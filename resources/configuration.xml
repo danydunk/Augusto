@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Configuration>
+	
+	<IgnoredComponents>
+		<FullComponent>
+			<Component>
+				<Attributes>
+					<Property>
+						<Name>Class</Name>
+						<Value>javax.swing.JCheckBox</Value>
+					</Property>                    
+				</Attributes>
+			</Component>
+		</FullComponent>		
+	</IgnoredComponents>
+	
+	<TerminalComponents>
+		<FullComponent>
+			<Component>
+				<Attributes>
+					<Property>
+						<Name>Title</Name>
+						<Value>Cancel</Value>
+					</Property>
+				</Attributes>
+			</Component>
+		</FullComponent>
+		<FullComponent>
+			<Component>
+				<Attributes>
+					<Property>
+						<Name>Title</Name>
+						<Value>OK</Value>
+					</Property>
+				</Attributes>
+			</Component>
+		</FullComponent>	
+	</TerminalComponents>
+	
+</Configuration>

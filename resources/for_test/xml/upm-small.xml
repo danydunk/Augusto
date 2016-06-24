@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<GUI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="GUI_schema.xsd">
+    <window id="w1">
+        <title>Add Account</title>
+        <modal>true</modal>
+        <root>false</root>
+        <input_widget id="w2007498480">
+            <label>account</label>
+            <text/>
+            <class>javax.swing.JTextField</class>
+        </input_widget>
+        <input_widget id="w2007517576">
+            <label>user id</label>
+            <text/>
+            <class>javax.swing.JTextField</class>
+        </input_widget>
+        <input_widget id="w2774944816">
+            <label>password</label>
+            <text/>
+            <class>javax.swing.JPasswordField</class>
+        </input_widget>
+        <action_widget id="w2570453882">
+            <label>generate</label>
+            <class>javax.swing.JButton</class>
+        </action_widget>
+        <input_widget id="w2937018836">
+            <label>url</label>
+            <text/>
+            <class>javax.swing.JTextField</class>
+        </input_widget>
+        <input_widget id="w2534235680">
+            <label>notes</label>
+            <text/>
+            <class>javax.swing.JTextArea</class>
+        </input_widget>
+        <action_widget id="w3660345700">
+            <label>ok</label>
+            <class>javax.swing.JButton</class>
+        </action_widget>
+        <action_widget id="w3114841242">
+            <label>cancel</label>
+            <class>javax.swing.JButton</class>
+        </action_widget>
+    </window>
+    <window id="w2">
+        <title>/Users/daniele/Documents/work/InteractiveTesting/jfc-guitar-v1.1.1/upm-small-ripping/db - Universal Password Manager</title>
+        <modal>false</modal>
+        <root>true</root>
+        <input_widget id="w2143515822">
+            <label>search.gif</label>
+            <text/>
+            <class>javax.swing.JTextField</class>
+        </input_widget>
+        <selectable_widget id="w1030010946">
+            <label>search.gif</label>
+            <size>0</size>
+            <class>javax.swing.JList</class>
+        </selectable_widget>
+        <action_widget id="w1593185608">
+            <label>account</label>
+            <class>javax.swing.JMenu</class>
+        </action_widget>
+        <action_widget id="w1005214592">
+            <label>add account</label>
+            <class>javax.swing.JMenuItem</class>
+        </action_widget>
+    </window>
+    <edge id="w1005214592-w1">
+        <from>w1005214592</from>
+        <to>w1</to>
+    </edge>
+    <edge id="w3660345700-w2">
+        <from>w3660345700</from>
+        <to>w2</to>
+    </edge>
+    <edge id="w3114841242-w2">
+        <from>w3114841242</from>
+        <to>w2</to>
+    </edge>
+</GUI>
