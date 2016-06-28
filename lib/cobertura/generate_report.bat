@@ -1,0 +1,1 @@
+cobertura-report.bat --format html --datafile "C:\workspace\ABT_java\outputs\experiment_20141120_0140\coverage\ser\cobertura6.ser" --destination "C:\coberturaResults"
