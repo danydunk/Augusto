@@ -2,14 +2,11 @@ package usi.gui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Set;
 
-import usi.gui.widgets.GUI;
 import usi.gui.widgets.Widget;
 import usi.gui.widgets.Window;
+import usi.util.IDManager;
 
 import com.rational.test.ft.object.interfaces.TestObject;
 import com.rational.test.ft.script.Property;
@@ -17,23 +14,25 @@ import com.rational.test.ft.script.SubitemFactory;
 
 public class GuiStateManager {
 
-	private final HashSet<String> testObjToFilter;
+	private final List<String> widgetsOfInterest;
 	private final ArrayList<Widget> currentWidgets;
 	private final TestObject root;
 	private final Property[] properties = new Property[3];
+	private final IDManager ids;
 
 	public GuiStateManager(TestObject root) {
 
 		this.root = root;
+		this.ids = new IDManager();
 
 		this.currentWidgets = new ArrayList<Widget>();
 		this.properties[0] = new Property("showing", "true");
 		this.properties[1] = new Property("enabled", "true");
 		this.properties[2] = new Property("visible", "true");
 
-		this.testObjToFilter = new HashSet<String>();
-		this.testObjToFilter.add("PopupMenuSeparatorUI");
-		this.testObjToFilter.add("SeparatorUI");
+		// TODO:to fill
+		this.widgetsOfInterest = new ArrayList<String>();
+
 	}
 
 	public ArrayList<Widget> getCurrentWidgets() {
@@ -41,7 +40,7 @@ public class GuiStateManager {
 		return this.currentWidgets;
 	}
 
-	public GUI getCurrentGUI() throws Exception {
+	public List<Window> getCurrentGUI() throws Exception {
 
 		TestObject[] appoggio = null;
 		TestObject[] windows = null;
@@ -70,13 +69,11 @@ public class GuiStateManager {
 			throw new Exception("GUIStateManager - getCurrentGUI: no windows found");
 		}
 
-		Window rootWind = null;
 		List<Window> winds = new ArrayList<>();
 
 		for (TestObject wind : windows) {
 
 			TestObject[] tos = null;
-			Object[] o = null;
 
 			try {
 				tos = wind.find(SubitemFactory.atDescendant(this.properties));
@@ -86,42 +83,49 @@ public class GuiStateManager {
 
 			// DZ: the test objects are ordered and filtered. Filtering and
 			// ordering are done together to optimise the computation
-			o = this.orderTOs(tos);
-			tos = (TestObject[]) o[1];
+			tos = this.orderTOs(tos);
+
+			ContextAnalyzer context = new ContextAnalyzer(new ArrayList<TestObject>(Arrays.asList(tos)));
 
 			List<Widget> ws = new ArrayList<>();
 			for (TestObject to : tos) {
-				ws.add(new Widget(to));
-			}
-
-			Window w = new Window(wind, ws);
-			winds.add(w);
-
-			// the top window is detected
-			if (rootWind == null) {
-				if (!(wind.getProperty("name") != null && wind.getProperty("name").toString()
-						.contains("overrideRedirect"))
-						&& tos.length > 0) {
-					rootWind = w;
+				Widget widget = new Widget(to, this.ids.nextWidgetId());
+				// we keep only the widget of interest
+				if (this.widgetsOfInterest.contains(widget.getType())) {
+					// if the widget does not have a label we look for
+					// descriptors
+					if (widget.getProperty("label") == null || widget.getProperty("label").length() == 0) {
+						widget.setDescriptor(context.getDescriptor(widget.getView()));
+					}
+					ws.add(widget);
 				}
 			}
-		}
 
-		return new GUI(winds, rootWind);
+			Window w = new Window(wind, ws, this.ids.nextWindowId());
+			winds.add(w);
+
+			// windows with no widgets or with the override redirect flag are
+			// filtered
+			if (!(wind.getProperty("name") != null && wind.getProperty("name").toString().contains("overrideRedirect"))
+					&& tos.length > 0) {
+				winds.add(w);
+			}
+
+		}
+		return winds;
 	}
 
 	/**
 	 * @author DZ Method that orders TOs w.r.t their properties. For each TO the
 	 *         properties we consider for ordering are defined in JWidget.java
-	 *         For ordering the class WidgetWRappe is used
+	 *         For ordering the class WidgetWrapper is used
 	 * @param widget
 	 *            list
-	 * @return A ordered widget list and a string array containing the state
-	 *         representation of each widget calculated with getPropertyValue
+	 * @return A ordered TO list
+	 * @throws Exception
 	 */
-	private Object[] orderTOs(TestObject[] tos) {
+	private TestObject[] orderTOs(TestObject[] tos) throws Exception {
 
-		String[] outS = new String[tos.length];
 		TOWrapper[] wws = new TOWrapper[tos.length];
 		int cont = 0;
 		for (TestObject w : tos) {
@@ -134,48 +138,10 @@ public class GuiStateManager {
 		cont = 0;
 		for (TOWrapper ww : wws) {
 			outArray[cont] = ww.getTO();
-			outS[cont] = ww.getWidgetState();
 			cont++;
 		}
 
-		ArrayList<TestObject> finalOut = new ArrayList<TestObject>();
-		ArrayList<String> finalOutS = new ArrayList<String>();
-
-		if (outArray.length > 0) {
-			finalOut.add(outArray[0]);
-			finalOutS.add(outS[0]);
-
-			for (int c = 1, d = outArray.length; c < d; c++) {
-				// DZ: TOs filtered
-				if ((outArray[c].getProperty("uIClassID") != null && !this.testObjToFilter.contains(outArray[c]
-						.getProperty("uIClassID"))) && !outArray[c].isSameObject(outArray[c - 1])) {
-					finalOut.add(outArray[c]);
-					finalOutS.add(outS[c]);
-				}
-			}
-		}
-		Object[] out = new Object[2];
-		out[0] = finalOutS.toArray(new String[finalOutS.size()]);
-		out[1] = finalOut.toArray(new TestObject[finalOut.size()]);
-		return out;
-	}
-
-	/**
-	 * 
-	 * @param property
-	 * @return
-	 */
-	private String getPropertyValue(Hashtable<String, Object> property) {
-
-		Set<String> ks = property.keySet();
-		String[] app = new String[ks.size()];
-		String[] keys = ks.toArray(app);
-		Arrays.sort(keys);
-		String valueString = "";
-		for (String key : keys) {
-			valueString = valueString.concat(property.get(key).toString() + "#AbT#");
-		}
-		return valueString;
+		return outArray;
 	}
 
 	/**
@@ -189,35 +155,38 @@ public class GuiStateManager {
 	public class TOWrapper implements Comparable {
 
 		private TestObject to = null;
-		private Widget w = null;
-		private String widgetState = null;
+		private final int x;
+		private final int y;
 
-		public TOWrapper(TestObject to) {
+		public TOWrapper(TestObject to) throws Exception {
 
 			this.to = to;
-			this.w = new Widget(to);
-			this.widgetState = GuiStateManager.this.getPropertyValue(this.w.getProperties());
+			this.x = Integer.valueOf(to.getProperty("x").toString());
+			this.y = Integer.valueOf(to.getProperty("y").toString());
 		}
 
 		@Override
 		public int compareTo(Object arg0) {
 
-			TOWrapper ww2 = (TOWrapper) arg0;
-			String s1 = this.getWidgetState();
-			String s2 = ww2.getWidgetState();
-			int out = s1.compareTo(s2);
-			if (out < 0) {
-				return -1;
-			}
-			if (out > 0) {
+			TOWrapper in = (TOWrapper) arg0;
+			int x = in.getX();
+			int y = in.getY();
+
+			if (this.y < y) {
 				return 1;
 			}
-			return out;
-		}
-
-		public Widget getWidget() {
-
-			return this.w;
+			if (this.y > y) {
+				return -1;
+			}
+			// y must be equal
+			if (this.x < x) {
+				return 1;
+			}
+			if (this.x > x) {
+				return -1;
+			}
+			// also x must be equal
+			return 0;
 		}
 
 		public TestObject getTO() {
@@ -225,9 +194,14 @@ public class GuiStateManager {
 			return this.to;
 		}
 
-		public String getWidgetState() {
+		public int getX() {
 
-			return this.widgetState;
+			return this.x;
+		}
+
+		public int getY() {
+
+			return this.y;
 		}
 	}
 }
