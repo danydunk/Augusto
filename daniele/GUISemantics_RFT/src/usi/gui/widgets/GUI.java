@@ -5,12 +5,12 @@ import java.util.List;
 public class GUI {
 
 	private final List<Window> windows;
-	private final Window topWindow;
+	private final Window root;
 
-	public GUI(List<Window> windows, Window topWindow) {
+	public GUI(List<Window> windows, Window root) {
 
 		this.windows = windows;
-		this.topWindow = topWindow;
+		this.root = root;
 	}
 
 	public List<Window> getWindows() {
@@ -18,8 +18,8 @@ public class GUI {
 		return this.windows;
 	}
 
-	public Window getTopWindow() {
+	public Window getRoot() {
 
-		return this.topWindow;
+		return this.root;
 	}
 }

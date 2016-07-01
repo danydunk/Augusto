@@ -1,279 +1,239 @@
 package usi.gui.widgets;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.rational.test.ft.object.interfaces.TestObject;
 
 public class Widget {
 
 	private final TestObject to;
-	private final Hashtable<String, Object> widgetState;
+	private final Map<String, String> widgetState;
+	private final String id;
+	private String descriptor;
 
-	public Widget(TestObject to) {
+	public Widget(TestObject to, String id) throws Exception {
 
+		if (to == null || id == null) {
+			throw new Exception("Widget: constructor error.");
+		}
 		this.to = to;
-		this.widgetState = new Hashtable<String, Object>();
+		this.id = id;
+		this.widgetState = new HashMap<String, String>();
 		try {
-			this.addPropertiesToMap(to.getProperty("uIClassID").toString());
-		} catch (Exception e) {}
-
+			this.addPropertiesToMap(to.getProperty("class").toString());
+		} catch (Exception e) {
+			throw new Exception("Widget: error loading classid, " + e.getMessage());
+		}
 	}
 
-	@Override
-	public int hashCode() {
+	public Widget(Map<String, String> properties, String id) throws Exception {
 
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((this.to == null) ? 0 : this.to.hashCode());
-		return result;
+		if (properties == null || !properties.containsKey("class") || id == null) {
+			throw new Exception("Widget: constructor error.");
+		}
+		this.id = id;
+		this.to = null;
+		this.widgetState = new HashMap<String, String>(properties);
 	}
 
-	@Override
-	public boolean equals(Object obj) {
+	public boolean isSame(Widget w) throws Exception {
 
-		if (this == obj) {
+		if (w == null || !(w instanceof Widget)) {
+			throw new Exception("Widget - isSame: wrong input.");
+		}
+		if (this == w) {
 			return true;
 		}
-		if (obj == null) {
+
+		if (!this.getClass().equals(w.getClass())) {
 			return false;
 		}
-		if (this.getClass() != obj.getClass()) {
+
+		if (this.getProperty("x").equals(w.getProperty("x"))) {
 			return false;
 		}
-		Widget other = (Widget) obj;
-		if (this.to == null) {
-			if (other.to != null) {
-				return false;
-			}
-		} else if (!this.to.equals(other.to)) {
+		if (this.getProperty("y").equals(w.getProperty("y"))) {
 			return false;
 		}
+		// TODO: FINISH
 		return true;
 	}
 
-	public Hashtable<String, Object> getProperties() {
+	public Map<String, String> getProperties() {
 
-		return this.widgetState;
+		return new HashMap<String, String>(this.widgetState);
 	}
 
-	/*
-	 * @Override public Object getProperty(String propertyName) { if
-	 * (widgetState.containsKey(propertyName)){ return
-	 * widgetState.get(propertyName); } else return null;
-	 * 
-	 * }
-	 */
-
-	public Object getProperty(String propertyName) {
+	public String getProperty(String propertyName) {
 
 		if (this.widgetState.containsKey(propertyName)) {
 			return this.widgetState.get(propertyName);
-		} else {
-			try {
-				this.addPropertyToMap(propertyName, this.to.getProperty(propertyName));
-				return this.to.getProperty(propertyName);
-			} catch (Exception e) {
-				return "";
-			}
 		}
-
-	}
-
-	public boolean isSameWidget(Widget w) {
-
-		return ((TestObject) w.getView()).isSameObject(this.to);
+		return null;
 	}
 
 	public String getType() {
 
-		return this.getProperty("uIClassID").toString();
+		return this.getProperty("class");
 	}
 
-	public boolean isActive() {
-
-		return true;
-	}
-
-	public Object getView() {
+	public TestObject getView() {
 
 		return this.to;
 	}
 
-	private void addPropertyToMap(String property, Object value) {
+	private void addPropertyToMap(String property, String value) {
 
-		if (value == null) {
-			value = "";
-		}
 		this.widgetState.put(property, value);
 	}
 
 	private void addPropertiesToMap(String type) {
 
+		this.addPropertyToMap("class", this.to.getProperty("uIClassID").toString().toString());
+		this.addPropertyToMap("x", this.to.getProperty("x").toString().toString());
+		this.addPropertyToMap("y", this.to.getProperty("y").toString().toString());
+
 		if (type.equals("BusyLabelUI")) {
 
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
 		} else if (type.equals("ButtonUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("label", this.to.getProperty("label"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-		} else if (type.equals("CheckBoxMenuItemUI")) {
+			this.addPropertyToMap("label", this.to.getProperty("label").toString());
 
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("label", this.to.getProperty("label"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("name", this.to.getProperty("name"));
-			this.addPropertyToMap("selected", this.to.getProperty("selected"));
+		} else if (type.equals("CheckBoxMenuItemUI")) {
+			this.addPropertyToMap("label", this.to.getProperty("label").toString());
+			this.addPropertyToMap("selected", this.to.getProperty("selected").toString());
+
 		} else if (type.equals("CheckBoxUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("label", this.to.getProperty("label"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("name", this.to.getProperty("name"));
-			this.addPropertyToMap("selected", this.to.getProperty("selected"));
+			this.addPropertyToMap("label", this.to.getProperty("label").toString());
+			this.addPropertyToMap("selected", this.to.getProperty("selected").toString());
 
 		} else if (type.equals("ColorChooserUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
+
 		} else if (type.equals("ComboBoxUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("name", this.to.getProperty("name"));
-			this.addPropertyToMap("selectedIndex", this.to.getProperty("selectedIndex"));
-			this.addPropertyToMap("itemCount", this.to.getProperty("itemCount"));
+			this.addPropertyToMap("selected", this.to.getProperty("selectedIndex").toString());
+			this.addPropertyToMap("size", this.to.getProperty("itemCount").toString());
+
 		} else if (type.equals("ComponentUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
+
 		} else if (type.equals("EditorPaneUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("editable", this.to.getProperty("editable"));
+			this.addPropertyToMap("value", this.to.getProperty("text").toString());
+			this.addPropertyToMap("editable", this.to.getProperty("editable").toString());
+
 		} else if (type.equals("FileChooserUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
+			this.addPropertyToMap("class", this.to.getProperty("uIClassID").toString());
 
 		} else if (type.equals("FormattedTextFieldUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("editable", this.to.getProperty("editable"));
+			this.addPropertyToMap("value", this.to.getProperty("text").toString());
+			this.addPropertyToMap("editable", this.to.getProperty("editable").toString());
+
 		} else if (type.equals("HyperlinkUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("label", this.to.getProperty("label"));
+			this.addPropertyToMap("label", this.to.getProperty("label").toString());
 
 		} else if (type.equals("LabelUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
+			this.addPropertyToMap("label", this.to.getProperty("text").toString());
 
 		} else if (type.equals("ListUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("minSelectionIndex", this.to.getProperty("minSelectionIndex"));
-			this.addPropertyToMap("maxSelectionIndex", this.to.getProperty("maxSelectionIndex"));
-			this.addPropertyToMap(".itemCount", this.to.getProperty(".itemCount"));
+			this.addPropertyToMap("size",
+					String.valueOf(Integer.valueOf(this.to.getProperty("lastVisibleIndex").toString()) + 1));
+			this.addPropertyToMap("selected", this.to.getProperty("selectedIndex").toString());
+
 		} else if (type.equals("MenuBarUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
 
 		} else if (type.equals("MenuItemUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("label", this.to.getProperty("label"));
+			this.addPropertyToMap("label", this.to.getProperty("label").toString());
+
 		} else if (type.equals("MenuUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("label", this.to.getProperty("label"));
+			this.addPropertyToMap("label", this.to.getProperty("label").toString());
+
 		} else if (type.equals("OptionPaneUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
 
 		} else if (type.equals("PanelUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("name", this.to.getProperty("name"));
+
 		} else if (type.equals("PasswordFieldUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("editable", this.to.getProperty("editable"));
+			this.addPropertyToMap("value", this.to.getProperty("text").toString());
+			this.addPropertyToMap("editable", this.to.getProperty("editable").toString());
 
 		} else if (type.equals("PopupMenuSeparatorUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
 
 		} else if (type.equals("PopupMenuUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("label", this.to.getProperty("label"));
 
 		} else if (type.equals("ProgressBarUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
 
-		}
+		} else if (type.equals("RadioButtonUI")) {
+			this.addPropertyToMap("label", this.to.getProperty("label").toString());
+			this.addPropertyToMap("selected", this.to.getProperty("selected").toString());
 
-		else if (type.equals("RadioButtonUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("label", this.to.getProperty("label"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("selected", this.to.getProperty("selected"));
 		} else if (type.equals("ScrollBarUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
 
 		} else if (type.equals("ScrollPaneUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
 
 		} else if (type.equals("SeparatorUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
 
 		} else if (type.equals("SliderUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("minimum", this.to.getProperty("minimum"));
-			this.addPropertyToMap("maximum", this.to.getProperty("maximum"));
-			this.addPropertyToMap("value", this.to.getProperty("value"));
+
 		} else if (type.equals("SpinnerUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
 
 		} else if (type.equals("SplitPaneUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
 
 		} else if (type.equals("TabbedPaneUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("selectedIndex", this.to.getProperty("selectedIndex"));
-			this.addPropertyToMap("tabCount", this.to.getProperty("tabCount"));
+			this.addPropertyToMap("selected", this.to.getProperty("selectedIndex").toString());
+			this.addPropertyToMap("size", this.to.getProperty("tabCount").toString());
+			this.addPropertyToMap("tabs", this.to.getProperty(".tabs").toString());
 
 		} else if (type.equals("TableHeaderUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
 
 		} else if (type.equals("TableUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("rowCount", this.to.getProperty("rowCount"));
-			this.addPropertyToMap("columnCount", this.to.getProperty("columnCount"));
-			this.addPropertyToMap("selectedRow", this.to.getProperty("selectedRow"));
-			this.addPropertyToMap("selectedColumn", this.to.getProperty("selectedColumn"));
-			this.addPropertyToMap("selectedColumnCount", this.to.getProperty("selectedColumnCount"));
-			this.addPropertyToMap("selectedRowCount", this.to.getProperty("selectedRowCount"));
-			this.addPropertyToMap("editable", this.to.getProperty("editable"));
+			int rowc = Integer.valueOf(this.to.getProperty("rowCount").toString());
+			int columnc = Integer.valueOf(this.to.getProperty("columnCount").toString());
+			int size = rowc * columnc;
+			int rows = Integer.valueOf(this.to.getProperty("selectedRow").toString());
+			int columns = Integer.valueOf(this.to.getProperty("selectedColumn").toString());
+			int selected = 0;
+			for (int cont = 0; cont < rows; cont++) {
+				selected += columnc;
+			}
+			selected += columns;
+			this.addPropertyToMap("size", String.valueOf(size));
+			this.addPropertyToMap("selected", String.valueOf(selected));
 
 		} else if (type.equals("TextAreaUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("editable", this.to.getProperty("editable"));
-		} else if (type.equals("TextFieldUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("editable", this.to.getProperty("editable"));
-		} else if (type.equals("TextPaneUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-			this.addPropertyToMap("editable", this.to.getProperty("editable"));
-		} else if (type.equals("ToggleButtonUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("label", this.to.getProperty("label"));
-			this.addPropertyToMap("text", this.to.getProperty("text"));
-		}
+			this.addPropertyToMap("value", this.to.getProperty("text").toString());
+			this.addPropertyToMap("editable", this.to.getProperty("editable").toString());
 
-		else if (type.equals("ToolBarUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("name", this.to.getProperty("name"));
+		} else if (type.equals("TextFieldUI")) {
+			this.addPropertyToMap("value", this.to.getProperty("text").toString());
+			this.addPropertyToMap("editable", this.to.getProperty("editable").toString());
+
+		} else if (type.equals("TextPaneUI")) {
+			this.addPropertyToMap("value", this.to.getProperty("text").toString());
+			this.addPropertyToMap("editable", this.to.getProperty("editable").toString());
+
+		} else if (type.equals("ToggleButtonUI")) {
+			this.addPropertyToMap("label", this.to.getProperty("label").toString());
+
+		} else if (type.equals("ToolBarUI")) {
+
 		} else if (type.equals("TreeUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("name", this.to.getProperty("name"));
-			this.addPropertyToMap("rowCount", this.to.getProperty("rowCount"));
-			this.addPropertyToMap("maxSelectionRow", this.to.getProperty("maxSelectionRow"));
-			this.addPropertyToMap("minSelectionRow", this.to.getProperty("minSelectionRow"));
-			this.addPropertyToMap("editable", this.to.getProperty("editable"));
 
 		} else if (type.equals("MonthViewUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
-			this.addPropertyToMap("name", this.to.getProperty("name"));
+
 		} else if (type.equals("DatePickerUI")) {
-			this.addPropertyToMap("uIClassID", this.to.getProperty("uIClassID"));
+
 		}
+	}
+
+	public String getId() {
+
+		return this.id;
+	}
+
+	public String getDescriptor() {
+
+		return this.descriptor;
+	}
+
+	public void setDescriptor(String descriptor) {
+
+		this.descriptor = descriptor;
 	}
 }

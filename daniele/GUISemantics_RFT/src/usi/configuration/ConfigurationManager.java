@@ -32,10 +32,6 @@ public class ConfigurationManager {
 		ConfigurationManager.setSleepTime(Long.valueOf(properties.getProperty("sleep_time")));
 	}
 
-	private static void generateAUTrunFile() {
-
-	}
-
 	public static String getAutClasspath() {
 
 		return autClasspath;
