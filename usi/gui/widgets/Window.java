@@ -24,8 +24,15 @@ public class Window {
 		this.x = Integer.valueOf(to.getProperty("x").toString());
 		this.y = Integer.valueOf(to.getProperty("y").toString());
 		this.to = to;
-		this.contained = contained;
-		this.modal = Boolean.valueOf(to.getProperty("modal").toString());
+		this.contained = new ArrayList<>(contained);
+		boolean modale;
+		try{
+			modale = Boolean.valueOf(to.getProperty("modal").toString());
+		}catch(Exception e) {
+			//modal property not found
+			modale = false;
+		}
+		this.modal = modale;
 		this.id = id;
 	}
 
@@ -41,7 +48,7 @@ public class Window {
 
 	public List<Widget> getContained() {
 
-		return new ArrayList<Widget>(this.contained);
+		return new ArrayList<>(this.contained);
 	}
 
 	public String getTitle() {

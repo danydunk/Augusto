@@ -47,14 +47,14 @@ public class GUIWriter {
 		this.selectable_widgets_classes.add("TableUI");
 	}
 
-	public Element writeWindow(Window in, boolean root) throws Exception {
+	public Element writeWindow(final Window in, final boolean root) throws Exception {
 
 		// the a document is created
 		final DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		final DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-		Document tmp = docBuilder.newDocument();
+		final Document tmp = docBuilder.newDocument();
 
-		Element out = tmp.createElement("Window");
+		final Element out = tmp.createElement("Window");
 		out.setAttribute("id", in.getId());
 		// title is added
 		Element node = tmp.createElement("title");
@@ -69,10 +69,10 @@ public class GUIWriter {
 		node.setTextContent(String.valueOf(root));
 		out.appendChild(node);
 
-		for (Widget w : in.getContained()) {
+		for (final Widget w : in.getContained()) {
 			node = null;
 			// label
-			Element label = tmp.createElement("label");
+			final Element label = tmp.createElement("label");
 			if (w.getProperty("label") != null && w.getProperty("label").length() > 0) {
 				label.setTextContent(w.getProperty("label"));
 			} else {
@@ -80,17 +80,16 @@ public class GUIWriter {
 					label.setTextContent(w.getDescriptor());
 				} else {
 					label.setTextContent("");
-
 				}
 			}
 			// class
-			Element classs = tmp.createElement("class");
+			final Element classs = tmp.createElement("class");
 			classs.setTextContent(w.getType());
 			// pos
-			Element pos = tmp.createElement("pos");
+			final Element pos = tmp.createElement("pos");
 			pos.setTextContent(w.getProperty("x") + ":" + w.getProperty("y"));
 
-			if (this.action_widgets_classes.contains(w)) {
+			if (this.action_widgets_classes.contains(w.getType())) {
 				node = tmp.createElement("action_widget");
 				node.setAttribute("id", w.getId());
 				out.appendChild(node);
@@ -103,7 +102,7 @@ public class GUIWriter {
 				}
 			}
 
-			if (this.input_widgets_classes.contains(w)) {
+			if (this.input_widgets_classes.contains(w.getType())) {
 				node = tmp.createElement("input_widget");
 				node.setAttribute("id", w.getId());
 				out.appendChild(node);
@@ -111,10 +110,10 @@ public class GUIWriter {
 				node.appendChild(pos);
 				node.appendChild(label);
 				// value
-				Element value = tmp.createElement("value");
+				final Element value = tmp.createElement("value");
 				node.appendChild(value);
 				if (w.getProperty("selected") != null) {
-					Element size = tmp.createElement("size");
+					final Element size = tmp.createElement("size");
 					node.appendChild(size);
 					if (w.getProperty("size") != null) {
 						value.setTextContent(w.getProperty("selected"));
@@ -133,7 +132,7 @@ public class GUIWriter {
 				}
 			}
 
-			if (this.selectable_widgets_classes.contains(w)) {
+			if (this.selectable_widgets_classes.contains(w.getType())) {
 				node = tmp.createElement("selectable_widget");
 				node.setAttribute("id", w.getId());
 				out.appendChild(node);
@@ -141,11 +140,11 @@ public class GUIWriter {
 				node.appendChild(pos);
 				node.appendChild(label);
 				// size
-				Element size = tmp.createElement("size");
+				final Element size = tmp.createElement("size");
 				size.setTextContent(w.getProperty("size"));
 				node.appendChild(size);
 				// selected
-				Element selected = tmp.createElement("selected");
+				final Element selected = tmp.createElement("selected");
 				selected.setTextContent(w.getProperty("selected"));
 				node.appendChild(selected);
 			}

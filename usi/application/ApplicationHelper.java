@@ -21,17 +21,17 @@ public class ApplicationHelper {
 		RationalTestScript.shellExecute("scripts" + System.getProperty("file.separator") + "AUT.bat");
 		System.gc();
 
-		long delayTime = System.nanoTime();
+		final long delayTime = System.nanoTime();
 
 		this.root = null;
 		try {
 			do {
 
-				Thread.sleep(1000);
+				Thread.sleep(2000);
 
 				this.root = RationalTestScript.getRootTestObject();
 			} while (this.root == null && (System.nanoTime() - delayTime) / 1000000 < 30000);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new Exception("ApplicationHelper - startApplication: error, " + e.getMessage());
 		}
 		return this.root;
@@ -45,12 +45,12 @@ public class ApplicationHelper {
 		}
 		TestObject[] tos = null;
 		try {
-			Registry registry = LocateRegistry.getRegistry(2007);
-			RemoteCoberturaInterface rmo = (RemoteCoberturaInterface) registry.lookup("RemoteCobertura");
+			final Registry registry = LocateRegistry.getRegistry(2007);
+			final RemoteCoberturaInterface rmo = (RemoteCoberturaInterface) registry.lookup("RemoteCobertura");
 			rmo.getCoverage();
 			tos = this.root.find(SubitemFactory.atChild("showing", "true", "enabled", "true"));
 			tos[0].getProcess().kill();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			this.forceClose();
 			return;
 		}
