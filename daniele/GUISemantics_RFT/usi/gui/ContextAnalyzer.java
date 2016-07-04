@@ -32,7 +32,7 @@ public class ContextAnalyzer {
 	 * @param windowNode
 	 * @throws Exception
 	 */
-	public ContextAnalyzer(List<TestObject> tos) throws Exception {
+	public ContextAnalyzer(final List<TestObject> tos) throws Exception {
 
 		this.descriptors_classes = new ArrayList<String>();
 		this.descriptors_classes.add("LabelUI");
@@ -42,64 +42,64 @@ public class ContextAnalyzer {
 		this.fatherMap = new HashMap<TestObject, TestObject>();
 		this.containerDescription = new HashMap<TestObject, String>();
 
-		for (TestObject to : tos) {
-			String classs = to.getProperty("uiClassId").toString();
+		for (final TestObject to : tos) {
+			final String classs = to.getProperty("uIClassID").toString();
 			if (classs == null) {
 				throw new Exception("ContextAnalyzer: class id not found.");
 			}
 			// the father is retrieved
-			TestObject father = to.getParent();
-			if (father != null && !tos.contains(father)) {
-				throw new Exception("ContextAnalyzer: to father not found.");
-			}
+			final TestObject father = to.getMappableParent();
+
 			this.fatherMap.put(to, father);
+			if (!this.descriptorInContainer.containsKey(father)) {
+				final List<Descriptor> list = new ArrayList<Descriptor>();
+				this.descriptorInContainer.put(father, list);
+			}
+			if (!this.containedInContainer.containsKey(father)) {
+				final List<TestObject> list = new ArrayList<>();
+				this.containedInContainer.put(father, list);
+			}
+
 			// if it is a descriptor
 			if (this.descriptors_classes.contains(classs)) {
-				int x = Integer.valueOf(to.getProperty("x").toString());
-				int y = Integer.valueOf(to.getProperty("y").toString());
-				int width = Integer.valueOf(to.getProperty("width").toString());
-				int height = Integer.valueOf(to.getProperty("height").toString());
-				String label = to.getProperty("text").toString();
+				final int x = Integer.valueOf(to.getProperty("x").toString());
+				final int y = Integer.valueOf(to.getProperty("y").toString());
+				final int width = Integer.valueOf(to.getProperty("width").toString());
+				final int height = Integer.valueOf(to.getProperty("height").toString());
+
+				final Object text = to.getProperty("text");
+				String label = "";
+				if (text != null) {
+					label = text.toString();
+				}
 				// we filter the empty strings
 				if (label.trim().length() == 0) {
 					continue;
 				}
-				Descriptor d = new Descriptor(label, x, y, height, width);
+				final Descriptor d = new Descriptor(label, x, y, height, width);
 
-				if (this.descriptorInContainer.containsKey(father)) {
-					this.descriptorInContainer.get(father).add(d);
-				} else {
-					List<Descriptor> list = new ArrayList<Descriptor>();
-					list.add(d);
-					this.descriptorInContainer.put(father, list);
-				}
+				this.descriptorInContainer.get(father).add(d);
 			} else {
-				if (this.containedInContainer.containsKey(father)) {
-					this.containedInContainer.get(father).add(to);
-				} else {
-					List<TestObject> contained = new ArrayList<TestObject>();
-					contained.add(to);
-					this.containedInContainer.put(father, contained);
-				}
+				this.containedInContainer.get(father).add(to);
 			}
 		}
 
 	}
 
-	public String getDescriptor(TestObject to) throws Exception {
+	public String getDescriptor(final TestObject to) throws Exception {
 
-		int x = Integer.valueOf(to.getProperty("x").toString());
-		int y = Integer.valueOf(to.getProperty("y").toString());
-		int width = Integer.valueOf(to.getProperty("width").toString());
-		int height = Integer.valueOf(to.getProperty("height").toString());
-		Area area = new Area(x, y, height, width);
+		final int x = Integer.valueOf(to.getProperty("x").toString());
+		final int y = Integer.valueOf(to.getProperty("y").toString());
+		final int width = Integer.valueOf(to.getProperty("width").toString());
+		final int height = Integer.valueOf(to.getProperty("height").toString());
+		final Area area = new Area(x, y, height, width);
 
 		if (!this.fatherMap.containsKey(to)) {
 			throw new Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
 		}
 
-		TestObject father = this.fatherMap.get(to);
-		List<Descriptor> descriptors = this.descriptorInContainer.get(father);
+		final TestObject father = this.fatherMap.get(to);
+		final List<Descriptor> descriptors = this.descriptorInContainer.get(father);
 
 		double min_dist = Double.MAX_VALUE;
 		Descriptor nearer = null;
@@ -117,7 +117,7 @@ public class ContextAnalyzer {
 		return this.getContainerDescriptor(father);
 	}
 
-	public String getContainerDescriptor(TestObject to) throws Exception {
+	public String getContainerDescriptor(final TestObject to) throws Exception {
 
 		if (to == null) {
 			return null;
@@ -128,23 +128,29 @@ public class ContextAnalyzer {
 		}
 
 		// if it has a title we return it
-		String title = to.getProperty("title").toString();
-		if (title != null && title.trim().length() > 0) {
-			return title;
+		Object title = null;
+		try {
+			title = to.getProperty("title");
+		} catch (final Exception e) {
+			// TO does not have a title
+		}
+
+		if (title != null && title.toString().trim().length() > 0) {
+			return title.toString();
 		}
 		// else we look for descriptors
-		int x = Integer.valueOf(to.getProperty("x").toString());
-		int y = Integer.valueOf(to.getProperty("y").toString());
-		int width = Integer.valueOf(to.getProperty("width").toString());
-		int height = Integer.valueOf(to.getProperty("height").toString());
-		Area area = new Area(x, y, height, width);
+		final int x = Integer.valueOf(to.getProperty("x").toString());
+		final int y = Integer.valueOf(to.getProperty("y").toString());
+		final int width = Integer.valueOf(to.getProperty("width").toString());
+		final int height = Integer.valueOf(to.getProperty("height").toString());
+		final Area area = new Area(x, y, height, width);
 
 		if (!this.fatherMap.containsKey(to)) {
 			throw new Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
 		}
 
-		TestObject father = this.fatherMap.get(to);
-		List<Descriptor> descriptors = this.descriptorInContainer.get(father);
+		final TestObject father = this.fatherMap.get(to);
+		final List<Descriptor> descriptors = this.descriptorInContainer.get(father);
 
 		double min_dist = Double.MAX_VALUE;
 		Descriptor nearer = null;

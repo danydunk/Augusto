@@ -1,5 +1,6 @@
 package usi.gui;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,10 +18,10 @@ public class GuiStateManager {
 	private final List<String> widgetsOfInterest;
 	private final ArrayList<Widget> currentWidgets;
 	private final TestObject root;
-	private final Property[] properties = new Property[0];
+	private final Property[] properties = new Property[1];
 	private final IDManager ids;
 
-	public GuiStateManager(TestObject root) {
+	public GuiStateManager(final TestObject root) {
 
 		this.root = root;
 		this.ids = new IDManager();
@@ -28,7 +29,7 @@ public class GuiStateManager {
 		this.currentWidgets = new ArrayList<Widget>();
 		// this.properties[0] = new Property("showing", "true");
 		// this.properties[1] = new Property("enabled", "true");
-		// this.properties[2] = new Property("visible", "true");
+		this.properties[0] = new Property("visible", "true");
 
 		this.widgetsOfInterest = new ArrayList<String>();
 		this.widgetsOfInterest.add("ButtonUI");
@@ -58,7 +59,7 @@ public class GuiStateManager {
 
 		try {
 			appoggio = this.root.find(SubitemFactory.atChild(this.properties));
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new Exception("GUIStateManager - getCurrentGUI: error in find, " + e.getMessage());
 		}
 
@@ -66,7 +67,7 @@ public class GuiStateManager {
 			try {
 				Thread.sleep(200);
 				windows = this.root.find(SubitemFactory.atChild(this.properties));
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				throw new Exception("GUIStateManager - getCurrentGUI: error in find, " + e.getMessage());
 			}
 
@@ -80,29 +81,31 @@ public class GuiStateManager {
 			throw new Exception("GUIStateManager - getCurrentGUI: no windows found");
 		}
 
-		List<Window> winds = new ArrayList<Window>();
+		final List<Window> winds = new ArrayList<Window>();
 
-		for (TestObject wind : windows) {
+		for (final TestObject wind : windows) {
 
 			TestObject[] tos = null;
 
 			try {
 				tos = wind.find(SubitemFactory.atDescendant(this.properties));
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				throw new Exception("GUIStateManager - getCurrentGUI: error in sub-widget find, " + e.getMessage());
 			}
 
-			// DZ: the test objects are ordered and filtered. Filtering and
-			// ordering are done together to optimise the computation
+			// System.out.println("WINDOW");
+			// for (final TestObject tt : tos) {
+			// System.out.println(tt.getProperty("uIClassID").toString());
+			// }
 			tos = this.orderTOs(tos);
 
-			ContextAnalyzer context = new ContextAnalyzer(new ArrayList<TestObject>(Arrays.asList(tos)));
+			final ContextAnalyzer context = new ContextAnalyzer(new ArrayList<TestObject>(Arrays.asList(tos)));
 
-			List<Widget> ws = new ArrayList<Widget>();
-			for (TestObject to : tos) {
-				Widget widget = new Widget(to, this.ids.nextWidgetId());
+			final List<Widget> ws = new ArrayList<Widget>();
+			for (final TestObject to : tos) {
 				// we keep only the widget of interest
-				if (this.widgetsOfInterest.contains(widget.getType())) {
+				if (this.widgetsOfInterest.contains(to.getProperty("uIClassID").toString())) {
+					final Widget widget = new Widget(to, this.ids.nextWidgetId());
 					// if the widget does not have a label we look for
 					// descriptors
 					if (widget.getProperty("label") == null || widget.getProperty("label").length() == 0) {
@@ -112,8 +115,7 @@ public class GuiStateManager {
 				}
 			}
 
-			Window w = new Window(wind, ws, this.ids.nextWindowId());
-			winds.add(w);
+			final Window w = new Window(wind, ws, this.ids.nextWindowId());
 
 			// windows with no widgets or with the override redirect flag are
 			// filtered
@@ -135,19 +137,19 @@ public class GuiStateManager {
 	 * @return A ordered TO list
 	 * @throws Exception
 	 */
-	private TestObject[] orderTOs(TestObject[] tos) throws Exception {
+	private TestObject[] orderTOs(final TestObject[] tos) throws Exception {
 
-		TOWrapper[] wws = new TOWrapper[tos.length];
+		final TOWrapper[] wws = new TOWrapper[tos.length];
 		int cont = 0;
-		for (TestObject w : tos) {
+		for (final TestObject w : tos) {
 			wws[cont] = new TOWrapper(w);
 			cont++;
 		}
 		Arrays.sort(wws);
-		TestObject[] outArray = new TestObject[wws.length];
+		final TestObject[] outArray = new TestObject[wws.length];
 
 		cont = 0;
-		for (TOWrapper ww : wws) {
+		for (final TOWrapper ww : wws) {
 			outArray[cont] = ww.getTO();
 			cont++;
 		}
@@ -169,32 +171,39 @@ public class GuiStateManager {
 		private final int x;
 		private final int y;
 
-		public TOWrapper(TestObject to) throws Exception {
+		public TOWrapper(final TestObject to) throws Exception {
 
+			Point p = null;
+			try {
+				p = (Point) to.getProperty("locationOnScreen");
+			} catch (final Exception e) {
+				// widget not visible
+				p = (Point) to.getMappableParent().getProperty("locationOnScreen");
+			}
 			this.to = to;
-			this.x = Integer.valueOf(to.getProperty("x").toString());
-			this.y = Integer.valueOf(to.getProperty("y").toString());
+			this.x = p.x;
+			this.y = p.y;
 		}
 
 		@Override
-		public int compareTo(Object arg0) {
+		public int compareTo(final Object arg0) {
 
-			TOWrapper in = (TOWrapper) arg0;
-			int x = in.getX();
-			int y = in.getY();
+			final TOWrapper in = (TOWrapper) arg0;
+			final double x = in.getX();
+			final double y = in.getY();
 
 			if (this.y < y) {
-				return 1;
+				return -1;
 			}
 			if (this.y > y) {
-				return -1;
+				return 1;
 			}
 			// y must be equal
 			if (this.x < x) {
-				return 1;
+				return -1;
 			}
 			if (this.x > x) {
-				return -1;
+				return 1;
 			}
 			// also x must be equal
 			return 0;

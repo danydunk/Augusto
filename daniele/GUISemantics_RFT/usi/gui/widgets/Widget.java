@@ -1,5 +1,6 @@
 package usi.gui.widgets;
 
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ public class Widget {
 	private final String id;
 	private String descriptor;
 
-	public Widget(TestObject to, String id) throws Exception {
+	public Widget(final TestObject to, final String id) throws Exception {
 
 		if (to == null || id == null) {
 			throw new Exception("Widget: constructor error.");
@@ -21,13 +22,14 @@ public class Widget {
 		this.id = id;
 		this.widgetState = new HashMap<String, String>();
 		try {
-			this.addPropertiesToMap(to.getProperty("class").toString());
-		} catch (Exception e) {
+			this.addPropertiesToMap(to.getProperty("uIClassID").toString());
+		} catch (final Exception e) {
+			e.printStackTrace();
 			throw new Exception("Widget: error loading classid, " + e.getMessage());
 		}
 	}
 
-	public Widget(Map<String, String> properties, String id) throws Exception {
+	public Widget(final Map<String, String> properties, final String id) throws Exception {
 
 		if (properties == null || !properties.containsKey("class") || id == null) {
 			throw new Exception("Widget: constructor error.");
@@ -37,7 +39,7 @@ public class Widget {
 		this.widgetState = new HashMap<String, String>(properties);
 	}
 
-	public boolean isSame(Widget w) throws Exception {
+	public boolean isSame(final Widget w) throws Exception {
 
 		if (w == null || !(w instanceof Widget)) {
 			throw new Exception("Widget - isSame: wrong input.");
@@ -65,7 +67,7 @@ public class Widget {
 		return new HashMap<String, String>(this.widgetState);
 	}
 
-	public String getProperty(String propertyName) {
+	public String getProperty(final String propertyName) {
 
 		if (this.widgetState.containsKey(propertyName)) {
 			return this.widgetState.get(propertyName);
@@ -83,21 +85,34 @@ public class Widget {
 		return this.to;
 	}
 
-	private void addPropertyToMap(String property, String value) {
+	private void addPropertyToMap(final String property, final String value) {
 
 		this.widgetState.put(property, value);
 	}
 
-	private void addPropertiesToMap(String type) {
+	private void addPropertiesToMap(final String type) {
 
 		this.addPropertyToMap("class", this.to.getProperty("uIClassID").toString().toString());
-		this.addPropertyToMap("x", this.to.getProperty("x").toString().toString());
-		this.addPropertyToMap("y", this.to.getProperty("y").toString().toString());
+		Point p = null;
+		try {
+			p = (Point) this.to.getProperty("locationOnScreen");
+		} catch (final Exception e) {
+			// widget not visible
+			p = (Point) this.to.getMappableParent().getProperty("locationOnScreen");
+		}
+		this.addPropertyToMap("x", String.valueOf(p.x));
+		this.addPropertyToMap("y", String.valueOf(p.y));
 
 		if (type.equals("BusyLabelUI")) {
 
 		} else if (type.equals("ButtonUI")) {
-			this.addPropertyToMap("label", this.to.getProperty("label").toString());
+			String label = this.to.getProperty("label").toString();
+			if (label == null || label.length() == 0) {
+				if (this.to.getProperty("toolTipText") != null) {
+					label = this.to.getProperty("toolTipText").toString();
+				}
+			}
+			this.addPropertyToMap("label", label);
 
 		} else if (type.equals("CheckBoxMenuItemUI")) {
 			this.addPropertyToMap("label", this.to.getProperty("label").toString());
@@ -130,7 +145,12 @@ public class Widget {
 			this.addPropertyToMap("label", this.to.getProperty("label").toString());
 
 		} else if (type.equals("LabelUI")) {
-			this.addPropertyToMap("label", this.to.getProperty("text").toString());
+			final Object text = this.to.getProperty("text");
+			String label = "";
+			if (text != null) {
+				label = text.toString();
+			}
+			this.addPropertyToMap("label", label);
 
 		} else if (type.equals("ListUI")) {
 			this.addPropertyToMap("size",
@@ -140,7 +160,10 @@ public class Widget {
 		} else if (type.equals("MenuBarUI")) {
 
 		} else if (type.equals("MenuItemUI")) {
-			this.addPropertyToMap("label", this.to.getProperty("label").toString());
+			final String label;
+			label = this.to.getMappableParent().getProperty("label").toString() + " - "
+					+ this.to.getProperty("label").toString();
+			this.addPropertyToMap("label", label);
 
 		} else if (type.equals("MenuUI")) {
 			this.addPropertyToMap("label", this.to.getProperty("label").toString());
@@ -183,11 +206,11 @@ public class Widget {
 		} else if (type.equals("TableHeaderUI")) {
 
 		} else if (type.equals("TableUI")) {
-			int rowc = Integer.valueOf(this.to.getProperty("rowCount").toString());
-			int columnc = Integer.valueOf(this.to.getProperty("columnCount").toString());
-			int size = rowc * columnc;
-			int rows = Integer.valueOf(this.to.getProperty("selectedRow").toString());
-			int columns = Integer.valueOf(this.to.getProperty("selectedColumn").toString());
+			final int rowc = Integer.valueOf(this.to.getProperty("rowCount").toString());
+			final int columnc = Integer.valueOf(this.to.getProperty("columnCount").toString());
+			final int size = rowc * columnc;
+			final int rows = Integer.valueOf(this.to.getProperty("selectedRow").toString());
+			final int columns = Integer.valueOf(this.to.getProperty("selectedColumn").toString());
 			int selected = 0;
 			for (int cont = 0; cont < rows; cont++) {
 				selected += columnc;
@@ -232,7 +255,7 @@ public class Widget {
 		return this.descriptor;
 	}
 
-	public void setDescriptor(String descriptor) {
+	public void setDescriptor(final String descriptor) {
 
 		this.descriptor = descriptor;
 	}
