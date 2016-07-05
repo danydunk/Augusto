@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GUI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="GUI_schema.xsd">
+	<window id="w1">
+		<title>Init</title>
+		<modal>false</modal>
+		<root>true</root>
+		<action_widget id="aw1">
+			<label>add</label>
+			<class></class>
+		</action_widget>
+		<action_widget id="aw2">
+			<label>test</label>
+			<class></class>
+		</action_widget>
+	</window>
+	<window id="w2">
+		<title>Form</title>
+		<modal>false</modal>
+		<root>false</root>
+		<label></label>
+		<action_widget id="aw3">
+			<label>save</label>
+			<class></class>
+		</action_widget>
+		<action_widget id="aw4">
+			<label>back</label>
+			<class></class>
+		</action_widget>
+		<input_widget id="iw1">
+			<label>field1</label>
+			<text></text>
+			<class></class>
+		</input_widget>
+		<input_widget id="iw2">
+			<label>field2</label>
+			<text></text>
+			<class></class>
+		</input_widget>
+	</window>
+	<window id="w3">
+		<title>Other</title>
+		<modal>false</modal>
+		<root>false</root>
+		<label></label>
+		<action_widget id="aw5">
+			<label>add</label>
+			<class></class>
+		</action_widget>
+		<input_widget id="iw3">
+			<label>field3</label>
+			<text></text>
+			<class></class>
+		</input_widget>
+	</window>
+	<edge id="e1">
+		<from>aw1</from>
+		<to>w2</to>
+	</edge>
+	<edge id="e2">
+		<from>aw2</from>
+		<to>w3</to>
+	</edge>
+</GUI>

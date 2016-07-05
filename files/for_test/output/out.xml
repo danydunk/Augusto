@@ -1,158 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?><GUI>
     <Window id="wind1">
-        <title>Master Password...</title>
-        <modal>true</modal>
-        <root>true</root>
-        <input_widget id="wid1">
-            <class>PasswordFieldUI</class>
-            <pos>611:343</pos>
-            <label>Please enter the master password for this database</label>
-            <value/>
-        </input_widget>
-        <action_widget id="wid2">
-            <class>ButtonUI</class>
-            <pos>642:372</pos>
-            <label>OK</label>
-        </action_widget>
-        <action_widget id="wid3">
-            <class>ButtonUI</class>
-            <pos>723:372</pos>
-            <label>Cancel</label>
-        </action_widget>
-    </Window>
-    <Window id="wind2">
         <title>Universal Password Manager</title>
         <modal>false</modal>
         <root>false</root>
+        <action_widget id="wid1">
+            <class>MenuItemUI</class>
+            <pos>590:309</pos>
+            <label>Database - New Database</label>
+        </action_widget>
+        <action_widget id="wid2">
+            <class>MenuItemUI</class>
+            <pos>590:309</pos>
+            <label>Database - Open Database</label>
+        </action_widget>
+        <action_widget id="wid3">
+            <class>MenuItemUI</class>
+            <pos>590:309</pos>
+            <label>Database - Open Database From URL</label>
+        </action_widget>
         <action_widget id="wid4">
             <class>MenuItemUI</class>
-            <pos>590:230</pos>
-            <label>Database - New Database</label>
+            <pos>590:309</pos>
+            <label>Database - Sync with Remote Database</label>
         </action_widget>
         <action_widget id="wid5">
             <class>MenuItemUI</class>
-            <pos>590:230</pos>
-            <label>Database - Open Database</label>
+            <pos>590:309</pos>
+            <label>Database - Change Master Password</label>
         </action_widget>
         <action_widget id="wid6">
             <class>MenuItemUI</class>
-            <pos>590:230</pos>
-            <label>Database - Open Database From URL</label>
+            <pos>590:309</pos>
+            <label>Database - Database Properties</label>
         </action_widget>
         <action_widget id="wid7">
             <class>MenuItemUI</class>
-            <pos>590:230</pos>
-            <label>Database - Sync with Remote Database</label>
+            <pos>590:309</pos>
+            <label>Database - Export</label>
         </action_widget>
         <action_widget id="wid8">
             <class>MenuItemUI</class>
-            <pos>590:230</pos>
-            <label>Database - Change Master Password</label>
+            <pos>590:309</pos>
+            <label>Database - Import</label>
         </action_widget>
         <action_widget id="wid9">
             <class>MenuItemUI</class>
-            <pos>590:230</pos>
-            <label>Database - Database Properties</label>
+            <pos>590:309</pos>
+            <label>Database - Exit</label>
         </action_widget>
         <action_widget id="wid10">
             <class>MenuItemUI</class>
-            <pos>590:230</pos>
-            <label>Database - Export</label>
+            <pos>647:309</pos>
+            <label>Account - Add Account</label>
         </action_widget>
         <action_widget id="wid11">
             <class>MenuItemUI</class>
-            <pos>590:230</pos>
-            <label>Database - Import</label>
+            <pos>647:309</pos>
+            <label>Account - Edit Account</label>
         </action_widget>
         <action_widget id="wid12">
             <class>MenuItemUI</class>
-            <pos>590:230</pos>
-            <label>Database - Exit</label>
+            <pos>647:309</pos>
+            <label>Account - Delete Account</label>
         </action_widget>
         <action_widget id="wid13">
             <class>MenuItemUI</class>
-            <pos>647:230</pos>
-            <label>Account - Add Account</label>
+            <pos>647:309</pos>
+            <label>Account - View Account</label>
         </action_widget>
         <action_widget id="wid14">
             <class>MenuItemUI</class>
-            <pos>647:230</pos>
-            <label>Account - Edit Account</label>
+            <pos>647:309</pos>
+            <label>Account - Copy Username</label>
         </action_widget>
         <action_widget id="wid15">
             <class>MenuItemUI</class>
-            <pos>647:230</pos>
-            <label>Account - Delete Account</label>
+            <pos>647:309</pos>
+            <label>Account - Copy Password</label>
         </action_widget>
         <action_widget id="wid16">
             <class>MenuItemUI</class>
-            <pos>647:230</pos>
-            <label>Account - View Account</label>
+            <pos>700:309</pos>
+            <label>Help - About</label>
         </action_widget>
         <action_widget id="wid17">
-            <class>MenuItemUI</class>
-            <pos>647:230</pos>
-            <label>Account - Copy Username</label>
+            <class>ButtonUI</class>
+            <pos>591:331</pos>
+            <label>Add Account</label>
         </action_widget>
         <action_widget id="wid18">
-            <class>MenuItemUI</class>
-            <pos>647:230</pos>
-            <label>Account - Copy Password</label>
+            <class>ButtonUI</class>
+            <pos>622:331</pos>
+            <label>Edit Account</label>
         </action_widget>
         <action_widget id="wid19">
-            <class>MenuItemUI</class>
-            <pos>700:230</pos>
-            <label>Help - About</label>
+            <class>ButtonUI</class>
+            <pos>653:331</pos>
+            <label>Delete Account</label>
         </action_widget>
         <action_widget id="wid20">
             <class>ButtonUI</class>
-            <pos>591:252</pos>
-            <label>Add Account</label>
+            <pos>690:331</pos>
+            <label>Copy Username</label>
         </action_widget>
         <action_widget id="wid21">
             <class>ButtonUI</class>
-            <pos>622:252</pos>
-            <label>Edit Account</label>
+            <pos>721:331</pos>
+            <label>Copy Password</label>
         </action_widget>
         <action_widget id="wid22">
             <class>ButtonUI</class>
-            <pos>653:252</pos>
-            <label>Delete Account</label>
+            <pos>758:331</pos>
+            <label>Options</label>
         </action_widget>
         <action_widget id="wid23">
             <class>ButtonUI</class>
-            <pos>690:252</pos>
-            <label>Copy Username</label>
-        </action_widget>
-        <action_widget id="wid24">
-            <class>ButtonUI</class>
-            <pos>721:252</pos>
-            <label>Copy Password</label>
-        </action_widget>
-        <action_widget id="wid25">
-            <class>ButtonUI</class>
-            <pos>758:252</pos>
-            <label>Options</label>
-        </action_widget>
-        <action_widget id="wid26">
-            <class>ButtonUI</class>
-            <pos>795:252</pos>
+            <pos>795:331</pos>
             <label>Sync with Remote Database</label>
         </action_widget>
-        <input_widget id="wid27">
+        <input_widget id="wid24">
             <class>TextFieldUI</class>
-            <pos>609:291</pos>
+            <pos>609:370</pos>
             <label>Universal Password Manager</label>
             <value/>
         </input_widget>
-        <action_widget id="wid28">
+        <action_widget id="wid25">
             <class>ButtonUI</class>
-            <pos>737:292</pos>
+            <pos>737:371</pos>
             <label>Reset Search</label>
         </action_widget>
-        <selectable_widget id="wid29">
+        <selectable_widget id="wid26">
             <class>ListUI</class>
-            <pos>592:317</pos>
+            <pos>592:396</pos>
             <label>Universal Password Manager</label>
             <size>0</size>
             <selected>-1</selected>

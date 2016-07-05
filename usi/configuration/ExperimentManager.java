@@ -50,6 +50,9 @@ public class ExperimentManager {
 					+ File.separator + "output" + System.getProperty("file.separator") + "stdOUT.log\"" + " 2> \""
 					+ System.getProperty("user.dir") + File.separator + "output" + System.getProperty("file.separator")
 					+ "stdERR.log\"");
+			//out.newLine();
+		//	out.write("pause");
+
 			out.flush();
 			out.close();
 		} catch (IOException e) {
