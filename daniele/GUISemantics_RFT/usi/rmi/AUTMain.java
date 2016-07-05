@@ -9,9 +9,11 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 
+
+
+
 import mockit.Mock;
-import mockit.MockClass;
-import mockit.Mockit;
+import mockit.MockUp;
 import net.sourceforge.cobertura.coveragedata.CoverageDataFileHandler;
 import net.sourceforge.cobertura.coveragedata.ProjectData;
 
@@ -36,9 +38,11 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 			System.out.println("Impossibile creare o registrare l'oggetto");
 			System.exit(1);
 		}
-
-		Mockit.setUpMock(SystemMock.class);
-
+		
+		//TODO: fix time mock
+		//Mockit.setUpMock(SystemMock.class);
+		//new MockUp<System>(){};
+		
 		try {
 			Class<?> autClass = Class.forName(args[0]);
 			String methodName = "main";
@@ -114,16 +118,16 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 		}
 	}
 
-	@MockClass(realClass = System.class)
-	public static class SystemMock {
 
-		private static final long startT = System.nanoTime();
-		private static final long referenceT = 1433356618285L;
+	//@MockClass(realClass = System.class)
+	public class SystemMock extends MockUp<System>{
 
-		@Mock
-		public static long currentTimeMillis() {
+		private  static final long referenceT = 1433356618285L;
 
-			return referenceT + (System.nanoTime() - startT) / 1000000L;
-		}
+//		@Mock
+//		public static long currentTimeMillis() {
+//			 final long startT = System.nanoTime();
+//			return referenceT + (System.nanoTime() - startT) / 1000000L;
+//		}
 	}
 }
