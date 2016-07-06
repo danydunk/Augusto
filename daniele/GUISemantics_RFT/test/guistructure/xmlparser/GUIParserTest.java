@@ -1,4 +1,4 @@
-package test.guistructure.parser;
+package test.guistructure.xmlparser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -15,7 +15,7 @@ import usi.guistructure.Action_widget;
 import usi.guistructure.GUI;
 import usi.guistructure.Input_widget;
 import usi.guistructure.Window;
-import usi.guistructure.parser.GUIParser;
+import usi.guistructure.xmlparser.GUIParser;
 import usi.xml.XMLUtil;
 
 public class GUIParserTest {
@@ -23,7 +23,8 @@ public class GUIParserTest {
 	@Test
 	public void testParserGUI1() throws Exception {
 
-		final Document doc = XMLUtil.read(new File("./files/for_test/xml/GUI.xml").getAbsolutePath());
+		final Document doc = XMLUtil.read(new File("./files/for_test/xml/GUI.xml")
+		.getAbsolutePath());
 		Assert.assertNotNull(doc);
 		final GUI gui = GUIParser.parse(doc);
 
