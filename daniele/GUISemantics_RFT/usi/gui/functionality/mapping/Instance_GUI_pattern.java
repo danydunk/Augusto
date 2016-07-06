@@ -1,21 +1,21 @@
-package usi.guifunctionality.mapping;
+package usi.gui.functionality.mapping;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import usi.guipattern.GUI_Pattern;
-import usi.guipattern.Pattern_action_widget;
-import usi.guipattern.Pattern_input_widget;
-import usi.guipattern.Pattern_selectable_widget;
-import usi.guipattern.Pattern_window;
+import usi.gui.pattern.GUI_Pattern;
+import usi.gui.pattern.Pattern_action_widget;
+import usi.gui.pattern.Pattern_input_widget;
+import usi.gui.pattern.Pattern_selectable_widget;
+import usi.gui.pattern.Pattern_window;
+import usi.gui.structure.Action_widget;
+import usi.gui.structure.GUI;
+import usi.gui.structure.Input_widget;
+import usi.gui.structure.Selectable_widget;
+import usi.gui.structure.Window;
 import usi.guisemantic.SpecificSemantics;
-import usi.guistructure.Action_widget;
-import usi.guistructure.GUI;
-import usi.guistructure.Input_widget;
-import usi.guistructure.Selectable_widget;
-import usi.guistructure.Window;
 
 /**
  * This class represents one instance of a pattern inside a GUI. It reference to
@@ -42,7 +42,9 @@ public class Instance_GUI_pattern {
 	private final Map<Selectable_widget, Pattern_selectable_widget> selectable_widgets_mapping;
 	protected SpecificSemantics semantics;
 
-	public Instance_GUI_pattern(final GUI gui, final GUI_Pattern guipattern, final List<Instance_window> windows) {
+	public Instance_GUI_pattern(final GUI gui, final GUI_Pattern guipattern,
+			final List<Instance_window> windows) {
+
 		this.gui = gui;
 		this.guipattern = guipattern;
 		this.windows = windows;
@@ -86,6 +88,7 @@ public class Instance_GUI_pattern {
 	}
 
 	public Instance_GUI_pattern(final GUI gui, final GUI_Pattern guipattern) {
+
 		this.gui = gui;
 		this.guipattern = guipattern;
 
@@ -227,8 +230,8 @@ public class Instance_GUI_pattern {
 
 		try {
 			for (final Window w : this.gui.getWindows()) {
-				for (final Action_widget aw : this.gui.getBackwardLinks(w)) {
-					out.getGui().addEdge(aw, w);
+				for (final Action_widget aw : this.gui.getStaticBackwardLinks(w)) {
+					out.getGui().addStaticEdge(aw, w);
 				}
 			}
 		} catch (final Exception e) {

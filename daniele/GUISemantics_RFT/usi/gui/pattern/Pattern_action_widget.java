@@ -1,6 +1,6 @@
-package usi.guipattern;
+package usi.gui.pattern;
 
-import usi.guistructure.Action_widget;
+import usi.gui.structure.Action_widget;
 
 public class Pattern_action_widget extends Pattern_widget<Action_widget> {
 

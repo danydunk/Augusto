@@ -1,4 +1,4 @@
-package usi.guipattern;
+package usi.gui.pattern;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,18 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
 import usi.guisemantic.FunctionalitySemantics;
 import usi.guisemantic.alloy.AlloyUtil;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 public class GUI_Pattern {
 
 	private final String GUI_SEMANTICS_PATH = "./files/alloy/GUI_general.als";
 
 	private List<Pattern_window> windows;
-	// private Map<String, Pattern_container> containers;
 	private List<Pattern_action_widget> action_widgets;
 	private List<Pattern_input_widget> input_widgets;
 	private List<Pattern_selectable_widget> selectable_widgets;
@@ -30,11 +29,11 @@ public class GUI_Pattern {
 	private FunctionalitySemantics semantics;
 
 	public GUI_Pattern() {
+
 		this.windows = new ArrayList<>();
 		this.edgesFrom = HashMultimap.create();
 		this.edgesTo = HashMultimap.create();
 		this.aw_window_mapping = new HashMap<>();
-		// containers = new HashMap<>();
 		this.action_widgets = new ArrayList<>();
 		this.selectable_widgets = new ArrayList<>();
 		this.input_widgets = new ArrayList<>();
@@ -42,7 +41,8 @@ public class GUI_Pattern {
 
 	public boolean isEdge(final Pattern_action_widget aw, final Pattern_window w) throws Exception {
 
-		if (aw == null || w == null || !this.windows.contains(w) || !this.action_widgets.contains(aw)) {
+		if (aw == null || w == null || !this.windows.contains(w)
+				|| !this.action_widgets.contains(aw)) {
 			throw new Exception("GUI_Pattern: wrong input in isEdge");
 		}
 		if (this.edgesFrom.containsEntry(aw, w) && this.edgesTo.containsEntry(w, aw)) {
@@ -81,7 +81,8 @@ public class GUI_Pattern {
 
 	public void addEdge(final Pattern_action_widget aw, final Pattern_window w) throws Exception {
 
-		if (aw == null || w == null || !this.windows.contains(w) || !this.action_widgets.contains(aw)) {
+		if (aw == null || w == null || !this.windows.contains(w)
+				|| !this.action_widgets.contains(aw)) {
 			throw new Exception("GUI_Pattern: wrong input in addEdge");
 		}
 		this.edgesFrom.put(aw, w);
@@ -102,7 +103,6 @@ public class GUI_Pattern {
 		if (ws == null) {
 			throw new Exception("GUI_Pattern: wrong input in setWindows");
 		}
-		// containers = new HashMap<>();
 		this.action_widgets = new ArrayList<>();
 		this.input_widgets = new ArrayList<>();
 		this.selectable_widgets = new ArrayList<>();
@@ -121,16 +121,6 @@ public class GUI_Pattern {
 		}
 		this.windows.add(n);
 
-		// for(Pattern_container c : n.getContainers()) {
-		// containers.put(c.getId(), c);
-		//
-		// for(Pattern_input_widget iw : c.getInput_widgets())
-		// input_widgets.put(iw.getId(), iw);
-		// for(Pattern_selectable_widget sw : c.getSelectable_widgets())
-		// selectable_widgets.put(sw.getId(), sw);
-		// for(Pattern_action_widget aw : c.getAction_widgets())
-		// action_widgets.put(aw.getId(), aw);
-		// }
 		this.action_widgets.addAll(n.getActionWidgets());
 		this.input_widgets.addAll(n.getInputWidgets());
 		this.selectable_widgets.addAll(n.getSelectableWidgets());
@@ -152,22 +142,6 @@ public class GUI_Pattern {
 
 		return new ArrayList<>(this.windows);
 	}
-
-	// public Map<String, Pattern_container> getContainers() {
-	// return containers;
-	// }
-	//
-	// public void addContainer(Pattern_container c) throws Exception {
-	// if(c == null || containers.containsKey(c.getId()))
-	// throw new Exception("GUI_Pattern: wrong input in addContainer");
-	// containers.put(c.getId(), c);
-	// }
-	//
-	// public void removeContainer(Pattern_container c) throws Exception {
-	// if(c == null || !containers.containsKey(c.getId()))
-	// throw new Exception("GUI_Pattern: wrong input in removeContainer");
-	// containers.remove(c);
-	// }
 
 	public List<Pattern_action_widget> getAction_widgets() {
 
@@ -216,8 +190,8 @@ public class GUI_Pattern {
 			br.close();
 			// the two files are merged
 			final String model = gui_s + func_s;
-			final FunctionalitySemantics semantics = FunctionalitySemantics
-					.instantiate(AlloyUtil.loadAlloyModelFromString(model));
+			final FunctionalitySemantics semantics = FunctionalitySemantics.instantiate(AlloyUtil
+					.loadAlloyModelFromString(model));
 			this.semantics = semantics;
 		}
 	}

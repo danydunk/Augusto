@@ -33,7 +33,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4TupleSet;
 import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
-import usi.guipattern.Cardinality;
+import usi.gui.pattern.Cardinality;
 import usi.guisemantic.alloy.entity.AlloyEntity;
 import usi.guisemantic.alloy.entity.Fact;
 import usi.guisemantic.alloy.entity.Function;

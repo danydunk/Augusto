@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import usi.guipattern.Cardinality;
+import usi.gui.pattern.Cardinality;
 import usi.guisemantic.FunctionalitySemantics;
 import usi.guisemantic.alloy.entity.Fact;
 import usi.guisemantic.alloy.entity.Function;

@@ -1,8 +1,8 @@
-package usi.guipattern;
+package usi.gui.pattern;
 
 import java.util.regex.Matcher;
 
-import usi.guistructure.Widget;
+import usi.gui.structure.Widget;
 
 public abstract class Pattern_widget<T extends Widget> {
 
@@ -13,6 +13,7 @@ public abstract class Pattern_widget<T extends Widget> {
 
 	public Pattern_widget(final String id, final String label, final Cardinality card,
 			final String alloy_correspondence) {
+
 		if (id != null) {
 			this.id = id;
 		} else {
@@ -58,29 +59,23 @@ public abstract class Pattern_widget<T extends Widget> {
 
 		final java.util.regex.Pattern r = java.util.regex.Pattern.compile(this.getLabel());
 
+		if ((w.getLabel() == null || w.getLabel().length() == 0)
+				&& (w.getDescriptor() != null || w.getDescriptor().length() > 0)) {
+			final Matcher m = r.matcher(w.getDescriptor());
+			return m.find();
+		}
+
+		if (w.getLabel() == null) {
+			final Matcher m = r.matcher("");
+			return m.find();
+		}
+
 		final Matcher m = r.matcher(w.getLabel());
 		return m.find();
 	}
-
-	// public abstract boolean isMatch(T e) throws Exception;
-	//
-	// public List<T> isMatch(Collection<T> l) throws Exception {
-	// List<T> matches = new ArrayList<>();
-	//
-	// for(T el : l) {
-	// if(this.isMatch(el))
-	// matches.add(el);
-	// }
-	// return matches;
-	// }
 
 	public String getAlloyCorrespondence() {
 
 		return this.alloy_correspondence;
 	}
-
-	// public void setAlloyCorrespondence(final String alloy_correspondence) {
-	//
-	// this.alloy_correspondence = alloy_correspondence;
-	// }
 }

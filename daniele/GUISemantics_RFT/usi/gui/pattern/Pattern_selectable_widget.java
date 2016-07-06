@@ -1,8 +1,8 @@
-package usi.guipattern;
+package usi.gui.pattern;
 
 import java.util.regex.Matcher;
 
-import usi.guistructure.Selectable_widget;
+import usi.gui.structure.Selectable_widget;
 
 public class Pattern_selectable_widget extends Pattern_widget<Selectable_widget> {
 

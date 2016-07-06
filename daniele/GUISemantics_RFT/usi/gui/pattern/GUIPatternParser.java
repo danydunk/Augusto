@@ -1,4 +1,4 @@
-package usi.guipattern.parser;
+package usi.gui.pattern;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,14 +7,6 @@ import java.util.stream.Collectors;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import usi.guipattern.Boolean_regexp;
-import usi.guipattern.Cardinality;
-import usi.guipattern.GUI_Pattern;
-import usi.guipattern.Pattern_action_widget;
-import usi.guipattern.Pattern_input_widget;
-import usi.guipattern.Pattern_selectable_widget;
-import usi.guipattern.Pattern_window;
 
 public class GUIPatternParser {
 

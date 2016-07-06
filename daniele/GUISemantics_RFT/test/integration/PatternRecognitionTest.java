@@ -10,16 +10,13 @@ import java.util.List;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import usi.guifunctionality.GUIFunctionality_search;
-import usi.guifunctionality.mapping.Instance_GUI_pattern;
-import usi.guifunctionality.mapping.Instance_window;
-import usi.guipattern.GUI_Pattern;
-import usi.guipattern.parser.GUIPatternParser;
-import usi.guistructure.GUI;
-import usi.guistructure.converter.GUIExtractionTools;
-import usi.guistructure.converter.GUIStructureConverter;
-import usi.guistructure.converter.interfaces.IConverter;
-import usi.guistructure.parser.GUIParser;
+import usi.gui.functionality.GUIFunctionality_search;
+import usi.gui.functionality.mapping.Instance_GUI_pattern;
+import usi.gui.functionality.mapping.Instance_window;
+import usi.gui.pattern.GUIPatternParser;
+import usi.gui.pattern.GUI_Pattern;
+import usi.gui.structure.GUI;
+import usi.gui.structure.GUIParser;
 import usi.xml.XMLUtil;
 
 public class PatternRecognitionTest {
@@ -29,19 +26,6 @@ public class PatternRecognitionTest {
 
 		System.out.println("test1");
 		try {
-			final Document g = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-upmsmall-GUI.xml").getAbsolutePath());
-			final Document efg = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-upmsmall-EFG.xml").getAbsolutePath());
-
-			final IConverter c = GUIStructureConverter.getConverter(GUIExtractionTools.GUIRipping);
-			final Object[] inputs = new Object[2];
-			inputs[0] = g;
-			inputs[1] = efg;
-			final Document out = c.convert(inputs);
-			// we save the GUI model
-			XMLUtil.save("./files/for_test/xml/upm-small.xml", out);
-
 			// we load a gui pattern
 			Document doc = XMLUtil.read(new File("./files/xml/add_pattern.xml").getAbsolutePath());
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
@@ -95,18 +79,6 @@ public class PatternRecognitionTest {
 
 		System.out.println("test2");
 		try {
-			final Document g = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-upmfull-GUI.xml").getAbsolutePath());
-			final Document efg = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-upmfull-EFG.xml").getAbsolutePath());
-
-			final IConverter c = GUIStructureConverter.getConverter(GUIExtractionTools.GUIRipping);
-			final Object[] inputs = new Object[2];
-			inputs[0] = g;
-			inputs[1] = efg;
-			final Document out = c.convert(inputs);
-			// we save the GUI model
-			XMLUtil.save("./files/for_test/xml/upm-full.xml", out);
 
 			// we load a gui pattern
 			Document doc = XMLUtil.read(new File("./files/xml/add_pattern.xml").getAbsolutePath());
@@ -123,7 +95,8 @@ public class PatternRecognitionTest {
 			for (final Instance_GUI_pattern gg : res) {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
-					System.out.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					System.out
+							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 
 				// assertEquals(2, gg.getWindows().size());
@@ -164,18 +137,6 @@ public class PatternRecognitionTest {
 
 		System.out.println("test3");
 		try {
-			final Document g = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-buddi-GUI.xml").getAbsolutePath());
-			final Document efg = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-buddi-EFG.xml").getAbsolutePath());
-
-			final IConverter c = GUIStructureConverter.getConverter(GUIExtractionTools.GUIRipping);
-			final Object[] inputs = new Object[2];
-			inputs[0] = g;
-			inputs[1] = efg;
-			final Document out = c.convert(inputs);
-			// we save the GUI model
-			XMLUtil.save("./files/for_test/xml/buddi.xml", out);
 
 			// we load a gui pattern
 			Document doc = XMLUtil.read(new File("./files/xml/add_pattern.xml").getAbsolutePath());
@@ -192,7 +153,8 @@ public class PatternRecognitionTest {
 			for (final Instance_GUI_pattern gg : res) {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
-					System.out.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					System.out
+							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -215,21 +177,9 @@ public class PatternRecognitionTest {
 		System.out.println("test1_labelfree");
 
 		try {
-			final Document g = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-upmsmall-GUI.xml").getAbsolutePath());
-			final Document efg = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-upmsmall-EFG.xml").getAbsolutePath());
-
-			final IConverter c = GUIStructureConverter.getConverter(GUIExtractionTools.GUIRipping);
-			final Object[] inputs = new Object[2];
-			inputs[0] = g;
-			inputs[1] = efg;
-			final Document out = c.convert(inputs);
-			// we save the GUI model
-			XMLUtil.save("./files/for_test/xml/upm-small.xml", out);
-
 			// we load a gui pattern
-			Document doc = XMLUtil.read(new File("./files/xml/add_pattern_labelfree.xml").getAbsolutePath());
+			Document doc = XMLUtil.read(new File("./files/xml/add_pattern_labelfree.xml")
+					.getAbsolutePath());
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
@@ -243,7 +193,8 @@ public class PatternRecognitionTest {
 			for (final Instance_GUI_pattern gg : res) {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
-					System.out.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					System.out
+							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 					// assertEquals(2, gg.getWindows().size());
 				}
 
@@ -281,21 +232,10 @@ public class PatternRecognitionTest {
 		System.out.println("test2_labelfree");
 
 		try {
-			final Document g = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-upmfull-GUI.xml").getAbsolutePath());
-			final Document efg = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-upmfull-EFG.xml").getAbsolutePath());
-
-			final IConverter c = GUIStructureConverter.getConverter(GUIExtractionTools.GUIRipping);
-			final Object[] inputs = new Object[2];
-			inputs[0] = g;
-			inputs[1] = efg;
-			final Document out = c.convert(inputs);
-			// we save the GUI model
-			XMLUtil.save("./files/for_test/xml/upm-full.xml", out);
 
 			// we load a gui pattern
-			Document doc = XMLUtil.read(new File("./files/xml/add_pattern_labelfree.xml").getAbsolutePath());
+			Document doc = XMLUtil.read(new File("./files/xml/add_pattern_labelfree.xml")
+					.getAbsolutePath());
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
@@ -309,7 +249,8 @@ public class PatternRecognitionTest {
 			for (final Instance_GUI_pattern gg : res) {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
-					System.out.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					System.out
+							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 					// assertEquals(2, gg.getWindows().size());
 				}
 
@@ -347,21 +288,10 @@ public class PatternRecognitionTest {
 
 		System.out.println("test3_labelfree");
 		try {
-			final Document g = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-buddi-GUI.xml").getAbsolutePath());
-			final Document efg = XMLUtil
-					.read(new File("./files/for_test/xml/guiripping-buddi-EFG.xml").getAbsolutePath());
-
-			final IConverter c = GUIStructureConverter.getConverter(GUIExtractionTools.GUIRipping);
-			final Object[] inputs = new Object[2];
-			inputs[0] = g;
-			inputs[1] = efg;
-			final Document out = c.convert(inputs);
-			// we save the GUI model
-			XMLUtil.save("./files/for_test/xml/buddi.xml", out);
 
 			// we load a gui pattern
-			Document doc = XMLUtil.read(new File("./files/xml/add_pattern_labelfree.xml").getAbsolutePath());
+			Document doc = XMLUtil.read(new File("./files/xml/add_pattern_labelfree.xml")
+					.getAbsolutePath());
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
@@ -375,7 +305,8 @@ public class PatternRecognitionTest {
 			for (final Instance_GUI_pattern gg : res) {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
-					System.out.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					System.out
+							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 					// assertEquals(2, gg.getWindows().size());
 				}
 

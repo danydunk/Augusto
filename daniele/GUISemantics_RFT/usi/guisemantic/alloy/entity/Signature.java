@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import usi.guipattern.Cardinality;
+import usi.gui.pattern.Cardinality;
 
 public class Signature extends AlloyEntity {
 

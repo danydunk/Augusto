@@ -1,4 +1,4 @@
-package usi.guipattern;
+package usi.gui.pattern;
 
 public enum Cardinality {
 	ONE(1, 1), LONE(0, 1), SOME(1, Integer.MAX_VALUE), SET(0, Integer.MAX_VALUE), NONE(0, 0);
