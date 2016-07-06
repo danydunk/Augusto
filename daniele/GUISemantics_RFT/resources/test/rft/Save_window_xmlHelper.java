@@ -20,11 +20,11 @@ import com.rational.test.ft.vp.IFtVerificationPoint;
 import com.ibm.rational.test.ft.object.interfaces.sapwebportal.*;
 /**
  * Script Name   : <b>Save_window_xml</b><br>
- * Generated     : <b>2016/07/05 7:08:25 AM</b><br>
+ * Generated     : <b>2016/07/06 4:43:23 AM</b><br>
  * Description   : Helper class for script<br>
  * Original Host : Windows 7 amd64 6.1 <br>
  * 
- * @since  July 05, 2016
+ * @since  July 06, 2016
  * @author usi
  */
 public abstract class Save_window_xmlHelper extends RationalTestScript
