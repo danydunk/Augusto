@@ -1,6 +1,6 @@
 package usi.guisemantic.alloy.entity;
 
-import usi.guipattern.Cardinality;
+import usi.gui.pattern.Cardinality;
 
 public class BinaryRelation {
 

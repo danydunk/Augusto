@@ -1,50 +1,27 @@
 package usi.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import usi.gui.widgets.Widget;
-import usi.gui.widgets.Window;
+import usi.gui.structure.Action_widget;
+import usi.gui.structure.Input_widget;
+import usi.gui.structure.Option_input_widget;
+import usi.gui.structure.Selectable_widget;
+import usi.gui.structure.Window;
 
 /**
  * Class that dumps a GUI into a xml file
- * 
+ *
  * @author lta
- * 
+ *
  */
 public class GUIWriter {
 
-	private final List<String> action_widgets_classes;
-	private final List<String> input_widgets_classes;
-	private final List<String> selectable_widgets_classes;
-
 	public GUIWriter() {
 
-		this.action_widgets_classes = new ArrayList<String>();
-		this.input_widgets_classes = new ArrayList<String>();
-		this.selectable_widgets_classes = new ArrayList<String>();
-
-		this.action_widgets_classes.add("ButtonUI");
-		this.action_widgets_classes.add("MenuItemUI");
-		this.action_widgets_classes.add("TabbedPaneUI");
-
-		this.input_widgets_classes.add("FormattedTextFieldUI");
-		this.input_widgets_classes.add("PasswordFieldUI");
-		this.input_widgets_classes.add("javax.swing.JTextArea");
-		this.input_widgets_classes.add("TextAreaUI");
-		this.input_widgets_classes.add("TextFieldUI");
-		this.input_widgets_classes.add("RadioButtonUI");
-		this.input_widgets_classes.add("CheckBoxUI");
-		this.input_widgets_classes.add("ComboBoxUI");
-
-		this.selectable_widgets_classes.add("ListUI");
-		this.selectable_widgets_classes.add("TableUI");
 	}
 
 	public Element writeWindow(final Window in, final boolean root) throws Exception {
@@ -54,11 +31,20 @@ public class GUIWriter {
 		final DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 		final Document tmp = docBuilder.newDocument();
 
-		final Element out = tmp.createElement("Window");
+		final Element out = tmp.createElement("window");
 		out.setAttribute("id", in.getId());
+		// position
+		String pos = String.valueOf(in.getX()) + ":" + String.valueOf(in.getY());
+		Element node = tmp.createElement("pos");
+		node.setTextContent(pos);
+		out.appendChild(node);
+		// class
+		node = tmp.createElement("class");
+		node.setTextContent(in.getClasss());
+		out.appendChild(node);
 		// title is added
-		Element node = tmp.createElement("title");
-		node.setTextContent(in.getTitle());
+		node = tmp.createElement("title");
+		node.setTextContent(in.getLabel());
 		out.appendChild(node);
 		// modal is added
 		node = tmp.createElement("modal");
@@ -69,85 +55,108 @@ public class GUIWriter {
 		node.setTextContent(String.valueOf(root));
 		out.appendChild(node);
 
-		for (final Widget w : in.getContained()) {
-			node = null;
-			// label
-			final Element label = tmp.createElement("label");
-			if (w.getProperty("label") != null && w.getProperty("label").length() > 0) {
-				label.setTextContent(w.getProperty("label"));
-			} else {
-				if (w.getDescriptor() != null) {
-					label.setTextContent(w.getDescriptor());
-				} else {
-					label.setTextContent("");
-				}
-			}
+		// action widgets are added
+		for (final Action_widget aw : in.getActionWidgets()) {
+			node = tmp.createElement("action_widget");
+			node.setAttribute("id", aw.getId());
+			out.appendChild(node);
+			// position
+			pos = String.valueOf(aw.getX()) + ":" + String.valueOf(aw.getY());
+			Element subnode = tmp.createElement("pos");
+			subnode.setTextContent(pos);
+			node.appendChild(subnode);
 			// class
-			final Element classs = tmp.createElement("class");
-			classs.setTextContent(w.getType());
-			// pos
-			final Element pos = tmp.createElement("pos");
-			pos.setTextContent(w.getProperty("x") + ":" + w.getProperty("y"));
-
-			if (this.action_widgets_classes.contains(w.getType())) {
-				node = tmp.createElement("action_widget");
-				node.setAttribute("id", w.getId());
-				out.appendChild(node);
-				node.appendChild(classs);
-				node.appendChild(pos);
-				node.appendChild(label);
-
-				if (w.getType().equals("TabbedPaneUI")) {
-					// TODO: manage tabbed pane
-				}
+			subnode = tmp.createElement("class");
+			subnode.setTextContent(aw.getClasss());
+			node.appendChild(subnode);
+			// label
+			if (aw.getLabel() != null && aw.getLabel().length() > 0) {
+				subnode = tmp.createElement("label");
+				subnode.setTextContent(aw.getLabel());
+				node.appendChild(subnode);
 			}
-
-			if (this.input_widgets_classes.contains(w.getType())) {
-				node = tmp.createElement("input_widget");
-				node.setAttribute("id", w.getId());
-				out.appendChild(node);
-				node.appendChild(classs);
-				node.appendChild(pos);
-				node.appendChild(label);
-				// value
-				final Element value = tmp.createElement("value");
-				node.appendChild(value);
-				if (w.getProperty("selected") != null) {
-					final Element size = tmp.createElement("size");
-					node.appendChild(size);
-					if (w.getProperty("size") != null) {
-						value.setTextContent(w.getProperty("selected"));
-						size.setTextContent(w.getProperty("size"));
-						node.appendChild(size);
-					} else {
-						size.setTextContent("2");
-						if ("true".equals(w.getProperty("selected"))) {
-							value.setTextContent("0");
-						} else {
-							value.setTextContent("1");
-						}
-					}
-				} else {
-					value.setTextContent(w.getProperty("value"));
-				}
+			// descriptor
+			if (aw.getDescriptor() != null && aw.getDescriptor().length() > 0) {
+				subnode = tmp.createElement("descriptor");
+				subnode.setTextContent(aw.getDescriptor());
+				node.appendChild(subnode);
 			}
+		}
 
-			if (this.selectable_widgets_classes.contains(w.getType())) {
-				node = tmp.createElement("selectable_widget");
-				node.setAttribute("id", w.getId());
-				out.appendChild(node);
-				node.appendChild(classs);
-				node.appendChild(pos);
-				node.appendChild(label);
-				// size
-				final Element size = tmp.createElement("size");
-				size.setTextContent(w.getProperty("size"));
-				node.appendChild(size);
-				// selected
-				final Element selected = tmp.createElement("selected");
-				selected.setTextContent(w.getProperty("selected"));
-				node.appendChild(selected);
+		// input widgets are added
+		for (final Input_widget iw : in.getInputWidgets()) {
+			node = tmp.createElement("input_widget");
+			node.setAttribute("id", iw.getId());
+			out.appendChild(node);
+			// position
+			pos = String.valueOf(iw.getX()) + ":" + String.valueOf(iw.getY());
+			Element subnode = tmp.createElement("pos");
+			subnode.setTextContent(pos);
+			node.appendChild(subnode);
+			// class
+			subnode = tmp.createElement("class");
+			subnode.setTextContent(iw.getClasss());
+			node.appendChild(subnode);
+			// label
+			if (iw.getLabel() != null && iw.getLabel().length() > 0) {
+				subnode = tmp.createElement("label");
+				subnode.setTextContent(iw.getLabel());
+				node.appendChild(subnode);
 			}
+			// descriptor
+			if (iw.getDescriptor() != null && iw.getDescriptor().length() > 0) {
+				subnode = tmp.createElement("descriptor");
+				subnode.setTextContent(iw.getDescriptor());
+				node.appendChild(subnode);
+			}
+			// value
+			String value;
+			if (iw instanceof Option_input_widget) {
+				final Option_input_widget oiw = (Option_input_widget) iw;
+				value = "[options] " + String.valueOf(oiw.getSelected()) + " : "
+						+ String.valueOf(oiw.getSize());
+			} else {
+				value = iw.getValue();
+			}
+			subnode = tmp.createElement("value");
+			subnode.setTextContent(value);
+			node.appendChild(subnode);
+		}
+
+		// selectable widgets are added
+		for (final Selectable_widget sw : in.getSelectableWidgets()) {
+			node = tmp.createElement("selectable_widget");
+			node.setAttribute("id", sw.getId());
+			out.appendChild(node);
+			// position
+			pos = String.valueOf(sw.getX()) + ":" + String.valueOf(sw.getY());
+			Element subnode = tmp.createElement("pos");
+			subnode.setTextContent(pos);
+			node.appendChild(subnode);
+			// class
+			subnode = tmp.createElement("class");
+			subnode.setTextContent(sw.getClasss());
+			node.appendChild(subnode);
+			// label
+			if (sw.getLabel() != null && sw.getLabel().length() > 0) {
+				subnode = tmp.createElement("label");
+				subnode.setTextContent(sw.getLabel());
+				node.appendChild(subnode);
+			}
+			// descriptor
+			if (sw.getDescriptor() != null && sw.getDescriptor().length() > 0) {
+				subnode = tmp.createElement("descriptor");
+				subnode.setTextContent(sw.getDescriptor());
+				node.appendChild(subnode);
+			}
+			// size
+			subnode = tmp.createElement("size");
+			subnode.setTextContent(String.valueOf(sw.getSize()));
+			node.appendChild(subnode);
+			// selected
+			subnode = tmp.createElement("selected");
+			subnode.setTextContent(String.valueOf(sw.getSelected()));
+			node.appendChild(subnode);
 		}
 
 		return out;

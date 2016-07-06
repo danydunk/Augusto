@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import usi.guipattern.Cardinality;
+import usi.gui.pattern.Cardinality;
 import usi.guisemantic.alloy.entity.Signature;
 
 public class SignatureTest {

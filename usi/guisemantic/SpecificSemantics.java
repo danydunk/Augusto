@@ -8,23 +8,23 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
-
-import usi.guifunctionality.mapping.Instance_GUI_pattern;
-import usi.guipattern.Cardinality;
-import usi.guipattern.Pattern_action_widget;
-import usi.guipattern.Pattern_input_widget;
-import usi.guipattern.Pattern_window;
+import usi.gui.functionality.mapping.Instance_GUI_pattern;
+import usi.gui.pattern.Cardinality;
+import usi.gui.pattern.Pattern_action_widget;
+import usi.gui.pattern.Pattern_input_widget;
+import usi.gui.pattern.Pattern_window;
+import usi.gui.structure.Action_widget;
+import usi.gui.structure.GUI;
+import usi.gui.structure.Input_widget;
+import usi.gui.structure.Window;
 import usi.guisemantic.alloy.AlloyUtil;
 import usi.guisemantic.alloy.Alloy_Model;
 import usi.guisemantic.alloy.entity.Fact;
 import usi.guisemantic.alloy.entity.Function;
 import usi.guisemantic.alloy.entity.Predicate;
 import usi.guisemantic.alloy.entity.Signature;
-import usi.guistructure.Action_widget;
-import usi.guistructure.GUI;
-import usi.guistructure.Input_widget;
-import usi.guistructure.Window;
+
+import com.google.common.collect.Lists;
 
 public class SpecificSemantics extends FunctionalitySemantics {
 
@@ -32,8 +32,10 @@ public class SpecificSemantics extends FunctionalitySemantics {
 	protected List<Signature> concrete_action_w;
 	protected List<Signature> concrete_input_w;
 
-	public SpecificSemantics(final List<Signature> signatures, final List<Fact> facts, final List<Predicate> predicates,
-			final List<Function> functions, final List<String> open_statments) throws Exception {
+	public SpecificSemantics(final List<Signature> signatures, final List<Fact> facts,
+			final List<Predicate> predicates, final List<Function> functions,
+			final List<String> open_statments) throws Exception {
+
 		super(signatures, facts, predicates, functions, open_statments);
 
 		this.concrete_windows = new ArrayList<>();
@@ -43,20 +45,21 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			if (sig.isSubset()) {
 				continue;
 			}
-			if ((sig.hasParent(this.window_signature) || this.windows_extensions.contains(sig.getParent()))
-					&& !sig.isAbstract_()) {
+			if ((sig.hasParent(this.window_signature) || this.windows_extensions.contains(sig
+					.getParent())) && !sig.isAbstract_()) {
 				this.concrete_windows.add(sig);
 			}
-			if ((sig.getParent().contains(this.action_w_signature)
-					|| this.action_w_extensions.contains(sig.getParent())) && !sig.isAbstract_()) {
+			if ((sig.getParent().contains(this.action_w_signature) || this.action_w_extensions
+					.contains(sig.getParent())) && !sig.isAbstract_()) {
 				this.concrete_action_w.add(sig);
 			}
-			if ((sig.getParent().contains(this.input_w_signature) || this.input_w_extensions.contains(sig.getParent()))
-					&& !sig.isAbstract_()) {
+			if ((sig.getParent().contains(this.input_w_signature) || this.input_w_extensions
+					.contains(sig.getParent())) && !sig.isAbstract_()) {
 				this.concrete_input_w.add(sig);
 			}
 		}
-		if ((this.concrete_windows.size() + this.concrete_action_w.size() + this.concrete_input_w.size()) == 0) {
+		if ((this.concrete_windows.size() + this.concrete_action_w.size() + this.concrete_input_w
+				.size()) == 0) {
 			throw new Exception("SpecificSemantics: error in constructor");
 		}
 	}
@@ -91,7 +94,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 		final FunctionalitySemantics func_semantics = in.getGuipattern().getSemantics();
 		if (func_semantics == null) {
-			throw new Exception("SpecificSemantics - generate: semantics is missing in gui pattern.");
+			throw new Exception(
+					"SpecificSemantics - generate: semantics is missing in gui pattern.");
 		}
 		// these lists are going to be used to create the specific semantics
 		final List<Signature> signatures = new ArrayList<>(func_semantics.getSignatures());
@@ -119,17 +123,19 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		for (final Window win : windows) {
 			// we find the associated pattern window
 			final Pattern_window pw = windowsMap.get(win);
-			final List<Signature> to_search = new ArrayList<>(func_semantics.getWindows_extensions());
+			final List<Signature> to_search = new ArrayList<>(
+					func_semantics.getWindows_extensions());
 			to_search.add(func_semantics.window_signature);
-			final Signature w_sig = AlloyUtil.searchSignatureInList(to_search, pw.getAlloyCorrespondence());
+			final Signature w_sig = AlloyUtil.searchSignatureInList(to_search,
+					pw.getAlloyCorrespondence());
 
 			if (w_sig == null) {
-				throw new Exception(
-						"SpecificSemantics - generate: wrong alloy corrispondence " + pw.getAlloyCorrespondence());
+				throw new Exception("SpecificSemantics - generate: wrong alloy corrispondence "
+						+ pw.getAlloyCorrespondence());
 			}
 
-			final Signature concreteWinSig = new Signature("Window_" + win.getId(), Cardinality.ONE, false,
-					Lists.newArrayList(w_sig), false);
+			final Signature concreteWinSig = new Signature("Window_" + win.getId(),
+					Cardinality.ONE, false, Lists.newArrayList(w_sig), false);
 
 			// We add the windows to the list of signatures
 			signatures.add(concreteWinSig);
@@ -154,21 +160,25 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 				Signature piw_sig = null;
 
-				if (piw.getAlloyCorrespondence() != null && piw.getAlloyCorrespondence().length() > 0) {
+				if (piw.getAlloyCorrespondence() != null
+						&& piw.getAlloyCorrespondence().length() > 0) {
 					// the pattern input widget signature is retrieved
-					final List<Signature> to_search = new ArrayList<>(func_semantics.getInput_w_extensions());
+					final List<Signature> to_search = new ArrayList<>(
+							func_semantics.getInput_w_extensions());
 					to_search.add(func_semantics.input_w_signature);
-					piw_sig = AlloyUtil.searchSignatureInList(to_search, piw.getAlloyCorrespondence());
+					piw_sig = AlloyUtil.searchSignatureInList(to_search,
+							piw.getAlloyCorrespondence());
 					System.out.println(piw.getAlloyCorrespondence());
 					if (piw_sig == null) {
-						throw new Exception("SpecificSemantics - generate: wrong alloy corrispondence "
-								+ piw.getAlloyCorrespondence());
+						throw new Exception(
+								"SpecificSemantics - generate: wrong alloy corrispondence "
+										+ piw.getAlloyCorrespondence());
 					}
 				} else {
 					piw_sig = func_semantics.getInput_w_signature();
 				}
-				final Signature sigIW = new Signature("Input_widget_" + iw.getId(), Cardinality.ONE, false,
-						Lists.newArrayList(piw_sig), false);
+				final Signature sigIW = new Signature("Input_widget_" + iw.getId(),
+						Cardinality.ONE, false, Lists.newArrayList(piw_sig), false);
 
 				signatures.add(sigIW);
 				input_widgets.put(iw, sigIW);
@@ -191,30 +201,34 @@ public class SpecificSemantics extends FunctionalitySemantics {
 					continue;
 				}
 				Signature paw_sig = null;
-				if (paw.getAlloyCorrespondence() != null && paw.getAlloyCorrespondence().length() > 0) {
+				if (paw.getAlloyCorrespondence() != null
+						&& paw.getAlloyCorrespondence().length() > 0) {
 
 					// the pattern action widget signature is retrieved
-					final List<Signature> to_search = new ArrayList<>(func_semantics.getAction_w_extensions());
+					final List<Signature> to_search = new ArrayList<>(
+							func_semantics.getAction_w_extensions());
 					to_search.add(func_semantics.action_w_signature);
-					paw_sig = AlloyUtil.searchSignatureInList(to_search, paw.getAlloyCorrespondence());
+					paw_sig = AlloyUtil.searchSignatureInList(to_search,
+							paw.getAlloyCorrespondence());
 
 					if (paw_sig == null) {
-						throw new Exception("SpecificSemantics - generate: wrong alloy corrispondence "
-								+ paw.getAlloyCorrespondence());
+						throw new Exception(
+								"SpecificSemantics - generate: wrong alloy corrispondence "
+										+ paw.getAlloyCorrespondence());
 					}
 				} else {
 					paw_sig = func_semantics.getAction_w_signature();
 				}
 
-				final Signature sigAW = new Signature("Action_widget_" + aw.getId(), Cardinality.ONE, false,
-						Lists.newArrayList(paw_sig), false);
+				final Signature sigAW = new Signature("Action_widget_" + aw.getId(),
+						Cardinality.ONE, false, Lists.newArrayList(paw_sig), false);
 
 				signatures.add(sigAW);
 				action_widgets.put(aw, sigAW);
 			}
 			// a fact is created to associate the AWS to the window
-			final Fact factAW = createFactsForActionWidget(action_widgets, added_windows.get(win), added_windows,
-					in.getGui());
+			final Fact factAW = createFactsForActionWidget(action_widgets, added_windows.get(win),
+					added_windows, in.getGui());
 			if (!"".equals(factAW.getContent())) {
 				facts.add(factAW);
 			}
@@ -222,7 +236,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			// TO DO: add selectable widgets to alloy
 		}
 
-		final Alloy_Model specific_model = new Alloy_Model(signatures, facts, predicates, functions, opens);
+		final Alloy_Model specific_model = new Alloy_Model(signatures, facts, predicates,
+				functions, opens);
 		return instantiate(specific_model);
 	}
 
@@ -233,7 +248,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 	 * @param iws
 	 * @param window
 	 */
-	static private Fact createFactsForInputWidget(final Map<Input_widget, Signature> iws, final Signature window) {
+	static private Fact createFactsForInputWidget(final Map<Input_widget, Signature> iws,
+			final Signature window) {
 
 		return createFactsForElement(iws.values(), window, "iws");
 	}
@@ -247,21 +263,23 @@ public class SpecificSemantics extends FunctionalitySemantics {
 	 * @param window
 	 * @throws Exception
 	 */
-	private static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws, final Signature window,
-			final Map<Window, Signature> ws, final GUI gui) throws Exception {
+	private static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
+			final Signature window, final Map<Window, Signature> ws, final GUI gui)
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
 
 		for (final Action_widget aw : aws.keySet()) {
 			final List<Window> edges = new ArrayList<>();
-			for (final Window w : gui.getForwardLinks(aw)) {
+			for (final Window w : gui.getStaticForwardLinks(aw)) {
 				if (ws.containsKey(w)) {
 					edges.add(w);
 				}
 			}
 			if (edges.size() > 0) {
-				content += System.getProperty("line.separator") + aws.get(aw).getIdentifier() + ".goes = ";
+				content += System.getProperty("line.separator") + aws.get(aw).getIdentifier()
+						+ ".goes = ";
 				int i = 0;
 				for (final Window edge : edges) {
 					content += ws.get(edge).getIdentifier();
@@ -282,13 +300,14 @@ public class SpecificSemantics extends FunctionalitySemantics {
 	 * @param sws
 	 * @param window
 	 */
-	private static Fact createFactsForSelectableWidget(final List<Signature> sws, final Signature window) {
+	private static Fact createFactsForSelectableWidget(final List<Signature> sws,
+			final Signature window) {
 
 		return createFactsForElement(sws, window, "aws");
 	}
 
-	private static Fact createFactsForElement(final Collection<Signature> widgets, final Signature window,
-			final String fieldToRelated) {
+	private static Fact createFactsForElement(final Collection<Signature> widgets,
+			final Signature window, final String fieldToRelated) {
 
 		if (widgets.isEmpty()) {
 			return new Fact(window.getIdentifier() + "_" + fieldToRelated, "");

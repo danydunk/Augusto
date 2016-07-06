@@ -1,7 +1,7 @@
 package usi.guisemantic.testcase;
 
-import usi.guistructure.Widget;
-import usi.guistructure.Window;
+import usi.gui.structure.Widget;
+import usi.gui.structure.Window;
 
 public class Select extends GUIAction {
 

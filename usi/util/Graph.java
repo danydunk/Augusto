@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import usi.guistructure.Action_widget;
-import usi.guistructure.GUI;
-import usi.guistructure.Window;
+import usi.gui.structure.Action_widget;
+import usi.gui.structure.GUI;
+import usi.gui.structure.Window;
 
 public class Graph {
 
@@ -14,6 +14,7 @@ public class Graph {
 	private final List<Edge> edges;
 
 	public Graph(final List<Vertex> vertexes, final List<Edge> edges) {
+
 		this.vertexes = vertexes;
 		this.edges = edges;
 	}
@@ -54,7 +55,7 @@ public class Graph {
 		for (final Window window : gui.getWindows()) {
 			final Vertex vsrc = getVertex(vertexes, window.getId());
 			for (final Action_widget actionWindows : window.getActionWidgets()) {
-				final Collection<Window> links = gui.getForwardLinks(actionWindows);
+				final Collection<Window> links = gui.getStaticForwardLinks(actionWindows);
 				for (final Window linkedWin : links) {
 					final Vertex vdest = getVertex(vertexes, linkedWin.getId());
 					final int weight = 1;

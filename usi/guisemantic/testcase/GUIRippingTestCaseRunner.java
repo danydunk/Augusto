@@ -14,9 +14,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import usi.gui.structure.Widget;
+import usi.gui.structure.Window;
 import usi.guisemantic.testcase.interfaces.IGUITestCaseRunner;
-import usi.guistructure.Widget;
-import usi.guistructure.Window;
 import usi.xml.XMLUtil;
 
 public class GUIRippingTestCaseRunner implements IGUITestCaseRunner {

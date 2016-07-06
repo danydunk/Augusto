@@ -2,20 +2,18 @@ package usi.guisemantic.testcase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import usi.gui.functionality.mapping.Instance_GUI_pattern;
+import usi.gui.functionality.mapping.Instance_window;
+import usi.gui.structure.Action_widget;
+import usi.gui.structure.Input_widget;
+import usi.gui.structure.Window;
+import usi.guisemantic.SpecificSemantics;
+import usi.guisemantic.alloy.AlloyUtil;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
-import usi.guifunctionality.mapping.Instance_GUI_pattern;
-import usi.guifunctionality.mapping.Instance_window;
-import usi.guisemantic.SpecificSemantics;
-import usi.guisemantic.alloy.AlloyUtil;
-import usi.guistructure.Action_widget;
-import usi.guistructure.Input_widget;
-import usi.guistructure.Selectable_widget;
-import usi.guistructure.Window;
 
 public class AlloyTestCaseGenerator {
 
@@ -37,6 +35,7 @@ public class AlloyTestCaseGenerator {
 	 */
 
 	public AlloyTestCaseGenerator(final Instance_GUI_pattern instance) {
+
 		this.instance = instance;
 	}
 
@@ -58,7 +57,8 @@ public class AlloyTestCaseGenerator {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<GUITestCase> generateTestCases(final int max_run, final int initial_timout) throws Exception {
+	public List<GUITestCase> generateTestCases(final int max_run, final int initial_timout)
+			throws Exception {
 
 		final SpecificSemantics model = this.instance.getSemantics();
 
@@ -71,6 +71,7 @@ public class AlloyTestCaseGenerator {
 			private boolean exception;
 
 			public RunCommandThread(final Command run, final Module alloy) {
+
 				this.run_command = run;
 				this.alloy_model = alloy;
 				this.exception = false;
@@ -83,8 +84,10 @@ public class AlloyTestCaseGenerator {
 				int timeout = initial_timout;
 				try {
 					for (int x = 0; x < max_run; x++) {
-						System.out.println("STARTING COMMAND: " + run.toString() + " RUN " + (x + 1));
-						final A4Solution solution = AlloyUtil.runCommand(this.alloy_model, run, timeout);
+						System.out.println("STARTING COMMAND: " + run.toString() + " RUN "
+								+ (x + 1));
+						final A4Solution solution = AlloyUtil.runCommand(this.alloy_model, run,
+								timeout);
 
 						if (solution == null) {
 							timeout += initial_timout;
@@ -93,18 +96,19 @@ public class AlloyTestCaseGenerator {
 						} else if (!solution.satisfiable()) {
 							final int new_scope = run.overall + this.run_command.overall;
 
-							run = new Command(this.run_command.pos, this.run_command.label, this.run_command.check,
-									new_scope, this.run_command.bitwidth, this.run_command.maxseq,
-									this.run_command.expects, this.run_command.scope,
-									this.run_command.additionalExactScopes, this.run_command.formula,
-									this.run_command.parent);
+							run = new Command(this.run_command.pos, this.run_command.label,
+									this.run_command.check, new_scope, this.run_command.bitwidth,
+									this.run_command.maxseq, this.run_command.expects,
+									this.run_command.scope, this.run_command.additionalExactScopes,
+									this.run_command.formula, this.run_command.parent);
 							if (x + 1 < max_run) {
 								System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
 										+ " unsat. New scope = " + new_scope);
 							}
 
 						} else {
-							System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString() + " found solution.");
+							System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
+									+ " found solution.");
 							this.solution = solution;
 							break;
 						}
@@ -133,14 +137,14 @@ public class AlloyTestCaseGenerator {
 		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
 
 		final List<Command> run_commands = compiled.getAllCommands();
-		
-		 List<RunCommandThread> threads = new ArrayList<>();
-		for(Command cmd : run_commands){
-			RunCommandThread rc = new RunCommandThread(cmd,compiled);
+
+		final List<RunCommandThread> threads = new ArrayList<>();
+		for (final Command cmd : run_commands) {
+			final RunCommandThread rc = new RunCommandThread(cmd, compiled);
 			rc.start();
 			threads.add(rc);
 		}
-		
+
 		final List<A4Solution> solutions = new ArrayList<>();
 		for (final RunCommandThread t : threads) {
 			t.join();
@@ -175,67 +179,80 @@ public class AlloyTestCaseGenerator {
 
 			final int time_index = Integer.valueOf(tuple.atom(2).split("\\$")[1]);
 
+			// TODO: fix
 			// the oracle is retrieved
-			Window oracle = null;
-			final List<A4Tuple> curr = AlloyUtil.getTuples(solution, "Current_window");
-			for (final A4Tuple t : curr) {
-				if (t.arity() != 3) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: wrong arity of current window");
-				}
-				if (t.atom(2).equals(tuple.atom(2))) {
-					String window = t.atom(1).split("\\$")[0];
-					if (window.equals("General")) {
-						break;
-					}
-					window = window.substring(7);
-					Window target_w = null;
-					for (final Instance_window w : this.instance.getWindows()) {
-						if (w.getInstance().getId().equals(window)) {
-							target_w = w.getInstance();
-							break;
-						}
-					}
-
-					if (target_w == null) {
-						throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error detecting oracle.");
-					}
-					// we create a new window
-					oracle = new Window(target_w.getId(), target_w.isModal(), target_w.getLabel(), target_w.isRoot());
-					for (final Action_widget aw : target_w.getActionWidgets()) {
-						oracle.addActionWidget(aw);
-					}
-					for (final Input_widget iw : target_w.getInputWidgets()) {
-						final List<A4Tuple> values = AlloyUtil.getTuples(solution, "Input_widget_" + iw.getId());
-						String v = "";
-						for (final A4Tuple value : values) {
-							if (value.arity() != 3) {
-								throw new Exception(
-										"AlloyTestCaseGenerator - analyzeTuples: error retriving input widget value.");
-							}
-							if (value.atom(2).equals(tuple.atom(2))) {
-								final int value_index = Integer.valueOf(value.atom(1).split("\\$")[1]);
-								// TODO: manage values
-								v = String.valueOf(value_index);
-							}
-						}
-
-						final Input_widget iww = new Input_widget(iw.getId(), iw.getLabel(), v, iw.getClasss());
-						oracle.addInputWidget(iww);
-					}
-					for (final Selectable_widget sw : target_w.getSelectableWidgets()) {
-						// TODO
-						oracle.addSelectableWidget(sw);
-					}
-
-					break;
-				}
-			}
+			// final Window oracle = null;
+			// final List<A4Tuple> curr = AlloyUtil.getTuples(solution,
+			// "Current_window");
+			// for (final A4Tuple t : curr) {
+			// if (t.arity() != 3) {
+			// throw new Exception(
+			// "AlloyTestCaseGenerator - analyzeTuples: wrong arity of current window");
+			// }
+			// if (t.atom(2).equals(tuple.atom(2))) {
+			// String window = t.atom(1).split("\\$")[0];
+			// if (window.equals("General")) {
+			// break;
+			// }
+			// window = window.substring(7);
+			// Window target_w = null;
+			// for (final Instance_window w : this.instance.getWindows()) {
+			// if (w.getInstance().getId().equals(window)) {
+			// target_w = w.getInstance();
+			// break;
+			// }
+			// }
+			//
+			// if (target_w == null) {
+			// throw new Exception(
+			// "AlloyTestCaseGenerator - analyzeTuples: error detecting oracle.");
+			// }
+			// // we create a new window
+			// // oracle = new Window(target_w.getId(), target_w.isModal(),
+			// // target_w.getLabel(),
+			// // target_w.isRoot());
+			// for (final Action_widget aw : target_w.getActionWidgets()) {
+			// oracle.addWidget(aw);
+			// }
+			// for (final Input_widget iw : target_w.getInputWidgets()) {
+			// final List<A4Tuple> values = AlloyUtil.getTuples(solution,
+			// "Input_widget_"
+			// + iw.getId());
+			// String v = "";
+			// for (final A4Tuple value : values) {
+			// if (value.arity() != 3) {
+			// throw new Exception(
+			// "AlloyTestCaseGenerator - analyzeTuples: error retriving input widget value.");
+			// }
+			// if (value.atom(2).equals(tuple.atom(2))) {
+			// final int value_index = Integer
+			// .valueOf(value.atom(1).split("\\$")[1]);
+			// // TODO: manage values
+			// v = String.valueOf(value_index);
+			// }
+			// }
+			//
+			// final Input_widget iww = new Input_widget(iw.getId(),
+			// iw.getLabel(), v,
+			// iw.getClasss());
+			// oracle.addWidget(iww);
+			// }
+			// for (final Selectable_widget sw :
+			// target_w.getSelectableWidgets()) {
+			// // TODO
+			// oracle.addWidget(sw);
+			// }
+			//
+			// break;
+			// }
+			// }
 
 			final List<A4Tuple> params = AlloyUtil.getTuples(solution, tuple.atom(1));
 
 			if (tuple.atom(1).startsWith("Go")) {
 				if (params.size() != 1) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for go.");
+					throw new Exception(
+							"AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for go.");
 				}
 				final A4Tuple wid_tuple = params.get(0);
 				if (wid_tuple.atom(1).equals("General$0")) {
@@ -260,14 +277,15 @@ public class AlloyTestCaseGenerator {
 					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in go.");
 				}
 
-				final Go action = new Go(target_w, oracle);
+				final Go action = new Go(target_w, null);
 				actions.set(time_index - 1, action);
 				continue;
 			}
 
 			if (tuple.atom(1).startsWith("Fill")) {
 				if (params.size() != 2) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for fill.");
+					throw new Exception(
+							"AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for fill.");
 				}
 
 				String iw_id = null;
@@ -302,14 +320,15 @@ public class AlloyTestCaseGenerator {
 				}
 
 				// TODO: deal with input data
-				final Fill action = new Fill(target_iw, oracle, String.valueOf(value_index));
+				final Fill action = new Fill(target_iw, null, String.valueOf(value_index));
 				actions.set(time_index - 1, action);
 				continue;
 			}
 
 			if (tuple.atom(1).startsWith("Click")) {
 				if (params.size() != 1) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for click.");
+					throw new Exception(
+							"AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for click.");
 				}
 				final A4Tuple wid_tuple = params.get(0);
 				if (!wid_tuple.atom(1).startsWith("Action_widget_")) {
@@ -330,7 +349,7 @@ public class AlloyTestCaseGenerator {
 					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in click.");
 				}
 
-				final Click action = new Click(target_aw, oracle);
+				final Click action = new Click(target_aw, null);
 				actions.set(time_index - 1, action);
 				continue;
 			}

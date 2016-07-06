@@ -1,17 +1,17 @@
-package usi.guifunctionality.mapping;
+package usi.gui.functionality.mapping;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import usi.guipattern.Pattern_action_widget;
-import usi.guipattern.Pattern_input_widget;
-import usi.guipattern.Pattern_selectable_widget;
-import usi.guipattern.Pattern_window;
-import usi.guistructure.Action_widget;
-import usi.guistructure.Input_widget;
-import usi.guistructure.Selectable_widget;
-import usi.guistructure.Window;
+import usi.gui.pattern.Pattern_action_widget;
+import usi.gui.pattern.Pattern_input_widget;
+import usi.gui.pattern.Pattern_selectable_widget;
+import usi.gui.pattern.Pattern_window;
+import usi.gui.structure.Action_widget;
+import usi.gui.structure.Input_widget;
+import usi.gui.structure.Selectable_widget;
+import usi.gui.structure.Window;
 
 public class Instance_window {
 

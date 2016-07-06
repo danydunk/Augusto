@@ -5,17 +5,19 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import usi.guistructure.Action_widget;
-import usi.guistructure.GUI;
-import usi.guistructure.Input_widget;
-import usi.guistructure.Window;
-import usi.guistructure.xmlparser.GUIParser;
+import usi.gui.structure.Action_widget;
+import usi.gui.structure.GUI;
+import usi.gui.structure.GUIParser;
+import usi.gui.structure.Input_widget;
+import usi.gui.structure.Window;
 import usi.xml.XMLUtil;
 
 public class GUIParserTest {
@@ -63,7 +65,12 @@ public class GUIParserTest {
 		Action_widget aw3 = null;
 		Action_widget aw4 = null;
 
-		for (final Action_widget aw : gui.getAction_widgets()) {
+		final List<Action_widget> aws = new ArrayList<>();
+		for (final Window w : gui.getWindows()) {
+			aws.addAll(w.getActionWidgets());
+		}
+
+		for (final Action_widget aw : aws) {
 			if ("aw1".equals(aw.getId())) {
 				aw1 = aw;
 			}
@@ -79,8 +86,12 @@ public class GUIParserTest {
 		}
 
 		Input_widget iw1 = null;
+		final List<Input_widget> iws = new ArrayList<>();
+		for (final Window w : gui.getWindows()) {
+			iws.addAll(w.getInputWidgets());
+		}
 
-		for (final Input_widget iw : gui.getInput_widgets()) {
+		for (final Input_widget iw : iws) {
 			if ("iw1".equals(iw.getId())) {
 				iw1 = iw;
 			}
@@ -96,18 +107,18 @@ public class GUIParserTest {
 
 		// There is a relation from AW1 to W2
 		assertNotNull(aw1);
-		final Collection<Window> wc = gui.getForwardLinks(aw1);
+		final Collection<Window> wc = gui.getStaticForwardLinks(aw1);
 		assertEquals("Number of Edges", 1, wc.size());
 		assertEquals("To windpws", "w2", wc.iterator().next().getId());
 
 		// No edge from AW3
 		assertNotNull(aw3);
-		final Collection<Window> wc3 = gui.getForwardLinks(aw3);
+		final Collection<Window> wc3 = gui.getStaticForwardLinks(aw3);
 		assertTrue(wc3.isEmpty());
 
 		// No edge from AW4
 		assertNotNull(aw4);
-		final Collection<Window> wc4 = gui.getForwardLinks(aw4);
+		final Collection<Window> wc4 = gui.getStaticForwardLinks(aw4);
 		assertTrue(wc4.isEmpty());
 
 	}

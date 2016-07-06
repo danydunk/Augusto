@@ -1,4 +1,4 @@
-package usi.guifunctionality;
+package usi.gui.functionality;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -8,18 +8,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import usi.gui.functionality.mapping.Instance_GUI_pattern;
+import usi.gui.functionality.mapping.Instance_window;
+import usi.gui.pattern.Cardinality;
+import usi.gui.pattern.GUI_Pattern;
+import usi.gui.pattern.Pattern_action_widget;
+import usi.gui.pattern.Pattern_window;
+import usi.gui.structure.Action_widget;
+import usi.gui.structure.GUI;
+import usi.gui.structure.Window;
+
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
-
-import usi.guifunctionality.mapping.Instance_GUI_pattern;
-import usi.guifunctionality.mapping.Instance_window;
-import usi.guipattern.Cardinality;
-import usi.guipattern.GUI_Pattern;
-import usi.guipattern.Pattern_action_widget;
-import usi.guipattern.Pattern_window;
-import usi.guistructure.Action_widget;
-import usi.guistructure.GUI;
-import usi.guistructure.Window;
 
 public class GUIFunctionality_search {
 
@@ -29,6 +29,7 @@ public class GUIFunctionality_search {
 	private Table<Pattern_window, Window, List<Instance_window>> matches_table_wm;
 
 	public GUIFunctionality_search(final GUI gui) {
+
 		this.gui = gui;
 	}
 
@@ -44,7 +45,8 @@ public class GUIFunctionality_search {
 		Map<Pattern_window, List<Window>> possible_matches = new LinkedHashMap<>();
 		// table that contains for each window_pattern and window the possible
 		// instances
-		Table<Pattern_window, Window, List<Instance_window>> matches_table = HashBasedTable.create();
+		Table<Pattern_window, Window, List<Instance_window>> matches_table = HashBasedTable
+				.create();
 
 		for (final Pattern_window pw : pattern.getWindows()) {
 			final List<Window> windows = new ArrayList<>();
@@ -75,9 +77,11 @@ public class GUIFunctionality_search {
 
 			final List<Entry<Window, Pattern_window>> tuples = new ArrayList<>();
 
-			for (final Entry<Pattern_window, List<Window>> entry : this.possible_matches_wm.entrySet()) {
+			for (final Entry<Pattern_window, List<Window>> entry : this.possible_matches_wm
+					.entrySet()) {
 				for (final Window w : entry.getValue()) {
-					final Entry<Window, Pattern_window> e = new AbstractMap.SimpleEntry<>(w, entry.getKey());
+					final Entry<Window, Pattern_window> e = new AbstractMap.SimpleEntry<>(w,
+							entry.getKey());
 					tuples.add(e);
 				}
 			}
@@ -136,8 +140,8 @@ public class GUIFunctionality_search {
 	 * required. A window to match the pattern must have at least one correct
 	 * backward edge (if the pattern window has some).
 	 */
-	private Instance_GUI_pattern traverse(final Window w, final Pattern_window pw, Instance_GUI_pattern igp)
-			throws Exception {
+	private Instance_GUI_pattern traverse(final Window w, final Pattern_window pw,
+			Instance_GUI_pattern igp) throws Exception {
 
 		// System.out.println(w.getId()+" - "+pw.getId());
 		// if the window is already part of the instance_gui_pattern
@@ -167,8 +171,7 @@ public class GUIFunctionality_search {
 
 				// the working structures are saved
 				final Map<Pattern_window, List<Window>> possible_matches_copy = copyMap(this.possible_matches_wm);
-				final Table<Pattern_window, Window, List<Instance_window>> matches_table_copy = copyTable(
-						this.matches_table_wm);
+				final Table<Pattern_window, Window, List<Instance_window>> matches_table_copy = copyTable(this.matches_table_wm);
 
 				// the instance_windows that match this one are remove
 				this.adaptWorkStructures(instance);
@@ -187,28 +190,33 @@ public class GUIFunctionality_search {
 							// boolean used to recognise the optional windows
 							boolean check_optional = false;
 							boolean check = false;
-							for (final Pattern_window target_pw : this.gui_pattern.getForwardLinks(paw)) {
-								for (final Window target_w : this.gui.getForwardLinks(aw)) {
+							for (final Pattern_window target_pw : this.gui_pattern
+									.getForwardLinks(paw)) {
+								for (final Window target_w : this.gui.getStaticForwardLinks(aw)) {
 									// if the target_pw has cardinality 1 and it
 									// is already in the pattern
 									// then the edge must go to the window
 									// already matched
 									final List<Window> lws = igp.getWindows().stream()
-											.filter(e -> e.getPattern() == target_pw).map(e -> e.getInstance())
-											.collect(Collectors.toList());
-									if (!(target_pw.getCardinality() == Cardinality.ONE && lws.size() > 0
-											&& !lws.contains(target_w))) {
-										final Instance_GUI_pattern new_instance = this.traverse(target_w, target_pw,
-												igp.clone());
+											.filter(e -> e.getPattern() == target_pw)
+											.map(e -> e.getInstance()).collect(Collectors.toList());
+									if (!(target_pw.getCardinality() == Cardinality.ONE
+											&& lws.size() > 0 && !lws.contains(target_w))) {
+										final Instance_GUI_pattern new_instance = this.traverse(
+												target_w, target_pw, igp.clone());
 										if (new_instance != null) {
 											check = true;
-											new_instance.getGui().addEdge(aw, target_w);
+											new_instance.getGui().addStaticEdge(aw, target_w);
 											igp = new_instance;
 										}
 									}
 								}
-								if (target_pw.getCardinality()
-										.getMin() != 0 /* && target_pw != pw */) {
+								if (target_pw.getCardinality().getMin() != 0 /*
+								 * &&
+								 * target_pw
+								 * !=
+								 * pw
+								 */) {
 									check_optional = true;
 								}
 							}
@@ -233,9 +241,11 @@ public class GUIFunctionality_search {
 					correct = false;
 					for (final Pattern_action_widget paw : this.gui_pattern.getBackwardLinks(pw)) {
 						// boolean used to recognise the optional windows
-						final Pattern_window source_pw = this.gui_pattern.getAw_window_mapping().get(paw);
+						final Pattern_window source_pw = this.gui_pattern.getAw_window_mapping()
+								.get(paw);
 
-						for (final Action_widget aw : this.gui.getBackwardLinks(instance.getInstance())) {
+						for (final Action_widget aw : this.gui.getStaticBackwardLinks(instance
+								.getInstance())) {
 							final Window source_w = this.gui.getActionWidget_Window(aw);
 
 							// if(igp.getGui().getAction_widgets().contains(aw)
@@ -246,11 +256,12 @@ public class GUIFunctionality_search {
 							// source_pw)
 							// final Instance_GUI_pattern igp_copy2 =
 							// igp.clone();
-							final Instance_GUI_pattern new_instance = this.traverse(source_w, source_pw, igp.clone());
+							final Instance_GUI_pattern new_instance = this.traverse(source_w,
+									source_pw, igp.clone());
 							if (new_instance != null) {
 								if (new_instance.getAction_widgets_mapping().get(aw) == paw) {
 									correct = true;
-									new_instance.getGui().addEdge(aw, instance.getInstance());
+									new_instance.getGui().addStaticEdge(aw, instance.getInstance());
 									igp = new_instance;
 								}
 								// else {
@@ -258,8 +269,11 @@ public class GUIFunctionality_search {
 								// }
 							}
 						}
-						if (source_pw.getCardinality()
-								.getMin() != 0 /* && source_pw != pw */) {
+						if (source_pw.getCardinality().getMin() != 0 /*
+						 * &&
+						 * source_pw
+						 * != pw
+						 */) {
 							check_optional = true;
 						}
 					}
@@ -272,8 +286,8 @@ public class GUIFunctionality_search {
 					break;
 				}
 
-				final List<Instance_window> newMarked = instances.parallelStream().filter(e -> !marked.contains(e))
-						.filter(e -> {
+				final List<Instance_window> newMarked = instances.parallelStream()
+						.filter(e -> !marked.contains(e)).filter(e -> {
 							for (final Action_widget aw : e.getInstance().getActionWidgets()) {
 								if (e.getPAW_for_AW(aw) != instance.getPAW_for_AW(aw)) {
 									return false;
@@ -306,10 +320,14 @@ public class GUIFunctionality_search {
 	private void adaptWorkStructures(final Instance_window iw) {
 
 		final List<Map.Entry<Pattern_window, List<Instance_window>>> entries = this.matches_table_wm
-				.column(iw.getInstance()).entrySet().stream().map(e -> {
-					final List<Instance_window> l = new ArrayList<>(
-							e.getValue().parallelStream().filter(ee -> !iw.isOverlap(ee)).collect(Collectors.toList()));
-					return new AbstractMap.SimpleEntry<Pattern_window, List<Instance_window>>(e.getKey(), l);
+				.column(iw.getInstance())
+				.entrySet()
+				.stream()
+				.map(e -> {
+					final List<Instance_window> l = new ArrayList<>(e.getValue().parallelStream()
+							.filter(ee -> !iw.isOverlap(ee)).collect(Collectors.toList()));
+					return new AbstractMap.SimpleEntry<Pattern_window, List<Instance_window>>(e
+							.getKey(), l);
 				}).collect(Collectors.toList());
 
 		for (final Entry<Pattern_window, List<Instance_window>> entry : entries) {

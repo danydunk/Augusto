@@ -1,4 +1,4 @@
-package usi.guipattern;
+package usi.gui.pattern;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -9,14 +9,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.google.common.collect.Collections2;
+import usi.gui.functionality.mapping.Instance_window;
+import usi.gui.structure.Action_widget;
+import usi.gui.structure.Input_widget;
+import usi.gui.structure.Selectable_widget;
+import usi.gui.structure.Widget;
+import usi.gui.structure.Window;
 
-import usi.guifunctionality.mapping.Instance_window;
-import usi.guistructure.Action_widget;
-import usi.guistructure.Input_widget;
-import usi.guistructure.Selectable_widget;
-import usi.guistructure.Widget;
-import usi.guistructure.Window;
+import com.google.common.collect.Collections2;
 
 public class Pattern_window extends Pattern_widget<Window> {
 
@@ -25,10 +25,12 @@ public class Pattern_window extends Pattern_widget<Window> {
 	private List<Pattern_action_widget> action_widgets;
 	private List<Pattern_input_widget> input_widgets;
 	private List<Pattern_selectable_widget> selectable_widgets;
+
 	// private List<Pattern_container> containers;
 
 	public Pattern_window(final String id, final String label, final Cardinality card,
 			final String alloy_correspondence, final Boolean_regexp modal, final Boolean_regexp root) {
+
 		super(id, label, card, alloy_correspondence);
 		this.modal = modal;
 		this.root = root;
@@ -129,6 +131,19 @@ public class Pattern_window extends Pattern_widget<Window> {
 
 		if (in != null) {
 			this.selectable_widgets.add(in);
+		}
+	}
+
+	public void addWidget(final Pattern_widget w) {
+
+		if (w instanceof Pattern_action_widget) {
+			this.addActionWidget((Pattern_action_widget) w);
+		}
+		if (w instanceof Pattern_input_widget) {
+			this.addInputWidget((Pattern_input_widget) w);
+		}
+		if (w instanceof Pattern_selectable_widget) {
+			this.addSelectableWidget((Pattern_selectable_widget) w);
 		}
 	}
 
@@ -341,7 +356,8 @@ public class Pattern_window extends Pattern_widget<Window> {
 	 * widgets that match the cardinalities
 	 */
 	protected <C extends Widget> List<Map<? extends Pattern_widget<C>, List<C>>> distribute(
-			final List<? extends Pattern_widget<C>> keys, final Map<? extends Pattern_widget<C>, List<C>> map) {
+			final List<? extends Pattern_widget<C>> keys,
+			final Map<? extends Pattern_widget<C>, List<C>> map) {
 
 		final List<Map<? extends Pattern_widget<C>, List<C>>> out = new ArrayList<>();
 
@@ -375,7 +391,8 @@ public class Pattern_window extends Pattern_widget<Window> {
 					}
 				}
 				// all the permutations are calculated
-				final Collection<List<Integer>> permutations = Collections2.orderedPermutations(to_perm);
+				final Collection<List<Integer>> permutations = Collections2
+						.orderedPermutations(to_perm);
 
 				// the list of possibilities is created
 				possibilities.addAll(permutations.parallelStream().map(e -> {

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import usi.gui.widgets.Widget;
-import usi.gui.widgets.Window;
+import usi.gui.structure.Widget;
+import usi.gui.structure.Window;
 import usi.util.IDManager;
 
 import com.rational.test.ft.object.interfaces.TestObject;
@@ -15,8 +15,6 @@ import com.rational.test.ft.script.SubitemFactory;
 
 public class GuiStateManager {
 
-	private final List<String> widgetsOfInterest;
-	private final ArrayList<Widget> currentWidgets;
 	private final TestObject root;
 	private final Property[] properties = new Property[1];
 	private final IDManager ids;
@@ -26,33 +24,12 @@ public class GuiStateManager {
 		this.root = root;
 		this.ids = new IDManager();
 
-		this.currentWidgets = new ArrayList<Widget>();
 		// this.properties[0] = new Property("showing", "true");
 		// this.properties[1] = new Property("enabled", "true");
 		this.properties[0] = new Property("visible", "true");
-
-		this.widgetsOfInterest = new ArrayList<String>();
-		this.widgetsOfInterest.add("ButtonUI");
-		this.widgetsOfInterest.add("MenuItemUI");
-		this.widgetsOfInterest.add("TabbedPaneUI");
-		this.widgetsOfInterest.add("FormattedTextFieldUI");
-		this.widgetsOfInterest.add("PasswordFieldUI");
-		this.widgetsOfInterest.add("javax.swing.JTextArea");
-		this.widgetsOfInterest.add("TextAreaUI");
-		this.widgetsOfInterest.add("TextFieldUI");
-		this.widgetsOfInterest.add("RadioButtonUI");
-		this.widgetsOfInterest.add("CheckBoxUI");
-		this.widgetsOfInterest.add("ComboBoxUI");
-		this.widgetsOfInterest.add("ListUI");
-		this.widgetsOfInterest.add("TableUI");
 	}
 
-	public ArrayList<Widget> getCurrentWidgets() {
-
-		return this.currentWidgets;
-	}
-
-	public List<Window> getCurrentGUI() throws Exception {
+	public List<Window> getCurrentWindows() throws Exception {
 
 		TestObject[] appoggio = null;
 		TestObject[] windows = null;
@@ -68,10 +45,12 @@ public class GuiStateManager {
 				Thread.sleep(200);
 				windows = this.root.find(SubitemFactory.atChild(this.properties));
 			} catch (final Exception e) {
-				throw new Exception("GUIStateManager - getCurrentGUI: error in find, " + e.getMessage());
+				throw new Exception("GUIStateManager - getCurrentGUI: error in find, "
+						+ e.getMessage());
 			}
 
-			if (windows != null && windows.length != 0 && appoggio != null && appoggio.length == windows.length) {
+			if (windows != null && windows.length != 0 && appoggio != null
+					&& appoggio.length == windows.length) {
 				break;
 			}
 			appoggio = windows;
@@ -90,7 +69,8 @@ public class GuiStateManager {
 			try {
 				tos = wind.find(SubitemFactory.atDescendant(this.properties));
 			} catch (final Exception e) {
-				throw new Exception("GUIStateManager - getCurrentGUI: error in sub-widget find, " + e.getMessage());
+				throw new Exception("GUIStateManager - getCurrentGUI: error in sub-widget find, "
+						+ e.getMessage());
 			}
 
 			// System.out.println("WINDOW");
@@ -99,30 +79,38 @@ public class GuiStateManager {
 			// }
 			tos = this.orderTOs(tos);
 
-			final ContextAnalyzer context = new ContextAnalyzer(new ArrayList<TestObject>(Arrays.asList(tos)));
-
-			final List<Widget> ws = new ArrayList<Widget>();
-			for (final TestObject to : tos) {
-				// we keep only the widget of interest
-				if (this.widgetsOfInterest.contains(to.getProperty("uIClassID").toString())) {
-					final Widget widget = new Widget(to, this.ids.nextWidgetId());
-					// if the widget does not have a label we look for
-					// descriptors
-					if (widget.getProperty("label") == null || widget.getProperty("label").length() == 0) {
-						widget.setDescriptor(context.getDescriptor(widget.getView()));
-					}
-					ws.add(widget);
-				}
-			}
-
-			final Window w = new Window(wind, ws, this.ids.nextWindowId());
+			final ContextAnalyzer context = new ContextAnalyzer(new ArrayList<TestObject>(
+					Arrays.asList(tos)));
 
 			// windows with no widgets or with the override redirect flag are
 			// filtered
-			if (!(wind.getProperty("name") != null && wind.getProperty("name").toString().contains("overrideRedirect"))
-					&& tos.length > 0) {
-				winds.add(w);
+			if ((wind.getProperty("name") != null && wind.getProperty("name").toString()
+					.contains("overrideRedirect"))
+					|| tos.length == 0) {
+				continue;
 			}
+
+			final Widget wid = Widget.getWidget(wind);
+			if (!(wid instanceof Window)) {
+				throw new Exception(
+						"GuiStateManager - getCurrentWindows: error, window not recognized.");
+			}
+			final Window w = (Window) wid;
+
+			for (final TestObject to : tos) {
+				// we keep only the widget of interest
+				final Widget widget = Widget.getWidget(to);
+				if (widget != null) {
+					// if the widget does not have a label we look for
+					// descriptors
+					if (widget.getLabel() == null || widget.getLabel().length() == 0) {
+						widget.setDescriptor(context.getDescriptor(widget.getTo()));
+					}
+					w.addWidget(widget);
+				}
+			}
+
+			winds.add(w);
 
 		}
 		return winds;
@@ -158,7 +146,7 @@ public class GuiStateManager {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author DZ Class that wraps a widget. It implements the Comparable
 	 *         interface and compares widgets w.r.t their state representation
 	 *         calculated with the method getPropertyValue. For each widget type

@@ -11,12 +11,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import usi.guipattern.Boolean_regexp;
-import usi.guipattern.GUI_Pattern;
-import usi.guipattern.Pattern_action_widget;
-import usi.guipattern.Pattern_input_widget;
-import usi.guipattern.Pattern_window;
-import usi.guipattern.parser.GUIPatternParser;
+import usi.gui.pattern.Boolean_regexp;
+import usi.gui.pattern.GUIPatternParser;
+import usi.gui.pattern.GUI_Pattern;
+import usi.gui.pattern.Pattern_action_widget;
+import usi.gui.pattern.Pattern_input_widget;
+import usi.gui.pattern.Pattern_window;
 import usi.xml.XMLUtil;
 
 public class GUIPatternParserTest {
