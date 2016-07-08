@@ -1,6 +1,8 @@
 package test.integration;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -8,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -246,4 +249,146 @@ public class AlloyTestCaseGenerationTest {
 		final List<GUITestCase> tests = generator.generateTestCases(1, 30000);
 		assertEquals(4, tests.size());
 	}
+
+	/**
+	 * Scenario taken from test 2
+	 *
+	 * @throws Exception
+	 */
+	@Test
+	public void test3_RefineSemanticSpecification() throws Exception {
+
+		// Concrete GUI, 3 forms
+		final GUI gui = new GUI();
+		// w1
+		final Window w1 = new Window_test("w1", "init");
+		final Action_widget aw1 = new Action_widget_test("aw1", "add");
+		final Action_widget aw2 = new Action_widget_test("aw2", "test");
+		w1.addWidget(aw1);
+		w1.addWidget(aw2);
+		gui.addWindow(w1);
+		// w2
+		final Window w2 = new Window_test("w2", "form");
+		final Action_widget aw3 = new Action_widget_test("aw3", "next");
+		final Action_widget aw4 = new Action_widget_test("aw4", "back");
+		final Input_widget iw1 = new Input_widget_test("iw1", "field1", "");
+		final Input_widget iw2 = new Input_widget_test("iw2", "field2", "");
+		w2.addWidget(aw3);
+		w2.addWidget(aw4);
+		w2.addWidget(iw1);
+		w2.addWidget(iw2);
+		gui.addWindow(w2);
+		// w3
+		final Window w3 = new Window_test("w3", "other");
+		final Action_widget aw5 = new Action_widget_test("aw5", "add");
+		final Input_widget iw3 = new Input_widget_test("iw3", "field3", "");
+		w3.addWidget(aw5);
+		w3.addWidget(iw3);
+		gui.addWindow(w3);
+		// edges
+		gui.addStaticEdge(aw1, w2);
+		gui.addStaticEdge(aw2, w3);
+		gui.addStaticEdge(aw4, w1);
+
+		final GUI_Pattern pattern = new GUI_Pattern();
+		// pw1
+		final Pattern_window pw1 = new Pattern_window("pw1", ".*", Cardinality.SOME, "Initial",
+				Boolean_regexp.ANY, Boolean_regexp.ANY);
+		final Pattern_action_widget paw1 = new Pattern_action_widget("paw1", ".*add.*",
+				Cardinality.SOME, "Trigger");
+		pw1.addWidget(paw1);
+		pattern.addWindow(pw1);
+		// pw2
+		final Pattern_window pw2 = new Pattern_window("pw2", ".*", Cardinality.ONE, "Form",
+				Boolean_regexp.ANY, Boolean_regexp.ANY);
+		final Pattern_action_widget paw2 = new Pattern_action_widget("paw2", ".*next.*",
+				Cardinality.ONE, "Ok");
+		final Pattern_action_widget paw3 = new Pattern_action_widget("paw3", ".*back.*",
+				Cardinality.ONE, "Cancel");
+		final Pattern_input_widget piw1 = new Pattern_input_widget("piw1", ".*", Cardinality.SOME,
+				"Input_widget", null);
+		pw2.addWidget(paw2);
+		pw2.addWidget(paw3);
+		pw2.addWidget(piw1);
+		pattern.addWindow(pw2);
+		// pw3
+		final Pattern_window pw3 = new Pattern_window("pw3", ".*", Cardinality.LONE, "Confirm",
+				Boolean_regexp.TRUE, Boolean_regexp.ANY);
+		final Pattern_action_widget paw4 = new Pattern_action_widget("paw4", ".*ok.*",
+				Cardinality.ONE, "Ok");
+		final Pattern_action_widget paw5 = new Pattern_action_widget("paw5", ".*back.*",
+				Cardinality.ONE, "Cancel");
+		pw3.addWidget(paw4);
+		pw3.addWidget(paw5);
+		pattern.addWindow(pw3);
+		// edges
+		pattern.addEdge(paw1, pw2);
+		pattern.addEdge(paw3, pw1);
+		pattern.addEdge(paw2, pw3);
+		pattern.addEdge(paw5, pw2);
+
+		// Pattern 3 Windows
+
+		pattern.loadSemantics("ADD.als");
+
+		final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+		final List<Instance_GUI_pattern> res = gfs.match(pattern);
+		assertEquals(1, res.size());
+		assertEquals(2, res.get(0).getWindows().size());
+
+		Instance_window ww1 = null;
+		Instance_window ww2 = null;
+		for (final Instance_window ww : res.get(0).getWindows()) {
+			switch (ww.getInstance().getId()) {
+			case "w1":
+				ww1 = ww;
+				break;
+			case "w2":
+				ww2 = ww;
+				break;
+			}
+		}
+		assertTrue(ww1 != null);
+		assertTrue(ww2 != null);
+
+		final Instance_GUI_pattern in = res.get(0);
+
+		in.generateSpecificSemantics();
+
+		final SpecificSemantics spec = in.getSemantics();
+
+		System.out.println("Sign " + spec.getSignatures().size());
+
+		System.out.println("Facts " + spec.getFacts().size());
+
+		final Map<Window, Pattern_window> winMap = in.getWindows_mapping();
+
+		// pw3 (Confirmation window) was not associated to a windows because it
+		// was not discovered
+		// let's assert this:
+		for (final Window win : winMap.keySet()) {
+			final String pwi = winMap.get(win).getId();
+			assertNotSame(pw3, pwi);
+		}
+
+		final SpecificSemantics semantic4discoveringPw3 = AlloyTestCaseGenerator
+				.semantic4DiscoverWindow(in, //
+						w2, // sourceWindow, //
+						pw3, // pattern_TargetWindow,//
+						paw2// patternActionWidget
+						);
+
+		assertNotNull(semantic4discoveringPw3);
+
+		assertTrue(semantic4discoveringPw3.getFacts().size() > in.getSemantics().getFacts().size());
+		assertTrue(semantic4discoveringPw3.getSignatures().size() > in.getSemantics()
+				.getSignatures().size());
+
+		// final AlloyTestCaseGenerator generator = new
+		// AlloyTestCaseGenerator(in);
+		// final List<GUITestCase> tests = generator.generateTestCases(1,
+		// 30000);
+		// assertEquals(4, tests.size());
+	}
+
 }
