@@ -160,23 +160,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 				Signature piw_sig = null;
 
-				if (piw.getAlloyCorrespondence() != null
-						&& piw.getAlloyCorrespondence().length() > 0) {
-					// the pattern input widget signature is retrieved
-					final List<Signature> to_search = new ArrayList<>(
-							func_semantics.getInput_w_extensions());
-					to_search.add(func_semantics.input_w_signature);
-					piw_sig = AlloyUtil.searchSignatureInList(to_search,
-							piw.getAlloyCorrespondence());
-					System.out.println(piw.getAlloyCorrespondence());
-					if (piw_sig == null) {
-						throw new Exception(
-								"SpecificSemantics - generate: wrong alloy corrispondence "
-										+ piw.getAlloyCorrespondence());
-					}
-				} else {
-					piw_sig = func_semantics.getInput_w_signature();
-				}
+				piw_sig = searchForParent(func_semantics, piw);
+
 				final Signature sigIW = new Signature("Input_widget_" + iw.getId(),
 						Cardinality.ONE, false, Lists.newArrayList(piw_sig), false);
 
@@ -200,25 +185,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 					// AW not mapped
 					continue;
 				}
-				Signature paw_sig = null;
-				if (paw.getAlloyCorrespondence() != null
-						&& paw.getAlloyCorrespondence().length() > 0) {
-
-					// the pattern action widget signature is retrieved
-					final List<Signature> to_search = new ArrayList<>(
-							func_semantics.getAction_w_extensions());
-					to_search.add(func_semantics.action_w_signature);
-					paw_sig = AlloyUtil.searchSignatureInList(to_search,
-							paw.getAlloyCorrespondence());
-
-					if (paw_sig == null) {
-						throw new Exception(
-								"SpecificSemantics - generate: wrong alloy corrispondence "
-										+ paw.getAlloyCorrespondence());
-					}
-				} else {
-					paw_sig = func_semantics.getAction_w_signature();
-				}
+				final Signature paw_sig = searchForParent(func_semantics, paw);
 
 				final Signature sigAW = new Signature("Action_widget_" + aw.getId(),
 						Cardinality.ONE, false, Lists.newArrayList(paw_sig), false);
@@ -239,6 +206,51 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		final Alloy_Model specific_model = new Alloy_Model(signatures, facts, predicates,
 				functions, opens);
 		return instantiate(specific_model);
+	}
+
+	// TODO: maybe we should move this method to, for instance, AlloyModel.
+	public static Signature searchForParent(final FunctionalitySemantics func_semantics,
+			final Pattern_input_widget piw) throws Exception {
+
+		Signature piw_sig;
+		if (piw.getAlloyCorrespondence() != null && piw.getAlloyCorrespondence().length() > 0) {
+			// the pattern input widget signature is retrieved
+			final List<Signature> to_search = new ArrayList<>(
+					func_semantics.getInput_w_extensions());
+			to_search.add(func_semantics.input_w_signature);
+			piw_sig = AlloyUtil.searchSignatureInList(to_search, piw.getAlloyCorrespondence());
+			System.out.println(piw.getAlloyCorrespondence());
+			if (piw_sig == null) {
+				throw new Exception("SpecificSemantics - generate: wrong alloy corrispondence "
+						+ piw.getAlloyCorrespondence());
+			}
+		} else {
+			piw_sig = func_semantics.getInput_w_signature();
+		}
+		return piw_sig;
+	}
+
+	// TODO: maybe we should move this method to, for instance, AlloyModel.
+	public static Signature searchForParent(final FunctionalitySemantics func_semantics,
+			final Pattern_action_widget paw) throws Exception {
+
+		Signature paw_sig = null;
+		if (paw.getAlloyCorrespondence() != null && paw.getAlloyCorrespondence().length() > 0) {
+
+			// the pattern action widget signature is retrieved
+			final List<Signature> to_search = new ArrayList<>(
+					func_semantics.getAction_w_extensions());
+			to_search.add(func_semantics.action_w_signature);
+			paw_sig = AlloyUtil.searchSignatureInList(to_search, paw.getAlloyCorrespondence());
+
+			if (paw_sig == null) {
+				throw new Exception("SpecificSemantics - generate: wrong alloy corrispondence "
+						+ paw.getAlloyCorrespondence());
+			}
+		} else {
+			paw_sig = func_semantics.getAction_w_signature();
+		}
+		return paw_sig;
 	}
 
 	/**
@@ -265,7 +277,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 	 */
 	private static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -306,7 +318,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		return createFactsForElement(sws, window, "aws");
 	}
 
-	private static Fact createFactsForElement(final Collection<Signature> widgets,
+	public static Fact createFactsForElement(final Collection<Signature> widgets,
 			final Signature window, final String fieldToRelated) {
 
 		if (widgets.isEmpty()) {
