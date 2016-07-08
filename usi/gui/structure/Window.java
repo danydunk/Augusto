@@ -9,11 +9,10 @@ public class Window extends Widget {
 
 	private boolean root;
 	private final boolean modal;
+	// these lists are ordered by the widgets position
 	private List<Action_widget> action_widgets;
 	private List<Input_widget> input_widgets;
 	private List<Selectable_widget> selectable_widgets;
-
-	// private List<Container> containers;
 
 	public Window(final TestObject to, final String id, final String label, final String classs,
 			final int x, final int y, final boolean modal) throws Exception {
@@ -62,6 +61,7 @@ public class Window extends Widget {
 
 		if (in != null) {
 			this.action_widgets.add(in);
+			this.action_widgets.sort(null);
 		}
 	}
 
@@ -69,6 +69,7 @@ public class Window extends Widget {
 
 		if (in != null) {
 			this.input_widgets.add(in);
+			this.input_widgets.sort(null);
 		}
 	}
 
@@ -76,6 +77,7 @@ public class Window extends Widget {
 
 		if (in != null) {
 			this.selectable_widgets.add(in);
+			this.input_widgets.sort(null);
 		}
 	}
 
@@ -85,6 +87,8 @@ public class Window extends Widget {
 			this.action_widgets = new ArrayList<>();
 		}
 		this.action_widgets = in;
+		this.action_widgets.sort(null);
+
 	}
 
 	public void setInput_widgets(final List<Input_widget> in) {
@@ -93,6 +97,7 @@ public class Window extends Widget {
 			this.input_widgets = new ArrayList<>();
 		}
 		this.input_widgets = in;
+		this.input_widgets.sort(null);
 	}
 
 	public void setSelectable_widgets(final List<Selectable_widget> in) {
@@ -101,6 +106,7 @@ public class Window extends Widget {
 			this.selectable_widgets = new ArrayList<>();
 		}
 		this.selectable_widgets = in;
+		this.selectable_widgets.sort(null);
 	}
 
 	public boolean isModal() {
@@ -133,14 +139,59 @@ public class Window extends Widget {
 		return new ArrayList<>(this.selectable_widgets);
 	}
 
-	// TODO: implement this
 	@Override
 	public boolean isSame(final Widget w) {
 
 		if (!(w instanceof Window)) {
 			return false;
 		}
+		if (!super.sameProperties(w)) {
+			return false;
+		}
+		// we consider a window to be the same if it has the same widgets
+		final Window win = (Window) w;
+		if (win.getActionWidgets().size() != this.getActionWidgets().size()) {
+			return false;
+		}
+		// widgets are ordered by position
+		for (int cont = 0; cont < this.getActionWidgets().size(); cont++) {
+			final Action_widget aw = this.getActionWidgets().get(cont);
+			if (!aw.isSame(win.getActionWidgets().get(cont))) {
+				return false;
+			}
+		}
+
+		if (win.getInputWidgets().size() != this.getInputWidgets().size()) {
+			return false;
+		}
+		// widgets are ordered by position
+		for (int cont = 0; cont < this.getInputWidgets().size(); cont++) {
+			final Input_widget iw = this.getInputWidgets().get(cont);
+			if (!iw.isSame(win.getInputWidgets().get(cont))) {
+				return false;
+			}
+		}
+
+		if (win.getSelectableWidgets().size() != this.getSelectableWidgets().size()) {
+			return false;
+		}
+		// widgets are ordered by position
+		for (int cont = 0; cont < this.getSelectableWidgets().size(); cont++) {
+			final Selectable_widget iw = this.getSelectableWidgets().get(cont);
+			if (!iw.isSame(win.getSelectableWidgets().get(cont))) {
+				return false;
+			}
+		}
+
 		return true;
 	}
 
+	public List<Widget> getWidgets() {
+
+		final List<Widget> widgs = new ArrayList<>();
+		widgs.addAll(this.action_widgets);
+		widgs.addAll(this.input_widgets);
+		widgs.addAll(this.selectable_widgets);
+		return widgs;
+	}
 }
