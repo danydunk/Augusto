@@ -525,6 +525,7 @@ public class AlloyTestCaseGenerator {
 
 		System.out.println("Creating " + factDiscovering);
 
+		final String runCom = "run{System}";
 		/*
 		 * fact{ some t, t': Time, w: Window_w2, w': Conf_undiscovered, c: Click
 		 * | click [Action_widget_aw3, t, T/next[t], c] and
@@ -551,6 +552,7 @@ public class AlloyTestCaseGenerator {
 		facts.add(factDiscovering);
 		facts.add(factLinkActions);
 		facts.add(fact_aws_from_undiscover_window);
+		opens.add(runCom);
 
 		final SpecificSemantics semantif4DiscoverWindow = new SpecificSemantics(signatures, facts,
 				predicates, functions, opens);
