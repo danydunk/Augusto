@@ -525,7 +525,7 @@ public class AlloyTestCaseGenerator {
 
 		System.out.println("Creating " + factDiscovering);
 
-		final String runCom = "run{System}";
+		final String runCom = "run {System}";
 		/*
 		 * fact{ some t, t': Time, w: Window_w2, w': Conf_undiscovered, c: Click
 		 * | click [Action_widget_aw3, t, T/next[t], c] and
