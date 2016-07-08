@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -142,7 +143,7 @@ public class AlloyTestCaseGenerationTest {
 			assertEquals(3, tests.size());
 		} catch (
 
-		final Exception e) {
+				final Exception e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -378,7 +379,7 @@ public class AlloyTestCaseGenerationTest {
 						w2, // sourceWindow, //
 						pw3, // pattern_TargetWindow,//
 						paw2// patternActionWidget
-				);
+						);
 
 		assertNotNull(semantic4discoveringPw3);
 
@@ -399,7 +400,18 @@ public class AlloyTestCaseGenerationTest {
 
 		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
 
-		final List<Command> run_commands = compiled.getAllCommands();
-	}
+		assertNotNull(compiled);
 
+		final List<Command> run_commands = compiled.getAllCommands();
+		System.out.println(run_commands);
+		// TODO: See that Alloy transform the commands.
+		final List<Command> runSystem = run_commands.stream()
+				.filter(e -> e.toString().equals("Run run$1")).collect(Collectors.toList());
+
+		assertTrue(runSystem.size() > 0);
+
+		final A4Solution solution = AlloyUtil.runCommand(compiled, runSystem.get(0));
+
+		// assertTrue(solution.satisfiable());
+	}
 }
