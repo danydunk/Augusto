@@ -33,6 +33,8 @@ import usi.guisemantic.alloy.AlloyUtil;
 import usi.guisemantic.alloy.Alloy_Model;
 import usi.guisemantic.testcase.AlloyTestCaseGenerator;
 import usi.guisemantic.testcase.GUITestCase;
+import edu.mit.csail.sdg.alloy4compiler.ast.Command;
+import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 public class AlloyTestCaseGenerationTest {
@@ -140,7 +142,7 @@ public class AlloyTestCaseGenerationTest {
 			assertEquals(3, tests.size());
 		} catch (
 
-				final Exception e) {
+		final Exception e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -376,7 +378,7 @@ public class AlloyTestCaseGenerationTest {
 						w2, // sourceWindow, //
 						pw3, // pattern_TargetWindow,//
 						paw2// patternActionWidget
-						);
+				);
 
 		assertNotNull(semantic4discoveringPw3);
 
@@ -389,6 +391,15 @@ public class AlloyTestCaseGenerationTest {
 		// final List<GUITestCase> tests = generator.generateTestCases(1,
 		// 30000);
 		// assertEquals(4, tests.size());
+
+		final String alloy_model = semantic4discoveringPw3.toString();
+		System.out.println("START ALLOY MODEL");
+		System.out.println(semantic4discoveringPw3);
+		System.out.println("END ALLOY MODEL");
+
+		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
+
+		final List<Command> run_commands = compiled.getAllCommands();
 	}
 
 }
