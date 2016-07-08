@@ -1,13 +1,11 @@
 package usi.gui;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import usi.gui.structure.Widget;
 import usi.gui.structure.Window;
-import usi.util.IDManager;
 
 import com.rational.test.ft.object.interfaces.TestObject;
 import com.rational.test.ft.script.Property;
@@ -17,12 +15,11 @@ public class GuiStateManager {
 
 	private final TestObject root;
 	private final Property[] properties = new Property[1];
-	private final IDManager ids;
+	private List<Window> currentWindows;
 
 	public GuiStateManager(final TestObject root) {
 
 		this.root = root;
-		this.ids = new IDManager();
 
 		// this.properties[0] = new Property("showing", "true");
 		// this.properties[1] = new Property("enabled", "true");
@@ -73,12 +70,6 @@ public class GuiStateManager {
 						+ e.getMessage());
 			}
 
-			// System.out.println("WINDOW");
-			// for (final TestObject tt : tos) {
-			// System.out.println(tt.getProperty("uIClassID").toString());
-			// }
-			tos = this.orderTOs(tos);
-
 			final ContextAnalyzer context = new ContextAnalyzer(new ArrayList<TestObject>(
 					Arrays.asList(tos)));
 
@@ -113,103 +104,12 @@ public class GuiStateManager {
 			winds.add(w);
 
 		}
+		this.currentWindows = winds;
 		return winds;
 	}
 
-	/**
-	 * @author DZ Method that orders TOs w.r.t their properties. For each TO the
-	 *         properties we consider for ordering are defined in JWidget.java
-	 *         For ordering the class WidgetWrapper is used
-	 * @param widget
-	 *            list
-	 * @return A ordered TO list
-	 * @throws Exception
-	 */
-	private TestObject[] orderTOs(final TestObject[] tos) throws Exception {
+	public List<Window> getLastComputedWindows() {
 
-		final TOWrapper[] wws = new TOWrapper[tos.length];
-		int cont = 0;
-		for (final TestObject w : tos) {
-			wws[cont] = new TOWrapper(w);
-			cont++;
-		}
-		Arrays.sort(wws);
-		final TestObject[] outArray = new TestObject[wws.length];
-
-		cont = 0;
-		for (final TOWrapper ww : wws) {
-			outArray[cont] = ww.getTO();
-			cont++;
-		}
-
-		return outArray;
-	}
-
-	/**
-	 *
-	 * @author DZ Class that wraps a widget. It implements the Comparable
-	 *         interface and compares widgets w.r.t their state representation
-	 *         calculated with the method getPropertyValue. For each widget type
-	 *         the properties we consider for comparing are defined in
-	 *         JWidget.java
-	 */
-	public class TOWrapper implements Comparable {
-
-		private TestObject to = null;
-		private final int x;
-		private final int y;
-
-		public TOWrapper(final TestObject to) throws Exception {
-
-			Point p = null;
-			try {
-				p = (Point) to.getProperty("locationOnScreen");
-			} catch (final Exception e) {
-				// widget not visible
-				p = (Point) to.getMappableParent().getProperty("locationOnScreen");
-			}
-			this.to = to;
-			this.x = p.x;
-			this.y = p.y;
-		}
-
-		@Override
-		public int compareTo(final Object arg0) {
-
-			final TOWrapper in = (TOWrapper) arg0;
-			final double x = in.getX();
-			final double y = in.getY();
-
-			if (this.y < y) {
-				return -1;
-			}
-			if (this.y > y) {
-				return 1;
-			}
-			// y must be equal
-			if (this.x < x) {
-				return -1;
-			}
-			if (this.x > x) {
-				return 1;
-			}
-			// also x must be equal
-			return 0;
-		}
-
-		public TestObject getTO() {
-
-			return this.to;
-		}
-
-		public int getX() {
-
-			return this.x;
-		}
-
-		public int getY() {
-
-			return this.y;
-		}
+		return new ArrayList<>(this.currentWindows);
 	}
 }

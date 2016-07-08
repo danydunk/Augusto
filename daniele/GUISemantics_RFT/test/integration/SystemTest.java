@@ -15,7 +15,6 @@ import usi.gui.pattern.GUI_Pattern;
 import usi.gui.structure.GUI;
 import usi.gui.structure.GUIParser;
 import usi.guisemantic.testcase.AlloyTestCaseGenerator;
-import usi.guisemantic.testcase.GUIRippingTestCaseRunner;
 import usi.guisemantic.testcase.GUITestCase;
 import usi.xml.XMLUtil;
 
@@ -41,30 +40,6 @@ public class SystemTest {
 			final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(match);
 			final List<GUITestCase> tests = generator.generateTestCases(1, 30000);
 
-			final GUIRippingTestCaseRunner runner = new GUIRippingTestCaseRunner(
-					"./files/for_test", "./files/for_test/apps/upmsmall/upm-small.jar:"
-							+ "./files/for_test/apps/upmsmall/commons-logging-1.1.jar:"
-							+ "./files/for_test/apps/upmsmall/commons-codec-1.3.jar:"
-							+ "./files/for_test/apps/upmsmall/applejavaextensions-1.4.jar:"
-							+ "./files/for_test/apps/upmsmall/bcprov-jdk14-145.jar",
-							"com._17od.upm.gui.MainWindow",
-					"./files/for_test/xml/guiripping-upmsmall-EFG2.xml",
-					"./files/for_test/xml/guiripping-upmsmall-GUI.xml");
-			// {
-			//
-			// @Override
-			// void createFiles() {
-			//
-			// this.efg_path =
-			// "./files/for_test/xml/guiripping-upmsmall-EFG.xml";
-			// this.gui_path =
-			// "./files/for_test/xml/guiripping-upmsmall-GUI.xml";
-			// }
-			// };
-
-			for (final GUITestCase test : tests) {
-				runner.runGUITestCase(test);
-			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 			fail();

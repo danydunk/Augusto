@@ -6,7 +6,7 @@ import usi.util.IDManager;
 
 import com.rational.test.ft.object.interfaces.TestObject;
 
-public abstract class Widget {
+public abstract class Widget implements Comparable<Widget> {
 
 	protected final String id;
 	protected final String label;
@@ -109,11 +109,41 @@ public abstract class Widget {
 		return this.to;
 	}
 
+	@Override
+	public int compareTo(final Widget in) {
+
+		final double x = in.getX();
+		final double y = in.getY();
+
+		if (this.y < y) {
+			return -1;
+		}
+		if (this.y > y) {
+			return 1;
+		}
+		// y must be equal
+		if (this.x < x) {
+			return -1;
+		}
+		if (this.x > x) {
+			return 1;
+		}
+		// also x must be equal
+		return 0;
+	}
+
 	protected boolean sameProperties(final Widget w) {
 
-		if (w.x != this.x || w.y != this.y) {
+		// we use the position +- delta to match
+		final int delta = 2;
+		if (w.x > this.x + delta || w.x < this.x - delta) {
 			return false;
 		}
+		if (w.y > this.y + delta || w.y < this.y - delta) {
+			return false;
+		}
+
+		// TODO: what if the label changes?
 		if (!w.label.equals(this.label)) {
 			return false;
 		}
