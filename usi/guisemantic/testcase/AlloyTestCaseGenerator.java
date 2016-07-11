@@ -560,4 +560,81 @@ public class AlloyTestCaseGenerator {
 		return semantif4DiscoverWindow;
 	}
 
+	public SpecificSemantics validateRequired(final Instance_GUI_pattern instancePattern,
+			final Signature iwsigRequired, final Signature awsig) throws Exception {
+
+		final SpecificSemantics originalSemantic = instancePattern.getSemantics();
+		final int generalMaxSet = 4;
+		int time = 1;
+		boolean foundSat = false;
+		final int limitTime = 10;
+		SpecificSemantics semanticSolution = null;
+
+		while (!foundSat && time < limitTime) {
+
+			// We create the fact
+			final String factContent = "all t: Time |  (#" + iwsigRequired.getIdentifier()
+					+ ".content.t=" + time + ") => click_semantics [" + awsig.getIdentifier()
+					+ ", t]";
+			final Fact fact = new Fact("", factContent);
+
+			final List<Signature> signatures = new ArrayList<>(originalSemantic.getSignatures());
+			final List<Fact> facts = new ArrayList<>(originalSemantic.getFacts());
+			final List<Predicate> predicates = new ArrayList<>(originalSemantic.getPredicates());
+			final List<Function> functions = new ArrayList<>(originalSemantic.getFunctions());
+			final List<String> opens = new ArrayList<>(originalSemantic.getOpenStatements());
+
+			facts.add(fact);
+			// Run command
+			final String restriction = "for " + generalMaxSet + " but exactly " + time + " Time";
+			opens.add("run{System} " + restriction);
+
+			//
+			final SpecificSemantics semantic = new SpecificSemantics(signatures, facts, predicates,
+					functions, opens);
+			// ---
+			final Module compiled = AlloyUtil.compileAlloyModel(semantic.toString());
+
+			if (compiled == null) {
+				new IllegalStateException("Any module created");
+			}
+			final List<Command> run_commands = compiled.getAllCommands();
+			System.out.println(run_commands);
+			final List<Command> runSystem = run_commands.stream()
+					.filter(e -> e.toString().equals("Run run$1 " + restriction))
+					.collect(Collectors.toList());
+
+			if (runSystem.isEmpty()) {
+				new IllegalStateException("Any module created");
+			}
+
+			final A4Solution solution = AlloyUtil.runCommand(compiled, runSystem.get(0));
+			System.out.println("Has solution: " + solution);
+
+			foundSat = solution.satisfiable();
+			if (foundSat) {
+				semanticSolution = semantic;
+			} else {
+				time++;
+			}
+
+		}
+
+		if (!foundSat) {
+			System.out.println("Not found solution after time " + time);
+
+		}
+
+		/*
+		 * fact{ all t: Time | (#Input_widget_iw2.content.t=0) =>
+		 * click_semantics [Action_widget_aw3, t] }
+		 *
+		 * fact{ Required.associated_to = Input_widget_iw2 } fact{ all t: Time |
+		 * (#Input_widget_iw1.content.t=1 and click_semantics
+		 * [Action_widget_aw3, t]) }
+		 */
+
+		return semanticSolution;
+
+	}
 }
