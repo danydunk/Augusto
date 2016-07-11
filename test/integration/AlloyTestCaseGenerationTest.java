@@ -406,12 +406,13 @@ public class AlloyTestCaseGenerationTest {
 		System.out.println(run_commands);
 		// TODO: See that Alloy transform the commands.
 		final List<Command> runSystem = run_commands.stream()
-				.filter(e -> e.toString().equals("Run run$1")).collect(Collectors.toList());
+				.filter(e -> e.toString().equals("Run run$1 for 4")).collect(Collectors.toList());
 
 		assertTrue(runSystem.size() > 0);
 
 		final A4Solution solution = AlloyUtil.runCommand(compiled, runSystem.get(0));
+		System.out.println("Has solution: " + solution);
 
-		// assertTrue(solution.satisfiable());
+		assertTrue(solution.satisfiable());
 	}
 }
