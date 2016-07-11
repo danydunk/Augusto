@@ -284,7 +284,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 		for (final Action_widget aw : aws.keySet()) {
 			final List<Window> edges = new ArrayList<>();
-			for (final Window w : gui.getStaticForwardLinks(aw)) {
+			for (final Window w : gui.getStaticForwardLinks(aw.getId())) {
 				if (ws.containsKey(w)) {
 					edges.add(w);
 				}
@@ -318,7 +318,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		return createFactsForElement(sws, window, "aws");
 	}
 
-	public static Fact createFactsForElement(final Collection<Signature> widgets,
+	private static Fact createFactsForElement(final Collection<Signature> widgets,
 			final Signature window, final String fieldToRelated) {
 
 		if (widgets.isEmpty()) {
