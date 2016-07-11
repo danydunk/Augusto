@@ -143,7 +143,7 @@ public class AlloyTestCaseGenerationTest {
 			assertEquals(3, tests.size());
 		} catch (
 
-				final Exception e) {
+		final Exception e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -179,9 +179,9 @@ public class AlloyTestCaseGenerationTest {
 		w3.addWidget(iw3);
 		gui.addWindow(w3);
 		// edges
-		gui.addStaticEdge(aw1, w2);
-		gui.addStaticEdge(aw2, w3);
-		gui.addStaticEdge(aw4, w1);
+		gui.addStaticEdge(aw1.getId(), w2.getId());
+		gui.addStaticEdge(aw2.getId(), w3.getId());
+		gui.addStaticEdge(aw4.getId(), w1.getId());
 
 		final GUI_Pattern pattern = new GUI_Pattern();
 		// pw1
