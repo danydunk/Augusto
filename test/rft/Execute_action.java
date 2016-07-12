@@ -1,5 +1,6 @@
 package test.rft;
 
+import java.io.File;
 import java.util.List;
 
 import resources.test.rft.Execute_actionHelper;
@@ -33,22 +34,21 @@ public class Execute_action extends Execute_actionHelper {
 
 		try {
 			ApplicationHelper application = null;
-			final String conf_file = "files" + System.getProperty("file.separator") + "for_test"
-					+ System.getProperty("file.separator") + "config"
-					+ System.getProperty("file.separator") + "upm.properties";
+			final String conf_file = "files" + File.separator + "for_test" + File.separator
+					+ "config" + File.separator + "upm.properties";
 			ConfigurationManager.load(conf_file);
 			ExperimentManager.init();
 			application = new ApplicationHelper();
 			final RootTestObject root = application.startApplication();
 			final GuiStateManager gui = new GuiStateManager(root);
-			List<Window> windows = gui.getCurrentWindows();
+			List<Window> windows = gui.readGUI();
 			Thread.sleep(1000);
 			final Action_widget aw = windows.get(0).getActionWidgets().get(0);
 
 			final Click click = new Click(aw, null);
 			final ActionManager manager = new ActionManager(gui, 500);
 			manager.executeAction(click);
-			windows = gui.getCurrentWindows();
+			windows = gui.readGUI();
 			if (!windows.get(0).getLabel().contains("New Password Database")) {
 				throw new Exception();
 			}

@@ -72,7 +72,7 @@ public class GUIParser {
 			throw new Exception("GUIParser - createEdge: id not found.");
 		}
 		if (type.equals("static")) {
-			gui.addStaticEdge(aw.get(0), w.get(0));
+			gui.addStaticEdge(aw.get(0).id, w.get(0).id);
 		} else {
 			// TODO: finish
 			throw new Exception("");

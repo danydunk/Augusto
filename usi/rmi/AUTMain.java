@@ -9,10 +9,6 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 
-
-
-
-import mockit.Mock;
 import mockit.MockUp;
 import net.sourceforge.cobertura.coveragedata.CoverageDataFileHandler;
 import net.sourceforge.cobertura.coveragedata.ProjectData;
@@ -26,46 +22,46 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 
 	private static final long serialVersionUID = 1L;
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
 		System.out.println("Creazione e registrazione dell'oggetto");
 		try {
 			LocateRegistry.createRegistry(2007);
-			Registry registry = LocateRegistry.getRegistry(2007);
+			final Registry registry = LocateRegistry.getRegistry(2007);
 			registry.rebind("RemoteCobertura", new AUTMain());
-		} catch (RemoteException e) {
+		} catch (final RemoteException e) {
 			e.printStackTrace();
 			System.out.println("Impossibile creare o registrare l'oggetto");
 			System.exit(1);
 		}
-		
-		//TODO: fix time mock
-		//Mockit.setUpMock(SystemMock.class);
-		//new MockUp<System>(){};
-		
+
+		// TODO: fix time mock
+		// Mockit.setUpMock(SystemMock.class);
+		// new MockUp<System>(){};
+
 		try {
-			Class<?> autClass = Class.forName(args[0]);
-			String methodName = "main";
-			Class<?>[] argsTypes = new Class[] { String[].class };
-			Method mainMethod = autClass.getDeclaredMethod(methodName, argsTypes);
-			String[] mainArgs = Arrays.copyOfRange(args, 1, args.length);
+			final Class<?> autClass = Class.forName(args[0]);
+			final String methodName = "main";
+			final Class<?>[] argsTypes = new Class[] { String[].class };
+			final Method mainMethod = autClass.getDeclaredMethod(methodName, argsTypes);
+			final String[] mainArgs = Arrays.copyOfRange(args, 1, args.length);
 			mainMethod.invoke(null, (Object) mainArgs);
-		} catch (SecurityException e) {
+		} catch (final SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
+		} catch (final NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -88,13 +84,13 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 			ProjectData.saveGlobalProjectData();
 			// Thread.sleep(1000);
 			System.out.println("Cobertura RMI - Write done");
-		} catch (Throwable t) {
+		} catch (final Throwable t) {
 			System.err.println("Cobertura RMI - Write failed");
 		}
 	}
 
 	@Override
-	public void println(String s) {
+	public void println(final String s) {
 
 		System.err.println(s);
 	}
@@ -106,28 +102,26 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 			ProjectData.saveGlobalProjectData();
 			// Thread.sleep(200); // necessario perchè i projectdata vengano
 			// scritti su file
-			ProjectData projectData = CoverageDataFileHandler.loadCoverageData(new File("lib"
-					+ System.getProperty("file.separator") + "cobertura" + System.getProperty("file.separator")
-					+ "cobertura.ser"));
+			final ProjectData projectData = CoverageDataFileHandler.loadCoverageData(new File("lib"
+					+ File.separator + "cobertura" + File.separator + "cobertura.ser"));
 			System.out.println("Cobertura RMI - Get ProjectData Write done");
 			return projectData;
-		} catch (Exception t) {
+		} catch (final Exception t) {
 			System.out.println("Cobertura RMI - Get ProjectData failed");
 			t.printStackTrace();
 			return null;
 		}
 	}
 
+	// @MockClass(realClass = System.class)
+	public class SystemMock extends MockUp<System> {
 
-	//@MockClass(realClass = System.class)
-	public class SystemMock extends MockUp<System>{
+		private static final long referenceT = 1433356618285L;
 
-		private  static final long referenceT = 1433356618285L;
-
-//		@Mock
-//		public static long currentTimeMillis() {
-//			 final long startT = System.nanoTime();
-//			return referenceT + (System.nanoTime() - startT) / 1000000L;
-//		}
+		// @Mock
+		// public static long currentTimeMillis() {
+		// final long startT = System.nanoTime();
+		// return referenceT + (System.nanoTime() - startT) / 1000000L;
+		// }
 	}
 }

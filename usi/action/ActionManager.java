@@ -1,11 +1,9 @@
 package usi.action;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import usi.gui.GuiStateManager;
 import usi.gui.structure.Option_input_widget;
-import usi.gui.structure.Window;
 import usi.guisemantic.testcase.Click;
 import usi.guisemantic.testcase.Fill;
 import usi.guisemantic.testcase.GUIAction;
@@ -25,16 +23,12 @@ public class ActionManager {
 
 	public void executeAction(final GUIAction act) throws Exception {
 
-		final List<Window> winds = this.guimanager.getLastComputedWindows();
-		boolean to_found = false;
-		for (final Window wind : winds) {
-			if (wind.getWidgets().contains(act.getWidget())) {
-				to_found = true;
-			}
+		if (act.getWidget().getTo() == null) {
+			throw new Exception("ActionManager - executeAction: missing TO reference.");
 		}
 
-		if (!to_found) {
-			throw new Exception("ActionManager - executeAction: widget not found.");
+		if (!this.guimanager.getCurrentTOs().contains(act.getWidget().getTo())) {
+			throw new Exception("ActionManager - executeAction: TO not found.");
 		}
 
 		final String className = act.getWidget().getClasss();
@@ -61,9 +55,14 @@ public class ActionManager {
 			try {
 				method.invoke(c.newInstance(), click.getWidget());
 			} catch (final Exception e) {
-				e.printStackTrace();
-				throw new Exception("ActionManager - executeAction: error executing click, "
-						+ e.getMessage());
+				try {
+					Thread.sleep(100);
+					method.invoke(c.newInstance(), click.getWidget());
+				} catch (final Exception ee) {
+					e.printStackTrace();
+					throw new Exception("ActionManager - executeAction: error executing click, "
+							+ ee.getMessage());
+				}
 			}
 		}
 

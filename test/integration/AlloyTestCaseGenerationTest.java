@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import test.gui.GUIStructureMaker;
 import usi.gui.functionality.GUIFunctionality_search;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.functionality.mapping.Instance_window;
@@ -262,36 +263,7 @@ public class AlloyTestCaseGenerationTest {
 	public void test3_RefineSemanticSpecification() throws Exception {
 
 		// Concrete GUI, 3 forms
-		final GUI gui = new GUI();
-		// w1
-		final Window w1 = new Window_test("w1", "init");
-		final Action_widget aw1 = new Action_widget_test("aw1", "add");
-		final Action_widget aw2 = new Action_widget_test("aw2", "test");
-		w1.addWidget(aw1);
-		w1.addWidget(aw2);
-		gui.addWindow(w1);
-		// w2
-		final Window w2 = new Window_test("w2", "form");
-		final Action_widget aw3 = new Action_widget_test("aw3", "next");
-		final Action_widget aw4 = new Action_widget_test("aw4", "back");
-		final Input_widget iw1 = new Input_widget_test("iw1", "field1", "");
-		final Input_widget iw2 = new Input_widget_test("iw2", "field2", "");
-		w2.addWidget(aw3);
-		w2.addWidget(aw4);
-		w2.addWidget(iw1);
-		w2.addWidget(iw2);
-		gui.addWindow(w2);
-		// w3
-		final Window w3 = new Window_test("w3", "other");
-		final Action_widget aw5 = new Action_widget_test("aw5", "add");
-		final Input_widget iw3 = new Input_widget_test("iw3", "field3", "");
-		w3.addWidget(aw5);
-		w3.addWidget(iw3);
-		gui.addWindow(w3);
-		// edges
-		gui.addStaticEdge(aw1, w2);
-		gui.addStaticEdge(aw2, w3);
-		gui.addStaticEdge(aw4, w1);
+		final GUI gui = GUIStructureMaker.instance1();
 
 		final GUI_Pattern pattern = new GUI_Pattern();
 		// pw1
@@ -372,6 +344,14 @@ public class AlloyTestCaseGenerationTest {
 		for (final Window win : winMap.keySet()) {
 			final String pwi = winMap.get(win).getId();
 			assertNotSame(pw3, pwi);
+		}
+
+		Window w2 = null;
+		for (final Window w : gui.getWindows()) {
+			if (w.getId().equals("w2")) {
+				w2 = w;
+				break;
+			}
 		}
 
 		final SpecificSemantics semantic4discoveringPw3 = AlloyTestCaseGenerator

@@ -1,7 +1,9 @@
 package usi.gui.structure;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.rational.test.ft.object.interfaces.TestObject;
 
@@ -10,6 +12,7 @@ public class Window extends Widget {
 	private boolean root;
 	private final boolean modal;
 	// these lists are ordered by the widgets position
+	private final Map<String, Widget> widgets_map;
 	private List<Action_widget> action_widgets;
 	private List<Input_widget> input_widgets;
 	private List<Selectable_widget> selectable_widgets;
@@ -27,6 +30,7 @@ public class Window extends Widget {
 		this.action_widgets = new ArrayList<>();
 		this.input_widgets = new ArrayList<>();
 		this.selectable_widgets = new ArrayList<>();
+		this.widgets_map = new HashMap<>();
 	}
 
 	public Window(final String id, final String label, final String classs, final int x,
@@ -42,6 +46,7 @@ public class Window extends Widget {
 		this.action_widgets = new ArrayList<>();
 		this.input_widgets = new ArrayList<>();
 		this.selectable_widgets = new ArrayList<>();
+		this.widgets_map = new HashMap<>();
 	}
 
 	public void addWidget(final Widget w) {
@@ -59,7 +64,7 @@ public class Window extends Widget {
 
 	private void addActionWidget(final Action_widget in) {
 
-		if (in != null) {
+		if (in != null && !this.widgets_map.containsKey(in.id)) {
 			this.action_widgets.add(in);
 			this.action_widgets.sort(null);
 		}
@@ -67,7 +72,7 @@ public class Window extends Widget {
 
 	private void addInputWidget(final Input_widget in) {
 
-		if (in != null) {
+		if (in != null && !this.widgets_map.containsKey(in.id)) {
 			this.input_widgets.add(in);
 			this.input_widgets.sort(null);
 		}
@@ -75,7 +80,7 @@ public class Window extends Widget {
 
 	private void addSelectableWidget(final Selectable_widget in) {
 
-		if (in != null) {
+		if (in != null && !this.widgets_map.containsKey(in.id)) {
 			this.selectable_widgets.add(in);
 			this.input_widgets.sort(null);
 		}
@@ -83,30 +88,52 @@ public class Window extends Widget {
 
 	public void setAction_widgets(final List<Action_widget> in) {
 
-		if (in == null) {
-			this.action_widgets = new ArrayList<>();
-		}
-		this.action_widgets = in;
-		this.action_widgets.sort(null);
+		if (in != null) {
 
+			for (final Action_widget aw : this.action_widgets) {
+				this.widgets_map.remove(aw.id);
+			}
+
+			this.action_widgets = in;
+
+			for (final Action_widget aw : this.action_widgets) {
+				this.widgets_map.put(aw.id, aw);
+			}
+
+			this.action_widgets.sort(null);
+		}
 	}
 
 	public void setInput_widgets(final List<Input_widget> in) {
 
-		if (in == null) {
-			this.input_widgets = new ArrayList<>();
+		if (in != null) {
+
+			for (final Input_widget iw : this.input_widgets) {
+				this.widgets_map.remove(iw.id);
+			}
+
+			this.input_widgets = in;
+
+			for (final Input_widget iw : this.input_widgets) {
+				this.widgets_map.put(iw.id, iw);
+			}
+			this.input_widgets.sort(null);
 		}
-		this.input_widgets = in;
-		this.input_widgets.sort(null);
 	}
 
 	public void setSelectable_widgets(final List<Selectable_widget> in) {
 
-		if (in == null) {
-			this.selectable_widgets = new ArrayList<>();
+		if (in != null) {
+			for (final Selectable_widget sw : this.selectable_widgets) {
+				this.widgets_map.remove(sw.id);
+			}
+
+			this.selectable_widgets = in;
+			for (final Selectable_widget sw : this.selectable_widgets) {
+				this.widgets_map.put(sw.id, sw);
+			}
+			this.selectable_widgets.sort(null);
 		}
-		this.selectable_widgets = in;
-		this.selectable_widgets.sort(null);
 	}
 
 	public boolean isModal() {
@@ -148,40 +175,47 @@ public class Window extends Widget {
 		if (!super.sameProperties(w)) {
 			return false;
 		}
-		// we consider a window to be the same if it has the same widgets
-		final Window win = (Window) w;
-		if (win.getActionWidgets().size() != this.getActionWidgets().size()) {
-			return false;
-		}
-		// widgets are ordered by position
-		for (int cont = 0; cont < this.getActionWidgets().size(); cont++) {
-			final Action_widget aw = this.getActionWidgets().get(cont);
-			if (!aw.isSame(win.getActionWidgets().get(cont))) {
-				return false;
-			}
-		}
 
-		if (win.getInputWidgets().size() != this.getInputWidgets().size()) {
-			return false;
-		}
-		// widgets are ordered by position
-		for (int cont = 0; cont < this.getInputWidgets().size(); cont++) {
-			final Input_widget iw = this.getInputWidgets().get(cont);
-			if (!iw.isSame(win.getInputWidgets().get(cont))) {
-				return false;
-			}
-		}
+		// like in gui ripping a window is the same if it has the same title and
+		// position
 
-		if (win.getSelectableWidgets().size() != this.getSelectableWidgets().size()) {
-			return false;
-		}
-		// widgets are ordered by position
-		for (int cont = 0; cont < this.getSelectableWidgets().size(); cont++) {
-			final Selectable_widget iw = this.getSelectableWidgets().get(cont);
-			if (!iw.isSame(win.getSelectableWidgets().get(cont))) {
-				return false;
-			}
-		}
+		// // we consider a window to be the same if it has the same widgets
+		// final Window win = (Window) w;
+		// if (win.getActionWidgets().size() != this.getActionWidgets().size())
+		// {
+		// return false;
+		// }
+		// // widgets are ordered by position
+		// for (int cont = 0; cont < this.getActionWidgets().size(); cont++) {
+		// final Action_widget aw = this.getActionWidgets().get(cont);
+		// if (!aw.isSame(win.getActionWidgets().get(cont))) {
+		// return false;
+		// }
+		// }
+		//
+		// if (win.getInputWidgets().size() != this.getInputWidgets().size()) {
+		// return false;
+		// }
+		// // widgets are ordered by position
+		// for (int cont = 0; cont < this.getInputWidgets().size(); cont++) {
+		// final Input_widget iw = this.getInputWidgets().get(cont);
+		// if (!iw.isSame(win.getInputWidgets().get(cont))) {
+		// return false;
+		// }
+		// }
+		//
+		// if (win.getSelectableWidgets().size() !=
+		// this.getSelectableWidgets().size()) {
+		// return false;
+		// }
+		// // widgets are ordered by position
+		// for (int cont = 0; cont < this.getSelectableWidgets().size(); cont++)
+		// {
+		// final Selectable_widget iw = this.getSelectableWidgets().get(cont);
+		// if (!iw.isSame(win.getSelectableWidgets().get(cont))) {
+		// return false;
+		// }
+		// }
 
 		return true;
 	}

@@ -1,9 +1,7 @@
 package test.rft;
 
+import java.io.File;
 import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -40,34 +38,23 @@ public class Save_window_xml extends Save_window_xmlHelper {
 	public void testMain(final Object[] args) {
 
 		try {
-			final String out_file = "files" + System.getProperty("file.separator") + "for_test"
-					+ System.getProperty("file.separator") + "output"
-					+ System.getProperty("file.separator") + "out.xml";
+			final String out_file = "files" + File.separator + "for_test" + File.separator
+					+ "output" + File.separator + "out.xml";
 			ApplicationHelper application = null;
 			try {
-				final String conf_file = "files" + System.getProperty("file.separator")
-						+ "for_test" + System.getProperty("file.separator") + "config"
-						+ System.getProperty("file.separator") + "upm.properties";
+				final String conf_file = "files" + File.separator + "for_test" + File.separator
+						+ "config" + File.separator + "upm.properties";
 				ConfigurationManager.load(conf_file);
 				ExperimentManager.init();
 				application = new ApplicationHelper();
 				final RootTestObject root = application.startApplication();
 				final GuiStateManager gui = new GuiStateManager(root);
-				final List<Window> windows = gui.getCurrentWindows();
+				final List<Window> windows = gui.readGUI();
 				final GUIWriter writer = new GUIWriter();
-				// final Element w1 = writer.writeWindow(windows.get(0), true);
-				final Element w2 = writer.writeWindow(windows.get(0), false);
 
-				final DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-				final DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-				final Document doc = docBuilder.newDocument();
-				// doc.adoptNode(w1);
-				doc.adoptNode(w2);
-
-				final Element out = doc.createElement("GUI");
-				doc.appendChild(out);
-				// out.appendChild(w1);
-				out.appendChild(w2);
+				final GUI g = new GUI();
+				g.addWindow(windows.get(0));
+				final Document doc = writer.writeGUI(g);
 
 				usi.xml.XMLUtil.save(out_file, doc);
 			} catch (final Exception e) {

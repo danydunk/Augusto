@@ -192,7 +192,8 @@ public class GUIFunctionality_search {
 							boolean check = false;
 							for (final Pattern_window target_pw : this.gui_pattern
 									.getForwardLinks(paw)) {
-								for (final Window target_w : this.gui.getStaticForwardLinks(aw)) {
+								for (final Window target_w : this.gui.getStaticForwardLinks(aw
+										.getId())) {
 									// if the target_pw has cardinality 1 and it
 									// is already in the pattern
 									// then the edge must go to the window
@@ -206,17 +207,18 @@ public class GUIFunctionality_search {
 												target_w, target_pw, igp.clone());
 										if (new_instance != null) {
 											check = true;
-											new_instance.getGui().addStaticEdge(aw, target_w);
+											new_instance.getGui().addStaticEdge(aw.getId(),
+													target_w.getId());
 											igp = new_instance;
 										}
 									}
 								}
 								if (target_pw.getCardinality().getMin() != 0 /*
-								 * &&
-								 * target_pw
-								 * !=
-								 * pw
-								 */) {
+																			 * &&
+																			 * target_pw
+																			 * !=
+																			 * pw
+																			 */) {
 									check_optional = true;
 								}
 							}
@@ -245,7 +247,7 @@ public class GUIFunctionality_search {
 								.get(paw);
 
 						for (final Action_widget aw : this.gui.getStaticBackwardLinks(instance
-								.getInstance())) {
+								.getInstance().getId())) {
 							final Window source_w = this.gui.getActionWidget_Window(aw);
 
 							// if(igp.getGui().getAction_widgets().contains(aw)
@@ -261,7 +263,8 @@ public class GUIFunctionality_search {
 							if (new_instance != null) {
 								if (new_instance.getAction_widgets_mapping().get(aw) == paw) {
 									correct = true;
-									new_instance.getGui().addStaticEdge(aw, instance.getInstance());
+									new_instance.getGui().addStaticEdge(aw.getId(),
+											instance.getInstance().getId());
 									igp = new_instance;
 								}
 								// else {
@@ -270,10 +273,10 @@ public class GUIFunctionality_search {
 							}
 						}
 						if (source_pw.getCardinality().getMin() != 0 /*
-						 * &&
-						 * source_pw
-						 * != pw
-						 */) {
+																	 * &&
+																	 * source_pw
+																	 * != pw
+																	 */) {
 							check_optional = true;
 						}
 					}

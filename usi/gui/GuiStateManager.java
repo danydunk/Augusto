@@ -16,6 +16,7 @@ public class GuiStateManager {
 	private final TestObject root;
 	private final Property[] properties = new Property[1];
 	private List<Window> currentWindows;
+	private List<TestObject> currentTOs;
 
 	public GuiStateManager(final TestObject root) {
 
@@ -24,9 +25,14 @@ public class GuiStateManager {
 		// this.properties[0] = new Property("showing", "true");
 		// this.properties[1] = new Property("enabled", "true");
 		this.properties[0] = new Property("visible", "true");
+		this.currentWindows = new ArrayList<>();
+		this.currentTOs = new ArrayList<>();
 	}
 
-	public List<Window> getCurrentWindows() throws Exception {
+	public List<Window> readGUI() throws Exception {
+
+		this.currentWindows = new ArrayList<>();
+		this.currentTOs = new ArrayList<>();
 
 		TestObject[] appoggio = null;
 		TestObject[] windows = null;
@@ -37,9 +43,9 @@ public class GuiStateManager {
 			throw new Exception("GUIStateManager - getCurrentGUI: error in find, " + e.getMessage());
 		}
 
-		for (int cont = 0; cont < 20; cont++) {
+		for (int cont = 0; cont < 5; cont++) {
 			try {
-				Thread.sleep(200);
+				Thread.sleep(100);
 				windows = this.root.find(SubitemFactory.atChild(this.properties));
 			} catch (final Exception e) {
 				throw new Exception("GUIStateManager - getCurrentGUI: error in find, "
@@ -51,10 +57,6 @@ public class GuiStateManager {
 				break;
 			}
 			appoggio = windows;
-		}
-
-		if (windows.length == 0) {
-			throw new Exception("GUIStateManager - getCurrentGUI: no windows found");
 		}
 
 		final List<Window> winds = new ArrayList<Window>();
@@ -69,6 +71,8 @@ public class GuiStateManager {
 				throw new Exception("GUIStateManager - getCurrentGUI: error in sub-widget find, "
 						+ e.getMessage());
 			}
+
+			this.currentTOs.addAll(Arrays.asList(tos));
 
 			final ContextAnalyzer context = new ContextAnalyzer(new ArrayList<TestObject>(
 					Arrays.asList(tos)));
@@ -108,7 +112,12 @@ public class GuiStateManager {
 		return winds;
 	}
 
-	public List<Window> getLastComputedWindows() {
+	public List<TestObject> getCurrentTOs() {
+
+		return new ArrayList<>(this.currentTOs);
+	}
+
+	public List<Window> getCurrentWindows() {
 
 		return new ArrayList<>(this.currentWindows);
 	}

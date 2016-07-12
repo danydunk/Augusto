@@ -96,13 +96,13 @@ public class TestGUiDijkstra {
 		w5.addWidget(aw9);
 		gui.addWindow(w5);
 		// edges
-		gui.addStaticEdge(aw1, w4);
-		gui.addStaticEdge(aw6, w2);
-		gui.addStaticEdge(aw7, w1);
-		gui.addStaticEdge(aw2, w3);
-		gui.addStaticEdge(aw4, w4);
-		gui.addStaticEdge(aw3, w5);
-		gui.addStaticEdge(aw9, w2);
+		gui.addStaticEdge(aw1.getId(), w4.getId());
+		gui.addStaticEdge(aw6.getId(), w2.getId());
+		gui.addStaticEdge(aw7.getId(), w1.getId());
+		gui.addStaticEdge(aw2.getId(), w3.getId());
+		gui.addStaticEdge(aw4.getId(), w4.getId());
+		gui.addStaticEdge(aw3.getId(), w5.getId());
+		gui.addStaticEdge(aw9.getId(), w2.getId());
 
 		// w1B
 		final Window_test w1b = new Window_test("w1b", "init1");
@@ -132,10 +132,10 @@ public class TestGUiDijkstra {
 		w3b.addWidget(iw3b);
 		gui.addWindow(w3b);
 		// edges
-		gui.addStaticEdge(aw1b, w3b);
-		gui.addStaticEdge(aw6b, w1b);
-		gui.addStaticEdge(aw5b, w2b);
-		gui.addStaticEdge(aw4b, w3b);
+		gui.addStaticEdge(aw1b.getId(), w3b.getId());
+		gui.addStaticEdge(aw6b.getId(), w1b.getId());
+		gui.addStaticEdge(aw5b.getId(), w2b.getId());
+		gui.addStaticEdge(aw4b.getId(), w3b.getId());
 
 		final Graph graph = Graph.convert(gui);
 		assertNotNull(graph);

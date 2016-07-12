@@ -60,7 +60,7 @@ public abstract class Pattern_widget<T extends Widget> {
 		final java.util.regex.Pattern r = java.util.regex.Pattern.compile(this.getLabel());
 
 		if ((w.getLabel() == null || w.getLabel().length() == 0)
-				&& (w.getDescriptor() != null || w.getDescriptor().length() > 0)) {
+				&& (w.getDescriptor() != null && w.getDescriptor().length() > 0)) {
 			final Matcher m = r.matcher(w.getDescriptor());
 			return m.find();
 		}
