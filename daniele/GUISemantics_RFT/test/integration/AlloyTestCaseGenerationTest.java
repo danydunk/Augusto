@@ -98,6 +98,7 @@ public class AlloyTestCaseGenerationTest {
 					return null;
 				}
 			}
+			inst.getSemantics().generate_run_commands();
 			final For_test generator = new For_test(inst);
 			final List<GUITestCase> tests = generator.generateTestCases(1, 30000);
 			assertEquals(3, tests.size());
@@ -144,6 +145,7 @@ public class AlloyTestCaseGenerationTest {
 		final Instance_GUI_pattern in = res.get(0);
 
 		in.generateSpecificSemantics();
+		in.getSemantics().generate_run_commands();
 		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in);
 		final List<GUITestCase> tests = generator.generateTestCases(1, 30000);
 		assertEquals(4, tests.size());
