@@ -65,6 +65,7 @@ public class SpecificSemanticTest {
 		final Instance_GUI_pattern in = res.get(0);
 
 		final SpecificSemantics specsem = SpecificSemantics.generate(in);
+		specsem.generate_run_commands();
 		// System.out.println(specsem);
 		assertNotNull(specsem);
 
