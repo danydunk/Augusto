@@ -9,9 +9,9 @@ import usi.application.ApplicationHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
 import usi.gui.GuiStateManager;
+import usi.gui.semantic.testcase.Click;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.Window;
-import usi.guisemantic.testcase.Click;
 
 import com.rational.test.ft.object.interfaces.RootTestObject;
 

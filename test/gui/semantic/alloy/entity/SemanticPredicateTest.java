@@ -10,8 +10,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import usi.guisemantic.alloy.entity.Semantic_predicate;
-import usi.guisemantic.alloy.entity.Signature;
+import usi.gui.semantic.alloy.entity.Semantic_predicate;
+import usi.gui.semantic.alloy.entity.Signature;
 
 public class SemanticPredicateTest {
 

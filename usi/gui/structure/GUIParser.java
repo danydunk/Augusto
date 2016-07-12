@@ -57,7 +57,6 @@ public class GUIParser {
 
 		// String id = node.getAttributes().getNamedItem("id").getNodeValue();
 		// See that the id is not used.
-		final String type = node.getAttributes().getNamedItem("type").getNodeValue();
 		final Node fromNode = getElementNode(node.getChildNodes(), "from");
 		final Node toNode = getElementNode(node.getChildNodes(), "to");
 		final String idFrom = this.getNodeContent(fromNode);
@@ -71,12 +70,8 @@ public class GUIParser {
 		if (aw.size() != 1 || w.size() != 1) {
 			throw new Exception("GUIParser - createEdge: id not found.");
 		}
-		if (type.equals("static")) {
-			gui.addStaticEdge(aw.get(0).id, w.get(0).id);
-		} else {
-			// TODO: finish
-			throw new Exception("");
-		}
+		gui.addEdge(aw.get(0).getId(), w.get(0).getId());
+
 	}
 
 	private Window createWindows(final Node nodeWindow) throws Exception {

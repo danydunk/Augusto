@@ -6,12 +6,12 @@ import java.util.List;
 import usi.action.ActionManager;
 import usi.application.ApplicationHelper;
 import usi.gui.GuiStateManager;
+import usi.gui.semantic.testcase.Click;
+import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Widget;
 import usi.gui.structure.Window;
-import usi.guisemantic.testcase.Click;
-import usi.guisemantic.testcase.GUIAction;
 
 import com.rational.test.ft.object.interfaces.RootTestObject;
 
@@ -104,13 +104,13 @@ public class Ripper {
 				if (match == null) {
 					// new window
 					this.gui.addWindow(current);
-					this.gui.addStaticEdge(aw.getId(), current.getId());
+					this.gui.addEdge(aw.getId(), current.getId());
 					final List<GUIAction> actions_to_current = new ArrayList<>(actions);
 					actions_to_current.add(act);
 					this.ripWindow(actions_to_current, current);
 
 				} else {
-					this.gui.addStaticEdge(aw.getId(), match.getId());
+					this.gui.addEdge(aw.getId(), match.getId());
 				}
 			}
 

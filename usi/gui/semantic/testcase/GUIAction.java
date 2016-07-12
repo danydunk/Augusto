@@ -1,4 +1,4 @@
-package usi.guisemantic.testcase;
+package usi.gui.semantic.testcase;
 
 import usi.gui.structure.Widget;
 import usi.gui.structure.Window;

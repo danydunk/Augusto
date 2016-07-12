@@ -1,14 +1,14 @@
-package usi.guisemantic;
+package usi.gui.semantic;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import usi.guisemantic.alloy.Alloy_Model;
-import usi.guisemantic.alloy.entity.Fact;
-import usi.guisemantic.alloy.entity.Function;
-import usi.guisemantic.alloy.entity.Predicate;
-import usi.guisemantic.alloy.entity.Semantic_predicate;
-import usi.guisemantic.alloy.entity.Signature;
+import usi.gui.semantic.alloy.Alloy_Model;
+import usi.gui.semantic.alloy.entity.Fact;
+import usi.gui.semantic.alloy.entity.Function;
+import usi.gui.semantic.alloy.entity.Predicate;
+import usi.gui.semantic.alloy.entity.Semantic_predicate;
+import usi.gui.semantic.alloy.entity.Signature;
 
 public class FunctionalitySemantics extends Alloy_Model {
 
@@ -29,8 +29,9 @@ public class FunctionalitySemantics extends Alloy_Model {
 	protected List<Signature> input_w_extensions;
 
 	public FunctionalitySemantics(final List<Signature> signatures, final List<Fact> facts,
-			final List<Predicate> predicates, final List<Function> functions, final List<String> open_statments)
-			throws Exception {
+			final List<Predicate> predicates, final List<Function> functions,
+			final List<String> open_statments) throws Exception {
+
 		super(signatures, facts, predicates, functions, open_statments);
 
 		for (final Signature sig : signatures) {
@@ -58,8 +59,9 @@ public class FunctionalitySemantics extends Alloy_Model {
 				this.go = pred;
 			}
 		}
-		if (this.click == null || this.fill == null || this.go == null || this.window_signature == null
-				|| this.action_w_signature == null || this.input_w_signature == null) {
+		if (this.click == null || this.fill == null || this.go == null
+				|| this.window_signature == null || this.action_w_signature == null
+				|| this.input_w_signature == null) {
 			throw new Exception("FunctionalitySemantics: error in constructor");
 		}
 
@@ -83,20 +85,27 @@ public class FunctionalitySemantics extends Alloy_Model {
 		}
 
 		for (final Predicate pred : predicates) {
-			if ("click_semantics".equals(pred.getIdentifier()) && pred.getInputs().keySet().size() == 2) {
-				this.click_semantics = new Semantic_predicate(pred.getIdentifier(), pred.getContent(),
+			if ("click_semantics".equals(pred.getIdentifier())
+					&& pred.getInputs().keySet().size() == 2) {
+				this.click_semantics = new Semantic_predicate(pred.getIdentifier(),
+						pred.getContent(), pred.getInputs());
+			}
+			if ("fill_semantics".equals(pred.getIdentifier())
+					&& pred.getInputs().keySet().size() == 3) {
+				this.fill_semantics = new Semantic_predicate(pred.getIdentifier(),
+						pred.getContent(), pred.getInputs());
+			}
+			if ("go_semantics".equals(pred.getIdentifier())
+					&& pred.getInputs().keySet().size() == 2) {
+				this.go_semantics = new Semantic_predicate(pred.getIdentifier(), pred.getContent(),
 						pred.getInputs());
 			}
-			if ("fill_semantics".equals(pred.getIdentifier()) && pred.getInputs().keySet().size() == 3) {
-				this.fill_semantics = new Semantic_predicate(pred.getIdentifier(), pred.getContent(), pred.getInputs());
-			}
-			if ("go_semantics".equals(pred.getIdentifier()) && pred.getInputs().keySet().size() == 2) {
-				this.go_semantics = new Semantic_predicate(pred.getIdentifier(), pred.getContent(), pred.getInputs());
-			}
 		}
-		if (this.click_semantics == null || this.go_semantics == null || this.fill_semantics == null
-				|| (this.windows_extensions.size() + this.action_w_extensions.size()
-						+ this.input_w_extensions.size()) == 0) {
+		if (this.click_semantics == null
+				|| this.go_semantics == null
+				|| this.fill_semantics == null
+				|| (this.windows_extensions.size() + this.action_w_extensions.size() + this.input_w_extensions
+						.size()) == 0) {
 			throw new Exception("FunctionalitySemantics: error in constructor");
 		}
 		this.generate_run_commands();
@@ -170,7 +179,8 @@ public class FunctionalitySemantics extends Alloy_Model {
 						sem_pred = sem_pred + " and ";
 					}
 				}
-				final String run_command = "run {System and {" + pred + sem_pred + ")} } for " + this.RUN_SCOPE;
+				final String run_command = "run {System and {" + pred + sem_pred + ")} } for "
+						+ this.RUN_SCOPE;
 				this.run_commands.add(run_command);
 			}
 		}
@@ -198,7 +208,8 @@ public class FunctionalitySemantics extends Alloy_Model {
 						sem_pred = sem_pred + " and ";
 					}
 				}
-				final String run_command = "run {System and {" + pred + sem_pred + ")} } for " + this.RUN_SCOPE;
+				final String run_command = "run {System and {" + pred + sem_pred + ")} } for "
+						+ this.RUN_SCOPE;
 				this.run_commands.add(run_command);
 			}
 		}
@@ -226,7 +237,8 @@ public class FunctionalitySemantics extends Alloy_Model {
 						sem_pred = sem_pred + " and ";
 					}
 				}
-				final String run_command = "run {System and {" + pred + sem_pred + ")} } for " + this.RUN_SCOPE;
+				final String run_command = "run {System and {" + pred + sem_pred + ")} } for "
+						+ this.RUN_SCOPE;
 				this.run_commands.add(run_command);
 			}
 		}

@@ -14,8 +14,8 @@ public class GUI {
 
 	private Map<String, Window> windows;
 	private Map<String, Window> aw_window_mapping;
-	private final Multimap<String, String> staticEdgesFrom;
-	private final Multimap<String, String> staticEdgesTo;
+	private Multimap<String, String> edgesFrom;
+	private Multimap<String, String> edgesTo;
 	private String root;
 
 	// TODO: dynamic edges
@@ -24,28 +24,28 @@ public class GUI {
 		this.windows = new HashMap<>();
 		this.aw_window_mapping = new HashMap<>();
 
-		this.staticEdgesFrom = HashMultimap.create();
-		this.staticEdgesTo = HashMultimap.create();
+		this.edgesFrom = HashMultimap.create();
+		this.edgesTo = HashMultimap.create();
 	}
 
-	public boolean isStaticEdge(final String aw, final String w) throws Exception {
+	public boolean isEdge(final String aw, final String w) throws Exception {
 
 		if (aw == null || w == null || !this.windows.containsKey(w)
 				|| !this.aw_window_mapping.containsKey(aw)) {
 			throw new Exception("GUI: wrong input in isEdge");
 		}
-		if (this.staticEdgesFrom.containsEntry(aw, w) && this.staticEdgesTo.containsEntry(w, aw)) {
+		if (this.edgesFrom.containsEntry(aw, w) && this.edgesTo.containsEntry(w, aw)) {
 			return true;
 		}
 		return false;
 	}
 
-	public List<Window> getStaticForwardLinks(final String aw) throws Exception {
+	public List<Window> getForwardLinks(final String aw) throws Exception {
 
 		if (aw == null || !this.aw_window_mapping.containsKey(aw)) {
-			throw new Exception("GUI: wrong input in getFrwardLinks");
+			throw new Exception("GUI: wrong input in staticEdgesTo");
 		}
-		final Collection<String> out = this.staticEdgesFrom.get(aw);
+		final Collection<String> out = this.edgesFrom.get(aw);
 		if (out != null) {
 			final List<Window> to_return = new ArrayList<>();
 			for (final String s : out) {
@@ -57,24 +57,24 @@ public class GUI {
 		}
 	}
 
-	public List<Action_widget> getStaticBackwardLinks(final String w) throws Exception {
+	public List<Action_widget> getBackwardLinks(final String w) throws Exception {
 
 		if (w == null || !this.windows.containsKey(w)) {
 			throw new Exception("GUI: wrong input in getBackwardLinks");
 		}
 
-		final Collection<String> out = this.staticEdgesTo.get(w);
+		final Collection<String> out = this.edgesTo.get(w);
 		if (out != null) {
 			final List<Action_widget> to_return = new ArrayList<>();
 			loop: for (final String id : out) {
 				final List<Action_widget> aws = this.aw_window_mapping.get(id).getActionWidgets();
 				for (final Action_widget aw : aws) {
-					if (aw.id.equals(id)) {
+					if (aw.getId().equals(id)) {
 						to_return.add(aw);
 						continue loop;
 					}
 				}
-				throw new Exception("GUI - getStaticBackwardLinks: edge not found.");
+				throw new Exception("GUI - getBackwardLinks: edge not found.");
 			}
 			return to_return;
 		} else {
@@ -82,23 +82,23 @@ public class GUI {
 		}
 	}
 
-	public void addStaticEdge(final String aw, final String w) throws Exception {
+	public void addEdge(final String aw, final String w) throws Exception {
 
 		if (aw == null || w == null || !this.windows.containsKey(w)
 				|| !this.aw_window_mapping.containsKey(aw)) {
 			throw new Exception("GUI: wrong input in addEdge");
 		}
-		this.staticEdgesFrom.put(aw, w);
-		this.staticEdgesTo.put(w, aw);
+		this.edgesFrom.put(aw, w);
+		this.edgesTo.put(w, aw);
 	}
 
-	public void removeStaticEdge(final String aw, final String w) throws Exception {
+	public void removeEdge(final String aw, final String w) throws Exception {
 
 		if (aw == null || w == null) {
 			throw new Exception("GUI: wrong input in removeEdge");
 		}
-		this.staticEdgesFrom.remove(aw, w);
-		this.staticEdgesTo.remove(w, aw);
+		this.edgesFrom.remove(aw, w);
+		this.edgesTo.remove(w, aw);
 	}
 
 	public Window getRoot() {
@@ -117,6 +117,9 @@ public class GUI {
 		this.windows = new HashMap<>();
 		this.aw_window_mapping = new HashMap<>();
 
+		this.edgesFrom = HashMultimap.create();
+		this.edgesTo = HashMultimap.create();
+
 		for (final Window w : ws) {
 			this.addWindow(w);
 		}
@@ -124,45 +127,45 @@ public class GUI {
 
 	public void addWindow(final Window n) throws Exception {
 
-		if (n == null || this.windows.containsKey(n.id)) {
+		if (n == null || this.windows.containsKey(n.getId())) {
 			throw new Exception("GUI: wrong input in addWindow");
 		}
-		this.windows.put(n.id, n);
+		this.windows.put(n.getId(), n);
 
 		if (n.isRoot()) {
 			if (this.root != null) {
 				throw new Exception("GUI - addWindow: there already is a root window.");
 			}
-			this.root = n.id;
+			this.root = n.getId();
 		}
 
 		for (final Action_widget aw : n.getActionWidgets()) {
-			this.aw_window_mapping.put(aw.id, n);
+			this.aw_window_mapping.put(aw.getId(), n);
 		}
 	}
 
 	public void removeWindow(final Window n) throws Exception {
 
-		if (n == null || !this.windows.containsKey(n.id)) {
+		if (n == null || !this.windows.containsKey(n.getId())) {
 			throw new Exception("GUI: wrong input in removeWindow");
 		}
 
 		// the edges associated with this window are removed
-		final List<Action_widget> to_remove = new ArrayList<>(this.getStaticBackwardLinks(n.id));
+		final List<Action_widget> to_remove = new ArrayList<>(this.getBackwardLinks(n.getId()));
 		for (final Action_widget aw : to_remove) {
-			this.removeStaticEdge(aw.id, n.id);
+			this.removeEdge(aw.getId(), n.getId());
 		}
 
 		final List<String> from_links = this.aw_window_mapping.entrySet().parallelStream()
 				.filter(e -> e.getValue() == n).map(ee -> ee.getKey()).collect(Collectors.toList());
 
 		for (final String aw : from_links) {
-			for (final Window w : this.getStaticForwardLinks(aw)) {
-				this.removeStaticEdge(aw, w.id);
+			for (final Window w : this.getForwardLinks(aw)) {
+				this.removeEdge(aw, w.getId());
 			}
 		}
 
-		this.windows.remove(n.id);
+		this.windows.remove(n.getId());
 		this.setWindows(new ArrayList<Window>(this.windows.values()));
 	}
 
@@ -171,8 +174,8 @@ public class GUI {
 		return new ArrayList<>(this.windows.values());
 	}
 
-	public Window getActionWidget_Window(final Action_widget aw) {
+	public Window getActionWidget_Window(final String aw) {
 
-		return this.aw_window_mapping.get(aw.getId());
+		return this.aw_window_mapping.get(aw);
 	}
 }

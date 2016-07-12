@@ -1,4 +1,4 @@
-package usi.guisemantic.testcase;
+package usi.gui.semantic.testcase;
 
 import java.util.List;
 

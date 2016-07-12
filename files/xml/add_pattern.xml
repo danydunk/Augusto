@@ -59,30 +59,30 @@
 			<text>.*</text>
 		</input_widget>
 	</window>
-	<edge>
+	<edge type="static">
 		<from>aw1</from>
 		<to>form_1</to>
 	</edge>
-	<edge>
+	<edge type="static">
 		<from>aw3</from>
 		<to>initial</to>
 	</edge>
-	<edge>
+	<edge type="static">
 		<from>aw2</from>
 		<to>form_2</to>
 		<to>confirmation</to>
 	</edge>
-	<edge>
+	<edge type="static">
 		<from>aw4</from>
 		<to>form_2</to>
 		<to>confirmation</to>
 	</edge>
-	<edge>
+	<edge type="static">
 		<from>aw5</from>
 		<to>form_2</to>
 		<to>form_1</to>
 	</edge>
-	<edge>
+	<edge type="static">
 		<from>aw7</from>
 		<to>form_2</to>
 		<to>form_1</to>

@@ -12,10 +12,10 @@ import usi.gui.functionality.GUIFunctionality_search;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.pattern.GUIPatternParser;
 import usi.gui.pattern.GUI_Pattern;
+import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
+import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.structure.GUI;
 import usi.gui.structure.GUIParser;
-import usi.guisemantic.testcase.AlloyTestCaseGenerator;
-import usi.guisemantic.testcase.GUITestCase;
 import usi.xml.XMLUtil;
 
 public class SystemTest {

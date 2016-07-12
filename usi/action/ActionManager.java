@@ -3,12 +3,12 @@ package usi.action;
 import java.lang.reflect.Method;
 
 import usi.gui.GuiStateManager;
+import usi.gui.semantic.testcase.Click;
+import usi.gui.semantic.testcase.Fill;
+import usi.gui.semantic.testcase.GUIAction;
+import usi.gui.semantic.testcase.Go;
+import usi.gui.semantic.testcase.Select;
 import usi.gui.structure.Option_input_widget;
-import usi.guisemantic.testcase.Click;
-import usi.guisemantic.testcase.Fill;
-import usi.guisemantic.testcase.GUIAction;
-import usi.guisemantic.testcase.Go;
-import usi.guisemantic.testcase.Select;
 
 public class ActionManager {
 

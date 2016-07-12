@@ -39,6 +39,7 @@ public class GUIPatternParser {
 		}
 
 		final NodeList childWin = nNodeGUI.getChildNodes();
+		final List<Pattern_action_widget> aws = new ArrayList<>();
 		// FOR each GUI's child:
 		for (int ch = 0; ch < childWin.getLength(); ch++) {
 
@@ -47,10 +48,11 @@ public class GUIPatternParser {
 
 				if ("window".equals(nChild.getNodeName())) {
 					final Pattern_window windows = this.createPatternWindows(nChild);
+					aws.addAll(windows.getActionWidgets());
 					gui.addWindow(windows);
 
 				} else if ("edge".equals(nChild.getNodeName())) {
-					this.createEdge(nChild, gui);
+					this.createEdge(nChild, gui, aws);
 				}
 
 			}
@@ -59,10 +61,10 @@ public class GUIPatternParser {
 		return gui;
 	}
 
-	private void createEdge(final Node node, final GUI_Pattern gui) throws Exception {
+	private void createEdge(final Node node, final GUI_Pattern gui,
+			final List<Pattern_action_widget> aws) throws Exception {
 
-		// String id = node.getAttributes().getNamedItem("id").getNodeValue();
-		// See that the id is not used.
+		final String type = node.getAttributes().getNamedItem("type").getNodeValue();
 		final Node fromNode = getElementNode(node.getChildNodes(), "from");
 		final Node toNode = getElementNode(node.getChildNodes(), "to");
 		final String idFrom = this.getNodeContent(fromNode);
@@ -71,17 +73,25 @@ public class GUIPatternParser {
 		// Pattern_action_widget aw = gui.getAction_widgets().get(idFrom);
 		// Pattern_window w = gui.getWindows().get(idTo);
 
-		final List<Pattern_action_widget> aw = gui.getAction_widgets().stream().filter(e -> e.getId().equals(idFrom))
+		final List<Pattern_action_widget> aw = aws.stream().filter(e -> e.getId().equals(idFrom))
 				.collect(Collectors.toList());
 
-		final List<Pattern_window> w = gui.getWindows().stream().filter(e -> e.getId().equals(idTo))
-				.collect(Collectors.toList());
+		final List<Pattern_window> w = gui.getWindows().stream()
+				.filter(e -> e.getId().equals(idTo)).collect(Collectors.toList());
 
 		if (aw.size() != 1 || w.size() != 1) {
 			throw new Exception("GUIParser - createEdge: id not found.");
 		}
-
-		gui.addEdge(aw.get(0), w.get(0));
+		switch (type) {
+		case "static":
+			gui.addStaticEdge(aw.get(0).getId(), w.get(0).getId());
+			break;
+		case "dynamic":
+			gui.addDynamicEdge(aw.get(0).getId(), w.get(0).getId());
+			break;
+		default:
+			throw new Exception("GUIParser - createEdge: edge type not found.");
+		}
 	}
 
 	private Pattern_window createPatternWindows(final Node nodeWindow) throws Exception {
@@ -90,9 +100,11 @@ public class GUIPatternParser {
 		final String cardValue = nodeWindow.getAttributes().getNamedItem("card").getNodeValue();
 
 		final Node nodeModal = getElementNode(nodeWindow.getChildNodes(), "modal");
-		final Boolean_regexp modal = Boolean_regexp.valueOf(this.getNodeContent(nodeModal).toUpperCase());
+		final Boolean_regexp modal = Boolean_regexp.valueOf(this.getNodeContent(nodeModal)
+				.toUpperCase());
 		final Node nodeRoot = getElementNode(nodeWindow.getChildNodes(), "root");
-		final Boolean_regexp root = Boolean_regexp.valueOf(this.getNodeContent(nodeRoot).toUpperCase());
+		final Boolean_regexp root = Boolean_regexp.valueOf(this.getNodeContent(nodeRoot)
+				.toUpperCase());
 		final Node nodeTitle = getElementNode(nodeWindow.getChildNodes(), "title");
 		final String title = this.getNodeContent(nodeTitle);
 
@@ -106,17 +118,18 @@ public class GUIPatternParser {
 
 		final List<Pattern_action_widget> actionWidgets = this.createActionsWidgets(nodeWindow);
 		for (final Pattern_action_widget action_widget : actionWidgets) {
-			window.addActionWidget(action_widget);
+			window.addWidget(action_widget);
 		}
 
-		final List<Pattern_selectable_widget> patternWidgets = this.createSelectableWidgets(nodeWindow);
+		final List<Pattern_selectable_widget> patternWidgets = this
+				.createSelectableWidgets(nodeWindow);
 		for (final Pattern_selectable_widget pattern_widget : patternWidgets) {
-			window.addSelectableWidget(pattern_widget);
+			window.addWidget(pattern_widget);
 		}
 
 		final List<Pattern_input_widget> inputWidgets = this.createInputWidgets(nodeWindow);
 		for (final Pattern_input_widget input_widget : inputWidgets) {
-			window.addInputWidget(input_widget);
+			window.addWidget(input_widget);
 		}
 
 		// List<Node> nodeContainerList =
@@ -176,7 +189,8 @@ public class GUIPatternParser {
 	private List<Pattern_input_widget> createInputWidgets(final Node nodeContainer) {
 
 		final List<Pattern_input_widget> input = new ArrayList<>();
-		final List<Node> nodes = this.getElementNodesList(nodeContainer.getChildNodes(), "input_widget");
+		final List<Node> nodes = this.getElementNodesList(nodeContainer.getChildNodes(),
+				"input_widget");
 		for (final Node node : nodes) {
 			final String id = node.getAttributes().getNamedItem("id").getNodeValue();
 			final Node nodeLabel = getElementNode(node.getChildNodes(), "label");
@@ -217,7 +231,8 @@ public class GUIPatternParser {
 	private List<Pattern_action_widget> createActionsWidgets(final Node nodeContainer) {
 
 		final List<Pattern_action_widget> actions = new ArrayList<>();
-		final List<Node> nodes = this.getElementNodesList(nodeContainer.getChildNodes(), "action_widget");
+		final List<Node> nodes = this.getElementNodesList(nodeContainer.getChildNodes(),
+				"action_widget");
 		for (final Node node : nodes) {
 			final String id = node.getAttributes().getNamedItem("id").getNodeValue();
 			final Node nodeLabel = getElementNode(node.getChildNodes(), "label");
@@ -246,7 +261,8 @@ public class GUIPatternParser {
 	private List<Pattern_selectable_widget> createSelectableWidgets(final Node nodeContainer) {
 
 		final List<Pattern_selectable_widget> selectables = new ArrayList<>();
-		final List<Node> nodes = this.getElementNodesList(nodeContainer.getChildNodes(), "selectable_widget");
+		final List<Node> nodes = this.getElementNodesList(nodeContainer.getChildNodes(),
+				"selectable_widget");
 		for (final Node node : nodes) {
 			final String id = node.getAttributes().getNamedItem("id").getNodeValue();
 			final Node nodeLabel = getElementNode(node.getChildNodes(), "label");
@@ -260,7 +276,8 @@ public class GUIPatternParser {
 			if (nAlloy != null) {
 				alloy = nAlloy.getNodeValue();
 			}
-			final Pattern_selectable_widget aw = new Pattern_selectable_widget(id, label, card, alloy, size);
+			final Pattern_selectable_widget aw = new Pattern_selectable_widget(id, label, card,
+					alloy, size);
 
 			selectables.add(aw);
 		}

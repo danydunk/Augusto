@@ -1,6 +1,6 @@
-package usi.guisemantic.testcase.interfaces;
+package usi.gui.semantic.testcase.interfaces;
 
-import usi.guisemantic.testcase.GUITestCase;
+import usi.gui.semantic.testcase.GUITestCase;
 
 /**
  * GUITestCaseRunner interface, there should be a class implementing this
