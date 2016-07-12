@@ -633,7 +633,7 @@ public class AlloyTestCaseGenerator {
 		/*
 		 * fact{ all t: Time | (#Input_widget_iw2.content.t=0) =>
 		 * click_semantics [Action_widget_aw3, t] }
-		 *
+		 * 
 		 * fact{ Required.associated_to = Input_widget_iw2 } fact{ all t: Time |
 		 * (#Input_widget_iw1.content.t=1 and click_semantics
 		 * [Action_widget_aw3, t]) }
@@ -642,4 +642,101 @@ public class AlloyTestCaseGenerator {
 		return semanticSolution;
 
 	}
+
+	// public SpecificSemantics validateRequired(final Instance_GUI_pattern
+	// instancePattern,
+	// A4Solution solution, final GUITestCase tc, boolean result) throws
+	// Exception {
+
+	// 1rst this/Track<:op={Track$0->Go$0->Time$1, Track$0->Click$0->Time$2,
+	// Track$0->Click$1->Time$3}
+	// 2nd as this/Click<:clicked={Click$0->Action_widget_aw1$0,
+	// Click$1->Action_widget_aw3$0}
+	// with this/Fill={}
+
+	public static SpecificSemantics validateRequired(final Instance_GUI_pattern instancePattern,
+			final A4Solution solution, final GUITestCase tc) throws Exception {
+
+		final SpecificSemantics originalSemantic = instancePattern.getSemantics();
+
+		final int timeToSearch = tc.getActions().size() - 2; // last time - 1//
+
+		SpecificSemantics semanticSolution = null;
+
+		final List<Fact> facts = new ArrayList<>(originalSemantic.getFacts());
+
+		// 1- take last time
+		// 2- take the state at the t-1
+		// 3- create the constrain
+		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track");
+
+		// List with the filled Inputs
+		final List<String> inputs = new ArrayList<>(tc.getActions().size());
+
+		// Input affected at last time - 1
+		String actionAffected = null;
+
+		// We iterates over track
+		for (final A4Tuple tuple : tracks) {
+			if (tuple.arity() != 3) {
+				throw new Exception("AlloyTestCaseGenerator - analyzeTuples: wrong arity of track");
+			}
+			final String action = tuple.atom(1);
+
+			final int time_index = Integer.valueOf(tuple.atom(2).split("\\$")[1]);
+			// {Track$0->Go$0->Time$1
+			if (time_index == timeToSearch) {
+				// if the time of the track is the same we search tmax-1
+				final List<A4Tuple> clicks = AlloyUtil.getTuples(solution, "Click");
+				// Click$0->Action_widget_aw1$0
+				for (final A4Tuple click : clicks) {
+					if (click.atom(0).equals(action)) {
+						actionAffected = click.atom(1);
+						break;
+					}
+				}
+			} else if (time_index < timeToSearch) {
+				// for the previous times, we search for fills at that time
+				final List<A4Tuple> fills = AlloyUtil.getTuples(solution, "Fill");
+				// Click$0->Action_widget_aw1$0
+				for (final A4Tuple fill : fills) {
+					if (fill.atom(0).equals(action)) {
+						final String inputAffected = fill.atom(1);
+						System.out.println("Input found " + inputAffected);
+						//
+						final String idIn = inputAffected.split("\\$")[0];
+						inputs.set(time_index, idIn);
+
+					}
+				}
+
+			}
+
+		}
+
+		for (int i = 0; i < inputs.size(); i++) {
+			//
+			final String idIn = inputs.get(i);
+			if (idIn != null) {
+				final String factContent = "all t: Time |  (#" + idIn + ".content.t="
+						+ timeToSearch + ") => click_semantics [" + actionAffected + ", t]";
+				final Fact fact = new Fact("", factContent);
+				System.out.println("Creating " + factContent);
+				facts.add(fact);
+			}
+		}
+
+		// We create the fact
+
+		final List<Signature> signatures = new ArrayList<>(originalSemantic.getSignatures());
+		final List<Predicate> predicates = new ArrayList<>(originalSemantic.getPredicates());
+		final List<Function> functions = new ArrayList<>(originalSemantic.getFunctions());
+		final List<String> opens = new ArrayList<>(originalSemantic.getOpenStatements());
+
+		semanticSolution = new SpecificSemantics(signatures, facts, predicates, functions, opens);
+
+		return semanticSolution;
+
+	}
+
 }
