@@ -108,7 +108,8 @@ public class FunctionalitySemantics extends Alloy_Model {
 						.size()) == 0) {
 			throw new Exception("FunctionalitySemantics: error in constructor");
 		}
-		this.generate_run_commands();
+		this.run_commands = new ArrayList<>();
+		// this.generate_run_commands();
 	}
 
 	public Semantic_predicate getClickSemantics() {
@@ -152,9 +153,7 @@ public class FunctionalitySemantics extends Alloy_Model {
 		return new ArrayList<>(this.input_w_extensions);
 	}
 
-	private void generate_run_commands() throws Exception {
-
-		this.run_commands = new ArrayList<>();
+	public void generate_run_commands() throws Exception {
 
 		final String click = "one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and";
 		for (final String prec : this.click_semantics.getCases().keySet()) {
@@ -258,6 +257,11 @@ public class FunctionalitySemantics extends Alloy_Model {
 	public List<String> getRun_commands() {
 
 		return new ArrayList<>(this.run_commands);
+	}
+
+	public void addRun_command(final String run) {
+
+		this.run_commands.add(run);
 	}
 
 	public Signature getWindow_signature() {
