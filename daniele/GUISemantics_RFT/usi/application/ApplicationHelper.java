@@ -1,5 +1,6 @@
 package usi.application;
 
+import java.io.File;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -18,7 +19,7 @@ public class ApplicationHelper {
 
 		RationalTestScript.unregisterAll();
 
-		RationalTestScript.shellExecute("scripts" + System.getProperty("file.separator") + "AUT.bat");
+		RationalTestScript.shellExecute("scripts" + File.separator + "AUT.bat");
 		System.gc();
 
 		final long delayTime = System.nanoTime();
@@ -46,7 +47,8 @@ public class ApplicationHelper {
 		TestObject[] tos = null;
 		try {
 			final Registry registry = LocateRegistry.getRegistry(2007);
-			final RemoteCoberturaInterface rmo = (RemoteCoberturaInterface) registry.lookup("RemoteCobertura");
+			final RemoteCoberturaInterface rmo = (RemoteCoberturaInterface) registry
+					.lookup("RemoteCobertura");
 			rmo.getCoverage();
 			tos = this.root.find(SubitemFactory.atChild("showing", "true", "enabled", "true"));
 			tos[0].getProcess().kill();
@@ -58,8 +60,8 @@ public class ApplicationHelper {
 
 	public void forceClose() {
 
-		RationalTestScript.shellExecute(System.getProperty("user.dir") + System.getProperty("file.separator")
-				+ "AppScript" + System.getProperty("file.separator") + "closeapplication.bat");
+		RationalTestScript.shellExecute(System.getProperty("user.dir") + File.separator
+				+ "AppScript" + File.separator + "closeapplication.bat");
 	}
 
 	public RootTestObject restartApplication() throws Exception {

@@ -144,7 +144,13 @@ public abstract class Widget implements Comparable<Widget> {
 		}
 
 		// TODO: what if the label changes?
-		if (!w.label.equals(this.label)) {
+		if (w.label == null && this.label != null) {
+			return false;
+		}
+		if (w.label != null && this.label == null) {
+			return false;
+		}
+		if (w.label != null && !w.label.equals(this.label)) {
 			return false;
 		}
 		if (!w.classs.equals(this.classs)) {
@@ -307,5 +313,10 @@ public abstract class Widget implements Comparable<Widget> {
 
 		}
 		return null;
+	}
+
+	public void setTO(final TestObject to) {
+
+		this.to = to;
 	}
 }

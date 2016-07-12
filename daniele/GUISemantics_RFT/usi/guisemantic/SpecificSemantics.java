@@ -1,7 +1,6 @@
 package usi.guisemantic;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -14,7 +13,6 @@ import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_input_widget;
 import usi.gui.pattern.Pattern_window;
 import usi.gui.structure.Action_widget;
-import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Window;
 import usi.guisemantic.alloy.AlloyUtil;
@@ -160,7 +158,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 				Signature piw_sig = null;
 
-				piw_sig = searchForParent(func_semantics, piw);
+				piw_sig = AlloyUtil.searchForParent(func_semantics, piw);
 
 				final Signature sigIW = new Signature("Input_widget_" + iw.getId(),
 						Cardinality.ONE, false, Lists.newArrayList(piw_sig), false);
@@ -169,7 +167,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 				input_widgets.put(iw, sigIW);
 			}
 			// a fact is created to associate the IWS to the window
-			final Fact factIW = createFactsForInputWidget(input_widgets, added_windows.get(win));
+			final Fact factIW = AlloyUtil.createFactsForInputWidget(input_widgets,
+					added_windows.get(win));
 			if (!"".equals(factIW.getContent())) {
 				facts.add(factIW);
 			}
@@ -185,7 +184,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 					// AW not mapped
 					continue;
 				}
-				final Signature paw_sig = searchForParent(func_semantics, paw);
+				final Signature paw_sig = AlloyUtil.searchForParent(func_semantics, paw);
 
 				final Signature sigAW = new Signature("Action_widget_" + aw.getId(),
 						Cardinality.ONE, false, Lists.newArrayList(paw_sig), false);
@@ -194,8 +193,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 				action_widgets.put(aw, sigAW);
 			}
 			// a fact is created to associate the AWS to the window
-			final Fact factAW = createFactsForActionWidget(action_widgets, added_windows.get(win),
-					added_windows, in.getGui());
+			final Fact factAW = AlloyUtil.createFactsForActionWidget(action_widgets,
+					added_windows.get(win), added_windows, in.getGui());
 			if (!"".equals(factAW.getContent())) {
 				facts.add(factAW);
 			}
@@ -208,131 +207,4 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		return instantiate(specific_model);
 	}
 
-	// TODO: maybe we should move this method to, for instance, AlloyModel.
-	public static Signature searchForParent(final FunctionalitySemantics func_semantics,
-			final Pattern_input_widget piw) throws Exception {
-
-		Signature piw_sig;
-		if (piw.getAlloyCorrespondence() != null && piw.getAlloyCorrespondence().length() > 0) {
-			// the pattern input widget signature is retrieved
-			final List<Signature> to_search = new ArrayList<>(
-					func_semantics.getInput_w_extensions());
-			to_search.add(func_semantics.input_w_signature);
-			piw_sig = AlloyUtil.searchSignatureInList(to_search, piw.getAlloyCorrespondence());
-			System.out.println(piw.getAlloyCorrespondence());
-			if (piw_sig == null) {
-				throw new Exception("SpecificSemantics - generate: wrong alloy corrispondence "
-						+ piw.getAlloyCorrespondence());
-			}
-		} else {
-			piw_sig = func_semantics.getInput_w_signature();
-		}
-		return piw_sig;
-	}
-
-	// TODO: maybe we should move this method to, for instance, AlloyModel.
-	public static Signature searchForParent(final FunctionalitySemantics func_semantics,
-			final Pattern_action_widget paw) throws Exception {
-
-		Signature paw_sig = null;
-		if (paw.getAlloyCorrespondence() != null && paw.getAlloyCorrespondence().length() > 0) {
-
-			// the pattern action widget signature is retrieved
-			final List<Signature> to_search = new ArrayList<>(
-					func_semantics.getAction_w_extensions());
-			to_search.add(func_semantics.action_w_signature);
-			paw_sig = AlloyUtil.searchSignatureInList(to_search, paw.getAlloyCorrespondence());
-
-			if (paw_sig == null) {
-				throw new Exception("SpecificSemantics - generate: wrong alloy corrispondence "
-						+ paw.getAlloyCorrespondence());
-			}
-		} else {
-			paw_sig = func_semantics.getAction_w_signature();
-		}
-		return paw_sig;
-	}
-
-	/**
-	 * Method that links Windows signatures with Input Widget Signatures
-	 * according to the structure of the GUI
-	 *
-	 * @param iws
-	 * @param window
-	 */
-	static private Fact createFactsForInputWidget(final Map<Input_widget, Signature> iws,
-			final Signature window) {
-
-		return createFactsForElement(iws.values(), window, "iws");
-	}
-
-	/**
-	 * Method that links Windows signatures with Action Widget Signatures
-	 * according to the structure of the GUI. it requires also the gui and the
-	 * list of added signatures to add fact about the edges
-	 *
-	 * @param aws
-	 * @param window
-	 * @throws Exception
-	 */
-	private static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
-			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
-
-		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
-		String content = initial_fact.getContent();
-
-		for (final Action_widget aw : aws.keySet()) {
-			final List<Window> edges = new ArrayList<>();
-			for (final Window w : gui.getStaticForwardLinks(aw.getId())) {
-				if (ws.containsKey(w)) {
-					edges.add(w);
-				}
-			}
-			if (edges.size() > 0) {
-				content += System.getProperty("line.separator") + aws.get(aw).getIdentifier()
-						+ ".goes = ";
-				int i = 0;
-				for (final Window edge : edges) {
-					content += ws.get(edge).getIdentifier();
-					content += (i + 1 == edges.size()) ? "" : " + ";
-					i++;
-				}
-			}
-		}
-
-		final Fact fact = new Fact(window.getIdentifier() + "_aws", content);
-		return fact;
-	}
-
-	/**
-	 * Method that links Windows signatures with Selectable Widget Signatures
-	 * according to the structure of the GUI
-	 *
-	 * @param sws
-	 * @param window
-	 */
-	private static Fact createFactsForSelectableWidget(final List<Signature> sws,
-			final Signature window) {
-
-		return createFactsForElement(sws, window, "aws");
-	}
-
-	private static Fact createFactsForElement(final Collection<Signature> widgets,
-			final Signature window, final String fieldToRelated) {
-
-		if (widgets.isEmpty()) {
-			return new Fact(window.getIdentifier() + "_" + fieldToRelated, "");
-		}
-
-		String content = window.getIdentifier() + "." + fieldToRelated + " = ";
-		int i = 0;
-		for (final Signature widget : widgets) {
-			content += widget.getIdentifier();
-			content += (i + 1 == widgets.size()) ? "" : " + ";
-			i++;
-		}
-
-		return new Fact(window.getIdentifier() + "_" + fieldToRelated, content);
-	}
 }

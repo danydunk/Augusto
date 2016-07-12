@@ -1,5 +1,6 @@
 package usi.configuration;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
@@ -8,26 +9,29 @@ public class ConfigurationManager {
 	private static String autClasspath;
 	private static String autBinDirectory;
 	private static String autMainCLass;
+	private static String resetScriptPath;
 
 	private static long sleepTime;
 
 	public static void load() throws Exception {
 
-		load("config" + System.getProperty("file.separator") + "aut.properties");
+		load("config" + File.separator + "aut.properties");
 	}
 
-	public static void load(String configuration_file_path) throws Exception {
+	public static void load(final String configuration_file_path) throws Exception {
 
-		Properties properties = new Properties();
+		final Properties properties = new Properties();
 		try {
 			properties.load(new FileInputStream(configuration_file_path));
-		} catch (Exception e) {
-			throw new Exception("ConfigurationManager - init: error loading file, " + e.getMessage());
+		} catch (final Exception e) {
+			throw new Exception("ConfigurationManager - init: error loading file, "
+					+ e.getMessage());
 		}
 
 		ConfigurationManager.setAutBinDirectory(properties.getProperty("aut_bin_directory"));
 		ConfigurationManager.setAutMainCLass(properties.getProperty("aut_main_class"));
 		ConfigurationManager.setAutClasspath(properties.getProperty("aut_classpath"));
+		ConfigurationManager.setResetScriptPath(properties.getProperty("reset_script_path"));
 
 		ConfigurationManager.setSleepTime(Long.valueOf(properties.getProperty("sleep_time")));
 	}
@@ -37,7 +41,7 @@ public class ConfigurationManager {
 		return autClasspath;
 	}
 
-	public static void setAutClasspath(String autClasspath) {
+	public static void setAutClasspath(final String autClasspath) {
 
 		ConfigurationManager.autClasspath = autClasspath;
 	}
@@ -47,7 +51,7 @@ public class ConfigurationManager {
 		return autBinDirectory;
 	}
 
-	public static void setAutBinDirectory(String autBinDirectory) {
+	public static void setAutBinDirectory(final String autBinDirectory) {
 
 		ConfigurationManager.autBinDirectory = autBinDirectory;
 	}
@@ -57,9 +61,14 @@ public class ConfigurationManager {
 		return autMainCLass;
 	}
 
-	public static void setAutMainCLass(String autMainCLass) {
+	public static void setAutMainCLass(final String autMainCLass) {
 
 		ConfigurationManager.autMainCLass = autMainCLass;
+	}
+
+	public static void setResetScriptPath(final String resetScriptPath) {
+
+		ConfigurationManager.resetScriptPath = resetScriptPath;
 	}
 
 	public static long getSleepTime() {
@@ -67,8 +76,13 @@ public class ConfigurationManager {
 		return sleepTime;
 	}
 
-	public static void setSleepTime(long sleepTime) {
+	public static void setSleepTime(final long sleepTime) {
 
 		ConfigurationManager.sleepTime = sleepTime;
+	}
+
+	public static String getResetScriptPath() {
+
+		return ConfigurationManager.resetScriptPath;
 	}
 }

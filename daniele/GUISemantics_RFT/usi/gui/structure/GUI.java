@@ -12,32 +12,26 @@ import com.google.common.collect.Multimap;
 
 public class GUI {
 
-	private List<Window> windows;
-	// private List<Action_widget> action_widgets;
-	// private List<Input_widget> input_widgets;
-	// private List<Selectable_widget> selectable_widgets;
-	private Map<Action_widget, Window> aw_window_mapping;
-	private final Multimap<Action_widget, Window> staticEdgesFrom;
-	private final Multimap<Window, Action_widget> staticEdgesTo;
-	private Window root;
+	private Map<String, Window> windows;
+	private Map<String, Window> aw_window_mapping;
+	private final Multimap<String, String> staticEdgesFrom;
+	private final Multimap<String, String> staticEdgesTo;
+	private String root;
 
 	// TODO: dynamic edges
 	public GUI() {
 
-		this.windows = new ArrayList<>();
-		// this.action_widgets = new ArrayList<>();
-		// this.input_widgets = new ArrayList<>();
-		// this.selectable_widgets = new ArrayList<>();
+		this.windows = new HashMap<>();
 		this.aw_window_mapping = new HashMap<>();
 
 		this.staticEdgesFrom = HashMultimap.create();
 		this.staticEdgesTo = HashMultimap.create();
 	}
 
-	public boolean isStaticEdge(final Action_widget aw, final Window w) throws Exception {
+	public boolean isStaticEdge(final String aw, final String w) throws Exception {
 
-		if (aw == null || w == null || !this.windows.contains(w)
-				|| !this.aw_window_mapping.keySet().contains(aw)) {
+		if (aw == null || w == null || !this.windows.containsKey(w)
+				|| !this.aw_window_mapping.containsKey(aw)) {
 			throw new Exception("GUI: wrong input in isEdge");
 		}
 		if (this.staticEdgesFrom.containsEntry(aw, w) && this.staticEdgesTo.containsEntry(w, aw)) {
@@ -46,44 +40,59 @@ public class GUI {
 		return false;
 	}
 
-	public Collection<Window> getStaticForwardLinks(final Action_widget aw) throws Exception {
+	public List<Window> getStaticForwardLinks(final String aw) throws Exception {
 
-		if (aw == null || !this.aw_window_mapping.keySet().contains(aw)) {
+		if (aw == null || !this.aw_window_mapping.containsKey(aw)) {
 			throw new Exception("GUI: wrong input in getFrwardLinks");
 		}
-		final Collection<Window> out = this.staticEdgesFrom.get(aw);
+		final Collection<String> out = this.staticEdgesFrom.get(aw);
 		if (out != null) {
-			return out;
+			final List<Window> to_return = new ArrayList<>();
+			for (final String s : out) {
+				to_return.add(this.windows.get(s));
+			}
+			return to_return;
 		} else {
 			return new ArrayList<Window>();
 		}
 	}
 
-	public Collection<Action_widget> getStaticBackwardLinks(final Window w) throws Exception {
+	public List<Action_widget> getStaticBackwardLinks(final String w) throws Exception {
 
-		if (w == null || !this.windows.contains(w)) {
+		if (w == null || !this.windows.containsKey(w)) {
 			throw new Exception("GUI: wrong input in getBackwardLinks");
 		}
 
-		final Collection<Action_widget> out = this.staticEdgesTo.get(w);
+		final Collection<String> out = this.staticEdgesTo.get(w);
 		if (out != null) {
-			return out;
+			final List<Action_widget> to_return = new ArrayList<>();
+			loop: for (final String id : out) {
+				final List<Action_widget> aws = this.aw_window_mapping.get(id).getActionWidgets();
+				for (final Action_widget aw : aws) {
+					if (aw.id.equals(id)) {
+						to_return.add(aw);
+						continue loop;
+					}
+				}
+				throw new Exception("GUI - getStaticBackwardLinks: edge not found.");
+			}
+			return to_return;
 		} else {
 			return new ArrayList<Action_widget>();
 		}
 	}
 
-	public void addStaticEdge(final Action_widget aw, final Window w) throws Exception {
+	public void addStaticEdge(final String aw, final String w) throws Exception {
 
-		if (aw == null || w == null || !this.windows.contains(w)
-				|| !this.aw_window_mapping.keySet().contains(aw)) {
+		if (aw == null || w == null || !this.windows.containsKey(w)
+				|| !this.aw_window_mapping.containsKey(aw)) {
 			throw new Exception("GUI: wrong input in addEdge");
 		}
 		this.staticEdgesFrom.put(aw, w);
 		this.staticEdgesTo.put(w, aw);
 	}
 
-	public void removeStaticEdge(final Action_widget aw, final Window w) throws Exception {
+	public void removeStaticEdge(final String aw, final String w) throws Exception {
 
 		if (aw == null || w == null) {
 			throw new Exception("GUI: wrong input in removeEdge");
@@ -92,20 +101,12 @@ public class GUI {
 		this.staticEdgesTo.remove(w, aw);
 	}
 
-	public void setRoot(final Window n) throws Exception {
-
-		if (n == null || !this.windows.contains(n)) {
-			throw new Exception("GUI: wrong input in setInitial");
-		}
-		this.root = n;
-	}
-
 	public Window getRoot() {
 
-		return this.root;
+		return this.windows.get(this.root);
 	}
 
-	public void setWindows(final Collection<Window> ws) throws Exception {
+	public void setWindows(final List<Window> ws) throws Exception {
 
 		if (ws == null) {
 			throw new Exception("GUI: wrong input in setWindows");
@@ -113,7 +114,7 @@ public class GUI {
 		// this.action_widgets = new ArrayList<>();
 		// this.input_widgets = new ArrayList<>();
 		// this.selectable_widgets = new ArrayList<>();
-		this.windows = new ArrayList<>();
+		this.windows = new HashMap<>();
 		this.aw_window_mapping = new HashMap<>();
 
 		for (final Window w : ws) {
@@ -123,66 +124,55 @@ public class GUI {
 
 	public void addWindow(final Window n) throws Exception {
 
-		if (n == null || this.windows.contains(n)) {
+		if (n == null || this.windows.containsKey(n.id)) {
 			throw new Exception("GUI: wrong input in addWindow");
 		}
-		this.windows.add(n);
+		this.windows.put(n.id, n);
 
-		// this.input_widgets.addAll(n.getInputWidgets());
-		// this.selectable_widgets.addAll(n.getSelectableWidgets());
+		if (n.isRoot()) {
+			if (this.root != null) {
+				throw new Exception("GUI - addWindow: there already is a root window.");
+			}
+			this.root = n.id;
+		}
+
 		for (final Action_widget aw : n.getActionWidgets()) {
-			this.aw_window_mapping.put(aw, n);
-			// this.action_widgets.add(aw);
+			this.aw_window_mapping.put(aw.id, n);
 		}
 	}
 
 	public void removeWindow(final Window n) throws Exception {
 
-		if (n == null || !this.windows.contains(n)) {
+		if (n == null || !this.windows.containsKey(n.id)) {
 			throw new Exception("GUI: wrong input in removeWindow");
 		}
 
 		// the edges associated with this window are removed
-		final List<Action_widget> to_remove = new ArrayList<>(this.getStaticBackwardLinks(n));
+		final List<Action_widget> to_remove = new ArrayList<>(this.getStaticBackwardLinks(n.id));
 		for (final Action_widget aw : to_remove) {
-			this.removeStaticEdge(aw, n);
+			this.removeStaticEdge(aw.id, n.id);
 		}
 
-		final List<Action_widget> from_links = this.aw_window_mapping.entrySet().parallelStream()
+		final List<String> from_links = this.aw_window_mapping.entrySet().parallelStream()
 				.filter(e -> e.getValue() == n).map(ee -> ee.getKey()).collect(Collectors.toList());
 
-		for (final Action_widget aw : from_links) {
+		for (final String aw : from_links) {
 			for (final Window w : this.getStaticForwardLinks(aw)) {
-				this.removeStaticEdge(aw, w);
+				this.removeStaticEdge(aw, w.id);
 			}
 		}
 
-		this.windows.remove(n);
-		this.setWindows(this.windows);
+		this.windows.remove(n.id);
+		this.setWindows(new ArrayList<Window>(this.windows.values()));
 	}
 
 	public List<Window> getWindows() {
 
-		return new ArrayList<>(this.windows);
+		return new ArrayList<>(this.windows.values());
 	}
-
-	// public List<Action_widget> getAction_widgets() {
-	//
-	// return new ArrayList<>(this.action_widgets);
-	// }
-	//
-	// public List<Input_widget> getInput_widgets() {
-	//
-	// return new ArrayList<>(this.input_widgets);
-	// }
-	//
-	// public List<Selectable_widget> getSelectable_widgets() {
-	//
-	// return new ArrayList<>(this.selectable_widgets);
-	// }
 
 	public Window getActionWidget_Window(final Action_widget aw) {
 
-		return this.aw_window_mapping.get(aw);
+		return this.aw_window_mapping.get(aw.getId());
 	}
 }

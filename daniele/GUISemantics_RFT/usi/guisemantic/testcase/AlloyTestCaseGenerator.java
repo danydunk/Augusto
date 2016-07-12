@@ -429,7 +429,7 @@ public class AlloyTestCaseGenerator {
 
 		for (final Pattern_input_widget piw : piws) {
 
-			final Signature piw_sig = SpecificSemantics.searchForParent(originalSemantic, piw);
+			final Signature piw_sig = AlloyUtil.searchForParent(originalSemantic, piw);
 
 			if (piw_sig == null) {
 				throw new Exception("Element not found: " + piw);
@@ -452,7 +452,7 @@ public class AlloyTestCaseGenerator {
 
 		for (final Pattern_action_widget paw : paws) {
 
-			final Signature paw_sig = SpecificSemantics.searchForParent(originalSemantic, paw);
+			final Signature paw_sig = AlloyUtil.searchForParent(originalSemantic, paw);
 
 			if (paw_sig == null) {
 				throw new Exception("Element not found: " + paw_sig);
@@ -467,8 +467,8 @@ public class AlloyTestCaseGenerator {
 		}
 
 		// We put widgets to the undiscover window
-		final Fact fact_aws_from_undiscover_window = SpecificSemantics.createFactsForElement(
-				aw_sig, sigWinToDiscover, "aws");
+		final Fact fact_aws_from_undiscover_window = AlloyUtil.createFactsForElement(aw_sig,
+				sigWinToDiscover, "aws");
 		System.out.println("Creating " + fact_aws_from_undiscover_window);
 
 		Signature sig_action_to_execute = null;

@@ -55,7 +55,7 @@ public class Graph {
 		for (final Window window : gui.getWindows()) {
 			final Vertex vsrc = getVertex(vertexes, window.getId());
 			for (final Action_widget actionWindows : window.getActionWidgets()) {
-				final Collection<Window> links = gui.getStaticForwardLinks(actionWindows);
+				final Collection<Window> links = gui.getStaticForwardLinks(actionWindows.getId());
 				for (final Window linkedWin : links) {
 					final Vertex vdest = getVertex(vertexes, linkedWin.getId());
 					final int weight = 1;
