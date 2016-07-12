@@ -242,4 +242,15 @@ public class Instance_GUI_pattern {
 
 		this.semantics = SpecificSemantics.generate(this);
 	}
+
+	public List<Window> getPatternWindowMatches(final String pw) {
+
+		final List<Window> out = new ArrayList<>();
+		for (final Instance_window iw : this.windows) {
+			if (iw.getPattern().getId().equals(pw)) {
+				out.add(iw.getInstance());
+			}
+		}
+		return out;
+	}
 }
