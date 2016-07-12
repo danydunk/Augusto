@@ -1,4 +1,4 @@
-package usi.guisemantic.alloy.entity;
+package usi.gui.semantic.alloy.entity;
 
 public abstract class AlloyEntity {
 
@@ -6,6 +6,7 @@ public abstract class AlloyEntity {
 	protected final String identifier;
 
 	public AlloyEntity(final String identifier) {
+
 		if (identifier != null) {
 			if (identifier.startsWith("this/")) {
 				this.identifier = identifier.replace("this/", "");

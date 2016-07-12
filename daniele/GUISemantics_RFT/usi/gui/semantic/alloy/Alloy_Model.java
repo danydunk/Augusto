@@ -1,12 +1,12 @@
-package usi.guisemantic.alloy;
+package usi.gui.semantic.alloy;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import usi.guisemantic.alloy.entity.Fact;
-import usi.guisemantic.alloy.entity.Function;
-import usi.guisemantic.alloy.entity.Predicate;
-import usi.guisemantic.alloy.entity.Signature;
+import usi.gui.semantic.alloy.entity.Fact;
+import usi.gui.semantic.alloy.entity.Function;
+import usi.gui.semantic.alloy.entity.Predicate;
+import usi.gui.semantic.alloy.entity.Signature;
 
 public class Alloy_Model {
 
@@ -16,10 +16,12 @@ public class Alloy_Model {
 	protected final List<Predicate> predicates;
 	protected final List<Function> functions;
 
-	public Alloy_Model(final List<Signature> signatures, final List<Fact> facts, final List<Predicate> predicates,
-			final List<Function> functions, final List<String> open_statements) throws Exception {
-		if (signatures == null || signatures.size() == 0 || facts == null || predicates == null || functions == null
-				|| open_statements == null) {
+	public Alloy_Model(final List<Signature> signatures, final List<Fact> facts,
+			final List<Predicate> predicates, final List<Function> functions,
+			final List<String> open_statements) throws Exception {
+
+		if (signatures == null || signatures.size() == 0 || facts == null || predicates == null
+				|| functions == null || open_statements == null) {
 			throw new Exception("AlloyModel: constructor error");
 		}
 		this.signatures = new ArrayList<>(signatures);

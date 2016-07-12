@@ -38,9 +38,9 @@ public class GUIStructureMaker {
 			w3.addWidget(iw3);
 			gui.addWindow(w3);
 			// edges
-			gui.addStaticEdge(aw1.getId(), w2.getId());
-			gui.addStaticEdge(aw2.getId(), w3.getId());
-			gui.addStaticEdge(aw4.getId(), w1.getId());
+			gui.addEdge(aw1.getId(), w2.getId());
+			gui.addEdge(aw2.getId(), w3.getId());
+			gui.addEdge(aw4.getId(), w1.getId());
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -89,11 +89,11 @@ public class GUIStructureMaker {
 			w4.addWidget(iw5);
 			gui.addWindow(w4);
 			// edges
-			gui.addStaticEdge(aw1.getId(), w4.getId());
-			gui.addStaticEdge(aw6.getId(), w2.getId());
-			gui.addStaticEdge(aw7.getId(), w1.getId());
-			gui.addStaticEdge(aw2.getId(), w3.getId());
-			gui.addStaticEdge(aw4.getId(), w4.getId());
+			gui.addEdge(aw1.getId(), w4.getId());
+			gui.addEdge(aw6.getId(), w2.getId());
+			gui.addEdge(aw7.getId(), w1.getId());
+			gui.addEdge(aw2.getId(), w3.getId());
+			gui.addEdge(aw4.getId(), w4.getId());
 
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -139,11 +139,11 @@ public class GUIStructureMaker {
 			w4.addWidget(aw7);
 			gui.addWindow(w4);
 			// edges
-			gui.addStaticEdge(aw1.getId(), w2.getId());
-			gui.addStaticEdge(aw2.getId(), w3.getId());
-			gui.addStaticEdge(aw4.getId(), w1.getId());
-			gui.addStaticEdge(aw3.getId(), w4.getId());
-			gui.addStaticEdge(aw7.getId(), w2.getId());
+			gui.addEdge(aw1.getId(), w2.getId());
+			gui.addEdge(aw2.getId(), w3.getId());
+			gui.addEdge(aw4.getId(), w1.getId());
+			gui.addEdge(aw3.getId(), w4.getId());
+			gui.addEdge(aw7.getId(), w2.getId());
 
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -200,13 +200,13 @@ public class GUIStructureMaker {
 			w5.addWidget(aw9);
 			gui.addWindow(w5);
 			// edges
-			gui.addStaticEdge(aw1.getId(), w4.getId());
-			gui.addStaticEdge(aw6.getId(), w2.getId());
-			gui.addStaticEdge(aw7.getId(), w1.getId());
-			gui.addStaticEdge(aw2.getId(), w3.getId());
-			gui.addStaticEdge(aw4.getId(), w4.getId());
-			gui.addStaticEdge(aw3.getId(), w5.getId());
-			gui.addStaticEdge(aw9.getId(), w2.getId());
+			gui.addEdge(aw1.getId(), w4.getId());
+			gui.addEdge(aw6.getId(), w2.getId());
+			gui.addEdge(aw7.getId(), w1.getId());
+			gui.addEdge(aw2.getId(), w3.getId());
+			gui.addEdge(aw4.getId(), w4.getId());
+			gui.addEdge(aw3.getId(), w5.getId());
+			gui.addEdge(aw9.getId(), w2.getId());
 
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -253,11 +253,11 @@ public class GUIStructureMaker {
 			w4.addWidget(aw7);
 			gui.addWindow(w4);
 			// edges
-			gui.addStaticEdge(aw1.getId(), w2.getId());
-			gui.addStaticEdge(aw2.getId(), w3.getId());
-			gui.addStaticEdge(aw4.getId(), w1.getId());
-			gui.addStaticEdge(aw3.getId(), w4.getId());
-			gui.addStaticEdge(aw7.getId(), w2.getId());
+			gui.addEdge(aw1.getId(), w2.getId());
+			gui.addEdge(aw2.getId(), w3.getId());
+			gui.addEdge(aw4.getId(), w1.getId());
+			gui.addEdge(aw3.getId(), w4.getId());
+			gui.addEdge(aw7.getId(), w2.getId());
 			// w1B
 			final Window w1b = new Window("w1b", "init1", "class", 1, 1, false);
 			final Action_widget aw1b = new Action_widget("aw1b", "add", "class", 1, 1);
@@ -277,8 +277,8 @@ public class GUIStructureMaker {
 			w2b.addWidget(iw2b);
 			gui.addWindow(w2b);
 			// edges
-			gui.addStaticEdge(aw1b.getId(), w2b.getId());
-			gui.addStaticEdge(aw4b.getId(), w1b.getId());
+			gui.addEdge(aw1b.getId(), w2b.getId());
+			gui.addEdge(aw4b.getId(), w1b.getId());
 
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -336,13 +336,13 @@ public class GUIStructureMaker {
 			w5.addWidget(aw9);
 			gui.addWindow(w5);
 			// edges
-			gui.addStaticEdge(aw1.getId(), w4.getId());
-			gui.addStaticEdge(aw6.getId(), w2.getId());
-			gui.addStaticEdge(aw7.getId(), w1.getId());
-			gui.addStaticEdge(aw2.getId(), w3.getId());
-			gui.addStaticEdge(aw4.getId(), w4.getId());
-			gui.addStaticEdge(aw3.getId(), w5.getId());
-			gui.addStaticEdge(aw9.getId(), w2.getId());
+			gui.addEdge(aw1.getId(), w4.getId());
+			gui.addEdge(aw6.getId(), w2.getId());
+			gui.addEdge(aw7.getId(), w1.getId());
+			gui.addEdge(aw2.getId(), w3.getId());
+			gui.addEdge(aw4.getId(), w4.getId());
+			gui.addEdge(aw3.getId(), w5.getId());
+			gui.addEdge(aw9.getId(), w2.getId());
 			// w1B
 			final Window w1b = new Window("w1b", "init1", "class", 1, 1, false);
 			final Action_widget aw1b = new Action_widget("aw1b", "add", "class", 1, 1);
@@ -371,10 +371,10 @@ public class GUIStructureMaker {
 			w3b.addWidget(iw3b);
 			gui.addWindow(w3b);
 			// edges
-			gui.addStaticEdge(aw1b.getId(), w3b.getId());
-			gui.addStaticEdge(aw6b.getId(), w1b.getId());
-			gui.addStaticEdge(aw5b.getId(), w2b.getId());
-			gui.addStaticEdge(aw4b.getId(), w3b.getId());
+			gui.addEdge(aw1b.getId(), w3b.getId());
+			gui.addEdge(aw6b.getId(), w1b.getId());
+			gui.addEdge(aw5b.getId(), w2b.getId());
+			gui.addEdge(aw4b.getId(), w3b.getId());
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

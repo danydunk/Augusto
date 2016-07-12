@@ -51,10 +51,9 @@ public class GUIWriter {
 		}
 
 		for (final Action_widget aw : aws) {
-			final List<Window> winds = gui.getStaticForwardLinks(aw.getId());
+			final List<Window> winds = gui.getForwardLinks(aw.getId());
 			if (winds.size() > 0) {
 				final Element edge = this.doc.createElement("edge");
-				edge.setAttribute("type", "static");
 				gui_tag.appendChild(edge);
 				final Element from = this.doc.createElement("from");
 				from.setTextContent(aw.getId());
@@ -66,7 +65,6 @@ public class GUIWriter {
 				}
 			}
 		}
-		// TODO:dynamic edges
 
 		return this.doc;
 	}

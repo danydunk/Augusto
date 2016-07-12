@@ -64,7 +64,7 @@ public class Window extends Widget {
 
 	private void addActionWidget(final Action_widget in) {
 
-		if (in != null && !this.widgets_map.containsKey(in.id)) {
+		if (in != null && !this.widgets_map.containsKey(in.getId())) {
 			this.action_widgets.add(in);
 			this.action_widgets.sort(null);
 		}
@@ -72,7 +72,7 @@ public class Window extends Widget {
 
 	private void addInputWidget(final Input_widget in) {
 
-		if (in != null && !this.widgets_map.containsKey(in.id)) {
+		if (in != null && !this.widgets_map.containsKey(in.getId())) {
 			this.input_widgets.add(in);
 			this.input_widgets.sort(null);
 		}
@@ -80,7 +80,7 @@ public class Window extends Widget {
 
 	private void addSelectableWidget(final Selectable_widget in) {
 
-		if (in != null && !this.widgets_map.containsKey(in.id)) {
+		if (in != null && !this.widgets_map.containsKey(in.getId())) {
 			this.selectable_widgets.add(in);
 			this.input_widgets.sort(null);
 		}
@@ -91,13 +91,13 @@ public class Window extends Widget {
 		if (in != null) {
 
 			for (final Action_widget aw : this.action_widgets) {
-				this.widgets_map.remove(aw.id);
+				this.widgets_map.remove(aw.getId());
 			}
 
 			this.action_widgets = in;
 
 			for (final Action_widget aw : this.action_widgets) {
-				this.widgets_map.put(aw.id, aw);
+				this.widgets_map.put(aw.getId(), aw);
 			}
 
 			this.action_widgets.sort(null);
@@ -109,13 +109,13 @@ public class Window extends Widget {
 		if (in != null) {
 
 			for (final Input_widget iw : this.input_widgets) {
-				this.widgets_map.remove(iw.id);
+				this.widgets_map.remove(iw.getId());
 			}
 
 			this.input_widgets = in;
 
 			for (final Input_widget iw : this.input_widgets) {
-				this.widgets_map.put(iw.id, iw);
+				this.widgets_map.put(iw.getId(), iw);
 			}
 			this.input_widgets.sort(null);
 		}
@@ -125,12 +125,12 @@ public class Window extends Widget {
 
 		if (in != null) {
 			for (final Selectable_widget sw : this.selectable_widgets) {
-				this.widgets_map.remove(sw.id);
+				this.widgets_map.remove(sw.getId());
 			}
 
 			this.selectable_widgets = in;
 			for (final Selectable_widget sw : this.selectable_widgets) {
-				this.widgets_map.put(sw.id, sw);
+				this.widgets_map.put(sw.getId(), sw);
 			}
 			this.selectable_widgets.sort(null);
 		}

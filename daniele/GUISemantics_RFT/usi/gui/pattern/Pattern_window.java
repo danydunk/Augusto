@@ -22,6 +22,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 
 	private final Boolean_regexp modal;
 	private final Boolean_regexp root;
+	private final Map<String, Pattern_widget> widgets_map;
 	private List<Pattern_action_widget> action_widgets;
 	private List<Pattern_input_widget> input_widgets;
 	private List<Pattern_selectable_widget> selectable_widgets;
@@ -37,6 +38,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 		this.action_widgets = new ArrayList<>();
 		this.input_widgets = new ArrayList<>();
 		this.selectable_widgets = new ArrayList<>();
+		this.widgets_map = new HashMap<>();
 	}
 
 	// public Pattern_window(String id, Boolean_regexp modal, String title,
@@ -92,45 +94,50 @@ public class Pattern_window extends Pattern_widget<Window> {
 	public void setAction_widgets(final List<Pattern_action_widget> in) {
 
 		if (in == null) {
-			this.action_widgets = new ArrayList<>();
+			for (final Pattern_action_widget aw : this.action_widgets) {
+				this.widgets_map.remove(aw.getId());
+			}
+
+			this.action_widgets = in;
+
+			for (final Pattern_action_widget aw : this.action_widgets) {
+				this.widgets_map.put(aw.getId(), aw);
+			}
+
 		}
+
 		this.action_widgets = in;
 	}
 
 	public void setInput_widgets(final List<Pattern_input_widget> in) {
 
-		if (in == null) {
-			this.input_widgets = new ArrayList<>();
+		if (in != null) {
+
+			for (final Pattern_input_widget iw : this.input_widgets) {
+				this.widgets_map.remove(iw.getId());
+			}
+
+			this.input_widgets = in;
+
+			for (final Pattern_input_widget iw : this.input_widgets) {
+				this.widgets_map.put(iw.getId(), iw);
+			}
+			this.input_widgets.sort(null);
 		}
-		this.input_widgets = in;
 	}
 
 	public void setSelectable_widgets(final List<Pattern_selectable_widget> in) {
 
-		if (in == null) {
-			this.selectable_widgets = new ArrayList<>();
-		}
-		this.selectable_widgets = in;
-	}
-
-	public void addActionWidget(final Pattern_action_widget in) {
-
 		if (in != null) {
-			this.action_widgets.add(in);
-		}
-	}
+			for (final Pattern_selectable_widget sw : this.selectable_widgets) {
+				this.widgets_map.remove(sw.getId());
+			}
 
-	public void addInputWidget(final Pattern_input_widget in) {
-
-		if (in != null) {
-			this.input_widgets.add(in);
-		}
-	}
-
-	public void addSelectableWidget(final Pattern_selectable_widget in) {
-
-		if (in != null) {
-			this.selectable_widgets.add(in);
+			this.selectable_widgets = in;
+			for (final Pattern_selectable_widget sw : this.selectable_widgets) {
+				this.widgets_map.put(sw.getId(), sw);
+			}
+			this.selectable_widgets.sort(null);
 		}
 	}
 
@@ -144,6 +151,27 @@ public class Pattern_window extends Pattern_widget<Window> {
 		}
 		if (w instanceof Pattern_selectable_widget) {
 			this.addSelectableWidget((Pattern_selectable_widget) w);
+		}
+	}
+
+	private void addActionWidget(final Pattern_action_widget in) {
+
+		if (in != null) {
+			this.action_widgets.add(in);
+		}
+	}
+
+	private void addInputWidget(final Pattern_input_widget in) {
+
+		if (in != null) {
+			this.input_widgets.add(in);
+		}
+	}
+
+	private void addSelectableWidget(final Pattern_selectable_widget in) {
+
+		if (in != null) {
+			this.selectable_widgets.add(in);
 		}
 	}
 
@@ -357,7 +385,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 	 */
 	protected <C extends Widget> List<Map<? extends Pattern_widget<C>, List<C>>> distribute(
 			final List<? extends Pattern_widget<C>> keys,
-			final Map<? extends Pattern_widget<C>, List<C>> map) {
+					final Map<? extends Pattern_widget<C>, List<C>> map) {
 
 		final List<Map<? extends Pattern_widget<C>, List<C>>> out = new ArrayList<>();
 

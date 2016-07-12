@@ -10,12 +10,12 @@ import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_input_widget;
 import usi.gui.pattern.Pattern_selectable_widget;
 import usi.gui.pattern.Pattern_window;
+import usi.gui.semantic.SpecificSemantics;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
-import usi.guisemantic.SpecificSemantics;
 
 /**
  * This class represents one instance of a pattern inside a GUI. It reference to
@@ -31,12 +31,12 @@ public class Instance_GUI_pattern {
 	private final GUI gui;
 	private final GUI_Pattern guipattern;
 	private final List<Instance_window> windows;
-	// protected List<Instance_container> containers;
+
 	private final List<Action_widget> action_widgets;
 	private final List<Input_widget> input_widgets;
 	private final List<Selectable_widget> selectable_widgets;
 	private final Map<Window, Pattern_window> windows_mapping;
-	// protected Map<Container, Pattern_container> containers_mapping;
+
 	private final Map<Action_widget, Pattern_action_widget> action_widgets_mapping;
 	private final Map<Input_widget, Pattern_input_widget> input_widgets_mapping;
 	private final Map<Selectable_widget, Pattern_selectable_widget> selectable_widgets_mapping;
@@ -49,22 +49,17 @@ public class Instance_GUI_pattern {
 		this.guipattern = guipattern;
 		this.windows = windows;
 
-		// containers = new ArrayList<Instance_container>();
 		this.action_widgets = new ArrayList<>();
 		this.input_widgets = new ArrayList<>();
 		this.selectable_widgets = new ArrayList<>();
 
-		// containers_mapping = new HashMap<Container, Pattern_container>();
 		this.action_widgets_mapping = new HashMap<>();
 		this.input_widgets_mapping = new HashMap<>();
 		this.selectable_widgets_mapping = new HashMap<>();
 		this.windows_mapping = new HashMap<>();
 		for (final Instance_window iw : this.windows) {
 			this.windows_mapping.put(iw.getInstance(), iw.getPattern());
-			// for(List<Instance_container> lic : iw.getC_map().values()) {
-			// containers.addAll(lic);
-			// for(Instance_container ic : lic) {
-			// containers_mapping.put(ic.instance, ic.pattern);
+
 			for (final Pattern_action_widget paw : iw.getAw_map().keySet()) {
 				this.action_widgets.addAll(iw.getAw_map().get(paw));
 				for (final Action_widget aw : iw.getAw_map().get(paw)) {
@@ -93,12 +88,10 @@ public class Instance_GUI_pattern {
 		this.guipattern = guipattern;
 
 		this.windows = new ArrayList<>();
-		// containers = new ArrayList<Instance_container>();
 		this.action_widgets = new ArrayList<>();
 		this.input_widgets = new ArrayList<>();
 		this.selectable_widgets = new ArrayList<>();
 
-		// containers_mapping = new HashMap<Container, Pattern_container>();
 		this.action_widgets_mapping = new HashMap<>();
 		this.input_widgets_mapping = new HashMap<>();
 		this.selectable_widgets_mapping = new HashMap<>();
@@ -230,8 +223,8 @@ public class Instance_GUI_pattern {
 
 		try {
 			for (final Window w : this.gui.getWindows()) {
-				for (final Action_widget aw : this.gui.getStaticBackwardLinks(w.getId())) {
-					out.getGui().addStaticEdge(aw.getId(), w.getId());
+				for (final Action_widget aw : this.gui.getBackwardLinks(w.getId())) {
+					out.getGui().addEdge(aw.getId(), w.getId());
 				}
 			}
 		} catch (final Exception e) {

@@ -1,4 +1,4 @@
-package usi.guisemantic;
+package usi.gui.semantic;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,15 +12,15 @@ import usi.gui.pattern.Cardinality;
 import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_input_widget;
 import usi.gui.pattern.Pattern_window;
+import usi.gui.semantic.alloy.AlloyUtil;
+import usi.gui.semantic.alloy.Alloy_Model;
+import usi.gui.semantic.alloy.entity.Fact;
+import usi.gui.semantic.alloy.entity.Function;
+import usi.gui.semantic.alloy.entity.Predicate;
+import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Window;
-import usi.guisemantic.alloy.AlloyUtil;
-import usi.guisemantic.alloy.Alloy_Model;
-import usi.guisemantic.alloy.entity.Fact;
-import usi.guisemantic.alloy.entity.Function;
-import usi.guisemantic.alloy.entity.Predicate;
-import usi.guisemantic.alloy.entity.Signature;
 
 import com.google.common.collect.Lists;
 
@@ -124,6 +124,9 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			final List<Signature> to_search = new ArrayList<>(
 					func_semantics.getWindows_extensions());
 			to_search.add(func_semantics.window_signature);
+			System.out.println(pw.getId());
+
+			System.out.println(pw.getAlloyCorrespondence());
 			final Signature w_sig = AlloyUtil.searchSignatureInList(to_search,
 					pw.getAlloyCorrespondence());
 

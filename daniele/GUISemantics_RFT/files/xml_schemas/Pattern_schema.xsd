@@ -70,8 +70,6 @@
 					</xs:element>
 				</xs:sequence>
 			</xs:sequence>
-			<xs:attribute name="id" type="xs:string" />
-			<xs:attribute name="alloy" type="xs:string" />
 		</xs:complexType>
 	</xs:element>
 </xs:schema>

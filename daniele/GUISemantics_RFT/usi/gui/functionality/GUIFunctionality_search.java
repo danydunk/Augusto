@@ -191,9 +191,8 @@ public class GUIFunctionality_search {
 							boolean check_optional = false;
 							boolean check = false;
 							for (final Pattern_window target_pw : this.gui_pattern
-									.getForwardLinks(paw)) {
-								for (final Window target_w : this.gui.getStaticForwardLinks(aw
-										.getId())) {
+									.getStaticForwardLinks(paw.getId())) {
+								for (final Window target_w : this.gui.getForwardLinks(aw.getId())) {
 									// if the target_pw has cardinality 1 and it
 									// is already in the pattern
 									// then the edge must go to the window
@@ -207,7 +206,7 @@ public class GUIFunctionality_search {
 												target_w, target_pw, igp.clone());
 										if (new_instance != null) {
 											check = true;
-											new_instance.getGui().addStaticEdge(aw.getId(),
+											new_instance.getGui().addEdge(aw.getId(),
 													target_w.getId());
 											igp = new_instance;
 										}
@@ -241,14 +240,15 @@ public class GUIFunctionality_search {
 				if (correct) {
 					boolean check_optional = false;
 					correct = false;
-					for (final Pattern_action_widget paw : this.gui_pattern.getBackwardLinks(pw)) {
+					for (final Pattern_action_widget paw : this.gui_pattern
+							.getStaticBackwardLinks(pw.getId())) {
 						// boolean used to recognise the optional windows
-						final Pattern_window source_pw = this.gui_pattern.getAw_window_mapping()
-								.get(paw);
+						final Pattern_window source_pw = this.gui_pattern
+								.getActionWidget_Window(paw.getId());
 
-						for (final Action_widget aw : this.gui.getStaticBackwardLinks(instance
+						for (final Action_widget aw : this.gui.getBackwardLinks(instance
 								.getInstance().getId())) {
-							final Window source_w = this.gui.getActionWidget_Window(aw);
+							final Window source_w = this.gui.getActionWidget_Window(aw.getId());
 
 							// if(igp.getGui().getAction_widgets().contains(aw)
 							// &&
@@ -263,7 +263,7 @@ public class GUIFunctionality_search {
 							if (new_instance != null) {
 								if (new_instance.getAction_widgets_mapping().get(aw) == paw) {
 									correct = true;
-									new_instance.getGui().addStaticEdge(aw.getId(),
+									new_instance.getGui().addEdge(aw.getId(),
 											instance.getInstance().getId());
 									igp = new_instance;
 								}

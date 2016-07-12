@@ -8,13 +8,13 @@ import com.rational.test.ft.object.interfaces.TestObject;
 
 public abstract class Widget implements Comparable<Widget> {
 
-	protected final String id;
-	protected final String label;
-	protected String descriptor;
-	protected final String classs;
-	protected final int x;
-	protected final int y;
-	protected TestObject to;
+	private final String id;
+	private final String label;
+	private String descriptor;
+	private final String classs;
+	private final int x;
+	private final int y;
+	private TestObject to;
 
 	private static IDManager idm = new IDManager();
 

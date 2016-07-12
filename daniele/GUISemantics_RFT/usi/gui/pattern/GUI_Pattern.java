@@ -8,9 +8,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import usi.guisemantic.FunctionalitySemantics;
-import usi.guisemantic.alloy.AlloyUtil;
+import usi.gui.semantic.FunctionalitySemantics;
+import usi.gui.semantic.alloy.AlloyUtil;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -19,83 +20,182 @@ public class GUI_Pattern {
 
 	private final String GUI_SEMANTICS_PATH = "./files/alloy/GUI_general.als";
 
-	private List<Pattern_window> windows;
-	private List<Pattern_action_widget> action_widgets;
-	private List<Pattern_input_widget> input_widgets;
-	private List<Pattern_selectable_widget> selectable_widgets;
-	private Map<Pattern_action_widget, Pattern_window> aw_window_mapping;
-	private final Multimap<Pattern_action_widget, Pattern_window> edgesFrom;
-	private final Multimap<Pattern_window, Pattern_action_widget> edgesTo;
+	private Map<String, Pattern_window> windows;
+	// private List<Pattern_action_widget> action_widgets;
+	// private List<Pattern_input_widget> input_widgets;
+	// private List<Pattern_selectable_widget> selectable_widgets;
+	private Map<String, Pattern_window> aw_window_mapping;
+	private Multimap<String, String> staticEdgesFrom;
+	private Multimap<String, String> staticEdgesTo;
+	private Multimap<String, String> dynamicEdgesFrom;
+	private Multimap<String, String> dynamicEdgesTo;
 	private FunctionalitySemantics semantics;
 
 	public GUI_Pattern() {
 
-		this.windows = new ArrayList<>();
-		this.edgesFrom = HashMultimap.create();
-		this.edgesTo = HashMultimap.create();
+		this.windows = new HashMap<>();
+		this.staticEdgesFrom = HashMultimap.create();
+		this.staticEdgesTo = HashMultimap.create();
+		this.dynamicEdgesFrom = HashMultimap.create();
+		this.dynamicEdgesTo = HashMultimap.create();
 		this.aw_window_mapping = new HashMap<>();
-		this.action_widgets = new ArrayList<>();
-		this.selectable_widgets = new ArrayList<>();
-		this.input_widgets = new ArrayList<>();
+		// this.action_widgets = new ArrayList<>();
+		// this.selectable_widgets = new ArrayList<>();
+		// this.input_widgets = new ArrayList<>();
 	}
 
-	public boolean isEdge(final Pattern_action_widget aw, final Pattern_window w) throws Exception {
+	public boolean isStaticEdge(final String aw, final String w) throws Exception {
 
-		if (aw == null || w == null || !this.windows.contains(w)
-				|| !this.action_widgets.contains(aw)) {
-			throw new Exception("GUI_Pattern: wrong input in isEdge");
+		if (aw == null || w == null || !this.windows.containsKey(w)
+				|| !this.aw_window_mapping.containsKey(aw)) {
+			throw new Exception("GUI_Pattern: wrong input in isStaticEdge");
 		}
-		if (this.edgesFrom.containsEntry(aw, w) && this.edgesTo.containsEntry(w, aw)) {
+		if (this.staticEdgesFrom.containsEntry(aw, w) && this.staticEdgesTo.containsEntry(w, aw)) {
 			return true;
 		}
 		return false;
 	}
 
-	public List<Pattern_window> getForwardLinks(final Pattern_action_widget aw) throws Exception {
+	public List<Pattern_window> getStaticForwardLinks(final String aw) throws Exception {
 
-		if (aw == null || !this.action_widgets.contains(aw)) {
-			throw new Exception("GUI_Pattern: wrong input in getFrwardLinks");
+		if (aw == null || !this.aw_window_mapping.containsKey(aw)) {
+			throw new Exception("GUI_Pattern: wrong input in getStaticForwardLinks");
 		}
 
-		final Collection<Pattern_window> out = this.edgesFrom.get(aw);
+		final Collection<String> out = this.staticEdgesFrom.get(aw);
 		if (out != null) {
-			return new ArrayList<>(out);
+			final List<Pattern_window> to_return = new ArrayList<>();
+			for (final String s : out) {
+				to_return.add(this.windows.get(s));
+			}
+			return to_return;
+
 		} else {
 			return new ArrayList<Pattern_window>();
 		}
 	}
 
-	public List<Pattern_action_widget> getBackwardLinks(final Pattern_window w) throws Exception {
+	public List<Pattern_action_widget> getStaticBackwardLinks(final String w) throws Exception {
 
-		if (w == null || !this.windows.contains(w)) {
-			throw new Exception("GUI_Pattern: wrong input in getBackwardLinks");
+		if (w == null || !this.windows.containsKey(w)) {
+			throw new Exception("GUI_Pattern: wrong input in getStaticBackwardLinks");
 		}
 
-		final Collection<Pattern_action_widget> out = this.edgesTo.get(w);
+		final Collection<String> out = this.staticEdgesTo.get(w);
 		if (out != null) {
-			return new ArrayList<>(out);
+			final List<Pattern_action_widget> to_return = new ArrayList<>();
+			loop: for (final String id : out) {
+				final List<Pattern_action_widget> aws = this.aw_window_mapping.get(id)
+						.getActionWidgets();
+				for (final Pattern_action_widget aw : aws) {
+					if (aw.getId().equals(id)) {
+						to_return.add(aw);
+						continue loop;
+					}
+				}
+				throw new Exception("GUI - getStaticBackwardLinks: edge not found.");
+			}
+			return to_return;
 		} else {
 			return new ArrayList<Pattern_action_widget>();
 		}
 	}
 
-	public void addEdge(final Pattern_action_widget aw, final Pattern_window w) throws Exception {
+	public void addStaticEdge(final String aw, final String w) throws Exception {
 
-		if (aw == null || w == null || !this.windows.contains(w)
-				|| !this.action_widgets.contains(aw)) {
-			throw new Exception("GUI_Pattern: wrong input in addEdge");
+		if (aw == null || w == null || !this.windows.containsKey(w)
+				|| !this.aw_window_mapping.containsKey(aw)) {
+			throw new Exception("GUI_Pattern: wrong input in addStaticEdge");
 		}
-		this.edgesFrom.put(aw, w);
-		this.edgesTo.put(w, aw);
+		this.staticEdgesFrom.put(aw, w);
+		this.staticEdgesTo.put(w, aw);
 	}
 
-	public void removeEdge(final Pattern_action_widget aw, final Pattern_window w) throws Exception {
+	public void removeStaticEdge(final String aw, final String w) throws Exception {
 
 		if (aw == null || w == null) {
-			throw new Exception("GUI_Pattern: wrong input in removeEdge");
+			throw new Exception("GUI_Pattern: wrong input in removeStaticEdge");
 		}
-		this.edgesFrom.remove(aw, w);
-		this.edgesTo.remove(w, aw);
+		this.staticEdgesFrom.remove(aw, w);
+		this.staticEdgesTo.remove(w, aw);
+	}
+
+	//
+
+	public boolean isDyanamicEdge(final String aw, final String w) throws Exception {
+
+		if (aw == null || w == null || !this.windows.containsKey(w)
+				|| !this.aw_window_mapping.containsKey(aw)) {
+			throw new Exception("GUI_Pattern: wrong input in isDyanamicEdge");
+		}
+		if (this.dynamicEdgesFrom.containsEntry(aw, w) && this.dynamicEdgesTo.containsEntry(w, aw)) {
+			return true;
+		}
+		return false;
+	}
+
+	public List<Pattern_window> getDynamicForwardLinks(final String aw) throws Exception {
+
+		if (aw == null || !this.aw_window_mapping.containsKey(aw)) {
+			throw new Exception("GUI_Pattern: wrong input in getDynamicForwardLinks");
+		}
+
+		final Collection<String> out = this.dynamicEdgesFrom.get(aw);
+		if (out != null) {
+			final List<Pattern_window> to_return = new ArrayList<>();
+			for (final String s : out) {
+				to_return.add(this.windows.get(s));
+			}
+			return to_return;
+
+		} else {
+			return new ArrayList<Pattern_window>();
+		}
+	}
+
+	public List<Pattern_action_widget> getDynamicBackwardLinks(final String w) throws Exception {
+
+		if (w == null || !this.windows.containsKey(w)) {
+			throw new Exception("GUI_Pattern: wrong input in getDynamicBackwardLinks");
+		}
+
+		final Collection<String> out = this.dynamicEdgesTo.get(w);
+		if (out != null) {
+			final List<Pattern_action_widget> to_return = new ArrayList<>();
+			loop: for (final String id : out) {
+				final List<Pattern_action_widget> aws = this.aw_window_mapping.get(id)
+						.getActionWidgets();
+				for (final Pattern_action_widget aw : aws) {
+					if (aw.getId().equals(id)) {
+						to_return.add(aw);
+						continue loop;
+					}
+				}
+				throw new Exception("GUI - getDynamicBackwardLinks: edge not found.");
+			}
+			return to_return;
+		} else {
+			return new ArrayList<Pattern_action_widget>();
+		}
+	}
+
+	public void addDynamicEdge(final String aw, final String w) throws Exception {
+
+		if (aw == null || w == null || !this.windows.containsKey(w)
+				|| !this.aw_window_mapping.containsKey(aw)) {
+			throw new Exception("GUI_Pattern: wrong input in addDynamicEdge");
+		}
+		this.dynamicEdgesFrom.put(aw, w);
+		this.dynamicEdgesTo.put(w, aw);
+	}
+
+	public void removeDynamicEdge(final String aw, final String w) throws Exception {
+
+		if (aw == null || w == null) {
+			throw new Exception("GUI_Pattern: wrong input in removeDynamicEdge");
+		}
+		this.dynamicEdgesFrom.remove(aw, w);
+		this.dynamicEdgesTo.remove(w, aw);
 	}
 
 	public void setWindows(final List<Pattern_window> ws) throws Exception {
@@ -103,11 +203,17 @@ public class GUI_Pattern {
 		if (ws == null) {
 			throw new Exception("GUI_Pattern: wrong input in setWindows");
 		}
-		this.action_widgets = new ArrayList<>();
-		this.input_widgets = new ArrayList<>();
-		this.selectable_widgets = new ArrayList<>();
+		// this.action_widgets = new ArrayList<>();
+		// this.input_widgets = new ArrayList<>();
+		// this.selectable_widgets = new ArrayList<>();
 		this.aw_window_mapping = new HashMap<>();
-		this.windows = new ArrayList<>();
+		this.windows = new HashMap<>();
+
+		this.staticEdgesFrom = HashMultimap.create();
+		this.staticEdgesTo = HashMultimap.create();
+		this.dynamicEdgesFrom = HashMultimap.create();
+		this.dynamicEdgesTo = HashMultimap.create();
+		this.aw_window_mapping = new HashMap<>();
 
 		for (final Pattern_window w : ws) {
 			this.addWindow(w);
@@ -116,46 +222,83 @@ public class GUI_Pattern {
 
 	public void addWindow(final Pattern_window n) throws Exception {
 
-		if (n == null || this.windows.contains(n)) {
+		if (n == null || this.windows.containsKey(n.getId())) {
 			throw new Exception("GUI_Pattern: wrong input in addWindow");
 		}
-		this.windows.add(n);
+		this.windows.put(n.getId(), n);
 
-		this.action_widgets.addAll(n.getActionWidgets());
-		this.input_widgets.addAll(n.getInputWidgets());
-		this.selectable_widgets.addAll(n.getSelectableWidgets());
+		// this.action_widgets.addAll(n.getActionWidgets());
+		// this.input_widgets.addAll(n.getInputWidgets());
+		// this.selectable_widgets.addAll(n.getSelectableWidgets());
 		for (final Pattern_action_widget paw : n.getActionWidgets()) {
-			this.aw_window_mapping.put(paw, n);
+			this.aw_window_mapping.put(paw.getId(), n);
 		}
 	}
 
 	public void removeWindow(final Pattern_window n) throws Exception {
 
-		if (n == null || !this.windows.contains(n)) {
+		if (n == null || !this.windows.containsKey(n.getId())) {
 			throw new Exception("GUI_Pattern: wrong input in removeWindow");
 		}
-		this.windows.remove(n);
-		this.setWindows(this.windows);
+
+		// the static edges associated with this window are removed
+		List<Pattern_action_widget> to_remove = new ArrayList<>(this.getStaticBackwardLinks(n
+				.getId()));
+		for (final Pattern_action_widget aw : to_remove) {
+			this.removeStaticEdge(aw.getId(), n.getId());
+		}
+
+		List<String> from_links = this.aw_window_mapping.entrySet().parallelStream()
+				.filter(e -> e.getValue() == n).map(ee -> ee.getKey()).collect(Collectors.toList());
+
+		for (final String aw : from_links) {
+			for (final Pattern_window w : this.getStaticForwardLinks(aw)) {
+				this.removeStaticEdge(aw, w.getId());
+			}
+		}
+
+		// the dynamic edges associated with this window are removed
+		to_remove = new ArrayList<>(this.getDynamicBackwardLinks(n.getId()));
+		for (final Pattern_action_widget aw : to_remove) {
+			this.removeStaticEdge(aw.getId(), n.getId());
+		}
+
+		from_links = this.aw_window_mapping.entrySet().parallelStream()
+				.filter(e -> e.getValue() == n).map(ee -> ee.getKey()).collect(Collectors.toList());
+
+		for (final String aw : from_links) {
+			for (final Pattern_window w : this.getDynamicForwardLinks(aw)) {
+				this.removeStaticEdge(aw, w.getId());
+			}
+		}
+
+		this.windows.remove(n.getId());
+		this.setWindows(new ArrayList<>(this.windows.values()));
 	}
 
 	public List<Pattern_window> getWindows() {
 
-		return new ArrayList<>(this.windows);
+		return new ArrayList<>(this.windows.values());
 	}
 
-	public List<Pattern_action_widget> getAction_widgets() {
+	// public List<Pattern_action_widget> getAction_widgets() {
+	//
+	// return new ArrayList<>(this.action_widgets);
+	// }
+	//
+	// public List<Pattern_input_widget> getInput_widgets() {
+	//
+	// return new ArrayList<>(this.input_widgets);
+	// }
+	//
+	// public Map<String, Pattern_window> getAW_window_mapping() {
+	//
+	// return new HashMap<>(this.aw_window_mapping);
+	// }
 
-		return new ArrayList<>(this.action_widgets);
-	}
+	public Pattern_window getActionWidget_Window(final String aw) {
 
-	public List<Pattern_input_widget> getInput_widgets() {
-
-		return new ArrayList<>(this.input_widgets);
-	}
-
-	public Map<Pattern_action_widget, Pattern_window> getAw_window_mapping() {
-
-		return new HashMap<>(this.aw_window_mapping);
+		return this.aw_window_mapping.get(aw);
 	}
 
 	public FunctionalitySemantics getSemantics() {

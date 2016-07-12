@@ -1,7 +1,6 @@
 package test.gui.pattern.parser;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -66,38 +65,33 @@ public class GUIPatternParserTest {
 		assertEquals("actions", 1, w1.getActionWidgets().size());
 		assertEquals("input", 0, w1.getInputWidgets().size());
 
-		final Pattern_action_widget aw1 = gui.getAction_widgets().get(0);
-		assertEquals("action label", ".*(add|new|create).*", aw1.getLabel());
-		assertEquals("action alloy", "Trigger", aw1.getAlloyCorrespondence());
-		assertNotNull(aw1);
-		final Collection<Pattern_window> wc = gui.getForwardLinks(aw1);
-		assertEquals("Number of Edges", 1, wc.size());
-		assertEquals("To windows", "form_1", wc.iterator().next().getId());
-
 		// Test labels of Action and Input
 		Pattern_action_widget paw = null;
-		for (final Pattern_action_widget paw2 : gui.getAction_widgets()) {
-			if ("aw3".equals(paw2.getId())) {
-				paw = paw2;
+		for (final Pattern_window pww : gui.getWindows()) {
+			for (final Pattern_action_widget paw2 : pww.getActionWidgets()) {
+				if ("aw3".equals(paw2.getId())) {
+					paw = paw2;
+				}
 			}
 		}
 		Pattern_input_widget piw = null;
-		for (final Pattern_input_widget piw2 : gui.getInput_widgets()) {
-			if ("iw1".equals(piw2.getId())) {
-				piw = piw2;
+		for (final Pattern_window pww : gui.getWindows()) {
+			for (final Pattern_input_widget piw2 : pww.getInputWidgets()) {
+				if ("iw1".equals(piw2.getId())) {
+					piw = piw2;
+				}
 			}
 		}
-
 		assertEquals("Label actions", ".*(back|cancel|back).*", paw.getLabel());
 		assertEquals("Label actions", ".*", piw.getLabel());
 
 		// Test forward link
-		final Collection<Pattern_window> wc3 = gui.getForwardLinks(paw);
+		final Collection<Pattern_window> wc3 = gui.getStaticForwardLinks(paw.getId());
 		assertEquals(1, wc3.size());
 		assertTrue(wc3.contains(w1));
 
 		// Test backwardLinks
-		final Collection<Pattern_action_widget> pawfrom1 = gui.getBackwardLinks(w1);
+		final Collection<Pattern_action_widget> pawfrom1 = gui.getStaticBackwardLinks(w1.getId());
 		assertEquals(1, pawfrom1.size());
 		assertTrue(pawfrom1.contains(paw));
 

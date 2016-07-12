@@ -1,4 +1,4 @@
-package usi.guisemantic.alloy;
+package usi.gui.semantic.alloy;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,16 +15,16 @@ import java.util.Map;
 import usi.gui.pattern.Cardinality;
 import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_input_widget;
+import usi.gui.semantic.FunctionalitySemantics;
+import usi.gui.semantic.alloy.entity.AlloyEntity;
+import usi.gui.semantic.alloy.entity.Fact;
+import usi.gui.semantic.alloy.entity.Function;
+import usi.gui.semantic.alloy.entity.Predicate;
+import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Window;
-import usi.guisemantic.FunctionalitySemantics;
-import usi.guisemantic.alloy.entity.AlloyEntity;
-import usi.guisemantic.alloy.entity.Fact;
-import usi.guisemantic.alloy.entity.Function;
-import usi.guisemantic.alloy.entity.Predicate;
-import usi.guisemantic.alloy.entity.Signature;
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
@@ -749,14 +749,14 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
 
 		for (final Action_widget aw : aws.keySet()) {
 			final List<Window> edges = new ArrayList<>();
-			for (final Window w : gui.getStaticForwardLinks(aw.getId())) {
+			for (final Window w : gui.getForwardLinks(aw.getId())) {
 				if (ws.containsKey(w)) {
 					edges.add(w);
 				}

@@ -1,4 +1,4 @@
-package usi.guisemantic.alloy.entity;
+package usi.gui.semantic.alloy.entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
