@@ -9,6 +9,8 @@ public abstract class GUIAction {
 	// how the window should look like after the action is performed
 	final private Window oracle;
 
+	private Window result;
+
 	public GUIAction(final Widget w, final Window oracle) throws Exception {
 
 		if (w == null) {
@@ -26,5 +28,15 @@ public abstract class GUIAction {
 	public Window getOracle() {
 
 		return this.oracle;
+	}
+
+	public void setResult(final Window result) {
+
+		this.result = result;
+	}
+
+	public Window getResult() {
+
+		return this.result;
 	}
 }
