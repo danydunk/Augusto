@@ -103,7 +103,7 @@ public class AlloyTestCaseGenerationTest {
 			assertEquals(3, tests.size());
 		} catch (
 
-		final Exception e) {
+				final Exception e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -233,7 +233,7 @@ public class AlloyTestCaseGenerationTest {
 						w2, // sourceWindow, //
 						pw3, // pattern_TargetWindow,//
 						paw2// patternActionWidget
-						);
+				);
 
 		assertNotNull(semantic4discoveringPw3);
 
@@ -269,4 +269,124 @@ public class AlloyTestCaseGenerationTest {
 
 		assertTrue(solution.satisfiable());
 	}
+
+	@Test
+	public void test4_addingRedefinition() throws Exception {
+
+		// Concrete GUI, 3 forms
+		final GUI gui = GUIStructureMaker.instance1();
+
+		final GUI_Pattern pattern = GUIPatternMaker.instance1();
+
+		// Pattern 3 Windows
+
+		pattern.loadSemantics("ADD.als");
+
+		final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+		final List<Instance_GUI_pattern> res = gfs.match(pattern);
+		assertEquals(1, res.size());
+		assertEquals(2, res.get(0).getWindows().size());
+
+		Instance_window ww1 = null;
+		Instance_window ww2 = null;
+		for (final Instance_window ww : res.get(0).getWindows()) {
+			switch (ww.getInstance().getId()) {
+			case "w1":
+				ww1 = ww;
+				break;
+			case "w2":
+				ww2 = ww;
+				break;
+			}
+		}
+		assertTrue(ww1 != null);
+		assertTrue(ww2 != null);
+
+		final Instance_GUI_pattern in = res.get(0);
+
+		in.generateSpecificSemantics();
+
+		final SpecificSemantics spec = in.getSemantics();
+
+		System.out.println("Sign " + spec.getSignatures().size());
+
+		System.out.println("Facts " + spec.getFacts().size());
+
+		final Map<Window, Pattern_window> winMap = in.getWindows_mapping();
+
+		Window w2 = null;
+		for (final Window w : gui.getWindows()) {
+			if (w.getId().equals("w2")) {
+				w2 = w;
+				break;
+			}
+		}
+
+		Pattern_action_widget paw2 = null;
+		Pattern_window pw3 = null;
+
+		for (final Pattern_window pww : pattern.getWindows()) {
+			if (pww.getId().equals("pw3")) {
+				pw3 = pww;
+			}
+			for (final Pattern_action_widget paww : pww.getActionWidgets()) {
+				if (paww.getId().equals("paw2")) {
+					paw2 = paww;
+				}
+			}
+		}
+
+		final SpecificSemantics semantic4discoveringPw3 = AlloyTestCaseGenerator
+				.semantic4DiscoverWindow(in, //
+						w2, // sourceWindow, //
+						pw3, // pattern_TargetWindow,//
+						paw2// patternActionWidget
+						);
+
+		assertNotNull(semantic4discoveringPw3);
+
+		assertTrue(semantic4discoveringPw3.getFacts().size() > in.getSemantics().getFacts().size());
+		assertTrue(semantic4discoveringPw3.getSignatures().size() > in.getSemantics()
+				.getSignatures().size());
+
+		// final AlloyTestCaseGenerator generator = new
+		// AlloyTestCaseGenerator(in);
+		// final List<GUITestCase> tests = generator.generateTestCases(1,
+		// 30000);
+		// assertEquals(4, tests.size());
+
+		final String alloy_model = semantic4discoveringPw3.toString();
+		System.out.println("START ALLOY MODEL");
+		System.out.println(semantic4discoveringPw3);
+		System.out.println("END ALLOY MODEL");
+
+		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
+
+		assertNotNull(compiled);
+
+		final List<Command> run_commands = compiled.getAllCommands();
+		System.out.println(run_commands);
+		// TODO: See that Alloy transform the commands.
+		final List<Command> runSystem = run_commands.stream()
+				.filter(e -> e.toString().equals("Run run$1 for 4")).collect(Collectors.toList());
+
+		assertTrue(runSystem.size() > 0);
+
+		final A4Solution solution = AlloyUtil.runCommand(compiled, runSystem.get(0));
+		System.out.println("Has solution: " + solution);
+
+		assertTrue(solution.satisfiable());
+
+		in.generateSpecificSemantics();
+		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in);
+		final List<GUITestCase> tests = generator.generateTestCases(1, 30000);
+
+		assertEquals(4, tests.size());
+
+		final SpecificSemantics constrainSemantic = AlloyTestCaseGenerator.validateRequired(in,
+				solution, tests.get(0));
+
+		assertNotNull(constrainSemantic);
+	}
+
 }
