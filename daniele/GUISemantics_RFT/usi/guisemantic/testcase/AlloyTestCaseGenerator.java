@@ -560,6 +560,11 @@ public class AlloyTestCaseGenerator {
 		return semantif4DiscoverWindow;
 	}
 
+	// public SpecificSemantics validateRequired(final Instance_GUI_pattern
+	// instancePattern,
+	// A4Solution solution, final GUITestCase tc, boolean result) throws
+	// Exception {
+
 	public SpecificSemantics validateRequired(final Instance_GUI_pattern instancePattern,
 			final Signature iwsigRequired, final Signature awsig) throws Exception {
 
@@ -628,7 +633,7 @@ public class AlloyTestCaseGenerator {
 		/*
 		 * fact{ all t: Time | (#Input_widget_iw2.content.t=0) =>
 		 * click_semantics [Action_widget_aw3, t] }
-		 *
+		 * 
 		 * fact{ Required.associated_to = Input_widget_iw2 } fact{ all t: Time |
 		 * (#Input_widget_iw1.content.t=1 and click_semantics
 		 * [Action_widget_aw3, t]) }
