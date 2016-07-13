@@ -145,11 +145,11 @@ public class GUIFunctionality_search {
 
 		// System.out.println(w.getId()+" - "+pw.getId());
 		// if the window is already part of the instance_gui_pattern
-		if (igp.getWindows_mapping().get(w) == pw) {
+		if (pw== igp.getPW_for_W(w.getId())) {
 			return igp;
 		}
 		// if the window is already matched to another pattern window
-		if (igp.getWindows_mapping().get(w) != null) {
+		if (igp.getPW_for_W(w.getId()) != null) {
 			return null;
 		}
 
@@ -184,7 +184,7 @@ public class GUIFunctionality_search {
 				// the forward links are checked
 				loops_1: for (final Pattern_action_widget paw : pw.getActionWidgets()) {
 
-					final List<Action_widget> aws = instance.getAw_map().get(paw);
+					final List<Action_widget> aws = instance.getAWS_for_PAW(paw.getId());
 					if (aws != null) {
 						for (final Action_widget aw : aws) {
 							// boolean used to recognise the optional windows
@@ -212,12 +212,7 @@ public class GUIFunctionality_search {
 										}
 									}
 								}
-								if (target_pw.getCardinality().getMin() != 0 /*
-																			 * &&
-																			 * target_pw
-																			 * !=
-																			 * pw
-																			 */) {
+								if (target_pw.getCardinality().getMin() != 0) {
 									check_optional = true;
 								}
 							}
@@ -261,7 +256,8 @@ public class GUIFunctionality_search {
 							final Instance_GUI_pattern new_instance = this.traverse(source_w,
 									source_pw, igp.clone());
 							if (new_instance != null) {
-								if (new_instance.getAction_widgets_mapping().get(aw) == paw) {
+								if (paw ==
+										new_instance.getPAW_for_AW(aw.getId())) {
 									correct = true;
 									new_instance.getGui().addEdge(aw.getId(),
 											instance.getInstance().getId());
@@ -273,10 +269,10 @@ public class GUIFunctionality_search {
 							}
 						}
 						if (source_pw.getCardinality().getMin() != 0 /*
-																	 * &&
-																	 * source_pw
-																	 * != pw
-																	 */) {
+						 * &&
+						 * source_pw
+						 * != pw
+						 */) {
 							check_optional = true;
 						}
 					}
@@ -289,10 +285,13 @@ public class GUIFunctionality_search {
 					break;
 				}
 
-				final List<Instance_window> newMarked = instances.parallelStream()
-						.filter(e -> !marked.contains(e)).filter(e -> {
+				final List<Instance_window> newMarked = instances
+						.parallelStream()
+						.filter(e -> !marked.contains(e))
+						.filter(e -> {
 							for (final Action_widget aw : e.getInstance().getActionWidgets()) {
-								if (e.getPAW_for_AW(aw) != instance.getPAW_for_AW(aw)) {
+								if (e.getPAW_for_AW(aw.getId()) != instance.getPAW_for_AW(aw
+										.getId())) {
 									return false;
 								}
 							}

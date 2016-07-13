@@ -298,7 +298,7 @@ public class AlloyTestCaseGenerator {
 				}
 
 				Input_widget target_iw = null;
-				for (final Input_widget iw : this.instance.getInput_widgets()) {
+				for (final Input_widget iw : this.instance.getGui().getInput_widgets()) {
 					if (iw.getId().equals(iw_id)) {
 						target_iw = iw;
 						break;
@@ -328,7 +328,7 @@ public class AlloyTestCaseGenerator {
 				aw_id = aw_id.split("\\$")[0];
 
 				Action_widget target_aw = null;
-				for (final Action_widget aw : this.instance.getAction_widgets()) {
+				for (final Action_widget aw : this.instance.getGui().getAction_widgets()) {
 					if (aw.getId().equals(aw_id)) {
 						target_aw = aw;
 						break;

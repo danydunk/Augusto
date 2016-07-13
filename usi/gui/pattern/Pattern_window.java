@@ -66,6 +66,11 @@ public class Pattern_window extends Pattern_widget<Window> {
 	// containers.remove(c);
 	// }
 
+	public boolean containsWidget(final String id) {
+
+		return this.widgets_map.containsKey(id);
+	}
+
 	public Boolean_regexp getModal() {
 
 		return this.modal;
@@ -152,6 +157,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 		if (w instanceof Pattern_selectable_widget) {
 			this.addSelectableWidget((Pattern_selectable_widget) w);
 		}
+		this.widgets_map.put(w.getId(), w);
 	}
 
 	private void addActionWidget(final Pattern_action_widget in) {
@@ -263,6 +269,11 @@ public class Pattern_window extends Pattern_widget<Window> {
 		}
 
 		return true;
+	}
+
+	public Pattern_widget getWidget(final String id) {
+
+		return this.widgets_map.get(id);
 	}
 
 	/**

@@ -21,9 +21,6 @@ public class GUI_Pattern {
 	private final String GUI_SEMANTICS_PATH = "./files/alloy/GUI_general.als";
 
 	private Map<String, Pattern_window> windows;
-	// private List<Pattern_action_widget> action_widgets;
-	// private List<Pattern_input_widget> input_widgets;
-	// private List<Pattern_selectable_widget> selectable_widgets;
 	private Map<String, Pattern_window> aw_window_mapping;
 	private Multimap<String, String> staticEdgesFrom;
 	private Multimap<String, String> staticEdgesTo;
@@ -119,8 +116,6 @@ public class GUI_Pattern {
 		this.staticEdgesFrom.remove(aw, w);
 		this.staticEdgesTo.remove(w, aw);
 	}
-
-	//
 
 	public boolean isDyanamicEdge(final String aw, final String w) throws Exception {
 
@@ -281,20 +276,38 @@ public class GUI_Pattern {
 		return new ArrayList<>(this.windows.values());
 	}
 
-	// public List<Pattern_action_widget> getAction_widgets() {
-	//
-	// return new ArrayList<>(this.action_widgets);
-	// }
-	//
-	// public List<Pattern_input_widget> getInput_widgets() {
-	//
-	// return new ArrayList<>(this.input_widgets);
-	// }
-	//
-	// public Map<String, Pattern_window> getAW_window_mapping() {
-	//
-	// return new HashMap<>(this.aw_window_mapping);
-	// }
+	public List<Pattern_action_widget> getAction_widgets() {
+
+		final List<Pattern_action_widget> out = new ArrayList<>();
+
+		for (final Pattern_window pw : this.windows.values()) {
+			out.addAll(pw.getActionWidgets());
+		}
+
+		return out;
+	}
+
+	public List<Pattern_input_widget> getInput_widgets() {
+
+		final List<Pattern_input_widget> out = new ArrayList<>();
+
+		for (final Pattern_window pw : this.windows.values()) {
+			out.addAll(pw.getInputWidgets());
+		}
+
+		return out;
+	}
+
+	public List<Pattern_selectable_widget> getSelectable_widgets() {
+
+		final List<Pattern_selectable_widget> out = new ArrayList<>();
+
+		for (final Pattern_window pw : this.windows.values()) {
+			out.addAll(pw.getSelectableWidgets());
+		}
+
+		return out;
+	}
 
 	public Pattern_window getActionWidget_Window(final String aw) {
 
@@ -337,5 +350,15 @@ public class GUI_Pattern {
 					.loadAlloyModelFromString(model));
 			this.semantics = semantics;
 		}
+	}
+
+	public boolean containsWindow(final String id) {
+
+		return this.windows.containsKey(id);
+	}
+
+	public Pattern_window getWindow(final String id) {
+
+		return this.windows.get(id);
 	}
 }
