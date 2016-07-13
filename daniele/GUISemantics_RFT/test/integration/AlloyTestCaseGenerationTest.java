@@ -87,9 +87,10 @@ public class AlloyTestCaseGenerationTest {
 
 			class For_test extends AlloyTestCaseGenerator {
 
-				public For_test(final Instance_GUI_pattern instance) {
+				public For_test(final Instance_GUI_pattern instance, final int max_run,
+						final long timeout) {
 
-					super(instance);
+					super(instance, max_run, timeout);
 					// TODO Auto-generated constructor stub
 				}
 
@@ -100,12 +101,12 @@ public class AlloyTestCaseGenerationTest {
 				}
 			}
 			inst.getSemantics().generate_run_commands();
-			final For_test generator = new For_test(inst);
-			final List<GUITestCase> tests = generator.generateTestCases(1, 30000);
+			final For_test generator = new For_test(inst, 1, 30000);
+			final List<GUITestCase> tests = generator.generateTestCases();
 			assertEquals(3, tests.size());
 		} catch (
 
-				final Exception e) {
+		final Exception e) {
 			e.printStackTrace();
 			fail();
 		}
@@ -147,8 +148,8 @@ public class AlloyTestCaseGenerationTest {
 
 		in.generateSpecificSemantics();
 		in.getSemantics().generate_run_commands();
-		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in);
-		final List<GUITestCase> tests = generator.generateTestCases(1, 30000);
+		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in, 1, 30000);
+		final List<GUITestCase> tests = generator.generateTestCases();
 		assertEquals(4, tests.size());
 	}
 
@@ -269,8 +270,8 @@ public class AlloyTestCaseGenerationTest {
 		assertTrue(solution.satisfiable());
 
 		in.setSpecificSemantics(semantic4discoveringPw3);
-		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in);
-		final List<GUITestCase> tests = generator.generateTestCases(1, 30000);
+		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in, 1, 30000);
+		final List<GUITestCase> tests = generator.generateTestCases();
 
 		assertEquals(1, tests.size());
 

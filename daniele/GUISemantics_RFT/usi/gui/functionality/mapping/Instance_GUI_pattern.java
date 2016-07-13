@@ -230,6 +230,7 @@ public class Instance_GUI_pattern {
 		} catch (final Exception e) {
 			return null;
 		}
+		out.setSpecificSemantics(this.semantics);
 		return out;
 	}
 
@@ -243,7 +244,7 @@ public class Instance_GUI_pattern {
 		this.semantics = SpecificSemantics.generate(this);
 	}
 
-	public void setSpecificSemantics(final SpecificSemantics in) throws Exception {
+	public void setSpecificSemantics(final SpecificSemantics in) {
 
 		this.semantics = in;
 	}
