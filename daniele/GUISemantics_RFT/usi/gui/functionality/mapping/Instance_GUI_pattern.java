@@ -243,6 +243,11 @@ public class Instance_GUI_pattern {
 		this.semantics = SpecificSemantics.generate(this);
 	}
 
+	public void setSpecificSemantics(final SpecificSemantics in) throws Exception {
+
+		this.semantics = in;
+	}
+
 	public List<Window> getPatternWindowMatches(final String pw) {
 
 		final List<Window> out = new ArrayList<>();

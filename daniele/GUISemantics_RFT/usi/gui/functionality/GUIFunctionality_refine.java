@@ -76,13 +76,12 @@ public class GUIFunctionality_refine {
 
 				}
 			}
-
 		}
 
 		return null;
 	}
 
-	private SpecificSemantics semantic4DiscoverWindow(final SpecificSemantics originalSemantic,
+	protected SpecificSemantics semantic4DiscoverWindow(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Pattern_window pattern_TargetWindow,
 			final Action_widget actionWidget) throws Exception {
 
