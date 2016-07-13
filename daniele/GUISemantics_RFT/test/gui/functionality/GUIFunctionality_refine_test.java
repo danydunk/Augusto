@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
@@ -92,13 +91,11 @@ public class GUIFunctionality_refine_test {
 
 		System.out.println("Facts " + spec.getFacts().size());
 
-		final Map<Window, Pattern_window> winMap = in.getWindows_mapping();
-
 		// pw3 (Confirmation window) was not associated to a windows because it
 		// was not discovered
 		// let's assert this:
-		for (final Window win : winMap.keySet()) {
-			final String pwi = winMap.get(win).getId();
+		for (final Window win : in.getGui().getWindows()) {
+			final String pwi = in.getPW_for_W(win.getId()).getId();
 			assertNotSame("pw3", pwi);
 		}
 

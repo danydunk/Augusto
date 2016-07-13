@@ -27,11 +27,17 @@ import com.google.common.collect.Lists;
 
 public class GUIFunctionality_refine {
 
-	Instance_GUI_pattern instancePattern;
+	private final Instance_GUI_pattern instancePattern;
+	private final GUI gui;
+	private final GUI_Pattern pattern;
+	private final SpecificSemantics semantics;
 
 	public GUIFunctionality_refine(final Instance_GUI_pattern instance, final GUI gui) {
 
 		this.instancePattern = instance;
+		this.pattern = instance.getGuipattern();
+		this.gui = instance.getGui();
+		this.semantics = instance.getSemantics();
 	}
 
 	public Instance_GUI_pattern refine() throws Exception {
@@ -52,7 +58,7 @@ public class GUIFunctionality_refine {
 				// all the dynamic edges
 				for (final Pattern_window target_pw : pattern.getDynamicForwardLinks(paw.getId())) {
 					// all the concrete aw that match the paw
-					for (final Action_widget aw : iw.getAw_map().get(paw)) {
+					for (final Action_widget aw : iw.getAWS_for_PAW(paw.getId())) {
 						final Instance_GUI_pattern clone = working_obj.clone();
 						final List<Window> target_w_matched = this.instancePattern
 								.getPatternWindowMatches(target_pw.getId());
@@ -98,12 +104,115 @@ public class GUIFunctionality_refine {
 		return null;
 	}
 
+	private Instance_GUI_pattern discoverDynamicEdges() throws Exception {
+
+		// final Instance_GUI_pattern working_obj = this.instancePattern;
+		//
+		// final GUI_Pattern pattern = this.instancePattern.getGuipattern();
+		// final SpecificSemantics semantics =
+		// this.instancePattern.getSemantics();
+		//
+		// final GUI matched_gui = this.instancePattern.getGui();
+		//
+		// for (final Pattern_window pw : pattern.getWindows()) {
+		// final List<Window> target_w_matched =
+		// this.instancePattern.getPatternWindowMatches(pw
+		// .getId());
+		// // if target_w_matched is empty it means the pattern_window was not
+		// // found
+		// if (target_w_matched.size() == 0) {
+		// continue;
+		// }
+		// boolean edge_found = false;
+		// for (final Window w : target_w_matched) {
+		// if (matched_gui.isEdge(aw.getId(), w.getId())) {
+		// edge_found = true;
+		// break;
+		// }
+		// }
+		//
+		// }
+		//
+		// // all windows match found
+		// for (final Instance_window iw : this.instancePattern.getWindows()) {
+		// final Pattern_window pw = iw.getPattern();
+		// final Window sourcew = iw.getInstance();
+		//
+		// for (final Pattern_action_widget paw : pw.getActionWidgets()) {
+		// // all the dynamic edges
+		// for (final Pattern_window target_pw :
+		// pattern.getDynamicForwardLinks(paw.getId())) {
+		// // all the concrete aw that match the paw
+		// for (final Action_widget aw : iw.getAw_map().get(paw)) {
+		// // we clone the instance
+		// final Instance_GUI_pattern clone = working_obj.clone();
+		// // all the windows that matched the target window of the
+		// // edge
+		// final List<Window> target_w_matched = this.instancePattern
+		// .getPatternWindowMatches(target_pw.getId());
+		//
+		// // if target window was already discovered
+		// if (target_w_matched.size() > 0) {
+		//
+		// boolean edge_found = false;
+		// for (final Window w : target_w_matched) {
+		// if (matched_gui.isEdge(aw.getId(), w.getId())) {
+		// edge_found = true;
+		// break;
+		// }
+		// }
+		// if (!edge_found) {
+		// for (final Window w : target_w_matched) {
+		// final SpecificSemantics new_sem = this.semantic4DiscoverWindow(
+		// semantics, sourcew, w, aw);
+		// clone.setSpecificSemantics(new_sem);
+		// final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(
+		// clone);
+		// final List<GUITestCase> tests = test_gen
+		// .generateMinimalTestCases();
+		//
+		// }
+		// }
+		// }
+		// }
+		//
+		// }
+		// }
+		// }
+
+		return null;
+	}
+
+	private Instance_GUI_pattern discoverClasses() throws Exception {
+
+		// final Instance_GUI_pattern working_obj = this.instancePattern;
+		//
+		// for (final Pattern_window to_discover : this.pattern.getWindows()) {
+		// final List<Window> target_w_matched = this.instancePattern
+		// .getPatternWindowMatches(to_discover.getId());
+		// // if target_w_matched is not empty it means the pattern_window was
+		// // already found
+		// if (target_w_matched.size() > 0) {
+		// continue;
+		// }
+		// // all the dynamic edges that go to the window to discover
+		// for (final Pattern_action_widget paw :
+		// this.pattern.getDynamicBackwardLinks(to_discover
+		// .getId())) {
+		// final working_obj.g
+		// }
+		//
+		// }
+
+		return null;
+	}
+
 	protected SpecificSemantics semantic4DiscoverWindow(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Pattern_window pattern_TargetWindow,
 			final Action_widget actionWidget) throws Exception {
 
 		// Maybe we should check the action that relates them.
-		if (this.instancePattern.getWindows_mapping().values().contains(pattern_TargetWindow)) {
+		if (this.instancePattern.getWS_for_PW(pattern_TargetWindow.getId()).size() > 0) {
 			throw new Exception("The pattern window to discover was already mapped.");
 		}
 
@@ -227,10 +336,10 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverWindow(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-					throws Exception {
+			throws Exception {
 
 		// Maybe we should check the action that relates them.
-		if (!this.instancePattern.getWindows_mapping().containsKey(targetWindow)) {
+		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {
 			throw new Exception("The pattern window to discover was not already mapped.");
 		}
 

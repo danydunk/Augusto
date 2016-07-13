@@ -174,8 +174,51 @@ public class GUI {
 		return new ArrayList<>(this.windows.values());
 	}
 
+	public List<Action_widget> getAction_widgets() {
+
+		final List<Action_widget> out = new ArrayList<>();
+
+		for (final Window pw : this.windows.values()) {
+			out.addAll(pw.getActionWidgets());
+		}
+
+		return out;
+	}
+
+	public List<Input_widget> getInput_widgets() {
+
+		final List<Input_widget> out = new ArrayList<>();
+
+		for (final Window pw : this.windows.values()) {
+			out.addAll(pw.getInputWidgets());
+		}
+
+		return out;
+	}
+
+	public List<Selectable_widget> getSelectable_widgets() {
+
+		final List<Selectable_widget> out = new ArrayList<>();
+
+		for (final Window pw : this.windows.values()) {
+			out.addAll(pw.getSelectableWidgets());
+		}
+
+		return out;
+	}
+
 	public Window getActionWidget_Window(final String aw) {
 
 		return this.aw_window_mapping.get(aw);
+	}
+
+	public boolean containsWindow(final String id) {
+
+		return this.windows.containsKey(id);
+	}
+
+	public Window getWindow(final String id) {
+
+		return this.windows.get(id);
 	}
 }

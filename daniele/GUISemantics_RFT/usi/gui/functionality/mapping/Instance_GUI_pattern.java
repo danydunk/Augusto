@@ -30,16 +30,24 @@ public class Instance_GUI_pattern {
 	// gui contains only the windows that match the pattern
 	private final GUI gui;
 	private final GUI_Pattern guipattern;
+
 	private final List<Instance_window> windows;
+	// from window to pattern window
+	private final Map<String, String> windows_mapping;
+	// private final Map<Action_widget, Pattern_action_widget>
+	// action_widgets_mapping;
+	// private final Map<Input_widget, Pattern_input_widget>
+	// input_widgets_mapping;
+	// private final Map<Selectable_widget, Pattern_selectable_widget>
+	// selectable_widgets_mapping;
+	// private final Map<Pattern_window, List<Window>> pattern_windows_mapping;
+	// private final Map<Pattern_action_widget, List<Action_widget>>
+	// pattern_action_widgets_mapping;
+	// private final Map<Pattern_input_widget, List<Input_widget>>
+	// pattern_input_widgets_mapping;
+	// private final Map<Pattern_selectable_widget, List<Selectable_widget>>
+	// pattern_selectable_widgets_mapping;
 
-	private final List<Action_widget> action_widgets;
-	private final List<Input_widget> input_widgets;
-	private final List<Selectable_widget> selectable_widgets;
-	private final Map<Window, Pattern_window> windows_mapping;
-
-	private final Map<Action_widget, Pattern_action_widget> action_widgets_mapping;
-	private final Map<Input_widget, Pattern_input_widget> input_widgets_mapping;
-	private final Map<Selectable_widget, Pattern_selectable_widget> selectable_widgets_mapping;
 	protected SpecificSemantics semantics;
 
 	public Instance_GUI_pattern(final GUI gui, final GUI_Pattern guipattern,
@@ -49,36 +57,37 @@ public class Instance_GUI_pattern {
 		this.guipattern = guipattern;
 		this.windows = windows;
 
-		this.action_widgets = new ArrayList<>();
-		this.input_widgets = new ArrayList<>();
-		this.selectable_widgets = new ArrayList<>();
-
-		this.action_widgets_mapping = new HashMap<>();
-		this.input_widgets_mapping = new HashMap<>();
-		this.selectable_widgets_mapping = new HashMap<>();
+		// this.action_widgets = new ArrayList<>();
+		// this.input_widgets = new ArrayList<>();
+		// this.selectable_widgets = new ArrayList<>();
+		//
+		// this.action_widgets_mapping = new HashMap<>();
+		// this.input_widgets_mapping = new HashMap<>();
+		// this.selectable_widgets_mapping = new HashMap<>();
 		this.windows_mapping = new HashMap<>();
 		for (final Instance_window iw : this.windows) {
-			this.windows_mapping.put(iw.getInstance(), iw.getPattern());
+			this.windows_mapping.put(iw.getInstance().getId(), iw.getPattern().getId());
 
-			for (final Pattern_action_widget paw : iw.getAw_map().keySet()) {
-				this.action_widgets.addAll(iw.getAw_map().get(paw));
-				for (final Action_widget aw : iw.getAw_map().get(paw)) {
-					this.action_widgets_mapping.put(aw, paw);
-				}
-			}
-			for (final Pattern_input_widget piw : iw.getIw_map().keySet()) {
-				this.input_widgets.addAll(iw.getIw_map().get(piw));
-				for (final Input_widget iiw : iw.getIw_map().get(piw)) {
-					this.input_widgets_mapping.put(iiw, piw);
-				}
-
-			}
-			for (final Pattern_selectable_widget psw : iw.getSw_map().keySet()) {
-				this.selectable_widgets.addAll(iw.getSw_map().get(psw));
-				for (final Selectable_widget sw : iw.getSw_map().get(psw)) {
-					this.selectable_widgets_mapping.put(sw, psw);
-				}
-			}
+			// for (final Pattern_action_widget paw : iw.getAw_map().keySet()) {
+			// this.action_widgets.addAll(iw.getAw_map().get(paw));
+			// for (final Action_widget aw : iw.getAw_map().get(paw)) {
+			// this.action_widgets_mapping.put(aw, paw);
+			// }
+			// }
+			// for (final Pattern_input_widget piw : iw.getIw_map().keySet()) {
+			// this.input_widgets.addAll(iw.getIw_map().get(piw));
+			// for (final Input_widget iiw : iw.getIw_map().get(piw)) {
+			// this.input_widgets_mapping.put(iiw, piw);
+			// }
+			//
+			// }
+			// for (final Pattern_selectable_widget psw :
+			// iw.getSw_map().keySet()) {
+			// this.selectable_widgets.addAll(iw.getSw_map().get(psw));
+			// for (final Selectable_widget sw : iw.getSw_map().get(psw)) {
+			// this.selectable_widgets_mapping.put(sw, psw);
+			// }
+			// }
 		}
 	}
 
@@ -88,13 +97,13 @@ public class Instance_GUI_pattern {
 		this.guipattern = guipattern;
 
 		this.windows = new ArrayList<>();
-		this.action_widgets = new ArrayList<>();
-		this.input_widgets = new ArrayList<>();
-		this.selectable_widgets = new ArrayList<>();
-
-		this.action_widgets_mapping = new HashMap<>();
-		this.input_widgets_mapping = new HashMap<>();
-		this.selectable_widgets_mapping = new HashMap<>();
+		// this.action_widgets = new ArrayList<>();
+		// this.input_widgets = new ArrayList<>();
+		// this.selectable_widgets = new ArrayList<>();
+		//
+		// this.action_widgets_mapping = new HashMap<>();
+		// this.input_widgets_mapping = new HashMap<>();
+		// this.selectable_widgets_mapping = new HashMap<>();
 		this.windows_mapping = new HashMap<>();
 	}
 
@@ -103,27 +112,27 @@ public class Instance_GUI_pattern {
 		if (this.windows.contains(iw)) {
 			return;
 		}
-		this.windows_mapping.put(iw.getInstance(), iw.getPattern());
+		this.windows_mapping.put(iw.getInstance().getId(), iw.getPattern().getId());
 		this.windows.add(iw);
-		for (final Pattern_action_widget paw : iw.getAw_map().keySet()) {
-			this.action_widgets.addAll(iw.getAw_map().get(paw));
-			for (final Action_widget aw : iw.getAw_map().get(paw)) {
-				this.action_widgets_mapping.put(aw, paw);
-			}
-		}
-		for (final Pattern_input_widget piw : iw.getIw_map().keySet()) {
-			this.input_widgets.addAll(iw.getIw_map().get(piw));
-			for (final Input_widget iiw : iw.getIw_map().get(piw)) {
-				this.input_widgets_mapping.put(iiw, piw);
-			}
-
-		}
-		for (final Pattern_selectable_widget psw : iw.getSw_map().keySet()) {
-			this.selectable_widgets.addAll(iw.getSw_map().get(psw));
-			for (final Selectable_widget sw : iw.getSw_map().get(psw)) {
-				this.selectable_widgets_mapping.put(sw, psw);
-			}
-		}
+		// for (final Pattern_action_widget paw : iw.getAw_map().keySet()) {
+		// this.action_widgets.addAll(iw.getAw_map().get(paw));
+		// for (final Action_widget aw : iw.getAw_map().get(paw)) {
+		// this.action_widgets_mapping.put(aw, paw);
+		// }
+		// }
+		// for (final Pattern_input_widget piw : iw.getIw_map().keySet()) {
+		// this.input_widgets.addAll(iw.getIw_map().get(piw));
+		// for (final Input_widget iiw : iw.getIw_map().get(piw)) {
+		// this.input_widgets_mapping.put(iiw, piw);
+		// }
+		//
+		// }
+		// for (final Pattern_selectable_widget psw : iw.getSw_map().keySet()) {
+		// this.selectable_widgets.addAll(iw.getSw_map().get(psw));
+		// for (final Selectable_widget sw : iw.getSw_map().get(psw)) {
+		// this.selectable_widgets_mapping.put(sw, psw);
+		// }
+		// }
 	}
 
 	public void removeWindow(final Instance_window iw) {
@@ -133,25 +142,25 @@ public class Instance_GUI_pattern {
 		}
 		this.windows.remove(iw);
 		this.windows_mapping.remove(iw.getInstance());
-		for (final Pattern_action_widget paw : iw.getAw_map().keySet()) {
-			this.action_widgets.removeAll(iw.getAw_map().get(paw));
-			for (final Action_widget aw : iw.getAw_map().get(paw)) {
-				this.action_widgets_mapping.remove(aw, paw);
-			}
-		}
-		for (final Pattern_input_widget piw : iw.getIw_map().keySet()) {
-			this.input_widgets.removeAll(iw.getIw_map().get(piw));
-			for (final Input_widget iiw : iw.getIw_map().get(piw)) {
-				this.input_widgets_mapping.remove(iiw, piw);
-			}
-
-		}
-		for (final Pattern_selectable_widget psw : iw.getSw_map().keySet()) {
-			this.selectable_widgets.removeAll(iw.getSw_map().get(psw));
-			for (final Selectable_widget sw : iw.getSw_map().get(psw)) {
-				this.selectable_widgets_mapping.remove(sw, psw);
-			}
-		}
+		// for (final Pattern_action_widget paw : iw.getAw_map().keySet()) {
+		// this.action_widgets.removeAll(iw.getAw_map().get(paw));
+		// for (final Action_widget aw : iw.getAw_map().get(paw)) {
+		// this.action_widgets_mapping.remove(aw, paw);
+		// }
+		// }
+		// for (final Pattern_input_widget piw : iw.getIw_map().keySet()) {
+		// this.input_widgets.removeAll(iw.getIw_map().get(piw));
+		// for (final Input_widget iiw : iw.getIw_map().get(piw)) {
+		// this.input_widgets_mapping.remove(iiw, piw);
+		// }
+		//
+		// }
+		// for (final Pattern_selectable_widget psw : iw.getSw_map().keySet()) {
+		// this.selectable_widgets.removeAll(iw.getSw_map().get(psw));
+		// for (final Selectable_widget sw : iw.getSw_map().get(psw)) {
+		// this.selectable_widgets_mapping.remove(sw, psw);
+		// }
+		// }
 	}
 
 	public GUI getGui() {
@@ -169,43 +178,88 @@ public class Instance_GUI_pattern {
 		return new ArrayList<>(this.windows);
 	}
 
-	public List<Action_widget> getAction_widgets() {
+	public Pattern_window getPW_for_W(final String w) {
 
-		return new ArrayList<>(this.action_widgets);
+		return this.guipattern.getWindow(this.windows_mapping.get(w));
 	}
 
-	public List<Input_widget> getInput_widgets() {
+	public List<Window> getWS_for_PW(final String pw) {
 
-		return new ArrayList<>(this.input_widgets);
+		final List<Window> out = new ArrayList<>();
+
+		for (final String w : this.windows_mapping.keySet()) {
+			if (this.windows_mapping.get(w).equals(pw)) {
+				out.add(this.gui.getWindow(w));
+			}
+		}
+		return out;
 	}
 
-	public List<Selectable_widget> getSelectable_widgets() {
+	public Pattern_action_widget getPAW_for_AW(final String aw) {
 
-		return new ArrayList<>(this.selectable_widgets);
+		for (final Instance_window iw : this.windows) {
+			final Pattern_action_widget out = iw.getPAW_for_AW(aw);
+			if (out != null) {
+				return out;
+			}
+		}
+		return null;
 	}
 
-	public Map<Window, Pattern_window> getWindows_mapping() {
+	public Pattern_input_widget getPIW_for_IW(final String iw) {
 
-		return new HashMap<>(this.windows_mapping);
+		for (final Instance_window iww : this.windows) {
+			final Pattern_input_widget out = iww.getPIW_for_IW(iw);
+			if (out != null) {
+				return out;
+			}
+		}
+		return null;
 	}
 
-	// public Map<Container, Pattern_container> getContainers_mapping() {
-	// return containers_mapping;
-	// }
+	public Pattern_selectable_widget getPSW_for_SW(final String sw) {
 
-	public Map<Action_widget, Pattern_action_widget> getAction_widgets_mapping() {
-
-		return new HashMap<>(this.action_widgets_mapping);
+		for (final Instance_window iww : this.windows) {
+			final Pattern_selectable_widget out = iww.getPSW_for_SW(sw);
+			if (out != null) {
+				return out;
+			}
+		}
+		return null;
 	}
 
-	public Map<Input_widget, Pattern_input_widget> getInput_widgets_mapping() {
+	public List<Action_widget> getAWS_for_PAW(final Pattern_action_widget paw) throws Exception {
 
-		return new HashMap<>(this.input_widgets_mapping);
+		for (final Instance_window iw : this.windows) {
+			final List<Action_widget> out = iw.getAWS_for_PAW(paw.getId());
+			if (out != null) {
+				return out;
+			}
+		}
+		return null;
 	}
 
-	public Map<Selectable_widget, Pattern_selectable_widget> getSelectable_widgets_mapping() {
+	public List<Input_widget> getIWS_for_PIW(final Pattern_input_widget piw) throws Exception {
 
-		return new HashMap<>(this.selectable_widgets_mapping);
+		for (final Instance_window iw : this.windows) {
+			final List<Input_widget> out = iw.getIWS_for_PIW(piw.getId());
+			if (out != null) {
+				return out;
+			}
+		}
+		return null;
+	}
+
+	public List<Selectable_widget> getSWS_for_PSW(final Pattern_selectable_widget psw)
+			throws Exception {
+
+		for (final Instance_window iw : this.windows) {
+			final List<Selectable_widget> out = iw.getSWS_for_PSW(psw.getId());
+			if (out != null) {
+				return out;
+			}
+		}
+		return null;
 	}
 
 	@Override

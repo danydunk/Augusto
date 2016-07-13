@@ -102,9 +102,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		final List<Function> functions = new ArrayList<>(func_semantics.getFunctions());
 		final List<String> opens = new ArrayList<>(func_semantics.getOpenStatements());
 
-		final Map<Window, Pattern_window> windowsMap = in.getWindows_mapping();
-
-		final List<Window> windows = new ArrayList<Window>(windowsMap.keySet());
+		final List<Window> windows = new ArrayList<Window>(in.getGui().getWindows());
 		// We sort the windows, due they came from a set. Let's try to minimize
 		// the nondeterminism
 		Collections.sort(windows, new Comparator<Window>() {
@@ -120,7 +118,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		final Map<Window, Signature> added_windows = new LinkedHashMap<>();
 		for (final Window win : windows) {
 			// we find the associated pattern window
-			final Pattern_window pw = windowsMap.get(win);
+			final Pattern_window pw = in.getPW_for_W(win.getId());
 			final List<Signature> to_search = new ArrayList<>(
 					func_semantics.getWindows_extensions());
 			to_search.add(func_semantics.window_signature);
@@ -152,7 +150,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			final Map<Input_widget, Signature> input_widgets = new LinkedHashMap<>();
 			for (final Input_widget iw : win.getInputWidgets()) {
 
-				final Pattern_input_widget piw = in.getInput_widgets_mapping().get(iw);
+				final Pattern_input_widget piw = in.getPIW_for_IW(iw.getId());
 
 				if (piw == null) {
 					// IW not mapped
@@ -181,7 +179,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 			for (final Action_widget aw : win.getActionWidgets()) {
 
-				final Pattern_action_widget paw = in.getAction_widgets_mapping().get(aw);
+				final Pattern_action_widget paw = in.getPAW_for_AW(aw.getId());
 
 				if (paw == null) {
 					// AW not mapped

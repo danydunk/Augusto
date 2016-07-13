@@ -49,6 +49,16 @@ public class Window extends Widget {
 		this.widgets_map = new HashMap<>();
 	}
 
+	public Widget getWidget(final String id) {
+
+		return this.widgets_map.get(id);
+	}
+
+	public boolean containsWidget(final String id) {
+
+		return this.widgets_map.containsKey(id);
+	}
+
 	public void addWidget(final Widget w) {
 
 		if (w instanceof Action_widget) {
@@ -60,6 +70,7 @@ public class Window extends Widget {
 		if (w instanceof Selectable_widget) {
 			this.addSelectableWidget((Selectable_widget) w);
 		}
+		this.widgets_map.put(w.getId(), w);
 	}
 
 	private void addActionWidget(final Action_widget in) {
