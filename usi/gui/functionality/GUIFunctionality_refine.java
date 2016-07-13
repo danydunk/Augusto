@@ -17,6 +17,8 @@ import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Function;
 import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
+import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
+import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Window;
@@ -34,6 +36,8 @@ public class GUIFunctionality_refine {
 
 	public Instance_GUI_pattern refine() throws Exception {
 
+		final Instance_GUI_pattern working_obj = this.instancePattern;
+
 		final GUI_Pattern pattern = this.instancePattern.getGuipattern();
 		final SpecificSemantics semantics = this.instancePattern.getSemantics();
 
@@ -47,12 +51,13 @@ public class GUIFunctionality_refine {
 			for (final Pattern_action_widget paw : pw.getActionWidgets()) {
 				// all the dynamic edges
 				for (final Pattern_window target_pw : pattern.getDynamicForwardLinks(paw.getId())) {
-
 					// all the concrete aw that match the paw
 					for (final Action_widget aw : iw.getAw_map().get(paw)) {
+						final Instance_GUI_pattern clone = working_obj.clone();
 						final List<Window> target_w_matched = this.instancePattern
 								.getPatternWindowMatches(target_pw.getId());
 
+						// if target window was already discovered
 						if (target_w_matched.size() > 0) {
 
 							boolean edge_found = false;
@@ -66,11 +71,23 @@ public class GUIFunctionality_refine {
 								for (final Window w : target_w_matched) {
 									final SpecificSemantics new_sem = this.semantic4DiscoverWindow(
 											semantics, sourcew, w, aw);
+									clone.setSpecificSemantics(new_sem);
+									final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(
+											clone);
+									final List<GUITestCase> tests = test_gen
+											.generateMinimalTestCases();
+
 								}
 							}
 						} else {
+							// if target window needs to be discovered
 							final SpecificSemantics new_sem = this.semantic4DiscoverWindow(
 									semantics, sourcew, target_pw, aw);
+							clone.setSpecificSemantics(new_sem);
+							final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(
+									clone);
+							final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
+
 						}
 					}
 
@@ -210,7 +227,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverWindow(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-			throws Exception {
+					throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getWindows_mapping().containsKey(targetWindow)) {

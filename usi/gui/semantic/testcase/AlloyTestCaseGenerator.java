@@ -15,15 +15,18 @@ import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Window;
+import edu.mit.csail.sdg.alloy4.ConstList;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
+import edu.mit.csail.sdg.alloy4compiler.ast.CommandScope;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
+import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 
 public class AlloyTestCaseGenerator {
 
-	final static private int RUN_INITIAL_TIMEOUT = 120000; // 2 minute
-	final static private int MAX_RUN = 5;
+	private long RUN_INITIAL_TIMEOUT = 120000; // 2 minute
+	private int MAX_RUN = 5;
 
 	final Instance_GUI_pattern instance;
 
@@ -39,14 +42,17 @@ public class AlloyTestCaseGenerator {
 	 * @throws Exception
 	 */
 
+	public AlloyTestCaseGenerator(final Instance_GUI_pattern instance, final int max_run,
+			final long initial_timout) {
+
+		this.instance = instance;
+		this.MAX_RUN = max_run;
+		this.RUN_INITIAL_TIMEOUT = initial_timout;
+	}
+
 	public AlloyTestCaseGenerator(final Instance_GUI_pattern instance) {
 
 		this.instance = instance;
-	}
-
-	public List<GUITestCase> generateTestCases() throws Exception {
-
-		return this.generateTestCases(MAX_RUN, RUN_INITIAL_TIMEOUT);
 	}
 
 	/**
@@ -56,83 +62,62 @@ public class AlloyTestCaseGenerator {
 	 * goes in timeout is rerun with a double timeout. If a command is unsat,
 	 * the scope is dubled.
 	 *
-	 * @param model
-	 * @param max_run
-	 * @param initial_timout
 	 * @return
 	 * @throws Exception
 	 */
-	public List<GUITestCase> generateTestCases(final int max_run, final int initial_timout)
-			throws Exception {
+	public List<GUITestCase> generateTestCases() throws Exception {
 
 		final SpecificSemantics model = this.instance.getSemantics();
 
-		// inner class used to run threads for parallelism
-		final class RunCommandThread extends Thread {
+		final String alloy_model = model.toString();
+		System.out.println("START ALLOY MODEL");
+		System.out.println(model);
+		System.out.println("END ALLOY MODEL");
 
-			final private Command run_command;
-			final private Module alloy_model;
-			private A4Solution solution;
-			private boolean exception;
+		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
 
-			public RunCommandThread(final Command run, final Module alloy) {
+		final List<Command> run_commands = compiled.getAllCommands();
 
-				this.run_command = run;
-				this.alloy_model = alloy;
-				this.exception = false;
+		final List<RunCommandThread> threads = new ArrayList<>();
+		for (final Command cmd : run_commands) {
+			final RunCommandThread rc = new RunCommandThread(cmd, compiled);
+			rc.start();
+			threads.add(rc);
+		}
+
+		final List<A4Solution> solutions = new ArrayList<>();
+		for (final RunCommandThread t : threads) {
+			t.join();
+			if (t.hasExceptions()) {
+				System.out.println();
 			}
-
-			@Override
-			public void run() {
-
-				Command run = this.run_command;
-				int timeout = initial_timout;
-				try {
-					for (int x = 0; x < max_run; x++) {
-						System.out.println("STARTING COMMAND: " + run.toString() + " RUN "
-								+ (x + 1));
-						final A4Solution solution = AlloyUtil.runCommand(this.alloy_model, run,
-								timeout);
-
-						if (solution == null) {
-							timeout += initial_timout;
-							System.out.println("RUN " + (x + 1) + " COMMAND:" + run.toString()
-									+ " timeout. New timeout =" + timeout);
-						} else if (!solution.satisfiable()) {
-							final int new_scope = run.overall + this.run_command.overall;
-
-							run = new Command(this.run_command.pos, this.run_command.label,
-									this.run_command.check, new_scope, this.run_command.bitwidth,
-									this.run_command.maxseq, this.run_command.expects,
-									this.run_command.scope, this.run_command.additionalExactScopes,
-									this.run_command.formula, this.run_command.parent);
-							if (x + 1 < max_run) {
-								System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
-										+ " unsat. New scope = " + new_scope);
-							}
-
-						} else {
-							System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
-									+ " found solution.");
-							this.solution = solution;
-							break;
-						}
-					}
-				} catch (final Exception e) {
-					this.exception = true;
-				}
-			}
-
-			public A4Solution getSolution() {
-
-				return this.solution;
-			}
-
-			public boolean hasExceptions() {
-
-				return this.exception;
+			if (!t.hasExceptions() && t.getSolution() != null && t.getSolution().satisfiable()) {
+				solutions.add(t.getSolution());
 			}
 		}
+
+		final List<GUITestCase> out = new ArrayList<>();
+		// TO DO: add the creation of GUI test cases
+		for (final A4Solution sol : solutions) {
+			out.add(this.analyzeTuples(sol));
+		}
+
+		return out;
+	}
+
+	/**
+	 * Function that generates GUI test cases running the run commands contained
+	 * in a specific semantics. Each run command is run for a maximum of max_run
+	 * times. The timeout of each run command is initial_timeout. When a command
+	 * goes in timeout is rerun with a double timeout. If a command is unsat,
+	 * the scope is dubled.
+	 *
+	 * @return
+	 * @throws Exception
+	 */
+	public List<GUITestCase> generateMinimalTestCases() throws Exception {
+
+		final SpecificSemantics model = this.instance.getSemantics();
 
 		final String alloy_model = model.toString();
 		System.out.println("START ALLOY MODEL");
@@ -541,7 +526,117 @@ public class AlloyTestCaseGenerator {
 		semanticSolution = new SpecificSemantics(signatures, facts, predicates, functions, opens);
 
 		return semanticSolution;
-
 	}
 
+	// inner class used to run threads for parallelism
+	final class RunCommandThread extends Thread {
+
+		final private Command run_command;
+		final private Module alloy_model;
+		private A4Solution solution;
+		private boolean exception;
+		private final boolean minimal;
+
+		public RunCommandThread(final Command run, final Module alloy) {
+
+			this.run_command = run;
+			this.alloy_model = alloy;
+			this.exception = false;
+			this.minimal = false;
+		}
+
+		public RunCommandThread(final Command run, final Module alloy, final boolean minimal) {
+
+			this.run_command = run;
+			this.alloy_model = alloy;
+			this.exception = false;
+			this.minimal = minimal;
+		}
+
+		@Override
+		public void run() {
+
+			try {
+				int time_scope = -1;
+
+				if (this.minimal) {
+					time_scope = 2;
+				} else {
+					time_scope = this.run_command.overall;
+				}
+
+				Sig time = null;
+				for (final Sig s : this.alloy_model.getAllSigs()) {
+					if (s.label.equals("this/Time")) {
+						time = s;
+					}
+				}
+				if (time == null) {
+					this.exception = true;
+					return;
+				}
+				CommandScope scope = new CommandScope(time, false, time_scope);
+
+				ConstList<CommandScope> scope_list = this.run_command.scope.make(1, scope);
+
+				Command run = new Command(this.run_command.pos, this.run_command.label,
+						this.run_command.check, this.run_command.overall,
+						this.run_command.bitwidth, this.run_command.maxseq,
+						this.run_command.expects, scope_list,
+						this.run_command.additionalExactScopes, this.run_command.formula,
+						this.run_command.parent);
+
+				long timeout = AlloyTestCaseGenerator.this.RUN_INITIAL_TIMEOUT;
+
+				for (int x = 0; x < AlloyTestCaseGenerator.this.MAX_RUN; x++) {
+					System.out.println("STARTING COMMAND: " + run.toString() + " RUN " + (x + 1));
+					final A4Solution solution = AlloyUtil
+							.runCommand(this.alloy_model, run, timeout);
+
+					if (solution == null) {
+						timeout += AlloyTestCaseGenerator.this.RUN_INITIAL_TIMEOUT;
+						System.out.println("RUN " + (x + 1) + " COMMAND:" + run.toString()
+								+ " timeout. New timeout =" + timeout);
+					} else if (!solution.satisfiable()) {
+
+						time_scope++;
+						scope = new CommandScope(time, false, time_scope);
+
+						scope_list = this.run_command.scope.make(1, scope);
+
+						run = new Command(this.run_command.pos, this.run_command.label,
+								this.run_command.check, this.run_command.overall,
+								this.run_command.bitwidth, this.run_command.maxseq,
+								this.run_command.expects, scope_list,
+								this.run_command.additionalExactScopes, this.run_command.formula,
+								this.run_command.parent);
+
+						if (x + 1 < AlloyTestCaseGenerator.this.MAX_RUN) {
+							System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
+									+ " unsat. Time scope = " + time_scope);
+						}
+
+					} else {
+						System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
+								+ " found solution.");
+						this.solution = solution;
+						break;
+					}
+				}
+			} catch (final Exception e) {
+				e.printStackTrace();
+				this.exception = true;
+			}
+		}
+
+		public A4Solution getSolution() {
+
+			return this.solution;
+		}
+
+		public boolean hasExceptions() {
+
+			return this.exception;
+		}
+	}
 }

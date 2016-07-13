@@ -167,8 +167,8 @@ public class GUIFunctionality_refine_test {
 		assertTrue(solution.satisfiable());
 
 		in.setSpecificSemantics(semantic4discoveringPw3);
-		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in);
-		final List<GUITestCase> tests = generator.generateTestCases(1, 30000);
+		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in, 1, 30000);
+		final List<GUITestCase> tests = generator.generateTestCases();
 
 		assertEquals(1, tests.size());
 	}
