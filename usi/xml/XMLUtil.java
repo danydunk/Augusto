@@ -84,7 +84,7 @@ public class XMLUtil {
 
 	/**
 	 * function that extracts the elements children of a input element
-	 * 
+	 *
 	 * @param element
 	 * @return
 	 */
@@ -104,7 +104,7 @@ public class XMLUtil {
 	/**
 	 * function that searches a element with a certain name between the children
 	 * of a input element
-	 * 
+	 *
 	 * @param element
 	 * @return
 	 */
