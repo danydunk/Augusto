@@ -103,9 +103,7 @@ public class AlloyTestCaseGenerationTest {
 			final For_test generator = new For_test(inst, 1, 50000);
 			final List<GUITestCase> tests = generator.generateTestCases();
 			assertEquals(3, tests.size());
-		} catch (
-
-				final Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			fail();
 		}

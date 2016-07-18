@@ -99,7 +99,7 @@ public class AlloyTestCaseGenerator {
 		final List<GUITestCase> out = new ArrayList<>();
 		// TO DO: add the creation of GUI test cases
 		for (final A4Solution sol : solutions) {
-			AlloyUtil.extractProperty(sol, model);
+			// AlloyUtil.extractProperty(sol, model);
 
 			out.add(this.analyzeTuples(sol));
 		}
@@ -425,7 +425,7 @@ public class AlloyTestCaseGenerator {
 		/*
 		 * fact{ all t: Time | (#Input_widget_iw2.content.t=0) =>
 		 * click_semantics [Action_widget_aw3, t] }
-		 *
+		 * 
 		 * fact{ Required.associated_to = Input_widget_iw2 } fact{ all t: Time |
 		 * (#Input_widget_iw1.content.t=1 and click_semantics
 		 * [Action_widget_aw3, t]) }
