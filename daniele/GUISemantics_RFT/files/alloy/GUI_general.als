@@ -85,5 +85,3 @@ pred go [w: Window, t, t': Time, g: Go] {
 	--- operation is tracked ---
 	g.where = w and Track.op.t' = g
 }
-
-run {}
