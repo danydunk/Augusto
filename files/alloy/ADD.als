@@ -25,17 +25,19 @@ fact {
 	all g: Go | g.where = Initial
 }
 ---------------Generic ADD Semantics----------
-sig Property {
+sig Field {
 	associated_to: one Input_widget,
 	has_value: Value lone -> Object
 }
-sig Unique, Required in Property { }
+sig Property_unique, Property_required in Field { }
 sig Object { }
 one sig List { 
 	contains: Object set -> Time
 }
 fact {
-	#Property = #Input_widget
+	#Field = #Input_widget
+	all f: Field |  #f.associated_to = 1
+	all iw: Input_widget | #associated_to.iw = 1
 }
 
 pred go_semantics [w: Window, t: Time] { }
@@ -71,14 +73,14 @@ pred click_fail_post [aw: Action_widget, t, t': Time]	{
 	Input_widget.content.t' = Input_widget.content.t
 }
 pred add [t, t': Time] {
-	one o: Object | all p: Property | p.has_value.o = p.associated_to.content.t and List.contains.t' = List.contains.t+o
+	one o: Object | all f: Field | f.has_value.o = f.associated_to.content.t and List.contains.t' = List.contains.t+o
 }
 pred filled_required_in_w_test [w: Form, t: Time] { 
-	all iw: w.iws | (iw in Required.associated_to) => #iw.content.t = 1
+	all iw: w.iws | (iw in Property_required.associated_to) => #iw.content.t = 1
 }
 pred  filled_required_test [t: Time] { 
-	all iw: Input_widget | (iw in Required.associated_to) => #iw.content.t = 1
+	all iw: Input_widget | (iw in Property_required.associated_to) => #iw.content.t = 1
 }
 pred  unique_test [t: Time] { 
-	all p: Unique | all o2: List.contains.t | (#p.has_value.o2 = 1) => p.associated_to.content.t != p.has_value.o2
+	all p: Property_unique | all o2: List.contains.t | (#p.has_value.o2 = 1) => p.associated_to.content.t != p.has_value.o2
 }
