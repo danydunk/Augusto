@@ -100,7 +100,7 @@ public class AlloyTestCaseGenerationTest {
 				}
 			}
 			inst.getSemantics().generate_run_commands();
-			final For_test generator = new For_test(inst, 1, 30000);
+			final For_test generator = new For_test(inst, 1, 50000);
 			final List<GUITestCase> tests = generator.generateTestCases();
 			assertEquals(3, tests.size());
 		} catch (
@@ -147,7 +147,7 @@ public class AlloyTestCaseGenerationTest {
 
 		in.generateSpecificSemantics();
 		in.getSemantics().generate_run_commands();
-		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in, 1, 30000);
+		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in, 1, 40000);
 		final List<GUITestCase> tests = generator.generateTestCases();
 		assertEquals(4, tests.size());
 	}

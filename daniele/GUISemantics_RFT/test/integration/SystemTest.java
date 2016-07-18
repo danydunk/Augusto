@@ -37,7 +37,9 @@ public class SystemTest {
 			final List<Instance_GUI_pattern> res = gfs.match(pattern);
 			final Instance_GUI_pattern match = res.get(0);
 			match.generateSpecificSemantics();
-			final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(match, 1, 30000);
+			match.getSemantics().generate_run_commands();
+			final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(match, 1, 60000);
+
 			final List<GUITestCase> tests = generator.generateTestCases();
 
 		} catch (final Exception e) {

@@ -183,26 +183,59 @@ public class GUIFunctionality_refine {
 		return null;
 	}
 
-	private Instance_GUI_pattern discoverClasses() throws Exception {
+	private Instance_GUI_pattern discoverWindows() throws Exception {
 
 		// final Instance_GUI_pattern working_obj = this.instancePattern;
-		//
-		// for (final Pattern_window to_discover : this.pattern.getWindows()) {
-		// final List<Window> target_w_matched = this.instancePattern
-		// .getPatternWindowMatches(to_discover.getId());
-		// // if target_w_matched is not empty it means the pattern_window was
-		// // already found
-		// if (target_w_matched.size() > 0) {
-		// continue;
-		// }
-		// // all the dynamic edges that go to the window to discover
-		// for (final Pattern_action_widget paw :
-		// this.pattern.getDynamicBackwardLinks(to_discover
-		// .getId())) {
-		// final working_obj.g
-		// }
-		//
-		// }
+
+		for (final Pattern_window to_discover : this.pattern.getWindows()) {
+			final List<Window> target_w_matched = this.instancePattern
+					.getPatternWindowMatches(to_discover.getId());
+			// if target_w_matched is not empty it means the pattern_window was
+			// already found
+			if (target_w_matched.size() > 0) {
+				continue;
+			}
+			// all the dynamic edges that go to the window to discover
+			for (final Pattern_action_widget paw : this.pattern.getDynamicBackwardLinks(to_discover
+					.getId())) {
+				final List<Action_widget> matched_aws = this.instancePattern.getAWS_for_PAW(paw
+						.getId());
+				// if the paw has no matches
+				if (matched_aws == null || matched_aws.size() == 0) {
+					continue;
+				}
+				for (final Action_widget aw : matched_aws) {
+					final Window source_window = this.gui.getActionWidget_Window(aw.getId());
+					final SpecificSemantics new_sem = this.semantic4DiscoverWindow(this.semantics,
+							source_window, to_discover, aw);
+
+					final Instance_GUI_pattern clone = this.instancePattern.clone();
+					clone.setSpecificSemantics(new_sem);
+
+					final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
+					final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
+
+					if (tests.size() != 1) {
+						throw new Exception(
+								"GUIFunctionality_refine - discoverClasses: error generating test case.");
+					}
+
+					// execute test
+
+					// reached window match
+					// add the dynamic edge to the gui
+					// rip the window
+					// update instance
+
+					// reached window does not match
+
+					// add contraints
+
+				}
+
+			}
+
+		}
 
 		return null;
 	}
@@ -336,7 +369,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverWindow(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-			throws Exception {
+					throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {

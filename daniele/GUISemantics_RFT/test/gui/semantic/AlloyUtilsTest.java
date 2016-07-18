@@ -11,7 +11,14 @@ import java.util.List;
 
 import org.junit.Test;
 
+import test.gui.GUIPatternMaker;
+import test.gui.GUIStructureMaker;
+import usi.gui.functionality.GUIFunctionality_search;
+import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.pattern.Cardinality;
+import usi.gui.pattern.GUI_Pattern;
+import usi.gui.semantic.FunctionalitySemantics;
+import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.semantic.alloy.Alloy_Model;
 import usi.gui.semantic.alloy.entity.AlloyEntity;
@@ -20,6 +27,10 @@ import usi.gui.semantic.alloy.entity.Function;
 import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.semantic.alloy.entity.TernaryRelation;
+import usi.gui.structure.GUI;
+import edu.mit.csail.sdg.alloy4compiler.ast.Command;
+import edu.mit.csail.sdg.alloy4compiler.ast.Module;
+import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 public class AlloyUtilsTest {
 
@@ -145,6 +156,47 @@ public class AlloyUtilsTest {
 		assertNotNull(mAlloy);
 		assertEquals(mAlloy.getAllSigs().size(), model.getSignatures().size());
 
+	}
+
+	@Test
+	public void testExtractProperty() throws Exception {
+
+		final GUI gui = GUIStructureMaker.instance1();
+
+		final GUI_Pattern pattern = GUIPatternMaker.instance1();
+
+		final Alloy_Model model = AlloyUtil.loadAlloyModelFromFile(new File(
+				"./files/for_test/alloy/GUI_ADD.als"));
+		pattern.setSemantics(FunctionalitySemantics.instantiate(model));
+
+		final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+		final List<Instance_GUI_pattern> res = gfs.match(pattern);
+		assertEquals(1, res.size());
+		assertEquals(2, res.get(0).getWindows().size());
+
+		final Instance_GUI_pattern in = res.get(0);
+
+		final SpecificSemantics specsem = SpecificSemantics.generate(in);
+		specsem.generate_run_commands();
+
+		// Save it, and verify if it can be reloaded
+		final String plainConcreteModel = specsem.toString();
+
+		final File fileConcreteModel = AlloyUtil.saveModelInFile(plainConcreteModel,
+				"./files/for_test/alloy/generated_model.als");
+
+		final Module moduleAlloyMit = AlloyUtil.compileAlloyModel(fileConcreteModel);
+		System.out.println(specsem);
+
+		// Now, let's see if there is a solution
+		final Command command = moduleAlloyMit.getAllCommands().get(3);
+		final A4Solution asol = AlloyUtil.runCommand(moduleAlloyMit, command);
+		assertTrue(asol.satisfiable());
+		final String out = AlloyUtil.extractProperty(asol, specsem);
+		System.out.println(out);
+		assertTrue(out
+				.equals("one Field_0,Field_1:Property_unique|Property_unique = (Field_0+Field_1) and Property_required = (Field_1) and Field_0.associated_to = (Input_widget_iw2) and Field_1.associated_to = (Input_widget_iw1)")
+				|| out.equals("one Field_1:Property_required,Field_0:Property_unique|Property_required = (Field_1) and Property_unique = (Field_0+Field_1) and Field_1.associated_to = (Input_widget_iw1) and Field_0.associated_to = (Input_widget_iw2)"));
 	}
 
 	private static Signature searchSignatureInList(final List<Signature> signatures,
