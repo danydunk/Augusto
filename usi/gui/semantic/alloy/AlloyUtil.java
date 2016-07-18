@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ import usi.gui.pattern.Cardinality;
 import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_input_widget;
 import usi.gui.semantic.FunctionalitySemantics;
+import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.entity.AlloyEntity;
 import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Function;
@@ -708,6 +710,28 @@ public class AlloyUtil {
 		return result;
 	}
 
+	static public List<String> getElementsInSet(final A4Solution solution, final Sig sig) {
+
+		final String[] lines = solution.toString().split("\\r?\\n");
+		for (String line : lines) {
+			if (line.startsWith(sig.label + "={")) {
+				line = line.substring(2 + sig.label.length());
+				line = line.substring(0, line.length() - 1);
+				if (line.length() == 0) {
+					return new ArrayList<String>();
+				}
+				final String[] atoms = line.split(",");
+				final List<String> out = new ArrayList<>();
+				for (final String ss : atoms) {
+					out.add(ss.trim().replace("$", "_"));
+				}
+				return out;
+			}
+		}
+
+		return null;
+	}
+
 	static public List<A4Tuple> getAllTuples(final A4Solution solution) {
 
 		final List<A4Tuple> allTuples = new ArrayList<>();
@@ -749,7 +773,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -819,7 +843,7 @@ public class AlloyUtil {
 					func_semantics.getInput_w_extensions());
 			to_search.add(func_semantics.getInput_w_signature());
 			piw_sig = AlloyUtil.searchSignatureInList(to_search, piw.getAlloyCorrespondence());
-			System.out.println(piw.getAlloyCorrespondence());
+			// System.out.println(piw.getAlloyCorrespondence());
 			if (piw_sig == null) {
 				throw new Exception("SpecificSemantics - generate: wrong alloy corrispondence "
 						+ piw.getAlloyCorrespondence());
@@ -851,5 +875,225 @@ public class AlloyUtil {
 			paw_sig = func_semantics.getAction_w_signature();
 		}
 		return paw_sig;
+	}
+
+	public static String extractProperty(final A4Solution sol, final SpecificSemantics sem)
+			throws Exception {
+
+		// we retrieve the signature that start with property
+		final Map<Sig, List<String>> properties = new HashMap<>();
+		for (final Sig sig : sol.getAllReachableSigs()) {
+			if (sig.label.startsWith("this/Property_")) {
+				properties.put(sig, new ArrayList<>());
+			}
+		}
+
+		// first part of constraint
+		String exists = "one ";
+		// the constraint
+		String constraint = "";
+
+		// we retrieve all the atoms related to this sigs
+		final List<String> atoms = new ArrayList<>();
+
+		int cont = 0;
+		for (final Sig sig : properties.keySet()) {
+			final String signame = sig.label.substring(5);
+			final List<String> sig_atom = AlloyUtil.getElementsInSet(sol, sig);
+			properties.get(sig).addAll(sig_atom);
+			String new_exist = "";
+			String new_constraint = "";
+			for (final String ss : sig_atom) {
+
+				// if the atom was not already added
+				if (!atoms.contains(ss)) {
+					if (new_exist.length() > 0) {
+						new_exist += ",";
+					}
+					new_exist += ss;
+
+					atoms.add(ss);
+				}
+				new_constraint += ss;
+
+				if (sig_atom.indexOf(ss) != sig_atom.size() - 1) {
+					new_constraint += "+";
+				}
+
+			}
+
+			if (new_exist.length() > 0) {
+				new_exist += ":" + signame;
+				if (!exists.equals("one ")) {
+					exists += ",";
+				}
+				exists += new_exist;
+			}
+			if (new_constraint.length() == 0) {
+				constraint += "#" + signame + " = 0";
+			} else {
+				constraint += signame + " = (" + new_constraint + ")";
+			}
+			if (cont < properties.size() - 1) {
+				constraint += " and ";
+			}
+			cont++;
+		}
+
+		// for all the atoms found
+		final List<String> processed_atoms = new ArrayList<>();
+		for (final Sig s : properties.keySet()) {
+
+			final List<Field> fields_appoggio = new ArrayList<Field>();
+			for (final Field f : s.getFields()) {
+				fields_appoggio.add(f);
+			}
+
+			if (s instanceof SubsetSig) {
+				final SubsetSig sub = (SubsetSig) s;
+				for (final Sig ss : sub.parents) {
+					for (final Field f : ss.getFields()) {
+						fields_appoggio.add(f);
+					}
+				}
+			}
+			final List<Field> fields = new ArrayList<Field>();
+			for (final Field field : fields_appoggio) {
+				if (field.decl().expr instanceof ExprUnary) {
+					final ExprUnary unary = (ExprUnary) field.decl().expr;
+					final String fieldRef = unary.sub.toString().replaceAll("this/", "");
+					if (!fieldRef.equals("Time") && isPartOfStructuralSigs(fieldRef, sem)) {
+						fields.add(field);
+					}
+					// TODO: deal with other signatures
+				} else if (field.decl().expr instanceof ExprBinary) {
+					final ExprBinary bin = (ExprBinary) field.decl().expr;
+					final String left = bin.left.toString().replaceAll("this/", "");
+					final String right = bin.right.toString().replaceAll("this/", "");
+					// TODO: deal with ternary rel
+				}
+			}
+
+			for (final String atom : atoms) {
+				if (processed_atoms.contains(atom)) {
+					continue;
+				}
+				for (final Field f : fields) {
+					final A4TupleSet ts = sol.eval(f);
+					final Iterator<A4Tuple> tupi = ts.iterator();
+					String new_constraint = "";
+
+					while (tupi.hasNext()) {
+						final A4Tuple tup = tupi.next();
+						if (!tup.atom(0).equals(atom.replace("_", "$"))) {
+							continue;
+						}
+						switch (tup.arity()) {
+						case 2:
+							final String sig = extractSigNameFromAtoms(tup.atom(1));
+
+							new_constraint += sig + "+";
+							// TODO: deal with other sigs that are not part of
+							// the
+							// structure
+							break;
+						case 3:
+							// TODO: deal with ternry relations
+							// sig = extractSigNameFromAtoms(tup.atom(1));
+							// if (sig.equals("Time")) {
+							// continue;
+							// }
+							// final String sig2 =
+							// extractSigNameFromAtoms(tup.atom(2));
+							// if (sig.equals("Time")) {
+							// continue;
+							// }
+							// if (isPartOfStructuralSigs(sig, sem) &&
+							// isPartOfStructuralSigs(sig2, sem)) {
+							// new_constraint += sig;
+							// }
+
+							break;
+						default:
+							throw new Exception("AlloyUtil - extractProperty: wrong arity.");
+						}
+
+					}
+					if (new_constraint.length() > 0) {
+						new_constraint = new_constraint.substring(0, new_constraint.length() - 1);
+						new_constraint = " and " + atom + "." + f.label + " = (" + new_constraint
+								+ ")";
+					} else {
+						new_constraint = " and #" + atom + "." + f.label + " = 0";
+					}
+					constraint += new_constraint;
+
+				}
+				processed_atoms.add(atom);
+			}
+		}
+		if (exists.equals("one ")) {
+			return constraint;
+		}
+		return exists + "|" + constraint;
+	}
+
+	private static String extractSigNameFromAtoms(final String atom) {
+
+		return atom.split("\\$")[0];
+	}
+
+	private static boolean isPartOfStructuralSigs(final String sig, final SpecificSemantics sem) {
+
+		if (sem.getWindow_signature().getIdentifier().equals(sig)) {
+			return true;
+		}
+
+		for (final Signature s : sem.getWindows_extensions()) {
+			if (s.getIdentifier().equals(sig)) {
+				return true;
+			}
+		}
+
+		for (final Signature s : sem.getConcrete_windows()) {
+			if (s.getIdentifier().equals(sig)) {
+				return true;
+			}
+		}
+
+		if (sem.getAction_w_signature().getIdentifier().equals(sig)) {
+			return true;
+		}
+
+		for (final Signature s : sem.getAction_w_extensions()) {
+			if (s.getIdentifier().equals(sig)) {
+				return true;
+			}
+		}
+
+		for (final Signature s : sem.getConcrete_action_w()) {
+			if (s.getIdentifier().equals(sig)) {
+				return true;
+			}
+		}
+
+		if (sem.getInput_w_signature().getIdentifier().equals(sig)) {
+			return true;
+		}
+
+		for (final Signature s : sem.getInput_w_extensions()) {
+			if (s.getIdentifier().equals(sig)) {
+				return true;
+			}
+		}
+
+		for (final Signature s : sem.getConcrete_input_w()) {
+			if (s.getIdentifier().equals(sig)) {
+				return true;
+			}
+		}
+
+		// TODO: selectable widget
+		return false;
 	}
 }

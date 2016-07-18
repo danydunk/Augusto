@@ -47,6 +47,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 					.getParent())) && !sig.isAbstract_()) {
 				this.concrete_windows.add(sig);
 			}
+
 			if ((sig.getParent().contains(this.action_w_signature) || this.action_w_extensions
 					.contains(sig.getParent())) && !sig.isAbstract_()) {
 				this.concrete_action_w.add(sig);
@@ -122,9 +123,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			final List<Signature> to_search = new ArrayList<>(
 					func_semantics.getWindows_extensions());
 			to_search.add(func_semantics.window_signature);
-			System.out.println(pw.getId());
 
-			System.out.println(pw.getAlloyCorrespondence());
 			final Signature w_sig = AlloyUtil.searchSignatureInList(to_search,
 					pw.getAlloyCorrespondence());
 

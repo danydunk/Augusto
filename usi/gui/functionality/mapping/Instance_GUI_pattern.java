@@ -228,10 +228,10 @@ public class Instance_GUI_pattern {
 		return null;
 	}
 
-	public List<Action_widget> getAWS_for_PAW(final Pattern_action_widget paw) throws Exception {
+	public List<Action_widget> getAWS_for_PAW(final String paw) throws Exception {
 
 		for (final Instance_window iw : this.windows) {
-			final List<Action_widget> out = iw.getAWS_for_PAW(paw.getId());
+			final List<Action_widget> out = iw.getAWS_for_PAW(paw);
 			if (out != null) {
 				return out;
 			}
@@ -239,10 +239,10 @@ public class Instance_GUI_pattern {
 		return null;
 	}
 
-	public List<Input_widget> getIWS_for_PIW(final Pattern_input_widget piw) throws Exception {
+	public List<Input_widget> getIWS_for_PIW(final String piw) throws Exception {
 
 		for (final Instance_window iw : this.windows) {
-			final List<Input_widget> out = iw.getIWS_for_PIW(piw.getId());
+			final List<Input_widget> out = iw.getIWS_for_PIW(piw);
 			if (out != null) {
 				return out;
 			}
@@ -250,11 +250,10 @@ public class Instance_GUI_pattern {
 		return null;
 	}
 
-	public List<Selectable_widget> getSWS_for_PSW(final Pattern_selectable_widget psw)
-			throws Exception {
+	public List<Selectable_widget> getSWS_for_PSW(final String psw) throws Exception {
 
 		for (final Instance_window iw : this.windows) {
-			final List<Selectable_widget> out = iw.getSWS_for_PSW(psw.getId());
+			final List<Selectable_widget> out = iw.getSWS_for_PSW(psw);
 			if (out != null) {
 				return out;
 			}
