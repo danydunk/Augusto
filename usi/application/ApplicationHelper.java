@@ -5,6 +5,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import usi.gui.GuiStateManager;
+import usi.gui.semantic.testcase.GUITestCase;
 import usi.rmi.RemoteCoberturaInterface;
 
 import com.rational.test.ft.object.interfaces.RootTestObject;
@@ -71,5 +72,9 @@ public class ApplicationHelper {
 
 		this.closeApplication();
 		this.startApplication();
+	}
+
+	public void runTestCase(final GUITestCase tc) {
+
 	}
 }

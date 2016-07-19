@@ -1,16 +1,18 @@
 package usi.gui.semantic.testcase;
 
-import usi.gui.structure.Widget;
+import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
 
 public class Select extends GUIAction {
 
 	final private int index;
 
-	public Select(final Widget w, final Window oracle, final int index) throws Exception {
-		super(w, oracle);
-		if (index < 0) {
-			throw new Exception("Select: null index.");
+	public Select(final Window w, final Window oracle, final Selectable_widget sw, final int index)
+			throws Exception {
+
+		super(w, sw, oracle);
+		if (index < 0 || sw == null) {
+			throw new Exception("Select: wrong inputs.");
 		}
 		this.index = index;
 	}

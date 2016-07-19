@@ -5,24 +5,31 @@ import usi.gui.structure.Window;
 
 public abstract class GUIAction {
 
-	final private Widget w;
+	final private Window w;
+	final private Widget wid;
 	// how the window should look like after the action is performed
 	final private Window oracle;
 
 	private Window result;
 
-	public GUIAction(final Widget w, final Window oracle) throws Exception {
+	public GUIAction(final Window w, final Widget wid, final Window oracle) throws Exception {
 
 		if (w == null) {
-			throw new Exception("GUIAction: null widget.");
+			throw new Exception("GUIAction: null source window.");
 		}
 		this.oracle = oracle;
 		this.w = w;
+		this.wid = wid;
+	}
+
+	public Window getWindow() {
+
+		return this.w;
 	}
 
 	public Widget getWidget() {
 
-		return this.w;
+		return this.wid;
 	}
 
 	public Window getOracle() {

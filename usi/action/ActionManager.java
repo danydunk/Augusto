@@ -9,6 +9,10 @@ import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.Go;
 import usi.gui.semantic.testcase.Select;
 import usi.gui.structure.Option_input_widget;
+import usi.gui.structure.Widget;
+import usi.gui.structure.Window;
+
+import com.rational.test.ft.object.interfaces.TestObject;
 
 public class ActionManager {
 
@@ -19,16 +23,21 @@ public class ActionManager {
 		this.sleeptime = sleeptime;
 	}
 
+	/*
+	 * 
+	 * GUI must be read before calling this method
+	 */
 	public void executeAction(final GUIAction act) throws Exception {
 
-		final GuiStateManager guimanager = GuiStateManager.getInstance();
-
-		if (act.getWidget().getTo() == null) {
-			throw new Exception("ActionManager - executeAction: missing TO reference.");
+		if (act instanceof Go) {
+			throw new Exception(
+					"ActionManager - executeAction: go actions must be elaborated before execution.");
 		}
 
-		if (!guimanager.getCurrentTOs().contains(act.getWidget().getTo())) {
-			throw new Exception("ActionManager - executeAction: TO not found.");
+		final GuiStateManager guimanager = GuiStateManager.getInstance();
+		final Window currWind = guimanager.getCurrentWindows().get(0);
+		if (act.getWindow() == null || !currWind.isSame(act.getWindow())) {
+			throw new Exception("ActionManager - executeAction: wrong source refenence.");
 		}
 
 		final String className = act.getWidget().getClasss();
@@ -41,23 +50,29 @@ public class ActionManager {
 			throw new Exception("ActionManager - ActionManager: " + className + " not found.");
 		}
 		final Method[] ms = c.getDeclaredMethods();
-		Method method = null;
-		for (final Method m : ms) {
-			if (m.getName().equals("click")) {
-				method = m;
-				break;
-			}
+
+		final TestObject to = this.findWidgetInCurrWindow(act.getWidget(), currWind);
+		if (to == null) {
+			throw new Exception("ActionManager - executeAction: TO not found.");
 		}
 
 		if (act instanceof Click) {
 			final Click click = (Click) act;
 
+			Method method = null;
+			for (final Method m : ms) {
+				if (m.getName().equals("click")) {
+					method = m;
+					break;
+				}
+			}
+
 			try {
-				method.invoke(c.newInstance(), click.getWidget());
+				method.invoke(c.newInstance(), to);
 			} catch (final Exception e) {
 				try {
 					Thread.sleep(100);
-					method.invoke(c.newInstance(), click.getWidget());
+					method.invoke(c.newInstance(), to);
 				} catch (final Exception ee) {
 					e.printStackTrace();
 					throw new Exception("ActionManager - executeAction: error executing click, "
@@ -69,17 +84,25 @@ public class ActionManager {
 		if (act instanceof Fill) {
 			final Fill fill = (Fill) act;
 
+			Method method = null;
+			for (final Method m : ms) {
+				if (m.getName().equals("fill")) {
+					method = m;
+					break;
+				}
+			}
+
 			if (fill.getWidget() instanceof Option_input_widget) {
 				final int index = Integer.valueOf(fill.getInput());
 				try {
-					method.invoke(c.newInstance(), fill.getWidget(), index);
+					method.invoke(c.newInstance(), to, index);
 				} catch (final Exception e) {
 					throw new Exception("ActionManager - executeAction: error executing fill, "
 							+ e.getMessage());
 				}
 			} else {
 				try {
-					method.invoke(c.newInstance(), fill.getWidget(), fill.getInput());
+					method.invoke(c.newInstance(), to, fill.getInput());
 				} catch (final Exception e) {
 					throw new Exception("ActionManager - executeAction: error executing fill, "
 							+ e.getMessage());
@@ -90,19 +113,32 @@ public class ActionManager {
 		if (act instanceof Select) {
 			final Select select = (Select) act;
 
+			Method method = null;
+			for (final Method m : ms) {
+				if (m.getName().equals("select")) {
+					method = m;
+					break;
+				}
+			}
+
 			try {
-				method.invoke(c.newInstance(), select.getWidget(), select.getIndex());
+				method.invoke(c.newInstance(), to, select.getIndex());
 			} catch (final Exception e) {
 				throw new Exception("ActionManager - executeAction: error executing select, "
 						+ e.getMessage());
 			}
 		}
 
-		if (act instanceof Go) {
-			throw new Exception(
-					"ActionManager - executeAction: go actions must be elaborated before execution.");
-		}
-
 		Thread.sleep(this.sleeptime);
+	}
+
+	private TestObject findWidgetInCurrWindow(final Widget w, final Window wind) {
+
+		for (final Widget wid : wind.getWidgets()) {
+			if (wid.isSame(w)) {
+				return wid.getTo();
+			}
+		}
+		return null;
 	}
 }
