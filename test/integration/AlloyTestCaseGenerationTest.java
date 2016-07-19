@@ -269,11 +269,6 @@ public class AlloyTestCaseGenerationTest {
 		final List<GUITestCase> tests = generator.generateTestCases();
 
 		assertEquals(1, tests.size());
-
-		final SpecificSemantics constrainSemantic = AlloyTestCaseGenerator.validateRequired(in,
-				solution, tests.get(0));
-
-		assertNotNull(constrainSemantic);
 	}
 
 	public class Wrapper extends GUIFunctionality_refine {

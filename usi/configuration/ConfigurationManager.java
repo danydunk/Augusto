@@ -10,7 +10,7 @@ public class ConfigurationManager {
 	private static String autBinDirectory;
 	private static String autMainCLass;
 	private static String resetScriptPath;
-
+	private static int alloyRunScope;
 	private static long sleepTime;
 
 	public static void load() throws Exception {
@@ -32,7 +32,8 @@ public class ConfigurationManager {
 		ConfigurationManager.setAutMainCLass(properties.getProperty("aut_main_class"));
 		ConfigurationManager.setAutClasspath(properties.getProperty("aut_classpath"));
 		ConfigurationManager.setResetScriptPath(properties.getProperty("reset_script_path"));
-
+		ConfigurationManager.setAlloyRunScope(Integer.valueOf(properties
+				.getProperty("alloy_run_scope")));
 		ConfigurationManager.setSleepTime(Long.valueOf(properties.getProperty("sleep_time")));
 	}
 
@@ -79,6 +80,16 @@ public class ConfigurationManager {
 	public static void setSleepTime(final long sleepTime) {
 
 		ConfigurationManager.sleepTime = sleepTime;
+	}
+
+	public static int getAlloyRunScope() {
+
+		return ConfigurationManager.alloyRunScope;
+	}
+
+	public static void setAlloyRunScope(final int alloyRunScope) {
+
+		ConfigurationManager.alloyRunScope = alloyRunScope;
 	}
 
 	public static String getResetScriptPath() {

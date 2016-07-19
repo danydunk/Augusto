@@ -13,8 +13,6 @@ import usi.gui.semantic.testcase.Click;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.Window;
 
-import com.rational.test.ft.object.interfaces.RootTestObject;
-
 /**
  * Description : Functional Test Script
  *
@@ -39,14 +37,14 @@ public class Execute_action extends Execute_actionHelper {
 			ConfigurationManager.load(conf_file);
 			ExperimentManager.init();
 			application = new ApplicationHelper();
-			final RootTestObject root = application.startApplication();
-			final GuiStateManager gui = new GuiStateManager(root);
+			application.startApplication();
+			final GuiStateManager gui = GuiStateManager.getInstance();
 			List<Window> windows = gui.readGUI();
 			Thread.sleep(1000);
 			final Action_widget aw = windows.get(0).getActionWidgets().get(0);
 
 			final Click click = new Click(aw, null);
-			final ActionManager manager = new ActionManager(gui, 500);
+			final ActionManager manager = new ActionManager(500);
 			manager.executeAction(click);
 			windows = gui.readGUI();
 			if (!windows.get(0).getLabel().contains("New Password Database")) {

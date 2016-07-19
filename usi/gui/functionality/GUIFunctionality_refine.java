@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import usi.configuration.ConfigurationManager;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.functionality.mapping.Instance_window;
 import usi.gui.pattern.Cardinality;
@@ -345,7 +346,7 @@ public class GUIFunctionality_refine {
 				+ " and t' in T/next[t] ";
 		final Fact factDiscovering = new Fact("", fcontent);
 
-		final String runCom = "run {System} for 4";
+		final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
 
 		final List<Signature> signatures = new ArrayList<>(originalSemantic.getSignatures());
 		final List<Fact> facts = new ArrayList<>(originalSemantic.getFacts());
@@ -369,7 +370,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverWindow(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-					throws Exception {
+			throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {
@@ -439,4 +440,10 @@ public class GUIFunctionality_refine {
 
 		return semantif4DiscoverWindow;
 	}
+
+	private boolean isWindowFound(final GUITestCase tc, final Pattern_window target) {
+
+		return true;
+	}
+
 }

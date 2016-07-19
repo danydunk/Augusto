@@ -18,8 +18,6 @@ import usi.gui.structure.GUIParser;
 import usi.gui.structure.Window;
 import usi.xml.XMLUtil;
 
-import com.rational.test.ft.object.interfaces.RootTestObject;
-
 /**
  * Description : Functional Test Script
  *
@@ -47,8 +45,8 @@ public class Save_window_xml extends Save_window_xmlHelper {
 				ConfigurationManager.load(conf_file);
 				ExperimentManager.init();
 				application = new ApplicationHelper();
-				final RootTestObject root = application.startApplication();
-				final GuiStateManager gui = new GuiStateManager(root);
+				application.startApplication();
+				final GuiStateManager gui = GuiStateManager.getInstance();
 				final List<Window> windows = gui.readGUI();
 				final GUIWriter writer = new GUIWriter();
 
