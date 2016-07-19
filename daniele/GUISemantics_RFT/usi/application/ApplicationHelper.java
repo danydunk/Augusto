@@ -4,6 +4,7 @@ import java.io.File;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+import usi.gui.GuiStateManager;
 import usi.rmi.RemoteCoberturaInterface;
 
 import com.rational.test.ft.object.interfaces.RootTestObject;
@@ -15,7 +16,7 @@ public class ApplicationHelper {
 
 	RootTestObject root = null;
 
-	public RootTestObject startApplication() throws Exception {
+	public void startApplication() throws Exception {
 
 		RationalTestScript.unregisterAll();
 
@@ -35,7 +36,7 @@ public class ApplicationHelper {
 		} catch (final Exception e) {
 			throw new Exception("ApplicationHelper - startApplication: error, " + e.getMessage());
 		}
-		return this.root;
+		GuiStateManager.create(this.root);
 	}
 
 	public void closeApplication() {
@@ -52,8 +53,10 @@ public class ApplicationHelper {
 			rmo.getCoverage();
 			tos = this.root.find(SubitemFactory.atChild("showing", "true", "enabled", "true"));
 			tos[0].getProcess().kill();
+			GuiStateManager.destroy();
 		} catch (final Exception e) {
 			this.forceClose();
+			GuiStateManager.destroy();
 			return;
 		}
 	}
@@ -64,9 +67,9 @@ public class ApplicationHelper {
 				+ "AppScript" + File.separator + "closeapplication.bat");
 	}
 
-	public RootTestObject restartApplication() throws Exception {
+	public void restartApplication() throws Exception {
 
 		this.closeApplication();
-		return this.startApplication();
+		this.startApplication();
 	}
 }

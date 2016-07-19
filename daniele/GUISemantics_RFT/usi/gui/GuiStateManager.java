@@ -17,8 +17,24 @@ public class GuiStateManager {
 	private final Property[] properties = new Property[1];
 	private List<Window> currentWindows;
 	private List<TestObject> currentTOs;
+	private static GuiStateManager instance;
 
-	public GuiStateManager(final TestObject root) {
+	public static GuiStateManager getInstance() {
+
+		return instance;
+	}
+
+	public static void create(final TestObject root) {
+
+		instance = new GuiStateManager(root);
+	}
+
+	public static void destroy() {
+
+		instance = null;
+	}
+
+	private GuiStateManager(final TestObject root) {
 
 		this.root = root;
 

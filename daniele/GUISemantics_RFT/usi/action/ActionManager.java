@@ -12,22 +12,22 @@ import usi.gui.structure.Option_input_widget;
 
 public class ActionManager {
 
-	private final GuiStateManager guimanager;
 	private final long sleeptime;
 
-	public ActionManager(final GuiStateManager guimanager, final long sleeptime) {
+	public ActionManager(final long sleeptime) {
 
-		this.guimanager = guimanager;
 		this.sleeptime = sleeptime;
 	}
 
 	public void executeAction(final GUIAction act) throws Exception {
 
+		final GuiStateManager guimanager = GuiStateManager.getInstance();
+
 		if (act.getWidget().getTo() == null) {
 			throw new Exception("ActionManager - executeAction: missing TO reference.");
 		}
 
-		if (!this.guimanager.getCurrentTOs().contains(act.getWidget().getTo())) {
+		if (!guimanager.getCurrentTOs().contains(act.getWidget().getTo())) {
 			throw new Exception("ActionManager - executeAction: TO not found.");
 		}
 

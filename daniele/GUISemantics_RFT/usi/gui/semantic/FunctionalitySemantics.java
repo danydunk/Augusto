@@ -3,6 +3,7 @@ package usi.gui.semantic;
 import java.util.ArrayList;
 import java.util.List;
 
+import usi.configuration.ConfigurationManager;
 import usi.gui.semantic.alloy.Alloy_Model;
 import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Function;
@@ -11,8 +12,6 @@ import usi.gui.semantic.alloy.entity.Semantic_predicate;
 import usi.gui.semantic.alloy.entity.Signature;
 
 public class FunctionalitySemantics extends Alloy_Model {
-
-	final private int RUN_SCOPE = 10;
 
 	protected Predicate click;
 	protected Predicate go;
@@ -179,7 +178,7 @@ public class FunctionalitySemantics extends Alloy_Model {
 					}
 				}
 				final String run_command = "run {System and {" + pred + sem_pred + ")} } for "
-						+ this.RUN_SCOPE;
+						+ ConfigurationManager.getAlloyRunScope();
 				this.run_commands.add(run_command);
 			}
 		}
@@ -208,7 +207,7 @@ public class FunctionalitySemantics extends Alloy_Model {
 					}
 				}
 				final String run_command = "run {System and {" + pred + sem_pred + ")} } for "
-						+ this.RUN_SCOPE;
+						+ ConfigurationManager.getAlloyRunScope();
 				this.run_commands.add(run_command);
 			}
 		}
@@ -237,7 +236,7 @@ public class FunctionalitySemantics extends Alloy_Model {
 					}
 				}
 				final String run_command = "run {System and {" + pred + sem_pred + ")} } for "
-						+ this.RUN_SCOPE;
+						+ ConfigurationManager.getAlloyRunScope();
 				this.run_commands.add(run_command);
 			}
 		}

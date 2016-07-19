@@ -13,8 +13,6 @@ import usi.gui.structure.GUI;
 import usi.gui.structure.Widget;
 import usi.gui.structure.Window;
 
-import com.rational.test.ft.object.interfaces.RootTestObject;
-
 public class Ripper {
 
 	private final List<String> action_widget_to_ignore;
@@ -29,14 +27,13 @@ public class Ripper {
 		this.application = new ApplicationHelper();
 		this.sleeptime = sleeptime;
 		this.action_widget_to_ignore = new ArrayList<>();
-
 	}
 
 	public GUI ripApplication() throws Exception {
 
-		final RootTestObject root = this.application.startApplication();
-		this.guimanager = new GuiStateManager(root);
-		this.actionManager = new ActionManager(this.guimanager, this.sleeptime);
+		this.application.startApplication();
+		this.guimanager = GuiStateManager.getInstance();
+		this.actionManager = new ActionManager(this.sleeptime);
 		this.gui = new GUI();
 		// we take only the first window of the list because that's the front
 		// window
@@ -63,7 +60,7 @@ public class Ripper {
 				continue;
 			}
 			final Click act = new Click(aw, null);
-			System.out.println(aw.getLabel());
+
 			this.actionManager.executeAction(act);
 
 			final List<Window> curr_windows = this.guimanager.readGUI();
@@ -128,6 +125,7 @@ public class Ripper {
 			final Window w) throws Exception {
 
 		this.application.restartApplication();
+		this.guimanager = GuiStateManager.getInstance();
 		for (final GUIAction act : actions) {
 			final Window current = this.guimanager.readGUI().get(0);
 
