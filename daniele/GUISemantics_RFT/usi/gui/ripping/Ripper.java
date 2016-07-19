@@ -10,7 +10,6 @@ import usi.gui.semantic.testcase.Click;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
-import usi.gui.structure.Widget;
 import usi.gui.structure.Window;
 
 public class Ripper {
@@ -59,7 +58,7 @@ public class Ripper {
 			if (this.action_widget_to_ignore.contains(aw.getClasss())) {
 				continue;
 			}
-			final Click act = new Click(aw, null);
+			final Click act = new Click(w, null, aw);
 
 			this.actionManager.executeAction(act);
 
@@ -75,7 +74,7 @@ public class Ripper {
 				loop: for (final Action_widget aww : aws) {
 					for (final Action_widget aww2 : aws2) {
 						if (aww2.isSame(aww)) {
-							aww.setTO(aww2.getTo());
+							// aww.setTO(aww2.getTo());
 							new_aws.add(aww);
 							continue loop;
 						}
@@ -86,7 +85,8 @@ public class Ripper {
 				if (new_aws.size() != aws.size() && cont < aws.size() - 1) {
 					// some widgets were missing and there are still actions to
 					// do, we restart the app
-					new_aws = this.filterAWS(this.restart_and_go_to_window(actions, w));
+					this.restart_and_go_to_window(actions, w);
+					continue;
 				}
 				aws = new_aws;
 				continue;
@@ -113,7 +113,7 @@ public class Ripper {
 
 			if (cont < aws.size() - 1) {
 				// application is restarted and brought back to the window
-				aws = this.filterAWS(this.restart_and_go_to_window(actions, w));
+				this.restart_and_go_to_window(actions, w);
 			}
 		}
 	}
@@ -121,27 +121,15 @@ public class Ripper {
 	// function that brings back the app to the target window by executing the
 	// input sequence of actions
 	// it returns the list of action widgets in the window with the current TOs
-	private List<Action_widget> restart_and_go_to_window(final List<GUIAction> actions,
-			final Window w) throws Exception {
+	private void restart_and_go_to_window(final List<GUIAction> actions, final Window w)
+			throws Exception {
 
 		this.application.restartApplication();
 		this.guimanager = GuiStateManager.getInstance();
 		for (final GUIAction act : actions) {
-			final Window current = this.guimanager.readGUI().get(0);
+			this.guimanager.readGUI();
 
-			final Widget wid = act.getWidget();
-			Widget matched_wid = null;
-			for (final Action_widget aw : current.getActionWidgets()) {
-				if (wid.isSame(aw)) {
-					matched_wid = aw;
-					break;
-				}
-			}
-			if (matched_wid == null) {
-				throw new Exception("Ripper - restart_and_go_to_window: widget not found.");
-			}
-			final Click click = new Click(matched_wid, null);
-			this.actionManager.executeAction(click);
+			this.actionManager.executeAction(act);
 		}
 
 		if (!w.isSame(this.guimanager.readGUI().get(0))) {
@@ -149,22 +137,23 @@ public class Ripper {
 					"Ripper - restart_and_go_to_window: it was not possible to reach the selected window.");
 		}
 
-		// we check that the action widgets are the same
-		// we consider only the widgets that were in the window the
-		// first time we reached it
-		final List<Action_widget> new_aws = new ArrayList<>();
-		loop: for (final Action_widget aww : w.getActionWidgets()) {
-			for (final Action_widget aww2 : this.guimanager.getCurrentWindows().get(0)
-					.getActionWidgets()) {
-				if (aww2.isSame(aww)) {
-					aww.setTO(aww2.getTo());
-					new_aws.add(aww);
-					continue loop;
-				}
-			}
-			break loop;
-		}
-		return new_aws;
+		// // we check that the action widgets are the same
+		// // we consider only the widgets that were in the window the
+		// // first time we reached it
+		// final List<Action_widget> new_aws = new ArrayList<>();
+		// loop: for (final Action_widget aww : w.getActionWidgets()) {
+		// for (final Action_widget aww2 :
+		// this.guimanager.getCurrentWindows().get(0)
+		// .getActionWidgets()) {
+		// if (aww2.isSame(aww)) {
+		// aww.setTO(aww2.getTo());
+		// new_aws.add(aww);
+		// continue loop;
+		// }
+		// }
+		// break loop;
+		// }
+		// return new_aws;
 	}
 
 	private Window isWindowNew(final Window w) {

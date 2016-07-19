@@ -152,6 +152,7 @@ public class AlloyTestCaseGenerator {
 	protected GUITestCase analyzeTuples(final A4Solution solution) throws Exception {
 
 		// TODO: oracle
+		// TODO: add source window
 		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track");
 
 		final List<GUIAction> actions = new ArrayList<>(tracks.size());
@@ -307,7 +308,7 @@ public class AlloyTestCaseGenerator {
 				}
 
 				// TODO: deal with input data
-				final Fill action = new Fill(target_iw, null, String.valueOf(value_index));
+				final Fill action = new Fill(null, null, target_iw, String.valueOf(value_index));
 				actions.set(time_index - 1, action);
 				continue;
 			}
@@ -336,7 +337,7 @@ public class AlloyTestCaseGenerator {
 					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in click.");
 				}
 
-				final Click action = new Click(target_aw, null);
+				final Click action = new Click(null, null, target_aw);
 				actions.set(time_index - 1, action);
 				continue;
 			}

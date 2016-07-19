@@ -1,14 +1,14 @@
 package usi.action.ui;
 
 import resources.usi.MainHelper;
-import usi.gui.structure.Widget;
 
+import com.rational.test.ft.object.interfaces.TestObject;
 import com.rational.test.ft.object.interfaces.TextGuiSubitemTestObject;
 
 public class TextAreaUI extends MainHelper {
 
-	public static void setText(final Widget testObject, final String text) throws Exception {
+	public static void setText(final TestObject testObject, final String text) throws Exception {
 
-		new TextGuiSubitemTestObject(testObject.getTo()).setProperty("text", text);
+		new TextGuiSubitemTestObject(testObject).setProperty("text", text);
 	}
 }

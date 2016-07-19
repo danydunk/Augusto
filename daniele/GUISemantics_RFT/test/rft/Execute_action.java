@@ -43,7 +43,7 @@ public class Execute_action extends Execute_actionHelper {
 			Thread.sleep(1000);
 			final Action_widget aw = windows.get(0).getActionWidgets().get(0);
 
-			final Click click = new Click(aw, null);
+			final Click click = new Click(windows.get(0), null, aw);
 			final ActionManager manager = new ActionManager(500);
 			manager.executeAction(click);
 			windows = gui.readGUI();

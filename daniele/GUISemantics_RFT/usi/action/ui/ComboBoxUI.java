@@ -1,20 +1,19 @@
 package usi.action.ui;
 
 import resources.usi.MainHelper;
-import usi.gui.structure.Widget;
 
+import com.rational.test.ft.object.interfaces.TestObject;
 import com.rational.test.ft.object.interfaces.TextSelectGuiSubitemTestObject;
 
 public class ComboBoxUI extends MainHelper {
 
-	public static void click(final Widget testObject, final long itemCount) {
+	public static void click(final TestObject testObject, final long itemCount) {
 
 		if (itemCount < 0) {
 			return;
 		}
 
-		final TextSelectGuiSubitemTestObject combo = new TextSelectGuiSubitemTestObject(
-				testObject.getTo());
+		final TextSelectGuiSubitemTestObject combo = new TextSelectGuiSubitemTestObject(testObject);
 		combo.click();
 
 		sleep(0.2);

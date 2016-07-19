@@ -1,11 +1,12 @@
 package usi.action.ui;
 
 import resources.usi.MainHelper;
-import usi.gui.structure.Widget;
+
+import com.rational.test.ft.object.interfaces.TestObject;
 
 public class TabbedPaneUI extends MainHelper {
 
-	public static void click(final Widget testObject, final long tabCount) throws Exception {
+	public static void click(final TestObject testObject, final long tabCount) throws Exception {
 
 		// TODO: finish
 		// new GuiSubitemTestObject((TestObject)
