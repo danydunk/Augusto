@@ -154,7 +154,11 @@ public class AlloyTestCaseGenerator {
 		// TODO: oracle
 		// TODO: add source window
 		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track");
-
+		final List<A4Tuple> curr_wind = AlloyUtil.getTuples(solution, "Current_window");
+		if (tracks.size() != curr_wind.size() - 1) {
+			throw new Exception(
+					"AlloyTestCaseGenerator - analyzeTuples: track and curr window must have same size.");
+		}
 		final List<GUIAction> actions = new ArrayList<>(tracks.size());
 		for (final A4Tuple t : tracks) {
 			actions.add(null);
@@ -162,10 +166,30 @@ public class AlloyTestCaseGenerator {
 
 		for (final A4Tuple tuple : tracks) {
 			if (tuple.arity() != 3) {
-				throw new Exception("AlloyTestCaseGenerator - analyzeTuples: wrong arity of track");
+				throw new Exception("AlloyTestCaseGenerator - analyzeTuples: wrong arity of track.");
 			}
 
 			final int time_index = Integer.valueOf(tuple.atom(2).split("\\$")[1]);
+
+			Window source_window = null;
+			for (final A4Tuple curr : curr_wind) {
+				System.out.println("Time$" + (time_index - 1));
+				if (curr.atom(2).equals("Time$" + (time_index - 1))) {
+					String windid = curr.atom(1).split("\\$")[0];
+					if (windid.startsWith("General")) {
+						// TODO: fix this
+						source_window = new Window("General", "General", "General", 0, 0, false);
+
+					} else {
+						windid = windid.split("_")[1];
+						source_window = this.instance.getGui().getWindow(windid);
+					}
+				}
+			}
+			if (source_window == null) {
+				throw new Exception(
+						"AlloyTestCaseGenerator - analyzeTuples:source window not found.");
+			}
 
 			// TODO: fix
 			// the oracle is retrieved
@@ -265,7 +289,7 @@ public class AlloyTestCaseGenerator {
 					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in go.");
 				}
 
-				final Go action = new Go(target_w, null);
+				final Go action = new Go(target_w, source_window);
 				actions.set(time_index - 1, action);
 				continue;
 			}
@@ -308,7 +332,8 @@ public class AlloyTestCaseGenerator {
 				}
 
 				// TODO: deal with input data
-				final Fill action = new Fill(null, null, target_iw, String.valueOf(value_index));
+				final Fill action = new Fill(source_window, null, target_iw,
+						String.valueOf(value_index));
 				actions.set(time_index - 1, action);
 				continue;
 			}
@@ -337,14 +362,14 @@ public class AlloyTestCaseGenerator {
 					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in click.");
 				}
 
-				final Click action = new Click(null, null, target_aw);
+				final Click action = new Click(source_window, null, target_aw);
 				actions.set(time_index - 1, action);
 				continue;
 			}
 			// TODO:select
 		}
 
-		final GUITestCase test = new GUITestCase(actions);
+		final GUITestCase test = new GUITestCase(solution, actions);
 		return test;
 	}
 

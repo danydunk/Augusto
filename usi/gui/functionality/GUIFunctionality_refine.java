@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import usi.configuration.ConfigurationManager;
+import usi.gui.GuiStateManager;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.functionality.mapping.Instance_window;
 import usi.gui.pattern.Cardinality;
@@ -12,6 +13,7 @@ import usi.gui.pattern.GUI_Pattern;
 import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_input_widget;
 import usi.gui.pattern.Pattern_window;
+import usi.gui.ripping.Ripper;
 import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.semantic.alloy.entity.Fact;
@@ -20,6 +22,7 @@ import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
 import usi.gui.semantic.testcase.GUITestCase;
+import usi.gui.semantic.testcase.TestCaseRunner;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Window;
@@ -28,165 +31,94 @@ import com.google.common.collect.Lists;
 
 public class GUIFunctionality_refine {
 
-	private final Instance_GUI_pattern instancePattern;
 	private final GUI gui;
+	private final Instance_GUI_pattern instancePattern;
+	private SpecificSemantics constrained;
+	private SpecificSemantics un_constrained;
 	private final GUI_Pattern pattern;
-	private final SpecificSemantics semantics;
+	private final List<GUITestCase> observed_tcs;
+	private final Ripper ripper;
 
-	public GUIFunctionality_refine(final Instance_GUI_pattern instance, final GUI gui) {
+	public GUIFunctionality_refine(final Instance_GUI_pattern instancePattern, final GUI gui)
+			throws Exception {
 
-		this.instancePattern = instance;
-		this.pattern = instance.getGuipattern();
-		this.gui = instance.getGui();
-		this.semantics = instance.getSemantics();
+		this.gui = gui;
+		this.instancePattern = instancePattern.clone();
+		this.constrained = null;
+		this.un_constrained = this.instancePattern.getSemantics();
+		this.pattern = this.instancePattern.getGuipattern();
+		this.observed_tcs = new ArrayList<>();
+		this.ripper = new Ripper(ConfigurationManager.getSleepTime(), this.gui);
 	}
 
 	public Instance_GUI_pattern refine() throws Exception {
 
-		final Instance_GUI_pattern working_obj = this.instancePattern;
+		final SpecificSemantics old_constrained_s = this.constrained;
+		do {
+			this.discoverWindows();
+			this.discoverDynamicEdges();
+		} while (old_constrained_s != this.constrained);
+		if (this.pattern.isInstance(this.instancePattern)) {
+			this.instancePattern.setSpecificSemantics(this.constrained);
+			return this.instancePattern;
+		} else {
+			return null;
+		}
+	}
 
-		final GUI_Pattern pattern = this.instancePattern.getGuipattern();
-		final SpecificSemantics semantics = this.instancePattern.getSemantics();
+	private void discoverDynamicEdges() throws Exception {
 
-		final GUI matched_gui = this.instancePattern.getGui();
+		for (final Pattern_window target : this.pattern.getWindows()) {
+			final List<Window> target_w_matched = this.instancePattern
+					.getPatternWindowMatches(target.getId());
+			// if target_w_matched is empty it means the pattern_window was not
+			// already found
+			if (target_w_matched.size() == 0) {
+				continue;
+			}
+			// all the dynamic edges that go to the window to discover
+			for (final Pattern_action_widget paw : this.pattern.getDynamicBackwardLinks(target
+					.getId())) {
+				final List<Action_widget> matched_aws = this.instancePattern.getAWS_for_PAW(paw
+						.getId());
+				// if the paw has no matches
+				if (matched_aws == null || matched_aws.size() == 0) {
+					continue;
+				}
 
-		// all windows match found
-		for (final Instance_window iw : this.instancePattern.getWindows()) {
-			final Pattern_window pw = iw.getPattern();
-			final Window sourcew = iw.getInstance();
+				for (final Action_widget aw : matched_aws) {
+					final Window source_window = this.gui.getActionWidget_Window(aw.getId());
 
-			for (final Pattern_action_widget paw : pw.getActionWidgets()) {
-				// all the dynamic edges
-				for (final Pattern_window target_pw : pattern.getDynamicForwardLinks(paw.getId())) {
-					// all the concrete aw that match the paw
-					for (final Action_widget aw : iw.getAWS_for_PAW(paw.getId())) {
-						final Instance_GUI_pattern clone = working_obj.clone();
-						final List<Window> target_w_matched = this.instancePattern
-								.getPatternWindowMatches(target_pw.getId());
+					for (final Window target_window : target_w_matched) {
 
-						// if target window was already discovered
-						if (target_w_matched.size() > 0) {
+						if (this.instancePattern.getGui().isEdge(aw.getId(), target_window.getId())) {
+							continue;
+						}
+						final GUITestCase tc = this.getTestToCoverEdge(source_window,
+								target_window, aw);
 
-							boolean edge_found = false;
-							for (final Window w : target_w_matched) {
-								if (matched_gui.isEdge(aw.getId(), w.getId())) {
-									edge_found = true;
-									break;
-								}
-							}
-							if (!edge_found) {
-								for (final Window w : target_w_matched) {
-									final SpecificSemantics new_sem = this.semantic4DiscoverWindow(
-											semantics, sourcew, w, aw);
-									clone.setSpecificSemantics(new_sem);
-									final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(
-											clone);
-									final List<GUITestCase> tests = test_gen
-											.generateMinimalTestCases();
+						final Instance_window found = this.getFoundWindow(tc, target);
+						final String constrain = AlloyUtil.extractProperty(tc.getAlloySolution(),
+								this.instancePattern.getSemantics());
 
-								}
-							}
+						if (found != null
+								&& found.getInstance().getId().equals(target_window.getId())
+								&& this.instancePattern.getWindows().contains(found)) {
+							// the window was found
+							this.instancePattern.getGui().addEdge(aw.getId(),
+									found.getInstance().getId());
 						} else {
-							// if target window needs to be discovered
-							final SpecificSemantics new_sem = this.semantic4DiscoverWindow(
-									semantics, sourcew, target_pw, aw);
-							clone.setSpecificSemantics(new_sem);
-							final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(
-									clone);
-							final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
-
+							this.un_constrained = null;
+							this.constrained = this
+									.addConstrain(this.constrained, constrain, false);
 						}
 					}
-
 				}
 			}
 		}
-
-		return null;
 	}
 
-	private Instance_GUI_pattern discoverDynamicEdges() throws Exception {
-
-		// final Instance_GUI_pattern working_obj = this.instancePattern;
-		//
-		// final GUI_Pattern pattern = this.instancePattern.getGuipattern();
-		// final SpecificSemantics semantics =
-		// this.instancePattern.getSemantics();
-		//
-		// final GUI matched_gui = this.instancePattern.getGui();
-		//
-		// for (final Pattern_window pw : pattern.getWindows()) {
-		// final List<Window> target_w_matched =
-		// this.instancePattern.getPatternWindowMatches(pw
-		// .getId());
-		// // if target_w_matched is empty it means the pattern_window was not
-		// // found
-		// if (target_w_matched.size() == 0) {
-		// continue;
-		// }
-		// boolean edge_found = false;
-		// for (final Window w : target_w_matched) {
-		// if (matched_gui.isEdge(aw.getId(), w.getId())) {
-		// edge_found = true;
-		// break;
-		// }
-		// }
-		//
-		// }
-		//
-		// // all windows match found
-		// for (final Instance_window iw : this.instancePattern.getWindows()) {
-		// final Pattern_window pw = iw.getPattern();
-		// final Window sourcew = iw.getInstance();
-		//
-		// for (final Pattern_action_widget paw : pw.getActionWidgets()) {
-		// // all the dynamic edges
-		// for (final Pattern_window target_pw :
-		// pattern.getDynamicForwardLinks(paw.getId())) {
-		// // all the concrete aw that match the paw
-		// for (final Action_widget aw : iw.getAw_map().get(paw)) {
-		// // we clone the instance
-		// final Instance_GUI_pattern clone = working_obj.clone();
-		// // all the windows that matched the target window of the
-		// // edge
-		// final List<Window> target_w_matched = this.instancePattern
-		// .getPatternWindowMatches(target_pw.getId());
-		//
-		// // if target window was already discovered
-		// if (target_w_matched.size() > 0) {
-		//
-		// boolean edge_found = false;
-		// for (final Window w : target_w_matched) {
-		// if (matched_gui.isEdge(aw.getId(), w.getId())) {
-		// edge_found = true;
-		// break;
-		// }
-		// }
-		// if (!edge_found) {
-		// for (final Window w : target_w_matched) {
-		// final SpecificSemantics new_sem = this.semantic4DiscoverWindow(
-		// semantics, sourcew, w, aw);
-		// clone.setSpecificSemantics(new_sem);
-		// final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(
-		// clone);
-		// final List<GUITestCase> tests = test_gen
-		// .generateMinimalTestCases();
-		//
-		// }
-		// }
-		// }
-		// }
-		//
-		// }
-		// }
-		// }
-
-		return null;
-	}
-
-	private Instance_GUI_pattern discoverWindows() throws Exception {
-
-		// final Instance_GUI_pattern working_obj = this.instancePattern;
+	private void discoverWindows() throws Exception {
 
 		for (final Pattern_window to_discover : this.pattern.getWindows()) {
 			final List<Window> target_w_matched = this.instancePattern
@@ -207,38 +139,154 @@ public class GUIFunctionality_refine {
 				}
 				for (final Action_widget aw : matched_aws) {
 					final Window source_window = this.gui.getActionWidget_Window(aw.getId());
-					final SpecificSemantics new_sem = this.semantic4DiscoverWindow(this.semantics,
-							source_window, to_discover, aw);
 
-					final Instance_GUI_pattern clone = this.instancePattern.clone();
-					clone.setSpecificSemantics(new_sem);
+					final GUITestCase tc = this
+							.getTestToReachWindow(source_window, to_discover, aw);
 
-					final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
-					final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
+					final Instance_window found = this.getFoundWindow(tc, to_discover);
+					final String constrain = AlloyUtil.extractProperty(tc.getAlloySolution(),
+							this.instancePattern.getSemantics());
 
-					if (tests.size() != 1) {
-						throw new Exception(
-								"GUIFunctionality_refine - discoverClasses: error generating test case.");
+					if (found != null
+							&& !this.instancePattern.getGui().containsWindow(
+									found.getInstance().getId())
+							&& !this.instancePattern.getWindows().contains(found)) {
+						// the window was found
+						this.instancePattern.getGui().addWindow(found.getInstance());
+						this.instancePattern.getGui().addEdge(aw.getId(),
+								found.getInstance().getId());
+						this.instancePattern.addWindow(found);
+					} else {
+						this.un_constrained = null;
+						this.constrained = this.addConstrain(this.constrained, constrain, false);
 					}
+				}
+			}
+		}
+	}
 
-					// execute test
+	protected GUITestCase getTestToReachWindow(final Window sourceWindow,
+			final Pattern_window to_discover, final Action_widget aw) throws Exception {
 
-					// reached window match
-					// add the dynamic edge to the gui
-					// rip the window
-					// update instance
+		String property = null;
+		GUITestCase tc = null;
+		SpecificSemantics new_sem = null;
 
-					// reached window does not match
+		while (tc == null) {
+			if (this.constrained == null) {
+				new_sem = this.semantic4DiscoverWindow(this.un_constrained, sourceWindow,
+						to_discover, aw);
+			} else {
+				new_sem = this.semantic4DiscoverWindow(this.constrained, sourceWindow, to_discover,
+						aw);
+			}
 
-					// add contraints
+			final Instance_GUI_pattern clone = this.instancePattern.clone();
+			clone.setSpecificSemantics(new_sem);
 
+			final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
+			final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
+
+			if (tests.size() > 1) {
+				throw new Exception(
+						"GUIFunctionality_refine - discoverClasses: error generating test case.");
+			}
+
+			if (tests.size() == 0) {
+				continue;
+			}
+
+			property = AlloyUtil.extractProperty(tests.get(0).getAlloySolution(), new_sem);
+
+			final boolean valid = this.validateProperty(property);
+
+			if (valid) {
+				tc = tests.get(0);
+				if (this.constrained == null) {
+					this.constrained = this.addConstrain(this.un_constrained, property, true);
 				}
 
+			} else {
+				this.constrained = null;
+				// add constraint
+				this.un_constrained = this.addConstrain(this.un_constrained, property, false);
 			}
+		}
+		return tc;
+	}
+
+	protected GUITestCase getTestToCoverEdge(final Window sourceWindow, final Window targetWindow,
+			final Action_widget aw) throws Exception {
+
+		String property = null;
+		GUITestCase tc = null;
+		SpecificSemantics new_sem = null;
+
+		while (tc == null) {
+			if (this.constrained == null) {
+				new_sem = this.semantic4DiscoverEdge(this.un_constrained, sourceWindow,
+						targetWindow, aw);
+			} else {
+				new_sem = this.semantic4DiscoverEdge(this.constrained, sourceWindow, targetWindow,
+						aw);
+			}
+
+			final Instance_GUI_pattern clone = this.instancePattern.clone();
+			clone.setSpecificSemantics(new_sem);
+
+			final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
+			final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
+
+			if (tests.size() > 1) {
+				throw new Exception(
+						"GUIFunctionality_refine - discoverClasses: error generating test case.");
+			}
+
+			if (tests.size() == 0) {
+				continue;
+			}
+
+			property = AlloyUtil.extractProperty(tests.get(0).getAlloySolution(), new_sem);
+
+			final boolean valid = this.validateProperty(property);
+
+			if (valid) {
+				tc = tests.get(0);
+				if (this.constrained == null) {
+					this.constrained = this.addConstrain(this.un_constrained, property, true);
+				}
+
+			} else {
+				this.constrained = null;
+				// add constraint
+				this.un_constrained = this.addConstrain(this.un_constrained, property, false);
+			}
+		}
+		return tc;
+	}
+
+	private boolean validateProperty(final String prop) {
+
+		// add code
+		return true;
+	}
+
+	private SpecificSemantics addConstrain(final SpecificSemantics sem, final String prop,
+			final boolean valid) throws Exception {
+
+		Fact constraint = null;
+		if (valid) {
+			constraint = new Fact("sem_prop", prop);
+		} else {
+			constraint = new Fact("sem_prop", "not (" + prop + ")");
 
 		}
 
-		return null;
+		final List<Fact> facts = new ArrayList<>(sem.getFacts());
+		facts.add(constraint);
+		final SpecificSemantics out = new SpecificSemantics(sem.getSignatures(), facts,
+				sem.getPredicates(), sem.getFunctions(), sem.getOpenStatements());
+		return out;
 	}
 
 	protected SpecificSemantics semantic4DiscoverWindow(final SpecificSemantics originalSemantic,
@@ -368,9 +416,9 @@ public class GUIFunctionality_refine {
 		return semantif4DiscoverWindow;
 	}
 
-	private SpecificSemantics semantic4DiscoverWindow(final SpecificSemantics originalSemantic,
+	private SpecificSemantics semantic4DiscoverEdge(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-			throws Exception {
+					throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {
@@ -441,9 +489,54 @@ public class GUIFunctionality_refine {
 		return semantif4DiscoverWindow;
 	}
 
-	private boolean isWindowFound(final GUITestCase tc, final Pattern_window target) {
+	private Instance_window getFoundWindow(final GUITestCase tc, final Pattern_window target)
+			throws Exception {
 
-		return true;
+		// the last action widget exercised
+		final Action_widget aw = (Action_widget) tc.getActions().get(tc.getActions().size() - 1)
+				.getWidget();
+		final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime());
+		runner.runTestCase(tc);
+		final GuiStateManager gmanager = GuiStateManager.getInstance();
+		gmanager.readGUI();
+		if (gmanager.getCurrentWindows().size() == 0) {
+			return null;
+		}
+		final Window reached_w = gmanager.getCurrentWindows().get(0);
+
+		tc.getActions().get(tc.getActions().size() - 1).setResult(reached_w);
+		this.observed_tcs.add(tc);
+
+		Window previoulsy_found = null;
+		for (final Window w : this.gui.getWindows()) {
+			if (w.isSame(reached_w)) {
+				previoulsy_found = w;
+				this.gui.addEdge(aw.getId(), w.getId());
+			}
+		}
+
+		if (previoulsy_found == null) {
+			// the window is new
+			// it gets ripped
+			this.ripper.ripWindow(tc.getActions(), reached_w);
+
+			this.gui.addWindow(reached_w);
+			this.gui.addEdge(aw.getId(), reached_w.getId());
+			final List<Instance_window> instances = target.getMatches(reached_w);
+			if (instances.size() == 0) {
+				return null;
+			}
+			// the first is returned because it the one that maps more elements
+			return instances.get(0);
+
+		} else {
+			// the window was found before
+			for (final Instance_window iw : this.instancePattern.getWindows()) {
+				if (iw.getPattern() == target && iw.getInstance().isSame(previoulsy_found)) {
+					return iw;
+				}
+			}
+			return null;
+		}
 	}
-
 }

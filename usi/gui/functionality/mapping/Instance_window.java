@@ -142,6 +142,9 @@ public class Instance_window {
 
 		final List<Action_widget> out = new ArrayList<>();
 		final List<String> ids = this.aw_map.get(paw);
+		if (ids == null) {
+			return null;
+		}
 		for (final String id : ids) {
 			final Action_widget aw = (Action_widget) this.instance.getWidget(id);
 			if (aw == null) {
@@ -156,6 +159,9 @@ public class Instance_window {
 
 		final List<Input_widget> out = new ArrayList<>();
 		final List<String> ids = this.iw_map.get(piw);
+		if (ids == null) {
+			return null;
+		}
 		for (final String id : ids) {
 			final Input_widget aw = (Input_widget) this.instance.getWidget(id);
 			if (aw == null) {
@@ -170,6 +176,9 @@ public class Instance_window {
 
 		final List<Selectable_widget> out = new ArrayList<>();
 		final List<String> ids = this.iw_map.get(psw);
+		if (ids == null) {
+			return null;
+		}
 		for (final String id : ids) {
 			final Selectable_widget aw = (Selectable_widget) this.instance.getWidget(id);
 			if (aw == null) {

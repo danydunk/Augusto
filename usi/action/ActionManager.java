@@ -24,7 +24,7 @@ public class ActionManager {
 	}
 
 	/*
-	 * 
+	 *
 	 * GUI must be read before calling this method
 	 */
 	public void executeAction(final GUIAction act) throws Exception {
