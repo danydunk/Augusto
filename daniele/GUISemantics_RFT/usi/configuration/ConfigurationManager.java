@@ -10,8 +10,8 @@ public class ConfigurationManager {
 	private static String autBinDirectory;
 	private static String autMainCLass;
 	private static String resetScriptPath;
-	private static int alloyRunScope;
-	private static long sleepTime;
+	private static int alloyRunScope = 10;
+	private static long sleepTime = 600;
 
 	public static void load() throws Exception {
 

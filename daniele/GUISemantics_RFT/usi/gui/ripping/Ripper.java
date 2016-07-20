@@ -23,9 +23,17 @@ public class Ripper {
 
 	public Ripper(final long sleeptime) {
 
-		this.application = new ApplicationHelper();
+		this.application = ApplicationHelper.getInstance();
 		this.sleeptime = sleeptime;
 		this.action_widget_to_ignore = new ArrayList<>();
+	}
+
+	public Ripper(final long sleeptime, final GUI gui) {
+
+		this.application = ApplicationHelper.getInstance();
+		this.sleeptime = sleeptime;
+		this.action_widget_to_ignore = new ArrayList<>();
+		this.gui = gui;
 	}
 
 	public GUI ripApplication() throws Exception {
@@ -47,7 +55,7 @@ public class Ripper {
 		return this.gui;
 	}
 
-	private void ripWindow(final List<GUIAction> actions, final Window w) throws Exception {
+	public void ripWindow(final List<GUIAction> actions, final Window w) throws Exception {
 
 		List<Action_widget> aws = this.filterAWS(w.getActionWidgets());
 

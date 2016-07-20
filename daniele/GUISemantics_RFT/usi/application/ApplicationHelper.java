@@ -5,7 +5,6 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import usi.gui.GuiStateManager;
-import usi.gui.semantic.testcase.GUITestCase;
 import usi.rmi.RemoteCoberturaInterface;
 
 import com.rational.test.ft.object.interfaces.RootTestObject;
@@ -15,7 +14,24 @@ import com.rational.test.ft.script.SubitemFactory;
 
 public class ApplicationHelper {
 
-	RootTestObject root = null;
+	private RootTestObject root;
+	private boolean running;
+
+	private static ApplicationHelper instance;
+
+	public static ApplicationHelper getInstance() {
+
+		if (instance == null) {
+			instance = new ApplicationHelper();
+		}
+		return instance;
+	}
+
+	private ApplicationHelper() {
+
+		this.running = false;
+		this.root = null;
+	}
 
 	public void startApplication() throws Exception {
 
@@ -38,6 +54,7 @@ public class ApplicationHelper {
 			throw new Exception("ApplicationHelper - startApplication: error, " + e.getMessage());
 		}
 		GuiStateManager.create(this.root);
+		this.running = true;
 	}
 
 	public void closeApplication() {
@@ -55,10 +72,11 @@ public class ApplicationHelper {
 			tos = this.root.find(SubitemFactory.atChild("showing", "true", "enabled", "true"));
 			tos[0].getProcess().kill();
 			GuiStateManager.destroy();
+			this.running = false;
 		} catch (final Exception e) {
 			this.forceClose();
 			GuiStateManager.destroy();
-			return;
+			this.running = false;
 		}
 	}
 
@@ -74,7 +92,8 @@ public class ApplicationHelper {
 		this.startApplication();
 	}
 
-	public void runTestCase(final GUITestCase tc) {
+	public boolean isRunning() {
 
+		return this.running;
 	}
 }

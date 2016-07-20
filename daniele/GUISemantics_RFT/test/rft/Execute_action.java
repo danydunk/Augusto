@@ -36,7 +36,7 @@ public class Execute_action extends Execute_actionHelper {
 					+ "config" + File.separator + "upm.properties";
 			ConfigurationManager.load(conf_file);
 			ExperimentManager.init();
-			application = new ApplicationHelper();
+			application = ApplicationHelper.getInstance();
 			application.startApplication();
 			final GuiStateManager gui = GuiStateManager.getInstance();
 			List<Window> windows = gui.readGUI();

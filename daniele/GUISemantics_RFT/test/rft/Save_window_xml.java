@@ -44,7 +44,7 @@ public class Save_window_xml extends Save_window_xmlHelper {
 						+ "config" + File.separator + "upm.properties";
 				ConfigurationManager.load(conf_file);
 				ExperimentManager.init();
-				application = new ApplicationHelper();
+				application = ApplicationHelper.getInstance();
 				application.startApplication();
 				final GuiStateManager gui = GuiStateManager.getInstance();
 				final List<Window> windows = gui.readGUI();

@@ -33,7 +33,7 @@ public class GUIFunctionality_refine_test {
 
 	public class Wrapper extends GUIFunctionality_refine {
 
-		public Wrapper(final Instance_GUI_pattern instance, final GUI gui) {
+		public Wrapper(final Instance_GUI_pattern instance, final GUI gui) throws Exception {
 
 			super(instance, gui);
 			// TODO Auto-generated constructor stub
