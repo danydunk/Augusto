@@ -16,8 +16,6 @@ public abstract class Widget implements Comparable<Widget> {
 	private final int y;
 	private TestObject to;
 
-	private static IDManager idm = new IDManager();
-
 	public Widget(final TestObject to, final String id, final String label, final String classs,
 			final int x, final int y) throws Exception {
 
@@ -167,7 +165,7 @@ public abstract class Widget implements Comparable<Widget> {
 	 */
 	abstract public boolean isSame(Widget w);
 
-	public static Widget getWidget(final TestObject to) throws Exception {
+	public static Widget getWidget(final TestObject to, final IDManager idm) throws Exception {
 
 		Point p = null;
 		try {

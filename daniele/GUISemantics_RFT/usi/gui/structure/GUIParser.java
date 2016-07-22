@@ -8,6 +8,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import usi.util.IDManager;
+
 public class GUIParser {
 
 	public static GUI parse(final Document doc) throws Exception {
@@ -19,6 +21,7 @@ public class GUIParser {
 	private GUI read(final Document doc) throws Exception {
 
 		final GUI gui = new GUI();
+		IDManager.create(gui);
 
 		final NodeList nList = doc.getElementsByTagName("GUI");
 
@@ -160,8 +163,8 @@ public class GUIParser {
 			if (value.startsWith("[options] ")) {
 				// option input widget
 				value = value.substring(10);
-				final int selected = Integer.valueOf(value.split(":")[0]);
-				final int size = Integer.valueOf(value.split(":")[1]);
+				final int selected = Integer.valueOf(value.split(":")[0].trim());
+				final int size = Integer.valueOf(value.split(":")[1].trim());
 				final Option_input_widget oiw = new Option_input_widget(id, label, classs, x, y,
 						size, selected);
 				oiw.setDescriptor(descriptor);

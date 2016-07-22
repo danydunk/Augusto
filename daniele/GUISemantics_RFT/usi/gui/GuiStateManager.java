@@ -6,12 +6,15 @@ import java.util.List;
 
 import usi.gui.structure.Widget;
 import usi.gui.structure.Window;
+import usi.util.IDManager;
 
 import com.rational.test.ft.object.interfaces.TestObject;
 import com.rational.test.ft.script.Property;
 import com.rational.test.ft.script.SubitemFactory;
 
 public class GuiStateManager {
+
+	private IDManager idm;
 
 	private final TestObject root;
 	private final Property[] properties = new Property[1];
@@ -37,12 +40,17 @@ public class GuiStateManager {
 	private GuiStateManager(final TestObject root) {
 
 		this.root = root;
-
 		// this.properties[0] = new Property("showing", "true");
 		// this.properties[1] = new Property("enabled", "true");
 		this.properties[0] = new Property("visible", "true");
 		this.currentWindows = new ArrayList<>();
 		this.currentTOs = new ArrayList<>();
+		this.idm = IDManager.getInstance();
+	}
+
+	public void setIDManager(final IDManager idm) {
+
+		this.idm = idm;
 	}
 
 	public List<Window> readGUI() throws Exception {
@@ -101,7 +109,7 @@ public class GuiStateManager {
 				continue;
 			}
 
-			final Widget wid = Widget.getWidget(wind);
+			final Widget wid = Widget.getWidget(wind, this.idm);
 			if (!(wid instanceof Window)) {
 				throw new Exception(
 						"GuiStateManager - getCurrentWindows: error, window not recognized.");
@@ -110,7 +118,7 @@ public class GuiStateManager {
 
 			for (final TestObject to : tos) {
 				// we keep only the widget of interest
-				final Widget widget = Widget.getWidget(to);
+				final Widget widget = Widget.getWidget(to, this.idm);
 				if (widget != null) {
 					// if the widget does not have a label we look for
 					// descriptors

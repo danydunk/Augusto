@@ -11,6 +11,7 @@ import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Window;
+import usi.util.IDManager;
 
 public class Ripper {
 
@@ -38,10 +39,11 @@ public class Ripper {
 
 	public GUI ripApplication() throws Exception {
 
+		this.gui = new GUI();
+		IDManager.create(this.gui);
 		this.application.startApplication();
 		this.guimanager = GuiStateManager.getInstance();
 		this.actionManager = new ActionManager(this.sleeptime);
-		this.gui = new GUI();
 		// we take only the first window of the list because that's the front
 		// window
 		final Window rootWind = this.guimanager.readGUI().get(0);
