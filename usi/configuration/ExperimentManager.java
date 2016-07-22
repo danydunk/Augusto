@@ -4,12 +4,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Date;
 
 import org.w3c.dom.Document;
 
 import usi.gui.GUIWriter;
 import usi.gui.structure.GUI;
+import usi.util.DateUtility;
 import usi.xml.XMLUtil;
 
 public class ExperimentManager {
@@ -23,7 +23,7 @@ public class ExperimentManager {
 				"--datafile",
 				"lib" + File.separator + "cobertura" + File.separator + "cobertura.ser",
 				ConfigurationManager.getAutBinDirectory(), };
-		// net.sourceforge.cobertura.instrument.Main.main(args);
+		net.sourceforge.cobertura.instrument.Main.main(args);
 
 		// generate the file AUT.bat
 		FileWriter autBatFile;
@@ -76,7 +76,7 @@ public class ExperimentManager {
 		String out_f;
 		if (path == null) {
 			out_f = "output" + File.separator + "ripping" + File.separator + "gui_"
-					+ (new Date().toString());
+					+ (DateUtility.now() + ".xml");
 		} else {
 			out_f = path;
 		}

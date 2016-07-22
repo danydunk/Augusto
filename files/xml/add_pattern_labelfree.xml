@@ -6,10 +6,10 @@
 		<title>.*</title>
 		<modal>any</modal>
 		<root>any</root>
-		<action_widget id="aw1" card="one" alloy="Trigger">
+		<action_widget id="paw1" card="one" alloy="Trigger">
 			<label>.*</label>
 		</action_widget>
-		<selectable_widget id="sw1" card="one" alloy="List">
+		<selectable_widget id="psw1" card="one" alloy="List">
 			<label>.*</label>
 			<size>.*</size>
 		</selectable_widget>
@@ -18,13 +18,13 @@
 		<title>.*</title>
 		<modal>any</modal>
 		<root>any</root>
-		<action_widget id="aw2" card="one" alloy="Ok">
+		<action_widget id="paw2" card="one" alloy="Ok">
 			<label>.*</label>
 		</action_widget>
-		<action_widget id="aw3" card="one" alloy="Cancel">
+		<action_widget id="paw3" card="one" alloy="Cancel">
 			<label>.*</label>
 		</action_widget>
-		<input_widget id="iw1" card="some" alloy="Input">
+		<input_widget id="piw1" card="some" alloy="Input">
 			<label>.*</label>
 			<text>.*</text>
 		</input_widget>
@@ -33,13 +33,13 @@
 		<title>.*</title>
 		<modal>any</modal>
 		<root>any</root>
-		<action_widget id="aw4" card="one" alloy="Ok">
+		<action_widget id="paw4" card="one" alloy="Ok">
 			<label>.*</label>
 		</action_widget>
-		<action_widget id="aw5" card="one" alloy="Cancel">
+		<action_widget id="paw5" card="one" alloy="Cancel">
 			<label>.*</label>
 		</action_widget>
-		<input_widget id="iw2" card="some" alloy="Input">
+		<input_widget id="piw2" card="some" alloy="Input">
 			<label>.*</label>
 			<text>.*</text>
 		</input_widget>
@@ -48,42 +48,42 @@
 		<title>.*</title>
 		<modal>true</modal>
 		<root>any</root>
-		<action_widget id="aw6" card="one" alloy="Ok">
+		<action_widget id="paw6" card="one" alloy="Ok">
 			<label>.*</label>
 		</action_widget>
-		<action_widget id="aw7" card="one" alloy="Cancel">
+		<action_widget id="paw7" card="one" alloy="Cancel">
 			<label>.*</label>
 		</action_widget>
-		<input_widget id="iw2" card="none" alloy="">
+		<input_widget id="piw2" card="none" alloy="">
 			<label>.*</label>
 			<text>.*</text>
 		</input_widget>
 	</window>
 	<edge type="static">
-		<from>aw1</from>
+		<from>paw1</from>
 		<to>form_1</to>
 	</edge>
 	<edge type="static">
-		<from>aw3</from>
+		<from>paw3</from>
 		<to>initial</to>
 	</edge>
-	<edge type="static">
-		<from>aw2</from>
+	<edge type="dynamic">
+		<from>paw2</from>
+		<to>form_2</to>
+		<to>confirmation</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw4</from>
 		<to>form_2</to>
 		<to>confirmation</to>
 	</edge>
 	<edge type="static">
-		<from>aw4</from>
-		<to>form_2</to>
-		<to>confirmation</to>
-	</edge>
-	<edge type="static">
-		<from>aw5</from>
+		<from>paw5</from>
 		<to>form_2</to>
 		<to>form_1</to>
 	</edge>
 	<edge type="static">
-		<from>aw7</from>
+		<from>paw7</from>
 		<to>form_2</to>
 		<to>form_1</to>
 	</edge>

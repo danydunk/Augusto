@@ -83,9 +83,7 @@ public class AlloyTestCaseGenerator {
 		final List<A4Solution> solutions = new ArrayList<>();
 		for (final RunCommandThread t : threads) {
 			t.join();
-			if (t.hasExceptions()) {
-				System.out.println();
-			}
+
 			if (!t.hasExceptions() && t.getSolution() != null && t.getSolution().satisfiable()) {
 				solutions.add(t.getSolution());
 			}
@@ -127,7 +125,7 @@ public class AlloyTestCaseGenerator {
 
 		final List<RunCommandThread> threads = new ArrayList<>();
 		for (final Command cmd : run_commands) {
-			final RunCommandThread rc = new RunCommandThread(cmd, compiled);
+			final RunCommandThread rc = new RunCommandThread(cmd, compiled, true);
 			rc.start();
 			threads.add(rc);
 		}
@@ -173,7 +171,7 @@ public class AlloyTestCaseGenerator {
 
 			Window source_window = null;
 			for (final A4Tuple curr : curr_wind) {
-				System.out.println("Time$" + (time_index - 1));
+				// System.out.println("Time$" + (time_index - 1));
 				if (curr.atom(2).equals("Time$" + (time_index - 1))) {
 					String windid = curr.atom(1).split("\\$")[0];
 					if (windid.startsWith("General")) {

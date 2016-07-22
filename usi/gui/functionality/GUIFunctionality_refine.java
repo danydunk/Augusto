@@ -38,6 +38,7 @@ public class GUIFunctionality_refine {
 	private final GUI_Pattern pattern;
 	private final List<GUITestCase> observed_tcs;
 	private final Ripper ripper;
+	private final List<String> covered_dyn_edges;
 
 	public GUIFunctionality_refine(final Instance_GUI_pattern instancePattern, final GUI gui)
 			throws Exception {
@@ -49,6 +50,7 @@ public class GUIFunctionality_refine {
 		this.pattern = this.instancePattern.getGuipattern();
 		this.observed_tcs = new ArrayList<>();
 		this.ripper = new Ripper(ConfigurationManager.getSleepTime(), this.gui);
+		this.covered_dyn_edges = new ArrayList<>();
 	}
 
 	public Instance_GUI_pattern refine() throws Exception {
@@ -76,7 +78,7 @@ public class GUIFunctionality_refine {
 			if (target_w_matched.size() == 0) {
 				continue;
 			}
-			// all the dynamic edges that go to the window to discover
+			// all the dynamic edges to cover
 			for (final Pattern_action_widget paw : this.pattern.getDynamicBackwardLinks(target
 					.getId())) {
 				final List<Action_widget> matched_aws = this.instancePattern.getAWS_for_PAW(paw
@@ -91,7 +93,8 @@ public class GUIFunctionality_refine {
 
 					for (final Window target_window : target_w_matched) {
 
-						if (this.instancePattern.getGui().isEdge(aw.getId(), target_window.getId())) {
+						final String edge = aw.getId() + " - " + target_window.getId();
+						if (this.covered_dyn_edges.contains(edge)) {
 							continue;
 						}
 						final GUITestCase tc = this.getTestToCoverEdge(source_window,
@@ -104,7 +107,8 @@ public class GUIFunctionality_refine {
 						if (found != null
 								&& found.getInstance().getId().equals(target_window.getId())
 								&& this.instancePattern.getWindows().contains(found)) {
-							// the window was found
+							// the edge was covered
+							this.covered_dyn_edges.add(edge);
 							this.instancePattern.getGui().addEdge(aw.getId(),
 									found.getInstance().getId());
 						} else {
@@ -150,7 +154,7 @@ public class GUIFunctionality_refine {
 					if (found != null
 							&& !this.instancePattern.getGui().containsWindow(
 									found.getInstance().getId())
-							&& !this.instancePattern.getWindows().contains(found)) {
+									&& !this.instancePattern.getWindows().contains(found)) {
 						// the window was found
 						this.instancePattern.getGui().addWindow(found.getInstance());
 						this.instancePattern.getGui().addEdge(aw.getId(),
@@ -310,7 +314,6 @@ public class GUIFunctionality_refine {
 		if (parent_w_sig == null) {
 			throw new Exception("Element not found: " + pw.getAlloyCorrespondence() + " at "
 					+ originalSemantic.getSignatures());
-
 		}
 
 		// We define the windows to discover.
@@ -418,7 +421,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverEdge(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-					throws Exception {
+			throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {

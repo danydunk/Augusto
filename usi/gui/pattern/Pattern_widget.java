@@ -61,7 +61,7 @@ public abstract class Pattern_widget<T extends Widget> {
 
 		if ((w.getLabel() == null || w.getLabel().length() == 0)
 				&& (w.getDescriptor() != null && w.getDescriptor().length() > 0)) {
-			final Matcher m = r.matcher(w.getDescriptor());
+			final Matcher m = r.matcher(w.getDescriptor().toLowerCase());
 			return m.find();
 		}
 
@@ -70,7 +70,7 @@ public abstract class Pattern_widget<T extends Widget> {
 			return m.find();
 		}
 
-		final Matcher m = r.matcher(w.getLabel());
+		final Matcher m = r.matcher(w.getLabel().toLowerCase());
 		return m.find();
 	}
 

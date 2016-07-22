@@ -69,7 +69,7 @@ public class GUIPatternParserTest {
 		Pattern_action_widget paw = null;
 		for (final Pattern_window pww : gui.getWindows()) {
 			for (final Pattern_action_widget paw2 : pww.getActionWidgets()) {
-				if ("aw3".equals(paw2.getId())) {
+				if ("paw3".equals(paw2.getId())) {
 					paw = paw2;
 				}
 			}
@@ -77,7 +77,7 @@ public class GUIPatternParserTest {
 		Pattern_input_widget piw = null;
 		for (final Pattern_window pww : gui.getWindows()) {
 			for (final Pattern_input_widget piw2 : pww.getInputWidgets()) {
-				if ("iw1".equals(piw2.getId())) {
+				if ("piw1".equals(piw2.getId())) {
 					piw = piw2;
 				}
 			}

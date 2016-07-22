@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -19,15 +18,11 @@ import usi.gui.functionality.mapping.Instance_window;
 import usi.gui.pattern.GUI_Pattern;
 import usi.gui.pattern.Pattern_window;
 import usi.gui.semantic.SpecificSemantics;
-import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
 import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Window;
-import edu.mit.csail.sdg.alloy4compiler.ast.Command;
-import edu.mit.csail.sdg.alloy4compiler.ast.Module;
-import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 public class GUIFunctionality_refine_test {
 
@@ -135,37 +130,9 @@ public class GUIFunctionality_refine_test {
 		assertTrue(semantic4discoveringPw3.getSignatures().size() > in.getSemantics()
 				.getSignatures().size());
 
-		// final AlloyTestCaseGenerator generator = new
-		// AlloyTestCaseGenerator(in);
-		// final List<GUITestCase> tests = generator.generateTestCases(1,
-		// 30000);
-		// assertEquals(4, tests.size());
-
-		final String alloy_model = semantic4discoveringPw3.toString();
-		System.out.println("START ALLOY MODEL");
-		System.out.println(semantic4discoveringPw3);
-		System.out.println("END ALLOY MODEL");
-
-		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
-
-		assertNotNull(compiled);
-
-		final List<Command> run_commands = compiled.getAllCommands();
-		System.out.println(run_commands);
-		// TODO: See that Alloy transform the commands.
-		final List<Command> runSystem = run_commands.stream()
-				.filter(e -> e.toString().equals("Run run$1 for 4")).collect(Collectors.toList());
-
-		assertTrue(runSystem.size() > 0);
-
-		final A4Solution solution = AlloyUtil.runCommand(compiled, runSystem.get(0));
-		System.out.println("Has solution: " + solution);
-
-		assertTrue(solution.satisfiable());
-
 		in.setSpecificSemantics(semantic4discoveringPw3);
-		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in, 1, 30000);
-		final List<GUITestCase> tests = generator.generateTestCases();
+		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in, 20, 30000);
+		final List<GUITestCase> tests = generator.generateMinimalTestCases();
 
 		assertEquals(1, tests.size());
 	}

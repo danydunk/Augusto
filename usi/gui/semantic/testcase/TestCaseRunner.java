@@ -36,7 +36,10 @@ public class TestCaseRunner {
 		gmanager.readGUI();
 
 		for (final GUIAction act : tc.getActions()) {
-
+			// TODO: deal with go actions
+			if (act instanceof Go) {
+				continue;
+			}
 			this.amanager.executeAction(act);
 			gmanager.readGUI();
 
