@@ -877,6 +877,9 @@ public class AlloyUtil {
 		return paw_sig;
 	}
 
+	/*
+	 * Function that extracts the semantic property from a solution.
+	 */
 	public static String extractProperty(final A4Solution sol, final SpecificSemantics sem)
 			throws Exception {
 

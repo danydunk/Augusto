@@ -127,7 +127,12 @@ public class GUI {
 
 	public void addWindow(final Window n) throws Exception {
 
+		if (n.getId().equals("w10")) {
+			System.out.println();
+		}
+
 		if (n == null || this.windows.containsKey(n.getId())) {
+			System.out.println(n.getId());
 			throw new Exception("GUI: wrong input in addWindow");
 		}
 		this.windows.put(n.getId(), n);
@@ -220,5 +225,10 @@ public class GUI {
 	public Window getWindow(final String id) {
 
 		return this.windows.get(id);
+	}
+
+	public int getNumberOfEdges() {
+
+		return this.edgesFrom.size();
 	}
 }
