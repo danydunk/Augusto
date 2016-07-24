@@ -26,7 +26,7 @@ public class Ripper extends RipperHelper {
 			final String out_file = "files" + File.separator + "for_test" + File.separator
 					+ "output" + File.separator + "outripping.xml";
 			final String conf_file = "files" + File.separator + "for_test" + File.separator
-					+ "config" + File.separator + "upm.properties";
+					+ "config" + File.separator + "upm_nodb.properties";
 			final Object[] inputs = new Object[4];
 			inputs[0] = "--conf";
 			inputs[1] = conf_file;

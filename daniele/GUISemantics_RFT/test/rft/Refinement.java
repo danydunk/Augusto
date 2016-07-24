@@ -6,6 +6,8 @@ import java.util.List;
 import org.w3c.dom.Document;
 
 import resources.test.rft.RefinementHelper;
+import usi.configuration.ConfigurationManager;
+import usi.configuration.ExperimentManager;
 import usi.gui.functionality.GUIFunctionality_refine;
 import usi.gui.functionality.GUIFunctionality_search;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
@@ -36,10 +38,12 @@ public class Refinement extends RefinementHelper {
 			// we load a gui pattern
 			Document doc = XMLUtil.read(new File("./files/xml/add_pattern.xml").getAbsolutePath());
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+			ConfigurationManager.load("./files/for_test/config/upm_small.properties");
+			ExperimentManager.init();
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-small_newripper.xml")
-					.getAbsolutePath());
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);

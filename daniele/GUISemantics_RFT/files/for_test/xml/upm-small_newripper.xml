@@ -1,28 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?><GUI>
-    <window id="w10">
-        <pos>563:297</pos>
-        <class>com._17od.upm.gui.AboutDialog</class>
-        <title>About UPM</title>
-        <modal>true</modal>
-        <root>false</root>
-        <action_widget id="aw21">
-            <pos>694:455</pos>
-            <class>ButtonUI</class>
-            <label>OK</label>
-        </action_widget>
-        <input_widget id="iw20">
-            <pos>566:322</pos>
-            <class>TextAreaUI</class>
-            <descriptor>About UPM</descriptor>
-            <value>Universal Password Manager
-&lt;version unknown&gt;
-
-Copyright © 2005-2010 Adrian Smith &amp; Contributors
-
-adrian@17od.com
-http://upm.sourceforge.net</value>
-        </input_widget>
-    </window>
     <window id="w1">
         <pos>579:260</pos>
         <class>com._17od.upm.gui.MainWindow</class>
@@ -111,17 +87,37 @@ http://upm.sourceforge.net</value>
             <value/>
         </input_widget>
     </window>
-    <edge>
-        <from>aw21</from>
-        <to>w1</to>
-    </edge>
+    <window id="w3">
+        <pos>563:297</pos>
+        <class>com._17od.upm.gui.AboutDialog</class>
+        <title>About UPM</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw6">
+            <pos>694:455</pos>
+            <class>ButtonUI</class>
+            <label>OK</label>
+        </action_widget>
+        <input_widget id="iw8">
+            <pos>566:322</pos>
+            <class>TextAreaUI</class>
+            <descriptor>About UPM</descriptor>
+            <value>Universal Password Manager
+&lt;version unknown&gt;
+
+Copyright © 2005-2010 Adrian Smith &amp; Contributors
+
+adrian@17od.com
+http://upm.sourceforge.net</value>
+        </input_widget>
+    </window>
     <edge>
         <from>aw1</from>
         <to>w2</to>
     </edge>
     <edge>
         <from>aw2</from>
-        <to>w10</to>
+        <to>w3</to>
     </edge>
     <edge>
         <from>aw4</from>
@@ -129,6 +125,10 @@ http://upm.sourceforge.net</value>
     </edge>
     <edge>
         <from>aw5</from>
+        <to>w1</to>
+    </edge>
+    <edge>
+        <from>aw6</from>
         <to>w1</to>
     </edge>
 </GUI>

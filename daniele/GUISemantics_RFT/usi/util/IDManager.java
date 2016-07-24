@@ -15,7 +15,6 @@ public class IDManager {
 	private int lastAWid = 0;
 	private int lastIWid = 0;
 	private int lastSWid = 0;
-
 	private int lastWid = 0;
 
 	public static void create(final GUI gui) {
@@ -33,81 +32,66 @@ public class IDManager {
 		this.gui = gui;
 	}
 
-	private int getLastWid() {
+	private void calculateLastIDs() {
 
-		final List<String> ids = this.gui.getWindows().stream().map(e -> e.getId())
-				.collect(Collectors.toList());
-
+		// window
+		List<Integer> ids = this.gui.getWindows().stream()
+				.map(e -> Integer.valueOf(e.getId().replace("w", ""))).collect(Collectors.toList());
 		Collections.sort(ids);
 		if (ids.size() == 0) {
-			return 0;
+			this.lastWid = 0;
+		} else {
+			this.lastWid = ids.get(ids.size() - 1);
 		}
-		final String lastid = ids.get(ids.size() - 1);
-		return Integer.valueOf(lastid.substring(1));
+		// AWS
+		ids = this.gui.getAction_widgets().stream()
+				.map(e -> Integer.valueOf(e.getId().replace("aw", "")))
+				.collect(Collectors.toList());
+		Collections.sort(ids);
+		if (ids.size() == 0) {
+			this.lastAWid = 0;
+		} else {
+			this.lastAWid = ids.get(ids.size() - 1);
+		}
+		// IWS
+		ids = this.gui.getInput_widgets().stream()
+				.map(e -> Integer.valueOf(e.getId().replace("iw", "")))
+				.collect(Collectors.toList());
+		if (ids.size() == 0) {
+			this.lastIWid = 0;
+		} else {
+			this.lastIWid = ids.get(ids.size() - 1);
+		}
+		// SWS
+		ids = this.gui.getSelectable_widgets().stream()
+				.map(e -> Integer.valueOf(e.getId().replace("sw", "")))
+				.collect(Collectors.toList());
+		Collections.sort(ids);
+		if (ids.size() == 0) {
+			this.lastSWid = 0;
+		} else {
+			this.lastSWid = ids.get(ids.size() - 1);
+		}
 	}
 
 	public String nextWindowId() {
 
-		int ind = this.getLastWid();
-		ind++;
-		this.lastWid = ind;
-		return "w" + ind;
+		this.calculateLastIDs();
+		return "w" + (++this.lastWid);
 	}
 
 	public String nextAWId() {
 
-		if (this.lastWid == this.getLastWid()) {
-			this.lastAWid++;
-			return "aw" + this.lastAWid;
-		}
-		final List<String> ids = this.gui.getAction_widgets().stream().map(e -> e.getId())
-				.collect(Collectors.toList());
-
-		Collections.sort(ids);
-		if (ids.size() == 0) {
-			return "aw1";
-		}
-		final String lastid = ids.get(ids.size() - 1);
-		int ind = Integer.valueOf(lastid.substring(2));
-		ind++;
-		return "aw" + ind;
+		return "aw" + (++this.lastAWid);
 	}
 
 	public String nextIWId() {
 
-		if (this.lastWid == this.getLastWid()) {
-			this.lastIWid++;
-			return "iw" + this.lastIWid;
-		}
-		final List<String> ids = this.gui.getInput_widgets().stream().map(e -> e.getId())
-				.collect(Collectors.toList());
-
-		Collections.sort(ids);
-		if (ids.size() == 0) {
-			return "iw1";
-		}
-		final String lastid = ids.get(ids.size() - 1);
-		int ind = Integer.valueOf(lastid.substring(2));
-		ind++;
-		return "iw" + ind;
+		return "iw" + (++this.lastIWid);
 	}
 
 	public String nextSWId() {
 
-		if (this.lastWid == this.getLastWid()) {
-			this.lastSWid++;
-			return "sw" + this.lastSWid;
-		}
-		final List<String> ids = this.gui.getSelectable_widgets().stream().map(e -> e.getId())
-				.collect(Collectors.toList());
-
-		Collections.sort(ids);
-		if (ids.size() == 0) {
-			return "sw1";
-		}
-		final String lastid = ids.get(ids.size() - 1);
-		int ind = Integer.valueOf(lastid.substring(2));
-		ind++;
-		return "sw" + ind;
+		return "sw" + (++this.lastSWid);
 	}
 }
