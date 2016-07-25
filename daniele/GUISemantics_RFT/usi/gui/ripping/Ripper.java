@@ -35,6 +35,7 @@ public class Ripper {
 		this.sleeptime = sleeptime;
 		this.action_widget_to_ignore = new ArrayList<>();
 		this.gui = gui;
+		this.actionManager = new ActionManager(this.sleeptime);
 	}
 
 	public GUI ripApplication() throws Exception {
@@ -43,7 +44,6 @@ public class Ripper {
 		IDManager.create(this.gui);
 		this.application.startApplication();
 		this.guimanager = GuiStateManager.getInstance();
-		this.actionManager = new ActionManager(this.sleeptime);
 		// we take only the first window of the list because that's the front
 		// window
 		final Window rootWind = this.guimanager.readGUI().get(0);
@@ -59,6 +59,9 @@ public class Ripper {
 
 	public void ripWindow(final List<GUIAction> actions, final Window w) throws Exception {
 
+		if (this.guimanager == null) {
+			this.guimanager = GuiStateManager.getInstance();
+		}
 		List<Action_widget> aws = this.filterAWS(w.getActionWidgets());
 
 		for (int cont = 0; cont < aws.size(); cont++) {

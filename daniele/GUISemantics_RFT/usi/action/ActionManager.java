@@ -24,7 +24,7 @@ public class ActionManager {
 	}
 
 	/*
-	 *
+	 * 
 	 * GUI must be read before calling this method
 	 */
 	public void executeAction(final GUIAction act) throws Exception {
@@ -102,6 +102,7 @@ public class ActionManager {
 				}
 			} else {
 				try {
+					System.out.println(fill.getInput());
 					method.invoke(c.newInstance(), to, fill.getInput());
 				} catch (final Exception e) {
 					throw new Exception("ActionManager - executeAction: error executing fill, "

@@ -66,31 +66,34 @@ public class GUIPatternParser {
 
 		final String type = node.getAttributes().getNamedItem("type").getNodeValue();
 		final Node fromNode = getElementNode(node.getChildNodes(), "from");
-		final Node toNode = getElementNode(node.getChildNodes(), "to");
 		final String idFrom = this.getNodeContent(fromNode);
-		final String idTo = this.getNodeContent(toNode);
-
-		// Pattern_action_widget aw = gui.getAction_widgets().get(idFrom);
-		// Pattern_window w = gui.getWindows().get(idTo);
+		final List<Node> toNodes = getElementsNode(node.getChildNodes(), "to");
 
 		final List<Pattern_action_widget> aw = aws.stream().filter(e -> e.getId().equals(idFrom))
 				.collect(Collectors.toList());
 
-		final List<Pattern_window> w = gui.getWindows().stream()
-				.filter(e -> e.getId().equals(idTo)).collect(Collectors.toList());
+		for (final Node toNode : toNodes) {
+			final String idTo = this.getNodeContent(toNode);
 
-		if (aw.size() != 1 || w.size() != 1) {
-			throw new Exception("GUIParser - createEdge: id not found.");
-		}
-		switch (type) {
-		case "static":
-			gui.addStaticEdge(aw.get(0).getId(), w.get(0).getId());
-			break;
-		case "dynamic":
-			gui.addDynamicEdge(aw.get(0).getId(), w.get(0).getId());
-			break;
-		default:
-			throw new Exception("GUIParser - createEdge: edge type not found.");
+			// Pattern_action_widget aw = gui.getAction_widgets().get(idFrom);
+			// Pattern_window w = gui.getWindows().get(idTo);
+
+			final List<Pattern_window> w = gui.getWindows().stream()
+					.filter(e -> e.getId().equals(idTo)).collect(Collectors.toList());
+
+			if (aw.size() != 1 || w.size() != 1) {
+				throw new Exception("GUIParser - createEdge: id not found.");
+			}
+			switch (type) {
+			case "static":
+				gui.addStaticEdge(aw.get(0).getId(), w.get(0).getId());
+				break;
+			case "dynamic":
+				gui.addDynamicEdge(aw.get(0).getId(), w.get(0).getId());
+				break;
+			default:
+				throw new Exception("GUIParser - createEdge: edge type not found.");
+			}
 		}
 	}
 
@@ -323,6 +326,31 @@ public class GUIPatternParser {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Return the all nodes from a NodeList with a given name passed as
+	 * parameter
+	 *
+	 * @param childWin
+	 * @param name
+	 * @return
+	 */
+	private static List<Node> getElementsNode(final NodeList childWin, final String name) {
+
+		// FOR each GUI child:
+		final List<Node> out = new ArrayList<>();
+		for (int ch = 0; ch < childWin.getLength(); ch++) {
+
+			final Node nChild = childWin.item(ch);
+			if (nChild.getNodeType() == Node.ELEMENT_NODE) {
+
+				if (name.equals(nChild.getNodeName())) {
+					out.add(nChild);
+				}
+			}
+		}
+		return out;
 	}
 
 	/**

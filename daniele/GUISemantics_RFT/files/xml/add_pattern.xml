@@ -71,11 +71,13 @@
 		<from>paw2</from>
 		<to>form_2</to>
 		<to>confirmation</to>
+		<to>initial</to>		
 	</edge>
 	<edge type="dynamic">
 		<from>paw4</from>
 		<to>form_2</to>
 		<to>confirmation</to>
+		<to>initial</to>		
 	</edge>
 	<edge type="static">
 		<from>paw5</from>
