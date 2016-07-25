@@ -22,13 +22,21 @@ import usi.gui.semantic.alloy.entity.Function;
 import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
+import usi.gui.semantic.testcase.Click;
+import usi.gui.semantic.testcase.Fill;
+import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.GUITestCase;
+import usi.gui.semantic.testcase.Go;
+import usi.gui.semantic.testcase.Select;
 import usi.gui.semantic.testcase.TestCaseRunner;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Window;
 
 import com.google.common.collect.Lists;
+
+import edu.mit.csail.sdg.alloy4compiler.ast.Module;
+import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 public class GUIFunctionality_refine {
 
@@ -74,10 +82,12 @@ public class GUIFunctionality_refine {
 			this.discoverWindows();
 			this.discoverDynamicEdges();
 			// if something has changed we iterate again
-		} while (!old_valid_constraints.equals(this.valid_constraint)
+		} while (old_valid_constraints != this.valid_constraint
 				|| old_unvalid_constraints_size != this.unvalid_constraints.size()
 				|| old_windows_number != this.instancePattern.getWindows().size()
 				|| old_edges_number != this.instancePattern.getGui().getNumberOfEdges());
+
+		System.out.println("RESULT: " + this.valid_constraint);
 
 		if (this.pattern.isInstance(this.instancePattern)) {
 
@@ -141,8 +151,8 @@ public class GUIFunctionality_refine {
 						} else {
 							if (found == null) {
 								this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
+								this.valid_constraint = null;
 							}
-							this.valid_constraint = null;
 						}
 					}
 				}
@@ -177,29 +187,24 @@ public class GUIFunctionality_refine {
 
 					final Instance_window found = this.getFoundWindow(tc, to_discover, paw);
 
-					if (found != null
-							&& !this.instancePattern.getGui().containsWindow(
-									found.getInstance().getId())
-									&& !this.instancePattern.getWindows().contains(found)) {
-						// the window was found
-						this.instancePattern.getGui().addWindow(found.getInstance());
-						this.instancePattern.getGui().addEdge(aw.getId(),
-								found.getInstance().getId());
-						this.instancePattern.addWindow(found);
-						List<String> constr = new ArrayList<>();
-						constr.add(this.valid_constraint);
-						constr.addAll(this.unvalid_constraints);
-						constr = this.adaptConstraints(constr, found);
-						this.valid_constraint = constr.remove(0);
-						this.unvalid_constraints = constr;
-					} else {
+					if (found != null) {
 
-						if (found == null) {
-							final List<String> constr = new ArrayList<>();
-							constr.add("not(" + this.valid_constraint + ")");
-							this.unvalid_constraints.add(this.adaptConstraints(constr, found)
-									.get(0));
+						if (!this.instancePattern.getGui().containsWindow(
+								found.getInstance().getId())
+								&& !this.instancePattern.getWindows().contains(found)) {
+							// the window was found
+							this.instancePattern.getGui().addWindow(found.getInstance());
+							this.instancePattern.getGui().addEdge(aw.getId(),
+									found.getInstance().getId());
+							this.instancePattern.addWindow(found);
+							this.instancePattern.generateSpecificSemantics();
 						}
+						this.valid_constraint = this.getAdaptedConstraint(this.instancePattern
+								.getSemantics());
+
+					} else {
+						this.unvalid_constraints.add(this.getAdaptedConstraint(this.instancePattern
+								.getSemantics()));
 						this.valid_constraint = null;
 					}
 				}
@@ -207,10 +212,45 @@ public class GUIFunctionality_refine {
 		}
 	}
 
-	// TODO:
-	private List<String> adaptConstraints(final List<String> constriants, final Instance_window iw) {
+	/*
+	 * method that returns a constraint consistent with all the test cases seen
+	 * so far Method used in the findWindow method because constraints in that
+	 * case cannot be extracted from the solutions
+	 */
+	private String getAdaptedConstraint(final SpecificSemantics in_sem) throws Exception {
 
-		return null;
+		final List<String> tcs = new ArrayList<>();
+		for (final GUITestCase tc : this.observed_tcs) {
+			tcs.add(this.getTCasFact(tc));
+		}
+
+		String prop = null;
+		while (prop == null) {
+
+			for (int cont = 0; cont < tcs.size(); cont++) {
+				final List<String> constraints = new ArrayList<>(this.unvalid_constraints);
+				constraints.add(tcs.get(cont));
+				if (prop != null) {
+					constraints.add(prop);
+				}
+
+				final SpecificSemantics sem = this.addConstrain(in_sem, constraints);
+
+				final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
+				sem.addRun_command(runCom);
+				final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
+				final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
+				final String new_prop = AlloyUtil.extractProperty(sol, sem);
+				if (sol.satisfiable()) {
+					if (prop == null) {
+						prop = new_prop;
+					}
+				} else {
+					this.unvalid_constraints.add("not(" + new_prop + ")");
+				}
+			}
+		}
+		return prop;
 	}
 
 	protected GUITestCase getTestToReachWindow(final Window sourceWindow,
@@ -254,10 +294,11 @@ public class GUIFunctionality_refine {
 
 			property = AlloyUtil.extractProperty(tests.get(0).getAlloySolution(), new_sem);
 
-			final boolean valid = this.validateProperty(property);
+			final boolean valid = this.validateProperty(property, constrained);
 
 			if (valid) {
 				tc = tests.get(0);
+				this.valid_constraint = property;
 			} else {
 				this.valid_constraint = null;
 				// add constraint
@@ -305,7 +346,7 @@ public class GUIFunctionality_refine {
 
 			property = AlloyUtil.extractProperty(tests.get(0).getAlloySolution(), new_sem);
 
-			final boolean valid = this.validateProperty(property);
+			final boolean valid = this.validateProperty(property, constrained);
 
 			if (valid) {
 				tc = tests.get(0);
@@ -320,9 +361,84 @@ public class GUIFunctionality_refine {
 		return tc;
 	}
 
-	private boolean validateProperty(final String prop) {
+	private String getTCasFact(final GUITestCase tc) {
 
-		// add code
+		String fact = "one ";
+		String operations = "";
+		String times = "";
+		String second_part = "";
+		String click = "Click =(";
+		String fill = "Fill =(";
+
+		final List<GUIAction> acts = tc.getActions().stream().filter(e -> !(e instanceof Go))
+				.collect(Collectors.toList());
+		for (int cont = 0; cont < acts.size(); cont++) {
+			final GUIAction act = acts.get(cont);
+			operations += "op" + (cont + 1);
+			times += "t" + (cont + 1);
+			times += ",";
+
+			second_part += "Track.op.t" + (cont + 1) + "=" + "op" + (cont + 1) + " ";
+
+			if (act instanceof Click) {
+				final Click c = (Click) act;
+				click += "op" + (cont + 1) + "+";
+				second_part += "op" + (cont + 1) + ".clicked=Action_widget_"
+						+ c.getWidget().getId();
+			}
+
+			if (act instanceof Fill) {
+				final Fill f = (Fill) act;
+				fill += "op" + (cont + 1) + "+";
+				second_part += "op" + (cont + 1) + ".filled=Input_widget_" + f.getWidget().getId();
+				// TODO: deal with value
+			}
+
+			if (act instanceof Select) {
+				// TODO:
+			}
+
+			if (cont < acts.size() - 1) {
+				operations += ",";
+				second_part += " and t" + (cont + 2) + "=T\next[" + (cont + 1) + "]";
+			}
+		}
+		times += "t" + (acts.size() + 1);
+		times += ":Time";
+		operations += ":Operation";
+		click = click.substring(0, click.length() - 1);
+		fill = fill.substring(0, fill.length() - 1);
+		fact += operations + ", " + times + "|" + second_part + " and " + click + " and " + fill;
+		fact += " and Current_window.is_in.t" + (acts.size() + 1) + "=Window_"
+				+ acts.get(acts.size() - 1).getResult().getId();
+		return fact;
+	}
+
+	private boolean validateProperty(final String prop, final SpecificSemantics in_sem)
+			throws Exception {
+
+		final List<String> tcs = new ArrayList<>();
+		for (final GUITestCase tc : this.observed_tcs) {
+			tcs.add(this.getTCasFact(tc));
+		}
+
+		for (int cont = 0; cont < tcs.size(); cont++) {
+			final List<String> constraints = new ArrayList<>(this.unvalid_constraints);
+			constraints.add(tcs.get(cont));
+			if (prop != null) {
+				constraints.add(prop);
+			}
+
+			final SpecificSemantics sem = this.addConstrain(in_sem, constraints);
+
+			final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
+			sem.addRun_command(runCom);
+			final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
+			final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
+			if (!sol.satisfiable()) {
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -338,6 +454,9 @@ public class GUIFunctionality_refine {
 
 		final SpecificSemantics out = new SpecificSemantics(sem.getSignatures(), facts,
 				sem.getPredicates(), sem.getFunctions(), sem.getOpenStatements());
+		for (final String run : sem.getRun_commands()) {
+			out.addRun_command(run);
+		}
 		return out;
 	}
 
@@ -365,8 +484,9 @@ public class GUIFunctionality_refine {
 		}
 
 		// We define the windows to discover.
-		final Signature sigWinToDiscover = new Signature("Window_" + pattern_TargetWindow.getId()
-				+ "_undiscovered", Cardinality.ONE, false, Lists.newArrayList(parent_w_sig), false);
+		final Signature sigWinToDiscover = new Signature("Undiscovered_window_"
+				+ pattern_TargetWindow.getId(), Cardinality.ONE, false,
+				Lists.newArrayList(parent_w_sig), false);
 
 		// Inputs:
 		final List<Pattern_input_widget> piws = pattern_TargetWindow.getInputWidgets();
@@ -375,13 +495,16 @@ public class GUIFunctionality_refine {
 
 		for (final Pattern_input_widget piw : piws) {
 
+			if (piw.getCardinality().getMax() == 0) {
+				continue;
+			}
 			final Signature piw_sig = AlloyUtil.searchForParent(originalSemantic, piw);
 
 			if (piw_sig == null) {
 				throw new Exception("Element not found: " + piw);
 			}
 
-			final Signature sigIW = new Signature("Input_widget_" + piw.getId() + "_undiscovered",
+			final Signature sigIW = new Signature("Undiscovered_inputwidget_" + piw.getId(),
 					Cardinality.ONE, false, Lists.newArrayList(piw_sig), false);
 
 			iw_sig.add(sigIW);
@@ -394,14 +517,16 @@ public class GUIFunctionality_refine {
 		final List<Signature> aw_sig = new ArrayList<>();
 
 		for (final Pattern_action_widget paw : paws) {
-
+			if (paw.getCardinality().getMax() == 0) {
+				continue;
+			}
 			final Signature paw_sig = AlloyUtil.searchForParent(originalSemantic, paw);
 
 			if (paw_sig == null) {
 				throw new Exception("Element not found: " + paw_sig);
 			}
 
-			final Signature sigAW = new Signature("Action_widget_" + paw.getId() + "_undiscovered",
+			final Signature sigAW = new Signature("Undiscovered_actionwidget_" + paw.getId(),
 					Cardinality.ONE, false, Lists.newArrayList(paw_sig), false);
 
 			aw_sig.add(sigAW);
@@ -522,7 +647,7 @@ public class GUIFunctionality_refine {
 				+ " and t' in T/next[t] ";
 		final Fact factDiscovering = new Fact("", fcontent);
 
-		final String runCom = "run {System} for 4";
+		final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
 
 		final List<Signature> signatures = new ArrayList<>(originalSemantic.getSignatures());
 		final List<Fact> facts = new ArrayList<>(originalSemantic.getFacts());
@@ -546,30 +671,36 @@ public class GUIFunctionality_refine {
 		// the last action widget exercised
 		final Action_widget aw = (Action_widget) tc.getActions().get(tc.getActions().size() - 1)
 				.getWidget();
-		final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime());
-		runner.runTestCase(tc);
-		final GuiStateManager gmanager = GuiStateManager.getInstance();
-		gmanager.readGUI();
-		if (gmanager.getCurrentWindows().size() == 0) {
-			return null;
-		}
-		final Window reached_w = gmanager.getCurrentWindows().get(0);
 
-		tc.getActions().get(tc.getActions().size() - 1).setResult(reached_w);
-		this.observed_tcs.add(tc);
-		this.ripper.ripWindow(tc.getActions(), reached_w);
-		ApplicationHelper.getInstance().closeApplication();
+		Window reached_w = this.wasTestCasePreviouslyExecuted(tc);
+
+		if (reached_w == null) {
+			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime());
+			runner.runTestCase(tc);
+			final GuiStateManager gmanager = GuiStateManager.getInstance();
+			gmanager.readGUI();
+			if (gmanager.getCurrentWindows().size() == 0) {
+				return null;
+			}
+			reached_w = gmanager.getCurrentWindows().get(0);
+		}
 
 		Window previoulsy_found = null;
 		for (final Window w : this.gui.getWindows()) {
 			if (w.isSame(reached_w)) {
 				previoulsy_found = w;
 				this.gui.addEdge(aw.getId(), w.getId());
+				break;
 			}
 		}
 
 		if (previoulsy_found == null) {
 			// the window is new
+			tc.getActions().get(tc.getActions().size() - 1).setResult(reached_w);
+			this.observed_tcs.add(tc);
+			this.ripper.ripWindow(tc.getActions(), reached_w);
+			ApplicationHelper.getInstance().closeApplication();
+
 			this.gui.addWindow(reached_w);
 			this.gui.addEdge(aw.getId(), reached_w.getId());
 			List<Instance_window> instances = target.getMatches(reached_w);
@@ -588,6 +719,9 @@ public class GUIFunctionality_refine {
 			return null;
 		} else {
 			// the window was found before
+			tc.getActions().get(tc.getActions().size() - 1).setResult(previoulsy_found);
+			this.observed_tcs.add(tc);
+			ApplicationHelper.getInstance().closeApplication();
 			this.gui.addEdge(aw.getId(), previoulsy_found.getId());
 			for (final Instance_window iw : this.instancePattern.getWindows()) {
 				if (iw.getPattern().getId().equals(target.getId())
@@ -595,7 +729,6 @@ public class GUIFunctionality_refine {
 					return iw;
 				}
 			}
-
 			final List<String> pws = this.pattern.getDynamicForwardLinks(paw.getId()).stream()
 					.map(e -> e.getId()).collect(Collectors.toList());
 			for (final Instance_window iw : this.instancePattern.getWindows()) {
@@ -607,5 +740,58 @@ public class GUIFunctionality_refine {
 
 			return null;
 		}
+	}
+
+	private Window wasTestCasePreviouslyExecuted(final GUITestCase tc) {
+
+		mainloop: for (final GUITestCase tc2 : this.observed_tcs) {
+			if (tc2.getActions().size() != tc.getActions().size()) {
+				continue;
+			}
+			for (int cont = 0; cont < tc.getActions().size(); cont++) {
+				// TODO: remove after dealing with go actions
+				final GUIAction act1 = tc.getActions().get(cont);
+				final GUIAction act2 = tc2.getActions().get(cont);
+				if (act1 instanceof Go && act2 instanceof Go) {
+					continue;
+				}
+
+				if (!act1.getWidget().getId().equals(act2.getWidget().getId())
+						|| !act1.getWindow().getId().equals(act2.getWindow().getId())) {
+					continue mainloop;
+				}
+
+				if (act1 instanceof Click) {
+					if (!(act2 instanceof Click)) {
+						continue mainloop;
+					}
+				}
+				if (act1 instanceof Fill) {
+					if (!(act2 instanceof Fill)) {
+						continue mainloop;
+					}
+					final Fill fill1 = (Fill) act1;
+					final Fill fill2 = (Fill) act2;
+					if (!fill1.getInput().equals(fill2.getInput())) {
+						continue mainloop;
+					}
+
+				}
+				if (act1 instanceof Select) {
+					if (!(act2 instanceof Select)) {
+						continue mainloop;
+					}
+					final Select select1 = (Select) act1;
+					final Select select2 = (Select) act2;
+					if (select1.getIndex() != select2.getIndex()) {
+						continue mainloop;
+					}
+				}
+
+			}
+			return tc2.getActions().get(tc2.getActions().size() - 1).getResult();
+		}
+
+	return null;
 	}
 }
