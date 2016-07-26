@@ -66,7 +66,7 @@ public class GUIFunctionality_refine {
 
 	public Instance_GUI_pattern refine() throws Exception {
 
-		this.valid_constraint = null;
+		this.valid_constraint = "";
 		this.unvalid_constraints = new ArrayList<>();
 
 		String old_valid_constraints;
@@ -82,7 +82,7 @@ public class GUIFunctionality_refine {
 			this.discoverWindows();
 			this.discoverDynamicEdges();
 			// if something has changed we iterate again
-		} while (old_valid_constraints != this.valid_constraint
+		} while (!old_valid_constraints.equals(this.valid_constraint)
 				|| old_unvalid_constraints_size != this.unvalid_constraints.size()
 				|| old_windows_number != this.instancePattern.getWindows().size()
 				|| old_edges_number != this.instancePattern.getGui().getNumberOfEdges());
@@ -151,7 +151,7 @@ public class GUIFunctionality_refine {
 						} else {
 							if (found == null) {
 								this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
-								this.valid_constraint = null;
+								this.valid_constraint = "";
 							}
 						}
 					}
@@ -205,7 +205,7 @@ public class GUIFunctionality_refine {
 					} else {
 						this.unvalid_constraints.add(this.getAdaptedConstraint(this.instancePattern
 								.getSemantics()));
-						this.valid_constraint = null;
+						this.valid_constraint = "";
 					}
 				}
 			}
@@ -221,13 +221,15 @@ public class GUIFunctionality_refine {
 
 		final List<String> tcs = new ArrayList<>();
 		for (final GUITestCase tc : this.observed_tcs) {
-			tcs.add(this.getTCasFact(tc));
+			tcs.add(this.getTCaseFact(tc));
 		}
 
 		String prop = null;
-		while (prop == null) {
+		loop: while (prop == null) {
 
 			for (int cont = 0; cont < tcs.size(); cont++) {
+				final int time_size = this.observed_tcs.get(cont).getActions().size() + 2;
+
 				final List<String> constraints = new ArrayList<>(this.unvalid_constraints);
 				constraints.add(tcs.get(cont));
 				if (prop != null) {
@@ -236,17 +238,22 @@ public class GUIFunctionality_refine {
 
 				final SpecificSemantics sem = this.addConstrain(in_sem, constraints);
 
-				final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
+				final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope()
+						+ " but " + time_size + " Time";
 				sem.addRun_command(runCom);
 				final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
 				final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
-				final String new_prop = AlloyUtil.extractProperty(sol, sem);
 				if (sol.satisfiable()) {
+					final String new_prop = AlloyUtil.extractProperty(sol, sem);
 					if (prop == null) {
 						prop = new_prop;
 					}
 				} else {
-					this.unvalid_constraints.add("not(" + new_prop + ")");
+					if (prop != null) {
+						this.unvalid_constraints.add("not(" + prop + ")");
+					}
+					prop = null;
+					continue loop;
 				}
 			}
 		}
@@ -265,7 +272,7 @@ public class GUIFunctionality_refine {
 		while (tc == null) {
 			final List<String> constraints = new ArrayList<>();
 
-			if (this.valid_constraint == null) {
+			if (this.valid_constraint.length() == 0) {
 				constraints.addAll(this.unvalid_constraints);
 				constraints.addAll(this.additional_constraints);
 			} else {
@@ -288,21 +295,28 @@ public class GUIFunctionality_refine {
 			}
 
 			if (tests.size() == 0) {
-				this.valid_constraint = null;
+				this.valid_constraint = "";
 				continue;
 			}
 
-			property = AlloyUtil.extractProperty(tests.get(0).getAlloySolution(), new_sem);
-
-			final boolean valid = this.validateProperty(property, constrained);
-
-			if (valid) {
+			// if valid_constraint is not null it means we are using the
+			// previous constraint that it is still valid
+			if (this.valid_constraint.length() > 0) {
 				tc = tests.get(0);
-				this.valid_constraint = property;
 			} else {
-				this.valid_constraint = null;
-				// add constraint
-				this.additional_constraints.add("not(" + property + ")");
+				// if not we need to validate the new constraint
+				property = AlloyUtil.extractProperty(tests.get(0).getAlloySolution(), constrained);
+
+				final boolean valid = this.validateProperty(property, new_sem);
+
+				if (valid) {
+					tc = tests.get(0);
+					this.valid_constraint = property;
+				} else {
+					this.valid_constraint = "";
+					// add constraint
+					this.additional_constraints.add("not(" + property + ")");
+				}
 			}
 		}
 		return tc;
@@ -318,7 +332,7 @@ public class GUIFunctionality_refine {
 		while (tc == null) {
 			final List<String> constraints = new ArrayList<>();
 
-			if (this.valid_constraint == null) {
+			if (this.valid_constraint.length() == 0) {
 				constraints.addAll(this.unvalid_constraints);
 			} else {
 				constraints.add(this.valid_constraint);
@@ -340,32 +354,39 @@ public class GUIFunctionality_refine {
 			}
 
 			if (tests.size() == 0) {
-				this.valid_constraint = null;
+				this.valid_constraint = "";
 				continue;
 			}
 
-			property = AlloyUtil.extractProperty(tests.get(0).getAlloySolution(), new_sem);
-
-			final boolean valid = this.validateProperty(property, constrained);
-
-			if (valid) {
+			// if valid_constraint is not null it means we are using the
+			// previous constraint that it is still valid
+			if (this.valid_constraint.length() > 0) {
 				tc = tests.get(0);
-				this.valid_constraint = property;
-
 			} else {
-				this.valid_constraint = null;
-				// add constraint
-				this.unvalid_constraints.add("not(" + property + ")");
+				// if not we need to validate the new constraint
+				property = AlloyUtil.extractProperty(tests.get(0).getAlloySolution(), new_sem);
+
+				final boolean valid = this.validateProperty(property, constrained);
+
+				if (valid) {
+					tc = tests.get(0);
+					this.valid_constraint = property;
+
+				} else {
+					this.valid_constraint = "";
+					// add constraint
+					this.unvalid_constraints.add("not(" + property + ")");
+				}
 			}
 		}
 		return tc;
 	}
 
-	private String getTCasFact(final GUITestCase tc) {
+	private String getTCaseFact(final GUITestCase tc) {
 
 		String fact = "one ";
 		String operations = "";
-		String times = "";
+		String times = "t0,";
 		String second_part = "";
 		String click = "Click =(";
 		String fill = "Fill =(";
@@ -377,20 +398,24 @@ public class GUIFunctionality_refine {
 			operations += "op" + (cont + 1);
 			times += "t" + (cont + 1);
 			times += ",";
+			if (cont == 0) {
+				second_part += "Track.op.t" + (cont + 1) + "=" + "op" + (cont + 1) + " ";
 
-			second_part += "Track.op.t" + (cont + 1) + "=" + "op" + (cont + 1) + " ";
-
+			} else {
+				second_part += " and Track.op.t" + (cont + 1) + "=" + "op" + (cont + 1) + " ";
+			}
 			if (act instanceof Click) {
 				final Click c = (Click) act;
 				click += "op" + (cont + 1) + "+";
-				second_part += "op" + (cont + 1) + ".clicked=Action_widget_"
+				second_part += "and op" + (cont + 1) + ".clicked=Action_widget_"
 						+ c.getWidget().getId();
 			}
 
 			if (act instanceof Fill) {
 				final Fill f = (Fill) act;
 				fill += "op" + (cont + 1) + "+";
-				second_part += "op" + (cont + 1) + ".filled=Input_widget_" + f.getWidget().getId();
+				second_part += "and op" + (cont + 1) + ".filled=Input_widget_"
+						+ f.getWidget().getId();
 				// TODO: deal with value
 			}
 
@@ -398,17 +423,25 @@ public class GUIFunctionality_refine {
 				// TODO:
 			}
 
+			second_part += " and t" + (cont + 2) + "=T/next[t" + (cont + 1) + "]";
 			if (cont < acts.size() - 1) {
 				operations += ",";
-				second_part += " and t" + (cont + 2) + "=T\next[" + (cont + 1) + "]";
 			}
 		}
+		second_part += " and t0=T/first";
+
 		times += "t" + (acts.size() + 1);
 		times += ":Time";
 		operations += ":Operation";
-		click = click.substring(0, click.length() - 1);
-		fill = fill.substring(0, fill.length() - 1);
-		fact += operations + ", " + times + "|" + second_part + " and " + click + " and " + fill;
+		if (!click.equals("Click =(")) {
+			click = click.substring(0, click.length() - 1) + ")";
+			second_part += " and " + click;
+		}
+		if (!fill.equals("Fill =(")) {
+			fill = fill.substring(0, fill.length() - 1) + ")";
+			second_part += " and " + fill;
+		}
+		fact += operations + "| one " + times + "|" + second_part;
 		fact += " and Current_window.is_in.t" + (acts.size() + 1) + "=Window_"
 				+ acts.get(acts.size() - 1).getResult().getId();
 		return fact;
@@ -419,19 +452,32 @@ public class GUIFunctionality_refine {
 
 		final List<String> tcs = new ArrayList<>();
 		for (final GUITestCase tc : this.observed_tcs) {
-			tcs.add(this.getTCasFact(tc));
+			tcs.add(this.getTCaseFact(tc));
 		}
 
-		for (int cont = 0; cont < tcs.size(); cont++) {
-			final List<String> constraints = new ArrayList<>(this.unvalid_constraints);
-			constraints.add(tcs.get(cont));
-			if (prop != null) {
-				constraints.add(prop);
+		// we clone the semantics to remove all the facts related to discovering
+		// windows/edges
+		final List<Fact> facts = new ArrayList<>();
+		for (final Fact f : in_sem.getFacts()) {
+			if (!f.getIdentifier().equals("for_disocvering")) {
+				facts.add(f);
 			}
+		}
 
-			final SpecificSemantics sem = this.addConstrain(in_sem, constraints);
+		final SpecificSemantics new_sem = new SpecificSemantics(in_sem.getSignatures(), facts,
+				in_sem.getPredicates(), in_sem.getFunctions(), in_sem.getOpenStatements());
 
-			final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
+		for (int cont = 0; cont < tcs.size(); cont++) {
+			// the time size is the number of actions +2 (because of Go)
+			final int time_size = this.observed_tcs.get(cont).getActions().size() + 2;
+			final List<String> constraints = new ArrayList<>();
+			constraints.add(tcs.get(cont));
+			constraints.add(prop);
+
+			final SpecificSemantics sem = this.addConstrain(new_sem, constraints);
+
+			final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope()
+					+ " but " + time_size + " Time";
 			sem.addRun_command(runCom);
 			final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
 			final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
@@ -568,7 +614,7 @@ public class GUIFunctionality_refine {
 				+ (sig_action_to_execute.getIdentifier()) + ", t, T/next[t], c] and "
 				+ " Current_window.is_in.t = w and Current_window.is_in.t' = w' "
 				+ " and t' in T/next[t] ";
-		final Fact factDiscovering = new Fact("", fcontent);
+		final Fact factDiscovering = new Fact("for_discovering", fcontent);
 
 		final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
 
@@ -645,7 +691,7 @@ public class GUIFunctionality_refine {
 				+ (sig_action_to_execute.getIdentifier()) + ", t, T/next[t], c] and "
 				+ " Current_window.is_in.t = w and Current_window.is_in.t' = w' "
 				+ " and t' in T/next[t] ";
-		final Fact factDiscovering = new Fact("", fcontent);
+		final Fact factDiscovering = new Fact("for_discovering", fcontent);
 
 		final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
 
