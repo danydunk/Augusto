@@ -237,6 +237,7 @@ public class AlloyUtil {
 				throw new Exception("AlloyUtil - runCommand: error in thread.");
 			}
 		} catch (final Exception e) {
+			e.printStackTrace();
 			throw new Exception("AlloyUtil - runCommand: error.");
 		}
 	}
