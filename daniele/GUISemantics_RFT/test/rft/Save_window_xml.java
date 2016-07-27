@@ -8,11 +8,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import resources.test.rft.Save_window_xmlHelper;
+import usi.action.ActionManager;
 import usi.application.ApplicationHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
 import usi.gui.GUIWriter;
 import usi.gui.GuiStateManager;
+import usi.gui.semantic.testcase.Click;
+import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.GUIParser;
 import usi.gui.structure.Window;
@@ -47,10 +50,16 @@ public class Save_window_xml extends Save_window_xmlHelper {
 				application = ApplicationHelper.getInstance();
 				application.startApplication();
 				final GuiStateManager gui = GuiStateManager.getInstance();
-				final List<Window> windows = gui.readGUI();
+				final GUI g = new GUI();
+				List<Window> windows = gui.readGUI();
+				final Action_widget aw = windows.get(0).getActionWidgets().get(0);
+
+				final Click click = new Click(windows.get(0), null, aw);
+				final ActionManager manager = new ActionManager(500);
+				manager.executeAction(click);
+				windows = gui.readGUI();
 				final GUIWriter writer = new GUIWriter();
 
-				final GUI g = new GUI();
 				g.addWindow(windows.get(0));
 				final Document doc = writer.writeGUI(g);
 
@@ -86,7 +95,7 @@ public class Save_window_xml extends Save_window_xmlHelper {
 			list = XMLUtil.searchChildren((Element) ws.item(0), "selectable_widget");
 			final String label = XMLUtil.searchChildren(list.get(0), "descriptor").get(0)
 					.getTextContent();
-			if (!label.equals("Universal Password Manager")) {
+			if (!label.contains("Universal Password Manager")) {
 				throw new Exception("");
 			}
 			application.closeApplication();

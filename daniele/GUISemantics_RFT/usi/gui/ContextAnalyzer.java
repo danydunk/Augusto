@@ -1,5 +1,6 @@
 package usi.gui;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,9 +10,9 @@ import com.rational.test.ft.object.interfaces.TestObject;
 
 /**
  * Class used to associate a label to a input widget
- * 
+ *
  * @author daniele
- * 
+ *
  */
 public class ContextAnalyzer {
 
@@ -28,7 +29,7 @@ public class ContextAnalyzer {
 	/**
 	 * The constructor takes in input the container xml node of a window in the
 	 * GUI xml file created by GUI Ripping
-	 * 
+	 *
 	 * @param windowNode
 	 * @throws Exception
 	 */
@@ -62,8 +63,9 @@ public class ContextAnalyzer {
 
 			// if it is a descriptor
 			if (this.descriptors_classes.contains(classs)) {
-				final int x = Integer.valueOf(to.getProperty("x").toString());
-				final int y = Integer.valueOf(to.getProperty("y").toString());
+				final Point p = (Point) to.getProperty("locationOnScreen");
+				final int x = p.x;
+				final int y = p.y;
 				final int width = Integer.valueOf(to.getProperty("width").toString());
 				final int height = Integer.valueOf(to.getProperty("height").toString());
 
@@ -88,8 +90,9 @@ public class ContextAnalyzer {
 
 	public String getDescriptor(final TestObject to) throws Exception {
 
-		final int x = Integer.valueOf(to.getProperty("x").toString());
-		final int y = Integer.valueOf(to.getProperty("y").toString());
+		final Point p = (Point) to.getProperty("locationOnScreen");
+		final int x = p.x;
+		final int y = p.y;
 		final int width = Integer.valueOf(to.getProperty("width").toString());
 		final int height = Integer.valueOf(to.getProperty("height").toString());
 		final Area area = new Area(x, y, height, width);
@@ -104,6 +107,9 @@ public class ContextAnalyzer {
 		double min_dist = Double.MAX_VALUE;
 		Descriptor nearer = null;
 		for (final Descriptor desc : descriptors) {
+			if (!area.isRelated(desc.a)) {
+				continue;
+			}
 			final double dist = area.getDistance(desc.a);
 			if (dist < min_dist) {
 				min_dist = dist;
@@ -139,8 +145,9 @@ public class ContextAnalyzer {
 			return title.toString();
 		}
 		// else we look for descriptors
-		final int x = Integer.valueOf(to.getProperty("x").toString());
-		final int y = Integer.valueOf(to.getProperty("y").toString());
+		final Point p = (Point) to.getProperty("locationOnScreen");
+		final int x = p.x;
+		final int y = p.y;
 		final int width = Integer.valueOf(to.getProperty("width").toString());
 		final int height = Integer.valueOf(to.getProperty("height").toString());
 		final Area area = new Area(x, y, height, width);
@@ -155,6 +162,9 @@ public class ContextAnalyzer {
 		double min_dist = Double.MAX_VALUE;
 		Descriptor nearer = null;
 		for (final Descriptor desc : descriptors) {
+			if (!area.isRelated(desc.a)) {
+				continue;
+			}
 			final double dist = area.getDistance(desc.a);
 			if (dist < min_dist) {
 				min_dist = dist;
@@ -192,7 +202,7 @@ public class ContextAnalyzer {
 		 * area. The distance is calculated from the topleft point of this area
 		 * to the bottonleft or topright (depending on the position) of the
 		 * input area
-		 * 
+		 *
 		 * @param area
 		 * @return
 		 */
@@ -200,9 +210,11 @@ public class ContextAnalyzer {
 
 			final int distance;
 			if ((a.y + a.height) > this.y) {
-				distance = (int) (Math.pow(((a.x + a.width) - this.x), 2) + Math.pow((a.y - this.y), 2));
+				distance = (int) (Math.pow(((a.x + a.width) - this.x), 2) + Math.pow(
+						(a.y - this.y), 2));
 			} else {
-				distance = (int) (Math.pow((a.x - this.x), 2) + Math.pow(((a.y + a.height) - this.y), 2));
+				distance = (int) (Math.pow((a.x - this.x), 2) + Math.pow(
+						((a.y + a.height) - this.y), 2));
 			}
 
 			return distance;
@@ -211,7 +223,7 @@ public class ContextAnalyzer {
 		/**
 		 * function that returns true if the input area is on the top left of
 		 * this area
-		 * 
+		 *
 		 * @param area
 		 * @return
 		 */
@@ -231,7 +243,8 @@ public class ContextAnalyzer {
 		public final String label;
 		public final Area a;
 
-		public Descriptor(final String label, final int x, final int y, final int height, final int width) {
+		public Descriptor(final String label, final int x, final int y, final int height,
+				final int width) {
 
 			this.label = label;
 			this.a = new Area(x, y, height, width);

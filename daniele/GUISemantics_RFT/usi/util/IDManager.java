@@ -22,6 +22,11 @@ public class IDManager {
 		instance = new IDManager(gui);
 	}
 
+	public static void create() {
+
+		instance = new IDManager(null);
+	}
+
 	public static IDManager getInstance() {
 
 		return instance;
@@ -32,8 +37,11 @@ public class IDManager {
 		this.gui = gui;
 	}
 
-	private void calculateLastIDs() {
+	public void calculateLastIDs() {
 
+		if (this.gui == null) {
+			return;
+		}
 		// window
 		List<Integer> ids = this.gui.getWindows().stream()
 				.map(e -> Integer.valueOf(e.getId().replace("w", ""))).collect(Collectors.toList());
@@ -76,7 +84,7 @@ public class IDManager {
 
 	public String nextWindowId() {
 
-		this.calculateLastIDs();
+		// this.calculateLastIDs();
 		return "w" + (++this.lastWid);
 	}
 

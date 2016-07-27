@@ -127,12 +127,7 @@ public class GUI {
 
 	public void addWindow(final Window n) throws Exception {
 
-		if (n.getId().equals("w10")) {
-			System.out.println();
-		}
-
 		if (n == null || this.windows.containsKey(n.getId())) {
-			System.out.println(n.getId());
 			throw new Exception("GUI: wrong input in addWindow");
 		}
 		this.windows.put(n.getId(), n);

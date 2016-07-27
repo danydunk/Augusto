@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Widget;
 import usi.gui.structure.Window;
 import usi.util.IDManager;
@@ -46,15 +47,20 @@ public class GuiStateManager {
 		this.currentWindows = new ArrayList<>();
 		this.currentTOs = new ArrayList<>();
 		this.idm = IDManager.getInstance();
+		if (this.idm == null) {
+			IDManager.create();
+			this.idm = IDManager.getInstance();
+		}
 	}
 
-	public void setIDManager(final IDManager idm) {
-
-		this.idm = idm;
-	}
+	// public void setIDManager(final IDManager idm) {
+	//
+	// this.idm = idm;
+	// }
 
 	public List<Window> readGUI() throws Exception {
 
+		this.idm.calculateLastIDs();
 		this.currentWindows = new ArrayList<>();
 		this.currentTOs = new ArrayList<>();
 
@@ -120,6 +126,9 @@ public class GuiStateManager {
 				// we keep only the widget of interest
 				final Widget widget = Widget.getWidget(to, this.idm);
 				if (widget != null) {
+					if (widget instanceof Selectable_widget) {
+						System.out.println();
+					}
 					// if the widget does not have a label we look for
 					// descriptors
 					if (widget.getLabel() == null || widget.getLabel().length() == 0) {
