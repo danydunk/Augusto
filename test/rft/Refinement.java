@@ -13,6 +13,7 @@ import usi.gui.functionality.GUIFunctionality_search;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.pattern.GUIPatternParser;
 import usi.gui.pattern.GUI_Pattern;
+import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.structure.GUI;
 import usi.gui.structure.GUIParser;
 import usi.xml.XMLUtil;
@@ -43,15 +44,27 @@ public class Refinement extends RefinementHelper {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-small_newripper.xml")
-			.getAbsolutePath());
+					.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
 			final List<Instance_GUI_pattern> res = gfs.match(pattern);
-			final Instance_GUI_pattern match = res.get(0);
+			Instance_GUI_pattern match = res.get(0);
 			match.generateSpecificSemantics();
 			final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
-			refiner.refine();
+			match = refiner.refine();
+			if (match == null) {
+				throw new Exception();
+			}
+			for (final Fact f : match.getSemantics().getFacts()) {
+				if (f.getContent()
+						.trim()
+						.equals("one Field_3,Field_4,Field_5:Property_unique|#Property_required = 0 and Property_unique = (Field_3+Field_4+Field_5) and Field_3.associated_to = (Input_widget_iw7) and Field_4.associated_to = (Input_widget_iw6) and Field_5.associated_to = (Input_widget_iw5)")) {
+					return;
+				}
+			}
+			throw new Exception();
+
 		} catch (final Exception e) {
 			e.printStackTrace();
 			System.out.println("ERROR");

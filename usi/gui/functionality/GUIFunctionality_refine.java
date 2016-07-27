@@ -87,8 +87,6 @@ public class GUIFunctionality_refine {
 				|| old_windows_number != this.instancePattern.getWindows().size()
 				|| old_edges_number != this.instancePattern.getGui().getNumberOfEdges());
 
-		System.out.println("RESULT: " + this.valid_constraint);
-
 		if (this.pattern.isInstance(this.instancePattern)) {
 
 			final List<String> constraints = new ArrayList<>();

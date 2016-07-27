@@ -18,7 +18,7 @@ public class Ripper {
 	private final List<String> action_widget_to_ignore;
 	private final ApplicationHelper application;
 	private GuiStateManager guimanager;
-	private ActionManager actionManager;
+	private final ActionManager actionManager;
 	private GUI gui;
 	private final long sleeptime;
 
@@ -27,6 +27,7 @@ public class Ripper {
 		this.application = ApplicationHelper.getInstance();
 		this.sleeptime = sleeptime;
 		this.action_widget_to_ignore = new ArrayList<>();
+		this.actionManager = new ActionManager(this.sleeptime);
 	}
 
 	public Ripper(final long sleeptime, final GUI gui) {
