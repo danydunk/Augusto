@@ -39,15 +39,17 @@ public class Execute_action extends Execute_actionHelper {
 			application = ApplicationHelper.getInstance();
 			application.startApplication();
 			final GuiStateManager gui = GuiStateManager.getInstance();
+
 			List<Window> windows = gui.readGUI();
-			Thread.sleep(1000);
+
 			final Action_widget aw = windows.get(0).getActionWidgets().get(0);
 
 			final Click click = new Click(windows.get(0), null, aw);
 			final ActionManager manager = new ActionManager(500);
 			manager.executeAction(click);
 			windows = gui.readGUI();
-			if (!windows.get(0).getLabel().contains("New Password Database")) {
+
+			if (!windows.get(0).getLabel().contains("Universal Password Manager")) {
 				throw new Exception();
 			}
 			application.closeApplication();
