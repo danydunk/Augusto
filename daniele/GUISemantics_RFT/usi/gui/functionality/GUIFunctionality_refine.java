@@ -638,7 +638,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverEdge(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-					throws Exception {
+			throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {
@@ -836,6 +836,6 @@ public class GUIFunctionality_refine {
 			return tc2.getActions().get(tc2.getActions().size() - 1).getResult();
 		}
 
-	return null;
+		return null;
 	}
 }
