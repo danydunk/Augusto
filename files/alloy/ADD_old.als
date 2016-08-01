@@ -30,6 +30,7 @@ sig Field {
 	has_value: Value lone -> Object
 }
 sig Property_unique, Property_required in Field { }
+sig Object { }
 one sig List { 
 	contains: Object set -> Time
 }
@@ -46,7 +47,6 @@ pred go_success_post [w: Window, t, t': Time] {
 pred go_fail_post [w: Window, t, t': Time] {
 	List.contains.t' = List.contains.t
 }
-pred go_pre[w: Window, t: Time] {}
 
 pred fill_semantics [iw: Input_widget, t: Time, v: Value] { }
 pred fill_success_post [iw: Input_widget, t, t': Time, v: Value] { 
@@ -55,7 +55,6 @@ pred fill_success_post [iw: Input_widget, t, t': Time, v: Value] {
 pred fill_fail_post [iw: Input_widget, t, t': Time, v: Value] { 
 	List.contains.t' = List.contains.t
 }
-pred fill_pre[iw: Input_widget, t: Time, v: Value] { }
 
 pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Ok and Current_window.is_in.t  in Form and (#aw.goes = 1 and aw.goes in Form)) => filled_required_in_w_test [Current_window.is_in.t, t] 
@@ -73,13 +72,6 @@ pred click_fail_post [aw: Action_widget, t, t': Time]	{
 	List.contains.t' = List.contains.t
 	Input_widget.content.t' = Input_widget.content.t
 }
-pred click_pre[aw: Action_widget, t: Time] {}
-
-pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }
-pred select_success_post [sw: Selectable_widget, t, t': Time, o: Object] { }
-pred select_fail_post [sw: Selectable_widget, t, t': Time, o: Object] { }
-pred select_pre[sw: Selectable_widget, t: Time, o: Object] { }
-
 pred add [t, t': Time] {
 	one o: Object | all f: Field | f.has_value.o = f.associated_to.content.t and List.contains.t' = List.contains.t+o
 }
