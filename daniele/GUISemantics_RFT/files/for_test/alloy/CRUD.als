@@ -1,5 +1,4 @@
 open util/ordering [Time] as T
-
 ---------------- Signatures ----------------
 abstract sig Field { }
 sig Required extends Field { }
@@ -23,7 +22,7 @@ one sig Track {
 	obj: Object lone -> Time
 }
 ---------------- Declaration of the Unique Fields ----------------
-fact unique_field { //TO ADAPT
+fact unique_field {
 	all f: Field1 | f in Unique
 }
 ---------------- Constraints to clean the model ----------------

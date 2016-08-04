@@ -9,8 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import test.gui.GUIPatternMaker;
-import test.gui.GUIStructureMaker;
+import test.gui.structure.GUIStructureMaker;
 import usi.gui.functionality.GUIFunctionality_search;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.pattern.GUI_Pattern;
@@ -50,7 +49,7 @@ public class GUI_Pattern_test {
 			final List<Instance_GUI_pattern> res = gfs.match(pattern);
 			assertEquals(1, res.size());
 			assertEquals(2, res.get(0).getWindows().size());
-			res.get(0).getGui().removeEdge("aw1", "w2");
+			res.get(0).getGui().removeStaticEdge("aw1", "w2");
 			assertFalse(pattern.isInstance(res.get(0)));
 
 		} catch (final Exception e) {

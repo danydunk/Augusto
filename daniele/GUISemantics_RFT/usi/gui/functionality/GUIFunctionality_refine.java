@@ -45,7 +45,7 @@ public class GUIFunctionality_refine {
 	private List<String> unvalid_constraints;
 	// additional list of unvalid constraints that has to be adapted during the
 	// window search
-	List<String> additional_constraints;
+	private List<String> additional_constraints;
 	private String valid_constraint;
 	private final GUI_Pattern pattern;
 	private final List<GUITestCase> observed_tcs;
@@ -77,7 +77,8 @@ public class GUIFunctionality_refine {
 			old_valid_constraints = this.valid_constraint;
 			old_unvalid_constraints_size = this.unvalid_constraints.size();
 			old_windows_number = this.instancePattern.getWindows().size();
-			old_edges_number = this.instancePattern.getGui().getNumberOfEdges();
+			old_edges_number = this.instancePattern.getGui().getNumberOfStaticEdges()
+					+ this.instancePattern.getGui().getNumberOfDynamicEdges();
 
 			this.discoverWindows();
 			this.discoverDynamicEdges();
@@ -85,7 +86,9 @@ public class GUIFunctionality_refine {
 		} while (!old_valid_constraints.equals(this.valid_constraint)
 				|| old_unvalid_constraints_size != this.unvalid_constraints.size()
 				|| old_windows_number != this.instancePattern.getWindows().size()
-				|| old_edges_number != this.instancePattern.getGui().getNumberOfEdges());
+				|| old_edges_number != (this.instancePattern.getGui().getNumberOfStaticEdges() + this.instancePattern
+						.getGui().getNumberOfDynamicEdges()));
+		// System.out.println(this.valid_constraint);
 
 		if (this.pattern.isInstance(this.instancePattern)) {
 
@@ -144,7 +147,7 @@ public class GUIFunctionality_refine {
 								&& this.instancePattern.getWindows().contains(found)) {
 							// the edge was covered
 							this.covered_dyn_edges.add(edge);
-							this.instancePattern.getGui().addEdge(aw.getId(),
+							this.instancePattern.getGui().addDynamicEdge(aw.getId(),
 									found.getInstance().getId());
 						} else {
 							if (found == null) {
@@ -192,7 +195,7 @@ public class GUIFunctionality_refine {
 								&& !this.instancePattern.getWindows().contains(found)) {
 							// the window was found
 							this.instancePattern.getGui().addWindow(found.getInstance());
-							this.instancePattern.getGui().addEdge(aw.getId(),
+							this.instancePattern.getGui().addDynamicEdge(aw.getId(),
 									found.getInstance().getId());
 							this.instancePattern.addWindow(found);
 							this.instancePattern.generateSpecificSemantics();
@@ -733,7 +736,7 @@ public class GUIFunctionality_refine {
 		for (final Window w : this.gui.getWindows()) {
 			if (w.isSame(reached_w)) {
 				previoulsy_found = w;
-				this.gui.addEdge(aw.getId(), w.getId());
+				this.gui.addDynamicEdge(aw.getId(), w.getId());
 				break;
 			}
 		}
@@ -746,7 +749,7 @@ public class GUIFunctionality_refine {
 			ApplicationHelper.getInstance().closeApplication();
 
 			this.gui.addWindow(reached_w);
-			this.gui.addEdge(aw.getId(), reached_w.getId());
+			this.gui.addDynamicEdge(aw.getId(), reached_w.getId());
 			List<Instance_window> instances = target.getMatches(reached_w);
 			if (instances.size() != 0) {
 				// the first is returned because it the one that maps more
@@ -766,7 +769,7 @@ public class GUIFunctionality_refine {
 			tc.getActions().get(tc.getActions().size() - 1).setResult(previoulsy_found);
 			this.observed_tcs.add(tc);
 			ApplicationHelper.getInstance().closeApplication();
-			this.gui.addEdge(aw.getId(), previoulsy_found.getId());
+			this.gui.addDynamicEdge(aw.getId(), previoulsy_found.getId());
 			for (final Instance_window iw : this.instancePattern.getWindows()) {
 				if (iw.getPattern().getId().equals(target.getId())
 						&& iw.getInstance().getId().equals(previoulsy_found.getId())) {

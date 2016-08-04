@@ -15,7 +15,9 @@ abstract sig Update_trigger extends Action_widget { }
 abstract sig Delete_trigger extends Action_widget { }
 
 abstract sig Form extends Window { }
-abstract sig View extends Window { }
+abstract sig View extends Window { 
+	mapping: Input_widget one -> Input_widget
+}
 abstract sig Initial extends Window { }
 abstract sig Confirm extends Window { }
 
@@ -28,12 +30,15 @@ fact {
 	#View = 1
 	#Form > 0
 	#Initial = 1
-	all vw: View | one ok: Ok | vw.iws = Input_widget and #vw.sws = 0  and vw.aws = ok
+	all vw: View | one ok: Ok | #vw.sws = 0 and vw.aws = ok
+	#View.iws = #Form.iws
+	all iw: View.iws | one iww: Form.iws | View.mapping.iw = iww and #View.mapping.iw = 1
+	all iww: Form.iws | one iw: View.iws | View.mapping.iw = iww
+	all t: Time, iw: View.iws | iw.content.t = View.mapping.iw.content.t
 	all iw: Initial | iw.aws = (Create_trigger+Read_trigger+Update_trigger+Delete_trigger) and #iw.iws = 0 and #iw.sws = 1
 	all fw: Form | one ok: Ok,  cancel: Cancel | #fw.iws > 0 and fw.aws = ok+cancel and #fw.sws = 0
 	all cw: Confirm | one ok: Ok,  cancel: Cancel | #cw.iws = 0 and #cw.sws = 0 and cw.aws = ok+cancel
 	#Window = #Form + #Initial + #Confirm + #General + #View
-	all aw: Ok+Cancel+Create_trigger+Read_trigger+Update_trigger+Delete_trigger| not (#aw.goes  > 0 and aw.goes in aws.aw)
 }
 ---------------Generic ADD Semantics----------
 abstract sig Crud_op {}
@@ -118,7 +123,7 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Ok and Current_crud_op.operation.t = CREATE and aw.goes = Initial) => (#Selectable_widget.selected.t' = 0 and #Input_widget.content.t' = 0 and add [t, t'] and #Current_crud_op.operation.t' = 0)
 	(aw in Ok and Current_crud_op.operation.t = UPDATE and aw.goes = Initial) => (#Selectable_widget.selected.t' = 0 and #Input_widget.content.t' = 0 and update [t, t'] and #Current_crud_op.operation.t' = 0)
 	(aw in Ok and Current_crud_op.operation.t = DELETE and aw.goes = Initial) => (#Selectable_widget.selected.t' = 0 and #Input_widget.content.t' = 0 and delete [t, t'] and #Current_crud_op.operation.t' = 0)
-	(aw in Ok and Current_crud_op.operation.t = READ and aw.goes = Initial) => (#Selectable_widget.selected.t' = 0 and #Input_widget.content.t' = 0 and #Current_crud_op.operation.t' = 0)
+	(aw in Ok and Current_crud_op.operation.t = READ and aw.goes = Initial) => (#Selectable_widget.selected.t' = 0 and #Input_widget.content.t' = 0 and #Current_crud_op.operation.t' = 0 and List.contains.t' = List.contains.t)
 	(aw in Delete_trigger and aw.goes in Initial) => (#Selectable_widget.selected.t' = 0 and #Input_widget.content.t' = 0 and delete [t, t'] and #Current_crud_op.operation.t' = 0)
 }
 pred click_fail_post [aw: Action_widget, t, t': Time]	{
@@ -136,7 +141,7 @@ pred filled_required_test [w: Form, t: Time] {
 	all iw: w.iws | (iw in Property_required.associated_to) => #iw.content.t = 1
 }
 pred  unique_test [w: Form, t: Time] { 
-	all p: Property_unique | all o2: List.contains.t | (p.associated_to in w.iws and #p.has_value.o2 = 1) => p.associated_to.content.t != p.has_value.o2
+	all p: Property_unique | all o2: List.contains.t | (p.associated_to in w.iws) => p.associated_to.content.t != p.has_value.o2
 }
 pred  unique_for_update_test [w: Form, t: Time] { 
 	all p: Property_unique | all o2: (List.contains.t-Selectable_widget.selected.t) | (p.associated_to in w.iws and #p.has_value.o2 = 1) => p.associated_to.content.t != p.has_value.o2
@@ -149,4 +154,4 @@ pred update [t, t': Time] {
 }
 pred delete [t, t': Time] {
 	List.contains.t' = List.contains.t - Selectable_widget.selected.t
-}ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ웆ￆ
+}

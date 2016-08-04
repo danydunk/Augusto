@@ -1,4 +1,4 @@
-package test.gui;
+package test.gui.pattern;
 
 import usi.gui.pattern.Boolean_regexp;
 import usi.gui.pattern.Cardinality;

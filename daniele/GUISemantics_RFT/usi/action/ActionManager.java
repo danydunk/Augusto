@@ -102,7 +102,6 @@ public class ActionManager {
 				}
 			} else {
 				try {
-					System.out.println(fill.getInput());
 					method.invoke(c.newInstance(), to, fill.getInput());
 				} catch (final Exception e) {
 					throw new Exception("ActionManager - executeAction: error executing fill, "
@@ -116,7 +115,7 @@ public class ActionManager {
 
 			Method method = null;
 			for (final Method m : ms) {
-				if (m.getName().equals("select")) {
+				if (m.getName().equals("click")) {
 					method = m;
 					break;
 				}

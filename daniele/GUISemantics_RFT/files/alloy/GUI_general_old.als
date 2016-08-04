@@ -45,6 +45,7 @@ sig Value { }
 abstract sig Input_widget {
 	content: Value lone -> Time
 }
+abstract sig Selectable_widget {}
 fact {
 	all gw: General |  #gw.iws = 0 and #gw.aws = 0
 	all iw: Input_widget | one w: Window | iw in w.iws
@@ -76,6 +77,7 @@ pred fill [iw: Input_widget, t, t': Time, v: Value, f: Fill] {
 	--- operation is tracked ---
 	f.filled = iw and f.with = v and Track.op.t' = f
 }
+pred select [sw: Selectable_widget, t, t': Time, o: Object, s: Fill] { }
 pred go [w: Window, t, t': Time, g: Go] {
 	--- precondition ---
 	General in Current_window.is_in.t

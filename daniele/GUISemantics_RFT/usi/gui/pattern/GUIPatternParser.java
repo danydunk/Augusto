@@ -217,7 +217,6 @@ public class GUIPatternParser {
 
 		final Node nodeAtt = node.getAttributes().getNamedItem("card");
 		if (nodeAtt == null) {
-			// TODO: check
 			return Cardinality.SET;
 		}
 		final String cardValue = nodeAtt.getNodeValue();

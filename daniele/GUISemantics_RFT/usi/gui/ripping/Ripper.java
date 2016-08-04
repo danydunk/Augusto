@@ -115,13 +115,13 @@ public class Ripper {
 				if (match == null) {
 					// new window
 					this.gui.addWindow(current);
-					this.gui.addEdge(aw.getId(), current.getId());
+					this.gui.addStaticEdge(aw.getId(), current.getId());
 					final List<GUIAction> actions_to_current = new ArrayList<>(actions);
 					actions_to_current.add(act);
 					this.ripWindow(actions_to_current, current);
 
 				} else {
-					this.gui.addEdge(aw.getId(), match.getId());
+					this.gui.addStaticEdge(aw.getId(), match.getId());
 				}
 			}
 

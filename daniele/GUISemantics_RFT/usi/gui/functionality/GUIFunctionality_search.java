@@ -61,9 +61,9 @@ public class GUIFunctionality_search {
 			}
 			// if the possible matches are less than the minimum number required
 			// for the pattern window the pattern cannot be found
-			if (windows.size() < pw.getCardinality().getMin()) {
-				return out;
-			}
+			// if (windows.size() < pw.getCardinality().getMin()) {
+			// return out;
+			// }
 		}
 
 		// the windows found are partitioned into sets of connected windows
@@ -109,7 +109,11 @@ public class GUIFunctionality_search {
 
 						if (instances.size() > pw.getCardinality().getMax()
 								|| instances.size() < pw.getCardinality().getMin()) {
-							check = false;
+							// if thes window is not reached by any static edge
+							// it can be missing
+							if (pattern.getStaticBackwardLinks(pw.getId()).size() > 0) {
+								check = false;
+							}
 						}
 					}
 
@@ -145,7 +149,7 @@ public class GUIFunctionality_search {
 
 		// System.out.println(w.getId()+" - "+pw.getId());
 		// if the window is already part of the instance_gui_pattern
-		if (pw== igp.getPW_for_W(w.getId())) {
+		if (pw == igp.getPW_for_W(w.getId())) {
 			return igp;
 		}
 		// if the window is already matched to another pattern window
@@ -192,7 +196,8 @@ public class GUIFunctionality_search {
 							boolean check = false;
 							for (final Pattern_window target_pw : this.gui_pattern
 									.getStaticForwardLinks(paw.getId())) {
-								for (final Window target_w : this.gui.getForwardLinks(aw.getId())) {
+								for (final Window target_w : this.gui.getStaticForwardLinks(aw
+										.getId())) {
 									// if the target_pw has cardinality 1 and it
 									// is already in the pattern
 									// then the edge must go to the window
@@ -206,7 +211,7 @@ public class GUIFunctionality_search {
 												target_w, target_pw, igp.clone());
 										if (new_instance != null) {
 											check = true;
-											new_instance.getGui().addEdge(aw.getId(),
+											new_instance.getGui().addStaticEdge(aw.getId(),
 													target_w.getId());
 											igp = new_instance;
 										}
@@ -241,7 +246,7 @@ public class GUIFunctionality_search {
 						final Pattern_window source_pw = this.gui_pattern
 								.getActionWidget_Window(paw.getId());
 
-						for (final Action_widget aw : this.gui.getBackwardLinks(instance
+						for (final Action_widget aw : this.gui.getStaticBackwardLinks(instance
 								.getInstance().getId())) {
 							final Window source_w = this.gui.getActionWidget_Window(aw.getId());
 
@@ -256,10 +261,9 @@ public class GUIFunctionality_search {
 							final Instance_GUI_pattern new_instance = this.traverse(source_w,
 									source_pw, igp.clone());
 							if (new_instance != null) {
-								if (paw ==
-										new_instance.getPAW_for_AW(aw.getId())) {
+								if (paw == new_instance.getPAW_for_AW(aw.getId())) {
 									correct = true;
-									new_instance.getGui().addEdge(aw.getId(),
+									new_instance.getGui().addStaticEdge(aw.getId(),
 											instance.getInstance().getId());
 									igp = new_instance;
 								}

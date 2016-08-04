@@ -16,16 +16,20 @@ public class FunctionalitySemantics extends Alloy_Model {
 	protected Predicate click;
 	protected Predicate go;
 	protected Predicate fill;
+	protected Predicate select;
 	protected Signature window_signature;
 	protected Signature input_w_signature;
 	protected Signature action_w_signature;
+	protected Signature selectable_w_signature;
 	protected List<String> run_commands;
 	protected Semantic_predicate click_semantics;
 	protected Semantic_predicate go_semantics;
 	protected Semantic_predicate fill_semantics;
+	protected Semantic_predicate select_semantics;
 	protected List<Signature> windows_extensions;
 	protected List<Signature> action_w_extensions;
 	protected List<Signature> input_w_extensions;
+	protected List<Signature> selectable_w_extensions;
 
 	public FunctionalitySemantics(final List<Signature> signatures, final List<Fact> facts,
 			final List<Predicate> predicates, final List<Function> functions,
@@ -46,6 +50,9 @@ public class FunctionalitySemantics extends Alloy_Model {
 			if ("Input_widget".equals(sig.getIdentifier()) && sig.isAbstract_()) {
 				this.input_w_signature = sig;
 			}
+			if ("Selectable_widget".equals(sig.getIdentifier()) && sig.isAbstract_()) {
+				this.selectable_w_signature = sig;
+			}
 		}
 		for (final Predicate pred : predicates) {
 			if ("click".equals(pred.getIdentifier()) && pred.getInputs().keySet().size() == 3) {
@@ -54,19 +61,23 @@ public class FunctionalitySemantics extends Alloy_Model {
 			if ("fill".equals(pred.getIdentifier()) && pred.getInputs().keySet().size() == 4) {
 				this.fill = pred;
 			}
+			if ("select".equals(pred.getIdentifier()) && pred.getInputs().keySet().size() == 4) {
+				this.select = pred;
+			}
 			if ("go".equals(pred.getIdentifier()) && pred.getInputs().keySet().size() == 3) {
 				this.go = pred;
 			}
 		}
-		if (this.click == null || this.fill == null || this.go == null
+		if (this.click == null || this.fill == null || this.go == null || this.select == null
 				|| this.window_signature == null || this.action_w_signature == null
-				|| this.input_w_signature == null) {
+				|| this.input_w_signature == null || this.selectable_w_signature == null) {
 			throw new Exception("FunctionalitySemantics: error in constructor");
 		}
 
 		this.windows_extensions = new ArrayList<>();
 		this.action_w_extensions = new ArrayList<>();
 		this.input_w_extensions = new ArrayList<>();
+		this.selectable_w_extensions = new ArrayList<>();
 
 		for (final Signature sig : signatures) {
 			if (sig.isSubset()) {
@@ -81,6 +92,9 @@ public class FunctionalitySemantics extends Alloy_Model {
 			if (sig.getParent().contains(this.input_w_signature) && sig.isAbstract_()) {
 				this.input_w_extensions.add(sig);
 			}
+			if (sig.getParent().contains(this.selectable_w_signature) && sig.isAbstract_()) {
+				this.selectable_w_extensions.add(sig);
+			}
 		}
 
 		for (final Predicate pred : predicates) {
@@ -94,6 +108,11 @@ public class FunctionalitySemantics extends Alloy_Model {
 				this.fill_semantics = new Semantic_predicate(pred.getIdentifier(),
 						pred.getContent(), pred.getInputs());
 			}
+			if ("select_semantics".equals(pred.getIdentifier())
+					&& pred.getInputs().keySet().size() == 3) {
+				this.select_semantics = new Semantic_predicate(pred.getIdentifier(),
+						pred.getContent(), pred.getInputs());
+			}
 			if ("go_semantics".equals(pred.getIdentifier())
 					&& pred.getInputs().keySet().size() == 2) {
 				this.go_semantics = new Semantic_predicate(pred.getIdentifier(), pred.getContent(),
@@ -103,8 +122,9 @@ public class FunctionalitySemantics extends Alloy_Model {
 		if (this.click_semantics == null
 				|| this.go_semantics == null
 				|| this.fill_semantics == null
-				|| (this.windows_extensions.size() + this.action_w_extensions.size() + this.input_w_extensions
-						.size()) == 0) {
+				|| this.select_semantics == null
+				|| (this.windows_extensions.size() + this.action_w_extensions.size()
+						+ this.input_w_extensions.size() + this.selectable_w_extensions.size()) == 0) {
 			throw new Exception("FunctionalitySemantics: error in constructor");
 		}
 		this.run_commands = new ArrayList<>();
@@ -124,6 +144,11 @@ public class FunctionalitySemantics extends Alloy_Model {
 	public Semantic_predicate getFillSemantics() {
 
 		return this.fill_semantics;
+	}
+
+	public Semantic_predicate getSelectSemantics() {
+
+		return this.select_semantics;
 	}
 
 	static public FunctionalitySemantics instantiate(final Alloy_Model in) throws Exception {
@@ -150,6 +175,11 @@ public class FunctionalitySemantics extends Alloy_Model {
 	public List<Signature> getInput_w_extensions() {
 
 		return new ArrayList<>(this.input_w_extensions);
+	}
+
+	public List<Signature> getSelectable_w_extensions() {
+
+		return new ArrayList<>(this.selectable_w_extensions);
 	}
 
 	public void generate_run_commands() throws Exception {
@@ -276,5 +306,10 @@ public class FunctionalitySemantics extends Alloy_Model {
 	public Signature getAction_w_signature() {
 
 		return this.action_w_signature;
+	}
+
+	public Signature getSelectable_w_signature() {
+
+		return this.selectable_w_signature;
 	}
 }

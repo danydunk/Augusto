@@ -11,8 +11,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import test.gui.GUIPatternMaker;
-import test.gui.GUIStructureMaker;
+import test.gui.pattern.GUIPatternMaker;
+import test.gui.structure.GUIStructureMaker;
 import usi.gui.functionality.GUIFunctionality_refine;
 import usi.gui.functionality.GUIFunctionality_search;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
@@ -111,8 +111,8 @@ public class AlloyTestCaseGenerationTest {
 		final GUI gui = GUIStructureMaker.instance1();
 
 		final GUI_Pattern pattern = GUIPatternMaker.instance1();
-
-		pattern.loadSemantics("ADD.als");
+		pattern.GUI_SEMANTICS_PATH = "./files/alloy/GUI_general_old.als";
+		pattern.loadSemantics("ADD_old.als");
 		// final Alloy_Model model = AlloyUtil.loadAlloyModelFromFile(new
 		// File("./files/alloy/ADD.als"));
 		// pattern.setSemantics(FunctionalitySemantics.instantiate(model));

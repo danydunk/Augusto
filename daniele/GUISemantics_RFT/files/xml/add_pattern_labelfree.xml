@@ -9,7 +9,7 @@
 		<action_widget id="paw1" card="one" alloy="Trigger">
 			<label>.*</label>
 		</action_widget>
-		<selectable_widget id="psw1" card="one" alloy="List">
+		<selectable_widget id="psw1" card="one" alloy="">
 			<label>.*</label>
 			<size>.*</size>
 		</selectable_widget>

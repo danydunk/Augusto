@@ -276,8 +276,11 @@ public class Instance_GUI_pattern {
 
 		try {
 			for (final Window w : this.gui.getWindows()) {
-				for (final Action_widget aw : this.gui.getBackwardLinks(w.getId())) {
-					out.getGui().addEdge(aw.getId(), w.getId());
+				for (final Action_widget aw : this.gui.getStaticBackwardLinks(w.getId())) {
+					out.getGui().addStaticEdge(aw.getId(), w.getId());
+				}
+				for (final Action_widget aw : this.gui.getDynamicBackwardLinks(w.getId())) {
+					out.getGui().addDynamicEdge(aw.getId(), w.getId());
 				}
 			}
 		} catch (final Exception e) {

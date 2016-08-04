@@ -61,6 +61,7 @@ fact {
 	all iw: Input_widget | some w: Window | iw in w.iws
 	all aw: Action_widget | some w: Window | aw in w.aws
 	all sw: Selectable_widget | some w: Window | sw in w.sws
+	all o: Object | some t: Time | o in Selectable_widget.list.t
 }
 ----------------Generic GUI Semantics ---------------
 one sig Current_window {

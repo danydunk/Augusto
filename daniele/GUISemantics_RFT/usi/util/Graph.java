@@ -39,7 +39,7 @@ public class Graph {
 		return null;
 	}
 
-	public static Graph convert(final GUI gui) throws Exception {
+	public static Graph convertGUI(final GUI gui) throws Exception {
 
 		final List<Vertex> vertexes = new ArrayList<>();
 		final List<Edge> edges = new ArrayList<>();
@@ -55,7 +55,7 @@ public class Graph {
 		for (final Window window : gui.getWindows()) {
 			final Vertex vsrc = getVertex(vertexes, window.getId());
 			for (final Action_widget actionWindows : window.getActionWidgets()) {
-				final Collection<Window> links = gui.getForwardLinks(actionWindows.getId());
+				final Collection<Window> links = gui.getStaticForwardLinks(actionWindows.getId());
 				for (final Window linkedWin : links) {
 					final Vertex vdest = getVertex(vertexes, linkedWin.getId());
 					final int weight = 1;
