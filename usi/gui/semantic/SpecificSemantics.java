@@ -11,6 +11,7 @@ import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.pattern.Cardinality;
 import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_input_widget;
+import usi.gui.pattern.Pattern_selectable_widget;
 import usi.gui.pattern.Pattern_window;
 import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.semantic.alloy.Alloy_Model;
@@ -20,6 +21,7 @@ import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.Input_widget;
+import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
 
 import com.google.common.collect.Lists;
@@ -29,6 +31,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 	protected List<Signature> concrete_windows;
 	protected List<Signature> concrete_action_w;
 	protected List<Signature> concrete_input_w;
+	protected List<Signature> concrete_selectable_w;
 
 	public SpecificSemantics(final List<Signature> signatures, final List<Fact> facts,
 			final List<Predicate> predicates, final List<Function> functions,
@@ -87,6 +90,11 @@ public class SpecificSemantics extends FunctionalitySemantics {
 	public List<Signature> getConcrete_input_w() {
 
 		return new ArrayList<>(this.concrete_input_w);
+	}
+
+	public List<Signature> getConcrete_selectable_w() {
+
+		return new ArrayList<>(this.concrete_selectable_w);
 	}
 
 	static public SpecificSemantics generate(final Instance_GUI_pattern in) throws Exception {
@@ -177,7 +185,6 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			final Map<Action_widget, Signature> action_widgets = new LinkedHashMap<>();
 
 			for (final Action_widget aw : win.getActionWidgets()) {
-
 				final Pattern_action_widget paw = in.getPAW_for_AW(aw.getId());
 
 				if (paw == null) {
@@ -199,7 +206,31 @@ public class SpecificSemantics extends FunctionalitySemantics {
 				facts.add(factAW);
 			}
 
-			// TO DO: add selectable widgets to alloy
+			// Now, we iterates the selectable widgets
+			final Map<Selectable_widget, Signature> selectable_widgets = new LinkedHashMap<>();
+
+			for (final Selectable_widget sw : win.getSelectableWidgets()) {
+
+				final Pattern_selectable_widget psw = in.getPSW_for_SW(sw.getId());
+
+				if (psw == null) {
+					// SW not mapped
+					continue;
+				}
+				final Signature psw_sig = AlloyUtil.searchForParent(func_semantics, psw);
+
+				final Signature sigSW = new Signature("Selectable_widget_" + sw.getId(),
+						Cardinality.ONE, false, Lists.newArrayList(psw_sig), false);
+
+				signatures.add(sigSW);
+				selectable_widgets.put(sw, sigSW);
+			}
+			// a fact is created to associate the AWS to the window
+			final Fact factSW = AlloyUtil.createFactsForSelectableWidget(selectable_widgets,
+					added_windows.get(win));
+			if (!"".equals(factSW.getContent())) {
+				facts.add(factSW);
+			}
 		}
 
 		final Alloy_Model specific_model = new Alloy_Model(signatures, facts, predicates,

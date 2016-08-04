@@ -26,7 +26,7 @@ public class GUIParserTest {
 	public void testParserGUI1() throws Exception {
 
 		final Document doc = XMLUtil.read(new File("./files/for_test/xml/GUI.xml")
-				.getAbsolutePath());
+		.getAbsolutePath());
 		Assert.assertNotNull(doc);
 		final GUI gui = GUIParser.parse(doc);
 
@@ -107,18 +107,18 @@ public class GUIParserTest {
 
 		// There is a relation from AW1 to W2
 		assertNotNull(aw1);
-		final Collection<Window> wc = gui.getForwardLinks(aw1.getId());
+		final Collection<Window> wc = gui.getStaticForwardLinks(aw1.getId());
 		assertEquals("Number of Edges", 1, wc.size());
 		assertEquals("To windpws", "w2", wc.iterator().next().getId());
 
 		// No edge from AW3
 		assertNotNull(aw3);
-		final Collection<Window> wc3 = gui.getForwardLinks(aw3.getId());
+		final Collection<Window> wc3 = gui.getStaticForwardLinks(aw3.getId());
 		assertTrue(wc3.isEmpty());
 
 		// No edge from AW4
 		assertNotNull(aw4);
-		final Collection<Window> wc4 = gui.getForwardLinks(aw4.getId());
+		final Collection<Window> wc4 = gui.getStaticForwardLinks(aw4.getId());
 		assertTrue(wc4.isEmpty());
 
 	}

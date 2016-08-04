@@ -44,7 +44,7 @@ public class Refinement extends RefinementHelper {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-small_newripper.xml")
-					.getAbsolutePath());
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -59,7 +59,7 @@ public class Refinement extends RefinementHelper {
 			for (final Fact f : match.getSemantics().getFacts()) {
 				if (f.getContent()
 						.trim()
-						.equals("one Field_3,Field_4,Field_5:Property_unique|#Property_required = 0 and Property_unique = (Field_3+Field_4+Field_5) and Field_3.associated_to = (Input_widget_iw7) and Field_4.associated_to = (Input_widget_iw6) and Field_5.associated_to = (Input_widget_iw5)")) {
+						.equals("one Field_4,Field_5:Property_unique|Property_unique = (Field_4+Field_5) and #Property_required = 0 and Field_4.associated_to = (Input_widget_iw7) and Field_5.associated_to = (Input_widget_iw2)")) {
 					return;
 				}
 			}

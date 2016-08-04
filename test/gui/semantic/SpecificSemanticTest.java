@@ -11,8 +11,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import test.gui.GUIPatternMaker;
-import test.gui.GUIStructureMaker;
+import test.gui.pattern.GUIPatternMaker;
+import test.gui.structure.GUIStructureMaker;
 import usi.gui.functionality.GUIFunctionality_search;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.functionality.mapping.Instance_window;

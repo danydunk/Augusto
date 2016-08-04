@@ -18,7 +18,7 @@
 		<action_widget id="paw4" card="some" alloy="Delete_trigger">
 			<label>.*(delete|remove).*</label>
 		</action_widget>
-		<selectable_widget id="psw1" card="one" alloy="List">
+		<selectable_widget id="psw1" card="one" alloy="">
 			<label>.*</label>
 			<size>.*</size>
 		</selectable_widget>
@@ -83,13 +83,17 @@
 			<text>.*</text>
 		</input_widget>
 	</window>
-	<window id="view" card="lone" alloy="View">
+	<window id="view" card="one" alloy="View">
 		<title>.*</title>
 		<modal>any</modal>
 		<root>any</root>
 		<action_widget id="paw13" card="one" alloy="Ok">
 			<label>.*(ok|back).*</label>
 		</action_widget>
+		<input_widget id="piw3" card="none" alloy="">
+			<label>.*</label>
+			<text>.*</text>
+		</input_widget>
 	</window>
 	<edge type="static">
 		<from>paw1</from>
@@ -118,13 +122,45 @@
 	</edge>
 	<edge type="dynamic">
 		<from>paw4</from>
-		<to>confirm_del</to>
+		<to>confirmation_del</to>
 		<to>initial</to>					
 	</edge>
 	<edge type="dynamic">
 		<from>paw5</from>
 		<to>form_2</to>
 		<to>confirmation</to>
+		<to>initial</to>		
+	</edge>
+	<edge type="dynamic">
+		<from>paw7</from>
+		<to>form_2</to>
+		<to>confirmation</to>
+		<to>initial</to>										
+	</edge>
+	<edge type="dynamic">
+		<from>paw8</from>
+		<to>form_2</to>
+		<to>form_1</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw9</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw10</from>
+		<to>form_2</to>
+		<to>form_1</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw11</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw12</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw13</from>
 		<to>initial</to>		
 	</edge>
 </pattern>

@@ -1,6 +1,7 @@
 package usi.gui.semantic.testcase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
@@ -9,6 +10,7 @@ import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.Input_widget;
+import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
 import edu.mit.csail.sdg.alloy4.ConstList;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
@@ -65,9 +67,9 @@ public class AlloyTestCaseGenerator {
 		final SpecificSemantics model = this.instance.getSemantics();
 
 		final String alloy_model = model.toString();
-		System.out.println("START ALLOY MODEL");
-		System.out.println(model);
-		System.out.println("END ALLOY MODEL");
+		// System.out.println("START ALLOY MODEL");
+		// System.out.println(model);
+		// System.out.println("END ALLOY MODEL");
 
 		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
 
@@ -90,7 +92,7 @@ public class AlloyTestCaseGenerator {
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
-		// TO DO: add the creation of GUI test cases
+		// TODO: add the creation of GUI test cases
 		for (final A4Solution sol : solutions) {
 			// AlloyUtil.extractProperty(sol, model);
 
@@ -139,7 +141,6 @@ public class AlloyTestCaseGenerator {
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
-		// TO DO: add the creation of GUI test cases
 		for (final A4Solution sol : solutions) {
 			out.add(this.analyzeTuples(sol));
 		}
@@ -150,7 +151,6 @@ public class AlloyTestCaseGenerator {
 	protected GUITestCase analyzeTuples(final A4Solution solution) throws Exception {
 
 		// TODO: oracle
-		// TODO: add source window
 		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track");
 		final List<A4Tuple> curr_wind = AlloyUtil.getTuples(solution, "Current_window");
 		if (tracks.size() != curr_wind.size() - 1) {
@@ -287,7 +287,7 @@ public class AlloyTestCaseGenerator {
 					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in go.");
 				}
 
-				final Go action = new Go(target_w, source_window);
+				final Go action = new Go(source_window, null, target_w);
 				actions.set(time_index - 1, action);
 				continue;
 			}
@@ -364,7 +364,86 @@ public class AlloyTestCaseGenerator {
 				actions.set(time_index - 1, action);
 				continue;
 			}
-			// TODO:select
+			if (tuple.atom(1).startsWith("Select")) {
+				if (params.size() != 2) {
+					throw new Exception(
+							"AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for select.");
+				}
+				String sw_id = null;
+				String sw_name = null;
+				String object = null;
+
+				for (final A4Tuple t : params) {
+					if (t.atom(1).startsWith("Selectable_widget")) {
+						sw_name = t.atom(1);
+						sw_id = t.atom(1).substring(18);
+						sw_id = sw_id.split("\\$")[0];
+						continue;
+					}
+					if (t.atom(1).startsWith("Object")) {
+						object = t.atom(1);
+						continue;
+					}
+				}
+
+				if (object == null || sw_id == null) {
+					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in select.");
+				}
+
+				// all the tuples connected with the sw
+				final List<A4Tuple> sw_tuples = AlloyUtil.getTuples(solution, sw_name);
+				final List<String> objects_in_sw_at_t = new ArrayList<>();
+				for (final A4Tuple sw_tuple : sw_tuples) {
+					if (sw_tuple.atom(2).equals("Time$" + (time_index - 1))) {
+						if (!objects_in_sw_at_t.contains(sw_tuple.atom(1))) {
+							objects_in_sw_at_t.add(sw_tuple.atom(1));
+						}
+					}
+				}
+				// now we order the objects in the selectable widget wrt their
+				// addition time
+				final List<String> to_order = new ArrayList<>();
+				for (final String obj : objects_in_sw_at_t) {
+					int lowest_time_index = Integer.MAX_VALUE;
+					for (final A4Tuple sw_tuple : sw_tuples) {
+						if (sw_tuple.atom(1).equals(obj)) {
+							final int index = Integer.valueOf(sw_tuple.atom(2).split("\\$")[1]);
+							if (index < lowest_time_index) {
+								lowest_time_index = index;
+							}
+
+						}
+					}
+					if (lowest_time_index == Integer.MAX_VALUE) {
+						throw new Exception(
+								"AlloyTestCaseGenerator - analyzeTuples: error in select.");
+					}
+					to_order.add(lowest_time_index + "_" + obj);
+				}
+				Collections.sort(to_order);
+				final List<String> ordered = new ArrayList<>();
+				for (final String s : to_order) {
+					ordered.add(s.split("_")[1]);
+				}
+
+				Selectable_widget target_sw = null;
+				for (final Selectable_widget sw : this.instance.getGui().getSelectable_widgets()) {
+					if (sw.getId().equals(sw_id)) {
+						target_sw = sw;
+						break;
+					}
+				}
+
+				if (target_sw == null) {
+					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in select.");
+				}
+
+				final int select_index = ordered.indexOf(object);
+				final Select action = new Select(source_window, null, target_sw, select_index);
+
+				actions.set(time_index - 1, action);
+				continue;
+			}
 		}
 
 		final GUITestCase test = new GUITestCase(solution, actions);

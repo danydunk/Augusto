@@ -16,6 +16,7 @@ import java.util.Map;
 import usi.gui.pattern.Cardinality;
 import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_input_widget;
+import usi.gui.pattern.Pattern_selectable_widget;
 import usi.gui.semantic.FunctionalitySemantics;
 import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.entity.AlloyEntity;
@@ -26,6 +27,7 @@ import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
+import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
@@ -219,6 +221,7 @@ public class AlloyUtil {
 							model.getAllReachableSigs(), run_command, options);
 					this.solution = app;
 				} catch (final Err e) {
+					e.printStackTrace();
 					this.exception = true;
 				}
 			}
@@ -347,7 +350,6 @@ public class AlloyUtil {
 						|| lines[x].trim().startsWith("assert")
 						|| lines[x].trim().startsWith("run")
 						|| lines[x].trim().startsWith("one sig")) {
-					System.out.println();
 					throw new Exception("AlloyUtil: error retriving body.");
 				}
 				if (lines[x].trim().equals("}")) {
@@ -781,7 +783,12 @@ public class AlloyUtil {
 
 		for (final Action_widget aw : aws.keySet()) {
 			final List<Window> edges = new ArrayList<>();
-			for (final Window w : gui.getForwardLinks(aw.getId())) {
+			for (final Window w : gui.getStaticForwardLinks(aw.getId())) {
+				if (ws.containsKey(w)) {
+					edges.add(w);
+				}
+			}
+			for (final Window w : gui.getDynamicForwardLinks(aw.getId())) {
 				if (ws.containsKey(w)) {
 					edges.add(w);
 				}
@@ -809,10 +816,10 @@ public class AlloyUtil {
 	 * @param sws
 	 * @param window
 	 */
-	public static Fact createFactsForSelectableWidget(final List<Signature> sws,
+	public static Fact createFactsForSelectableWidget(final Map<Selectable_widget, Signature> sws,
 			final Signature window) {
 
-		return createFactsForElement(sws, window, "aws");
+		return createFactsForElement(sws.values(), window, "sws");
 	}
 
 	public static Fact createFactsForElement(final Collection<Signature> widgets,
@@ -833,7 +840,27 @@ public class AlloyUtil {
 		return new Fact(window.getIdentifier() + "_" + fieldToRelated, content);
 	}
 
-	// TODO: maybe we should move this method to, for instance, AlloyModel.
+	public static Signature searchForParent(final FunctionalitySemantics func_semantics,
+			final Pattern_selectable_widget psw) throws Exception {
+
+		Signature psw_sig;
+		if (psw.getAlloyCorrespondence() != null && psw.getAlloyCorrespondence().length() > 0) {
+			// the pattern input widget signature is retrieved
+			final List<Signature> to_search = new ArrayList<>(
+					func_semantics.getSelectable_w_extensions());
+			to_search.add(func_semantics.getSelectable_w_signature());
+			psw_sig = AlloyUtil.searchSignatureInList(to_search, psw.getAlloyCorrespondence());
+			// System.out.println(piw.getAlloyCorrespondence());
+			if (psw_sig == null) {
+				throw new Exception("SpecificSemantics - generate: wrong alloy corrispondence "
+						+ psw.getAlloyCorrespondence());
+			}
+		} else {
+			psw_sig = func_semantics.getSelectable_w_signature();
+		}
+		return psw_sig;
+	}
+
 	public static Signature searchForParent(final FunctionalitySemantics func_semantics,
 			final Pattern_input_widget piw) throws Exception {
 
@@ -855,7 +882,6 @@ public class AlloyUtil {
 		return piw_sig;
 	}
 
-	// TODO: maybe we should move this method to, for instance, AlloyModel.
 	public static Signature searchForParent(final FunctionalitySemantics func_semantics,
 			final Pattern_action_widget paw) throws Exception {
 
@@ -1097,7 +1123,22 @@ public class AlloyUtil {
 			}
 		}
 
-		// TODO: selectable widget
+		if (sem.getSelectable_w_signature().getIdentifier().equals(sig)) {
+			return true;
+		}
+
+		for (final Signature s : sem.getSelectable_w_extensions()) {
+			if (s.getIdentifier().equals(sig)) {
+				return true;
+			}
+		}
+
+		for (final Signature s : sem.getConcrete_selectable_w()) {
+			if (s.getIdentifier().equals(sig)) {
+				return true;
+			}
+		}
+
 		return false;
 	}
 }

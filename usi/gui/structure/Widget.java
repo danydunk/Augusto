@@ -245,7 +245,7 @@ public abstract class Widget implements Comparable<Widget> {
 			return new Input_widget(to, idm.nextIWId(), label, type, x, y, value);
 
 		} else if (type.equals("HyperlinkUI")) {
-			// TO FILL
+			// TODO:
 
 		} else if (type.equals("ListUI")) {
 			final int size = Integer.valueOf(to.getProperty("lastVisibleIndex").toString()) + 1;

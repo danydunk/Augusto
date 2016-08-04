@@ -22,7 +22,7 @@ import com.google.common.collect.Multimap;
 
 public class GUI_Pattern {
 
-	private final String GUI_SEMANTICS_PATH = "./files/alloy/GUI_general.als";
+	public String GUI_SEMANTICS_PATH = "./files/alloy/GUI_general.als";
 
 	private Map<String, Pattern_window> windows;
 	private Map<String, Pattern_window> aw_window_mapping;
@@ -385,12 +385,9 @@ public class GUI_Pattern {
 		for (final Pattern_window pw : this.getWindows()) {
 			final List<Window> matches = in.getPatternWindowMatches(pw.getId());
 			for (final Window match : matches) {
-
-				final List<Pattern_action_widget> paws = new ArrayList<>();
-				paws.addAll(this.getStaticBackwardLinks(pw.getId()));
-				paws.addAll(this.getDynamicBackwardLinks(pw.getId()));
-
-				loop: for (final Pattern_action_widget paw : paws) {
+				// static
+				loop: for (final Pattern_action_widget paw : this
+						.getStaticBackwardLinks(pw.getId())) {
 					final Pattern_window source_pw = this.getActionWidget_Window(paw.getId());
 					final List<Window> pw_matches = in.getPatternWindowMatches(source_pw.getId());
 
@@ -410,7 +407,7 @@ public class GUI_Pattern {
 						}
 						found_aw_match = true;
 						for (final Action_widget aw : aw_matches) {
-							if (match_gui.isEdge(aw.getId(), match.getId())) {
+							if (match_gui.isStaticEdge(aw.getId(), match.getId())) {
 								continue loop;
 							}
 						}
@@ -419,14 +416,41 @@ public class GUI_Pattern {
 						return false;
 					}
 				}
+			// dynamic
+			loop: for (final Pattern_action_widget paw : this.getDynamicBackwardLinks(pw
+						.getId())) {
+				final Pattern_window source_pw = this.getActionWidget_Window(paw.getId());
+				final List<Window> pw_matches = in.getPatternWindowMatches(source_pw.getId());
+
+				if (pw_matches.size() == 0 && source_pw.getCardinality().getMin() == 0) {
+					continue;
+				}
+				boolean found_aw_match = false;
+				for (final Window w : pw_matches) {
+					List<Action_widget> aw_matches = in.getAWS_for_PAW(paw.getId());
+					if (aw_matches == null) {
+						continue;
+					}
+					aw_matches = aw_matches.stream().filter(e -> w.containsWidget(e.getId()))
+							.collect(Collectors.toList());
+					if (aw_matches.size() == 0) {
+						continue;
+					}
+					found_aw_match = true;
+					for (final Action_widget aw : aw_matches) {
+						if (match_gui.isDynamicEdge(aw.getId(), match.getId())) {
+							continue loop;
+						}
+					}
+				}
+				if (found_aw_match) {
+					return false;
+				}
+			}
 
 				for (final Pattern_action_widget paw : pw.getActionWidgets()) {
-
-					final List<Pattern_window> target_pws = new ArrayList<>();
-					target_pws.addAll(this.getStaticForwardLinks(paw.getId()));
-					target_pws.addAll(this.getDynamicForwardLinks(paw.getId()));
-
-					for (final Pattern_window target_pw : target_pws) {
+					// static
+					for (final Pattern_window target_pw : this.getStaticForwardLinks(paw.getId())) {
 						final List<Window> targets = in.getPatternWindowMatches(target_pw.getId());
 
 						final List<Action_widget> aw_matches = in.getAWS_for_PAW(paw.getId())
@@ -437,7 +461,28 @@ public class GUI_Pattern {
 							boolean target_found = false;
 							for (final Window ww : targets) {
 								target_found = true;
-								if (match_gui.isEdge(aw.getId(), ww.getId())) {
+								if (match_gui.isStaticEdge(aw.getId(), ww.getId())) {
+									continue loop;
+								}
+							}
+							if (target_found) {
+								return false;
+							}
+						}
+					}
+					// dynamic
+					for (final Pattern_window target_pw : this.getDynamicForwardLinks(paw.getId())) {
+						final List<Window> targets = in.getPatternWindowMatches(target_pw.getId());
+
+						final List<Action_widget> aw_matches = in.getAWS_for_PAW(paw.getId())
+								.stream().filter(e -> match.containsWidget(e.getId()))
+								.collect(Collectors.toList());
+
+						loop: for (final Action_widget aw : aw_matches) {
+							boolean target_found = false;
+							for (final Window ww : targets) {
+								target_found = true;
+								if (match_gui.isDynamicEdge(aw.getId(), ww.getId())) {
 									continue loop;
 								}
 							}

@@ -111,23 +111,23 @@ adrian@17od.com
 http://upm.sourceforge.net</value>
         </input_widget>
     </window>
-    <edge>
+    <edge type="static">
         <from>aw1</from>
         <to>w2</to>
     </edge>
-    <edge>
+    <edge type="static">
         <from>aw2</from>
         <to>w3</to>
     </edge>
-    <edge>
+    <edge type="static">
         <from>aw4</from>
         <to>w1</to>
     </edge>
-    <edge>
+    <edge type="static">
         <from>aw5</from>
         <to>w1</to>
     </edge>
-    <edge>
+    <edge type="static">
         <from>aw6</from>
         <to>w1</to>
     </edge>

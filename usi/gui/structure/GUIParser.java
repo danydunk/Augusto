@@ -58,7 +58,7 @@ public class GUIParser {
 	private void createEdge(final Node node, final GUI gui, final List<Action_widget> aws)
 			throws Exception {
 
-		// String id = node.getAttributes().getNamedItem("id").getNodeValue();
+		final String type = node.getAttributes().getNamedItem("type").getNodeValue();
 		// See that the id is not used.
 		final Node fromNode = getElementNode(node.getChildNodes(), "from");
 		final Node toNode = getElementNode(node.getChildNodes(), "to");
@@ -73,7 +73,16 @@ public class GUIParser {
 		if (aw.size() != 1 || w.size() != 1) {
 			throw new Exception("GUIParser - createEdge: id not found.");
 		}
-		gui.addEdge(aw.get(0).getId(), w.get(0).getId());
+		switch (type) {
+		case "static":
+			gui.addStaticEdge(aw.get(0).getId(), w.get(0).getId());
+			break;
+		case "dynamic":
+			gui.addDynamicEdge(aw.get(0).getId(), w.get(0).getId());
+			break;
+		default:
+			throw new Exception("GUIParser - createEdge: edge type not found.");
+		}
 
 	}
 

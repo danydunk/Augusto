@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
-import test.gui.GUIStructureMaker;
+import test.gui.structure.GUIStructureMaker;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
@@ -54,7 +54,7 @@ public class TestGUiDijkstra {
 
 		final GUI gui = GUIStructureMaker.instance6();
 
-		final Graph graph = Graph.convert(gui);
+		final Graph graph = Graph.convertGUI(gui);
 		assertNotNull(graph);
 
 		assertEquals(gui.getWindows().size(), graph.getVertexes().size());

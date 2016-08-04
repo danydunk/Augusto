@@ -6,7 +6,7 @@
 // insertion actions.  Any changes made directly to a helper class
 // file will be lost when automatically updated.
 
-package resources.usi;
+package resources.test.rft;
 
 import com.rational.test.ft.object.interfaces.*;
 import com.rational.test.ft.object.interfaces.SAP.*;
@@ -19,21 +19,21 @@ import com.rational.test.ft.script.*;
 import com.rational.test.ft.vp.IFtVerificationPoint;
 import com.ibm.rational.test.ft.object.interfaces.sapwebportal.*;
 /**
- * Script Name   : <b>Main</b><br>
- * Generated     : <b>2016/08/03 3:12:08 AM</b><br>
+ * Script Name   : <b>GO_select_test</b><br>
+ * Generated     : <b>2016/08/03 8:03:13 AM</b><br>
  * Description   : Helper class for script<br>
  * Original Host : Windows 7 amd64 6.1 <br>
  * 
  * @since  August 03, 2016
  * @author usi
  */
-public abstract class MainHelper extends RationalTestScript
+public abstract class GO_select_testHelper extends RationalTestScript
 {
 	
 
-	protected MainHelper()
+	protected GO_select_testHelper()
 	{
-		setScriptName("usi.Main");
+		setScriptName("test.rft.GO_select_test");
 	}
 	
 }

@@ -47,7 +47,7 @@ pred go_success_post [w: Window, t, t': Time] {
 pred go_fail_post [w: Window, t, t': Time] {
 	List.contains.t' = List.contains.t
 }
-
+pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }
 pred fill_semantics [iw: Input_widget, t: Time, v: Value] { }
 pred fill_success_post [iw: Input_widget, t, t': Time, v: Value] { 
 	List.contains.t' = List.contains.t

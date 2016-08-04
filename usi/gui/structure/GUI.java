@@ -14,38 +14,41 @@ public class GUI {
 
 	private Map<String, Window> windows;
 	private Map<String, Window> aw_window_mapping;
-	private Multimap<String, String> edgesFrom;
-	private Multimap<String, String> edgesTo;
+	private Multimap<String, String> staticEdgesFrom;
+	private Multimap<String, String> staticEdgesTo;
+	private Multimap<String, String> dynamicEdgesFrom;
+	private Multimap<String, String> dynamicEdgesTo;
 	private String root;
 
-	// TODO: dynamic edges
 	public GUI() {
 
 		this.windows = new HashMap<>();
 		this.aw_window_mapping = new HashMap<>();
 
-		this.edgesFrom = HashMultimap.create();
-		this.edgesTo = HashMultimap.create();
+		this.staticEdgesFrom = HashMultimap.create();
+		this.staticEdgesTo = HashMultimap.create();
+		this.dynamicEdgesFrom = HashMultimap.create();
+		this.dynamicEdgesTo = HashMultimap.create();
 	}
 
-	public boolean isEdge(final String aw, final String w) throws Exception {
+	public boolean isStaticEdge(final String aw, final String w) throws Exception {
 
 		if (aw == null || w == null || !this.windows.containsKey(w)
 				|| !this.aw_window_mapping.containsKey(aw)) {
-			throw new Exception("GUI: wrong input in isEdge");
+			throw new Exception("GUI - isStaticEdge: wrong input.");
 		}
-		if (this.edgesFrom.containsEntry(aw, w) && this.edgesTo.containsEntry(w, aw)) {
+		if (this.staticEdgesFrom.containsEntry(aw, w) && this.staticEdgesTo.containsEntry(w, aw)) {
 			return true;
 		}
 		return false;
 	}
 
-	public List<Window> getForwardLinks(final String aw) throws Exception {
+	public List<Window> getStaticForwardLinks(final String aw) throws Exception {
 
 		if (aw == null || !this.aw_window_mapping.containsKey(aw)) {
-			throw new Exception("GUI: wrong input in staticEdgesTo");
+			throw new Exception("GUI - getStaticForwardLinks: wrong input.");
 		}
-		final Collection<String> out = this.edgesFrom.get(aw);
+		final Collection<String> out = this.staticEdgesFrom.get(aw);
 		if (out != null) {
 			final List<Window> to_return = new ArrayList<>();
 			for (final String s : out) {
@@ -57,13 +60,13 @@ public class GUI {
 		}
 	}
 
-	public List<Action_widget> getBackwardLinks(final String w) throws Exception {
+	public List<Action_widget> getStaticBackwardLinks(final String w) throws Exception {
 
 		if (w == null || !this.windows.containsKey(w)) {
-			throw new Exception("GUI: wrong input in getBackwardLinks");
+			throw new Exception("GUI - getStaticBackwardLinks: wrong input.");
 		}
 
-		final Collection<String> out = this.edgesTo.get(w);
+		final Collection<String> out = this.staticEdgesTo.get(w);
 		if (out != null) {
 			final List<Action_widget> to_return = new ArrayList<>();
 			loop: for (final String id : out) {
@@ -74,7 +77,7 @@ public class GUI {
 						continue loop;
 					}
 				}
-				throw new Exception("GUI - getBackwardLinks: edge not found.");
+				throw new Exception("GUI - getStaticBackwardLinks: edge not found.");
 			}
 			return to_return;
 		} else {
@@ -82,23 +85,96 @@ public class GUI {
 		}
 	}
 
-	public void addEdge(final String aw, final String w) throws Exception {
+	public void addStaticEdge(final String aw, final String w) throws Exception {
 
 		if (aw == null || w == null || !this.windows.containsKey(w)
 				|| !this.aw_window_mapping.containsKey(aw)) {
-			throw new Exception("GUI: wrong input in addEdge");
+			throw new Exception("GUI - addStaticEdge: wrong input.");
 		}
-		this.edgesFrom.put(aw, w);
-		this.edgesTo.put(w, aw);
+		this.staticEdgesFrom.put(aw, w);
+		this.staticEdgesTo.put(w, aw);
 	}
 
-	public void removeEdge(final String aw, final String w) throws Exception {
+	public void removeStaticEdge(final String aw, final String w) throws Exception {
 
 		if (aw == null || w == null) {
-			throw new Exception("GUI: wrong input in removeEdge");
+			throw new Exception("GUI - removeStaticEdge: wrong input.");
 		}
-		this.edgesFrom.remove(aw, w);
-		this.edgesTo.remove(w, aw);
+		this.staticEdgesFrom.remove(aw, w);
+		this.staticEdgesTo.remove(w, aw);
+	}
+
+	public boolean isDynamicEdge(final String aw, final String w) throws Exception {
+
+		if (aw == null || w == null || !this.windows.containsKey(w)
+				|| !this.aw_window_mapping.containsKey(aw)) {
+			throw new Exception("GUI - isDynamicEdge: wrong input.");
+		}
+		if (this.dynamicEdgesFrom.containsEntry(aw, w) && this.dynamicEdgesTo.containsEntry(w, aw)) {
+			return true;
+		}
+		return false;
+	}
+
+	public List<Window> getDynamicForwardLinks(final String aw) throws Exception {
+
+		if (aw == null || !this.aw_window_mapping.containsKey(aw)) {
+			throw new Exception("GUI - getDynamicForwardLinks: wrong input.");
+		}
+		final Collection<String> out = this.dynamicEdgesFrom.get(aw);
+		if (out != null) {
+			final List<Window> to_return = new ArrayList<>();
+			for (final String s : out) {
+				to_return.add(this.windows.get(s));
+			}
+			return to_return;
+		} else {
+			return new ArrayList<Window>();
+		}
+	}
+
+	public List<Action_widget> getDynamicBackwardLinks(final String w) throws Exception {
+
+		if (w == null || !this.windows.containsKey(w)) {
+			throw new Exception("GUI: wrong input in getBackwardLinks");
+		}
+
+		final Collection<String> out = this.dynamicEdgesTo.get(w);
+		if (out != null) {
+			final List<Action_widget> to_return = new ArrayList<>();
+			loop: for (final String id : out) {
+				final List<Action_widget> aws = this.aw_window_mapping.get(id).getActionWidgets();
+				for (final Action_widget aw : aws) {
+					if (aw.getId().equals(id)) {
+						to_return.add(aw);
+						continue loop;
+					}
+				}
+				throw new Exception("GUI - getDynamicBackwardLinks: edge not found.");
+			}
+			return to_return;
+		} else {
+			return new ArrayList<Action_widget>();
+		}
+	}
+
+	public void addDynamicEdge(final String aw, final String w) throws Exception {
+
+		if (aw == null || w == null || !this.windows.containsKey(w)
+				|| !this.aw_window_mapping.containsKey(aw)) {
+			throw new Exception("GUI: wrong input in addDynamicEdge");
+		}
+		this.dynamicEdgesFrom.put(aw, w);
+		this.dynamicEdgesTo.put(w, aw);
+	}
+
+	public void removeDynamicEdge(final String aw, final String w) throws Exception {
+
+		if (aw == null || w == null) {
+			throw new Exception("GUI - removeDynamicEdge: wrong input.");
+		}
+		this.dynamicEdgesFrom.remove(aw, w);
+		this.dynamicEdgesTo.remove(w, aw);
 	}
 
 	public Window getRoot() {
@@ -117,8 +193,10 @@ public class GUI {
 		this.windows = new HashMap<>();
 		this.aw_window_mapping = new HashMap<>();
 
-		this.edgesFrom = HashMultimap.create();
-		this.edgesTo = HashMultimap.create();
+		this.staticEdgesFrom = HashMultimap.create();
+		this.staticEdgesTo = HashMultimap.create();
+		this.dynamicEdgesFrom = HashMultimap.create();
+		this.dynamicEdgesTo = HashMultimap.create();
 
 		for (final Window w : ws) {
 			this.addWindow(w);
@@ -150,18 +228,33 @@ public class GUI {
 			throw new Exception("GUI: wrong input in removeWindow");
 		}
 
-		// the edges associated with this window are removed
-		final List<Action_widget> to_remove = new ArrayList<>(this.getBackwardLinks(n.getId()));
+		// the static edges associated with this window are removed
+		List<Action_widget> to_remove = new ArrayList<>(this.getStaticBackwardLinks(n.getId()));
 		for (final Action_widget aw : to_remove) {
-			this.removeEdge(aw.getId(), n.getId());
+			this.removeStaticEdge(aw.getId(), n.getId());
 		}
 
-		final List<String> from_links = this.aw_window_mapping.entrySet().parallelStream()
+		List<String> from_links = this.aw_window_mapping.entrySet().parallelStream()
 				.filter(e -> e.getValue() == n).map(ee -> ee.getKey()).collect(Collectors.toList());
 
 		for (final String aw : from_links) {
-			for (final Window w : this.getForwardLinks(aw)) {
-				this.removeEdge(aw, w.getId());
+			for (final Window w : this.getStaticForwardLinks(aw)) {
+				this.removeStaticEdge(aw, w.getId());
+			}
+		}
+
+		// the dynamic edges associated with this window are removed
+		to_remove = new ArrayList<>(this.getDynamicBackwardLinks(n.getId()));
+		for (final Action_widget aw : to_remove) {
+			this.removeDynamicEdge(aw.getId(), n.getId());
+		}
+
+		from_links = this.aw_window_mapping.entrySet().parallelStream()
+				.filter(e -> e.getValue() == n).map(ee -> ee.getKey()).collect(Collectors.toList());
+
+		for (final String aw : from_links) {
+			for (final Window w : this.getDynamicForwardLinks(aw)) {
+				this.removeDynamicEdge(aw, w.getId());
 			}
 		}
 
@@ -222,8 +315,13 @@ public class GUI {
 		return this.windows.get(id);
 	}
 
-	public int getNumberOfEdges() {
+	public int getNumberOfStaticEdges() {
 
-		return this.edgesFrom.size();
+		return this.staticEdgesFrom.size();
+	}
+
+	public int getNumberOfDynamicEdges() {
+
+		return this.dynamicEdgesFrom.size();
 	}
 }
