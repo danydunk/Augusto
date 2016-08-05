@@ -42,9 +42,12 @@ abstract sig Action_widget {
 	goes: lone Window
 }
 sig Value { }
+sig Invalid in Value{}
 abstract sig Input_widget {
 	content: Value lone -> Time
 }
+abstract sig Selectable_widget {}
+
 fact {
 	all gw: General |  #gw.iws = 0 and #gw.aws = 0
 	all iw: Input_widget | one w: Window | iw in w.iws
@@ -85,6 +88,8 @@ pred go [w: Window, t, t': Time, g: Go] {
 	--- operation is tracked ---
 	g.where = w and Track.op.t' = g
 }
+pred select  [iw: Input_widget, t, t': Time, v: Value, f: Fill] {}
+
 
 run {}
 --------------------Initial State---------------
@@ -138,6 +143,8 @@ pred go_fail_post [w: Window, t, t': Time] {
 }
 
 pred fill_semantics [iw: Input_widget, t: Time, v: Value] { }
+pred select_semantics [iw: Input_widget, t: Time, v: Value] { }
+
 pred fill_success_post [iw: Input_widget, t, t': Time, v: Value] { 
 	List.contains.t' = List.contains.t
 }

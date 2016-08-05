@@ -37,7 +37,7 @@ public class ActionManager {
 		final GuiStateManager guimanager = GuiStateManager.getInstance();
 		final Window currWind = guimanager.getCurrentWindows().get(0);
 		if (act.getWindow() == null || !currWind.isSame(act.getWindow())) {
-			throw new Exception("ActionManager - executeAction: wrong source refenence.");
+			throw new Exception("ActionManager - executeAction: wrong source reference.");
 		}
 
 		final String className = act.getWidget().getClasss();
@@ -104,6 +104,7 @@ public class ActionManager {
 				try {
 					method.invoke(c.newInstance(), to, fill.getInput());
 				} catch (final Exception e) {
+					e.printStackTrace();
 					throw new Exception("ActionManager - executeAction: error executing fill, "
 							+ e.getMessage());
 				}

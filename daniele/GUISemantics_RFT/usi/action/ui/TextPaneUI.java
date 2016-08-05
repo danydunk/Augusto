@@ -9,7 +9,7 @@ import com.rational.test.ft.object.interfaces.TextGuiSubitemTestObject;
 
 public class TextPaneUI extends MainHelper {
 
-	public static void setText(final TestObject testObject, final String text) throws IOException {
+	public static void fill(final TestObject testObject, final String text) throws IOException {
 
 		new TextGuiSubitemTestObject(testObject).setProperty("text", text);
 	}

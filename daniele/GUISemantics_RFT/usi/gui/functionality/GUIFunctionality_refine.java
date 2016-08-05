@@ -641,7 +641,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverEdge(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-			throws Exception {
+					throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {
@@ -796,12 +796,8 @@ public class GUIFunctionality_refine {
 				continue;
 			}
 			for (int cont = 0; cont < tc.getActions().size(); cont++) {
-				// TODO: remove after dealing with go actions
 				final GUIAction act1 = tc.getActions().get(cont);
 				final GUIAction act2 = tc2.getActions().get(cont);
-				if (act1 instanceof Go && act2 instanceof Go) {
-					continue;
-				}
 
 				if (!act1.getWidget().getId().equals(act2.getWidget().getId())
 						|| !act1.getWindow().getId().equals(act2.getWindow().getId())) {
@@ -839,6 +835,6 @@ public class GUIFunctionality_refine {
 			return tc2.getActions().get(tc2.getActions().size() - 1).getResult();
 		}
 
-		return null;
+	return null;
 	}
 }
