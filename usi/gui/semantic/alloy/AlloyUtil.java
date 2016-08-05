@@ -24,9 +24,11 @@ import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Function;
 import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
+import usi.gui.semantic.testcase.inputdata.DataManager;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
+import usi.gui.structure.Option_input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
 import edu.mit.csail.sdg.alloy4.A4Reporter;
@@ -758,11 +760,44 @@ public class AlloyUtil {
 	 *
 	 * @param iws
 	 * @param window
+	 * @throws Exception
 	 */
 	static public Fact createFactsForInputWidget(final Map<Input_widget, Signature> iws,
-			final Signature window) {
+			final Signature window) throws Exception {
 
-		return createFactsForElement(iws.values(), window, "iws");
+		final Fact initial_fact = createFactsForElement(iws.values(), window, "iws");
+		String content = initial_fact.getContent();
+		final DataManager dm = DataManager.getInstance();
+
+		for (final Input_widget iw : iws.keySet()) {
+			if (iw instanceof Option_input_widget) {
+				final Option_input_widget oiw = (Option_input_widget) iw;
+				content += System.getProperty("line.separator");
+				content += "no f: Fill | f.filled in (Input_widget - "
+						+ iws.get(iw).getIdentifier() + ") and f.with in "
+						+ iws.get(iw).getIdentifier() + "_values";
+				content += System.getProperty("line.separator");
+				content += "all f: Fill |  f.filled in " + iws.get(iw).getIdentifier()
+						+ " => f.with in " + iws.get(iw).getIdentifier() + "_values";
+				content += System.getProperty("line.separator");
+				content += "all v: " + iws.get(iw).getIdentifier() + "_values | not (v in Invalid)";
+				content += System.getProperty("line.separator");
+				content += "#" + iws.get(iw).getIdentifier() + "_values = " + oiw.getSize();
+			} else {
+				String metadata = iw.getLabel() != null ? iw.getLabel() : "";
+				metadata += " ";
+				metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+				if (dm.getInvalidData(metadata).size() == 0) {
+					content += System.getProperty("line.separator");
+					content += "all t: Time | #" + iws.get(iw).getIdentifier()
+							+ ".content.t > 0 => not(" + iws.get(iw).getIdentifier()
+							+ ".content.t in Invalid)";
+				}
+			}
+
+		}
+		final Fact fact = new Fact(window.getIdentifier() + "_iws", content);
+		return fact;
 	}
 
 	/**
@@ -776,7 +811,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();

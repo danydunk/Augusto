@@ -42,6 +42,7 @@ abstract sig Action_widget {
 	goes: lone Window
 }
 sig Value { }
+sig Invalid in Value{}
 abstract sig Input_widget {
 	content: Value lone -> Time
 }

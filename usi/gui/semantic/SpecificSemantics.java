@@ -21,6 +21,7 @@ import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.Input_widget;
+import usi.gui.structure.Option_input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
 
@@ -170,7 +171,25 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 				final Signature sigIW = new Signature("Input_widget_" + iw.getId(),
 						Cardinality.ONE, false, Lists.newArrayList(piw_sig), false);
-
+				// if the widget is a option input widget we create a signature
+				// to contain its values
+				if (iw instanceof Option_input_widget) {
+					Signature value = null;
+					for (final Signature sign : signatures) {
+						if (sign.getIdentifier().equals("Value")) {
+							value = sign;
+							break;
+						}
+					}
+					if (value == null) {
+						throw new Exception(
+								"SpecificSemantics - generate: value signature not found.");
+					}
+					final Signature values = new Signature(
+							"Input_widget_" + iw.getId() + "_values", Cardinality.SOME, false,
+							Lists.newArrayList(value), false);
+					signatures.add(values);
+				}
 				signatures.add(sigIW);
 				input_widgets.put(iw, sigIW);
 			}

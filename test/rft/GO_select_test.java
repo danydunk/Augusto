@@ -14,12 +14,15 @@ import usi.gui.functionality.mapping.Instance_window;
 import usi.gui.pattern.GUIPatternParser;
 import usi.gui.pattern.GUI_Pattern;
 import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
+import usi.gui.semantic.testcase.Fill;
+import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.semantic.testcase.TestCaseRunner;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.GUIParser;
 import usi.gui.structure.Input_widget;
+import usi.gui.structure.Option_input_widget;
 import usi.gui.structure.Window;
 import usi.xml.XMLUtil;
 
@@ -49,7 +52,7 @@ public class GO_select_test extends GO_select_testHelper {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-					.getAbsolutePath());
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -59,8 +62,14 @@ public class GO_select_test extends GO_select_testHelper {
 			final Window view = new Window("w999", "view", "class", 1, 1, false);
 
 			for (final Input_widget iww : gui.getWindow("w10").getInputWidgets()) {
-				view.addWidget(new Input_widget(iww.getId() + "9", iww.getLabel(), iww.getClasss(),
-						iww.getX(), iww.getY(), iww.getValue()));
+				if (iww instanceof Option_input_widget) {
+					final Option_input_widget oiw = (Option_input_widget) iww;
+					view.addWidget(new Option_input_widget(iww.getId() + "9", iww.getLabel(), iww
+							.getClasss(), iww.getX(), iww.getY(), oiw.getSize(), oiw.getSelected()));
+				} else {
+					view.addWidget(new Input_widget(iww.getId() + "9", iww.getLabel(), iww
+							.getClasss(), iww.getX(), iww.getY(), iww.getValue()));
+				}
 			}
 
 			final Action_widget ok = new Action_widget("aw999", "ok", "class", 1, 1);
@@ -82,12 +91,20 @@ public class GO_select_test extends GO_select_testHelper {
 			r.getGui().addDynamicEdge("aw82", "w2");
 
 			r.generateSpecificSemantics();
-			final String run = "run{System and (one t: Time, s: Select | s in Track.op.t)} for 8";
+			final String run = "run{System and (one t, t': Time, s: Select, f: Fill | T/gt[t',t] and s in Track.op.t and f in Track.op.t' and f.with in Invalid)} for 8";
 
 			r.getSemantics().addRun_command(run);
 
 			final AlloyTestCaseGenerator tcgen = new AlloyTestCaseGenerator(r);
 			final List<GUITestCase> tests = tcgen.generateMinimalTestCases();
+			for (final GUIAction act : tests.get(0).getActions()) {
+				if (act instanceof Fill) {
+					final Fill f = (Fill) act;
+					if (!f.getInput().equals("htttp://google.it")) {
+						throw new Exception("");
+					}
+				}
+			}
 			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime(),
 					gui, false);
 			runner.runTestCase(tests.get(0));

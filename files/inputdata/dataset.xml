@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DATASET>
+  <DATA>
+    <metadata>url</metadata>
+    <values>
+      <valid>http://localhost/upm/dbServer1</valid>
+      <valid>http://localhost/upm/dbServer</valid>
+      <invalid>htttp://google.it</invalid>
+    </values>
+  </DATA>
+  <DATA>
+    <metadata>password</metadata>
+    <values>
+      <valid>password</valid>
+      <valid>pass</valid>
+    </values>
+  </DATA>
+  <DATA>
+    <metadata>generic-input-data</metadata>
+    <values>
+      <valid>generic string</valid>
+      <valid>0</valid>
+      <valid>generic</valid>
+      <valid>string</valid>
+      <valid>input</valid>
+      <valid>test</valid>            
+      <invalid>///**\\\</invalid>
+      <invalid>\\\**///</invalid>
+      <invalid>**///\\\**</invalid>
+      <invalid>**\\\///**</invalid>
+    </values>
+  </DATA>
+</DATASET>

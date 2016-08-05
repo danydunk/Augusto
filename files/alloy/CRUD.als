@@ -34,7 +34,7 @@ fact {
 	#View.iws = #Form.iws
 	all iw: View.iws | one iww: Form.iws | View.mapping.iw = iww and #View.mapping.iw = 1
 	all iww: Form.iws | one iw: View.iws | View.mapping.iw = iww
-	all t: Time, iw: View.iws | iw.content.t = View.mapping.iw.content.t
+	//all t: Time, iw: View.iws | iw.content.t = View.mapping.iw.content.t
 	all iw: Initial | iw.aws = (Create_trigger+Read_trigger+Update_trigger+Delete_trigger) and #iw.iws = 0 and #iw.sws = 1
 	all fw: Form | one ok: Ok,  cancel: Cancel | #fw.iws > 0 and fw.aws = ok+cancel and #fw.sws = 0
 	all cw: Confirm | one ok: Ok,  cancel: Cancel | #cw.iws = 0 and #cw.sws = 0 and cw.aws = ok+cancel
@@ -98,13 +98,13 @@ pred select_fail_post [sw: Selectable_widget, t, t': Time, o: Object] {
 pred select_pre[sw: Selectable_widget, t: Time, o: Object] { }
 
 pred click_semantics [aw: Action_widget, t: Time] {
-	(aw in Read_trigger) => #Selectable_widget.selected = 1
-	(aw in Update_trigger) => #Selectable_widget.selected = 1
-	(aw in Delete_trigger) => #Selectable_widget.selected = 1
-	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t = CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t]
-	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t = UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t]
-	(aw in Ok and Current_window.is_in.t  in Confirm and Current_crud_op.operation.t = CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t]
-	(aw in Ok and Current_window.is_in.t  in Confirm and Current_crud_op.operation.t = UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t]
+	(aw in Read_trigger) => #Selectable_widget.selected.t = 1
+	(aw in Update_trigger) => #Selectable_widget.selected.t = 1
+	(aw in Delete_trigger) => #Selectable_widget.selected.t = 1
+	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t = CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
+	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t = UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
+	(aw in Ok and Current_window.is_in.t  in Confirm and Current_crud_op.operation.t = CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
+	(aw in Ok and Current_window.is_in.t  in Confirm and Current_crud_op.operation.t = UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
 	(aw in Ok and Current_window.is_in.t  in Confirm and Current_crud_op.operation.t = DELETE) => #Selectable_widget.selected = 1
 	//(aw in Ok and Current_window.is_in.t  in Form and aw.goes in Initial) => (filled_required_test [t] and unique_test [t])
 	//(aw in Ok and Current_window.is_in.t  in Confirm) => (filled_required_test [t] and unique_test [t])
@@ -143,11 +143,15 @@ pred filled_required_test [w: Form, t: Time] {
 pred  unique_test [w: Form, t: Time] { 
 	all p: Property_unique | all o2: List.contains.t | (p.associated_to in w.iws) => p.associated_to.content.t != p.has_value.o2
 }
+pred valid_data_test [w: Form, t: Time] {
+	all v: w.iws.content.t | not(v in Invalid)
+}
 pred  unique_for_update_test [w: Form, t: Time] { 
 	all p: Property_unique | all o2: (List.contains.t-Selectable_widget.selected.t) | (p.associated_to in w.iws and #p.has_value.o2 = 1) => p.associated_to.content.t != p.has_value.o2
 }
-pred load_form[o: Object, t': Time] {
+pred load_form [o: Object, t': Time] {
 	all f: Field | f.associated_to.content.t' = f.has_value.o
+	all iw: View.iws | iw.content.t' = View.mapping.iw.content.t'
 }
 pred update [t, t': Time] {
 	one o: Object | all f: Field | f.has_value.o = f.associated_to.content.t and List.contains.t' = (List.contains.t - Selectable_widget.selected.t)+o
