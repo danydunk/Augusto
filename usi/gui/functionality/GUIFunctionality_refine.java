@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import usi.application.ApplicationHelper;
 import usi.configuration.ConfigurationManager;
-import usi.gui.GuiStateManager;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.functionality.mapping.Instance_window;
 import usi.gui.pattern.Cardinality;
@@ -26,6 +25,7 @@ import usi.gui.semantic.testcase.Click;
 import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.GUITestCase;
+import usi.gui.semantic.testcase.GUITestCaseResult;
 import usi.gui.semantic.testcase.Go;
 import usi.gui.semantic.testcase.Select;
 import usi.gui.semantic.testcase.TestCaseRunner;
@@ -48,7 +48,7 @@ public class GUIFunctionality_refine {
 	private List<String> additional_constraints;
 	private String valid_constraint;
 	private final GUI_Pattern pattern;
-	private final List<GUITestCase> observed_tcs;
+	private final List<GUITestCaseResult> observed_tcs;
 	private final Ripper ripper;
 	private final List<String> covered_dyn_edges;
 
@@ -88,7 +88,7 @@ public class GUIFunctionality_refine {
 				|| old_windows_number != this.instancePattern.getWindows().size()
 				|| old_edges_number != (this.instancePattern.getGui().getNumberOfStaticEdges() + this.instancePattern
 						.getGui().getNumberOfDynamicEdges()));
-		// System.out.println(this.valid_constraint);
+		System.out.println(this.valid_constraint);
 
 		if (this.pattern.isInstance(this.instancePattern)) {
 
@@ -221,15 +221,15 @@ public class GUIFunctionality_refine {
 	private String getAdaptedConstraint(final SpecificSemantics in_sem) throws Exception {
 
 		final List<String> tcs = new ArrayList<>();
-		for (final GUITestCase tc : this.observed_tcs) {
-			tcs.add(this.getTCaseFact(tc));
+		for (final GUITestCaseResult tcr : this.observed_tcs) {
+			tcs.add(this.getTCaseFact(tcr));
 		}
 
 		String prop = null;
 		loop: while (prop == null) {
 
 			for (int cont = 0; cont < tcs.size(); cont++) {
-				final int time_size = this.observed_tcs.get(cont).getActions().size() + 2;
+				final int time_size = this.observed_tcs.get(cont).getActions_executed().size() + 2;
 
 				final List<String> constraints = new ArrayList<>(this.unvalid_constraints);
 				constraints.add(tcs.get(cont));
@@ -383,7 +383,7 @@ public class GUIFunctionality_refine {
 		return tc;
 	}
 
-	private String getTCaseFact(final GUITestCase tc) {
+	private String getTCaseFact(final GUITestCaseResult tcr) {
 
 		String fact = "one ";
 		String operations = "";
@@ -391,9 +391,10 @@ public class GUIFunctionality_refine {
 		String second_part = "";
 		String click = "Click =(";
 		String fill = "Fill =(";
+		String go = "Go =(";
 
-		final List<GUIAction> acts = tc.getActions().stream().filter(e -> !(e instanceof Go))
-				.collect(Collectors.toList());
+		// TODO
+		final List<GUIAction> acts = tcr.getActions_executed();
 		for (int cont = 0; cont < acts.size(); cont++) {
 			final GUIAction act = acts.get(cont);
 			operations += "op" + (cont + 1);
@@ -423,6 +424,11 @@ public class GUIFunctionality_refine {
 			if (act instanceof Select) {
 				// TODO:
 			}
+			if (act instanceof Go) {
+				final Go g = (Go) act;
+				go += "op" + (cont + 1) + "+";
+				second_part += "and op" + (cont + 1) + ".where=Window_" + g.getWidget().getId();
+			}
 
 			second_part += " and t" + (cont + 2) + "=T/next[t" + (cont + 1) + "]";
 			if (cont < acts.size() - 1) {
@@ -442,9 +448,13 @@ public class GUIFunctionality_refine {
 			fill = fill.substring(0, fill.length() - 1) + ")";
 			second_part += " and " + fill;
 		}
+		if (!go.equals("Go =(")) {
+			go = go.substring(0, go.length() - 1) + ")";
+			second_part += " and " + go;
+		}
 		fact += operations + "| one " + times + "|" + second_part;
 		fact += " and Current_window.is_in.t" + (acts.size() + 1) + "=Window_"
-				+ acts.get(acts.size() - 1).getResult().getId();
+				+ tcr.getResults().get(acts.size() - 1).getId();
 		return fact;
 	}
 
@@ -452,8 +462,8 @@ public class GUIFunctionality_refine {
 			throws Exception {
 
 		final List<String> tcs = new ArrayList<>();
-		for (final GUITestCase tc : this.observed_tcs) {
-			tcs.add(this.getTCaseFact(tc));
+		for (final GUITestCaseResult tcr : this.observed_tcs) {
+			tcs.add(this.getTCaseFact(tcr));
 		}
 
 		// we clone the semantics to remove all the facts related to discovering
@@ -470,7 +480,7 @@ public class GUIFunctionality_refine {
 
 		for (int cont = 0; cont < tcs.size(); cont++) {
 			// the time size is the number of actions +2 (because of Go)
-			final int time_size = this.observed_tcs.get(cont).getActions().size() + 2;
+			final int time_size = this.observed_tcs.get(cont).getActions_executed().size() + 2;
 			final List<String> constraints = new ArrayList<>();
 			constraints.add(tcs.get(cont));
 			constraints.add(prop);
@@ -641,7 +651,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverEdge(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-					throws Exception {
+			throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {
@@ -720,31 +730,38 @@ public class GUIFunctionality_refine {
 				.getWidget();
 
 		Window reached_w = this.wasTestCasePreviouslyExecuted(tc);
-
+		// if the test case was run already the window was found already
+		Window previoulsy_found = reached_w;
 		if (reached_w == null) {
-			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime());
-			runner.runTestCase(tc);
-			final GuiStateManager gmanager = GuiStateManager.getInstance();
-			gmanager.readGUI();
-			if (gmanager.getCurrentWindows().size() == 0) {
+			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime(),
+					this.gui);
+			final GUITestCaseResult res = runner.runTestCase(tc);
+
+			if (res.getActions_executed().size() != tc.getActions().size()
+					|| res.getResults().get(tc.getActions().size() - 1) == null) {
 				return null;
 			}
-			reached_w = gmanager.getCurrentWindows().get(0);
-		}
+			// the window reached after the last action was executed
+			reached_w = res.getResults().get(tc.getActions().size() - 1);
 
-		Window previoulsy_found = null;
-		for (final Window w : this.gui.getWindows()) {
-			if (w.isSame(reached_w)) {
-				previoulsy_found = w;
-				this.gui.addDynamicEdge(aw.getId(), w.getId());
-				break;
+			previoulsy_found = null;
+			for (final Window w : this.gui.getWindows()) {
+				if (w.isSame(reached_w)) {
+					previoulsy_found = w;
+					this.gui.addDynamicEdge(aw.getId(), w.getId());
+					break;
+				}
 			}
+			if (previoulsy_found != null) {
+				final List<Window> results = res.getResults();
+				results.remove(res.getActions_executed().size() - 1);
+				results.add(res.getActions_executed().size() - 1, previoulsy_found);
+				res.setResults(results);
+			}
+			this.observed_tcs.add(res);
 		}
-
 		if (previoulsy_found == null) {
 			// the window is new
-			tc.getActions().get(tc.getActions().size() - 1).setResult(reached_w);
-			this.observed_tcs.add(tc);
 			this.ripper.ripWindow(tc.getActions(), reached_w);
 			ApplicationHelper.getInstance().closeApplication();
 
@@ -766,8 +783,6 @@ public class GUIFunctionality_refine {
 			return null;
 		} else {
 			// the window was found before
-			tc.getActions().get(tc.getActions().size() - 1).setResult(previoulsy_found);
-			this.observed_tcs.add(tc);
 			ApplicationHelper.getInstance().closeApplication();
 			this.gui.addDynamicEdge(aw.getId(), previoulsy_found.getId());
 			for (final Instance_window iw : this.instancePattern.getWindows()) {
@@ -791,13 +806,13 @@ public class GUIFunctionality_refine {
 
 	private Window wasTestCasePreviouslyExecuted(final GUITestCase tc) {
 
-		mainloop: for (final GUITestCase tc2 : this.observed_tcs) {
-			if (tc2.getActions().size() != tc.getActions().size()) {
+		mainloop: for (final GUITestCaseResult tc2 : this.observed_tcs) {
+			if (tc2.getTc().getActions().size() != tc.getActions().size()) {
 				continue;
 			}
 			for (int cont = 0; cont < tc.getActions().size(); cont++) {
 				final GUIAction act1 = tc.getActions().get(cont);
-				final GUIAction act2 = tc2.getActions().get(cont);
+				final GUIAction act2 = tc2.getTc().getActions().get(cont);
 
 				if (!act1.getWidget().getId().equals(act2.getWidget().getId())
 						|| !act1.getWindow().getId().equals(act2.getWindow().getId())) {
@@ -832,9 +847,9 @@ public class GUIFunctionality_refine {
 				}
 
 			}
-			return tc2.getActions().get(tc2.getActions().size() - 1).getResult();
+			return tc2.getResults().get(tc2.getActions_executed().size() - 1);
 		}
 
-	return null;
+		return null;
 	}
 }

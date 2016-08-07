@@ -19,26 +19,24 @@ import com.rational.test.ft.vp.impl.TestDataList;
 
 public class TestCaseRunner {
 
-	private final boolean oracle;
 	private final long sleep;
 	private final ActionManager amanager;
 	// used for go actions
 	private final GUI gui;
 
-	public TestCaseRunner(final long sleep, final GUI gui, final boolean oracle) {
+	public TestCaseRunner(final long sleep, final GUI gui) {
 
 		this.sleep = sleep;
-		this.oracle = oracle;
 		this.amanager = new ActionManager(this.sleep);
 		this.gui = gui;
 	}
 
 	public TestCaseRunner(final long sleep) {
 
-		this(sleep, null, false);
+		this(sleep, null);
 	}
 
-	public boolean runTestCase(final GUITestCase tc) throws Exception {
+	public GUITestCaseResult runTestCase(final GUITestCase tc) throws Exception {
 
 		final ApplicationHelper app = ApplicationHelper.getInstance();
 		if (app.isRunning()) {
@@ -54,7 +52,11 @@ public class TestCaseRunner {
 		final Map<Pair, List<Integer>> select_support_added_indexes = new HashMap<>();
 
 		final List<GUIAction> actions = tc.getActions();
-
+		// structures needed to construct the GUITestCaseResult
+		final List<GUIAction> actions_executed = new ArrayList<>();
+		final List<GUIAction> actions_actually_executed = new ArrayList<>();
+		final List<Window> results = new ArrayList<>();
+		List<GUIAction> go_actions = null;
 		for (int cont = 0; cont < actions.size(); cont++) {
 
 			GUIAction act = actions.get(cont);
@@ -101,6 +103,8 @@ public class TestCaseRunner {
 				final Window target = (Window) go.getWidget();
 				if (curr.isSame(target)) {
 					// we are already in the right window
+					actions_executed.add(act);
+					results.add(null);
 					continue;
 				}
 
@@ -121,8 +125,12 @@ public class TestCaseRunner {
 							"TestCaseRunner - runTestCase: current window could not be found in gui.");
 				}
 
-				final List<GUIAction> go_actions = go.getActionSequence(curr_mapped_w, this.gui);
+				go_actions = go.getActionSequence(curr_mapped_w, this.gui);
 				actions.addAll(cont + 1, go_actions);
+				actions_executed.add(act);
+				if (go_actions.size() == 0) {
+					results.add(null);
+				}
 				continue;
 			}
 
@@ -151,12 +159,24 @@ public class TestCaseRunner {
 			this.amanager.executeAction(act);
 			gmanager.readGUI();
 
-			if (this.oracle) {
-				// TODO: implement oracle
+			if (tc.getActions().contains(act)) {
+				actions_executed.add(act);
+				if (gmanager.getCurrentWindows().size() > 0) {
+					results.add(gmanager.getCurrentWindows().get(0));
+				} else {
+					results.add(null);
+				}
+			} else {
+				if (go_actions != null && go_actions.get(go_actions.size() - 1) == act) {
+					results.add(gmanager.getCurrentWindows().get(0));
+				}
+				actions_actually_executed.add(act);
 			}
 		}
 		app.closeApplication();
-		return true;
+		final GUITestCaseResult res = new GUITestCaseResult(tc, actions_executed, results,
+				actions_actually_executed);
+		return res;
 	}
 
 	private class Pair {
