@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 
-import resources.test.rft.RefinementHelper;
+import resources.test.rft.UPM_fullHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
 import usi.gui.functionality.GUIFunctionality_refine;
@@ -13,7 +13,6 @@ import usi.gui.functionality.GUIFunctionality_search;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.pattern.GUIPatternParser;
 import usi.gui.pattern.GUI_Pattern;
-import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.structure.GUI;
 import usi.gui.structure.GUIParser;
 import usi.xml.XMLUtil;
@@ -23,28 +22,28 @@ import usi.xml.XMLUtil;
  *
  * @author usi
  */
-public class Refinement extends RefinementHelper {
+public class UPM_full extends UPM_fullHelper {
 
 	/**
-	 * Script Name : <b>Refinement</b> Generated : <b>Jul 21, 2016 12:45:04
-	 * AM</b> Description : Functional Test Script Original Host : WinNT Version
-	 * 6.1 Build 7601 (S)
+	 * Script Name : <b>UPM_full</b> Generated : <b>Aug 7, 2016 2:20:28 AM</b>
+	 * Description : Functional Test Script Original Host : WinNT Version 6.1
+	 * Build 7601 (S)
 	 *
-	 * @since 2016/07/21
+	 * @since 2016/08/07
 	 * @author usi
 	 */
 	public void testMain(final Object[] args) {
 
 		try {
-			// we load a gui pattern
-			Document doc = XMLUtil.read(new File("./files/xml/add_pattern.xml").getAbsolutePath());
-			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
-			ConfigurationManager.load("./files/for_test/config/upm_small.properties");
+			ConfigurationManager.load("./files/for_test/config/upm.properties");
 			ExperimentManager.init();
+			// we load a gui pattern
+			Document doc = XMLUtil.read(new File("./files/xml/crud.xml").getAbsolutePath());
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
-			doc = XMLUtil.read(new File("./files/for_test/xml/upm-small_newripper.xml")
-					.getAbsolutePath());
+			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -54,18 +53,10 @@ public class Refinement extends RefinementHelper {
 			final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
 			match = refiner.refine();
 			if (match == null) {
-				throw new Exception();
+				throw new Exception("");
 			}
-			for (final Fact f : match.getSemantics().getFacts()) {
-				if (f.getContent().trim().contains("#Property_required = 0")) {
-					return;
-				}
-			}
-			throw new Exception();
-
 		} catch (final Exception e) {
 			e.printStackTrace();
-			System.out.println("ERROR");
 		}
 	}
 }

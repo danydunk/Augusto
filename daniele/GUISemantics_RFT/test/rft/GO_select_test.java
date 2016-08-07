@@ -52,7 +52,7 @@ public class GO_select_test extends GO_select_testHelper {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-			.getAbsolutePath());
+					.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -106,7 +106,7 @@ public class GO_select_test extends GO_select_testHelper {
 				}
 			}
 			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime(),
-					gui, false);
+					gui);
 			runner.runTestCase(tests.get(0));
 		} catch (final Exception e) {
 			System.out.println("ERROR");

@@ -20,6 +20,7 @@ abstract sig View extends Window {
 }
 abstract sig Initial extends Window { }
 abstract sig Confirm extends Window { }
+abstract sig Confirm_delete extends Window { }
 
 fact {
 	#Selectable_widget = 1
@@ -38,6 +39,7 @@ fact {
 	all iw: Initial | iw.aws = (Create_trigger+Read_trigger+Update_trigger+Delete_trigger) and #iw.iws = 0 and #iw.sws = 1
 	all fw: Form | one ok: Ok,  cancel: Cancel | #fw.iws > 0 and fw.aws = ok+cancel and #fw.sws = 0
 	all cw: Confirm | one ok: Ok,  cancel: Cancel | #cw.iws = 0 and #cw.sws = 0 and cw.aws = ok+cancel
+	all cw: Confirm_delete | one ok: Ok,  cancel: Cancel | #cw.iws = 0 and #cw.sws = 0 and cw.aws = ok+cancel
 	#Window = #Form + #Initial + #Confirm + #General + #View
 }
 ---------------Generic ADD Semantics----------
@@ -105,7 +107,7 @@ pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t = UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
 	(aw in Ok and Current_window.is_in.t  in Confirm and Current_crud_op.operation.t = CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
 	(aw in Ok and Current_window.is_in.t  in Confirm and Current_crud_op.operation.t = UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
-	(aw in Ok and Current_window.is_in.t  in Confirm and Current_crud_op.operation.t = DELETE) => #Selectable_widget.selected = 1
+	(aw in Ok and Current_window.is_in.t  in Confirm_delete and Current_crud_op.operation.t = DELETE) => #Selectable_widget.selected = 1
 	//(aw in Ok and Current_window.is_in.t  in Form and aw.goes in Initial) => (filled_required_test [t] and unique_test [t])
 	//(aw in Ok and Current_window.is_in.t  in Confirm) => (filled_required_test [t] and unique_test [t])
 }
@@ -113,7 +115,7 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Create_trigger) => (Current_crud_op.operation.t' = CREATE and List.contains.t' = List.contains.t and #Input_widget.content.t' = 0 and #Selectable_widget.selected.t' = 0)
 	(aw in Read_trigger) => (Current_crud_op.operation.t' = READ and List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t'] and #Selectable_widget.selected.t' = 0)
 	(aw in Update_trigger) => (Current_crud_op.operation.t' = UPDATE and List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t']  and Selectable_widget.selected.t' = Selectable_widget.selected.t)
-	(aw in Delete_trigger and aw.goes in Confirm) => (Current_crud_op.operation.t' = DELETE and List.contains.t' = List.contains.t  and Selectable_widget.selected.t' = Selectable_widget.selected.t)
+	(aw in Delete_trigger and aw.goes in Confirm_delete) => (Current_crud_op.operation.t' = DELETE and List.contains.t' = List.contains.t  and Selectable_widget.selected.t' = Selectable_widget.selected.t)
 	
 	(aw in Cancel and  Current_crud_op.operation.t = CREATE) => (List.contains.t' = List.contains.t and #Current_window.is_in.t.iws.content.t' = 0 and (Input_widget - Current_window.is_in.t.iws).content.t' = (Input_widget - Current_window.is_in.t.iws).content.t and Selectable_widget.selected.t' = Selectable_widget.selected.t)
 	(aw in Cancel and Current_crud_op.operation.t = (UPDATE+READ) and aw.goes in Form) => (List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t']  and Selectable_widget.selected.t' = Selectable_widget.selected.t)

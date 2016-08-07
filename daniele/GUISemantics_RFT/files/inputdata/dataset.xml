@@ -5,7 +5,6 @@
     <values>
       <valid>http://localhost/upm/dbServer1</valid>
       <valid>http://localhost/upm/dbServer</valid>
-      <invalid>htttp://google.it</invalid>
     </values>
   </DATA>
   <DATA>
