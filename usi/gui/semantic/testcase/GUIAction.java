@@ -34,4 +34,27 @@ public abstract class GUIAction {
 
 		return this.oracle;
 	}
+
+	protected boolean same(final GUIAction act) {
+
+		if (!act.getWidget().isSame(this.getWidget())) {
+			return false;
+		}
+		if (!act.getWindow().isSame(this.getWindow())) {
+			return false;
+		}
+		if (act.getOracle() != null && this.getOracle() == null) {
+			return false;
+		}
+		if (act.getOracle() == null && this.getOracle() != null) {
+			return false;
+		}
+		if (act.getOracle() != null && this.getOracle() != null
+				&& !act.getOracle().isSame(this.getOracle())) {
+			return false;
+		}
+		return true;
+	}
+
+	abstract public boolean isSame(GUIAction act);
 }

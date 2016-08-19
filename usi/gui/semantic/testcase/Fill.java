@@ -21,4 +21,17 @@ public class Fill extends GUIAction {
 
 		return this.input;
 	}
+
+	@Override
+	public boolean isSame(final GUIAction act) {
+
+		if (!(act instanceof Fill)) {
+			return false;
+		}
+		final Fill f = (Fill) act;
+		if (!f.getInput().equals(this.input)) {
+			return false;
+		}
+		return this.same(act);
+	}
 }

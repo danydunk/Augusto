@@ -141,7 +141,6 @@ public class AlloyUtilsTest {
 	}
 
 	/**
-	 * Currently this test fails due to the generated model has errors
 	 *
 	 * @throws Exception
 	 */

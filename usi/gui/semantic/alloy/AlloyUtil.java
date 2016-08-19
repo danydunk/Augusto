@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import usi.configuration.ConfigurationManager;
 import usi.gui.pattern.Cardinality;
 import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_input_widget;
@@ -24,6 +25,12 @@ import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Function;
 import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
+import usi.gui.semantic.testcase.Click;
+import usi.gui.semantic.testcase.Fill;
+import usi.gui.semantic.testcase.GUIAction;
+import usi.gui.semantic.testcase.GUITestCaseResult;
+import usi.gui.semantic.testcase.Go;
+import usi.gui.semantic.testcase.Select;
 import usi.gui.semantic.testcase.inputdata.DataManager;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
@@ -223,7 +230,7 @@ public class AlloyUtil {
 							model.getAllReachableSigs(), run_command, options);
 					this.solution = app;
 				} catch (final Err e) {
-					e.printStackTrace();
+					// e.printStackTrace();
 					this.exception = true;
 				}
 			}
@@ -811,7 +818,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1175,5 +1182,221 @@ public class AlloyUtil {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Method that returns an alloy model with one run command that if run
+	 * reproduces the test case in input
+	 *
+	 * @param mod
+	 * @param tcr
+	 * @return
+	 * @throws Exception
+	 */
+	static public Alloy_Model
+	getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult tcr)
+			throws Exception {
+
+		final List<Signature> sigs = mod.getSignatures();
+		final List<Fact> facts = mod.getFacts();
+		final List<Function> funcs = mod.getFunctions();
+		final List<Predicate> preds = mod.getPredicates();
+		final List<String> opens = mod.getOpenStatements();
+
+		// the signatures needed for extension are retrieved
+		final Signature time = AlloyUtil.searchSignatureInList(sigs, "Time");
+		final Signature click = AlloyUtil.searchSignatureInList(sigs, "Click");
+		final Signature fill = AlloyUtil.searchSignatureInList(sigs, "Fill");
+		final Signature select = AlloyUtil.searchSignatureInList(sigs, "Select");
+		final Signature go = AlloyUtil.searchSignatureInList(sigs, "Go");
+		final Signature object = AlloyUtil.searchSignatureInList(sigs, "Object");
+		final Signature value = AlloyUtil.searchSignatureInList(sigs, "Value");
+
+		// list are created because they are needed for the contructor of new
+		// signatures
+		final List<Signature> time_father = new ArrayList<>();
+		time_father.add(time);
+		final List<Signature> click_father = new ArrayList<>();
+		click_father.add(click);
+		final List<Signature> fill_father = new ArrayList<>();
+		fill_father.add(fill);
+		final List<Signature> select_father = new ArrayList<>();
+		select_father.add(select);
+		final List<Signature> go_father = new ArrayList<>();
+		go_father.add(go);
+		final List<Signature> object_father = new ArrayList<>();
+		object_father.add(object);
+		final List<Signature> value_father = new ArrayList<>();
+		value_father.add(value);
+
+		final Signature first = new Signature("t0", Cardinality.ONE, false, time_father, false);
+		sigs.add(first);
+
+		String fact = "";
+
+		final List<String> values_used = new ArrayList<>();
+		final List<GUIAction> acts = tcr.getActions_executed();
+		for (int cont = 0; cont < acts.size(); cont++) {
+			final GUIAction act = acts.get(cont);
+			final String op = "op" + (cont + 1);
+			final String t = "t" + (cont + 1);
+			final String prev_t = "t" + (cont);
+
+			final Signature new_time = new Signature(t, Cardinality.ONE, false, time_father, false);
+			sigs.add(new_time);
+
+			if (cont == 0) {
+				fact += "Track.op." + t + "=" + op + " and t0=T/first";
+
+			} else {
+				fact += " and Track.op." + t + "=" + op;
+			}
+			if (act instanceof Click) {
+				final Click c = (Click) act;
+				final Signature new_click = new Signature(op, Cardinality.ONE, false, click_father,
+						false);
+				sigs.add(new_click);
+
+				fact += " and " + op + ".clicked=Action_widget_" + c.getWidget().getId();
+			}
+
+			if (act instanceof Fill) {
+				final Fill f = (Fill) act;
+				final Signature new_fill = new Signature(op, Cardinality.ONE, false, fill_father,
+						false);
+				sigs.add(new_fill);
+
+				fact += " and " + op + ".filled=Input_widget_" + f.getWidget().getId();
+
+				String new_value = "";
+				if (f.getWidget() instanceof Option_input_widget) {
+					new_value += f.getWidget().getId() + "_";
+				}
+				new_value += f.getInput();
+
+				if (!values_used.contains(new_value)) {
+					values_used.add(new_value);
+					final Signature new_val = new Signature("val" + values_used.indexOf(value),
+							Cardinality.ONE, false, value_father, false);
+					sigs.add(new_val);
+				}
+				fact += " and " + op + ".with=val" + values_used.indexOf(value);
+
+			}
+
+			if (act instanceof Select) {
+				final Select s = (Select) act;
+				final Selectable_widget sw = (Selectable_widget) s.getWidget();
+				final Signature new_select = new Signature(op, Cardinality.ONE, false,
+						select_father, false);
+				sigs.add(new_select);
+
+				final String obj = "ob" + (cont + 1);
+				final Signature new_obj = new Signature(obj, Cardinality.ONE, false, object_father,
+						false);
+				sigs.add(new_obj);
+
+				fact += " and " + op + ".wid=Selectable_widget_" + s.getWidget().getId() + " and "
+						+ op + ".selected=" + obj;
+				fact += " and #Selectable_widget_" + s.getWidget().getId() + ".list." + t + "="
+						+ sw.getSize();
+				fact += " and #(T/prevs[(" + obj + ".appeared)] & Selectable_widget_"
+						+ s.getWidget().getId() + ".list." + t + ".appeared) = " + s.getIndex();
+				fact += " and #(T/nexts[(" + obj + ".appeared)] & Selectable_widget_"
+						+ s.getWidget().getId() + ".list." + t + ".appeared) = "
+						+ ((sw.getSize() - 1) - s.getIndex());
+			}
+			if (act instanceof Go) {
+				final Go g = (Go) act;
+				final Signature new_go = new Signature(op, Cardinality.ONE, false, go_father, false);
+				sigs.add(new_go);
+				fact += " and " + op + ".where=Window_" + g.getWidget().getId();
+			}
+
+			fact += " and " + t + "=T/next[" + prev_t + "]";
+
+		}
+
+		fact += " and Current_window.is_in.t" + (acts.size()) + "=Window_"
+				+ tcr.getResults().get(acts.size() - 1).getId();
+
+		final Fact new_fact = new Fact("testcase", fact);
+		facts.add(new_fact);
+
+		final int time_size = tcr.getActions_executed().size() + 1;
+		final int op_size = time_size - 1;
+
+		String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope() + " but "
+				+ time_size + " Time, " + op_size + " Operation";
+
+		final int winscope = AlloyUtil.getWinScope(mod);
+		final int awscope = AlloyUtil.getAWScope(mod);
+		final int iwscope = AlloyUtil.getIWScope(mod);
+		final int swscope = AlloyUtil.getSWScope(mod);
+
+		if (winscope > -1) {
+			runCom += "," + winscope + " Window ";
+		}
+		if (awscope > -1) {
+			runCom += "," + awscope + " Action_widget ";
+		}
+		if (iwscope > -1) {
+			runCom += "," + iwscope + " Input_widget ";
+		}
+		if (swscope > -1) {
+			runCom += "," + swscope + " Selectable_widget ";
+		}
+
+		final Alloy_Model out = new Alloy_Model(sigs, facts, preds, funcs, opens);
+		out.addRun_command(runCom);
+		return out;
+	}
+
+	static public int getWinScope(final SpecificSemantics in) {
+
+		int cont = 0;
+		for (final Signature s : in.getConcrete_windows()) {
+			if (s.getCardinality().getMax() > 1) {
+				return -1;
+			}
+			cont++;
+		}
+		return cont;
+	}
+
+	static public int getAWScope(final SpecificSemantics in) {
+
+		int cont = 0;
+		for (final Signature s : in.getConcrete_action_w()) {
+			if (s.getCardinality().getMax() > 1) {
+				return -1;
+			}
+			cont++;
+		}
+		return cont;
+	}
+
+	static public int getIWScope(final SpecificSemantics in) {
+
+		int cont = 0;
+		for (final Signature s : in.getConcrete_input_w()) {
+			if (s.getCardinality().getMax() > 1) {
+				return -1;
+			}
+			cont++;
+		}
+		return cont;
+	}
+
+	static public int getSWScope(final SpecificSemantics in) {
+
+		int cont = 0;
+		for (final Signature s : in.getConcrete_selectable_w()) {
+			if (s.getCardinality().getMax() > 1) {
+				return -1;
+			}
+			cont++;
+		}
+		return cont;
 	}
 }

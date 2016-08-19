@@ -43,22 +43,59 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		this.concrete_windows = new ArrayList<>();
 		this.concrete_action_w = new ArrayList<>();
 		this.concrete_input_w = new ArrayList<>();
+		this.concrete_selectable_w = new ArrayList<>();
+
 		for (final Signature sig : signatures) {
 			if (sig.isSubset()) {
 				continue;
 			}
-			if ((sig.hasParent(this.window_signature) || this.windows_extensions.contains(sig
-					.getParent())) && !sig.isAbstract_()) {
-				this.concrete_windows.add(sig);
-			}
 
-			if ((sig.getParent().contains(this.action_w_signature) || this.action_w_extensions
-					.contains(sig.getParent())) && !sig.isAbstract_()) {
-				this.concrete_action_w.add(sig);
-			}
-			if ((sig.getParent().contains(this.input_w_signature) || this.input_w_extensions
-					.contains(sig.getParent())) && !sig.isAbstract_()) {
-				this.concrete_input_w.add(sig);
+			if (!sig.isAbstract_()) {
+
+				if (sig.getParent().contains(this.window_signature)) {
+					this.concrete_windows.add(sig);
+				} else {
+					for (final Signature par : sig.getParent()) {
+						if (this.windows_extensions.contains(par)) {
+							this.concrete_windows.add(sig);
+							break;
+						}
+					}
+				}
+
+				if (sig.getParent().contains(this.action_w_signature)) {
+					this.concrete_action_w.add(sig);
+				} else {
+					for (final Signature par : sig.getParent()) {
+						if (this.action_w_extensions.contains(par)) {
+							this.concrete_action_w.add(sig);
+							break;
+						}
+					}
+				}
+
+				if (sig.getParent().contains(this.input_w_signature)) {
+					this.concrete_input_w.add(sig);
+				} else {
+					for (final Signature par : sig.getParent()) {
+						if (this.input_w_extensions.contains(par)) {
+							this.concrete_input_w.add(sig);
+							break;
+						}
+					}
+				}
+
+				if (sig.getParent().contains(this.selectable_w_signature)) {
+					this.concrete_selectable_w.add(sig);
+				} else {
+					for (final Signature par : sig.getParent()) {
+						if (this.selectable_w_extensions.contains(par)) {
+							this.concrete_selectable_w.add(sig);
+							break;
+						}
+					}
+				}
+
 			}
 		}
 		if ((this.concrete_windows.size() + this.concrete_action_w.size() + this.concrete_input_w
@@ -148,6 +185,10 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			signatures.add(concreteWinSig);
 			added_windows.put(win, concreteWinSig);
 		}
+
+		// we add a fact for the number of windows
+		final Fact win_num = new Fact("windows_number", "#Window = " + (added_windows.size() + 1));
+		facts.add(win_num);
 
 		// we iterate each window added (we need to do it in two cicles because
 		// to add the edges in the action windows we need to know which windows

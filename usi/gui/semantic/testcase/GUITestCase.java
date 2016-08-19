@@ -1,5 +1,6 @@
 package usi.gui.semantic.testcase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
@@ -20,11 +21,21 @@ public class GUITestCase {
 
 	public List<GUIAction> getActions() {
 
-		return this.actions;
+		return new ArrayList<GUIAction>(this.actions);
 	}
 
 	public A4Solution getAlloySolution() {
 
 		return this.solution;
+	}
+
+	public boolean containsAction(final GUIAction act) {
+
+		for (final GUIAction a : this.actions) {
+			if (a.isSame(act)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -14,8 +14,6 @@ import usi.gui.functionality.mapping.Instance_window;
 import usi.gui.pattern.GUIPatternParser;
 import usi.gui.pattern.GUI_Pattern;
 import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
-import usi.gui.semantic.testcase.Fill;
-import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.semantic.testcase.TestCaseRunner;
 import usi.gui.structure.Action_widget;
@@ -91,20 +89,19 @@ public class GO_select_test extends GO_select_testHelper {
 			r.getGui().addDynamicEdge("aw82", "w2");
 
 			r.generateSpecificSemantics();
-			final String run = "run{System and (one t, t': Time, s: Select, f: Fill | T/gt[t',t] and s in Track.op.t and f in Track.op.t' and f.with in Invalid)} for 8";
+			// final String run =
+			// "run{System and (one t, t': Time, s: Select, f: Fill | T/gt[t',t] and s in Track.op.t and f in Track.op.t' and f.with in Invalid)} for 8";
+			final String run2 = "run{System and (one t, t': Time, s: Select, f: Fill | T/gt[t',t] and s in Track.op.t and f in Track.op.t')} for 8";
 
-			r.getSemantics().addRun_command(run);
+			// r.getSemantics().addRun_command(run);
+			r.getSemantics().addRun_command(run2);
 
 			final AlloyTestCaseGenerator tcgen = new AlloyTestCaseGenerator(r);
 			final List<GUITestCase> tests = tcgen.generateMinimalTestCases();
-			for (final GUIAction act : tests.get(0).getActions()) {
-				if (act instanceof Fill) {
-					final Fill f = (Fill) act;
-					if (!f.getInput().equals("htttp://google.it")) {
-						throw new Exception("");
-					}
-				}
+			if (tests.size() > 1) {
+				throw new Exception("");
 			}
+
 			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime(),
 					gui);
 			runner.runTestCase(tests.get(0));

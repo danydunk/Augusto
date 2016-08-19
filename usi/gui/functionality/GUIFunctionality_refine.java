@@ -12,10 +12,12 @@ import usi.gui.pattern.Cardinality;
 import usi.gui.pattern.GUI_Pattern;
 import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_input_widget;
+import usi.gui.pattern.Pattern_selectable_widget;
 import usi.gui.pattern.Pattern_window;
 import usi.gui.ripping.Ripper;
 import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
+import usi.gui.semantic.alloy.Alloy_Model;
 import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Function;
 import usi.gui.semantic.alloy.entity.Predicate;
@@ -26,7 +28,6 @@ import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.semantic.testcase.GUITestCaseResult;
-import usi.gui.semantic.testcase.Go;
 import usi.gui.semantic.testcase.Select;
 import usi.gui.semantic.testcase.TestCaseRunner;
 import usi.gui.structure.Action_widget;
@@ -49,7 +50,6 @@ public class GUIFunctionality_refine {
 	private String valid_constraint;
 	private final GUI_Pattern pattern;
 	private final List<GUITestCaseResult> observed_tcs;
-	private final Ripper ripper;
 	private final List<String> covered_dyn_edges;
 
 	public GUIFunctionality_refine(final Instance_GUI_pattern instancePattern, final GUI gui)
@@ -60,7 +60,6 @@ public class GUIFunctionality_refine {
 
 		this.pattern = this.instancePattern.getGuipattern();
 		this.observed_tcs = new ArrayList<>();
-		this.ripper = new Ripper(ConfigurationManager.getSleepTime(), this.gui);
 		this.covered_dyn_edges = new ArrayList<>();
 	}
 
@@ -139,6 +138,9 @@ public class GUIFunctionality_refine {
 						}
 						final GUITestCase tc = this.getTestToCoverEdge(source_window,
 								target_window, aw);
+						if (tc == null) {
+							continue;
+						}
 
 						final Instance_window found = this.getFoundWindow(tc, target, paw);
 
@@ -185,6 +187,9 @@ public class GUIFunctionality_refine {
 
 					final GUITestCase tc = this
 							.getTestToReachWindow(source_window, to_discover, aw);
+					if (tc == null) {
+						continue;
+					}
 
 					final Instance_window found = this.getFoundWindow(tc, to_discover, paw);
 
@@ -199,6 +204,8 @@ public class GUIFunctionality_refine {
 									found.getInstance().getId());
 							this.instancePattern.addWindow(found);
 							this.instancePattern.generateSpecificSemantics();
+							System.out.println(this.instancePattern.getSemantics());
+
 						}
 						this.valid_constraint = this.getAdaptedConstraint(this.instancePattern
 								.getSemantics());
@@ -220,32 +227,45 @@ public class GUIFunctionality_refine {
 	 */
 	private String getAdaptedConstraint(final SpecificSemantics in_sem) throws Exception {
 
-		final List<String> tcs = new ArrayList<>();
-		for (final GUITestCaseResult tcr : this.observed_tcs) {
-			tcs.add(this.getTCaseFact(tcr));
-		}
+		//
+		// final List<String> tcs = new ArrayList<>();
+		// for (final GUITestCaseResult tcr : this.observed_tcs) {
+		// tcs.add(this.getTCaseFact(tcr));
+		// }
 
 		String prop = null;
 		loop: while (prop == null) {
 
-			for (int cont = 0; cont < tcs.size(); cont++) {
-				final int time_size = this.observed_tcs.get(cont).getActions_executed().size() + 2;
+			for (int cont = 0; cont < this.observed_tcs.size(); cont++) {
+				// final int time_size =
+				// this.observed_tcs.get(cont).getActions_executed().size() + 2;
 
 				final List<String> constraints = new ArrayList<>(this.unvalid_constraints);
-				constraints.add(tcs.get(cont));
+				// constraints.add(tcs.get(cont));
 				if (prop != null) {
 					constraints.add(prop);
 				}
 
-				final SpecificSemantics sem = this.addConstrain(in_sem, constraints);
+				final Alloy_Model sem = AlloyUtil
+						.getTCaseModel(in_sem, this.observed_tcs.get(cont));
+				final SpecificSemantics new_sem = this.addConstrain(sem, constraints);
 
-				final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope()
-						+ " but " + time_size + " Time";
-				sem.addRun_command(runCom);
-				final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
+				// final SpecificSemantics sem = this.addConstrain(in_sem,
+				// constraints);
+
+				// final String runCom = "run {System} for " +
+				// ConfigurationManager.getAlloyRunScope()
+				// + " but " + time_size + " Time";
+				// sem.addRun_command(runCom);
+
+				System.out.println("start");
+				System.out.println(sem);
+				System.out.println("end");
+
+				final Module comp = AlloyUtil.compileAlloyModel(new_sem.toString());
 				final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
 				if (sol.satisfiable()) {
-					final String new_prop = AlloyUtil.extractProperty(sol, sem);
+					final String new_prop = AlloyUtil.extractProperty(sol, new_sem);
 					if (prop == null) {
 						prop = new_prop;
 					}
@@ -296,8 +316,13 @@ public class GUIFunctionality_refine {
 			}
 
 			if (tests.size() == 0) {
-				this.valid_constraint = "";
-				continue;
+				if (this.valid_constraint.length() > 0) {
+					this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
+					this.valid_constraint = "";
+					continue;
+				} else {
+					return null;
+				}
 			}
 
 			// if valid_constraint is not null it means we are using the
@@ -355,8 +380,14 @@ public class GUIFunctionality_refine {
 			}
 
 			if (tests.size() == 0) {
-				this.valid_constraint = "";
-				continue;
+				if (this.valid_constraint.length() > 0) {
+					this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
+					this.valid_constraint = "";
+					continue;
+				} else {
+					return null;
+				}
+
 			}
 
 			// if valid_constraint is not null it means we are using the
@@ -383,88 +414,136 @@ public class GUIFunctionality_refine {
 		return tc;
 	}
 
-	private String getTCaseFact(final GUITestCaseResult tcr) {
-
-		String fact = "one ";
-		String operations = "";
-		String times = "t0,";
-		String second_part = "";
-		String click = "Click =(";
-		String fill = "Fill =(";
-		String go = "Go =(";
-
-		// TODO
-		final List<GUIAction> acts = tcr.getActions_executed();
-		for (int cont = 0; cont < acts.size(); cont++) {
-			final GUIAction act = acts.get(cont);
-			operations += "op" + (cont + 1);
-			times += "t" + (cont + 1);
-			times += ",";
-			if (cont == 0) {
-				second_part += "Track.op.t" + (cont + 1) + "=" + "op" + (cont + 1) + " ";
-
-			} else {
-				second_part += " and Track.op.t" + (cont + 1) + "=" + "op" + (cont + 1) + " ";
-			}
-			if (act instanceof Click) {
-				final Click c = (Click) act;
-				click += "op" + (cont + 1) + "+";
-				second_part += "and op" + (cont + 1) + ".clicked=Action_widget_"
-						+ c.getWidget().getId();
-			}
-
-			if (act instanceof Fill) {
-				final Fill f = (Fill) act;
-				fill += "op" + (cont + 1) + "+";
-				second_part += "and op" + (cont + 1) + ".filled=Input_widget_"
-						+ f.getWidget().getId();
-				// TODO: deal with value
-			}
-
-			if (act instanceof Select) {
-				// TODO:
-			}
-			if (act instanceof Go) {
-				final Go g = (Go) act;
-				go += "op" + (cont + 1) + "+";
-				second_part += "and op" + (cont + 1) + ".where=Window_" + g.getWidget().getId();
-			}
-
-			second_part += " and t" + (cont + 2) + "=T/next[t" + (cont + 1) + "]";
-			if (cont < acts.size() - 1) {
-				operations += ",";
-			}
-		}
-		second_part += " and t0=T/first";
-
-		times += "t" + (acts.size() + 1);
-		times += ":Time";
-		operations += ":Operation";
-		if (!click.equals("Click =(")) {
-			click = click.substring(0, click.length() - 1) + ")";
-			second_part += " and " + click;
-		}
-		if (!fill.equals("Fill =(")) {
-			fill = fill.substring(0, fill.length() - 1) + ")";
-			second_part += " and " + fill;
-		}
-		if (!go.equals("Go =(")) {
-			go = go.substring(0, go.length() - 1) + ")";
-			second_part += " and " + go;
-		}
-		fact += operations + "| one " + times + "|" + second_part;
-		fact += " and Current_window.is_in.t" + (acts.size() + 1) + "=Window_"
-				+ tcr.getResults().get(acts.size() - 1).getId();
-		return fact;
-	}
+	// private String getTCaseFact(final GUITestCaseResult tcr) {
+	//
+	// String fact = "one ";
+	// String operations = "";
+	// String times = "t0,";
+	// String values = "";
+	// String second_part = "";
+	// String click = "Click =(";
+	// String fill = "Fill =(";
+	// String select = "Select =(";
+	// String go = "Go =(";
+	// String objects = "";
+	//
+	// // TODO
+	// final List<String> values_used = new ArrayList<>();
+	// final List<GUIAction> acts = tcr.getActions_executed();
+	// for (int cont = 0; cont < acts.size(); cont++) {
+	// final GUIAction act = acts.get(cont);
+	// operations += "op" + (cont + 1);
+	// final String t = "t" + (cont + 1);
+	// times += t;
+	// times += ",";
+	// if (cont == 0) {
+	// second_part += "Track.op.t" + (cont + 1) + "=" + "op" + (cont + 1) + " ";
+	//
+	// } else {
+	// second_part += " and Track.op.t" + (cont + 1) + "=" + "op" + (cont + 1) +
+	// " ";
+	// }
+	// if (act instanceof Click) {
+	// final Click c = (Click) act;
+	// click += "op" + (cont + 1) + "+";
+	// second_part += "and op" + (cont + 1) + ".clicked=Action_widget_"
+	// + c.getWidget().getId();
+	// }
+	//
+	// if (act instanceof Fill) {
+	// final Fill f = (Fill) act;
+	// fill += "op" + (cont + 1) + "+";
+	// second_part += "and op" + (cont + 1) + ".filled=Input_widget_"
+	// + f.getWidget().getId();
+	// String value = "";
+	// if (f.getWidget() instanceof Option_input_widget) {
+	// value += f.getWidget().getId() + "_";
+	// }
+	// value += f.getInput();
+	//
+	// if (!values_used.contains(value)) {
+	// values_used.add(value);
+	// values += "val" + values_used.indexOf(value) + ",";
+	// }
+	// second_part += " and op" + (cont + 1) + ".with=val" +
+	// values_used.indexOf(value);
+	//
+	// }
+	//
+	// if (act instanceof Select) {
+	// final Select s = (Select) act;
+	// final Selectable_widget sw = (Selectable_widget) s.getWidget();
+	// objects += "ob" + (cont + 1) + ",";
+	// select += "op" + (cont + 1) + "+";
+	// second_part += "and op" + (cont + 1) + ".wid=Selectable_widget_"
+	// + s.getWidget().getId() + " and op" + (cont + 1) + ".selected=ob"
+	// + (cont + 1);
+	// second_part += " and #Selectable_widget_" + s.getWidget().getId() +
+	// ".list." + t
+	// + "=" + sw.getSize();
+	// second_part += " and #(T/prevs[(op" + (cont + 1)
+	// + ".appeared)] & Selectable_widget_" + s.getWidget().getId() + ".list." +
+	// t
+	// + ".appeared) = " + s.getIndex();
+	// second_part += " and #(T/nexts[(op" + (cont + 1)
+	// + ".appeared)] & Selectable_widget_" + s.getWidget().getId() + ".list." +
+	// t
+	// + ".appeared) = " + ((sw.getSize() - 1) - s.getIndex());
+	// }
+	// if (act instanceof Go) {
+	// final Go g = (Go) act;
+	// go += "op" + (cont + 1) + "+";
+	// second_part += "and op" + (cont + 1) + ".where=Window_" +
+	// g.getWidget().getId();
+	// }
+	//
+	// second_part += " and t" + (cont + 2) + "=T/next[" + t + "]";
+	// if (cont < acts.size() - 1) {
+	// operations += ",";
+	// }
+	// }
+	// second_part += " and t0=T/first";
+	//
+	// times += "t" + (acts.size() + 1);
+	// times += ":Time";
+	// operations += ":Operation";
+	// if (!values.equals("")) {
+	// values = values.substring(0, values.length() - 1) + ":Value";
+	// fact = "one " + values + "| " + fact;
+	// }
+	// if (!objects.equals("")) {
+	// objects = objects.substring(0, objects.length() - 1) + ":Object";
+	// fact = "one " + objects + "| " + fact;
+	// }
+	// if (!click.equals("Click =(")) {
+	// click = click.substring(0, click.length() - 1) + ")";
+	// second_part += " and " + click;
+	// }
+	// if (!fill.equals("Fill =(")) {
+	// fill = fill.substring(0, fill.length() - 1) + ")";
+	// second_part += " and " + fill;
+	// }
+	// if (!go.equals("Go =(")) {
+	// go = go.substring(0, go.length() - 1) + ")";
+	// second_part += " and " + go;
+	// }
+	// if (!select.equals("Select =(")) {
+	// select = select.substring(0, select.length() - 1) + ")";
+	// second_part += " and " + select;
+	// }
+	// fact += operations + "| one " + times + "|" + second_part;
+	// fact += " and Current_window.is_in.t" + (acts.size() + 1) + "=Window_"
+	// + tcr.getResults().get(acts.size() - 1).getId();
+	// return fact;
+	// }
 
 	private boolean validateProperty(final String prop, final SpecificSemantics in_sem)
 			throws Exception {
 
-		final List<String> tcs = new ArrayList<>();
-		for (final GUITestCaseResult tcr : this.observed_tcs) {
-			tcs.add(this.getTCaseFact(tcr));
-		}
+		// final List<String> tcs = new ArrayList<>();
+		// for (final GUITestCaseResult tcr : this.observed_tcs) {
+		// tcs.add(this.getTCaseFact(tcr));
+		// }
 
 		// we clone the semantics to remove all the facts related to discovering
 		// windows/edges
@@ -475,21 +554,19 @@ public class GUIFunctionality_refine {
 			}
 		}
 
-		final SpecificSemantics new_sem = new SpecificSemantics(in_sem.getSignatures(), facts,
-				in_sem.getPredicates(), in_sem.getFunctions(), in_sem.getOpenStatements());
-
-		for (int cont = 0; cont < tcs.size(); cont++) {
+		for (int cont = 0; cont < this.observed_tcs.size(); cont++) {
 			// the time size is the number of actions +2 (because of Go)
-			final int time_size = this.observed_tcs.get(cont).getActions_executed().size() + 2;
 			final List<String> constraints = new ArrayList<>();
-			constraints.add(tcs.get(cont));
+			// constraints.add(tcs.get(cont));
 			constraints.add(prop);
 
-			final SpecificSemantics sem = this.addConstrain(new_sem, constraints);
+			Alloy_Model sem = AlloyUtil.getTCaseModel(in_sem, this.observed_tcs.get(cont));
+			sem = this.addConstrain(sem, constraints);
 
-			final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope()
-					+ " but " + time_size + " Time";
-			sem.addRun_command(runCom);
+			System.out.println("start");
+			System.out.println(sem);
+			System.out.println("end");
+
 			final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
 			final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
 			if (!sol.satisfiable()) {
@@ -499,7 +576,7 @@ public class GUIFunctionality_refine {
 		return true;
 	}
 
-	private SpecificSemantics addConstrain(final SpecificSemantics sem, final List<String> props)
+	private SpecificSemantics addConstrain(final Alloy_Model sem, final List<String> props)
 			throws Exception {
 
 		final List<Fact> facts = new ArrayList<>(sem.getFacts());
@@ -560,13 +637,22 @@ public class GUIFunctionality_refine {
 			if (piw_sig == null) {
 				throw new Exception("Element not found: " + piw);
 			}
+			Signature sigIW = null;
+			if (piw.getCardinality().getMax() == 1) {
+				sigIW = new Signature("Undiscovered_inputwidget_" + piw.getId(), Cardinality.ONE,
+						false, Lists.newArrayList(piw_sig), false);
 
-			final Signature sigIW = new Signature("Undiscovered_inputwidget_" + piw.getId(),
-					Cardinality.ONE, false, Lists.newArrayList(piw_sig), false);
-
+			} else {
+				sigIW = new Signature("Undiscovered_inputwidget_" + piw.getId(), Cardinality.SOME,
+						false, Lists.newArrayList(piw_sig), false);
+			}
 			iw_sig.add(sigIW);
 
 		}
+
+		// We put widgets to the undiscovered window
+		final Fact fact_iws_from_undiscover_window = AlloyUtil.createFactsForElement(iw_sig,
+				sigWinToDiscover, "iws");
 
 		// Action:
 		final List<Pattern_action_widget> paws = pattern_TargetWindow.getActionWidgets();
@@ -583,8 +669,14 @@ public class GUIFunctionality_refine {
 				throw new Exception("Element not found: " + paw_sig);
 			}
 
-			final Signature sigAW = new Signature("Undiscovered_actionwidget_" + paw.getId(),
-					Cardinality.ONE, false, Lists.newArrayList(paw_sig), false);
+			Signature sigAW = null;
+			if (paw.getCardinality().getMax() == 1) {
+				sigAW = new Signature("Undiscovered_actionwidget_" + paw.getId(), Cardinality.ONE,
+						false, Lists.newArrayList(paw_sig), false);
+			} else {
+				sigAW = new Signature("Undiscovered_actionwidget_" + paw.getId(), Cardinality.SOME,
+						false, Lists.newArrayList(paw_sig), false);
+			}
 
 			aw_sig.add(sigAW);
 		}
@@ -592,6 +684,37 @@ public class GUIFunctionality_refine {
 		// We put widgets to the undiscovered window
 		final Fact fact_aws_from_undiscover_window = AlloyUtil.createFactsForElement(aw_sig,
 				sigWinToDiscover, "aws");
+
+		// selectable:
+		final List<Pattern_selectable_widget> psws = pattern_TargetWindow.getSelectableWidgets();
+
+		final List<Signature> sw_sig = new ArrayList<>();
+
+		for (final Pattern_selectable_widget psw : psws) {
+			if (psw.getCardinality().getMax() == 0) {
+				continue;
+			}
+			final Signature psw_sig = AlloyUtil.searchForParent(originalSemantic, psw);
+
+			if (psw_sig == null) {
+				throw new Exception("Element not found: " + psw_sig);
+			}
+
+			Signature sigSW = null;
+			if (psw.getCardinality().getMax() == 1) {
+				sigSW = new Signature("Undiscovered_selectablewidget_" + psw.getId(),
+						Cardinality.ONE, false, Lists.newArrayList(psw_sig), false);
+			} else {
+				sigSW = new Signature("Undiscovered_selectablewidget_" + psw.getId(),
+						Cardinality.SOME, false, Lists.newArrayList(psw_sig), false);
+			}
+
+			sw_sig.add(sigSW);
+		}
+
+		// We put widgets to the undiscovered window
+		final Fact fact_sws_from_undiscover_window = AlloyUtil.createFactsForElement(sw_sig,
+				sigWinToDiscover, "sws");
 
 		Signature sig_action_to_execute = null;
 
@@ -617,20 +740,29 @@ public class GUIFunctionality_refine {
 		final String contentFactLink = sig_action_to_execute.getIdentifier() + ".goes = "
 				+ sigWinToDiscover.getIdentifier();
 
-		final Fact factLinkActions = new Fact(sigWinToDiscover.getIdentifier() + "_awsd",
+		final Fact factLinkActions = new Fact(sigWinToDiscover.getIdentifier() + "_aws_link",
 				contentFactLink);
 
-		final String fcontent = "some t, t': Time, w: Window_w2, " + " w': "
-				+ sigWinToDiscover.getIdentifier() + " , c: Click " + " | click ["
+		final String fcontent = "some t, t': Time, w: Window_" + sourceWindow.getId() + ", "
+				+ " w': " + sigWinToDiscover.getIdentifier() + " , c: Click " + " | click ["
 				+ (sig_action_to_execute.getIdentifier()) + ", t, T/next[t], c] and "
 				+ " Current_window.is_in.t = w and Current_window.is_in.t' = w' "
 				+ " and t' in T/next[t] ";
 		final Fact factDiscovering = new Fact("for_discovering", fcontent);
 
-		final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
-
 		final List<Signature> signatures = new ArrayList<>(originalSemantic.getSignatures());
-		final List<Fact> facts = new ArrayList<>(originalSemantic.getFacts());
+		final List<Fact> facts = new ArrayList<>();
+		for (final Fact fact : originalSemantic.getFacts()) {
+			if (!fact.getIdentifier().equals("windows_number")) {
+				facts.add(fact);
+			} else {
+				// a new fact for the number of windows is created
+				final int num = Integer.valueOf(fact.getContent().substring(9).trim());
+				final Fact win_num = new Fact("windows_number", "#Window = " + (num + 1));
+				facts.add(win_num);
+			}
+		}
+
 		final List<Predicate> predicates = new ArrayList<>(originalSemantic.getPredicates());
 		final List<Function> functions = new ArrayList<>(originalSemantic.getFunctions());
 		final List<String> opens = new ArrayList<>(originalSemantic.getOpenStatements());
@@ -641,9 +773,36 @@ public class GUIFunctionality_refine {
 		facts.add(factDiscovering);
 		facts.add(factLinkActions);
 		facts.add(fact_aws_from_undiscover_window);
+		facts.add(fact_iws_from_undiscover_window);
+		facts.add(fact_sws_from_undiscover_window);
 
 		final SpecificSemantics semantif4DiscoverWindow = new SpecificSemantics(signatures, facts,
 				predicates, functions, opens);
+
+		final int winscope = AlloyUtil.getWinScope(semantif4DiscoverWindow);
+		final int awscope = AlloyUtil.getAWScope(semantif4DiscoverWindow);
+		final int iwscope = AlloyUtil.getIWScope(semantif4DiscoverWindow);
+		final int swscope = AlloyUtil.getSWScope(semantif4DiscoverWindow);
+
+		String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
+		String scope = "";
+		if (winscope > -1) {
+			scope += "," + winscope + " Window ";
+		}
+		if (awscope > -1) {
+			scope += "," + awscope + " Action_widget ";
+		}
+		if (iwscope > -1) {
+			scope += "," + iwscope + " Input_widget ";
+		}
+		if (swscope > -1) {
+			scope += "," + swscope + " Selectable_widget ";
+		}
+		if (scope.length() > 0) {
+			scope = " but " + scope.substring(1);
+		}
+		runCom = runCom + scope;
+
 		semantif4DiscoverWindow.addRun_command(runCom);
 
 		return semantif4DiscoverWindow;
@@ -651,7 +810,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverEdge(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-			throws Exception {
+					throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {
@@ -697,14 +856,12 @@ public class GUIFunctionality_refine {
 		final Fact factLinkActions = new Fact(sigWinToDiscover.getIdentifier() + "_awsd",
 				contentFactLink);
 
-		final String fcontent = "some t, t': Time, w: Window_w2, " + " w': "
+		final String fcontent = "some t, t': Time, w: Window_" + sourceWindow.getId() + ", w': "
 				+ sigWinToDiscover.getIdentifier() + " , c: Click " + " | click ["
 				+ (sig_action_to_execute.getIdentifier()) + ", t, T/next[t], c] and "
 				+ " Current_window.is_in.t = w and Current_window.is_in.t' = w' "
 				+ " and t' in T/next[t] ";
 		final Fact factDiscovering = new Fact("for_discovering", fcontent);
-
-		final String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
 
 		final List<Signature> signatures = new ArrayList<>(originalSemantic.getSignatures());
 		final List<Fact> facts = new ArrayList<>(originalSemantic.getFacts());
@@ -717,6 +874,30 @@ public class GUIFunctionality_refine {
 
 		final SpecificSemantics semantif4DiscoverWindow = new SpecificSemantics(signatures, facts,
 				predicates, functions, opens);
+
+		final int winscope = AlloyUtil.getWinScope(semantif4DiscoverWindow);
+		final int awscope = AlloyUtil.getAWScope(semantif4DiscoverWindow);
+		final int iwscope = AlloyUtil.getIWScope(semantif4DiscoverWindow);
+		final int swscope = AlloyUtil.getSWScope(semantif4DiscoverWindow);
+
+		String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
+		String scope = "";
+		if (winscope > -1) {
+			scope += "," + winscope + " Window ";
+		}
+		if (awscope > -1) {
+			scope += "," + awscope + " Action_widget ";
+		}
+		if (iwscope > -1) {
+			scope += "," + iwscope + " Input_widget ";
+		}
+		if (swscope > -1) {
+			scope += "," + swscope + " Selectable_widget ";
+		}
+		if (scope.length() > 0) {
+			scope = " but " + scope.substring(1);
+		}
+		runCom = runCom + scope;
 		semantif4DiscoverWindow.addRun_command(runCom);
 
 		return semantif4DiscoverWindow;
@@ -762,11 +943,18 @@ public class GUIFunctionality_refine {
 		}
 		if (previoulsy_found == null) {
 			// the window is new
-			this.ripper.ripWindow(tc.getActions(), reached_w);
-			ApplicationHelper.getInstance().closeApplication();
-
+			// we take the actions executed to reach the window(for ripping)
+			// we take the last element of the list because it is the for sure
+			// the last inserted
 			this.gui.addWindow(reached_w);
 			this.gui.addDynamicEdge(aw.getId(), reached_w.getId());
+			final List<GUIAction> action_executed = this.observed_tcs.get(
+					this.observed_tcs.size() - 1).getActions_actually_executed();
+
+			final Ripper ripper = new Ripper(ConfigurationManager.getSleepTime(), this.gui);
+			ripper.ripWindow(action_executed, reached_w);
+			ApplicationHelper.getInstance().closeApplication();
+
 			List<Instance_window> instances = target.getMatches(reached_w);
 			if (instances.size() != 0) {
 				// the first is returned because it the one that maps more
@@ -850,6 +1038,6 @@ public class GUIFunctionality_refine {
 			return tc2.getResults().get(tc2.getActions_executed().size() - 1);
 		}
 
-		return null;
+	return null;
 	}
 }

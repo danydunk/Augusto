@@ -35,6 +35,8 @@ public class UPM_full extends UPM_fullHelper {
 	public void testMain(final Object[] args) {
 
 		try {
+			System.out.println("Max Memory: " + Runtime.getRuntime().maxMemory() / (1024 * 1024)
+					+ " mb.");
 			ConfigurationManager.load("./files/for_test/config/upm.properties");
 			ExperimentManager.init();
 			// we load a gui pattern
@@ -43,7 +45,7 @@ public class UPM_full extends UPM_fullHelper {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-			.getAbsolutePath());
+					.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);

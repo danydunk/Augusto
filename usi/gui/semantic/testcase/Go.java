@@ -18,6 +18,15 @@ public class Go extends GUIAction {
 		super(source, target, oracle);
 	}
 
+	@Override
+	public boolean isSame(final GUIAction act) {
+
+		if (!(act instanceof Go)) {
+			return false;
+		}
+		return this.same(act);
+	}
+
 	public List<GUIAction> getActionSequence(final Window current, final GUI gui) throws Exception {
 
 		final List<GUIAction> out = new ArrayList<>();
