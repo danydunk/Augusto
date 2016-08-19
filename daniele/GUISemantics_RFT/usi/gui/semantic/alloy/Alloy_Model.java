@@ -15,6 +15,7 @@ public class Alloy_Model {
 	protected final List<Fact> facts;
 	protected final List<Predicate> predicates;
 	protected final List<Function> functions;
+	protected List<String> run_commands;
 
 	public Alloy_Model(final List<Signature> signatures, final List<Fact> facts,
 			final List<Predicate> predicates, final List<Function> functions,
@@ -29,6 +30,8 @@ public class Alloy_Model {
 		this.predicates = new ArrayList<>(predicates);
 		this.functions = new ArrayList<>(functions);
 		this.open_statements = new ArrayList<>(open_statements);
+		this.run_commands = new ArrayList<>();
+
 	}
 
 	@Override
@@ -49,6 +52,12 @@ public class Alloy_Model {
 		}
 		for (final Function function : this.functions) {
 			s += function.toString() + System.getProperty("line.separator");
+		}
+
+		s = s + System.getProperty("line.separator");
+
+		for (final String rc : this.getRun_commands()) {
+			s = s + rc + System.getProperty("line.separator");
 		}
 		return s;
 	}
@@ -76,5 +85,15 @@ public class Alloy_Model {
 	public List<String> getOpenStatements() {
 
 		return this.open_statements;
+	}
+
+	public List<String> getRun_commands() {
+
+		return new ArrayList<>(this.run_commands);
+	}
+
+	public void addRun_command(final String run) {
+
+		this.run_commands.add(run);
 	}
 }

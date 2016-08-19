@@ -13,4 +13,12 @@ public class Click extends GUIAction {
 		}
 	}
 
+	@Override
+	public boolean isSame(final GUIAction act) {
+
+		if (!(act instanceof Click)) {
+			return false;
+		}
+		return this.same(act);
+	}
 }

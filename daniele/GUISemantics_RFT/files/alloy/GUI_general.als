@@ -52,16 +52,18 @@ sig Invalid in Value { }
 abstract sig Input_widget {
 	content: Value lone -> Time
 }
-sig Object { }
+sig Object {
+	appeared: one Time
+}
 abstract sig Selectable_widget {
 	list: Object set -> Time,
 	selected: Object lone ->Time
 }
 fact {
 	all gw: General |  #gw.iws = 0 and #gw.aws = 0 and #gw.sws = 0
-	all iw: Input_widget | some w: Window | iw in w.iws
-	all aw: Action_widget | some w: Window | aw in w.aws
-	all sw: Selectable_widget | some w: Window | sw in w.sws
+	all iw: Input_widget | one w: Window | iw in w.iws
+	all aw: Action_widget | one w: Window | aw in w.aws
+	all sw: Selectable_widget | one w: Window | sw in w.sws
 	all o: Object | some t: Time | o in Selectable_widget.list.t
 }
 ----------------Generic GUI Semantics ---------------

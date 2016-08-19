@@ -63,6 +63,10 @@ public class Ripper {
 		if (this.guimanager == null) {
 			this.guimanager = GuiStateManager.getInstance();
 		}
+		if (this.guimanager == null) {
+			this.restart_and_go_to_window(actions, w);
+		}
+
 		List<Action_widget> aws = this.filterAWS(w.getActionWidgets());
 
 		for (int cont = 0; cont < aws.size(); cont++) {

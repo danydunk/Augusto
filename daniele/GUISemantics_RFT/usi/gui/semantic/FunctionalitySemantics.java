@@ -21,7 +21,6 @@ public class FunctionalitySemantics extends Alloy_Model {
 	protected Signature input_w_signature;
 	protected Signature action_w_signature;
 	protected Signature selectable_w_signature;
-	protected List<String> run_commands;
 	protected Semantic_predicate click_semantics;
 	protected Semantic_predicate go_semantics;
 	protected Semantic_predicate fill_semantics;
@@ -127,7 +126,6 @@ public class FunctionalitySemantics extends Alloy_Model {
 						+ this.input_w_extensions.size() + this.selectable_w_extensions.size()) == 0) {
 			throw new Exception("FunctionalitySemantics: error in constructor");
 		}
-		this.run_commands = new ArrayList<>();
 		// this.generate_run_commands();
 	}
 
@@ -270,27 +268,6 @@ public class FunctionalitySemantics extends Alloy_Model {
 				this.run_commands.add(run_command);
 			}
 		}
-	}
-
-	@Override
-	public String toString() {
-
-		String s = super.toString() + System.getProperty("line.separator");
-
-		for (final String rc : this.getRun_commands()) {
-			s = s + rc + System.getProperty("line.separator");
-		}
-		return s;
-	}
-
-	public List<String> getRun_commands() {
-
-		return new ArrayList<>(this.run_commands);
-	}
-
-	public void addRun_command(final String run) {
-
-		this.run_commands.add(run);
 	}
 
 	public Signature getWindow_signature() {

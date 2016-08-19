@@ -13,6 +13,19 @@ public class Select extends GUIAction {
 	// object
 	private final int index;
 
+	@Override
+	public boolean isSame(final GUIAction act) {
+
+		if (!(act instanceof Select)) {
+			return false;
+		}
+		final Select s = (Select) act;
+		if (s.getIndex() != this.index) {
+			return false;
+		}
+		return this.same(act);
+	}
+
 	public Select(final Window w, final Window oracle, final Selectable_widget sw, final int index)
 			throws Exception {
 

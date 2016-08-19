@@ -27,5 +27,5 @@
 	<classpathentry kind="lib" path="lib/alloy4.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jmockit-1.25/jmockit1.org/jmockit.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path=""/>
 </classpath>

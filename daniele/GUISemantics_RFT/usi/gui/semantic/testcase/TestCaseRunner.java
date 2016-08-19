@@ -158,8 +158,9 @@ public class TestCaseRunner {
 
 			this.amanager.executeAction(act);
 			gmanager.readGUI();
+			actions_actually_executed.add(act);
 
-			if (tc.getActions().contains(act)) {
+			if (tc.containsAction(act)) {
 				actions_executed.add(act);
 				if (gmanager.getCurrentWindows().size() > 0) {
 					results.add(gmanager.getCurrentWindows().get(0));
@@ -170,7 +171,6 @@ public class TestCaseRunner {
 				if (go_actions != null && go_actions.get(go_actions.size() - 1) == act) {
 					results.add(gmanager.getCurrentWindows().get(0));
 				}
-				actions_actually_executed.add(act);
 			}
 		}
 		app.closeApplication();

@@ -65,6 +65,7 @@ public class IDManager {
 		ids = this.gui.getInput_widgets().stream()
 				.map(e -> Integer.valueOf(e.getId().replace("iw", "")))
 				.collect(Collectors.toList());
+		Collections.sort(ids);
 		if (ids.size() == 0) {
 			this.lastIWid = 0;
 		} else {

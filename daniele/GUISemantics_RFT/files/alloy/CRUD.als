@@ -28,19 +28,19 @@ fact {
 	#Read_trigger > 0
 	#Update_trigger > 0
 	#Delete_trigger > 0
-	#View = 1
+	//#View = 1
 	#Form > 0
 	#Initial = 1
-	all vw: View | one ok: Ok | #vw.sws = 0 and vw.aws = ok
-	#View.iws = #Form.iws
-	all iw: View.iws | one iww: Form.iws | View.mapping.iw = iww and #View.mapping.iw = 1
-	all iww: Form.iws | one iw: View.iws | View.mapping.iw = iww
+	all vw: View | one ok: Ok | #vw.sws = 0 and vw.aws = ok and ok.goes = Initial
+	#View = 1 => #View.iws = #Form.iws
+	#View = 1 => all iw: View.iws | one iww: Form.iws | View.mapping.iw = iww and #View.mapping.iw = 1
+	#View = 1 => 	all iww: Form.iws | one iw: View.iws | View.mapping.iw = iww
 	//all t: Time, iw: View.iws | iw.content.t = View.mapping.iw.content.t
 	all iw: Initial | iw.aws = (Create_trigger+Read_trigger+Update_trigger+Delete_trigger) and #iw.iws = 0 and #iw.sws = 1
-	all fw: Form | one ok: Ok,  cancel: Cancel | #fw.iws > 0 and fw.aws = ok+cancel and #fw.sws = 0
-	all cw: Confirm | one ok: Ok,  cancel: Cancel | #cw.iws = 0 and #cw.sws = 0 and cw.aws = ok+cancel
-	all cw: Confirm_delete | one ok: Ok,  cancel: Cancel | #cw.iws = 0 and #cw.sws = 0 and cw.aws = ok+cancel
-	#Window = #Form + #Initial + #Confirm + #General + #View
+	all fw: Form | one ok: Ok,  cancel: Cancel | #fw.iws > 0 and fw.aws = ok+cancel and #fw.sws = 0 and ok.goes in Initial+Form and cancel.goes in Initial+Form
+	all cw: Confirm | one ok: Ok,  cancel: Cancel | #cw.iws = 0 and #cw.sws = 0 and cw.aws = ok+cancel and ok.goes in Initial+Form and cancel.goes in Initial+Form
+	all cw: Confirm_delete | one ok: Ok,  cancel: Cancel | #cw.iws = 0 and #cw.sws = 0 and cw.aws = ok+cancel and ok.goes in Initial and cancel.goes in Initial
+	#Window = #Form + #Initial + #Confirm + #Confirm_delete + #General + #View
 }
 ---------------Generic ADD Semantics----------
 abstract sig Crud_op {}
@@ -67,9 +67,11 @@ fact {
 pred go_semantics [w: Window, t: Time] { }
 pred go_success_post [w: Window, t, t': Time] {
 	List.contains.t' = List.contains.t
+	#Current_crud_op.operation.t' = 0
 }
 pred go_fail_post [w: Window, t, t': Time] {
 	List.contains.t' = List.contains.t
+	Current_crud_op.operation.t' = Current_crud_op.operation.t
 }
 pred go_pre[w: Window, t: Time] {
 	w in Initial
@@ -118,7 +120,7 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Delete_trigger and aw.goes in Confirm_delete) => (Current_crud_op.operation.t' = DELETE and List.contains.t' = List.contains.t  and Selectable_widget.selected.t' = Selectable_widget.selected.t)
 	
 	(aw in Cancel and  Current_crud_op.operation.t = CREATE) => (List.contains.t' = List.contains.t and #Current_window.is_in.t.iws.content.t' = 0 and (Input_widget - Current_window.is_in.t.iws).content.t' = (Input_widget - Current_window.is_in.t.iws).content.t and Selectable_widget.selected.t' = Selectable_widget.selected.t)
-	(aw in Cancel and Current_crud_op.operation.t = (UPDATE+READ) and aw.goes in Form) => (List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t']  and Selectable_widget.selected.t' = Selectable_widget.selected.t)
+	(aw in Cancel and Current_crud_op.operation.t in (UPDATE+READ) and aw.goes in Form) => (List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t']  and Selectable_widget.selected.t' = Selectable_widget.selected.t)
 	(aw in Cancel and aw.goes in Initial) => (List.contains.t' = List.contains.t and #Input_widget.content.t' = 0 and #Selectable_widget.selected = 0)
 
 	(aw in Ok and aw.goes in Form) => (List.contains.t' = List.contains.t and Input_widget.content.t' = Input_widget.content.t and Current_crud_op.operation.t' = Current_crud_op.operation.t and Selectable_widget.selected.t' = Selectable_widget.selected.t)
@@ -137,7 +139,7 @@ pred click_fail_post [aw: Action_widget, t, t': Time]	{
 pred click_pre[aw: Action_widget, t: Time] {}
 
 pred add [t, t': Time] {
-	one o: Object | all f: Field | f.has_value.o = f.associated_to.content.t and List.contains.t' = List.contains.t+o
+	one o: Object |all f: Field | o.appeared = t' and f.has_value.o = f.associated_to.content.t and List.contains.t' = List.contains.t+o
 }
 pred filled_required_test [w: Form, t: Time] { 
 	all iw: w.iws | (iw in Property_required.associated_to) => #iw.content.t = 1

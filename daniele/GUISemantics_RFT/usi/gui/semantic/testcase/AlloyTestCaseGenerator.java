@@ -29,7 +29,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 public class AlloyTestCaseGenerator {
 
 	private long RUN_INITIAL_TIMEOUT = 120000; // 2 minute
-	private int MAX_RUN = 10;
+	private int MAX_RUN = 12;
 
 	final Instance_GUI_pattern instance;
 
@@ -83,7 +83,11 @@ public class AlloyTestCaseGenerator {
 
 		final List<RunCommandThread> threads = new ArrayList<>();
 		for (final Command cmd : run_commands) {
-			final RunCommandThread rc = new RunCommandThread(cmd, compiled);
+			final RunCommandThread rc = new RunCommandThread(cmd, compiled,
+					AlloyUtil.getWinScope(this.instance.getSemantics()),
+					AlloyUtil.getAWScope(this.instance.getSemantics()),
+					AlloyUtil.getIWScope(this.instance.getSemantics()),
+					AlloyUtil.getSWScope(this.instance.getSemantics()));
 			rc.start();
 			threads.add(rc);
 		}
@@ -122,9 +126,9 @@ public class AlloyTestCaseGenerator {
 		final SpecificSemantics model = this.instance.getSemantics();
 
 		final String alloy_model = model.toString();
-		// System.out.println("START ALLOY MODEL");
-		// System.out.println(model);
-		// System.out.println("END ALLOY MODEL");
+		System.out.println("START ALLOY MODEL");
+		System.out.println(model);
+		System.out.println("END ALLOY MODEL");
 
 		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
 
@@ -132,7 +136,11 @@ public class AlloyTestCaseGenerator {
 
 		final List<RunCommandThread> threads = new ArrayList<>();
 		for (final Command cmd : run_commands) {
-			final RunCommandThread rc = new RunCommandThread(cmd, compiled, true);
+			final RunCommandThread rc = new RunCommandThread(cmd, compiled, true,
+					AlloyUtil.getWinScope(this.instance.getSemantics()),
+					AlloyUtil.getAWScope(this.instance.getSemantics()),
+					AlloyUtil.getIWScope(this.instance.getSemantics()),
+					AlloyUtil.getSWScope(this.instance.getSemantics()));
 			rc.start();
 			threads.add(rc);
 		}
@@ -326,7 +334,19 @@ public class AlloyTestCaseGenerator {
 				Input_widget target_iw = null;
 				for (final Input_widget iw : this.instance.getGui().getInput_widgets()) {
 					if (iw.getId().equals(iw_id)) {
-						target_iw = iw;
+						// target_iw = iw;
+						// TODO: add the current value
+						if (iw instanceof Option_input_widget) {
+							final Option_input_widget oiw = (Option_input_widget) iw;
+							target_iw = new Option_input_widget(oiw.getId(), oiw.getLabel(),
+									oiw.getClasss(), oiw.getX(), oiw.getY(), oiw.getSize(),
+									oiw.getSelected());
+						} else {
+							target_iw = new Input_widget(iw.getId(), iw.getLabel(), iw.getClasss(),
+									iw.getX(), iw.getY(), iw.getValue());
+						}
+
+						target_iw.setDescriptor(iw.getDescriptor());
 						break;
 					}
 				}
@@ -361,7 +381,10 @@ public class AlloyTestCaseGenerator {
 				Action_widget target_aw = null;
 				for (final Action_widget aw : this.instance.getGui().getAction_widgets()) {
 					if (aw.getId().equals(aw_id)) {
-						target_aw = aw;
+						// target_aw = aw;
+						target_aw = new Action_widget(aw.getId(), aw.getLabel(), aw.getClasss(),
+								aw.getX(), aw.getY());
+						target_aw.setDescriptor(aw.getDescriptor());
 						break;
 					}
 				}
@@ -439,7 +462,12 @@ public class AlloyTestCaseGenerator {
 				Selectable_widget target_sw = null;
 				for (final Selectable_widget sw : this.instance.getGui().getSelectable_widgets()) {
 					if (sw.getId().equals(sw_id)) {
-						target_sw = sw;
+						// target_sw = sw;
+						// TODO: add the correct selected
+						target_sw = new Selectable_widget(sw.getId(), sw.getLabel(),
+								sw.getClasss(), sw.getX(), sw.getY(), sw.getSize()
+								+ objects_in_sw_at_t.size(), 0);
+						target_sw.setDescriptor(sw.getDescriptor());
 						break;
 					}
 				}
@@ -559,7 +587,7 @@ public class AlloyTestCaseGenerator {
 				// this is possible because of the fact added in the model that
 				// constrains the possible values associated to the optional
 				// input widget
-				final String val = v.split("//$")[1].trim();
+				final String val = v.split("\\$")[1].trim();
 				out.put(v, val);
 
 			} else {
@@ -640,21 +668,35 @@ public class AlloyTestCaseGenerator {
 		private A4Solution solution;
 		private boolean exception;
 		private final boolean minimal;
+		private final int win_scope;
+		private final int aw_scope;
+		private final int iw_scope;
+		private final int sw_scope;
 
-		public RunCommandThread(final Command run, final Module alloy) {
+		public RunCommandThread(final Command run, final Module alloy, final int win_scope,
+				final int aw_scope, final int iw_scope, final int sw_scope) {
 
 			this.run_command = run;
 			this.alloy_model = alloy;
 			this.exception = false;
 			this.minimal = false;
+			this.win_scope = win_scope;
+			this.aw_scope = aw_scope;
+			this.iw_scope = iw_scope;
+			this.sw_scope = sw_scope;
 		}
 
-		public RunCommandThread(final Command run, final Module alloy, final boolean minimal) {
+		public RunCommandThread(final Command run, final Module alloy, final boolean minimal,
+				final int win_scope, final int aw_scope, final int iw_scope, final int sw_scope) {
 
 			this.run_command = run;
 			this.alloy_model = alloy;
 			this.exception = false;
 			this.minimal = minimal;
+			this.win_scope = win_scope;
+			this.aw_scope = aw_scope;
+			this.iw_scope = iw_scope;
+			this.sw_scope = sw_scope;
 		}
 
 		@Override
@@ -669,6 +711,49 @@ public class AlloyTestCaseGenerator {
 					time_scope = this.run_command.overall;
 				}
 
+				Sig win = null;
+				for (final Sig s : this.alloy_model.getAllSigs()) {
+					if (s.label.equals("this/Window")) {
+						win = s;
+					}
+				}
+				if (win == null) {
+					this.exception = true;
+					return;
+				}
+
+				Sig aw = null;
+				for (final Sig s : this.alloy_model.getAllSigs()) {
+					if (s.label.equals("this/Action_widget")) {
+						aw = s;
+					}
+				}
+				if (aw == null) {
+					this.exception = true;
+					return;
+				}
+
+				Sig iw = null;
+				for (final Sig s : this.alloy_model.getAllSigs()) {
+					if (s.label.equals("this/Input_widget")) {
+						iw = s;
+					}
+				}
+				if (iw == null) {
+					this.exception = true;
+					return;
+				}
+
+				Sig sw = null;
+				for (final Sig s : this.alloy_model.getAllSigs()) {
+					if (s.label.equals("this/Selectable_widget")) {
+						sw = s;
+					}
+				}
+				if (sw == null) {
+					this.exception = true;
+					return;
+				}
 				Sig time = null;
 				for (final Sig s : this.alloy_model.getAllSigs()) {
 					if (s.label.equals("this/Time")) {
@@ -679,9 +764,41 @@ public class AlloyTestCaseGenerator {
 					this.exception = true;
 					return;
 				}
-				CommandScope scope = new CommandScope(time, false, time_scope);
 
-				ConstList<CommandScope> scope_list = this.run_command.scope.make(1, scope);
+				Sig operation = null;
+				for (final Sig s : this.alloy_model.getAllSigs()) {
+					if (s.label.equals("this/Operation")) {
+						operation = s;
+					}
+				}
+				if (operation == null) {
+					this.exception = true;
+					return;
+				}
+
+				List<CommandScope> scopes = new ArrayList<>();
+				CommandScope timescope = new CommandScope(time, false, time_scope);
+				CommandScope opscope = new CommandScope(operation, false, time_scope - 1);
+				scopes.add(timescope);
+				scopes.add(opscope);
+				if (this.win_scope > -1) {
+					final CommandScope winscope = new CommandScope(win, false, this.win_scope);
+					scopes.add(winscope);
+				}
+				if (this.aw_scope > -1) {
+					final CommandScope awscope = new CommandScope(aw, false, this.aw_scope);
+					scopes.add(awscope);
+				}
+				if (this.iw_scope > -1) {
+					final CommandScope iwscope = new CommandScope(iw, false, this.iw_scope);
+					scopes.add(iwscope);
+				}
+				if (this.sw_scope > -1) {
+					final CommandScope swscope = new CommandScope(sw, false, this.sw_scope);
+					scopes.add(swscope);
+				}
+
+				ConstList<CommandScope> scope_list = this.run_command.scope.make(scopes);
 
 				Command run = new Command(this.run_command.pos, this.run_command.label,
 						this.run_command.check, this.run_command.overall,
@@ -704,9 +821,30 @@ public class AlloyTestCaseGenerator {
 					} else if (!solution.satisfiable()) {
 
 						time_scope++;
-						scope = new CommandScope(time, false, time_scope);
+						timescope = new CommandScope(time, false, time_scope);
+						opscope = new CommandScope(operation, false, time_scope - 1);
+						scopes = new ArrayList<>();
+						scopes.add(timescope);
+						scopes.add(opscope);
+						if (this.win_scope > -1) {
+							final CommandScope winscope = new CommandScope(win, false,
+									this.win_scope);
+							scopes.add(winscope);
+						}
+						if (this.aw_scope > -1) {
+							final CommandScope awscope = new CommandScope(aw, false, this.aw_scope);
+							scopes.add(awscope);
+						}
+						if (this.iw_scope > -1) {
+							final CommandScope iwscope = new CommandScope(iw, false, this.iw_scope);
+							scopes.add(iwscope);
+						}
+						if (this.sw_scope > -1) {
+							final CommandScope swscope = new CommandScope(sw, false, this.sw_scope);
+							scopes.add(swscope);
+						}
 
-						scope_list = this.run_command.scope.make(1, scope);
+						scope_list = this.run_command.scope.make(scopes);
 
 						run = new Command(this.run_command.pos, this.run_command.label,
 								this.run_command.check, this.run_command.overall,
@@ -743,4 +881,5 @@ public class AlloyTestCaseGenerator {
 			return this.exception;
 		}
 	}
+
 }
