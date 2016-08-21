@@ -31,7 +31,7 @@ fact {
 	//#View = 1
 	#Form > 0
 	#Initial = 1
-	all vw: View | one ok: Ok | #vw.sws = 0 and vw.aws = ok and ok.goes = Initial
+	all vw: View | one ok: Ok | #vw.sws = 0 and vw.aws = ok
 	#View = 1 => #View.iws = #Form.iws
 	#View = 1 => all iw: View.iws | one iww: Form.iws | View.mapping.iw = iww and #View.mapping.iw = 1
 	#View = 1 => 	all iww: Form.iws | one iw: View.iws | View.mapping.iw = iww
@@ -123,7 +123,7 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Cancel and Current_crud_op.operation.t in (UPDATE+READ) and aw.goes in Form) => (List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t']  and Selectable_widget.selected.t' = Selectable_widget.selected.t)
 	(aw in Cancel and aw.goes in Initial) => (List.contains.t' = List.contains.t and #Input_widget.content.t' = 0 and #Selectable_widget.selected = 0)
 
-	(aw in Ok and aw.goes in Form) => (List.contains.t' = List.contains.t and Input_widget.content.t' = Input_widget.content.t and Current_crud_op.operation.t' = Current_crud_op.operation.t and Selectable_widget.selected.t' = Selectable_widget.selected.t)
+	(aw in Ok and aw.goes in Form) => (List.contains.t' = List.contains.t and (all iw:Input_widget | iw.content.t' = iw.content.t) and Current_crud_op.operation.t' = Current_crud_op.operation.t and Selectable_widget.selected.t' = Selectable_widget.selected.t)
 	(aw in Ok and Current_crud_op.operation.t = CREATE and aw.goes = Initial) => (#Selectable_widget.selected.t' = 0 and #Input_widget.content.t' = 0 and add [t, t'] and #Current_crud_op.operation.t' = 0)
 	(aw in Ok and Current_crud_op.operation.t = UPDATE and aw.goes = Initial) => (#Selectable_widget.selected.t' = 0 and #Input_widget.content.t' = 0 and update [t, t'] and #Current_crud_op.operation.t' = 0)
 	(aw in Ok and Current_crud_op.operation.t = DELETE and aw.goes = Initial) => (#Selectable_widget.selected.t' = 0 and #Input_widget.content.t' = 0 and delete [t, t'] and #Current_crud_op.operation.t' = 0)
@@ -132,7 +132,7 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 }
 pred click_fail_post [aw: Action_widget, t, t': Time]	{
 	List.contains.t' = List.contains.t
-	Input_widget.content.t' = Input_widget.content.t
+	(all iw:Input_widget | iw.content.t' = iw.content.t)
 	Selectable_widget.selected.t' = Selectable_widget.selected.t
 	Current_crud_op.operation.t' = Current_crud_op.operation.t
 }

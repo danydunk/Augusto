@@ -155,6 +155,11 @@ public class TestCaseRunner {
 					throw new Exception("TestCaseRunner - runTestCase: error in select.");
 				}
 			}
+			// System.out.println("ACTION " + act);
+			// System.out.println(act.getWidget().getId());
+			// System.out.println(act.getWidget().getLabel());
+			// System.out.println(act.getWindow().getId());
+			// System.out.println(act.getWindow().getLabel());
 
 			this.amanager.executeAction(act);
 			gmanager.readGUI();

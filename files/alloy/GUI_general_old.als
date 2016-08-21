@@ -74,7 +74,7 @@ pred fill [iw: Input_widget, t, t': Time, v: Value, f: Fill] {
 	(not fill_semantics  [iw, t, v] and iw.content.t' = iw.content.t and fill_fail_post [iw, t, t', v])
 	--- general postcondition ---
 	Current_window.is_in.t' = Current_window.is_in.t
-	(Input_widget - iw).content.t' = (Input_widget - iw).content.t
+	all iw:(Input_widget - iw)| iw.content.t' = iw.content.t
 	--- operation is tracked ---
 	f.filled = iw and f.with = v and Track.op.t' = f
 }

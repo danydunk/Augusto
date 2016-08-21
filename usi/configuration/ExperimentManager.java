@@ -37,10 +37,9 @@ public class ExperimentManager {
 			out.newLine();
 			out.write("java -Xbootclasspath/p:" + System.getProperty("user.dir") + File.separator
 					+ "lib" + File.separator + "abtJFileChooser.jar;" + " -cp %CLASSPATH%;"
-					+ System.getProperty("user.dir") + File.separator + "bin;"
-					+ System.getProperty("user.dir") + File.separator + "lib" + File.separator
-					+ "cobertura" + File.separator + "cobertura.jar;"
-					+ ConfigurationManager.getAutClasspath() + ";"
+					+ System.getProperty("user.dir") + ";" + System.getProperty("user.dir")
+					+ File.separator + "lib" + File.separator + "cobertura" + File.separator
+					+ "cobertura.jar;" + ConfigurationManager.getAutClasspath() + ";"
 					+ new File(ConfigurationManager.getAutBinDirectory()).getParent() + ""
 					+ File.separator + "instrumented" + ";"
 					+ ConfigurationManager.getAutBinDirectory() + ";"
