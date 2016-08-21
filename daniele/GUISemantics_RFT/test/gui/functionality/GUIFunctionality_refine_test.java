@@ -131,7 +131,7 @@ public class GUIFunctionality_refine_test {
 				.getSignatures().size());
 
 		in.setSpecificSemantics(semantic4discoveringPw3);
-		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in, 20, 30000);
+		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in, 20, 100000);
 		final List<GUITestCase> tests = generator.generateMinimalTestCases();
 
 		assertEquals(1, tests.size());

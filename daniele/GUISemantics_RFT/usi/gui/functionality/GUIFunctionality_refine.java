@@ -61,6 +61,7 @@ public class GUIFunctionality_refine {
 		this.pattern = this.instancePattern.getGuipattern();
 		this.observed_tcs = new ArrayList<>();
 		this.covered_dyn_edges = new ArrayList<>();
+		System.out.println(instancePattern.getSemantics());
 	}
 
 	public Instance_GUI_pattern refine() throws Exception {
@@ -79,15 +80,15 @@ public class GUIFunctionality_refine {
 			old_edges_number = this.instancePattern.getGui().getNumberOfStaticEdges()
 					+ this.instancePattern.getGui().getNumberOfDynamicEdges();
 
-			this.discoverWindows();
 			this.discoverDynamicEdges();
+			this.discoverWindows();
 			// if something has changed we iterate again
 		} while (!old_valid_constraints.equals(this.valid_constraint)
 				|| old_unvalid_constraints_size != this.unvalid_constraints.size()
 				|| old_windows_number != this.instancePattern.getWindows().size()
 				|| old_edges_number != (this.instancePattern.getGui().getNumberOfStaticEdges() + this.instancePattern
 						.getGui().getNumberOfDynamicEdges()));
-		System.out.println(this.valid_constraint);
+		System.out.println("CONSTRAINT FOUND: " + this.valid_constraint);
 
 		if (this.pattern.isInstance(this.instancePattern)) {
 
@@ -132,8 +133,12 @@ public class GUIFunctionality_refine {
 
 					for (final Window target_window : target_w_matched) {
 
-						final String edge = aw.getId() + " - " + target_window.getId();
+						String edge = aw.getId() + " - " + target_window.getId();
+						System.out.println("DISCOVER DYNAMIC EDGE: looking for edge " + edge
+								+ " (from " + paw.getId() + ".");
+
 						if (this.covered_dyn_edges.contains(edge)) {
+							System.out.println("DISCOVER DYNAMIC EDGE: edge already found before.");
 							continue;
 						}
 						final GUITestCase tc = this.getTestToCoverEdge(source_window,
@@ -144,19 +149,41 @@ public class GUIFunctionality_refine {
 
 						final Instance_window found = this.getFoundWindow(tc, target, paw);
 
-						if (found != null
-								&& found.getInstance().getId().equals(target_window.getId())
-								&& this.instancePattern.getWindows().contains(found)) {
-							// the edge was covered
+						if (found != null) {
+							System.out.println("DISCOVER DYNAMIC EDGE: edge found.");
+							if (!this.instancePattern.getWindows().contains(found)) {
+								this.instancePattern.addWindow(found);
+							}
+							edge = aw.getId() + " - " + found.getPattern().getId();
 							this.covered_dyn_edges.add(edge);
 							this.instancePattern.getGui().addDynamicEdge(aw.getId(),
 									found.getInstance().getId());
+							this.instancePattern.generateSpecificSemantics();
 						} else {
-							if (found == null) {
-								this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
-								this.valid_constraint = "";
-							}
+							System.out.println("DISCOVER DYNAMIC EDGE: edge not found.");
+							this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
+							this.valid_constraint = "";
 						}
+
+						// if (found != null
+						// &&
+						// found.getInstance().getId().equals(target_window.getId())
+						// && this.instancePattern.getWindows().contains(found))
+						// {
+						// // the edge was covered
+						// this.covered_dyn_edges.add(edge);
+						// this.instancePattern.getGui().addDynamicEdge(aw.getId(),
+						// found.getInstance().getId());
+						// System.out.println("DISCOVER DYNAMIC EDGE: edge found.");
+						//
+						// } else {
+						// System.out.println("DISCOVER DYNAMIC EDGE: edge not found.");
+						// if (found == null) {
+						// this.unvalid_constraints.add("not(" +
+						// this.valid_constraint + ")");
+						// this.valid_constraint = "";
+						// }
+						// }
 					}
 				}
 			}
@@ -185,9 +212,13 @@ public class GUIFunctionality_refine {
 				for (final Action_widget aw : matched_aws) {
 					final Window source_window = this.gui.getActionWidget_Window(aw.getId());
 
+					System.out.println("DISCOVER DYNAMIC WINDOW: looking for "
+							+ to_discover.getId() + " from " + source_window.getLabel() + ".");
+
 					final GUITestCase tc = this
 							.getTestToReachWindow(source_window, to_discover, aw);
 					if (tc == null) {
+						System.out.println("DISCOVER DYNAMIC WINDOW: test case not found.");
 						continue;
 					}
 
@@ -196,21 +227,27 @@ public class GUIFunctionality_refine {
 					if (found != null) {
 
 						if (!this.instancePattern.getGui().containsWindow(
-								found.getInstance().getId())
-								&& !this.instancePattern.getWindows().contains(found)) {
-							// the window was found
+								found.getInstance().getId())) {
+							// new window was found
 							this.instancePattern.getGui().addWindow(found.getInstance());
-							this.instancePattern.getGui().addDynamicEdge(aw.getId(),
-									found.getInstance().getId());
-							this.instancePattern.addWindow(found);
-							this.instancePattern.generateSpecificSemantics();
-							System.out.println(this.instancePattern.getSemantics());
 
 						}
+						if (!this.instancePattern.getWindows().contains(found)) {
+
+							this.instancePattern.addWindow(found);
+							System.out.println("DISCOVER DYNAMIC WINDOW: window found.");
+						}
+						this.instancePattern.getGui().addDynamicEdge(aw.getId(),
+								found.getInstance().getId());
+						this.instancePattern.generateSpecificSemantics();
+						final String edge = aw.getId() + " - " + found.getInstance().getId();
+						this.covered_dyn_edges.add(edge);
+
 						this.valid_constraint = this.getAdaptedConstraint(this.instancePattern
 								.getSemantics());
 
 					} else {
+						System.out.println("DISCOVER DYNAMIC WINDOW: window not found.");
 						this.unvalid_constraints.add(this.getAdaptedConstraint(this.instancePattern
 								.getSemantics()));
 						this.valid_constraint = "";
@@ -232,13 +269,23 @@ public class GUIFunctionality_refine {
 		// for (final GUITestCaseResult tcr : this.observed_tcs) {
 		// tcs.add(this.getTCaseFact(tcr));
 		// }
+		System.out.println("GET ADAPTED CONSTRAINT: start.");
+
+		final List<Fact> facts = new ArrayList<>();
+		for (final Fact f : in_sem.getFacts()) {
+			if (!f.getIdentifier().equals("sem_prop")) {
+				facts.add(f);
+			}
+		}
+
+		final Alloy_Model mod_filtered = new Alloy_Model(in_sem.getSignatures(), facts,
+				in_sem.getPredicates(), in_sem.getFunctions(), in_sem.getOpenStatements());
+		final SpecificSemantics sem_filtered = SpecificSemantics.instantiate(mod_filtered);
 
 		String prop = null;
 		loop: while (prop == null) {
 
 			for (int cont = 0; cont < this.observed_tcs.size(); cont++) {
-				// final int time_size =
-				// this.observed_tcs.get(cont).getActions_executed().size() + 2;
 
 				final List<String> constraints = new ArrayList<>(this.unvalid_constraints);
 				// constraints.add(tcs.get(cont));
@@ -246,8 +293,8 @@ public class GUIFunctionality_refine {
 					constraints.add(prop);
 				}
 
-				final Alloy_Model sem = AlloyUtil
-						.getTCaseModel(in_sem, this.observed_tcs.get(cont));
+				final Alloy_Model sem = AlloyUtil.getTCaseModel(sem_filtered,
+						this.observed_tcs.get(cont));
 				final SpecificSemantics new_sem = this.addConstrain(sem, constraints);
 
 				// final SpecificSemantics sem = this.addConstrain(in_sem,
@@ -278,6 +325,7 @@ public class GUIFunctionality_refine {
 				}
 			}
 		}
+		System.out.println("GET ADAPTED CONSTRAINT: end.");
 		return prop;
 	}
 
@@ -289,6 +337,8 @@ public class GUIFunctionality_refine {
 		SpecificSemantics new_sem = null;
 
 		this.additional_constraints = new ArrayList<>();
+		final String old_valid_constraint = this.valid_constraint;
+		final List<String> old_invalid_constraint = new ArrayList<>(this.unvalid_constraints);
 
 		while (tc == null) {
 			final List<String> constraints = new ArrayList<>();
@@ -321,6 +371,8 @@ public class GUIFunctionality_refine {
 					this.valid_constraint = "";
 					continue;
 				} else {
+					this.valid_constraint = old_valid_constraint;
+					this.unvalid_constraints = old_invalid_constraint;
 					return null;
 				}
 			}
@@ -338,10 +390,15 @@ public class GUIFunctionality_refine {
 				if (valid) {
 					tc = tests.get(0);
 					this.valid_constraint = property;
+					System.out.println("GET TEST TO DISCOVER WINDOW: new valid property  - "
+							+ property);
 				} else {
 					this.valid_constraint = "";
 					// add constraint
 					this.additional_constraints.add("not(" + property + ")");
+					System.out
+							.println("GET TEST TO DISCOVER WINDOW: new invalid property added - not("
+									+ property + ")");
 				}
 			}
 		}
@@ -354,6 +411,9 @@ public class GUIFunctionality_refine {
 		String property = null;
 		GUITestCase tc = null;
 		SpecificSemantics new_sem = null;
+
+		final String old_valid_constraint = this.valid_constraint;
+		final List<String> old_invalid_constraint = new ArrayList<>(this.unvalid_constraints);
 
 		while (tc == null) {
 			final List<String> constraints = new ArrayList<>();
@@ -371,6 +431,11 @@ public class GUIFunctionality_refine {
 			final Instance_GUI_pattern clone = this.instancePattern.clone();
 			clone.setSpecificSemantics(constrained);
 
+			// System.out.println("Start constrained semantics");
+			// System.out.println(constrained);
+			//
+			// System.out.println("End constrained semantics");
+
 			final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
 			final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
 
@@ -385,6 +450,8 @@ public class GUIFunctionality_refine {
 					this.valid_constraint = "";
 					continue;
 				} else {
+					this.valid_constraint = old_valid_constraint;
+					this.unvalid_constraints = old_invalid_constraint;
 					return null;
 				}
 
@@ -402,11 +469,14 @@ public class GUIFunctionality_refine {
 
 				if (valid) {
 					tc = tests.get(0);
+					System.out.println("GET TEST TO COVER EDGE: new valid property - " + property);
 					this.valid_constraint = property;
 
 				} else {
 					this.valid_constraint = "";
 					// add constraint
+					System.out.println("GET TEST TO COVER EDGE: new invalid property added - not("
+							+ property + ")");
 					this.unvalid_constraints.add("not(" + property + ")");
 				}
 			}
@@ -540,6 +610,8 @@ public class GUIFunctionality_refine {
 	private boolean validateProperty(final String prop, final SpecificSemantics in_sem)
 			throws Exception {
 
+		System.out.println("VALIDATE PROPERTY: start.");
+
 		// final List<String> tcs = new ArrayList<>();
 		// for (final GUITestCaseResult tcr : this.observed_tcs) {
 		// tcs.add(this.getTCaseFact(tcr));
@@ -549,10 +621,15 @@ public class GUIFunctionality_refine {
 		// windows/edges
 		final List<Fact> facts = new ArrayList<>();
 		for (final Fact f : in_sem.getFacts()) {
-			if (!f.getIdentifier().equals("for_disocvering")) {
+			if (!f.getIdentifier().equals("for_discovering")
+					&& !f.getIdentifier().equals("sem_prop")) {
 				facts.add(f);
 			}
 		}
+
+		final Alloy_Model mod_filtered = new Alloy_Model(in_sem.getSignatures(), facts,
+				in_sem.getPredicates(), in_sem.getFunctions(), in_sem.getOpenStatements());
+		final SpecificSemantics sem_filtered = SpecificSemantics.instantiate(mod_filtered);
 
 		for (int cont = 0; cont < this.observed_tcs.size(); cont++) {
 			// the time size is the number of actions +2 (because of Go)
@@ -560,19 +637,21 @@ public class GUIFunctionality_refine {
 			// constraints.add(tcs.get(cont));
 			constraints.add(prop);
 
-			Alloy_Model sem = AlloyUtil.getTCaseModel(in_sem, this.observed_tcs.get(cont));
+			Alloy_Model sem = AlloyUtil.getTCaseModel(sem_filtered, this.observed_tcs.get(cont));
 			sem = this.addConstrain(sem, constraints);
 
-			System.out.println("start");
-			System.out.println(sem);
-			System.out.println("end");
+			// System.out.println("start validate sem");
+			// System.out.println(sem);
+			// System.out.println("end validate sem");
 
 			final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
 			final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
 			if (!sol.satisfiable()) {
+				System.out.println("VALIDATE PROPERTY: -false- end.");
 				return false;
 			}
 		}
+		System.out.println("VALIDATE PROPERTY: -true- end.");
 		return true;
 	}
 
@@ -737,22 +816,31 @@ public class GUIFunctionality_refine {
 			throw new Exception("Signature not found for action widget: ");
 		}
 
-		final String contentFactLink = sig_action_to_execute.getIdentifier() + ".goes = "
-				+ sigWinToDiscover.getIdentifier();
-
-		final Fact factLinkActions = new Fact(sigWinToDiscover.getIdentifier() + "_aws_link",
-				contentFactLink);
-
 		final String fcontent = "some t, t': Time, w: Window_" + sourceWindow.getId() + ", "
 				+ " w': " + sigWinToDiscover.getIdentifier() + " , c: Click " + " | click ["
 				+ (sig_action_to_execute.getIdentifier()) + ", t, T/next[t], c] and "
 				+ " Current_window.is_in.t = w and Current_window.is_in.t' = w' "
-				+ " and t' in T/next[t] ";
+				+ " and t' in T/next[t] and click_semantics["
+				+ (sig_action_to_execute.getIdentifier()) + ",t]";
 		final Fact factDiscovering = new Fact("for_discovering", fcontent);
 
 		final List<Signature> signatures = new ArrayList<>(originalSemantic.getSignatures());
 		final List<Fact> facts = new ArrayList<>();
 		for (final Fact fact : originalSemantic.getFacts()) {
+			// we remove the constraint the limited the aw
+			if (fact.getIdentifier().equals("Window_" + sourceWindow.getId() + "_aws")) {
+				String content = fact.getContent().replace(
+						"#Action_widget_" + actionWidget.getId() + ".goes = 0",
+						"Action_widget_" + actionWidget.getId() + ".goes = "
+								+ sigWinToDiscover.getIdentifier());
+				content = content.replace(
+						"Action_widget_" + actionWidget.getId() + ".goes = ",
+						"Action_widget_" + actionWidget.getId() + ".goes = "
+								+ sigWinToDiscover.getIdentifier() + " + ");
+				final Fact fact2 = new Fact("Window_" + sourceWindow.getId() + "_aws", content);
+				facts.add(fact2);
+				continue;
+			}
 			if (!fact.getIdentifier().equals("windows_number")) {
 				facts.add(fact);
 			} else {
@@ -771,7 +859,7 @@ public class GUIFunctionality_refine {
 		signatures.addAll(aw_sig);
 		signatures.addAll(iw_sig);
 		facts.add(factDiscovering);
-		facts.add(factLinkActions);
+		// facts.add(factLinkActions);
 		facts.add(fact_aws_from_undiscover_window);
 		facts.add(fact_iws_from_undiscover_window);
 		facts.add(fact_sws_from_undiscover_window);
@@ -850,27 +938,38 @@ public class GUIFunctionality_refine {
 			throw new Exception("Signature not found for action widget: ");
 		}
 
-		final String contentFactLink = sig_action_to_execute.getIdentifier() + ".goes = "
-				+ sigWinToDiscover.getIdentifier();
-
-		final Fact factLinkActions = new Fact(sigWinToDiscover.getIdentifier() + "_awsd",
-				contentFactLink);
-
 		final String fcontent = "some t, t': Time, w: Window_" + sourceWindow.getId() + ", w': "
 				+ sigWinToDiscover.getIdentifier() + " , c: Click " + " | click ["
 				+ (sig_action_to_execute.getIdentifier()) + ", t, T/next[t], c] and "
 				+ " Current_window.is_in.t = w and Current_window.is_in.t' = w' "
-				+ " and t' in T/next[t] ";
+				+ " and t' in T/next[t] and click_semantics["
+				+ (sig_action_to_execute.getIdentifier()) + ",t]";
 		final Fact factDiscovering = new Fact("for_discovering", fcontent);
 
 		final List<Signature> signatures = new ArrayList<>(originalSemantic.getSignatures());
-		final List<Fact> facts = new ArrayList<>(originalSemantic.getFacts());
+		final List<Fact> facts = new ArrayList<>();
+		for (final Fact f : originalSemantic.getFacts()) {
+			// we remove the fact that contrained the aw
+			if (f.getIdentifier().equals("Window_" + sourceWindow.getId() + "_aws")) {
+				String content = f.getContent().replace(
+						"#Action_widget_" + actionWidget.getId() + ".goes = 0",
+						"Action_widget_" + actionWidget.getId() + ".goes = "
+								+ sigWinToDiscover.getIdentifier());
+				content = content.replace(
+						"Action_widget_" + actionWidget.getId() + ".goes = ",
+						"Action_widget_" + actionWidget.getId() + ".goes = "
+								+ sigWinToDiscover.getIdentifier() + " + ");
+				final Fact fact = new Fact("Window_" + sourceWindow.getId() + "_aws", content);
+				facts.add(fact);
+				continue;
+			}
+			facts.add(f);
+		}
 		final List<Predicate> predicates = new ArrayList<>(originalSemantic.getPredicates());
 		final List<Function> functions = new ArrayList<>(originalSemantic.getFunctions());
 		final List<String> opens = new ArrayList<>(originalSemantic.getOpenStatements());
 
 		facts.add(factDiscovering);
-		facts.add(factLinkActions);
 
 		final SpecificSemantics semantif4DiscoverWindow = new SpecificSemantics(signatures, facts,
 				predicates, functions, opens);
@@ -906,6 +1005,7 @@ public class GUIFunctionality_refine {
 	private Instance_window getFoundWindow(final GUITestCase tc, final Pattern_window target,
 			final Pattern_action_widget paw) throws Exception {
 
+		System.out.println("GET FOUND WINDOW: start.");
 		// the last action widget exercised
 		final Action_widget aw = (Action_widget) tc.getActions().get(tc.getActions().size() - 1)
 				.getWidget();
@@ -916,7 +1016,15 @@ public class GUIFunctionality_refine {
 		if (reached_w == null) {
 			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime(),
 					this.gui);
-			final GUITestCaseResult res = runner.runTestCase(tc);
+			GUITestCaseResult res = null;
+			try {
+				res = runner.runTestCase(tc);
+			} catch (final Exception e) {
+				System.out
+				.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
+						+ e.getMessage());
+				return null;
+			}
 
 			if (res.getActions_executed().size() != tc.getActions().size()
 					|| res.getResults().get(tc.getActions().size() - 1) == null) {
@@ -959,11 +1067,13 @@ public class GUIFunctionality_refine {
 			if (instances.size() != 0) {
 				// the first is returned because it the one that maps more
 				// elements
+				System.out.println("GET FOUND WINDOW: end.");
 				return instances.get(0);
 			}
 			for (final Pattern_window pw : this.pattern.getDynamicForwardLinks(paw.getId())) {
 				instances = pw.getMatches(reached_w);
 				if (instances.size() != 0) {
+					System.out.println("GET FOUND WINDOW: end.");
 					return instances.get(0);
 				}
 
@@ -976,6 +1086,7 @@ public class GUIFunctionality_refine {
 			for (final Instance_window iw : this.instancePattern.getWindows()) {
 				if (iw.getPattern().getId().equals(target.getId())
 						&& iw.getInstance().getId().equals(previoulsy_found.getId())) {
+					System.out.println("GET FOUND WINDOW: end.");
 					return iw;
 				}
 			}
@@ -984,10 +1095,11 @@ public class GUIFunctionality_refine {
 			for (final Instance_window iw : this.instancePattern.getWindows()) {
 				if (pws.contains(iw.getPattern().getId())
 						&& iw.getInstance().getId().equals(previoulsy_found.getId())) {
+					System.out.println("GET FOUND WINDOW: end.");
 					return iw;
 				}
 			}
-
+			System.out.println("GET FOUND WINDOW: null end.");
 			return null;
 		}
 	}

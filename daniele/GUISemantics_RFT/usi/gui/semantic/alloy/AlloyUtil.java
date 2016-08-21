@@ -818,23 +818,19 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
 
 		for (final Action_widget aw : aws.keySet()) {
 			final List<Window> edges = new ArrayList<>();
-			for (final Window w : gui.getStaticForwardLinks(aw.getId())) {
-				if (ws.containsKey(w)) {
-					edges.add(w);
-				}
-			}
 			for (final Window w : gui.getDynamicForwardLinks(aw.getId())) {
 				if (ws.containsKey(w)) {
 					edges.add(w);
 				}
 			}
+
 			if (edges.size() > 0) {
 				content += System.getProperty("line.separator") + aws.get(aw).getIdentifier()
 						+ ".goes = ";
@@ -843,6 +839,27 @@ public class AlloyUtil {
 					content += ws.get(edge).getIdentifier();
 					content += (i + 1 == edges.size()) ? "" : " + ";
 					i++;
+				}
+			} else {
+				// we put static links only if there are not dynamic ones
+				for (final Window w : gui.getStaticForwardLinks(aw.getId())) {
+					if (ws.containsKey(w)) {
+						edges.add(w);
+					}
+				}
+
+				if (edges.size() > 0) {
+					content += System.getProperty("line.separator") + aws.get(aw).getIdentifier()
+							+ ".goes = ";
+					int i = 0;
+					for (final Window edge : edges) {
+						content += ws.get(edge).getIdentifier();
+						content += (i + 1 == edges.size()) ? "" : " + ";
+						i++;
+					}
+				} else {
+					content += System.getProperty("line.separator") + "#"
+							+ aws.get(aw).getIdentifier() + ".goes = 0";
 				}
 			}
 		}
@@ -961,29 +978,35 @@ public class AlloyUtil {
 		}
 
 		// first part of constraint
-		String exists = "one ";
+		String exists = "";
 		// the constraint
 		String constraint = "";
 
 		// we retrieve all the atoms related to this sigs
 		final List<String> atoms = new ArrayList<>();
+		// map used to create the exists part of the fact
+		final Map<String, List<String>> map_sig_atoms = new HashMap<>();
 
 		int cont = 0;
 		for (final Sig sig : properties.keySet()) {
 			final String signame = sig.label.substring(5);
+			if (!map_sig_atoms.containsKey(signame)) {
+				map_sig_atoms.put(signame, new ArrayList<String>());
+			}
+
 			final List<String> sig_atom = AlloyUtil.getElementsInSet(sol, sig);
 			properties.get(sig).addAll(sig_atom);
-			String new_exist = "";
+			// String new_exist = "";
 			String new_constraint = "";
 			for (final String ss : sig_atom) {
 
 				// if the atom was not already added
 				if (!atoms.contains(ss)) {
-					if (new_exist.length() > 0) {
-						new_exist += ",";
-					}
-					new_exist += ss;
-
+					// if (new_exist.length() > 0) {
+					// new_exist += ",";
+					// }
+					// new_exist += ss;
+					map_sig_atoms.get(signame).add(ss);
 					atoms.add(ss);
 				}
 				new_constraint += ss;
@@ -994,13 +1017,13 @@ public class AlloyUtil {
 
 			}
 
-			if (new_exist.length() > 0) {
-				new_exist += ":" + signame;
-				if (!exists.equals("one ")) {
-					exists += ",";
-				}
-				exists += new_exist;
-			}
+			// if (new_exist.length() > 0) {
+			// new_exist += ":" + signame;
+			// if (!exists.equals("one ")) {
+			// exists += ",";
+			// }
+			// exists += new_exist;
+			// }
 			if (new_constraint.length() == 0) {
 				constraint += "#" + signame + " = 0";
 			} else {
@@ -1010,6 +1033,21 @@ public class AlloyUtil {
 				constraint += " and ";
 			}
 			cont++;
+		}
+
+		for (final String sign : map_sig_atoms.keySet()) {
+			if (map_sig_atoms.get(sign).size() == 0) {
+				continue;
+			}
+			exists += "one ";
+			for (int c = 1; c < map_sig_atoms.get(sign).size() + 1; c++) {
+				final String atom = map_sig_atoms.get(sign).get(c - 1);
+				if ((c % 5) == 0) {
+					exists = exists.substring(0, exists.length() - 1) + ":" + sign + "|one ";
+				}
+				exists += atom + ",";
+			}
+			exists = exists.substring(0, exists.length() - 1) + ":" + sign + "|";
 		}
 
 		// for all the atoms found
@@ -1104,10 +1142,10 @@ public class AlloyUtil {
 				processed_atoms.add(atom);
 			}
 		}
-		if (exists.equals("one ")) {
+		if (exists.equals("")) {
 			return constraint;
 		}
-		return exists + "|" + constraint;
+		return exists + constraint;
 	}
 
 	private static String extractSigNameFromAtoms(final String atom) {
@@ -1194,8 +1232,8 @@ public class AlloyUtil {
 	 * @throws Exception
 	 */
 	static public Alloy_Model
-	getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult tcr)
-			throws Exception {
+			getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult tcr)
+					throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1276,11 +1314,11 @@ public class AlloyUtil {
 
 				if (!values_used.contains(new_value)) {
 					values_used.add(new_value);
-					final Signature new_val = new Signature("val" + values_used.indexOf(value),
+					final Signature new_val = new Signature("val" + values_used.indexOf(new_value),
 							Cardinality.ONE, false, value_father, false);
 					sigs.add(new_val);
 				}
-				fact += " and " + op + ".with=val" + values_used.indexOf(value);
+				fact += " and " + op + ".with=val" + values_used.indexOf(new_value);
 
 			}
 
