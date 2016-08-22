@@ -21,7 +21,7 @@ import com.google.common.collect.Collections2;
 public class Pattern_window extends Pattern_widget<Window> {
 
 	private final Boolean_regexp modal;
-	private final Boolean_regexp root;
+	private final boolean root;
 	private final Map<String, Pattern_widget> widgets_map;
 	private List<Pattern_action_widget> action_widgets;
 	private List<Pattern_input_widget> input_widgets;
@@ -30,7 +30,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 	// private List<Pattern_container> containers;
 
 	public Pattern_window(final String id, final String label, final Cardinality card,
-			final String alloy_correspondence, final Boolean_regexp modal, final Boolean_regexp root) {
+			final String alloy_correspondence, final Boolean_regexp modal, final boolean root) {
 
 		super(id, label, card, alloy_correspondence);
 		this.modal = modal;
@@ -76,7 +76,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 		return this.modal;
 	}
 
-	public Boolean_regexp getRoot() {
+	public boolean getRoot() {
 
 		return this.root;
 	}
@@ -193,12 +193,12 @@ public class Pattern_window extends Pattern_widget<Window> {
 			return false;
 		}
 
-		if (this.root == Boolean_regexp.FALSE && w.isRoot()) {
-			return false;
-		}
-		if (this.root == Boolean_regexp.TRUE && !w.isRoot()) {
-			return false;
-		}
+		// if (this.root == Boolean_regexp.FALSE && w.isRoot()) {
+		// return false;
+		// }
+		// if (this.root == Boolean_regexp.TRUE && !w.isRoot()) {
+		// return false;
+		// }
 
 		final Map<Pattern_action_widget, List<Action_widget>> aw_map = new HashMap<>();
 		final List<Action_widget> matched_aw = new ArrayList<>();
@@ -288,12 +288,12 @@ public class Pattern_window extends Pattern_widget<Window> {
 			return out;
 		}
 
-		if (this.root == Boolean_regexp.FALSE && w.isRoot()) {
-			return out;
-		}
-		if (this.root == Boolean_regexp.TRUE && !w.isRoot()) {
-			return out;
-		}
+		// if (this.root == Boolean_regexp.FALSE && w.isRoot()) {
+		// return out;
+		// }
+		// if (this.root == Boolean_regexp.TRUE && !w.isRoot()) {
+		// return out;
+		// }
 
 		final Map<Pattern_action_widget, List<Action_widget>> aw_map = new HashMap<>();
 		final List<Action_widget> matched_aw = new ArrayList<>();
@@ -396,7 +396,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 	 */
 	protected <C extends Widget> List<Map<? extends Pattern_widget<C>, List<C>>> distribute(
 			final List<? extends Pattern_widget<C>> keys,
-					final Map<? extends Pattern_widget<C>, List<C>> map) {
+			final Map<? extends Pattern_widget<C>, List<C>> map) {
 
 		final List<Map<? extends Pattern_widget<C>, List<C>>> out = new ArrayList<>();
 

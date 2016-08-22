@@ -13,6 +13,7 @@ import usi.gui.functionality.GUIFunctionality_search;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.pattern.GUIPatternParser;
 import usi.gui.pattern.GUI_Pattern;
+import usi.gui.pattern.Pattern_window;
 import usi.gui.structure.GUI;
 import usi.gui.structure.GUIParser;
 import usi.xml.XMLUtil;
@@ -35,17 +36,18 @@ public class UPM_full extends UPM_fullHelper {
 	public void testMain(final Object[] args) {
 
 		try {
-			System.out.println("Max Memory: " + Runtime.getRuntime().maxMemory() / (1024 * 1024)
-					+ " mb.");
 			ConfigurationManager.load("./files/for_test/config/upm.properties");
 			ExperimentManager.init();
 			// we load a gui pattern
 			Document doc = XMLUtil.read(new File("./files/xml/crud.xml").getAbsolutePath());
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
+			final List<Pattern_window> target_pw = pattern.getStaticForwardLinks(pattern
+					.getWindow("confirmation_del").getWidget("paw12").getId());
+
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-					.getAbsolutePath());
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -59,6 +61,7 @@ public class UPM_full extends UPM_fullHelper {
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
+			System.out.println("ERROR");
 		}
 	}
 }

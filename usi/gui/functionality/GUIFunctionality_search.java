@@ -33,6 +33,48 @@ public class GUIFunctionality_search {
 		this.gui = gui;
 	}
 
+	/**
+	 * Function that finds all the pattern windows reachable from the root
+	 * pattern window of the pattern with static edges.
+	 *
+	 *
+	 * @param pattern
+	 * @return
+	 * @throws Exception
+	 *             if the number of root windows in the pattern is different
+	 *             than 1
+	 */
+	private List<Pattern_window> getReachableWindows(final GUI_Pattern pattern) throws Exception {
+
+		final List<Pattern_window> roots = pattern.getWindows().stream()
+				.filter(e -> (e.getRoot() == true)).collect(Collectors.toList());
+
+		if (roots.size() != 1) {
+			throw new Exception(
+					"GUIFunctionality_search - getReachableWindows: wrong number of root windows in pattern.");
+		}
+
+		final Pattern_window root = roots.get(0);
+		final List<Pattern_window> out = new ArrayList<>();
+		this.recursion(out, root, pattern);
+		return out;
+	}
+
+	private void recursion(final List<Pattern_window> wins, final Pattern_window current,
+			final GUI_Pattern pattern) throws Exception {
+
+		if (wins.contains(current)) {
+			return;
+		}
+
+		wins.add(current);
+		for (final Pattern_action_widget paw : current.getActionWidgets()) {
+			for (final Pattern_window pw : pattern.getStaticForwardLinks(paw.getId())) {
+				this.recursion(wins, pw, pattern);
+			}
+		}
+	}
+
 	public List<Instance_GUI_pattern> match(final GUI_Pattern pattern) throws Exception {
 
 		this.gui_pattern = pattern;
@@ -48,7 +90,7 @@ public class GUIFunctionality_search {
 		Table<Pattern_window, Window, List<Instance_window>> matches_table = HashBasedTable
 				.create();
 
-		for (final Pattern_window pw : pattern.getWindows()) {
+		for (final Pattern_window pw : this.getReachableWindows(pattern)) {
 			final List<Window> windows = new ArrayList<>();
 			possible_matches.put(pw, windows);
 
@@ -103,7 +145,7 @@ public class GUIFunctionality_search {
 
 					// the cardinality of each pattern window is verified
 					boolean check = true;
-					for (final Pattern_window pw : pattern.getWindows()) {
+					for (final Pattern_window pw : this.getReachableWindows(pattern)) {
 						final List<Instance_window> instances = match.getWindows().stream()
 								.filter(e -> e.getPattern() == pw).collect(Collectors.toList());
 

@@ -5,7 +5,7 @@
 	<window id="initial" card="one" alloy="Initial">
 		<title>.*</title>
 		<modal>any</modal>
-		<root>any</root>
+		<root>true</root>
 		<action_widget id="paw1" card="one" alloy="Trigger">
 			<label>.*(add|new|create).*</label>
 		</action_widget>
@@ -17,7 +17,7 @@
 	<window id="form_1" card="one" alloy="Form">
 		<title>.*</title>
 		<modal>any</modal>
-		<root>any</root>
+		<root>false</root>
 		<action_widget id="paw2" card="one" alloy="Ok">
 			<label>.*(next|ok|save).*</label>
 		</action_widget>
@@ -32,7 +32,7 @@
 	<window id="form_2" card="set" alloy="Form">
 		<title>.*</title>
 		<modal>any</modal>
-		<root>any</root>
+		<root>false</root>
 		<action_widget id="paw4" card="one" alloy="Ok">
 			<label>.*(next|ok|save).*</label>
 		</action_widget>
@@ -47,7 +47,7 @@
 	<window id="confirmation" card="lone" alloy="Confirm">
 		<title>.*</title>
 		<modal>true</modal>
-		<root>any</root>
+		<root>false</root>
 		<action_widget id="paw6" card="one" alloy="Ok">
 			<label>.*(confirm|ok).*</label>
 		</action_widget>

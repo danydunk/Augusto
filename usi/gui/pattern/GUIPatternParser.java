@@ -106,8 +106,7 @@ public class GUIPatternParser {
 		final Boolean_regexp modal = Boolean_regexp.valueOf(this.getNodeContent(nodeModal)
 				.toUpperCase());
 		final Node nodeRoot = getElementNode(nodeWindow.getChildNodes(), "root");
-		final Boolean_regexp root = Boolean_regexp.valueOf(this.getNodeContent(nodeRoot)
-				.toUpperCase());
+		final Boolean root = Boolean.valueOf(this.getNodeContent(nodeRoot).toUpperCase());
 		final Node nodeTitle = getElementNode(nodeWindow.getChildNodes(), "title");
 		final String title = this.getNodeContent(nodeTitle);
 
