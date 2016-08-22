@@ -8,6 +8,7 @@ import java.util.Map;
 import usi.action.ActionManager;
 import usi.application.ApplicationHelper;
 import usi.gui.GuiStateManager;
+import usi.gui.pattern.Pattern_error_window;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
@@ -163,6 +164,7 @@ public class TestCaseRunner {
 
 			this.amanager.executeAction(act);
 			gmanager.readGUI();
+			this.dealWithErrorWindow(gmanager);
 			actions_actually_executed.add(act);
 
 			if (tc.containsAction(act)) {
@@ -182,6 +184,21 @@ public class TestCaseRunner {
 		final GUITestCaseResult res = new GUITestCaseResult(tc, actions_executed, results,
 				actions_actually_executed);
 		return res;
+	}
+
+	private void dealWithErrorWindow(final GuiStateManager gmanager) throws Exception {
+
+		if (gmanager.getCurrentWindows().size() > 0) {
+			final Window current = gmanager.getCurrentWindows().get(0);
+			final Pattern_error_window err = Pattern_error_window.getInstance();
+			if (err.isMatch(current)) {
+				// we create a click action (the window must have only one
+				// action widget to match the err window)
+				final Click click = new Click(current, null, current.getActionWidgets().get(0));
+				this.amanager.executeAction(click);
+				gmanager.readGUI();
+			}
+		}
 	}
 
 	private class Pair {

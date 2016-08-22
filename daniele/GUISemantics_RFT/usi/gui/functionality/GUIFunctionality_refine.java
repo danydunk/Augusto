@@ -61,7 +61,6 @@ public class GUIFunctionality_refine {
 		this.pattern = this.instancePattern.getGuipattern();
 		this.observed_tcs = new ArrayList<>();
 		this.covered_dyn_edges = new ArrayList<>();
-		System.out.println(instancePattern.getSemantics());
 	}
 
 	public Instance_GUI_pattern refine() throws Exception {
@@ -305,9 +304,9 @@ public class GUIFunctionality_refine {
 				// + " but " + time_size + " Time";
 				// sem.addRun_command(runCom);
 
-				System.out.println("start");
-				System.out.println(sem);
-				System.out.println("end");
+				// System.out.println("start");
+				// System.out.println(sem);
+				// System.out.println("end");
 
 				final Module comp = AlloyUtil.compileAlloyModel(new_sem.toString());
 				final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));

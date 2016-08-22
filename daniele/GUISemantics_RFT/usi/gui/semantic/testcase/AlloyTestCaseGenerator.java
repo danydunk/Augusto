@@ -126,9 +126,9 @@ public class AlloyTestCaseGenerator {
 		final SpecificSemantics model = this.instance.getSemantics();
 
 		final String alloy_model = model.toString();
-		System.out.println("START ALLOY MODEL");
-		System.out.println(model);
-		System.out.println("END ALLOY MODEL");
+		// System.out.println("START ALLOY MODEL");
+		// System.out.println(model);
+		// System.out.println("END ALLOY MODEL");
 
 		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
 
@@ -466,7 +466,7 @@ public class AlloyTestCaseGenerator {
 						// TODO: add the correct selected
 						target_sw = new Selectable_widget(sw.getId(), sw.getLabel(),
 								sw.getClasss(), sw.getX(), sw.getY(), sw.getSize()
-								+ objects_in_sw_at_t.size(), 0);
+										+ objects_in_sw_at_t.size(), 0);
 						target_sw.setDescriptor(sw.getDescriptor());
 						break;
 					}

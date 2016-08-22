@@ -62,7 +62,7 @@ abstract sig Selectable_widget {
 fact {
 	all gw: General |  #gw.iws = 0 and #gw.aws = 0 and #gw.sws = 0
 	all iw: Input_widget | one w: Window | iw in w.iws
-	all aw: Action_widget | one w: Window | aw in w.aws
+	all aw: Action_widget | one w: Window | aw in w.aws and #aw.goes < 2
 	all sw: Selectable_widget | one w: Window | sw in w.sws
 	all o: Object | some t: Time | o in Selectable_widget.list.t
 }
