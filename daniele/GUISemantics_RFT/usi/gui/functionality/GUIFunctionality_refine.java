@@ -90,6 +90,7 @@ public class GUIFunctionality_refine {
 		System.out.println("CONSTRAINT FOUND: " + this.valid_constraint);
 
 		if (this.pattern.isInstance(this.instancePattern)) {
+			System.out.println("PATTERN IS INSTANCE");
 
 			final List<String> constraints = new ArrayList<>();
 			if (this.valid_constraint == null || this.valid_constraint.length() == 0) {
@@ -130,11 +131,20 @@ public class GUIFunctionality_refine {
 				for (final Action_widget aw : matched_aws) {
 					final Window source_window = this.gui.getActionWidget_Window(aw.getId());
 
+					if (this.instancePattern.getGui().getDynamicForwardLinks(aw.getId()).size() > 0) {
+						// if we already have a dynamic edge in the pattern for
+						// this aw it makes no sense to look for more
+						System.out
+						.println("DISCOVER DYNAMIC EDGE: we already have a dynamic edge for "
+								+ aw.getId() + ".");
+						continue;
+					}
+
 					for (final Window target_window : target_w_matched) {
 
 						String edge = aw.getId() + " - " + target_window.getId();
 						System.out.println("DISCOVER DYNAMIC EDGE: looking for edge " + edge
-								+ " (from " + paw.getId() + ".");
+								+ " (from " + paw.getId() + ").");
 
 						if (this.covered_dyn_edges.contains(edge)) {
 							System.out.println("DISCOVER DYNAMIC EDGE: edge already found before.");
@@ -209,6 +219,15 @@ public class GUIFunctionality_refine {
 					continue;
 				}
 				for (final Action_widget aw : matched_aws) {
+					if (this.instancePattern.getGui().getDynamicForwardLinks(aw.getId()).size() > 0) {
+						// if we already have a dynamic edge in the pattern for
+						// this aw it makes no sense to look for more
+						System.out
+						.println("DISCOVER DYNAMIC WINDOW: we already have a dynamic edge for "
+								+ aw.getId() + ".");
+						continue;
+					}
+
 					final Window source_window = this.gui.getActionWidget_Window(aw.getId());
 
 					System.out.println("DISCOVER DYNAMIC WINDOW: looking for "
@@ -229,6 +248,25 @@ public class GUIFunctionality_refine {
 								found.getInstance().getId())) {
 							// new window was found
 							this.instancePattern.getGui().addWindow(found.getInstance());
+
+							// we add the found static edges to the instance gui
+							// TODO: deal with the fact that the ripping might
+							// find new windows
+							// connected by static edges that are part of the
+							// pattern
+							for (final Window w : this.gui.getWindows()) {
+								for (final Action_widget aww : w.getActionWidgets()) {
+									for (final Window targetw : this.gui.getStaticForwardLinks(aww
+											.getId())) {
+										if (this.instancePattern.getGui().containsWindow(w.getId())
+												&& this.instancePattern.getGui().containsWindow(
+														targetw.getId())) {
+											this.instancePattern.getGui().addStaticEdge(
+													aww.getId(), targetw.getId());
+										}
+									}
+								}
+							}
 
 						}
 						if (!this.instancePattern.getWindows().contains(found)) {

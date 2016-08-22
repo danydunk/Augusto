@@ -6,6 +6,7 @@ import java.util.List;
 import usi.action.ActionManager;
 import usi.application.ApplicationHelper;
 import usi.gui.GuiStateManager;
+import usi.gui.pattern.Pattern_error_window;
 import usi.gui.semantic.testcase.Click;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.structure.Action_widget;
@@ -81,6 +82,7 @@ public class Ripper {
 			this.actionManager.executeAction(act);
 
 			final List<Window> curr_windows = this.guimanager.readGUI();
+			this.dealWithErrorWindow(this.guimanager);
 
 			if (curr_windows.size() > 0 && w.isSame(curr_windows.get(0))) {
 				// same window
@@ -146,7 +148,7 @@ public class Ripper {
 		this.guimanager = GuiStateManager.getInstance();
 		for (final GUIAction act : actions) {
 			this.guimanager.readGUI();
-
+			this.dealWithErrorWindow(this.guimanager);
 			this.actionManager.executeAction(act);
 		}
 
@@ -172,6 +174,22 @@ public class Ripper {
 		// break loop;
 		// }
 		// return new_aws;
+	}
+
+	// TODO: this code is duplicated
+	private void dealWithErrorWindow(final GuiStateManager gmanager) throws Exception {
+
+		if (gmanager.getCurrentWindows().size() > 0) {
+			final Window current = gmanager.getCurrentWindows().get(0);
+			final Pattern_error_window err = Pattern_error_window.getInstance();
+			if (err.isMatch(current)) {
+				// we create a click action (the window must have only one
+				// action widget to match the err window)
+				final Click click = new Click(current, null, current.getActionWidgets().get(0));
+				this.actionManager.executeAction(click);
+				gmanager.readGUI();
+			}
+		}
 	}
 
 	private Window isWindowNew(final Window w) {

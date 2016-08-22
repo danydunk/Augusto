@@ -109,7 +109,7 @@ pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t = UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
 	(aw in Ok and Current_window.is_in.t  in Confirm and Current_crud_op.operation.t = CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
 	(aw in Ok and Current_window.is_in.t  in Confirm and Current_crud_op.operation.t = UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
-	(aw in Ok and Current_window.is_in.t  in Confirm_delete and Current_crud_op.operation.t = DELETE) => #Selectable_widget.selected = 1
+	(aw in Ok and Current_window.is_in.t  in Confirm_delete and Current_crud_op.operation.t = DELETE) => #Selectable_widget.selected.t = 1
 	//(aw in Ok and Current_window.is_in.t  in Form and aw.goes in Initial) => (filled_required_test [t] and unique_test [t])
 	//(aw in Ok and Current_window.is_in.t  in Confirm) => (filled_required_test [t] and unique_test [t])
 }
@@ -121,7 +121,7 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	
 	(aw in Cancel and  Current_crud_op.operation.t = CREATE) => (List.contains.t' = List.contains.t and #Current_window.is_in.t.iws.content.t' = 0 and (Input_widget - Current_window.is_in.t.iws).content.t' = (Input_widget - Current_window.is_in.t.iws).content.t and Selectable_widget.selected.t' = Selectable_widget.selected.t)
 	(aw in Cancel and Current_crud_op.operation.t in (UPDATE+READ) and aw.goes in Form) => (List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t']  and Selectable_widget.selected.t' = Selectable_widget.selected.t)
-	(aw in Cancel and aw.goes in Initial) => (List.contains.t' = List.contains.t and #Input_widget.content.t' = 0 and #Selectable_widget.selected = 0)
+	(aw in Cancel and aw.goes in Initial) => (List.contains.t' = List.contains.t and #Input_widget.content.t' = 0 and #Selectable_widget.selected.t = 0)
 
 	(aw in Ok and aw.goes in Form) => (List.contains.t' = List.contains.t and (all iw:Input_widget | iw.content.t' = iw.content.t) and Current_crud_op.operation.t' = Current_crud_op.operation.t and Selectable_widget.selected.t' = Selectable_widget.selected.t)
 	(aw in Ok and Current_crud_op.operation.t = CREATE and aw.goes = Initial) => (#Selectable_widget.selected.t' = 0 and #Input_widget.content.t' = 0 and add [t, t'] and #Current_crud_op.operation.t' = 0)

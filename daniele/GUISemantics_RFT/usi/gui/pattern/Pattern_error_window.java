@@ -22,7 +22,7 @@ public class Pattern_error_window extends Pattern_window {
 
 	private Pattern_error_window() {
 
-		super("error_w", ".*", Cardinality.ONE, "", Boolean_regexp.TRUE, Boolean_regexp.ANY);
+		super("error_w", ".*", Cardinality.ONE, "", Boolean_regexp.TRUE, false);
 		this.addWidget(this.paw);
 		this.addWidget(this.piw);
 		this.addWidget(this.psw);

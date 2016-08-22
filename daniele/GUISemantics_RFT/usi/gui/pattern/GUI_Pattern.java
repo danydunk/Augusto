@@ -386,6 +386,7 @@ public class GUI_Pattern {
 			final List<Window> matches = in.getPatternWindowMatches(pw.getId());
 			for (final Window match : matches) {
 				// static
+				boolean found_aw_match = false;
 				loop: for (final Pattern_action_widget paw : this
 						.getStaticBackwardLinks(pw.getId())) {
 					final Pattern_window source_pw = this.getActionWidget_Window(paw.getId());
@@ -394,7 +395,6 @@ public class GUI_Pattern {
 					if (pw_matches.size() == 0 && source_pw.getCardinality().getMin() == 0) {
 						continue;
 					}
-					boolean found_aw_match = false;
 					for (final Window w : pw_matches) {
 						List<Action_widget> aw_matches = in.getAWS_for_PAW(paw.getId());
 						if (aw_matches == null) {
@@ -408,56 +408,66 @@ public class GUI_Pattern {
 						found_aw_match = true;
 						for (final Action_widget aw : aw_matches) {
 							if (match_gui.isStaticEdge(aw.getId(), match.getId())) {
-								continue loop;
+								found_aw_match = false;
+								break loop;
 							}
 						}
 					}
-					if (found_aw_match) {
-						return false;
-					}
-				}
-			// dynamic
-			loop: for (final Pattern_action_widget paw : this.getDynamicBackwardLinks(pw
-						.getId())) {
-				final Pattern_window source_pw = this.getActionWidget_Window(paw.getId());
-				final List<Window> pw_matches = in.getPatternWindowMatches(source_pw.getId());
 
-				if (pw_matches.size() == 0 && source_pw.getCardinality().getMin() == 0) {
-					continue;
-				}
-				boolean found_aw_match = false;
-				for (final Window w : pw_matches) {
-					List<Action_widget> aw_matches = in.getAWS_for_PAW(paw.getId());
-					if (aw_matches == null) {
-						continue;
-					}
-					aw_matches = aw_matches.stream().filter(e -> w.containsWidget(e.getId()))
-							.collect(Collectors.toList());
-					if (aw_matches.size() == 0) {
-						continue;
-					}
-					found_aw_match = true;
-					for (final Action_widget aw : aw_matches) {
-						if (match_gui.isDynamicEdge(aw.getId(), match.getId())) {
-							continue loop;
-						}
-					}
 				}
 				if (found_aw_match) {
 					return false;
 				}
-			}
+				// dynamic
+				found_aw_match = false;
+				loop: for (final Pattern_action_widget paw : this.getDynamicBackwardLinks(pw
+						.getId())) {
+
+					final Pattern_window source_pw = this.getActionWidget_Window(paw.getId());
+					final List<Window> pw_matches = in.getPatternWindowMatches(source_pw.getId());
+
+					if (pw_matches.size() == 0 && source_pw.getCardinality().getMin() == 0) {
+						continue;
+					}
+					for (final Window w : pw_matches) {
+
+						List<Action_widget> aw_matches = in.getAWS_for_PAW(paw.getId());
+						if (aw_matches == null) {
+							continue;
+						}
+						aw_matches = aw_matches.stream().filter(e -> w.containsWidget(e.getId()))
+								.collect(Collectors.toList());
+
+						if (aw_matches.size() == 0) {
+							continue;
+						}
+						found_aw_match = true;
+						for (final Action_widget aw : aw_matches) {
+
+							if (match_gui.isDynamicEdge(aw.getId(), match.getId())) {
+								found_aw_match = false;
+								break loop;
+							}
+						}
+					}
+				}
+				if (found_aw_match) {
+
+					return false;
+				}
 
 				for (final Pattern_action_widget paw : pw.getActionWidgets()) {
 					// static
-					for (final Pattern_window target_pw : this.getStaticForwardLinks(paw.getId())) {
-						final List<Window> targets = in.getPatternWindowMatches(target_pw.getId());
+					List<Action_widget> aw_matches = in.getAWS_for_PAW(paw.getId()).stream()
+							.filter(e -> match.containsWidget(e.getId()))
+							.collect(Collectors.toList());
 
-						final List<Action_widget> aw_matches = in.getAWS_for_PAW(paw.getId())
-								.stream().filter(e -> match.containsWidget(e.getId()))
-								.collect(Collectors.toList());
+					loop: for (final Action_widget aw : aw_matches) {
+						for (final Pattern_window target_pw : this.getStaticForwardLinks(paw
+								.getId())) {
+							final List<Window> targets = in.getPatternWindowMatches(target_pw
+									.getId());
 
-						loop: for (final Action_widget aw : aw_matches) {
 							boolean target_found = false;
 							for (final Window ww : targets) {
 								target_found = true;
@@ -466,19 +476,22 @@ public class GUI_Pattern {
 								}
 							}
 							if (target_found) {
+
 								return false;
 							}
 						}
 					}
 					// dynamic
-					for (final Pattern_window target_pw : this.getDynamicForwardLinks(paw.getId())) {
-						final List<Window> targets = in.getPatternWindowMatches(target_pw.getId());
+					aw_matches = in.getAWS_for_PAW(paw.getId()).stream()
+							.filter(e -> match.containsWidget(e.getId()))
+							.collect(Collectors.toList());
 
-						final List<Action_widget> aw_matches = in.getAWS_for_PAW(paw.getId())
-								.stream().filter(e -> match.containsWidget(e.getId()))
-								.collect(Collectors.toList());
+					loop: for (final Action_widget aw : aw_matches) {
+						for (final Pattern_window target_pw : this.getDynamicForwardLinks(paw
+								.getId())) {
+							final List<Window> targets = in.getPatternWindowMatches(target_pw
+									.getId());
 
-						loop: for (final Action_widget aw : aw_matches) {
 							boolean target_found = false;
 							for (final Window ww : targets) {
 								target_found = true;
@@ -487,6 +500,7 @@ public class GUI_Pattern {
 								}
 							}
 							if (target_found) {
+
 								return false;
 							}
 						}
