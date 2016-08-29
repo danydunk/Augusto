@@ -23,7 +23,7 @@ public class ExperimentManager {
 				"--datafile",
 				"lib" + File.separator + "cobertura" + File.separator + "cobertura.ser",
 				ConfigurationManager.getAutBinDirectory(), };
-		net.sourceforge.cobertura.instrument.Main.main(args);
+		// net.sourceforge.cobertura.instrument.Main.main(args);
 
 		// generate the file AUT.bat
 		FileWriter autBatFile;

@@ -140,6 +140,8 @@ public class AlloyTestCaseGenerationTest {
 		final Instance_GUI_pattern in = res.get(0);
 
 		in.generateSpecificSemantics();
+		System.out.println(in.getSemantics());
+
 		in.getSemantics().generate_run_commands();
 		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in, 2, 100000);
 		final List<GUITestCase> tests = generator.generateTestCases();

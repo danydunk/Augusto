@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import usi.configuration.ConfigurationManager;
 import usi.gui.pattern.Cardinality;
@@ -28,6 +29,7 @@ import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.semantic.testcase.Click;
 import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
+import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.semantic.testcase.GUITestCaseResult;
 import usi.gui.semantic.testcase.Go;
 import usi.gui.semantic.testcase.Select;
@@ -230,7 +232,7 @@ public class AlloyUtil {
 							model.getAllReachableSigs(), run_command, options);
 					this.solution = app;
 				} catch (final Err e) {
-					// e.printStackTrace();
+					e.printStackTrace();
 					this.exception = true;
 				}
 			}
@@ -779,17 +781,29 @@ public class AlloyUtil {
 		for (final Input_widget iw : iws.keySet()) {
 			if (iw instanceof Option_input_widget) {
 				final Option_input_widget oiw = (Option_input_widget) iw;
-				content += System.getProperty("line.separator");
-				content += "no f: Fill | f.filled in (Input_widget - "
-						+ iws.get(iw).getIdentifier() + ") and f.with in "
-						+ iws.get(iw).getIdentifier() + "_values";
-				content += System.getProperty("line.separator");
-				content += "all f: Fill |  f.filled in " + iws.get(iw).getIdentifier()
-						+ " => f.with in " + iws.get(iw).getIdentifier() + "_values";
-				content += System.getProperty("line.separator");
-				content += "all v: " + iws.get(iw).getIdentifier() + "_values | not (v in Invalid)";
-				content += System.getProperty("line.separator");
-				content += "#" + iws.get(iw).getIdentifier() + "_values = " + oiw.getSize();
+				if (oiw.getSize() == 0) {
+					content += System.getProperty("line.separator");
+					content += "no f: Fill | f.filled in " + iws.get(iw).getIdentifier();
+				} else {
+					String list = "(";
+					for (int cc = 0; cc < oiw.getSize(); cc++) {
+						list += iws.get(iw).getIdentifier() + "_value_" + cc;
+						if (cc < oiw.getSize() - 1) {
+							list += "+";
+						}
+					}
+					list += ")";
+
+					content += System.getProperty("line.separator");
+					content += "no f: Fill | f.filled in (Input_widget - "
+							+ iws.get(iw).getIdentifier() + ") and f.with in " + list;
+					content += System.getProperty("line.separator");
+					content += "all f: Fill |  f.filled in " + iws.get(iw).getIdentifier()
+							+ " => f.with in " + list;
+					content += System.getProperty("line.separator");
+					content += "all v: " + list + " | not (v in Invalid)";
+					content += System.getProperty("line.separator");
+				}
 			} else {
 				String metadata = iw.getLabel() != null ? iw.getLabel() : "";
 				metadata += " ";
@@ -818,7 +832,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1231,9 +1245,8 @@ public class AlloyUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	static public Alloy_Model
-			getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult tcr)
-					throws Exception {
+	static public Alloy_Model getTCaseModel2(final SpecificSemantics mod,
+			final GUITestCaseResult tcr) throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1267,95 +1280,103 @@ public class AlloyUtil {
 		final List<Signature> value_father = new ArrayList<>();
 		value_father.add(value);
 
-		final Signature first = new Signature("t0", Cardinality.ONE, false, time_father, false);
-		sigs.add(first);
+		// final Signature first = new Signature("Time_0", Cardinality.ONE,
+		// false, time_father, false);
+		// sigs.add(first);
 
 		String fact = "";
+		String t = "";
 
 		final List<String> values_used = new ArrayList<>();
 		final List<GUIAction> acts = tcr.getActions_executed();
 		for (int cont = 0; cont < acts.size(); cont++) {
 			final GUIAction act = acts.get(cont);
-			final String op = "op" + (cont + 1);
-			final String t = "t" + (cont + 1);
-			final String prev_t = "t" + (cont);
-
-			final Signature new_time = new Signature(t, Cardinality.ONE, false, time_father, false);
-			sigs.add(new_time);
+			String op = null;
 
 			if (cont == 0) {
-				fact += "Track.op." + t + "=" + op + " and t0=T/first";
+				t = "T/next[T/first]";
 
 			} else {
-				fact += " and Track.op." + t + "=" + op;
+				t = "T/next[" + t + "]";
+				fact += " and ";
 			}
+
+			// final Signature new_time = new Signature(t, Cardinality.ONE,
+			// false, time_father, false);
+			// sigs.add(new_time);
+
 			if (act instanceof Click) {
+				op = "Click_" + (cont + 1);
 				final Click c = (Click) act;
 				final Signature new_click = new Signature(op, Cardinality.ONE, false, click_father,
 						false);
 				sigs.add(new_click);
 
-				fact += " and " + op + ".clicked=Action_widget_" + c.getWidget().getId();
+				fact += op + ".clicked=Action_widget_" + c.getWidget().getId();
 			}
 
 			if (act instanceof Fill) {
+				op = "Fill_" + (cont + 1);
 				final Fill f = (Fill) act;
 				final Signature new_fill = new Signature(op, Cardinality.ONE, false, fill_father,
 						false);
 				sigs.add(new_fill);
 
-				fact += " and " + op + ".filled=Input_widget_" + f.getWidget().getId();
+				fact += op + ".filled=Input_widget_" + f.getWidget().getId();
 
-				String new_value = "";
 				if (f.getWidget() instanceof Option_input_widget) {
-					new_value += f.getWidget().getId() + "_";
-				}
-				new_value += f.getInput();
+					fact += " and " + op + ".with=Input_widget_" + f.getWidget().getId()
+							+ "_value_" + f.getInput();
+				} else {
+					String new_value = "";
+					new_value += f.getInput();
 
-				if (!values_used.contains(new_value)) {
-					values_used.add(new_value);
-					final Signature new_val = new Signature("val" + values_used.indexOf(new_value),
-							Cardinality.ONE, false, value_father, false);
-					sigs.add(new_val);
+					if (!values_used.contains(new_value)) {
+						values_used.add(new_value);
+						final Signature new_val = new Signature("Value_"
+								+ values_used.indexOf(new_value), Cardinality.ONE, false,
+								value_father, false);
+						sigs.add(new_val);
+					}
+					fact += " and " + op + ".with=Value_" + values_used.indexOf(new_value);
 				}
-				fact += " and " + op + ".with=val" + values_used.indexOf(new_value);
 
 			}
 
 			if (act instanceof Select) {
+				op = "Select_" + (cont + 1);
 				final Select s = (Select) act;
 				final Selectable_widget sw = (Selectable_widget) s.getWidget();
 				final Signature new_select = new Signature(op, Cardinality.ONE, false,
 						select_father, false);
 				sigs.add(new_select);
 
-				final String obj = "ob" + (cont + 1);
+				final String obj = "Object_" + (cont + 1);
 				final Signature new_obj = new Signature(obj, Cardinality.ONE, false, object_father,
 						false);
 				sigs.add(new_obj);
 
-				fact += " and " + op + ".wid=Selectable_widget_" + s.getWidget().getId() + " and "
-						+ op + ".selected=" + obj;
-				fact += " and #Selectable_widget_" + s.getWidget().getId() + ".list." + t + "="
+				fact += op + ".wid=Selectable_widget_" + s.getWidget().getId() + " and " + op
+						+ ".selected=" + obj;
+				fact += " and #Selectable_widget_" + s.getWidget().getId() + ".list.(" + t + ")="
 						+ sw.getSize();
 				fact += " and #(T/prevs[(" + obj + ".appeared)] & Selectable_widget_"
-						+ s.getWidget().getId() + ".list." + t + ".appeared) = " + s.getIndex();
+						+ s.getWidget().getId() + ".list.(" + t + ").appeared) = " + s.getIndex();
 				fact += " and #(T/nexts[(" + obj + ".appeared)] & Selectable_widget_"
-						+ s.getWidget().getId() + ".list." + t + ".appeared) = "
+						+ s.getWidget().getId() + ".list.(" + t + ").appeared) = "
 						+ ((sw.getSize() - 1) - s.getIndex());
 			}
 			if (act instanceof Go) {
+				op = "Go_" + (cont + 1);
 				final Go g = (Go) act;
 				final Signature new_go = new Signature(op, Cardinality.ONE, false, go_father, false);
 				sigs.add(new_go);
-				fact += " and " + op + ".where=Window_" + g.getWidget().getId();
+				fact += op + ".where=Window_" + g.getWidget().getId();
 			}
-
-			fact += " and " + t + "=T/next[" + prev_t + "]";
-
+			fact += " and Track.op.(" + t + ")=" + op;
 		}
 
-		fact += " and Current_window.is_in.t" + (acts.size()) + "=Window_"
+		fact += " and Current_window.is_in.(T/last)=Window_"
 				+ tcr.getResults().get(acts.size() - 1).getId();
 
 		final Fact new_fact = new Fact("testcase", fact);
@@ -1436,5 +1457,242 @@ public class AlloyUtil {
 			cont++;
 		}
 		return cont;
+	}
+
+	/**
+	 * Method that returns an alloy model that cannot run the test case in input
+	 *
+	 * @param mod
+	 * @param tcr
+	 * @return
+	 * @throws Exception
+	 */
+	static public Alloy_Model getTCaseModelOpposite(final SpecificSemantics mod,
+			final GUITestCase tc) throws Exception {
+
+		final List<Signature> sigs = mod.getSignatures();
+		final List<Fact> facts = mod.getFacts();
+		final List<Function> funcs = mod.getFunctions();
+		final List<Predicate> preds = mod.getPredicates();
+		final List<String> opens = mod.getOpenStatements();
+
+		final String fact = getFactForTC(tc);
+
+		final Fact new_fact = new Fact("testcase", "not(" + fact + ")");
+		facts.add(new_fact);
+
+		final Alloy_Model out = new Alloy_Model(sigs, facts, preds, funcs, opens);
+		return out;
+	}
+
+	/**
+	 * Method that returns an alloy model with one run command that if run
+	 * reproduces the test case in input
+	 *
+	 * @param mod
+	 * @param tcr
+	 * @return
+	 * @throws Exception
+	 */
+	static public Alloy_Model
+			getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult tcr)
+					throws Exception {
+
+		final List<Signature> sigs = mod.getSignatures();
+		final List<Fact> facts = mod.getFacts();
+		final List<Function> funcs = mod.getFunctions();
+		final List<Predicate> preds = mod.getPredicates();
+		final List<String> opens = mod.getOpenStatements();
+
+		String fact = getFactForTC(tcr.getTc());
+
+		fact += " and Current_window.is_in.(T/last)=Window_"
+				+ tcr.getResults().get(tcr.getActions_executed().size() - 1).getId();
+
+		final Fact new_fact = new Fact("testcase", fact);
+		facts.add(new_fact);
+
+		final int time_size = tcr.getActions_executed().size() + 1;
+		final int op_size = time_size - 1;
+
+		String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope() + " but "
+				+ time_size + " Time, " + op_size + " Operation";
+
+		final int winscope = AlloyUtil.getWinScope(mod);
+		final int awscope = AlloyUtil.getAWScope(mod);
+		final int iwscope = AlloyUtil.getIWScope(mod);
+		final int swscope = AlloyUtil.getSWScope(mod);
+
+		if (winscope > -1) {
+			runCom += "," + winscope + " Window ";
+		}
+		if (awscope > -1) {
+			runCom += "," + awscope + " Action_widget ";
+		}
+		if (iwscope > -1) {
+			runCom += "," + iwscope + " Input_widget ";
+		}
+		if (swscope > -1) {
+			runCom += "," + swscope + " Selectable_widget ";
+		}
+
+		final Alloy_Model out = new Alloy_Model(sigs, facts, preds, funcs, opens);
+		out.addRun_command(runCom);
+		return out;
+
+	}
+
+	/**
+	 * Method that returns an alloy model that cannot run the test case in input
+	 *
+	 * @param mod
+	 * @param tcr
+	 * @return
+	 * @throws Exception
+	 */
+	static private String getFactForTC(final GUITestCase tc) throws Exception {
+
+		String fact = "";
+		String t = "";
+
+		final Map<String, List<String>> values_used = new HashMap<>();
+		final Map<String, List<String>> values_used_iw = new HashMap<>();
+
+		final List<GUIAction> acts = tc.getActions();
+		for (int cont = 0; cont < acts.size(); cont++) {
+			final GUIAction act = acts.get(cont);
+
+			if (cont == 0) {
+				t = "T/next[T/first]";
+
+			} else {
+				t = "T/next[" + t + "]";
+				fact += " and ";
+			}
+
+			if (act instanceof Click) {
+				final Click c = (Click) act;
+
+				fact += "Track.op.(" + t + ") in Click";
+
+				fact += " and Track.op.(" + t + ").clicked=Action_widget_" + c.getWidget().getId();
+			}
+
+			if (act instanceof Fill) {
+				final Fill f = (Fill) act;
+
+				fact += "Track.op.(" + t + ") in Fill";
+
+				fact += " and Track.op.(" + t + ").filled=Input_widget_" + f.getWidget().getId();
+
+				if (f.getWidget() instanceof Option_input_widget) {
+					fact += " and Track.op.(" + t + ").with=Input_widget_" + f.getWidget().getId()
+							+ "_value_" + f.getInput();
+				} else {
+					String new_value = "";
+					new_value += f.getInput();
+					if (!values_used_iw.containsKey(new_value)) {
+						values_used_iw.put(new_value, new ArrayList<String>());
+					}
+					if (f.getWidget().getLabel() != null && f.getWidget().getLabel().length() > 0) {
+						values_used_iw.get(new_value).add(f.getWidget().getLabel());
+					} else {
+						values_used_iw.get(new_value).add(f.getWidget().getDescriptor());
+					}
+
+					if (!values_used.containsKey(new_value)) {
+						values_used.put(new_value, new ArrayList<String>());
+					}
+					values_used.get(new_value).add("Track.op.(" + t + ").with");
+				}
+			}
+
+			if (act instanceof Select) {
+				final Select s = (Select) act;
+				final Selectable_widget sw = (Selectable_widget) s.getWidget();
+
+				fact += "Track.op.(" + t + ") in Select";
+
+				final String obj = "Track.op.(" + t + ")" + ".selected";
+
+				fact += " and Track.op.(" + t + ").wid=Selectable_widget_" + s.getWidget().getId();
+				fact += " and #Selectable_widget_" + s.getWidget().getId() + ".list.(" + t + ")="
+						+ sw.getSize();
+				fact += " and #(T/prevs[(" + obj + ".appeared)] & Selectable_widget_"
+						+ s.getWidget().getId() + ".list.(" + t + ").appeared) = " + s.getIndex();
+				fact += " and #(T/nexts[(" + obj + ".appeared)] & Selectable_widget_"
+						+ s.getWidget().getId() + ".list.(" + t + ").appeared) = "
+						+ ((sw.getSize() - 1) - s.getIndex());
+			}
+			if (act instanceof Go) {
+				final Go g = (Go) act;
+
+				fact += "Track.op.(" + t + ") in Go";
+
+				fact += " and Track.op.(" + t + ").where=Window_" + g.getWidget().getId();
+			}
+		}
+		// we deal with the values
+		final List<String> keys = values_used.keySet().stream().collect(Collectors.toList());
+		for (int c = 0; c < keys.size(); c++) {
+			final String s = keys.get(c);
+			// we deal with the equals
+			final List<String> fills = values_used.get(s);
+			if (fills.size() > 1) {
+				String prev = fills.get(0);
+				for (int cont = 1; cont < fills.size(); cont++) {
+					fact += " and " + prev + "=" + fills.get(cont);
+					prev = fills.get(cont);
+				}
+			}
+			// we deal with the differents
+			for (int cc = c + 1; cc < keys.size(); cc++) {
+				final String ss = keys.get(cc);
+				fact += " and " + values_used.get(s).get(0) + "!=" + values_used.get(ss).get(0);
+			}
+
+			// we check if the value is valid or invalid
+			// TODO: this works only if the input values are not duplicated
+			// between different descriptors
+			int valid = -1;
+			final DataManager dm = DataManager.getInstance();
+			for (final String desc : values_used_iw.get(s)) {
+
+				if (dm.getValidData(desc).contains(s)) {
+					if (valid == 0) {
+						throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
+					}
+					valid = 1;
+				} else if (dm.getInvalidData(desc).contains(s)) {
+					if (valid == 1) {
+						throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
+					}
+					valid = 0;
+				} else if (dm.getInvalidGenericData().contains(s)) {
+					if (valid == 1) {
+						throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
+					}
+					valid = 0;
+				} else if (dm.getValidGenericData().contains(s)) {
+					if (valid == 0) {
+						throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
+					}
+					valid = 1;
+				} else {
+					throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
+				}
+			}
+			if (valid == -1) {
+				throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
+			}
+			if (valid == 1) {
+				fact += " and not(" + values_used.get(s).get(0) + " in Invalid)";
+			} else {
+				fact += " and " + values_used.get(s).get(0) + " in Invalid";
+			}
+		}
+
+		return fact;
+
 	}
 }

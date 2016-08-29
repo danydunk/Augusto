@@ -13,7 +13,6 @@ import usi.gui.functionality.GUIFunctionality_search;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.pattern.GUIPatternParser;
 import usi.gui.pattern.GUI_Pattern;
-import usi.gui.pattern.Pattern_window;
 import usi.gui.structure.GUI;
 import usi.gui.structure.GUIParser;
 import usi.xml.XMLUtil;
@@ -42,9 +41,6 @@ public class UPM_full extends UPM_fullHelper {
 			Document doc = XMLUtil.read(new File("./files/xml/crud.xml").getAbsolutePath());
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
-			final List<Pattern_window> target_pw = pattern.getStaticForwardLinks(pattern
-					.getWindow("confirmation_del").getWidget("paw12").getId());
-
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
 			.getAbsolutePath());
@@ -52,8 +48,11 @@ public class UPM_full extends UPM_fullHelper {
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
 			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
 			Instance_GUI_pattern match = res.get(0);
+
 			match.generateSpecificSemantics();
+
 			final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
 			match = refiner.refine();
 			if (match == null) {

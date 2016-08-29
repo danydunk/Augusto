@@ -87,10 +87,18 @@ public class GUIFunctionality_refine {
 				|| old_windows_number != this.instancePattern.getWindows().size()
 				|| old_edges_number != (this.instancePattern.getGui().getNumberOfStaticEdges() + this.instancePattern
 						.getGui().getNumberOfDynamicEdges()));
-		System.out.println("CONSTRAINT FOUND: " + this.valid_constraint);
+		System.out.println("INITIAL CONSTRAINT FOUND: " + this.valid_constraint);
 
 		if (this.pattern.isInstance(this.instancePattern)) {
 			System.out.println("PATTERN IS INSTANCE");
+			this.instancePattern.generateSpecificSemantics();
+			// Thread.sleep(100000);
+			this.semanticPropertyRefine();
+			if (this.valid_constraint == null || this.valid_constraint.length() == 0) {
+				throw new Exception(
+						"GUIFunctionality_refine - refine: error refining semantic property.");
+			}
+			System.out.println("FINAL CONSTRAINT FOUND: " + this.valid_constraint);
 
 			final List<String> constraints = new ArrayList<>();
 			if (this.valid_constraint == null || this.valid_constraint.length() == 0) {
@@ -98,7 +106,6 @@ public class GUIFunctionality_refine {
 			} else {
 				constraints.add(this.valid_constraint);
 			}
-
 			final SpecificSemantics new_sem = this.addConstrain(
 					this.instancePattern.getSemantics(), constraints);
 			this.instancePattern.setSpecificSemantics(new_sem);
@@ -135,8 +142,8 @@ public class GUIFunctionality_refine {
 						// if we already have a dynamic edge in the pattern for
 						// this aw it makes no sense to look for more
 						System.out
-						.println("DISCOVER DYNAMIC EDGE: we already have a dynamic edge for "
-								+ aw.getId() + ".");
+								.println("DISCOVER DYNAMIC EDGE: we already have a dynamic edge for "
+										+ aw.getId() + ".");
 						continue;
 					}
 
@@ -223,8 +230,8 @@ public class GUIFunctionality_refine {
 						// if we already have a dynamic edge in the pattern for
 						// this aw it makes no sense to look for more
 						System.out
-						.println("DISCOVER DYNAMIC WINDOW: we already have a dynamic edge for "
-								+ aw.getId() + ".");
+								.println("DISCOVER DYNAMIC WINDOW: we already have a dynamic edge for "
+										+ aw.getId() + ".");
 						continue;
 					}
 
@@ -341,7 +348,7 @@ public class GUIFunctionality_refine {
 				// ConfigurationManager.getAlloyRunScope()
 				// + " but " + time_size + " Time";
 				// sem.addRun_command(runCom);
-
+				//
 				// System.out.println("start");
 				// System.out.println(sem);
 				// System.out.println("end");
@@ -434,8 +441,8 @@ public class GUIFunctionality_refine {
 					// add constraint
 					this.additional_constraints.add("not(" + property + ")");
 					System.out
-							.println("GET TEST TO DISCOVER WINDOW: new invalid property added - not("
-									+ property + ")");
+					.println("GET TEST TO DISCOVER WINDOW: new invalid property added - not("
+							+ property + ")");
 				}
 			}
 		}
@@ -521,138 +528,10 @@ public class GUIFunctionality_refine {
 		return tc;
 	}
 
-	// private String getTCaseFact(final GUITestCaseResult tcr) {
-	//
-	// String fact = "one ";
-	// String operations = "";
-	// String times = "t0,";
-	// String values = "";
-	// String second_part = "";
-	// String click = "Click =(";
-	// String fill = "Fill =(";
-	// String select = "Select =(";
-	// String go = "Go =(";
-	// String objects = "";
-	//
-	// // TODO
-	// final List<String> values_used = new ArrayList<>();
-	// final List<GUIAction> acts = tcr.getActions_executed();
-	// for (int cont = 0; cont < acts.size(); cont++) {
-	// final GUIAction act = acts.get(cont);
-	// operations += "op" + (cont + 1);
-	// final String t = "t" + (cont + 1);
-	// times += t;
-	// times += ",";
-	// if (cont == 0) {
-	// second_part += "Track.op.t" + (cont + 1) + "=" + "op" + (cont + 1) + " ";
-	//
-	// } else {
-	// second_part += " and Track.op.t" + (cont + 1) + "=" + "op" + (cont + 1) +
-	// " ";
-	// }
-	// if (act instanceof Click) {
-	// final Click c = (Click) act;
-	// click += "op" + (cont + 1) + "+";
-	// second_part += "and op" + (cont + 1) + ".clicked=Action_widget_"
-	// + c.getWidget().getId();
-	// }
-	//
-	// if (act instanceof Fill) {
-	// final Fill f = (Fill) act;
-	// fill += "op" + (cont + 1) + "+";
-	// second_part += "and op" + (cont + 1) + ".filled=Input_widget_"
-	// + f.getWidget().getId();
-	// String value = "";
-	// if (f.getWidget() instanceof Option_input_widget) {
-	// value += f.getWidget().getId() + "_";
-	// }
-	// value += f.getInput();
-	//
-	// if (!values_used.contains(value)) {
-	// values_used.add(value);
-	// values += "val" + values_used.indexOf(value) + ",";
-	// }
-	// second_part += " and op" + (cont + 1) + ".with=val" +
-	// values_used.indexOf(value);
-	//
-	// }
-	//
-	// if (act instanceof Select) {
-	// final Select s = (Select) act;
-	// final Selectable_widget sw = (Selectable_widget) s.getWidget();
-	// objects += "ob" + (cont + 1) + ",";
-	// select += "op" + (cont + 1) + "+";
-	// second_part += "and op" + (cont + 1) + ".wid=Selectable_widget_"
-	// + s.getWidget().getId() + " and op" + (cont + 1) + ".selected=ob"
-	// + (cont + 1);
-	// second_part += " and #Selectable_widget_" + s.getWidget().getId() +
-	// ".list." + t
-	// + "=" + sw.getSize();
-	// second_part += " and #(T/prevs[(op" + (cont + 1)
-	// + ".appeared)] & Selectable_widget_" + s.getWidget().getId() + ".list." +
-	// t
-	// + ".appeared) = " + s.getIndex();
-	// second_part += " and #(T/nexts[(op" + (cont + 1)
-	// + ".appeared)] & Selectable_widget_" + s.getWidget().getId() + ".list." +
-	// t
-	// + ".appeared) = " + ((sw.getSize() - 1) - s.getIndex());
-	// }
-	// if (act instanceof Go) {
-	// final Go g = (Go) act;
-	// go += "op" + (cont + 1) + "+";
-	// second_part += "and op" + (cont + 1) + ".where=Window_" +
-	// g.getWidget().getId();
-	// }
-	//
-	// second_part += " and t" + (cont + 2) + "=T/next[" + t + "]";
-	// if (cont < acts.size() - 1) {
-	// operations += ",";
-	// }
-	// }
-	// second_part += " and t0=T/first";
-	//
-	// times += "t" + (acts.size() + 1);
-	// times += ":Time";
-	// operations += ":Operation";
-	// if (!values.equals("")) {
-	// values = values.substring(0, values.length() - 1) + ":Value";
-	// fact = "one " + values + "| " + fact;
-	// }
-	// if (!objects.equals("")) {
-	// objects = objects.substring(0, objects.length() - 1) + ":Object";
-	// fact = "one " + objects + "| " + fact;
-	// }
-	// if (!click.equals("Click =(")) {
-	// click = click.substring(0, click.length() - 1) + ")";
-	// second_part += " and " + click;
-	// }
-	// if (!fill.equals("Fill =(")) {
-	// fill = fill.substring(0, fill.length() - 1) + ")";
-	// second_part += " and " + fill;
-	// }
-	// if (!go.equals("Go =(")) {
-	// go = go.substring(0, go.length() - 1) + ")";
-	// second_part += " and " + go;
-	// }
-	// if (!select.equals("Select =(")) {
-	// select = select.substring(0, select.length() - 1) + ")";
-	// second_part += " and " + select;
-	// }
-	// fact += operations + "| one " + times + "|" + second_part;
-	// fact += " and Current_window.is_in.t" + (acts.size() + 1) + "=Window_"
-	// + tcr.getResults().get(acts.size() - 1).getId();
-	// return fact;
-	// }
-
 	private boolean validateProperty(final String prop, final SpecificSemantics in_sem)
 			throws Exception {
 
 		System.out.println("VALIDATE PROPERTY: start.");
-
-		// final List<String> tcs = new ArrayList<>();
-		// for (final GUITestCaseResult tcr : this.observed_tcs) {
-		// tcs.add(this.getTCaseFact(tcr));
-		// }
 
 		// we clone the semantics to remove all the facts related to discovering
 		// windows/edges
@@ -935,7 +814,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverEdge(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-					throws Exception {
+			throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {
@@ -1047,7 +926,11 @@ public class GUIFunctionality_refine {
 		final Action_widget aw = (Action_widget) tc.getActions().get(tc.getActions().size() - 1)
 				.getWidget();
 
-		Window reached_w = this.wasTestCasePreviouslyExecuted(tc);
+		Window reached_w = null;
+		final GUITestCaseResult prev_res = this.wasTestCasePreviouslyExecuted(tc);
+		if (prev_res != null) {
+			reached_w = prev_res.getResults().get(prev_res.getActions_executed().size() - 1);
+		}
 		// if the test case was run already the window was found already
 		Window previoulsy_found = reached_w;
 		if (reached_w == null) {
@@ -1058,8 +941,8 @@ public class GUIFunctionality_refine {
 				res = runner.runTestCase(tc);
 			} catch (final Exception e) {
 				System.out
-				.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
-						+ e.getMessage());
+						.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
+								+ e.getMessage());
 				return null;
 			}
 
@@ -1141,7 +1024,7 @@ public class GUIFunctionality_refine {
 		}
 	}
 
-	private Window wasTestCasePreviouslyExecuted(final GUITestCase tc) {
+	private GUITestCaseResult wasTestCasePreviouslyExecuted(final GUITestCase tc) {
 
 		mainloop: for (final GUITestCaseResult tc2 : this.observed_tcs) {
 			if (tc2.getTc().getActions().size() != tc.getActions().size()) {
@@ -1157,36 +1040,162 @@ public class GUIFunctionality_refine {
 				}
 
 				if (act1 instanceof Click) {
+
 					if (!(act2 instanceof Click)) {
 						continue mainloop;
 					}
 				}
 				if (act1 instanceof Fill) {
+
 					if (!(act2 instanceof Fill)) {
 						continue mainloop;
 					}
 					final Fill fill1 = (Fill) act1;
 					final Fill fill2 = (Fill) act2;
+
 					if (!fill1.getInput().equals(fill2.getInput())) {
 						continue mainloop;
 					}
 
 				}
 				if (act1 instanceof Select) {
+
 					if (!(act2 instanceof Select)) {
 						continue mainloop;
 					}
 					final Select select1 = (Select) act1;
 					final Select select2 = (Select) act2;
+
 					if (select1.getIndex() != select2.getIndex()) {
 						continue mainloop;
 					}
 				}
 
 			}
-			return tc2.getResults().get(tc2.getActions_executed().size() - 1);
+			return tc2;
+			// return tc2.getResults().get(tc2.getActions_executed().size() -
+			// 1);
 		}
 
-	return null;
+		return null;
+	}
+
+	private void semanticPropertyRefine() throws Exception {
+
+		final long beginTime = System.currentTimeMillis();
+
+		final int winscope = AlloyUtil.getWinScope(this.instancePattern.getSemantics());
+		final int awscope = AlloyUtil.getAWScope(this.instancePattern.getSemantics());
+		final int iwscope = AlloyUtil.getIWScope(this.instancePattern.getSemantics());
+		final int swscope = AlloyUtil.getSWScope(this.instancePattern.getSemantics());
+		String scope = " but ";
+		scope += winscope + " Window ";
+		scope += "," + awscope + " Action_widget ";
+		scope += "," + iwscope + " Input_widget ";
+		scope += "," + swscope + " Selectable_widget ";
+		String runCmd = "run {"
+				+ "System and "
+				+ ""
+				+ "(some aw:Action_widget, iw:Input_widget, sw:Selectable_widget, w: Window| one opp:Operation| Track.op.(T/last) = opp and ((opp in Go and opp.where=w and not go_semantics[w, T/prev[T/last]]) or (opp in Click and opp.clicked = aw and not click_semantics[aw, T/prev[T/last]]) or (opp in Fill and opp.filled=iw and not fill_semantics[iw, T/prev[T/last], opp.with])  or (opp in Select and opp.wid=sw and not select_semantics[sw, T/prev[T/last], opp.selected])))}"
+				+ "for " + ConfigurationManager.getAlloyRunScope();
+		runCmd += scope;
+
+		List<String> true_constraints = new ArrayList<>();
+		true_constraints.add(this.valid_constraint);
+
+		final Instance_GUI_pattern clone_with = this.instancePattern.clone();
+		SpecificSemantics sem_with = this.addConstrain(this.instancePattern.getSemantics(),
+				true_constraints);
+
+		while ((System.currentTimeMillis() - beginTime) < ConfigurationManager
+				.getSemanticRefinementTimeout()) {
+
+			sem_with.addRun_command(runCmd);
+			// System.out.println(sem_with);
+			clone_with.setSpecificSemantics(sem_with);
+			final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
+			final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
+			if (tests.size() == 0) {
+				break;
+			}
+			if (tests.size() > 1) {
+				throw new Exception(
+						"GUIFunctionality_refine - semanticPropertyRefine: impossible to generate test cases.");
+			}
+
+			final GUITestCase tc = tests.get(0);
+
+			GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
+			if (res == null) {
+				final TestCaseRunner runner = new TestCaseRunner(
+						ConfigurationManager.getSleepTime(), this.gui);
+				res = runner.runTestCase(tc);
+
+			} else {
+				System.out.println("TESTCASE ALREADY RUN!!!");
+			}
+			// TODO: use oracle after it is implemented
+			if (res.getActions_executed().size() == tc.getActions().size()
+					&& res.getResults()
+							.get(tc.getActions().size() - 1)
+							.getId()
+							.equals(tc.getActions().get(tc.getActions().size() - 1).getOracle()
+									.getId())) {
+				// the beahviour was the same
+				System.out.println("SAME BEAHVIOUR");
+				sem_with = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(sem_with,
+						tc));
+			} else {
+				System.out.println("DIFFERENT BEAHVIOUR");
+				final List<String> false_constraints = new ArrayList<>();
+				false_constraints.add("not(" + this.valid_constraint + ")");
+
+				String new_prop = null;
+				while (new_prop == null) {
+					false_constraints.addAll(this.unvalid_constraints);
+					final SpecificSemantics sem_without = this.addConstrain(
+							this.instancePattern.getSemantics(), false_constraints);
+					final SpecificSemantics new_sem = SpecificSemantics.instantiate(AlloyUtil
+							.getTCaseModel(sem_without, res));
+
+					// System.out.println(new_sem);
+
+					final Module comp = AlloyUtil.compileAlloyModel(new_sem.toString());
+					final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
+
+					if (sol.satisfiable()) {
+						new_prop = AlloyUtil.extractProperty(sol, new_sem);
+						if (!this.validateProperty(new_prop, sem_without)) {
+							this.unvalid_constraints.add("not(" + new_prop + ")");
+							new_prop = null;
+						} else {
+							this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
+						}
+
+					} else {
+						System.out
+								.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+						return;
+					}
+				}
+				this.valid_constraint = new_prop;
+				true_constraints = new ArrayList<>();
+				true_constraints.add(this.valid_constraint);
+				// we remove the old sem property
+				final List<Fact> facts = new ArrayList<>();
+				for (final Fact fact : sem_with.getFacts()) {
+					if (!fact.getIdentifier().equals("sem_prop")) {
+						facts.add(fact);
+					}
+				}
+
+				final Alloy_Model mod = new Alloy_Model(sem_with.getSignatures(), facts,
+						sem_with.getPredicates(), sem_with.getFunctions(),
+						sem_with.getOpenStatements());
+				sem_with = this.addConstrain(mod, true_constraints);
+			}
+			this.observed_tcs.add(res);
+		}
+		System.out.println("SEMANTIC PROPERTY REFINE: end.");
 	}
 }
