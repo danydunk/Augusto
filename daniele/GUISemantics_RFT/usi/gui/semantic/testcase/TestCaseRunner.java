@@ -170,13 +170,13 @@ public class TestCaseRunner {
 			if (tc.containsAction(act)) {
 				actions_executed.add(act);
 				if (gmanager.getCurrentWindows().size() > 0) {
-					results.add(gmanager.getCurrentWindows().get(0));
+					results.add(this.getKnownWindowIfAny(gmanager.getCurrentWindows().get(0)));
 				} else {
 					results.add(null);
 				}
 			} else {
 				if (go_actions != null && go_actions.get(go_actions.size() - 1) == act) {
-					results.add(gmanager.getCurrentWindows().get(0));
+					results.add(this.getKnownWindowIfAny(gmanager.getCurrentWindows().get(0)));
 				}
 			}
 		}
@@ -184,6 +184,29 @@ public class TestCaseRunner {
 		final GUITestCaseResult res = new GUITestCaseResult(tc, actions_executed, results,
 				actions_actually_executed);
 		return res;
+	}
+
+	/**
+	 * function that checks if the window is already in the GUI, and if it is
+	 * the case returns the input window with the id it has in the GUI
+	 *
+	 * @return
+	 * @throws Exception
+	 */
+	private Window getKnownWindowIfAny(final Window in) throws Exception {
+
+		for (final Window w : this.gui.getWindows()) {
+			if (w.isSame(in)) {
+				final Window out = new Window(in.getTo(), w.getId(), in.getLabel(), in.getClasss(),
+						in.getX(), in.getY(), in.isModal());
+				out.setRoot(in.isRoot());
+				out.setAction_widgets(in.getActionWidgets());
+				out.setInput_widgets(in.getInputWidgets());
+				out.setSelectable_widgets(in.getSelectableWidgets());
+				return out;
+			}
+		}
+		return in;
 	}
 
 	private void dealWithErrorWindow(final GuiStateManager gmanager) throws Exception {

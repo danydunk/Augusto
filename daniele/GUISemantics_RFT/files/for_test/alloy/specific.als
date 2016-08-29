@@ -9,7 +9,7 @@ one sig Input_iw extends Input_widget {}
 
 fact {
 	Trigger_aw.goes = Window_form_w
-	#Ok_aw.goes = 0
+	Ok_aw.goes = Window_initial_w
 	Cancel_aw.goes =  Window_initial_w
 	Window_form_w.iws = Input_iw
 	Window_form_w.aws = Ok_aw+Cancel_aw

@@ -181,12 +181,14 @@ public class AlloyTestCaseGenerator {
 				throw new Exception("AlloyTestCaseGenerator - analyzeTuples: wrong arity of track.");
 			}
 
-			final int time_index = Integer.valueOf(tuple.atom(2).split("\\$")[1]);
+			final int time_index = this.extractTimeIndex(tuple.atom(2));
 
 			Window source_window = null;
+			Window oracle = null;
+
 			for (final A4Tuple curr : curr_wind) {
 				// System.out.println("Time$" + (time_index - 1));
-				if (curr.atom(2).equals("Time$" + (time_index - 1))) {
+				if (this.extractTimeIndex(curr.atom(2)) == (time_index - 1)) {
 					String windid = curr.atom(1).split("\\$")[0];
 					if (windid.startsWith("General")) {
 						// TODO: fix this
@@ -197,10 +199,22 @@ public class AlloyTestCaseGenerator {
 						source_window = this.instance.getGui().getWindow(windid);
 					}
 				}
+				// oracle
+				// TODO: must be fixed
+				if (this.extractTimeIndex(curr.atom(2)) == (time_index)) {
+					String windid = curr.atom(1).split("\\$")[0];
+					if (windid.startsWith("General")) {
+						continue;
+
+					} else {
+						windid = windid.split("_")[1];
+						oracle = this.instance.getGui().getWindow(windid);
+					}
+				}
 			}
 			if (source_window == null) {
 				throw new Exception(
-						"AlloyTestCaseGenerator - analyzeTuples:source window not found.");
+						"AlloyTestCaseGenerator - analyzeTuples: source window not found.");
 			}
 
 			// TODO: fix
@@ -301,7 +315,7 @@ public class AlloyTestCaseGenerator {
 					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in go.");
 				}
 
-				final Go action = new Go(source_window, null, target_w);
+				final Go action = new Go(source_window, oracle, target_w);
 				actions.set(time_index - 1, action);
 				continue;
 			}
@@ -361,7 +375,7 @@ public class AlloyTestCaseGenerator {
 					throw new Exception(
 							"AlloyTestCaseGenerator - analyzeTuples: error getting input data.");
 				}
-				final Fill action = new Fill(source_window, null, target_iw, inputdata);
+				final Fill action = new Fill(source_window, oracle, target_iw, inputdata);
 				actions.set(time_index - 1, action);
 				continue;
 			}
@@ -393,7 +407,7 @@ public class AlloyTestCaseGenerator {
 					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in click.");
 				}
 
-				final Click action = new Click(source_window, null, target_aw);
+				final Click action = new Click(source_window, oracle, target_aw);
 				actions.set(time_index - 1, action);
 				continue;
 			}
@@ -427,7 +441,7 @@ public class AlloyTestCaseGenerator {
 				final List<A4Tuple> sw_tuples = AlloyUtil.getTuples(solution, sw_name);
 				final List<String> objects_in_sw_at_t = new ArrayList<>();
 				for (final A4Tuple sw_tuple : sw_tuples) {
-					if (sw_tuple.atom(2).equals("Time$" + (time_index - 1))) {
+					if (this.extractTimeIndex(sw_tuple.atom(2)) == (time_index - 1)) {
 						if (!objects_in_sw_at_t.contains(sw_tuple.atom(1))) {
 							objects_in_sw_at_t.add(sw_tuple.atom(1));
 						}
@@ -477,7 +491,7 @@ public class AlloyTestCaseGenerator {
 				}
 
 				final int select_index = ordered.indexOf(object);
-				final Select action = new Select(source_window, null, target_sw, select_index);
+				final Select action = new Select(source_window, oracle, target_sw, select_index);
 
 				actions.set(time_index - 1, action);
 				continue;
@@ -587,7 +601,8 @@ public class AlloyTestCaseGenerator {
 				// this is possible because of the fact added in the model that
 				// constrains the possible values associated to the optional
 				// input widget
-				final String val = v.split("\\$")[1].trim();
+				String val = v.split("\\$")[0].trim();
+				val = val.replace("Input_widget_" + inpw.getId() + "_value_", "");
 				out.put(v, val);
 
 			} else {
@@ -879,6 +894,18 @@ public class AlloyTestCaseGenerator {
 		public boolean hasExceptions() {
 
 			return this.exception;
+		}
+	}
+
+	private int extractTimeIndex(final String atom) throws Exception {
+
+		if (!atom.startsWith("Time")) {
+			throw new Exception("AlloyUtil - extractTimeIndex: atom should start with Time.");
+		}
+		try {
+			return Integer.valueOf(atom.split("\\$")[1]);
+		} catch (final Exception e) {
+			throw new Exception("AlloyUtil - extractTimeIndex: error.");
 		}
 	}
 
