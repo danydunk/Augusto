@@ -28,6 +28,7 @@ import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.semantic.testcase.GUITestCaseResult;
+import usi.gui.semantic.testcase.OracleChecker;
 import usi.gui.semantic.testcase.Select;
 import usi.gui.semantic.testcase.TestCaseRunner;
 import usi.gui.structure.Action_widget;
@@ -36,6 +37,7 @@ import usi.gui.structure.Window;
 
 import com.google.common.collect.Lists;
 
+import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
@@ -441,8 +443,8 @@ public class GUIFunctionality_refine {
 					// add constraint
 					this.additional_constraints.add("not(" + property + ")");
 					System.out
-					.println("GET TEST TO DISCOVER WINDOW: new invalid property added - not("
-							+ property + ")");
+							.println("GET TEST TO DISCOVER WINDOW: new invalid property added - not("
+									+ property + ")");
 				}
 			}
 		}
@@ -528,7 +530,7 @@ public class GUIFunctionality_refine {
 		return tc;
 	}
 
-	private boolean validateProperty(final String prop, final SpecificSemantics in_sem)
+	private boolean validateProperty2(final String prop, final SpecificSemantics in_sem)
 			throws Exception {
 
 		System.out.println("VALIDATE PROPERTY: start.");
@@ -788,7 +790,13 @@ public class GUIFunctionality_refine {
 		final int iwscope = AlloyUtil.getIWScope(semantif4DiscoverWindow);
 		final int swscope = AlloyUtil.getSWScope(semantif4DiscoverWindow);
 
-		String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
+		int totalscope = ConfigurationManager.getAlloyRunScope();
+		if (winscope == -1 || awscope == -1 || iwscope == -1 || swscope == -1) {
+
+			totalscope = totalscope * 2;
+		}
+
+		String runCom = "run {System} for " + totalscope;
 		String scope = "";
 		if (winscope > -1) {
 			scope += "," + winscope + " Window ";
@@ -895,7 +903,13 @@ public class GUIFunctionality_refine {
 		final int iwscope = AlloyUtil.getIWScope(semantif4DiscoverWindow);
 		final int swscope = AlloyUtil.getSWScope(semantif4DiscoverWindow);
 
-		String runCom = "run {System} for " + ConfigurationManager.getAlloyRunScope();
+		int totalscope = ConfigurationManager.getAlloyRunScope();
+		if (winscope == -1 || awscope == -1 || iwscope == -1 || swscope == -1) {
+
+			totalscope = totalscope * 2;
+		}
+
+		String runCom = "run {System} for " + totalscope;
 		String scope = "";
 		if (winscope > -1) {
 			scope += "," + winscope + " Window ";
@@ -943,6 +957,7 @@ public class GUIFunctionality_refine {
 				System.out
 						.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
 								+ e.getMessage());
+				e.printStackTrace();
 				return null;
 			}
 
@@ -1084,10 +1099,18 @@ public class GUIFunctionality_refine {
 
 		final long beginTime = System.currentTimeMillis();
 
+		final OracleChecker oracle = new OracleChecker();
 		final int winscope = AlloyUtil.getWinScope(this.instancePattern.getSemantics());
 		final int awscope = AlloyUtil.getAWScope(this.instancePattern.getSemantics());
 		final int iwscope = AlloyUtil.getIWScope(this.instancePattern.getSemantics());
 		final int swscope = AlloyUtil.getSWScope(this.instancePattern.getSemantics());
+
+		int totalscope = ConfigurationManager.getAlloyRunScope();
+		if (winscope == -1 || awscope == -1 || iwscope == -1 || swscope == -1) {
+
+			totalscope = totalscope * 2;
+		}
+
 		String scope = " but ";
 		scope += winscope + " Window ";
 		scope += "," + awscope + " Action_widget ";
@@ -1097,7 +1120,7 @@ public class GUIFunctionality_refine {
 				+ "System and "
 				+ ""
 				+ "(some aw:Action_widget, iw:Input_widget, sw:Selectable_widget, w: Window| one opp:Operation| Track.op.(T/last) = opp and ((opp in Go and opp.where=w and not go_semantics[w, T/prev[T/last]]) or (opp in Click and opp.clicked = aw and not click_semantics[aw, T/prev[T/last]]) or (opp in Fill and opp.filled=iw and not fill_semantics[iw, T/prev[T/last], opp.with])  or (opp in Select and opp.wid=sw and not select_semantics[sw, T/prev[T/last], opp.selected])))}"
-				+ "for " + ConfigurationManager.getAlloyRunScope();
+				+ "for " + totalscope;
 		runCmd += scope;
 
 		List<String> true_constraints = new ArrayList<>();
@@ -1109,19 +1132,64 @@ public class GUIFunctionality_refine {
 
 		while ((System.currentTimeMillis() - beginTime) < ConfigurationManager
 				.getSemanticRefinementTimeout()) {
-
+			System.out.println("CURRENT SEMANTIC PROPERTY: " + this.valid_constraint);
 			sem_with.addRun_command(runCmd);
 			// System.out.println(sem_with);
 			clone_with.setSpecificSemantics(sem_with);
-			final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
-			final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
+			AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
+			List<GUITestCase> tests = test_gen.generateMinimalTestCases();
 			if (tests.size() == 0) {
-				break;
+				System.out.println("PROPERTY MAYBE OVERSEMPLIFIED");
+
+				// maybe the property was oversemplified
+				// we remove the current sem prop
+				final List<Fact> facts = new ArrayList<>();
+				for (final Fact fact : sem_with.getFacts()) {
+					if (!fact.getIdentifier().equals("sem_prop")) {
+						facts.add(fact);
+					}
+				}
+				final Alloy_Model mod = new Alloy_Model(sem_with.getSignatures(), facts,
+						sem_with.getPredicates(), sem_with.getFunctions(),
+						sem_with.getOpenStatements());
+				while (true) {
+					sem_with = this.addConstrain(mod, this.unvalid_constraints);
+					sem_with.addRun_command(runCmd);
+					// we try to generate a test
+					clone_with.setSpecificSemantics(sem_with);
+					test_gen = new AlloyTestCaseGenerator(clone_with);
+					tests = test_gen.generateMinimalTestCases();
+					if (tests.size() == 0) {
+						break;
+					}
+					if (tests.size() > 1) {
+						throw new Exception(
+								"GUIFunctionality_refine - semanticPropertyRefine: impossible to generate test cases.");
+					}
+
+					final String new_prop = AlloyUtil.extractProperty(tests.get(0)
+							.getAlloySolution(), sem_with);
+					System.out.println("VALIDATING PROPERTY: " + new_prop);
+
+					if (!this.validateProperty(new_prop, sem_with)) {
+						this.unvalid_constraints.add("not(" + new_prop + ")");
+
+					} else {
+						this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
+						this.valid_constraint = new_prop;
+						break;
+					}
+				}
+
 			}
 			if (tests.size() > 1) {
 				throw new Exception(
 						"GUIFunctionality_refine - semanticPropertyRefine: impossible to generate test cases.");
 			}
+
+			// for (final GUIAction a : tests.get(0).getActions()) {
+			// System.out.println(a);
+			// }
 
 			final GUITestCase tc = tests.get(0);
 
@@ -1134,42 +1202,39 @@ public class GUIFunctionality_refine {
 			} else {
 				System.out.println("TESTCASE ALREADY RUN!!!");
 			}
-			// TODO: use oracle after it is implemented
-			if (res.getActions_executed().size() == tc.getActions().size()
-					&& res.getResults()
-							.get(tc.getActions().size() - 1)
-							.getId()
-							.equals(tc.getActions().get(tc.getActions().size() - 1).getOracle()
-									.getId())) {
+
+			switch (oracle.check(res)) {
+			case 1:
 				// the beahviour was the same
 				System.out.println("SAME BEAHVIOUR");
 				sem_with = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(sem_with,
 						tc));
-			} else {
+				break;
+			case -1:
 				System.out.println("DIFFERENT BEAHVIOUR");
-				final List<String> false_constraints = new ArrayList<>();
-				false_constraints.add("not(" + this.valid_constraint + ")");
+				this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
+
+				final SpecificSemantics sem_without = SpecificSemantics.instantiate(AlloyUtil
+						.getTCaseModel(this.instancePattern.getSemantics(), res));
 
 				String new_prop = null;
 				while (new_prop == null) {
-					false_constraints.addAll(this.unvalid_constraints);
-					final SpecificSemantics sem_without = this.addConstrain(
-							this.instancePattern.getSemantics(), false_constraints);
-					final SpecificSemantics new_sem = SpecificSemantics.instantiate(AlloyUtil
-							.getTCaseModel(sem_without, res));
+					final SpecificSemantics new_sem = this.addConstrain(sem_without,
+							this.unvalid_constraints);
 
+					// System.out.println("start");
 					// System.out.println(new_sem);
+					// System.out.println("end");
 
 					final Module comp = AlloyUtil.compileAlloyModel(new_sem.toString());
 					final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
 
 					if (sol.satisfiable()) {
 						new_prop = AlloyUtil.extractProperty(sol, new_sem);
+						System.out.println("VALIDATING PROPERTY: " + new_prop);
 						if (!this.validateProperty(new_prop, sem_without)) {
 							this.unvalid_constraints.add("not(" + new_prop + ")");
 							new_prop = null;
-						} else {
-							this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
 						}
 
 					} else {
@@ -1193,9 +1258,115 @@ public class GUIFunctionality_refine {
 						sem_with.getPredicates(), sem_with.getFunctions(),
 						sem_with.getOpenStatements());
 				sem_with = this.addConstrain(mod, true_constraints);
+				break;
+			case 0:
+				throw new Exception(
+						"GUIFunctionality_refine - semanticPropertyRefine: it was not possible to run the whole testcase.");
+
 			}
 			this.observed_tcs.add(res);
 		}
 		System.out.println("SEMANTIC PROPERTY REFINE: end.");
+	}
+
+	private boolean validateProperty(final String prop, final SpecificSemantics in_sem)
+			throws Exception {
+
+		final class Run_command_thread extends Thread {
+
+			private A4Solution solution;
+			private boolean exception = false;
+			private final Module model;
+			private final Command run_command;
+
+			public Run_command_thread(final Module model, final Command run_command) {
+
+				this.model = model;
+				this.run_command = run_command;
+			}
+
+			public boolean hasException() {
+
+				return this.exception;
+			}
+
+			public A4Solution getSolution() {
+
+				return this.solution;
+			}
+
+			@Override
+			public void run() {
+
+				try {
+					this.solution = AlloyUtil.runCommand(this.model, this.run_command);
+				} catch (final Exception e) {
+					e.printStackTrace();
+					this.exception = true;
+				}
+			}
+		}
+
+		System.out.println("VALIDATE PROPERTY: start.");
+
+		// we clone the semantics to remove all the facts related to discovering
+		// windows/edges
+		final List<Fact> facts = new ArrayList<>();
+		for (final Fact f : in_sem.getFacts()) {
+			if (!f.getIdentifier().equals("for_discovering")
+					&& !f.getIdentifier().equals("sem_prop")
+					&& !f.getIdentifier().equals("testcase")) {
+				facts.add(f);
+			}
+		}
+
+		final Alloy_Model mod_filtered = new Alloy_Model(in_sem.getSignatures(), facts,
+				in_sem.getPredicates(), in_sem.getFunctions(), in_sem.getOpenStatements());
+		SpecificSemantics sem_filtered = SpecificSemantics.instantiate(mod_filtered);
+		final List<String> constraints = new ArrayList<>();
+		// constraints.add(tcs.get(cont));
+		constraints.add(prop);
+		sem_filtered = this.addConstrain(sem_filtered, constraints);
+
+		final List<Run_command_thread> threads = new ArrayList<>();
+
+		for (int cont = 0; cont < this.observed_tcs.size(); cont++) {
+			// the time size is the number of actions +2 (because of Go)
+
+			final Alloy_Model sem = AlloyUtil.getTCaseModel(sem_filtered,
+					this.observed_tcs.get(cont));
+
+			// System.out.println("start validate sem");
+			// System.out.println(sem);
+			// System.out.println("end validate sem");
+
+			final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
+			final Run_command_thread run = new Run_command_thread(comp, comp.getAllCommands()
+					.get(0));
+			run.start();
+			threads.add(run);
+		}
+		boolean alive = true;
+		while (alive) {
+			alive = false;
+			for (final Run_command_thread run : threads) {
+				if (run.isAlive()) {
+					alive = true;
+					continue;
+				} else {
+					if (run.exception) {
+						throw new Exception("GUIFunctionality_refine - validateProperty: error.");
+					}
+					final A4Solution sol = run.solution;
+					if (!sol.satisfiable()) {
+						System.out.println("VALIDATE PROPERTY: -false- end.");
+						return false;
+					}
+				}
+
+			}
+		}
+		System.out.println("VALIDATE PROPERTY: -true- end.");
+		return true;
 	}
 }

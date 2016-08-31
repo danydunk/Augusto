@@ -163,7 +163,6 @@ public class AlloyTestCaseGenerator {
 
 	protected GUITestCase analyzeTuples(final A4Solution solution) throws Exception {
 
-		// TODO: oracle
 		final Map<String, String> input_data_map = this.elaborateInputData(solution);
 		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track");
 		final List<A4Tuple> curr_wind = AlloyUtil.getTuples(solution, "Current_window");
@@ -200,15 +199,161 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 				// oracle
-				// TODO: must be fixed
 				if (this.extractTimeIndex(curr.atom(2)) == (time_index)) {
+
 					String windid = curr.atom(1).split("\\$")[0];
-					if (windid.startsWith("General")) {
+					if (windid.startsWith("General") || windid.startsWith("Undiscovered")) {
 						continue;
 
 					} else {
 						windid = windid.split("_")[1];
-						oracle = this.instance.getGui().getWindow(windid);
+						final Window target = this.instance.getGui().getWindow(windid);
+						if (target == null) {
+							throw new Exception(
+									"AlloyTestCaseGenerator - analyzeTuples: target window not found in GUI.");
+						}
+						final List<Action_widget> aws = new ArrayList<>();
+						final List<Input_widget> iws = new ArrayList<>();
+						final List<Selectable_widget> sws = new ArrayList<>();
+
+						final List<A4Tuple> association = AlloyUtil.getTuples(solution,
+								curr.atom(1));
+
+						awloop: for (final Action_widget aw : target.getActionWidgets()) {
+
+							for (final A4Tuple t : association) {
+								// if the aw is associated to the current window
+								// we add it
+								if (t.arity() == 2
+										&& t.atom(1).equals("Action_widget_" + aw.getId() + "$0")) {
+									aws.add(aw);
+									continue awloop;
+								}
+							}
+						}
+
+						iwloop: for (final Input_widget iw : target.getInputWidgets()) {
+							final List<A4Tuple> values = AlloyUtil.getTuples(solution,
+									"Input_widget_" + iw.getId());
+							String inputdata = "";
+							for (final A4Tuple value : values) {
+								if (value.arity() != 3) {
+									throw new Exception(
+											"AlloyTestCaseGenerator - analyzeTuples: error retriving input widget value.");
+								}
+								if (value.atom(2).equals(tuple.atom(2))) {
+									if (iw instanceof Option_input_widget) {
+										// System.out.println(value.atom(1));
+
+										String val = (value.atom(1).split("\\$")[0]);
+										// System.out.println(val);
+
+										val = val.replace("Input_widget_" + iw.getId() + "_value_",
+												"");
+										// System.out.println(val);
+										inputdata = val;
+
+									} else {
+										// the input data is retrieved
+										inputdata = input_data_map.get(value.atom(1));
+									}
+								}
+							}
+
+							for (final A4Tuple t : association) {
+								// if the iw is associated to the current window
+								// we add it
+								if (t.arity() == 2
+										&& t.atom(1).equals("Input_widget_" + iw.getId() + "$0")) {
+									if (iw instanceof Option_input_widget) {
+										final Option_input_widget oiw = (Option_input_widget) iw;
+
+										if (inputdata.length() == 0) {
+											inputdata = String.valueOf(oiw.getSelected());
+										}
+										final Option_input_widget new_oiw = new Option_input_widget(
+												oiw.getId(), oiw.getLabel(), oiw.getClasss(),
+												oiw.getX(), oiw.getY(), oiw.getSize(),
+												Integer.valueOf(inputdata));
+										new_oiw.setDescriptor(oiw.getDescriptor());
+										iws.add(new_oiw);
+									} else {
+										final Input_widget new_iw = new Input_widget(iw.getId(),
+												iw.getLabel(), iw.getClasss(), iw.getX(),
+												iw.getY(), inputdata);
+										new_iw.setDescriptor(iw.getDescriptor());
+										iws.add(new_iw);
+										continue iwloop;
+									}
+
+								}
+							}
+						}
+
+						swloop: for (final Selectable_widget sw : target.getSelectableWidgets()) {
+							for (final A4Tuple t : association) {
+								// if the aw is associated to the current window
+								// we add it
+								if (t.arity() == 2
+										&& t.atom(1).equals(
+												"Selectable_widget_" + sw.getId() + "$0")) {
+
+									final List<A4Tuple> objs = AlloyUtil.getTuples(solution,
+											"Selectable_widget_" + sw.getId());
+									final Map<String, Integer> map = new HashMap<>();
+									final List<Integer> to_order = new ArrayList<>();
+									String selected = "";
+
+									for (final A4Tuple obj : objs) {
+										if (obj.arity() != 3) {
+											throw new Exception(
+													"AlloyTestCaseGenerator - analyzeTuples: error retriving objects for selectable widget.");
+										}
+
+										if (obj.atom(2).equals(tuple.atom(2))) {
+											if (!map.containsKey(obj.atom(1))) {
+												final List<A4Tuple> appeared = AlloyUtil.getTuples(
+														solution, obj.atom(1));
+												if (appeared.size() != 1) {
+													throw new Exception(
+															"AlloyTestCaseGenerator - analyzeTuples: error ordering objects for selectable widget.");
+												}
+												final int ind = this.extractTimeIndex(appeared.get(
+														0).atom(1));
+												map.put(obj.atom(1), ind);
+												to_order.add(ind);
+											} else {
+												// if it appears two time it
+												// means it is
+												// the selected one
+												if (selected.length() > 0) {
+													throw new Exception(
+															"AlloyTestCaseGenerator - analyzeTuples: error retriving selected for selectable widget.");
+												}
+												selected = obj.atom(1);
+											}
+										}
+									}
+									Collections.sort(to_order);
+									int sel = -1;
+									if (selected.length() > 0) {
+										sel = to_order.indexOf(map.get(selected));
+									}
+									final Selectable_widget new_sw = new Selectable_widget(
+											sw.getId(), sw.getLabel(), sw.getClasss(), sw.getX(),
+											sw.getY(), sw.getSize() + (map.keySet().size()), sel);
+									new_sw.setDescriptor(sw.getDescriptor());
+									sws.add(new_sw);
+									continue swloop;
+								}
+							}
+						}
+
+						oracle = new Window(target.getId(), target.getLabel(), target.getClasss(),
+								target.getX(), target.getY(), target.isModal());
+						oracle.setAction_widgets(aws);
+						oracle.setInput_widgets(iws);
+						oracle.setSelectable_widgets(sws);
 					}
 				}
 			}
@@ -216,74 +361,6 @@ public class AlloyTestCaseGenerator {
 				throw new Exception(
 						"AlloyTestCaseGenerator - analyzeTuples: source window not found.");
 			}
-
-			// TODO: fix
-			// the oracle is retrieved
-			// final Window oracle = null;
-			// final List<A4Tuple> curr = AlloyUtil.getTuples(solution,
-			// "Current_window");
-			// for (final A4Tuple t : curr) {
-			// if (t.arity() != 3) {
-			// throw new Exception(
-			// "AlloyTestCaseGenerator - analyzeTuples: wrong arity of current window");
-			// }
-			// if (t.atom(2).equals(tuple.atom(2))) {
-			// String window = t.atom(1).split("\\$")[0];
-			// if (window.equals("General")) {
-			// break;
-			// }
-			// window = window.substring(7);
-			// Window target_w = null;
-			// for (final Instance_window w : this.instance.getWindows()) {
-			// if (w.getInstance().getId().equals(window)) {
-			// target_w = w.getInstance();
-			// break;
-			// }
-			// }
-			//
-			// if (target_w == null) {
-			// throw new Exception(
-			// "AlloyTestCaseGenerator - analyzeTuples: error detecting oracle.");
-			// }
-			// // we create a new window
-			// // oracle = new Window(target_w.getId(), target_w.isModal(),
-			// // target_w.getLabel(),
-			// // target_w.isRoot());
-			// for (final Action_widget aw : target_w.getActionWidgets()) {
-			// oracle.addWidget(aw);
-			// }
-			// for (final Input_widget iw : target_w.getInputWidgets()) {
-			// final List<A4Tuple> values = AlloyUtil.getTuples(solution,
-			// "Input_widget_"
-			// + iw.getId());
-			// String v = "";
-			// for (final A4Tuple value : values) {
-			// if (value.arity() != 3) {
-			// throw new Exception(
-			// "AlloyTestCaseGenerator - analyzeTuples: error retriving input widget value.");
-			// }
-			// if (value.atom(2).equals(tuple.atom(2))) {
-			// final int value_index = Integer
-			// .valueOf(value.atom(1).split("\\$")[1]);
-			// // TODO: manage values
-			// v = String.valueOf(value_index);
-			// }
-			// }
-			//
-			// final Input_widget iww = new Input_widget(iw.getId(),
-			// iw.getLabel(), v,
-			// iw.getClasss());
-			// oracle.addWidget(iww);
-			// }
-			// for (final Selectable_widget sw :
-			// target_w.getSelectableWidgets()) {
-			// // TODO
-			// oracle.addWidget(sw);
-			// }
-			//
-			// break;
-			// }
-			// }
 
 			final List<A4Tuple> params = AlloyUtil.getTuples(solution, tuple.atom(1));
 
@@ -480,7 +557,7 @@ public class AlloyTestCaseGenerator {
 						// TODO: add the correct selected
 						target_sw = new Selectable_widget(sw.getId(), sw.getLabel(),
 								sw.getClasss(), sw.getX(), sw.getY(), sw.getSize()
-										+ objects_in_sw_at_t.size(), 0);
+								+ objects_in_sw_at_t.size(), 0);
 						target_sw.setDescriptor(sw.getDescriptor());
 						break;
 					}
@@ -813,12 +890,13 @@ public class AlloyTestCaseGenerator {
 					scopes.add(swscope);
 				}
 
+				final int overall = this.run_command.overall;
+
 				ConstList<CommandScope> scope_list = this.run_command.scope.make(scopes);
 
 				Command run = new Command(this.run_command.pos, this.run_command.label,
-						this.run_command.check, this.run_command.overall,
-						this.run_command.bitwidth, this.run_command.maxseq,
-						this.run_command.expects, scope_list,
+						this.run_command.check, overall, this.run_command.bitwidth,
+						this.run_command.maxseq, this.run_command.expects, scope_list,
 						this.run_command.additionalExactScopes, this.run_command.formula,
 						this.run_command.parent);
 
@@ -862,9 +940,8 @@ public class AlloyTestCaseGenerator {
 						scope_list = this.run_command.scope.make(scopes);
 
 						run = new Command(this.run_command.pos, this.run_command.label,
-								this.run_command.check, this.run_command.overall,
-								this.run_command.bitwidth, this.run_command.maxseq,
-								this.run_command.expects, scope_list,
+								this.run_command.check, overall, this.run_command.bitwidth,
+								this.run_command.maxseq, this.run_command.expects, scope_list,
 								this.run_command.additionalExactScopes, this.run_command.formula,
 								this.run_command.parent);
 

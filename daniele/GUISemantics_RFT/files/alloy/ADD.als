@@ -63,15 +63,15 @@ pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Ok and Current_window.is_in.t  in Confirm) => (filled_required_test [t] and unique_test [t])
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
-	aw in Cancel => (#Current_window.is_in.t.iws.content.t' = 0 and List.contains.t' = List.contains.t and (Input_widget - Current_window.is_in.t.iws).content.t' = (Input_widget - Current_window.is_in.t.iws).content.t)
-	aw in Trigger => (List.contains.t' = List.contains.t and Input_widget.content.t' = Input_widget.content.t)
-	(aw in Ok and Current_window.is_in.t  in Form and (#aw.goes = 1 and aw.goes in Form)) => (List.contains.t' = List.contains.t and Input_widget.content.t' = Input_widget.content.t)
+	aw in Cancel => (#Current_window.is_in.t.iws.content.t' = 0 and List.contains.t' = List.contains.t and (Input_widget - Current_window.is_in.t.iws).content.t' = (Input_widget - Current_window.is_in.t.iws).content.t) 
+	aw in Trigger => (List.contains.t' = List.contains.t and (all iww: Input_widget | iww.content.t' = iww.content.t))
+	(aw in Ok and Current_window.is_in.t  in Form and (#aw.goes = 1 and aw.goes in Form)) => (List.contains.t' = List.contains.t and (all iww: Input_widget | iww.content.t' = iww.content.t))
 	(aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0) => (#Input_widget.content.t' = 0 and add [t, t'])
 	(aw in Ok and Current_window.is_in.t  in Confirm) => (#Input_widget.content.t' = 0 and add [t, t'])
 }
 pred click_fail_post [aw: Action_widget, t, t': Time]	{
 	List.contains.t' = List.contains.t
-	Input_widget.content.t' = Input_widget.content.t
+	all iw:Input_widget | iw.content.t' = iw.content.t
 }
 pred click_pre[aw: Action_widget, t: Time] {}
 
@@ -94,5 +94,6 @@ pred  unique_test [t: Time] {
 }
 fact{
 #Select = 0
-
+all t:Time|Selectable_widget.list.t = List.contains.t 
+all t:Time|(#List.contains.t = 1 => Selectable_widget.selected.t = List.contains.t) and (#List.contains.t = 0 => #Selectable_widget.selected.t = 0)
 }
