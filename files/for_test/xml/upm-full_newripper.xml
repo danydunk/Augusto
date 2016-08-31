@@ -84,19 +84,19 @@
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
-        <input_widget id="iw15">
+        <input_widget id="iw17">
             <pos>530:212</pos>
             <class>ComboBoxUI</class>
             <descriptor>Save in:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
-        <input_widget id="iw16">
+        <input_widget id="iw18">
             <pos>607:546</pos>
             <class>TextFieldUI</class>
             <descriptor>File name:</descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw17">
+        <input_widget id="iw19">
             <pos>607:574</pos>
             <class>ComboBoxUI</class>
             <descriptor>Files of type:</descriptor>
@@ -166,19 +166,19 @@
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
-        <input_widget id="iw15">
+        <input_widget id="iw20">
             <pos>530:212</pos>
             <class>ComboBoxUI</class>
             <descriptor>Look in:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
-        <input_widget id="iw16">
+        <input_widget id="iw21">
             <pos>607:546</pos>
             <class>TextFieldUI</class>
             <descriptor>File name:</descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw17">
+        <input_widget id="iw22">
             <pos>607:574</pos>
             <class>ComboBoxUI</class>
             <descriptor>Files of type:</descriptor>
@@ -203,7 +203,7 @@
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
-        <input_widget id="iw15">
+        <input_widget id="iw29">
             <pos>566:322</pos>
             <class>TextAreaUI</class>
             <descriptor>About UPM</descriptor>
@@ -237,37 +237,37 @@ http://upm.sourceforge.net</value>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
-        <input_widget id="iw15">
+        <input_widget id="iw23">
             <pos>600:208</pos>
             <class>TextFieldUI</class>
             <descriptor>Account</descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw16">
+        <input_widget id="iw24">
             <pos>600:248</pos>
             <class>TextFieldUI</class>
             <descriptor>User Id</descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw18">
+        <input_widget id="iw26">
             <pos>853:288</pos>
             <class>CheckBoxUI</class>
             <label>Hide</label>
             <value>[options] 1 : 2</value>
         </input_widget>
-        <input_widget id="iw17">
+        <input_widget id="iw25">
             <pos>600:289</pos>
             <class>PasswordFieldUI</class>
             <descriptor>Password</descriptor>
-            <value>hhOT7Fdg</value>
+            <value>pEYqWuVF</value>
         </input_widget>
-        <input_widget id="iw19">
+        <input_widget id="iw27">
             <pos>600:331</pos>
             <class>TextFieldUI</class>
             <descriptor>URL</descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw20">
+        <input_widget id="iw28">
             <pos>601:372</pos>
             <class>TextAreaUI</class>
             <descriptor>Notes</descriptor>
@@ -330,19 +330,19 @@ http://upm.sourceforge.net</value>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
-        <input_widget id="iw15">
+        <input_widget id="iw38">
             <pos>530:212</pos>
             <class>ComboBoxUI</class>
             <descriptor>Look in:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
-        <input_widget id="iw16">
+        <input_widget id="iw39">
             <pos>607:546</pos>
             <class>TextFieldUI</class>
             <descriptor>File name:</descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw17">
+        <input_widget id="iw40">
             <pos>607:574</pos>
             <class>ComboBoxUI</class>
             <descriptor>Files of type:</descriptor>
@@ -377,49 +377,49 @@ http://upm.sourceforge.net</value>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
-        <input_widget id="iw15">
+        <input_widget id="iw30">
             <pos>589:276</pos>
             <class>TextFieldUI</class>
             <descriptor>Database To Load On Startup</descriptor>
             <value>C:\Users\usi\abtMyDocuments\upm_db</value>
         </input_widget>
-        <input_widget id="iw16">
+        <input_widget id="iw31">
             <pos>589:320</pos>
             <class>ComboBoxUI</class>
             <descriptor>Language</descriptor>
             <value>[options] 1 : 5</value>
         </input_widget>
-        <input_widget id="iw17">
+        <input_widget id="iw32">
             <pos>586:370</pos>
             <class>CheckBoxUI</class>
             <label>Enable Proxy</label>
             <value>[options] 0 : 2</value>
         </input_widget>
-        <input_widget id="iw18">
+        <input_widget id="iw33">
             <pos>589:415</pos>
             <class>TextFieldUI</class>
             <descriptor>HTTP Proxy</descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw19">
+        <input_widget id="iw34">
             <pos>778:415</pos>
             <class>TextFieldUI</class>
             <descriptor>Port</descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw20">
+        <input_widget id="iw35">
             <pos>589:457</pos>
             <class>TextFieldUI</class>
             <descriptor>HTTP Proxy Username</descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw22">
+        <input_widget id="iw37">
             <pos>778:499</pos>
             <class>CheckBoxUI</class>
             <label>Hide</label>
             <value>[options] 1 : 2</value>
         </input_widget>
-        <input_widget id="iw21">
+        <input_widget id="iw36">
             <pos>589:500</pos>
             <class>PasswordFieldUI</class>
             <descriptor>HTTP Proxy Password</descriptor>
@@ -715,7 +715,7 @@ http://upm.sourceforge.net</value>
             <class>ButtonUI</class>
             <label>Reset Search</label>
         </action_widget>
-        <input_widget id="iw15">
+        <input_widget id="iw41">
             <pos>606:334</pos>
             <class>TextFieldUI</class>
             <descriptor>Universal Password Manager</descriptor>

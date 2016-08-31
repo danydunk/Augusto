@@ -18,13 +18,13 @@
         <input_widget id="iw1">
             <pos>606:318</pos>
             <class>TextFieldUI</class>
-            <descriptor>Local Database</descriptor>
+            <descriptor>C:\Users\usi\abtMyDocuments\upm_db - Universal Password Manager</descriptor>
             <value/>
         </input_widget>
         <selectable_widget id="sw1">
             <pos>589:344</pos>
             <class>ListUI</class>
-            <descriptor>Local Database</descriptor>
+            <descriptor>C:\Users\usi\abtMyDocuments\upm_db - Universal Password Manager</descriptor>
             <size>0</size>
             <selected>-1</selected>
         </selectable_widget>
@@ -71,7 +71,7 @@
         <input_widget id="iw4">
             <pos>600:290</pos>
             <class>PasswordFieldUI</class>
-            <descriptor>Account</descriptor>
+            <descriptor>Password</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw6">
@@ -83,7 +83,7 @@
         <input_widget id="iw7">
             <pos>601:373</pos>
             <class>TextAreaUI</class>
-            <descriptor>Account</descriptor>
+            <descriptor>Notes</descriptor>
             <value/>
         </input_widget>
     </window>

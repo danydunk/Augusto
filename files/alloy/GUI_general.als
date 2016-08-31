@@ -36,6 +36,8 @@ fact{
 	no o: Operation | not o in dom [Track.op]
 	all t: Time | not t = T/first => #Current_window.is_in.t = 1
 	all t: Time, g: Go | Track.op.t = g => (Current_window.is_in.(T/prev[t]) = General and (not g.where in General))
+	all t,t':Time| no f, f': Fill | t' = T/next[t] and Track.op.t = f and Track.op.t' =f' and f.filled = (f').filled and f.with = (f').with
+	all t,t':Time| no s, s': Select | t' = T/next[t] and Track.op.t = s and Track.op.t' =s' and s.selected = (s').selected and s.wid = (s').wid
 }
 ----------------Generic GUI Structure ----------------
 abstract sig Window {
@@ -90,8 +92,8 @@ pred fill [iw: Input_widget, t, t': Time, v: Value, f: Fill] {
 	(not fill_semantics  [iw, t, v] and iw.content.t' = iw.content.t and fill_fail_post [iw, t, t', v])
 	--- general postcondition ---
 	Current_window.is_in.t' = Current_window.is_in.t
-	(Input_widget - iw).content.t' = (Input_widget - iw).content.t
-	Selectable_widget.selected.t' = Selectable_widget.selected.t
+	all iww: (Input_widget - iw) | iww.content.t' = iww.content.t
+	all sw:Selectable_widget | sw.selected.t' = sw.selected.t
 	--- operation is tracked ---
 	f.filled = iw and f.with = v and Track.op.t' = f
 }
@@ -105,7 +107,7 @@ pred select [sw: Selectable_widget, t, t': Time, o: Object, s: Select] {
 	(not select_semantics  [sw, t, o] and sw.selected.t' = sw.selected.t and select_fail_post [sw, t, t', o])
 	--- general postcondition ---
 	Current_window.is_in.t' = Current_window.is_in.t
-	Input_widget.content.t' = Input_widget.content.t
+	all iw: Input_widget | iw.content.t' = iw.content.t
 	(Selectable_widget - sw).selected.t' = (Selectable_widget - sw).selected.t
 	--- operation is tracked ---
 	s.wid = sw and s.selected = o and Track.op.t' = s
@@ -116,7 +118,7 @@ pred go [w: Window, t, t': Time, g: Go] {
 	go_pre [w, t]
 	--- effect ---
 	(go_semantics [w, t] and Current_window.is_in.t' = w and 	#Input_widget.content.t' = 0 and #Selectable_widget.selected.t' = 0 and go_success_post [w, t, t']) or
-	(not go_semantics [w, t] and Current_window.is_in.t' = General and Input_widget.content.t' =  Input_widget.content.t and Selectable_widget.selected.t' = Selectable_widget.selected.t and go_fail_post [w, t, t'])
+	(not go_semantics [w, t] and Current_window.is_in.t' = General and (all iw: Input_widget | iw.content.t' = iw.content.t) and Selectable_widget.selected.t' = Selectable_widget.selected.t and go_fail_post [w, t, t'])
 	--- operation is tracked ---
 	g.where = w and Track.op.t' = g
 }
