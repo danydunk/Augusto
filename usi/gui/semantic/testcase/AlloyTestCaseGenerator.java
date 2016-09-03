@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import usi.configuration.ConfigurationManager;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.functionality.mapping.Instance_window;
 import usi.gui.semantic.SpecificSemantics;
@@ -62,8 +63,12 @@ public class AlloyTestCaseGenerator {
 	 * Function that generates GUI test cases running the run commands contained
 	 * in a specific semantics. Each run command is run for a maximum of max_run
 	 * times. The timeout of each run command is initial_timeout. When a command
-	 * goes in timeout is rerun with a double timeout. If a command is unsat,
-	 * the scope is dubled.
+	 * goes in timeout is rerun with a double timeout. The scope general scope
+	 * is the one specified in the configuration. Additional scopes are added
+	 * for each structural signature. If one of the structural signatures has a
+	 * not definite scope (for instance during refinement) the general scope is
+	 * doubled. If in the original command a general or a time scope are set
+	 * they are kept.
 	 *
 	 * @return
 	 * @throws Exception
@@ -115,8 +120,12 @@ public class AlloyTestCaseGenerator {
 	 * Function that generates GUI test cases running the run commands contained
 	 * in a specific semantics. Each run command is run for a maximum of max_run
 	 * times. The timeout of each run command is initial_timeout. When a command
-	 * goes in timeout is rerun with a double timeout. If a command is unsat,
-	 * the scope is dubled.
+	 * goes in timeout is rerun with a double timeout. The general scope is the
+	 * one specified in the configuration. Additional scopes are added for each
+	 * structural signature. If one of the structural signatures has a not
+	 * definite scope (for instance during refinement) the general scope is
+	 * doubled. If in the original command a general scope is set they are
+	 * kept.If a time scope is set an exception is raised.
 	 *
 	 * @return
 	 * @throws Exception
@@ -164,8 +173,8 @@ public class AlloyTestCaseGenerator {
 	protected GUITestCase analyzeTuples(final A4Solution solution) throws Exception {
 
 		final Map<String, String> input_data_map = this.elaborateInputData(solution);
-		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track");
-		final List<A4Tuple> curr_wind = AlloyUtil.getTuples(solution, "Current_window");
+		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track$0");
+		final List<A4Tuple> curr_wind = AlloyUtil.getTuples(solution, "Current_window$0");
 		if (tracks.size() != curr_wind.size() - 1) {
 			throw new Exception(
 					"AlloyTestCaseGenerator - analyzeTuples: track and curr window must have same size.");
@@ -234,7 +243,7 @@ public class AlloyTestCaseGenerator {
 
 						iwloop: for (final Input_widget iw : target.getInputWidgets()) {
 							final List<A4Tuple> values = AlloyUtil.getTuples(solution,
-									"Input_widget_" + iw.getId());
+									"Input_widget_" + iw.getId() + "$0");
 							String inputdata = "";
 							for (final A4Tuple value : values) {
 								if (value.arity() != 3) {
@@ -299,7 +308,7 @@ public class AlloyTestCaseGenerator {
 												"Selectable_widget_" + sw.getId() + "$0")) {
 
 									final List<A4Tuple> objs = AlloyUtil.getTuples(solution,
-											"Selectable_widget_" + sw.getId());
+											"Selectable_widget_" + sw.getId() + "$0");
 									final Map<String, Integer> map = new HashMap<>();
 									final List<Integer> to_order = new ArrayList<>();
 									String selected = "";
@@ -795,12 +804,13 @@ public class AlloyTestCaseGenerator {
 		public void run() {
 
 			try {
-				int time_scope = -1;
+				int overall = ConfigurationManager.getAlloyRunScope();
 
-				if (this.minimal) {
-					time_scope = 2;
-				} else {
-					time_scope = this.run_command.overall;
+				if (this.run_command.overall > 3) {
+					overall = this.run_command.overall;
+				} else if (this.win_scope == -1 || this.aw_scope == -1 || this.iw_scope == -1
+						|| this.sw_scope == -1) {
+					overall = overall * 2;
 				}
 
 				Sig win = null;
@@ -868,41 +878,62 @@ public class AlloyTestCaseGenerator {
 					return;
 				}
 
-				List<CommandScope> scopes = new ArrayList<>();
-				CommandScope timescope = new CommandScope(time, false, time_scope);
-				CommandScope opscope = new CommandScope(operation, false, time_scope - 1);
-				scopes.add(timescope);
-				scopes.add(opscope);
-				if (this.win_scope > -1) {
-					final CommandScope winscope = new CommandScope(win, false, this.win_scope);
-					scopes.add(winscope);
-				}
-				if (this.aw_scope > -1) {
-					final CommandScope awscope = new CommandScope(aw, false, this.aw_scope);
-					scopes.add(awscope);
-				}
-				if (this.iw_scope > -1) {
-					final CommandScope iwscope = new CommandScope(iw, false, this.iw_scope);
-					scopes.add(iwscope);
-				}
-				if (this.sw_scope > -1) {
-					final CommandScope swscope = new CommandScope(sw, false, this.sw_scope);
-					scopes.add(swscope);
+				int time_scope = -1;
+
+				final ConstList<CommandScope> set_scopes = this.run_command.scope;
+				for (final CommandScope scope : set_scopes) {
+					if (scope.sig == time) {
+						time_scope = scope.endingScope;
+					}
 				}
 
-				final int overall = this.run_command.overall;
+				if (this.minimal && time_scope != -1) {
+					this.exception = true;
+					return;
+				}
 
-				ConstList<CommandScope> scope_list = this.run_command.scope.make(scopes);
-
-				Command run = new Command(this.run_command.pos, this.run_command.label,
-						this.run_command.check, overall, this.run_command.bitwidth,
-						this.run_command.maxseq, this.run_command.expects, scope_list,
-						this.run_command.additionalExactScopes, this.run_command.formula,
-						this.run_command.parent);
+				if (this.minimal) {
+					time_scope = 2;
+				} else {
+					if (time_scope == -1) {
+						time_scope = ConfigurationManager.getTestcaseLength();
+					}
+				}
 
 				long timeout = AlloyTestCaseGenerator.this.RUN_INITIAL_TIMEOUT;
 
 				for (int x = 0; x < AlloyTestCaseGenerator.this.MAX_RUN; x++) {
+
+					final List<CommandScope> scopes = new ArrayList<>();
+					final CommandScope timescope = new CommandScope(time, false, time_scope);
+					final CommandScope opscope = new CommandScope(operation, false, time_scope - 1);
+					scopes.add(timescope);
+					scopes.add(opscope);
+					if (this.win_scope > -1) {
+						final CommandScope winscope = new CommandScope(win, false, this.win_scope);
+						scopes.add(winscope);
+					}
+					if (this.aw_scope > -1) {
+						final CommandScope awscope = new CommandScope(aw, false, this.aw_scope);
+						scopes.add(awscope);
+					}
+					if (this.iw_scope > -1) {
+						final CommandScope iwscope = new CommandScope(iw, false, this.iw_scope);
+						scopes.add(iwscope);
+					}
+					if (this.sw_scope > -1) {
+						final CommandScope swscope = new CommandScope(sw, false, this.sw_scope);
+						scopes.add(swscope);
+					}
+
+					final ConstList<CommandScope> scope_list = this.run_command.scope.make(scopes);
+
+					final Command run = new Command(this.run_command.pos, this.run_command.label,
+							this.run_command.check, overall, this.run_command.bitwidth,
+							this.run_command.maxseq, this.run_command.expects, scope_list,
+							this.run_command.additionalExactScopes, this.run_command.formula,
+							this.run_command.parent);
+
 					System.out.println("STARTING COMMAND: " + run.toString() + " RUN " + (x + 1));
 					final A4Solution solution = AlloyUtil
 							.runCommand(this.alloy_model, run, timeout);
@@ -911,49 +942,22 @@ public class AlloyTestCaseGenerator {
 						timeout += AlloyTestCaseGenerator.this.RUN_INITIAL_TIMEOUT;
 						System.out.println("RUN " + (x + 1) + " COMMAND:" + run.toString()
 								+ " timeout. New timeout =" + timeout);
-					} else if (!solution.satisfiable()) {
+					} else if (this.minimal && !solution.satisfiable()) {
 
 						time_scope++;
-						timescope = new CommandScope(time, false, time_scope);
-						opscope = new CommandScope(operation, false, time_scope - 1);
-						scopes = new ArrayList<>();
-						scopes.add(timescope);
-						scopes.add(opscope);
-						if (this.win_scope > -1) {
-							final CommandScope winscope = new CommandScope(win, false,
-									this.win_scope);
-							scopes.add(winscope);
-						}
-						if (this.aw_scope > -1) {
-							final CommandScope awscope = new CommandScope(aw, false, this.aw_scope);
-							scopes.add(awscope);
-						}
-						if (this.iw_scope > -1) {
-							final CommandScope iwscope = new CommandScope(iw, false, this.iw_scope);
-							scopes.add(iwscope);
-						}
-						if (this.sw_scope > -1) {
-							final CommandScope swscope = new CommandScope(sw, false, this.sw_scope);
-							scopes.add(swscope);
-						}
-
-						scope_list = this.run_command.scope.make(scopes);
-
-						run = new Command(this.run_command.pos, this.run_command.label,
-								this.run_command.check, overall, this.run_command.bitwidth,
-								this.run_command.maxseq, this.run_command.expects, scope_list,
-								this.run_command.additionalExactScopes, this.run_command.formula,
-								this.run_command.parent);
-
 						if (x + 1 < AlloyTestCaseGenerator.this.MAX_RUN) {
 							System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
 									+ " unsat. Time scope = " + time_scope);
 						}
-
 					} else {
-						System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
-								+ " found solution.");
-						this.solution = solution;
+						if (solution.satisfiable()) {
+							System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
+									+ " found solution.");
+							this.solution = solution;
+						} else {
+							System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
+									+ " solution not found.");
+						}
 						break;
 					}
 				}

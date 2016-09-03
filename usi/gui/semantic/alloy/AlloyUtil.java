@@ -717,7 +717,7 @@ public class AlloyUtil {
 		final Iterator<A4Tuple> tupi = tuples.iterator();
 		while (tupi.hasNext()) {
 			final A4Tuple tup = tupi.next();
-			if (tup.atom(0).startsWith(labelToMatch)) {
+			if (tup.atom(0).equals(labelToMatch)) {
 				result.add(tup);
 			}
 		}

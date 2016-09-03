@@ -13,6 +13,7 @@ public class ConfigurationManager {
 	private static int alloyRunScope = 9;
 	private static long sleepTime = 600;
 	private static long semanticRefinementTimeout = 1800000;// 30min
+	private static int testcaseLength = 15;
 
 	public static void load() throws Exception {
 
@@ -38,6 +39,8 @@ public class ConfigurationManager {
 		ConfigurationManager.setSleepTime(Long.valueOf(properties.getProperty("sleep_time")));
 		setSemanticRefinementTimeout(Long.valueOf(properties
 				.getProperty("semantic_refinement_timeout")));
+		ConfigurationManager.setTestcaseLength(Integer.valueOf(properties
+				.getProperty("testcase_length")));
 	}
 
 	public static String getAutClasspath() {
@@ -108,5 +111,15 @@ public class ConfigurationManager {
 	public static void setSemanticRefinementTimeout(final long semanticRefinementTimeout) {
 
 		ConfigurationManager.semanticRefinementTimeout = semanticRefinementTimeout;
+	}
+
+	public static int getTestcaseLength() {
+
+		return testcaseLength;
+	}
+
+	public static void setTestcaseLength(final int testcaseLength) {
+
+		ConfigurationManager.testcaseLength = testcaseLength;
 	}
 }

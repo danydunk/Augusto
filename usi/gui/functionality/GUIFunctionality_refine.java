@@ -2,6 +2,7 @@ package usi.gui.functionality;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import usi.application.ApplicationHelper;
@@ -90,7 +91,8 @@ public class GUIFunctionality_refine {
 				|| old_edges_number != (this.instancePattern.getGui().getNumberOfStaticEdges() + this.instancePattern
 						.getGui().getNumberOfDynamicEdges()));
 		System.out.println("INITIAL CONSTRAINT FOUND: " + this.valid_constraint);
-
+		// this.valid_constraint =
+		// "#Property_required = 0 and #Property_unique = 0";
 		if (this.pattern.isInstance(this.instancePattern)) {
 			System.out.println("PATTERN IS INSTANCE");
 			this.instancePattern.generateSpecificSemantics();
@@ -144,8 +146,8 @@ public class GUIFunctionality_refine {
 						// if we already have a dynamic edge in the pattern for
 						// this aw it makes no sense to look for more
 						System.out
-								.println("DISCOVER DYNAMIC EDGE: we already have a dynamic edge for "
-										+ aw.getId() + ".");
+						.println("DISCOVER DYNAMIC EDGE: we already have a dynamic edge for "
+								+ aw.getId() + ".");
 						continue;
 					}
 
@@ -232,8 +234,8 @@ public class GUIFunctionality_refine {
 						// if we already have a dynamic edge in the pattern for
 						// this aw it makes no sense to look for more
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: we already have a dynamic edge for "
-										+ aw.getId() + ".");
+						.println("DISCOVER DYNAMIC WINDOW: we already have a dynamic edge for "
+								+ aw.getId() + ".");
 						continue;
 					}
 
@@ -443,8 +445,8 @@ public class GUIFunctionality_refine {
 					// add constraint
 					this.additional_constraints.add("not(" + property + ")");
 					System.out
-							.println("GET TEST TO DISCOVER WINDOW: new invalid property added - not("
-									+ property + ")");
+					.println("GET TEST TO DISCOVER WINDOW: new invalid property added - not("
+							+ property + ")");
 				}
 			}
 		}
@@ -785,35 +787,8 @@ public class GUIFunctionality_refine {
 		final SpecificSemantics semantif4DiscoverWindow = new SpecificSemantics(signatures, facts,
 				predicates, functions, opens);
 
-		final int winscope = AlloyUtil.getWinScope(semantif4DiscoverWindow);
-		final int awscope = AlloyUtil.getAWScope(semantif4DiscoverWindow);
-		final int iwscope = AlloyUtil.getIWScope(semantif4DiscoverWindow);
-		final int swscope = AlloyUtil.getSWScope(semantif4DiscoverWindow);
-
-		int totalscope = ConfigurationManager.getAlloyRunScope();
-		if (winscope == -1 || awscope == -1 || iwscope == -1 || swscope == -1) {
-
-			totalscope = totalscope * 2;
-		}
-
-		String runCom = "run {System} for " + totalscope;
-		String scope = "";
-		if (winscope > -1) {
-			scope += "," + winscope + " Window ";
-		}
-		if (awscope > -1) {
-			scope += "," + awscope + " Action_widget ";
-		}
-		if (iwscope > -1) {
-			scope += "," + iwscope + " Input_widget ";
-		}
-		if (swscope > -1) {
-			scope += "," + swscope + " Selectable_widget ";
-		}
-		if (scope.length() > 0) {
-			scope = " but " + scope.substring(1);
-		}
-		runCom = runCom + scope;
+		String runCom = "run {System}";
+		runCom = runCom;
 
 		semantif4DiscoverWindow.addRun_command(runCom);
 
@@ -822,7 +797,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverEdge(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-			throws Exception {
+					throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {
@@ -898,35 +873,9 @@ public class GUIFunctionality_refine {
 		final SpecificSemantics semantif4DiscoverWindow = new SpecificSemantics(signatures, facts,
 				predicates, functions, opens);
 
-		final int winscope = AlloyUtil.getWinScope(semantif4DiscoverWindow);
-		final int awscope = AlloyUtil.getAWScope(semantif4DiscoverWindow);
-		final int iwscope = AlloyUtil.getIWScope(semantif4DiscoverWindow);
-		final int swscope = AlloyUtil.getSWScope(semantif4DiscoverWindow);
+		String runCom = "run {System}";
 
-		int totalscope = ConfigurationManager.getAlloyRunScope();
-		if (winscope == -1 || awscope == -1 || iwscope == -1 || swscope == -1) {
-
-			totalscope = totalscope * 2;
-		}
-
-		String runCom = "run {System} for " + totalscope;
-		String scope = "";
-		if (winscope > -1) {
-			scope += "," + winscope + " Window ";
-		}
-		if (awscope > -1) {
-			scope += "," + awscope + " Action_widget ";
-		}
-		if (iwscope > -1) {
-			scope += "," + iwscope + " Input_widget ";
-		}
-		if (swscope > -1) {
-			scope += "," + swscope + " Selectable_widget ";
-		}
-		if (scope.length() > 0) {
-			scope = " but " + scope.substring(1);
-		}
-		runCom = runCom + scope;
+		runCom = runCom;
 		semantif4DiscoverWindow.addRun_command(runCom);
 
 		return semantif4DiscoverWindow;
@@ -955,8 +904,8 @@ public class GUIFunctionality_refine {
 				res = runner.runTestCase(tc);
 			} catch (final Exception e) {
 				System.out
-						.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
-								+ e.getMessage());
+				.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
+						+ e.getMessage());
 				e.printStackTrace();
 				return null;
 			}
@@ -1092,7 +1041,7 @@ public class GUIFunctionality_refine {
 			// 1);
 		}
 
-		return null;
+	return null;
 	}
 
 	private void semanticPropertyRefine() throws Exception {
@@ -1100,28 +1049,11 @@ public class GUIFunctionality_refine {
 		final long beginTime = System.currentTimeMillis();
 
 		final OracleChecker oracle = new OracleChecker();
-		final int winscope = AlloyUtil.getWinScope(this.instancePattern.getSemantics());
-		final int awscope = AlloyUtil.getAWScope(this.instancePattern.getSemantics());
-		final int iwscope = AlloyUtil.getIWScope(this.instancePattern.getSemantics());
-		final int swscope = AlloyUtil.getSWScope(this.instancePattern.getSemantics());
 
-		int totalscope = ConfigurationManager.getAlloyRunScope();
-		if (winscope == -1 || awscope == -1 || iwscope == -1 || swscope == -1) {
-
-			totalscope = totalscope * 2;
-		}
-
-		String scope = " but ";
-		scope += winscope + " Window ";
-		scope += "," + awscope + " Action_widget ";
-		scope += "," + iwscope + " Input_widget ";
-		scope += "," + swscope + " Selectable_widget ";
-		String runCmd = "run {"
+		final String runCmd = "run {"
 				+ "System and "
 				+ ""
-				+ "(some aw:Action_widget, iw:Input_widget, sw:Selectable_widget, w: Window| one opp:Operation| Track.op.(T/last) = opp and ((opp in Go and opp.where=w and not go_semantics[w, T/prev[T/last]]) or (opp in Click and opp.clicked = aw and not click_semantics[aw, T/prev[T/last]]) or (opp in Fill and opp.filled=iw and not fill_semantics[iw, T/prev[T/last], opp.with])  or (opp in Select and opp.wid=sw and not select_semantics[sw, T/prev[T/last], opp.selected])))}"
-				+ "for " + totalscope;
-		runCmd += scope;
+				+ "(some aw:Action_widget, iw:Input_widget, sw:Selectable_widget, w: Window| one opp:Operation| Track.op.(T/last) = opp and ((opp in Go and opp.where=w and not go_semantics[w, T/prev[T/last]]) or (opp in Click and opp.clicked = aw and not click_semantics[aw, T/prev[T/last]]) or (opp in Fill and opp.filled=iw and not fill_semantics[iw, T/prev[T/last], opp.with])  or (opp in Select and opp.wid=sw and not select_semantics[sw, T/prev[T/last], opp.selected])))}";
 
 		List<String> true_constraints = new ArrayList<>();
 		true_constraints.add(this.valid_constraint);
@@ -1130,14 +1062,14 @@ public class GUIFunctionality_refine {
 		SpecificSemantics sem_with = this.addConstrain(this.instancePattern.getSemantics(),
 				true_constraints);
 
-		while ((System.currentTimeMillis() - beginTime) < ConfigurationManager
+		mainloop: while ((System.currentTimeMillis() - beginTime) < ConfigurationManager
 				.getSemanticRefinementTimeout()) {
 			System.out.println("CURRENT SEMANTIC PROPERTY: " + this.valid_constraint);
 			sem_with.addRun_command(runCmd);
 			// System.out.println(sem_with);
 			clone_with.setSpecificSemantics(sem_with);
-			AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
-			List<GUITestCase> tests = test_gen.generateMinimalTestCases();
+			final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
+			final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
 			if (tests.size() == 0) {
 				System.out.println("PROPERTY MAYBE OVERSEMPLIFIED");
 
@@ -1152,35 +1084,47 @@ public class GUIFunctionality_refine {
 				final Alloy_Model mod = new Alloy_Model(sem_with.getSignatures(), facts,
 						sem_with.getPredicates(), sem_with.getFunctions(),
 						sem_with.getOpenStatements());
+
+				final List<String> false_constraints = new ArrayList<>();
+				false_constraints.addAll(this.unvalid_constraints);
+				false_constraints.add("not(" + this.valid_constraint + ")");
+				final Random r = new Random();
+
 				while (true) {
-					sem_with = this.addConstrain(mod, this.unvalid_constraints);
-					sem_with.addRun_command(runCmd);
+					// we randomly pick one of the executed test cases
+					final int index = r.nextInt(this.observed_tcs.size());
+					sem_with = this.addConstrain(mod, false_constraints);
+					sem_with = SpecificSemantics.instantiate(AlloyUtil.getTCaseModel(sem_with,
+							this.observed_tcs.get(index)));
+
 					// we try to generate a test
-					clone_with.setSpecificSemantics(sem_with);
-					test_gen = new AlloyTestCaseGenerator(clone_with);
-					tests = test_gen.generateMinimalTestCases();
-					if (tests.size() == 0) {
-						break;
-					}
-					if (tests.size() > 1) {
-						throw new Exception(
-								"GUIFunctionality_refine - semanticPropertyRefine: impossible to generate test cases.");
+					final Module comp = AlloyUtil.compileAlloyModel(sem_with.toString());
+					final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
+
+					if (!sol.satisfiable()) {
+						System.out
+						.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+						break mainloop;
 					}
 
-					final String new_prop = AlloyUtil.extractProperty(tests.get(0)
-							.getAlloySolution(), sem_with);
+					final String new_prop = AlloyUtil.extractProperty(sol, sem_with);
 					System.out.println("VALIDATING PROPERTY: " + new_prop);
 
 					if (!this.validateProperty(new_prop, sem_with)) {
+						false_constraints.add("not(" + new_prop + ")");
 						this.unvalid_constraints.add("not(" + new_prop + ")");
 
 					} else {
-						this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
+						// this.unvalid_constraints.add("not(" +
+						// this.valid_constraint + ")");
 						this.valid_constraint = new_prop;
-						break;
+						true_constraints = new ArrayList<>();
+						true_constraints.add(this.valid_constraint);
+
+						sem_with = this.addConstrain(mod, true_constraints);
+						continue mainloop;
 					}
 				}
-
 			}
 			if (tests.size() > 1) {
 				throw new Exception(
@@ -1239,7 +1183,8 @@ public class GUIFunctionality_refine {
 
 					} else {
 						System.out
-								.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+								.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
+						this.valid_constraint = "";
 						return;
 					}
 				}
