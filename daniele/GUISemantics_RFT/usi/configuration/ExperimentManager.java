@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
 import org.w3c.dom.Document;
 
@@ -80,5 +82,20 @@ public class ExperimentManager {
 			out_f = path;
 		}
 		XMLUtil.save(out_f, doc);
+	}
+
+	public static void dumpTCresult(final List<String> results) throws Exception {
+
+		final String directory = "output" + File.separator + "testcases_result_"
+				+ DateUtility.now();
+		new File(directory).mkdir();
+		int cont = 1;
+		for (final String result : results) {
+			final PrintWriter writer = new PrintWriter(directory + File.separator + "testcase"
+					+ cont + "_result.txt", "UTF-8");
+			writer.print(result);
+			writer.close();
+			cont++;
+		}
 	}
 }

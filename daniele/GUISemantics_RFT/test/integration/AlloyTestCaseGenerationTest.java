@@ -96,9 +96,13 @@ public class AlloyTestCaseGenerationTest {
 				}
 			}
 			inst.getSemantics().generate_run_commands();
+			inst.getSemantics().addRun_command("run {System}");
+			inst.getSemantics().addRun_command("run {System} for 7");
+			inst.getSemantics().addRun_command("run {System} for 7 but 5 Time");
+
 			final For_test generator = new For_test(inst, 1, 40000);
 			final List<GUITestCase> tests = generator.generateTestCases();
-			assertEquals(3, tests.size());
+			assertEquals(6, tests.size());
 		} catch (final Exception e) {
 			e.printStackTrace();
 			fail();

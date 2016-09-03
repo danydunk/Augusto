@@ -6,8 +6,15 @@ import usi.gui.structure.Window;
 
 public class OracleChecker {
 
+	private String description_last_check;
+
 	public OracleChecker() {
 
+	}
+
+	public String getDescriptionOfLastOracleCheck() {
+
+		return this.description_last_check;
 	}
 
 	/**
@@ -20,8 +27,14 @@ public class OracleChecker {
 	 */
 	public int check(final GUITestCaseResult result) {
 
+		this.description_last_check = "";
+
 		if (result.getActions_executed().size() < result.getTc().getActions().size()) {
-			// System.out.println("diff actions");
+			this.description_last_check += "TESTCASE NOT RUN CORRECTLY";
+			this.description_last_check += System.lineSeparator();
+			this.description_last_check += "ACTIONS TO EXECUTE "
+					+ result.getTc().getActions().size() + " BUT EXECUTED ONLY "
+					+ result.getActions_executed().size();
 			return 0;
 		}
 
@@ -34,38 +47,63 @@ public class OracleChecker {
 			if (!actual.getId().equals(oracle.getId())) {
 				// System.out.println("diff winid " + actual.getId() + " " +
 				// oracle.getId());
-
+				this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += "ERROR AT ACTION " + (cont + 1);
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += "EXPECTED WINDOW " + oracle.getId() + " BUT IT WAS "
+						+ actual.getId();
 				return -1;
 			}
 			if (actual.getActionWidgets().size() < oracle.getActionWidgets().size()) {
-				// System.out.println("diff aws size");
-
+				this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += "ERROR AT ACTION " + (cont + 1);
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += "EXPECTED ACTION WIDGET SIZE "
+						+ oracle.getActionWidgets().size() + " BUT IT WAS "
+						+ actual.getActionWidgets().size();
 				return -1;
 			}
 			if (actual.getInputWidgets().size() < oracle.getInputWidgets().size()) {
-				// System.out.println("diff iws size");
-
+				this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += "ERROR AT ACTION " + (cont + 1);
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += "EXPECTED INPUT WIDGET SIZE "
+						+ oracle.getActionWidgets().size() + " BUT IT WAS "
+						+ actual.getActionWidgets().size();
 				return -1;
+
 			}
 			if (actual.getSelectableWidgets().size() < oracle.getSelectableWidgets().size()) {
-				// System.out.println("diff sws size");
-
+				this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += "ERROR AT ACTION " + (cont + 1);
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += "EXPECTED SELECTABLE WIDGET SIZE "
+						+ oracle.getActionWidgets().size() + " BUT IT WAS "
+						+ actual.getActionWidgets().size();
 				return -1;
 			}
 
 			for (final Input_widget iw : oracle.getInputWidgets()) {
 				final Input_widget actual_iw = (Input_widget) actual.getWidget(iw.getId());
 				if (actual_iw == null) {
-					// System.out.println("iw null");
-
+					this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+					this.description_last_check += System.lineSeparator();
+					this.description_last_check += "ERROR AT ACTION " + (cont + 1);
+					this.description_last_check += System.lineSeparator();
+					this.description_last_check += "INPUT WIDGET " + iw.getId() + " NOT FOUND";
 					return -1;
 				}
 				if (!actual_iw.getValue().equals(iw.getValue())) {
-					// System.out.println("diff value " + actual_iw.getId() +
-					// " "
-					// + actual_iw.getValue() + " " + iw.getId() + " " +
-					// iw.getValue());
-
+					this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+					this.description_last_check += System.lineSeparator();
+					this.description_last_check += "ERROR AT ACTION " + (cont + 1);
+					this.description_last_check += System.lineSeparator();
+					this.description_last_check += "EXPECTED INPUT WIDGET " + iw.getId()
+							+ " VALUE " + iw.getValue() + " BUT IT WAS " + actual_iw.getValue();
 					return -1;
 				}
 			}
@@ -74,21 +112,27 @@ public class OracleChecker {
 				final Selectable_widget actual_sw = (Selectable_widget) actual
 						.getWidget(sw.getId());
 				if (actual_sw == null) {
-					// System.out.println("sw null");
-
+					this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+					this.description_last_check += System.lineSeparator();
+					this.description_last_check += "ERROR AT ACTION " + (cont + 1);
+					this.description_last_check += System.lineSeparator();
+					this.description_last_check += "SELECTABLE WIDGET " + sw.getId() + " NOT FOUND";
 					return -1;
 				}
 				if (actual_sw.getSize() != sw.getSize()
 						|| actual_sw.getSelected() != sw.getSelected()) {
-					// System.out
-					// .println("diff selected " + actual_sw.getSize() + " "
-					// + actual_sw.getSelected() + " " + sw.getSize() + " "
-					// + sw.getSelected());
-
+					this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+					this.description_last_check += System.lineSeparator();
+					this.description_last_check += "ERROR AT ACTION " + (cont + 1);
+					this.description_last_check += System.lineSeparator();
+					this.description_last_check += "EXPECTED SELECTABLE WIDGET SIZE AND SELECTION "
+							+ sw.getSize() + " AND " + sw.getSelected() + " BUT IT WAS "
+							+ actual_sw.getSize() + " AND " + actual_sw.getSelected();
 					return -1;
 				}
 			}
 		}
+		this.description_last_check += "TEST CASE RUN CORRECTLY";
 		return 1;
 	}
 }
