@@ -1,5 +1,6 @@
 package usi.gui.semantic.testcase;
 
+import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
@@ -7,9 +8,12 @@ import usi.gui.structure.Window;
 public class OracleChecker {
 
 	private String description_last_check;
+	// needed to manage standard values
+	private final GUI gui;
 
-	public OracleChecker() {
+	public OracleChecker(final GUI gui) {
 
+		this.gui = gui;
 	}
 
 	public String getDescriptionOfLastOracleCheck() {
@@ -98,6 +102,17 @@ public class OracleChecker {
 					return -1;
 				}
 				if (!actual_iw.getValue().equals(iw.getValue())) {
+					// TODO: change it
+					// we manage iw that have a standard value
+					final Window ww = this.gui.getWindow(oracle.getId());
+					final Input_widget iw_gui = (Input_widget) ww.getWidget(actual_iw.getId());
+					// if the iw has a standard value and the oracle expects
+					// nothing it is ok
+					if (iw_gui.getValue() != null && iw_gui.getValue().length() > 0
+							&& iw.getValue().length() == 0) {
+						continue;
+					}
+
 					this.description_last_check += "FUNCTIONAL ORACLE ERROR";
 					this.description_last_check += System.lineSeparator();
 					this.description_last_check += "ERROR AT ACTION " + (cont + 1);

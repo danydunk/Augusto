@@ -122,8 +122,8 @@ public class GUIFunctionality_validate {
 
 		final Alloy_Model mod = new Alloy_Model(
 				this.instancePattern.getSemantics().getSignatures(), this.instancePattern
-						.getSemantics().getFacts(), this.instancePattern.getSemantics()
-						.getPredicates(), this.instancePattern.getSemantics().getFunctions(),
+				.getSemantics().getFacts(), this.instancePattern.getSemantics()
+				.getPredicates(), this.instancePattern.getSemantics().getFunctions(),
 				this.instancePattern.getSemantics().getOpenStatements());
 		for (final String run : new_run_commands) {
 			mod.addRun_command(run);
@@ -142,7 +142,7 @@ public class GUIFunctionality_validate {
 			results.add(runner.runTestCase(tc));
 		}
 
-		final OracleChecker oracle = new OracleChecker();
+		final OracleChecker oracle = new OracleChecker(this.gui);
 		final List<String> testcases_out = new ArrayList<>();
 		for (final GUITestCaseResult res : results) {
 			oracle.check(res);
