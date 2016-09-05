@@ -1048,7 +1048,7 @@ public class GUIFunctionality_refine {
 
 		final long beginTime = System.currentTimeMillis();
 
-		final OracleChecker oracle = new OracleChecker();
+		final OracleChecker oracle = new OracleChecker(this.gui);
 
 		final String runCmd = "run {"
 				+ "System and "
@@ -1131,9 +1131,9 @@ public class GUIFunctionality_refine {
 						"GUIFunctionality_refine - semanticPropertyRefine: impossible to generate test cases.");
 			}
 
-			// for (final GUIAction a : tests.get(0).getActions()) {
-			// System.out.println(a);
-			// }
+			for (final GUIAction a : tests.get(0).getActions()) {
+				System.out.println(a);
+			}
 
 			final GUITestCase tc = tests.get(0);
 
@@ -1156,6 +1156,10 @@ public class GUIFunctionality_refine {
 				break;
 			case -1:
 				System.out.println("DIFFERENT BEAHVIOUR");
+				// System.out.println();
+				// System.out.println(oracle.getDescriptionOfLastOracleCheck());
+				// System.out.println();
+
 				this.unvalid_constraints.add("not(" + this.valid_constraint + ")");
 
 				final SpecificSemantics sem_without = SpecificSemantics.instantiate(AlloyUtil

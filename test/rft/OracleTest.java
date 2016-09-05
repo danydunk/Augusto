@@ -38,7 +38,7 @@ public class OracleTest extends OracleTestHelper {
 	public void testMain(final Object[] args) {
 
 		try {
-			final OracleChecker oracle = new OracleChecker();
+			final OracleChecker oracle = new OracleChecker(new GUI());
 			ApplicationHelper application = null;
 			final String conf_file = "files" + File.separator + "for_test" + File.separator
 					+ "config" + File.separator + "upm.properties";
