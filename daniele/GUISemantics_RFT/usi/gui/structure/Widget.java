@@ -8,13 +8,13 @@ import com.rational.test.ft.object.interfaces.TestObject;
 
 public abstract class Widget implements Comparable<Widget> {
 
-	private final String id;
-	private final String label;
-	private String descriptor;
-	private final String classs;
-	private final int x;
-	private final int y;
-	private TestObject to;
+	protected final String id;
+	protected final String label;
+	protected String descriptor;
+	protected final String classs;
+	protected final int x;
+	protected final int y;
+	protected TestObject to;
 
 	public Widget(final TestObject to, final String id, final String label, final String classs,
 			final int x, final int y) throws Exception {
@@ -132,14 +132,14 @@ public abstract class Widget implements Comparable<Widget> {
 
 	protected boolean sameProperties(final Widget w) {
 
-		// we use the position +- delta to match
-		final int delta = 1;
-		if (w.x > this.x + delta || w.x < this.x - delta) {
-			return false;
-		}
-		if (w.y > this.y + delta || w.y < this.y - delta) {
-			return false;
-		}
+		// // we use the position +- delta to match
+		// final int delta = 1;
+		// if (w.x > this.x + delta || w.x < this.x - delta) {
+		// return false;
+		// }
+		// if (w.y > this.y + delta || w.y < this.y - delta) {
+		// return false;
+		// }
 
 		// TODO: what if the label changes?
 		if (w.label == null && this.label != null) {
@@ -149,6 +149,15 @@ public abstract class Widget implements Comparable<Widget> {
 			return false;
 		}
 		if (w.label != null && !w.label.equals(this.label)) {
+			return false;
+		}
+		if (w.descriptor == null && this.descriptor != null) {
+			return false;
+		}
+		if (w.descriptor != null && this.descriptor == null) {
+			return false;
+		}
+		if (w.descriptor != null && !w.descriptor.equals(this.descriptor)) {
 			return false;
 		}
 		if (!w.classs.equals(this.classs)) {

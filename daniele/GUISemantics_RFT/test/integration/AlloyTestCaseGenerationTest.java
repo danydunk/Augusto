@@ -15,6 +15,7 @@ import test.gui.pattern.GUIPatternMaker;
 import test.gui.structure.GUIStructureMaker;
 import usi.gui.functionality.GUIFunctionality_refine;
 import usi.gui.functionality.GUIFunctionality_search;
+import usi.gui.functionality.GUIFunctionality_validate;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
 import usi.gui.functionality.mapping.Instance_window;
 import usi.gui.pattern.GUI_Pattern;
@@ -90,12 +91,20 @@ public class AlloyTestCaseGenerationTest {
 				}
 
 				@Override
-				protected GUITestCase analyzeTuples(final A4Solution solution) throws Exception {
+				protected GUITestCase analyzeTuples(final A4Solution solution, final String run)
+						throws Exception {
 
 					return null;
 				}
 			}
-			inst.getSemantics().generate_run_commands();
+			final Instance_GUI_pattern inst2 = new Instance_GUI_pattern(new GUI(),
+					new GUI_Pattern(), new ArrayList<Instance_window>());
+			final Wrapper2 wr = new Wrapper2(inst2, null);
+			final List<String> runs = wr.generate(inst.getSemantics());
+			for (final String run : runs) {
+				inst.getSemantics().addRun_command(run);
+			}
+
 			inst.getSemantics().addRun_command("run {System}");
 			inst.getSemantics().addRun_command("run {System} for 7");
 			inst.getSemantics().addRun_command("run {System} for 7 but 5 Time");
@@ -144,9 +153,15 @@ public class AlloyTestCaseGenerationTest {
 		final Instance_GUI_pattern in = res.get(0);
 
 		in.generateSpecificSemantics();
-		System.out.println(in.getSemantics());
 
-		in.getSemantics().generate_run_commands();
+		final Instance_GUI_pattern inst = new Instance_GUI_pattern(new GUI(), new GUI_Pattern(),
+				new ArrayList<Instance_window>());
+		final Wrapper2 wr = new Wrapper2(inst, null);
+		final List<String> runs = wr.generate(in.getSemantics());
+		for (final String run : runs) {
+			in.getSemantics().addRun_command(run);
+		}
+
 		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(in, 2, 100000);
 		final List<GUITestCase> tests = generator.generateTestCases();
 		assertEquals(4, tests.size());
@@ -167,6 +182,36 @@ public class AlloyTestCaseGenerationTest {
 
 			return super.semantic4DiscoverWindow(originalSemantic, sourceWindow,
 					pattern_TargetWindow, actionWidget);
+		}
+	}
+
+	class Wrapper2 extends GUIFunctionality_validate {
+
+		public Wrapper2(final Instance_GUI_pattern instancePattern, final GUI gui) throws Exception {
+
+			super(instancePattern, gui);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void init() {
+
+		}
+
+		@Override
+		public void generate_run_commands(final FunctionalitySemantics sem) throws Exception {
+
+			if (sem == null) {
+				return;
+			} else {
+				super.generate_run_commands(sem);
+			}
+		}
+
+		public List<String> generate(final FunctionalitySemantics sem) throws Exception {
+
+			super.generate_run_commands(sem);
+			return super.getAllSemanticCases();
 		}
 	}
 }

@@ -176,7 +176,7 @@ public class AlloyUtilsTest {
 		final Instance_GUI_pattern in = res.get(0);
 
 		final SpecificSemantics specsem = SpecificSemantics.generate(in);
-		specsem.generate_run_commands();
+		specsem.addRun_command("run {System and {one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and ((aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0)) and (not (unique_test [t]) and not (filled_required_test [t]))} } for 9");
 
 		// Save it, and verify if it can be reloaded
 		final String plainConcreteModel = specsem.toString();
@@ -188,7 +188,7 @@ public class AlloyUtilsTest {
 		System.out.println(specsem);
 
 		// Now, let's see if there is a solution
-		final Command command = moduleAlloyMit.getAllCommands().get(3);
+		final Command command = moduleAlloyMit.getAllCommands().get(0);
 		final A4Solution asol = AlloyUtil.runCommand(moduleAlloyMit, command);
 		assertTrue(asol.satisfiable());
 		final String out = AlloyUtil.extractProperty(asol, specsem);

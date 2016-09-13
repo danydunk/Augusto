@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Semantic_predicate extends Predicate {
+
 	// the name of the predicate must be <operation predicate name>_semantics
 
 	// Map that contains the semantic cases
@@ -16,6 +17,7 @@ public class Semantic_predicate extends Predicate {
 
 	public Semantic_predicate(final String name, final String content,
 			final LinkedHashMap<Signature, List<String>> inputs) throws Exception {
+
 		super(name, content, inputs);
 		this.cases = new HashMap<String, List<String>>();
 		this.detetcCases();
@@ -37,14 +39,14 @@ public class Semantic_predicate extends Predicate {
 			final int index = line.lastIndexOf("=>");
 			final String precondition = line.substring(0, index).trim();
 			String postcondition = line.substring(index + 2, line.length()).trim();
-			if (postcondition.startsWith("(") && postcondition.endsWith("")) {
+			if (postcondition.startsWith("(") && postcondition.endsWith(")")) {
 				postcondition = postcondition.substring(1, postcondition.length() - 1);
 			}
 
 			final List<String> preds = new ArrayList<>();
 			while (true) {
-				final int index_and = postcondition.indexOf("and");
-				final int index_or = postcondition.indexOf("or");
+				final int index_and = postcondition.indexOf(" and ");
+				final int index_or = postcondition.indexOf(" or ");
 				if (index_and == -1 && index_or == -1) {
 					preds.add(postcondition);
 					break;
@@ -59,7 +61,7 @@ public class Semantic_predicate extends Predicate {
 				}
 				final String pred = postcondition.substring(0, ind).trim();
 				preds.add(pred);
-				postcondition = postcondition.substring(ind + 3).trim();
+				postcondition = postcondition.substring(ind + 4).trim();
 			}
 			if (preds.size() == 0) {
 				throw new Exception("Semantic_predicate - detetcCases: error");

@@ -24,13 +24,10 @@ import usi.gui.semantic.alloy.entity.Function;
 import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
-import usi.gui.semantic.testcase.Click;
-import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.semantic.testcase.GUITestCaseResult;
 import usi.gui.semantic.testcase.OracleChecker;
-import usi.gui.semantic.testcase.Select;
 import usi.gui.semantic.testcase.TestCaseRunner;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
@@ -91,11 +88,11 @@ public class GUIFunctionality_refine {
 				|| old_edges_number != (this.instancePattern.getGui().getNumberOfStaticEdges() + this.instancePattern
 						.getGui().getNumberOfDynamicEdges()));
 		System.out.println("INITIAL CONSTRAINT FOUND: " + this.valid_constraint);
-		// this.valid_constraint =
-		// "#Property_required = 0 and #Property_unique = 0";
+
 		if (this.pattern.isInstance(this.instancePattern)) {
 			System.out.println("PATTERN IS INSTANCE");
 			this.instancePattern.generateSpecificSemantics();
+			// System.out.println(this.instancePattern.getSemantics());
 			// Thread.sleep(100000);
 			this.semanticPropertyRefine();
 			if (this.valid_constraint == null || this.valid_constraint.length() == 0) {
@@ -140,16 +137,19 @@ public class GUIFunctionality_refine {
 				}
 
 				for (final Action_widget aw : matched_aws) {
+
 					final Window source_window = this.gui.getActionWidget_Window(aw.getId());
 
-					if (this.instancePattern.getGui().getDynamicForwardLinks(aw.getId()).size() > 0) {
-						// if we already have a dynamic edge in the pattern for
-						// this aw it makes no sense to look for more
-						System.out
-						.println("DISCOVER DYNAMIC EDGE: we already have a dynamic edge for "
-								+ aw.getId() + ".");
-						continue;
-					}
+					// if
+					// (this.instancePattern.getGui().getDynamicForwardLinks(aw.getId()).size()
+					// > 0) {
+					// // if we already have a dynamic edge in the pattern for
+					// // this aw it makes no sense to look for more
+					// System.out
+					// .println("DISCOVER DYNAMIC EDGE: we already have a dynamic edge for "
+					// + aw.getId() + ".");
+					// continue;
+					// }
 
 					for (final Window target_window : target_w_matched) {
 
@@ -164,6 +164,7 @@ public class GUIFunctionality_refine {
 						final GUITestCase tc = this.getTestToCoverEdge(source_window,
 								target_window, aw);
 						if (tc == null) {
+							System.out.println("DISCOVER DYNAMIC EDGE: edge not found.");
 							continue;
 						}
 
@@ -174,7 +175,7 @@ public class GUIFunctionality_refine {
 							if (!this.instancePattern.getWindows().contains(found)) {
 								this.instancePattern.addWindow(found);
 							}
-							edge = aw.getId() + " - " + found.getPattern().getId();
+							edge = aw.getId() + " - " + found.getInstance().getId();
 							this.covered_dyn_edges.add(edge);
 							this.instancePattern.getGui().addDynamicEdge(aw.getId(),
 									found.getInstance().getId());
@@ -212,7 +213,7 @@ public class GUIFunctionality_refine {
 
 	private void discoverWindows() throws Exception {
 
-		for (final Pattern_window to_discover : this.pattern.getWindows()) {
+		mainloop: for (final Pattern_window to_discover : this.pattern.getWindows()) {
 			final List<Window> target_w_matched = this.instancePattern
 					.getPatternWindowMatches(to_discover.getId());
 			// if target_w_matched is not empty it means the pattern_window was
@@ -230,14 +231,16 @@ public class GUIFunctionality_refine {
 					continue;
 				}
 				for (final Action_widget aw : matched_aws) {
-					if (this.instancePattern.getGui().getDynamicForwardLinks(aw.getId()).size() > 0) {
-						// if we already have a dynamic edge in the pattern for
-						// this aw it makes no sense to look for more
-						System.out
-						.println("DISCOVER DYNAMIC WINDOW: we already have a dynamic edge for "
-								+ aw.getId() + ".");
-						continue;
-					}
+					// if
+					// (this.instancePattern.getGui().getDynamicForwardLinks(aw.getId()).size()
+					// > 0) {
+					// // if we already have a dynamic edge in the pattern for
+					// // this aw it makes no sense to look for more
+					// System.out
+					// .println("DISCOVER DYNAMIC WINDOW: we already have a dynamic edge for "
+					// + aw.getId() + ".");
+					// continue;
+					// }
 
 					final Window source_window = this.gui.getActionWidget_Window(aw.getId());
 
@@ -293,7 +296,7 @@ public class GUIFunctionality_refine {
 
 						this.valid_constraint = this.getAdaptedConstraint(this.instancePattern
 								.getSemantics());
-
+						continue mainloop;
 					} else {
 						System.out.println("DISCOVER DYNAMIC WINDOW: window not found.");
 						this.unvalid_constraints.add(this.getAdaptedConstraint(this.instancePattern
@@ -445,8 +448,8 @@ public class GUIFunctionality_refine {
 					// add constraint
 					this.additional_constraints.add("not(" + property + ")");
 					System.out
-					.println("GET TEST TO DISCOVER WINDOW: new invalid property added - not("
-							+ property + ")");
+							.println("GET TEST TO DISCOVER WINDOW: new invalid property added - not("
+									+ property + ")");
 				}
 			}
 		}
@@ -787,8 +790,7 @@ public class GUIFunctionality_refine {
 		final SpecificSemantics semantif4DiscoverWindow = new SpecificSemantics(signatures, facts,
 				predicates, functions, opens);
 
-		String runCom = "run {System}";
-		runCom = runCom;
+		final String runCom = "run {System}";
 
 		semantif4DiscoverWindow.addRun_command(runCom);
 
@@ -797,7 +799,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverEdge(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-					throws Exception {
+			throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {
@@ -873,9 +875,8 @@ public class GUIFunctionality_refine {
 		final SpecificSemantics semantif4DiscoverWindow = new SpecificSemantics(signatures, facts,
 				predicates, functions, opens);
 
-		String runCom = "run {System}";
+		final String runCom = "run {System}";
 
-		runCom = runCom;
 		semantif4DiscoverWindow.addRun_command(runCom);
 
 		return semantif4DiscoverWindow;
@@ -904,8 +905,8 @@ public class GUIFunctionality_refine {
 				res = runner.runTestCase(tc);
 			} catch (final Exception e) {
 				System.out
-				.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
-						+ e.getMessage());
+						.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
+								+ e.getMessage());
 				e.printStackTrace();
 				return null;
 			}
@@ -931,7 +932,13 @@ public class GUIFunctionality_refine {
 				results.add(res.getActions_executed().size() - 1, previoulsy_found);
 				res.setResults(results);
 			}
-			this.observed_tcs.add(res);
+
+			// we dont need the result
+			final GUITestCase new_tc = new GUITestCase(null, res.getTc().getActions(), res.getTc()
+					.getRunCommand());
+			final GUITestCaseResult new_res = new GUITestCaseResult(new_tc,
+					res.getActions_executed(), res.getResults(), res.getActions_actually_executed());
+			this.observed_tcs.add(new_res);
 		}
 		if (previoulsy_found == null) {
 			// the window is new
@@ -965,7 +972,6 @@ public class GUIFunctionality_refine {
 			return null;
 		} else {
 			// the window was found before
-			ApplicationHelper.getInstance().closeApplication();
 			this.gui.addDynamicEdge(aw.getId(), previoulsy_found.getId());
 			for (final Instance_window iw : this.instancePattern.getWindows()) {
 				if (iw.getPattern().getId().equals(target.getId())
@@ -990,58 +996,13 @@ public class GUIFunctionality_refine {
 
 	private GUITestCaseResult wasTestCasePreviouslyExecuted(final GUITestCase tc) {
 
-		mainloop: for (final GUITestCaseResult tc2 : this.observed_tcs) {
-			if (tc2.getTc().getActions().size() != tc.getActions().size()) {
-				continue;
+		for (final GUITestCaseResult tc2 : this.observed_tcs) {
+			if (tc.isSame(tc2.getTc())) {
+				return tc2;
 			}
-			for (int cont = 0; cont < tc.getActions().size(); cont++) {
-				final GUIAction act1 = tc.getActions().get(cont);
-				final GUIAction act2 = tc2.getTc().getActions().get(cont);
-
-				if (!act1.getWidget().getId().equals(act2.getWidget().getId())
-						|| !act1.getWindow().getId().equals(act2.getWindow().getId())) {
-					continue mainloop;
-				}
-
-				if (act1 instanceof Click) {
-
-					if (!(act2 instanceof Click)) {
-						continue mainloop;
-					}
-				}
-				if (act1 instanceof Fill) {
-
-					if (!(act2 instanceof Fill)) {
-						continue mainloop;
-					}
-					final Fill fill1 = (Fill) act1;
-					final Fill fill2 = (Fill) act2;
-
-					if (!fill1.getInput().equals(fill2.getInput())) {
-						continue mainloop;
-					}
-
-				}
-				if (act1 instanceof Select) {
-
-					if (!(act2 instanceof Select)) {
-						continue mainloop;
-					}
-					final Select select1 = (Select) act1;
-					final Select select2 = (Select) act2;
-
-					if (select1.getIndex() != select2.getIndex()) {
-						continue mainloop;
-					}
-				}
-
-			}
-			return tc2;
-			// return tc2.getResults().get(tc2.getActions_executed().size() -
-			// 1);
 		}
 
-	return null;
+		return null;
 	}
 
 	private void semanticPropertyRefine() throws Exception {
@@ -1103,7 +1064,7 @@ public class GUIFunctionality_refine {
 
 					if (!sol.satisfiable()) {
 						System.out
-						.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+								.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 						break mainloop;
 					}
 
@@ -1131,9 +1092,9 @@ public class GUIFunctionality_refine {
 						"GUIFunctionality_refine - semanticPropertyRefine: impossible to generate test cases.");
 			}
 
-			for (final GUIAction a : tests.get(0).getActions()) {
-				System.out.println(a);
-			}
+			// for (final GUIAction a : tests.get(0).getActions()) {
+			// System.out.println(a + " " + a.getWidget().getId());
+			// }
 
 			final GUITestCase tc = tests.get(0);
 
@@ -1156,7 +1117,6 @@ public class GUIFunctionality_refine {
 				break;
 			case -1:
 				System.out.println("DIFFERENT BEAHVIOUR");
-				// System.out.println();
 				// System.out.println(oracle.getDescriptionOfLastOracleCheck());
 				// System.out.println();
 
@@ -1187,7 +1147,7 @@ public class GUIFunctionality_refine {
 
 					} else {
 						System.out
-								.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
+						.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
 						this.valid_constraint = "";
 						return;
 					}
@@ -1250,7 +1210,7 @@ public class GUIFunctionality_refine {
 				try {
 					this.solution = AlloyUtil.runCommand(this.model, this.run_command);
 				} catch (final Exception e) {
-					e.printStackTrace();
+					// e.printStackTrace();
 					this.exception = true;
 				}
 			}
@@ -1304,10 +1264,16 @@ public class GUIFunctionality_refine {
 					continue;
 				} else {
 					if (run.exception) {
+						for (final Run_command_thread run2 : threads) {
+							run2.interrupt();
+						}
 						throw new Exception("GUIFunctionality_refine - validateProperty: error.");
 					}
 					final A4Solution sol = run.solution;
 					if (!sol.satisfiable()) {
+						for (final Run_command_thread run2 : threads) {
+							run2.interrupt();
+						}
 						System.out.println("VALIDATE PROPERTY: -false- end.");
 						return false;
 					}

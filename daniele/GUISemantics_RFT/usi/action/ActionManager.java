@@ -36,6 +36,10 @@ public class ActionManager {
 
 		final GuiStateManager guimanager = GuiStateManager.getInstance();
 		final Window currWind = guimanager.getCurrentWindows().get(0);
+		// System.out.println(act.getWindow());
+		// System.out.println(act.getWindow().getId());
+		// System.out.println(currWind.getId());
+
 		if (act.getWindow() == null || !currWind.isSame(act.getWindow())) {
 			throw new Exception("ActionManager - executeAction: wrong source reference.");
 		}

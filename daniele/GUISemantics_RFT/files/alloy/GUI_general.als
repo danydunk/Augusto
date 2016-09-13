@@ -1,4 +1,5 @@
 open util/ordering [Time] as T
+open util/ordering [Input_widget] as IW
 open util/ternary
 open util/relation
 -----------------------Utils------------------------
@@ -32,12 +33,12 @@ pred System {
 	all t: Time - T/last | transition [t, T/next[t]]
 }
 fact{
-	no t: Time| (not t = T/first) and (not t in ran[Track.op])
-	no o: Operation | not o in dom [Track.op]
-	all t: Time | not t = T/first => #Current_window.is_in.t = 1
-	all t: Time, g: Go | Track.op.t = g => (Current_window.is_in.(T/prev[t]) = General and (not g.where in General))
-	all t,t':Time| no f, f': Fill | t' = T/next[t] and Track.op.t = f and Track.op.t' =f' and f.filled = (f').filled and f.with = (f').with
-	all t,t':Time| no s, s': Select | t' = T/next[t] and Track.op.t = s and Track.op.t' =s' and s.selected = (s').selected and s.wid = (s').wid
+	//no t: Time| (not t = T/first) and (not t in ran[Track.op])
+	//no o: Operation | not o in dom [Track.op]
+	//all t: Time | not t = T/first => #Current_window.is_in.t = 1
+	//all t: Time, g: Go | Track.op.t = g => (Current_window.is_in.(T/prev[t]) = General and (not g.where in General))
+	//all t,t':Time| no f, f': Fill | t' = T/next[t] and Track.op.t = f and Track.op.t' =f' and f.filled = (f').filled and f.with = (f').with
+	//all t,t':Time| no s, s': Select | t' = T/next[t] and Track.op.t = s and Track.op.t' =s' and s.selected = (s').selected and s.wid = (s').wid
 }
 ----------------Generic GUI Structure ----------------
 abstract sig Window {
@@ -47,7 +48,7 @@ abstract sig Window {
 }
 one sig General extends Window { }
 abstract sig Action_widget {
-	goes: lone Window
+	goes: set Window
 }
 sig Value { }
 sig Invalid in Value { }
@@ -62,7 +63,7 @@ abstract sig Selectable_widget {
 	selected: Object lone ->Time
 }
 fact {
-	all gw: General |  #gw.iws = 0 and #gw.aws = 0 and #gw.sws = 0
+	#General.iws = 0 and #General.aws = 0 and #General.sws = 0
 	all iw: Input_widget | one w: Window | iw in w.iws
 	all aw: Action_widget | one w: Window | aw in w.aws and #aw.goes < 2
 	all sw: Selectable_widget | one w: Window | sw in w.sws
@@ -77,8 +78,8 @@ pred click [aw: Action_widget, t, t': Time, c: Click] {
 	aw in Current_window.is_in.t.aws
 	click_pre [aw, t]
 	--- effect ---
-	(click_semantics [aw, t] and Current_window.is_in.t' = aw.goes and click_success_post [aw, t, t']) or
-	//(click_semantics  [aw, t] and not #aw.goes = 1 and Current_window.is_in.t' = General and click_success_post [aw, t, t']) or
+	(click_semantics [aw, t] and #aw.goes = 1 and Current_window.is_in.t' = aw.goes and click_success_post [aw, t, t']) or
+	(click_semantics [aw, t]  and not(#aw.goes = 1) and click_success_post [aw, t, t']) or
 	(not click_semantics  [aw, t] and Current_window.is_in.t' = Current_window.is_in.t and click_fail_post [aw, t, t'])
 	--- operation is tracked ---
 	c.clicked = aw and Track.op.t' = c

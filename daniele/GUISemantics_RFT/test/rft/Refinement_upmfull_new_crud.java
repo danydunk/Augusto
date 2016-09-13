@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 
-import resources.test.rft.UPM_fullHelper;
+import resources.test.rft.Refinement_upmfull_new_crudHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
 import usi.gui.functionality.GUIFunctionality_refine;
@@ -22,14 +22,14 @@ import usi.xml.XMLUtil;
  *
  * @author usi
  */
-public class UPM_full extends UPM_fullHelper {
+public class Refinement_upmfull_new_crud extends Refinement_upmfull_new_crudHelper {
 
 	/**
-	 * Script Name : <b>UPM_full</b> Generated : <b>Aug 7, 2016 2:20:28 AM</b>
-	 * Description : Functional Test Script Original Host : WinNT Version 6.1
-	 * Build 7601 (S)
+	 * Script Name : <b>Refinement_upmfull_new_crud</b> Generated : <b>Sep 7,
+	 * 2016 2:30:37 AM</b> Description : Functional Test Script Original Host :
+	 * WinNT Version 6.1 Build 7601 (S)
 	 *
-	 * @since 2016/08/07
+	 * @since 2016/09/07
 	 * @author usi
 	 */
 	public void testMain(final Object[] args) {
@@ -38,12 +38,12 @@ public class UPM_full extends UPM_fullHelper {
 			ConfigurationManager.load("./files/for_test/config/upm.properties");
 			ExperimentManager.init();
 			// we load a gui pattern
-			Document doc = XMLUtil.read(new File("./files/xml/new_crud.xml").getAbsolutePath());
+			Document doc = XMLUtil.read(new File("./files/xml/crud.xml").getAbsolutePath());
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-					.getAbsolutePath());
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -52,7 +52,7 @@ public class UPM_full extends UPM_fullHelper {
 			Instance_GUI_pattern match = res.get(0);
 
 			match.generateSpecificSemantics();
-
+			System.out.println(match.getSemantics());
 			final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
 			match = refiner.refine();
 			if (match == null) {

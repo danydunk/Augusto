@@ -25,9 +25,7 @@ import usi.gui.semantic.alloy.entity.AlloyEntity;
 import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.structure.GUI;
-import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
-import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 public class SpecificSemanticTest {
 
@@ -65,7 +63,6 @@ public class SpecificSemanticTest {
 		final Instance_GUI_pattern in = res.get(0);
 
 		final SpecificSemantics specsem = SpecificSemantics.generate(in);
-		specsem.generate_run_commands();
 		// System.out.println(specsem);
 		assertNotNull(specsem);
 
@@ -135,17 +132,5 @@ public class SpecificSemanticTest {
 		assertTrue(moduleAlloyMit.getAllFunc().size() >= loadedModelAlloyComplete.getFunctions()
 				.size());
 
-		boolean anySat = false;
-		// Now, let's see if there is a solution
-		for (final Command command : moduleAlloyMit.getAllCommands()) {
-			// Command command = moduleAlloyMit.getAllCommands().get(0);
-			final A4Solution asol = AlloyUtil.runCommand(moduleAlloyMit, command);
-			assertNotNull(asol);
-			anySat = anySat || (asol.satisfiable());
-			// if (asol.satisfiable()) {
-			// System.out.println("Sat command\n " + command);
-			// }
-		}
-		assertTrue(anySat);
 	}
 }

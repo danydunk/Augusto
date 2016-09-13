@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -182,6 +183,9 @@ public class AlloyUtil {
 
 		final A4Options options = new A4Options();
 		options.solver = A4Options.SatSolver.SAT4J;
+		options.solver = A4Options.SatSolver.SAT4J;
+		options.skolemDepth = 1;
+		options.unrolls = -1;
 		A4Solution solution = null;
 
 		try {
@@ -227,6 +231,8 @@ public class AlloyUtil {
 
 				final A4Options options = new A4Options();
 				options.solver = A4Options.SatSolver.SAT4J;
+				options.skolemDepth = 1;
+				options.unrolls = -1;
 				try {
 					final A4Solution app = TranslateAlloyToKodkod.execute_command(rep,
 							model.getAllReachableSigs(), run_command, options);
@@ -777,8 +783,12 @@ public class AlloyUtil {
 		final Fact initial_fact = createFactsForElement(iws.values(), window, "iws");
 		String content = initial_fact.getContent();
 		final DataManager dm = DataManager.getInstance();
+		// to fix the problem of the view window
+		// TODO: find another solution
+		final List<Input_widget> to_order = new ArrayList<>();
 
 		for (final Input_widget iw : iws.keySet()) {
+			to_order.add(iw);
 			if (iw instanceof Option_input_widget) {
 				final Option_input_widget oiw = (Option_input_widget) iw;
 				if (oiw.getSize() == 0) {
@@ -817,9 +827,84 @@ public class AlloyUtil {
 			}
 
 		}
+		// content += System.getProperty("line.separator");
+		Collections.sort(to_order);
+		for (int cont = 0; cont < (to_order.size() - 1); cont++) {
+			if (cont != 0) {
+				content += " and ";
+			}
+			content += "IW/next[" + iws.get(to_order.get(cont)).getIdentifier() + "]="
+					+ iws.get(to_order.get(cont + 1)).getIdentifier();
+		}
+
 		final Fact fact = new Fact(window.getIdentifier() + "_iws", content);
 		return fact;
 	}
+
+	// /**
+	// * Method that links Windows signatures with Action Widget Signatures
+	// * according to the structure of the GUI. it requires also the gui and the
+	// * list of added signatures to add fact about the edges
+	// *
+	// * @param aws
+	// * @param window
+	// * @throws Exception
+	// */
+	// public static Fact createFactsForActionWidget(final Map<Action_widget,
+	// Signature> aws,
+	// final Signature window, final Map<Window, Signature> ws, final GUI gui)
+	// throws Exception {
+	//
+	// final Fact initial_fact = createFactsForElement(aws.values(), window,
+	// "aws");
+	// String content = initial_fact.getContent();
+	//
+	// for (final Action_widget aw : aws.keySet()) {
+	// final List<Window> edges = new ArrayList<>();
+	// for (final Window w : gui.getDynamicForwardLinks(aw.getId())) {
+	// if (ws.containsKey(w)) {
+	// edges.add(w);
+	// }
+	// }
+	//
+	// if (edges.size() > 0) {
+	// content += System.getProperty("line.separator") +
+	// aws.get(aw).getIdentifier()
+	// + ".goes = ";
+	// int i = 0;
+	// for (final Window edge : edges) {
+	// content += ws.get(edge).getIdentifier();
+	// content += (i + 1 == edges.size()) ? "" : " + ";
+	// i++;
+	// }
+	// } else {
+	// // we put static links only if there are not dynamic ones
+	// for (final Window w : gui.getStaticForwardLinks(aw.getId())) {
+	// if (ws.containsKey(w)) {
+	// edges.add(w);
+	// }
+	// }
+	//
+	// if (edges.size() > 0) {
+	// content += System.getProperty("line.separator") +
+	// aws.get(aw).getIdentifier()
+	// + ".goes = ";
+	// int i = 0;
+	// for (final Window edge : edges) {
+	// content += ws.get(edge).getIdentifier();
+	// content += (i + 1 == edges.size()) ? "" : " + ";
+	// i++;
+	// }
+	// } else {
+	// content += System.getProperty("line.separator") + "#"
+	// + aws.get(aw).getIdentifier() + ".goes = 0";
+	// }
+	// }
+	// }
+	//
+	// final Fact fact = new Fact(window.getIdentifier() + "_aws", content);
+	// return fact;
+	// }
 
 	/**
 	 * Method that links Windows signatures with Action Widget Signatures
@@ -845,6 +930,12 @@ public class AlloyUtil {
 				}
 			}
 
+			for (final Window w : gui.getStaticForwardLinks(aw.getId())) {
+				if (ws.containsKey(w)) {
+					edges.add(w);
+				}
+			}
+
 			if (edges.size() > 0) {
 				content += System.getProperty("line.separator") + aws.get(aw).getIdentifier()
 						+ ".goes = ";
@@ -855,26 +946,8 @@ public class AlloyUtil {
 					i++;
 				}
 			} else {
-				// we put static links only if there are not dynamic ones
-				for (final Window w : gui.getStaticForwardLinks(aw.getId())) {
-					if (ws.containsKey(w)) {
-						edges.add(w);
-					}
-				}
-
-				if (edges.size() > 0) {
-					content += System.getProperty("line.separator") + aws.get(aw).getIdentifier()
-							+ ".goes = ";
-					int i = 0;
-					for (final Window edge : edges) {
-						content += ws.get(edge).getIdentifier();
-						content += (i + 1 == edges.size()) ? "" : " + ";
-						i++;
-					}
-				} else {
-					content += System.getProperty("line.separator") + "#"
-							+ aws.get(aw).getIdentifier() + ".goes = 0";
-				}
+				content += System.getProperty("line.separator") + "#" + aws.get(aw).getIdentifier()
+						+ ".goes = 0";
 			}
 		}
 

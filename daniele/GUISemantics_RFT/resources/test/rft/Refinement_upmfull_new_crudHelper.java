@@ -19,21 +19,21 @@ import com.rational.test.ft.script.*;
 import com.rational.test.ft.vp.IFtVerificationPoint;
 import com.ibm.rational.test.ft.object.interfaces.sapwebportal.*;
 /**
- * Script Name   : <b>TestCaseGeneration_upm_small</b><br>
- * Generated     : <b>2016/09/02 6:33:40 AM</b><br>
+ * Script Name   : <b>Refinement_upmfull_new_crud</b><br>
+ * Generated     : <b>2016/09/07 2:30:37 AM</b><br>
  * Description   : Helper class for script<br>
  * Original Host : Windows 7 amd64 6.1 <br>
  * 
- * @since  September 02, 2016
+ * @since  September 07, 2016
  * @author usi
  */
-public abstract class TestCaseGeneration_upm_smallHelper extends RationalTestScript
+public abstract class Refinement_upmfull_new_crudHelper extends RationalTestScript
 {
 	
 
-	protected TestCaseGeneration_upm_smallHelper()
+	protected Refinement_upmfull_new_crudHelper()
 	{
-		setScriptName("test.rft.TestCaseGeneration_upm_small");
+		setScriptName("test.rft.Refinement_upmfull_new_crud");
 	}
 	
 }

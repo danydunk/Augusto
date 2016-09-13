@@ -32,6 +32,7 @@ public class OracleChecker {
 	public int check(final GUITestCaseResult result) {
 
 		this.description_last_check = "";
+		int res = 1;
 
 		if (result.getActions_executed().size() < result.getTc().getActions().size()) {
 			this.description_last_check += "TESTCASE NOT RUN CORRECTLY";
@@ -39,14 +40,17 @@ public class OracleChecker {
 			this.description_last_check += "ACTIONS TO EXECUTE "
 					+ result.getTc().getActions().size() + " BUT EXECUTED ONLY "
 					+ result.getActions_executed().size();
-			return 0;
+			this.description_last_check += System.lineSeparator();
+
+			res = 0;
 		}
 
-		for (int cont = 0; cont < result.getTc().getActions().size(); cont++) {
+		for (int cont = 0; cont < result.getActions_executed().size(); cont++) {
 			final Window oracle = result.getTc().getActions().get(cont).getOracle();
 			if (oracle == null) {
 				continue;
 			}
+			// System.out.println(cont);
 			final Window actual = result.getResults().get(cont);
 			if (!actual.getId().equals(oracle.getId())) {
 				// System.out.println("diff winid " + actual.getId() + " " +
@@ -55,9 +59,12 @@ public class OracleChecker {
 				this.description_last_check += System.lineSeparator();
 				this.description_last_check += "ERROR AT ACTION " + (cont + 1);
 				this.description_last_check += System.lineSeparator();
-				this.description_last_check += "EXPECTED WINDOW " + oracle.getId() + " BUT IT WAS "
-						+ actual.getId();
-				return -1;
+				this.description_last_check += "EXPECTED WINDOW " + oracle.getId()
+						+ oracle.getLabel() + " BUT IT WAS " + actual.getId() + actual.getLabel();
+				this.description_last_check += System.lineSeparator();
+
+				res = (res == 1) ? -1 : res;
+				continue;
 			}
 			if (actual.getActionWidgets().size() < oracle.getActionWidgets().size()) {
 				this.description_last_check += "FUNCTIONAL ORACLE ERROR";
@@ -67,7 +74,9 @@ public class OracleChecker {
 				this.description_last_check += "EXPECTED ACTION WIDGET SIZE "
 						+ oracle.getActionWidgets().size() + " BUT IT WAS "
 						+ actual.getActionWidgets().size();
-				return -1;
+				this.description_last_check += System.lineSeparator();
+
+				res = (res == 1) ? -1 : res;
 			}
 			if (actual.getInputWidgets().size() < oracle.getInputWidgets().size()) {
 				this.description_last_check += "FUNCTIONAL ORACLE ERROR";
@@ -75,9 +84,11 @@ public class OracleChecker {
 				this.description_last_check += "ERROR AT ACTION " + (cont + 1);
 				this.description_last_check += System.lineSeparator();
 				this.description_last_check += "EXPECTED INPUT WIDGET SIZE "
-						+ oracle.getActionWidgets().size() + " BUT IT WAS "
-						+ actual.getActionWidgets().size();
-				return -1;
+						+ oracle.getInputWidgets().size() + " BUT IT WAS "
+						+ actual.getInputWidgets().size();
+				this.description_last_check += System.lineSeparator();
+
+				res = (res == 1) ? -1 : res;
 
 			}
 			if (actual.getSelectableWidgets().size() < oracle.getSelectableWidgets().size()) {
@@ -86,9 +97,11 @@ public class OracleChecker {
 				this.description_last_check += "ERROR AT ACTION " + (cont + 1);
 				this.description_last_check += System.lineSeparator();
 				this.description_last_check += "EXPECTED SELECTABLE WIDGET SIZE "
-						+ oracle.getActionWidgets().size() + " BUT IT WAS "
-						+ actual.getActionWidgets().size();
-				return -1;
+						+ oracle.getSelectableWidgets().size() + " BUT IT WAS "
+						+ actual.getSelectableWidgets().size();
+				this.description_last_check += System.lineSeparator();
+
+				res = (res == 1) ? -1 : res;
 			}
 
 			for (final Input_widget iw : oracle.getInputWidgets()) {
@@ -99,7 +112,10 @@ public class OracleChecker {
 					this.description_last_check += "ERROR AT ACTION " + (cont + 1);
 					this.description_last_check += System.lineSeparator();
 					this.description_last_check += "INPUT WIDGET " + iw.getId() + " NOT FOUND";
-					return -1;
+					this.description_last_check += System.lineSeparator();
+
+					res = (res == 1) ? -1 : res;
+					continue;
 				}
 				if (!actual_iw.getValue().equals(iw.getValue())) {
 					// TODO: change it
@@ -119,7 +135,9 @@ public class OracleChecker {
 					this.description_last_check += System.lineSeparator();
 					this.description_last_check += "EXPECTED INPUT WIDGET " + iw.getId()
 							+ " VALUE " + iw.getValue() + " BUT IT WAS " + actual_iw.getValue();
-					return -1;
+					this.description_last_check += System.lineSeparator();
+
+					res = (res == 1) ? -1 : res;
 				}
 			}
 
@@ -132,22 +150,26 @@ public class OracleChecker {
 					this.description_last_check += "ERROR AT ACTION " + (cont + 1);
 					this.description_last_check += System.lineSeparator();
 					this.description_last_check += "SELECTABLE WIDGET " + sw.getId() + " NOT FOUND";
-					return -1;
+					this.description_last_check += System.lineSeparator();
+
+					res = (res == 1) ? -1 : res;
 				}
-				if (actual_sw.getSize() != sw.getSize()
-						|| actual_sw.getSelected() != sw.getSelected()) {
+				if (actual_sw.getSize() != sw.getSize()) {
 					this.description_last_check += "FUNCTIONAL ORACLE ERROR";
 					this.description_last_check += System.lineSeparator();
 					this.description_last_check += "ERROR AT ACTION " + (cont + 1);
 					this.description_last_check += System.lineSeparator();
-					this.description_last_check += "EXPECTED SELECTABLE WIDGET SIZE AND SELECTION "
-							+ sw.getSize() + " AND " + sw.getSelected() + " BUT IT WAS "
-							+ actual_sw.getSize() + " AND " + actual_sw.getSelected();
-					return -1;
+					this.description_last_check += "EXPECTED SELECTABLE WIDGET SIZE "
+							+ sw.getSize() + " BUT IT WAS " + actual_sw.getSize();
+					this.description_last_check += System.lineSeparator();
+
+					res = (res == 1) ? -1 : res;
 				}
 			}
 		}
-		this.description_last_check += "TEST CASE RUN CORRECTLY";
-		return 1;
+		if (res == 1) {
+			this.description_last_check += "TEST CASE RUN CORRECTLY";
+		}
+		return res;
 	}
 }
