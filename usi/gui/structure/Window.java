@@ -180,53 +180,82 @@ public class Window extends Widget {
 	@Override
 	public boolean isSame(final Widget w) {
 
+		// we do not consider the label or position cause they can change over
+		// time
+
 		if (!(w instanceof Window)) {
 			return false;
 		}
-		if (!super.sameProperties(w)) {
+		// if (!super.sameProperties(w)) {
+		// return false;
+		// }
+
+		// same class
+		if (!w.classs.equals(this.classs)) {
 			return false;
 		}
 
-		// like in gui ripping a window is the same if it has the same title and
-		// position
+		// position is not reliable
+		// // we use the position +- delta to match
+		// final int delta = 1;
+		// if (w.x > this.x + delta || w.x < this.x - delta) {
+		// System.out.println("2");
+		//
+		// return false;
+		// }
+		// if (w.y > this.y + delta || w.y < this.y - delta) {
+		// System.out.println("3");
+		//
+		// return false;
+		// }
 
-		// // we consider a window to be the same if it has the same widgets
-		// final Window win = (Window) w;
-		// if (win.getActionWidgets().size() != this.getActionWidgets().size())
-		// {
-		// return false;
-		// }
-		// // widgets are ordered by position
-		// for (int cont = 0; cont < this.getActionWidgets().size(); cont++) {
-		// final Action_widget aw = this.getActionWidgets().get(cont);
-		// if (!aw.isSame(win.getActionWidgets().get(cont))) {
-		// return false;
-		// }
-		// }
-		//
-		// if (win.getInputWidgets().size() != this.getInputWidgets().size()) {
-		// return false;
-		// }
-		// // widgets are ordered by position
-		// for (int cont = 0; cont < this.getInputWidgets().size(); cont++) {
-		// final Input_widget iw = this.getInputWidgets().get(cont);
-		// if (!iw.isSame(win.getInputWidgets().get(cont))) {
-		// return false;
-		// }
-		// }
-		//
-		// if (win.getSelectableWidgets().size() !=
-		// this.getSelectableWidgets().size()) {
-		// return false;
-		// }
-		// // widgets are ordered by position
-		// for (int cont = 0; cont < this.getSelectableWidgets().size(); cont++)
-		// {
-		// final Selectable_widget iw = this.getSelectableWidgets().get(cont);
-		// if (!iw.isSame(win.getSelectableWidgets().get(cont))) {
-		// return false;
-		// }
-		// }
+		// we consider a window to be the same if it has the same widgets
+		final Window win = (Window) w;
+		if (win.getActionWidgets().size() != this.getActionWidgets().size()) {
+			return false;
+		}
+		// widgets are ordered by position
+		for (int cont = 0; cont < this.getActionWidgets().size(); cont++) {
+			final Action_widget aw = this.getActionWidgets().get(cont);
+			if (!aw.isSame(win.getActionWidgets().get(cont))) {
+
+				return false;
+			}
+		}
+
+		if (win.getInputWidgets().size() != this.getInputWidgets().size()) {
+
+			return false;
+		}
+		// widgets are ordered by position
+		for (int cont = 0; cont < this.getInputWidgets().size(); cont++) {
+			final Input_widget iw = this.getInputWidgets().get(cont);
+			if (iw instanceof Option_input_widget) {
+				final Option_input_widget oiw = (Option_input_widget) iw;
+				if (!oiw.isSame(win.getInputWidgets().get(cont))) {
+
+					return false;
+				}
+			} else {
+				if (!iw.isSame(win.getInputWidgets().get(cont))) {
+
+					return false;
+				}
+			}
+		}
+
+		if (win.getSelectableWidgets().size() != this.getSelectableWidgets().size()) {
+
+			return false;
+		}
+		// widgets are ordered by position
+		for (int cont = 0; cont < this.getSelectableWidgets().size(); cont++) {
+			final Selectable_widget iw = this.getSelectableWidgets().get(cont);
+			if (!iw.isSame(win.getSelectableWidgets().get(cont))) {
+
+				return false;
+			}
+		}
 
 		return true;
 	}

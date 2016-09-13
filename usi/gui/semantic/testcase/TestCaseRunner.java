@@ -12,6 +12,7 @@ import usi.gui.pattern.Pattern_error_window;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
+import usi.gui.structure.Option_input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
 
@@ -53,6 +54,24 @@ public class TestCaseRunner {
 
 		final GuiStateManager gmanager = GuiStateManager.getInstance();
 		gmanager.readGUI();
+
+		Window curr = null;
+		try {
+			curr = gmanager.getCurrentWindows().get(0);
+		} catch (final Exception e) {
+			// System.out.println("exception");
+			if (app.isRunning()) {
+				app.restartApplication();
+			} else {
+				app.startApplication();
+			}
+			Thread.sleep(1000);
+			gmanager.readGUI();
+			curr = gmanager.getCurrentWindows().get(0);
+			// System.out.println(curr);
+
+		}
+
 		this.select_support_initial = new HashMap<>();
 		this.select_support_added = new HashMap<>();
 		this.select_support_added_indexes = new HashMap<>();
@@ -64,13 +83,13 @@ public class TestCaseRunner {
 		final List<Window> results = new ArrayList<>();
 		List<GUIAction> go_actions = null;
 
-		Window curr = gmanager.getCurrentWindows().get(0);
 		this.updatedStructuresForSelect(curr);
 
-		for (int cont = 0; cont < actions.size(); cont++) {
+		mainloop: for (int cont = 0; cont < actions.size(); cont++) {
 
-			GUIAction act = actions.get(cont);
+			final GUIAction act = actions.get(cont);
 			curr = gmanager.getCurrentWindows().get(0);
+			GUIAction act_to_execute = act;
 
 			if (act instanceof Go) {
 				final Go go = (Go) act;
@@ -112,16 +131,21 @@ public class TestCaseRunner {
 			// app
 			if (act instanceof Select) {
 				final Select sel = (Select) act;
+
 				final Selectable_widget sw = (Selectable_widget) sel.getWidget();
 				final Pair new_p = new Pair(curr, sw);
 				boolean found = false;
 				for (final Pair p : this.select_support_initial.keySet()) {
 					if (p.isSame(new_p)) {
+						if (this.select_support_added_indexes.get(p).size() <= sel.getIndex()) {
+							// the selectable widget is not as expected
+							break mainloop;
+						}
 						final int index = this.select_support_added_indexes.get(p).get(
 								sel.getIndex());
 						final GUIAction select = new Select(sel.getWindow(), sel.getOracle(),
 								(Selectable_widget) sel.getWidget(), index);
-						act = select;
+						act_to_execute = select;
 						found = true;
 						break;
 					}
@@ -135,8 +159,13 @@ public class TestCaseRunner {
 			// System.out.println(act.getWidget().getLabel());
 			// System.out.println(act.getWindow().getId());
 			// System.out.println(act.getWindow().getLabel());
-
-			this.amanager.executeAction(act);
+			try {
+				this.amanager.executeAction(act_to_execute);
+			} catch (final Exception e) {
+				// System.out.println("ERROR EXECUTING ACTION");
+				// e.printStackTrace();
+				break mainloop;
+			}
 			gmanager.readGUI();
 			this.dealWithErrorWindow(gmanager);
 
@@ -181,21 +210,45 @@ public class TestCaseRunner {
 			final Pair new_p = new Pair(curr, sw);
 			for (final Pair p : this.select_support_initial.keySet()) {
 				if (p.isSame(new_p)) {
-					for (final String el : curr_el) {
-						if (!this.select_support_initial.get(p).contains(el)
-								&& !this.select_support_added.get(p).contains(el)) {
-							this.select_support_added.get(p).add(el);
-							this.select_support_added_indexes.get(p).add(curr_el.indexOf(el));
-						}
-					}
+					// the objects that are not available anymore are removed
+					final List<Integer> removed_indexes = new ArrayList<>();
+
 					for (int c = 0; c < this.select_support_added.get(p).size(); c++) {
 						final String el = this.select_support_added.get(p).get(c);
 						if (!curr_el.contains(el)) {
 							this.select_support_added.get(p).remove(c);
 							this.select_support_added_indexes.get(p).remove(c);
+							removed_indexes.add(c);
 							c--;
 						}
 					}
+
+					for (final String el : curr_el) {
+						if (!this.select_support_initial.get(p).contains(el)
+								&& !this.select_support_added.get(p).contains(el)) {
+							if (removed_indexes.size() == 1) {
+								// if one object is disappeared and one it
+								// appeared we consider it as an update of the
+								// previous (if the size is >1 or 0 we consider
+								// it as addition)
+								// TODO: this may work only for CRUD
+								this.select_support_added.get(p).add(removed_indexes.get(0), el);
+								this.select_support_added_indexes.get(p).add(
+										removed_indexes.get(0), curr_el.indexOf(el));
+							} else {
+								this.select_support_added.get(p).add(el);
+								this.select_support_added_indexes.get(p).add(curr_el.indexOf(el));
+							}
+						} else if (this.select_support_added.get(p).contains(el)) {
+							// we update the indexes
+							this.select_support_added_indexes.get(p).remove(
+									this.select_support_added.get(p).indexOf(el));
+							this.select_support_added_indexes.get(p).add(
+									this.select_support_added.get(p).indexOf(el),
+									curr_el.indexOf(el));
+						}
+					}
+
 					continue loop;
 				}
 			}
@@ -237,11 +290,20 @@ public class TestCaseRunner {
 				loop: for (final Input_widget iw : in.getInputWidgets()) {
 					for (final Input_widget iw2 : w.getInputWidgets()) {
 						if (iw2.isSame(iw)) {
-							final Input_widget new_iw = new Input_widget(iw2.getId(),
-									iw.getLabel(), iw.getClasss(), iw.getX(), iw.getY(),
-									iw.getValue());
-							new_iw.setDescriptor(iw.getDescriptor());
-							out.addWidget(new_iw);
+							if (iw2 instanceof Option_input_widget) {
+								final Option_input_widget oiw = (Option_input_widget) iw;
+								final Option_input_widget new_oiw = new Option_input_widget(
+										iw2.getId(), iw.getLabel(), iw.getClasss(), iw.getX(),
+										iw.getY(), oiw.getSize(), oiw.getSelected());
+								new_oiw.setDescriptor(iw.getDescriptor());
+								out.addWidget(new_oiw);
+							} else {
+								final Input_widget new_iw = new Input_widget(iw2.getId(),
+										iw.getLabel(), iw.getClasss(), iw.getX(), iw.getY(),
+										iw.getValue());
+								new_iw.setDescriptor(iw.getDescriptor());
+								out.addWidget(new_iw);
+							}
 							continue loop;
 						}
 					}

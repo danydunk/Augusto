@@ -1,11 +1,18 @@
 package usi.configuration;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+
+import net.sourceforge.cobertura.coveragedata.CoverageDataFileHandler;
+import net.sourceforge.cobertura.coveragedata.ProjectData;
 
 import org.w3c.dom.Document;
 
@@ -16,6 +23,11 @@ import usi.xml.XMLUtil;
 
 public class ExperimentManager {
 
+	private static final String SER_FILE_PATH = "." + File.separator + "lib" + File.separator
+			+ "cobertura" + File.separator + "cobertura.ser";
+	private static final String SER_RESET_FILE_PATH = "." + File.separator + "lib" + File.separator
+			+ "cobertura" + File.separator + "cobertura_reset.ser";
+
 	public static void init() throws Exception {
 
 		// instrument the application for cobertura analysis
@@ -25,7 +37,9 @@ public class ExperimentManager {
 				"--datafile",
 				"lib" + File.separator + "cobertura" + File.separator + "cobertura.ser",
 				ConfigurationManager.getAutBinDirectory(), };
-		// net.sourceforge.cobertura.instrument.Main.main(args);
+		new File(SER_FILE_PATH).delete();
+		net.sourceforge.cobertura.instrument.Main.main(args);
+		Files.copy(Paths.get(SER_FILE_PATH), Paths.get(SER_RESET_FILE_PATH), REPLACE_EXISTING);
 
 		// generate the file AUT.bat
 		FileWriter autBatFile;
@@ -84,7 +98,8 @@ public class ExperimentManager {
 		XMLUtil.save(out_f, doc);
 	}
 
-	public static void dumpTCresult(final List<String> results) throws Exception {
+	public static void dumpTCresult(final List<String> results, final String coverage)
+			throws Exception {
 
 		final String directory = "output" + File.separator + "testcases_result_"
 				+ DateUtility.now();
@@ -97,5 +112,25 @@ public class ExperimentManager {
 			writer.close();
 			cont++;
 		}
+		final PrintWriter writer = new PrintWriter(
+				directory + File.separator + "coverage_info.txt", "UTF-8");
+		writer.print(coverage);
+		writer.close();
+	}
+
+	public static void resetCoverage() throws IOException {
+
+		Files.copy(Paths.get(SER_RESET_FILE_PATH), Paths.get(SER_FILE_PATH), REPLACE_EXISTING);
+		// new File(SER_FILE_PATH).delete();
+	}
+
+	public static double[] getCoverage() {
+
+		final ProjectData globalCobertura = CoverageDataFileHandler.loadCoverageData(new File(
+				SER_FILE_PATH));
+		final double[] out = new double[2];
+		out[0] = globalCobertura.getLineCoverageRate();
+		out[1] = globalCobertura.getBranchCoverageRate();
+		return out;
 	}
 }

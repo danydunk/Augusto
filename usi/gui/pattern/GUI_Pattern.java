@@ -463,22 +463,22 @@ public class GUI_Pattern {
 							.collect(Collectors.toList());
 
 					loop: for (final Action_widget aw : aw_matches) {
+						boolean target_found = false;
 						for (final Pattern_window target_pw : this.getStaticForwardLinks(paw
 								.getId())) {
 							final List<Window> targets = in.getPatternWindowMatches(target_pw
 									.getId());
 
-							boolean target_found = false;
 							for (final Window ww : targets) {
 								target_found = true;
 								if (match_gui.isStaticEdge(aw.getId(), ww.getId())) {
 									continue loop;
 								}
 							}
-							if (target_found) {
+						}
+						if (target_found) {
 
-								return false;
-							}
+							return false;
 						}
 					}
 					// dynamic
@@ -487,22 +487,22 @@ public class GUI_Pattern {
 							.collect(Collectors.toList());
 
 					loop: for (final Action_widget aw : aw_matches) {
+						boolean target_found = false;
 						for (final Pattern_window target_pw : this.getDynamicForwardLinks(paw
 								.getId())) {
 							final List<Window> targets = in.getPatternWindowMatches(target_pw
 									.getId());
 
-							boolean target_found = false;
 							for (final Window ww : targets) {
 								target_found = true;
 								if (match_gui.isDynamicEdge(aw.getId(), ww.getId())) {
 									continue loop;
 								}
 							}
-							if (target_found) {
+						}
+						if (target_found) {
 
-								return false;
-							}
+							return false;
 						}
 					}
 				}

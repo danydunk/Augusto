@@ -14,6 +14,7 @@ public class ConfigurationManager {
 	private static long sleepTime = 600;
 	private static long semanticRefinementTimeout = 1800000;// 30min
 	private static int testcaseLength = 15;
+	private static boolean pairwiseTestcase = false;
 
 	public static void load() throws Exception {
 
@@ -29,7 +30,8 @@ public class ConfigurationManager {
 			throw new Exception("ConfigurationManager - init: error loading file, "
 					+ e.getMessage());
 		}
-
+		ConfigurationManager.setPairwiseTestcase(Boolean.valueOf(properties
+				.getProperty("pairwise_testcase")));
 		ConfigurationManager.setAutBinDirectory(properties.getProperty("aut_bin_directory"));
 		ConfigurationManager.setAutMainCLass(properties.getProperty("aut_main_class"));
 		ConfigurationManager.setAutClasspath(properties.getProperty("aut_classpath"));
@@ -121,5 +123,15 @@ public class ConfigurationManager {
 	public static void setTestcaseLength(final int testcaseLength) {
 
 		ConfigurationManager.testcaseLength = testcaseLength;
+	}
+
+	public static void setPairwiseTestcase(final boolean pairwiseTestcase) {
+
+		ConfigurationManager.pairwiseTestcase = pairwiseTestcase;
+	}
+
+	public static boolean getPairwiseTestcase() {
+
+		return pairwiseTestcase;
 	}
 }

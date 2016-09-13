@@ -29,17 +29,14 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 
 public class AlloyTestCaseGenerator {
 
-	private long RUN_INITIAL_TIMEOUT = 120000; // 2 minute
-	private int MAX_RUN = 12;
+	private long RUN_INITIAL_TIMEOUT = 1800000; // 30 minutes
+	private int MAX_RUN = 5;
 
 	final Instance_GUI_pattern instance;
 
 	/**
 	 * Function that generates GUI test cases running the run commands contained
-	 * in a specific semantics. Each run command is run for a maximum of MAX_RUN
-	 * times. The timeout of each run command is RUN_INITIAL_TIMEOUT. When a
-	 * command goes in timeout is rerun with a double timeout. If a command is
-	 * unsat, the scope is dubled.
+	 * in a specific semantics. Each command is run until completion or timeout.
 	 *
 	 * @param initial_timout
 	 * @return
@@ -61,14 +58,12 @@ public class AlloyTestCaseGenerator {
 
 	/**
 	 * Function that generates GUI test cases running the run commands contained
-	 * in a specific semantics. Each run command is run for a maximum of max_run
-	 * times. The timeout of each run command is initial_timeout. When a command
-	 * goes in timeout is rerun with a double timeout. The scope general scope
-	 * is the one specified in the configuration. Additional scopes are added
-	 * for each structural signature. If one of the structural signatures has a
-	 * not definite scope (for instance during refinement) the general scope is
-	 * doubled. If in the original command a general or a time scope are set
-	 * they are kept.
+	 * in a specific semantics. Each command is run until completion or timeout.
+	 * The scope general scope is the one specified in the configuration.
+	 * Additional scopes are added for each structural signature. If one of the
+	 * structural signatures has a not definite scope (for instance during
+	 * refinement) the general scope is doubled. If in the original command a
+	 * general or a time scope are set they are kept.
 	 *
 	 * @return
 	 * @throws Exception
@@ -76,7 +71,6 @@ public class AlloyTestCaseGenerator {
 	public List<GUITestCase> generateTestCases() throws Exception {
 
 		final SpecificSemantics model = this.instance.getSemantics();
-
 		final String alloy_model = model.toString();
 		// System.out.println("START ALLOY MODEL");
 		// System.out.println(model);
@@ -103,14 +97,21 @@ public class AlloyTestCaseGenerator {
 
 			if (!t.hasExceptions() && t.getSolution() != null && t.getSolution().satisfiable()) {
 				solutions.add(t.getSolution());
+			} else {
+				solutions.add(null);
+			}
+			if (t.isAlive()) {
+				t.interrupt();
 			}
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
-
-		for (final A4Solution sol : solutions) {
-			// AlloyUtil.extractProperty(sol, model);
-			out.add(this.analyzeTuples(sol));
+		for (int cont = 0; cont < solutions.size(); cont++) {
+			final A4Solution sol = solutions.get(cont);
+			if (sol != null) {
+				out.add(this.analyzeTuples(sol,
+						this.instance.getSemantics().getRun_commands().get(cont)));
+			}
 		}
 
 		return out;
@@ -159,18 +160,28 @@ public class AlloyTestCaseGenerator {
 			t.join();
 			if (!t.hasExceptions() && t.getSolution() != null && t.getSolution().satisfiable()) {
 				solutions.add(t.getSolution());
+			} else {
+				solutions.add(null);
+			}
+			if (t.isAlive()) {
+				t.interrupt();
 			}
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
-		for (final A4Solution sol : solutions) {
-			out.add(this.analyzeTuples(sol));
+		for (int cont = 0; cont < solutions.size(); cont++) {
+			final A4Solution sol = solutions.get(cont);
+			if (sol != null) {
+				out.add(this.analyzeTuples(sol,
+						this.instance.getSemantics().getRun_commands().get(cont)));
+			}
 		}
 
 		return out;
 	}
 
-	protected GUITestCase analyzeTuples(final A4Solution solution) throws Exception {
+	protected GUITestCase analyzeTuples(final A4Solution solution, final String run)
+			throws Exception {
 
 		final Map<String, String> input_data_map = this.elaborateInputData(solution);
 		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track$0");
@@ -251,16 +262,12 @@ public class AlloyTestCaseGenerator {
 											"AlloyTestCaseGenerator - analyzeTuples: error retriving input widget value.");
 								}
 								if (value.atom(2).equals(tuple.atom(2))) {
+
 									if (iw instanceof Option_input_widget) {
-										// System.out.println(value.atom(1));
 
-										String val = (value.atom(1).split("\\$")[0]);
-										// System.out.println(val);
-
-										val = val.replace("Input_widget_" + iw.getId() + "_value_",
-												"");
-										// System.out.println(val);
-										inputdata = val;
+										final String val = (value.atom(1).split("\\$")[0]);
+										// System.out.println("before " + val);
+										inputdata = val.split("_value_")[1];
 
 									} else {
 										// the input data is retrieved
@@ -275,6 +282,7 @@ public class AlloyTestCaseGenerator {
 								if (t.arity() == 2
 										&& t.atom(1).equals("Input_widget_" + iw.getId() + "$0")) {
 									if (iw instanceof Option_input_widget) {
+										// System.out.println(inputdata);
 										final Option_input_widget oiw = (Option_input_widget) iw;
 
 										if (inputdata.length() == 0) {
@@ -528,35 +536,36 @@ public class AlloyTestCaseGenerator {
 				final List<String> objects_in_sw_at_t = new ArrayList<>();
 				for (final A4Tuple sw_tuple : sw_tuples) {
 					if (this.extractTimeIndex(sw_tuple.atom(2)) == (time_index - 1)) {
-						if (!objects_in_sw_at_t.contains(sw_tuple.atom(1))) {
+						if (!objects_in_sw_at_t.contains(sw_tuple.atom(1))
+								&& sw_tuple.atom(1).startsWith("Object")) {
 							objects_in_sw_at_t.add(sw_tuple.atom(1));
 						}
 					}
 				}
 				// now we order the objects in the selectable widget wrt their
 				// addition time
-				final List<String> to_order = new ArrayList<>();
+				final List<Integer> to_order = new ArrayList<>();
+				final Map<String, Integer> map = new HashMap<>();
 				for (final String obj : objects_in_sw_at_t) {
-					int lowest_time_index = Integer.MAX_VALUE;
-					for (final A4Tuple sw_tuple : sw_tuples) {
-						if (sw_tuple.atom(1).equals(obj)) {
-							final int index = Integer.valueOf(sw_tuple.atom(2).split("\\$")[1]);
-							if (index < lowest_time_index) {
-								lowest_time_index = index;
-							}
+					final List<A4Tuple> obj_tuples = AlloyUtil.getTuples(solution, obj);
 
-						}
-					}
-					if (lowest_time_index == Integer.MAX_VALUE) {
+					if (obj_tuples.size() != 1) {
 						throw new Exception(
 								"AlloyTestCaseGenerator - analyzeTuples: error in select.");
 					}
-					to_order.add(lowest_time_index + "_" + obj);
+					final int appeared = this.extractTimeIndex(obj_tuples.get(0).atom(1));
+					if (!map.containsKey(obj)) {
+						to_order.add(appeared);
+						map.put(obj, appeared);
+					}
 				}
 				Collections.sort(to_order);
 				final List<String> ordered = new ArrayList<>();
-				for (final String s : to_order) {
-					ordered.add(s.split("_")[1]);
+				for (final Integer s : to_order) {
+					ordered.add(null);
+				}
+				for (final String obj : map.keySet()) {
+					ordered.set(to_order.indexOf(map.get(obj)), obj);
 				}
 
 				Selectable_widget target_sw = null;
@@ -566,7 +575,7 @@ public class AlloyTestCaseGenerator {
 						// TODO: add the correct selected
 						target_sw = new Selectable_widget(sw.getId(), sw.getLabel(),
 								sw.getClasss(), sw.getX(), sw.getY(), sw.getSize()
-								+ objects_in_sw_at_t.size(), 0);
+										+ objects_in_sw_at_t.size(), 0);
 						target_sw.setDescriptor(sw.getDescriptor());
 						break;
 					}
@@ -577,6 +586,7 @@ public class AlloyTestCaseGenerator {
 				}
 
 				final int select_index = ordered.indexOf(object);
+
 				final Select action = new Select(source_window, oracle, target_sw, select_index);
 
 				actions.set(time_index - 1, action);
@@ -584,7 +594,7 @@ public class AlloyTestCaseGenerator {
 			}
 		}
 
-		final GUITestCase test = new GUITestCase(solution, actions);
+		final GUITestCase test = new GUITestCase(solution, actions, run);
 		return test;
 	}
 
@@ -893,14 +903,14 @@ public class AlloyTestCaseGenerator {
 				}
 
 				if (this.minimal) {
-					time_scope = 2;
+					time_scope = 3;
 				} else {
 					if (time_scope == -1) {
 						time_scope = ConfigurationManager.getTestcaseLength();
 					}
 				}
 
-				long timeout = AlloyTestCaseGenerator.this.RUN_INITIAL_TIMEOUT;
+				final long timeout = AlloyTestCaseGenerator.this.RUN_INITIAL_TIMEOUT;
 
 				for (int x = 0; x < AlloyTestCaseGenerator.this.MAX_RUN; x++) {
 
@@ -939,9 +949,10 @@ public class AlloyTestCaseGenerator {
 							.runCommand(this.alloy_model, run, timeout);
 
 					if (solution == null) {
-						timeout += AlloyTestCaseGenerator.this.RUN_INITIAL_TIMEOUT;
-						System.out.println("RUN " + (x + 1) + " COMMAND:" + run.toString()
-								+ " timeout. New timeout =" + timeout);
+						// if timeout
+						System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
+								+ " TIMEOUT!");
+						break;
 					} else if (this.minimal && !solution.satisfiable()) {
 
 						time_scope++;
@@ -950,10 +961,10 @@ public class AlloyTestCaseGenerator {
 									+ " unsat. Time scope = " + time_scope);
 						}
 					} else {
+						this.solution = solution;
 						if (solution.satisfiable()) {
 							System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
 									+ " found solution.");
-							this.solution = solution;
 						} else {
 							System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
 									+ " solution not found.");
@@ -962,7 +973,7 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			} catch (final Exception e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 				this.exception = true;
 			}
 		}

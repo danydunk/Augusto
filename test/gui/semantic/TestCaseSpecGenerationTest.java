@@ -10,13 +10,17 @@ import java.util.List;
 import org.junit.Test;
 
 import test.gui.semantic.alloy.entity.SignatureTest;
-import usi.configuration.ConfigurationManager;
+import usi.gui.functionality.GUIFunctionality_validate;
+import usi.gui.functionality.mapping.Instance_GUI_pattern;
+import usi.gui.functionality.mapping.Instance_window;
 import usi.gui.pattern.Cardinality;
+import usi.gui.pattern.GUI_Pattern;
 import usi.gui.semantic.FunctionalitySemantics;
 import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Function;
 import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
+import usi.gui.structure.GUI;
 
 public class TestCaseSpecGenerationTest {
 
@@ -98,30 +102,48 @@ public class TestCaseSpecGenerationTest {
 	public void test() {
 
 		try {
+			final Instance_GUI_pattern inst = new Instance_GUI_pattern(new GUI(),
+					new GUI_Pattern(), new ArrayList<Instance_window>());
 			final FunctionalitySemantics fs = this.getFunctSemantics();
-			fs.generate_run_commands();
-			assertEquals(6, fs.getRun_commands().size());
-			assertEquals(
-					"run {System and {one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and ((aw in Ok and Current_window.is_in.t  in Form and (#aw.goes = 1 and aw.goes in Form))) and (not (filled_required_in_w_test [Current_window.is_in.t, t]))} } for "
-							+ ConfigurationManager.getAlloyRunScope(), fs.getRun_commands().get(0));
-			assertEquals(
-					"run {System and {one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and ((aw in Ok and Current_window.is_in.t  in Form and (#aw.goes = 1 and aw.goes in Form))) and (filled_required_in_w_test [Current_window.is_in.t, t])} } for "
-							+ ConfigurationManager.getAlloyRunScope(), fs.getRun_commands().get(1));
-			assertEquals(
-					"run {System and {one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and ((aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0)) and (not (unique_test [t]) and not (filled_required_test [t]))} } for "
-							+ ConfigurationManager.getAlloyRunScope(), fs.getRun_commands().get(2));
-			assertEquals(
-					"run {System and {one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and ((aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0)) and (unique_test [t] and not (filled_required_test [t]))} } for "
-							+ ConfigurationManager.getAlloyRunScope(), fs.getRun_commands().get(3));
-			assertEquals(
-					"run {System and {one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and ((aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0)) and (not (unique_test [t]) and filled_required_test [t])} } for "
-							+ ConfigurationManager.getAlloyRunScope(), fs.getRun_commands().get(4));
-			assertEquals(
-					"run {System and {one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and ((aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0)) and (unique_test [t] and filled_required_test [t])} } for "
-							+ ConfigurationManager.getAlloyRunScope(), fs.getRun_commands().get(5));
+
+			final Wrapper wr = new Wrapper(inst, new GUI());
+			final List<String> runs = wr.generate(fs);
+
+			assertEquals(6, runs.size());
+
 		} catch (final Exception e) {
 			e.printStackTrace();
 			fail();
+		}
+	}
+
+	class Wrapper extends GUIFunctionality_validate {
+
+		public Wrapper(final Instance_GUI_pattern instancePattern, final GUI gui) throws Exception {
+
+			super(instancePattern, gui);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		public void init() {
+
+		}
+
+		@Override
+		public void generate_run_commands(final FunctionalitySemantics sem) throws Exception {
+
+			if (sem == null) {
+				return;
+			} else {
+				super.generate_run_commands(sem);
+			}
+		}
+
+		public List<String> generate(final FunctionalitySemantics sem) throws Exception {
+
+			super.generate_run_commands(sem);
+			return super.getAllSemanticCases();
 		}
 	}
 }

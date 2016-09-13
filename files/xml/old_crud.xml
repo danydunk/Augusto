@@ -68,6 +68,21 @@
 			<text>.*</text>
 		</input_widget>
 	</window>
+	<window id="confirmation_del" card="lone" alloy="Confirm_delete">
+		<title>.*</title>
+		<modal>true</modal>
+		<root>false</root>
+		<action_widget id="paw11" card="one" alloy="Ok">
+			<label>.*(confirm|ok|yes).*</label>
+		</action_widget>
+		<action_widget id="paw12" card="one" alloy="Cancel">
+			<label>.*(cancel|back|no).*</label>
+		</action_widget>
+		<input_widget id="piw3" card="none" alloy="">
+			<label>.*</label>
+			<text>.*</text>
+		</input_widget>
+	</window>
 	<window id="view" card="one" alloy="View">
 		<title>.*</title>
 		<modal>any</modal>
@@ -88,10 +103,13 @@
 		<from>paw6</from>
 		<to>initial</to>
 	</edge>
-	<edge type="dynamic">
+	<edge type="static">
 		<from>paw10</from>
 		<to>form_2</to>
 		<to>form_1</to>
+	</edge>
+	<edge type="static">
+		<from>paw12</from>
 		<to>initial</to>
 	</edge>
 	<edge type="dynamic">
@@ -104,7 +122,8 @@
 	</edge>
 	<edge type="dynamic">
 		<from>paw4</from>
-		<to>confirmation</to>
+		<to>confirmation_del</to>
+		<to>initial</to>					
 	</edge>
 	<edge type="dynamic">
 		<from>paw5</from>
@@ -128,7 +147,16 @@
 		<to>initial</to>
 	</edge>
 	<edge type="static">
-		<from>paw13</from>
+		<from>paw10</from>
+		<to>form_2</to>
+		<to>form_1</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw11</from>
 		<to>initial</to>
+	</edge>
+	<edge type="static">
+		<from>paw13</from>
+		<to>initial</to>		
 	</edge>
 </pattern>

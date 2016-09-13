@@ -3,7 +3,6 @@ package usi.gui.semantic;
 import java.util.ArrayList;
 import java.util.List;
 
-import usi.configuration.ConfigurationManager;
 import usi.gui.semantic.alloy.Alloy_Model;
 import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Function;
@@ -178,96 +177,6 @@ public class FunctionalitySemantics extends Alloy_Model {
 	public List<Signature> getSelectable_w_extensions() {
 
 		return new ArrayList<>(this.selectable_w_extensions);
-	}
-
-	public void generate_run_commands() throws Exception {
-
-		final String click = "one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and";
-		for (final String prec : this.click_semantics.getCases().keySet()) {
-			final String pred = click + " (" + prec + ") and (";
-			// the number of possible combinations
-			final List<String> cases = this.click_semantics.getCases().get(prec);
-			final double n = Math.pow(2, cases.size());
-
-			for (int cont = 0; cont < n; cont++) {
-				String binary = Integer.toBinaryString(cont);
-				for (int c = 0; c < (cases.size() - binary.length()); c++) {
-					binary = "0" + binary;
-				}
-				String sem_pred = "";
-				for (int cont2 = cases.size() - 1; cont2 >= 0; cont2--) {
-					if (cont2 > (binary.length() - 1) || binary.charAt(cont2) == '0') {
-						sem_pred = sem_pred + "not (" + cases.get(cont2) + ")";
-					} else {
-						sem_pred = sem_pred + cases.get(cont2);
-					}
-					if (cont2 > 0) {
-						sem_pred = sem_pred + " and ";
-					}
-				}
-				final String run_command = "run {System and {" + pred + sem_pred + ")} } for "
-						+ ConfigurationManager.getAlloyRunScope();
-				this.run_commands.add(run_command);
-			}
-		}
-
-		final String fill = "one t: Time, iw: Input_widget, v: Value, f: Fill | fill [iw, t, T/next[t], v, f] and";
-		for (final String prec : this.fill_semantics.getCases().keySet()) {
-			final String pred = fill + " (" + prec + ") and (";
-			// the number of possible combinations
-			final List<String> cases = this.fill_semantics.getCases().get(prec);
-			final double n = Math.pow(2, cases.size());
-
-			for (int cont = 0; cont < n; cont++) {
-				String binary = Integer.toBinaryString(cont);
-				for (int c = 0; c < (cases.size() - binary.length()); c++) {
-					binary = "0" + binary;
-				}
-				String sem_pred = "";
-				for (int cont2 = cases.size() - 1; cont2 >= 0; cont2--) {
-					if (cont2 > (binary.length() - 1) || binary.charAt(cont2) == '0') {
-						sem_pred = sem_pred + "not (" + cases.get(cont2) + ")";
-					} else {
-						sem_pred = sem_pred + cases.get(cont2);
-					}
-					if (cont2 > 0) {
-						sem_pred = sem_pred + " and ";
-					}
-				}
-				final String run_command = "run {System and {" + pred + sem_pred + ")} } for "
-						+ ConfigurationManager.getAlloyRunScope();
-				this.run_commands.add(run_command);
-			}
-		}
-
-		final String go = "one t: Time, w: Window, g: Go | go [w, t, T/next[t], g] and";
-		for (final String prec : this.go_semantics.getCases().keySet()) {
-			final String pred = go + " (" + prec + ") and (";
-			// the number of possible combinations
-			final List<String> cases = this.go_semantics.getCases().get(prec);
-			final double n = Math.pow(2, cases.size());
-
-			for (int cont = 0; cont < n; cont++) {
-				String binary = Integer.toBinaryString(cont);
-				for (int c = 0; c < (cases.size() - binary.length()); c++) {
-					binary = "0" + binary;
-				}
-				String sem_pred = "";
-				for (int cont2 = cases.size() - 1; cont2 >= 0; cont2--) {
-					if (cont2 > (binary.length() - 1) || binary.charAt(cont2) == '0') {
-						sem_pred = sem_pred + "not (" + cases.get(cont2) + ")";
-					} else {
-						sem_pred = sem_pred + cases.get(cont2);
-					}
-					if (cont2 > 0) {
-						sem_pred = sem_pred + " and ";
-					}
-				}
-				final String run_command = "run {System and {" + pred + sem_pred + ")} } for "
-						+ ConfigurationManager.getAlloyRunScope();
-				this.run_commands.add(run_command);
-			}
-		}
 	}
 
 	public Signature getWindow_signature() {
