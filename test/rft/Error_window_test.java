@@ -59,7 +59,7 @@ public class Error_window_test extends Error_window_testHelper {
 			acts.add(c2);
 
 			final Window form = gui.getWindow("w10");
-			final Input_widget iw1 = (Input_widget) form.getWidget("iw15");
+			final Input_widget iw1 = (Input_widget) form.getWidget("iw24");
 			final Fill f1 = new Fill(form, null, iw1, "test");
 			acts.add(f1);
 
@@ -69,7 +69,8 @@ public class Error_window_test extends Error_window_testHelper {
 
 			final GUITestCase tc = new GUITestCase(null, acts, "run");
 
-			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime());
+			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime(),
+					gui);
 			runner.runTestCase(tc);
 
 		} catch (final Exception e) {

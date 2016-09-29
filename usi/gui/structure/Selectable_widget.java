@@ -48,6 +48,17 @@ public class Selectable_widget extends Widget {
 		}
 
 		// size and selected is not checked cause it can change
-		return this.sameProperties(w);
+		return this.sameProperties_strong(w);
+	}
+
+	@Override
+	public boolean isSimilar(final Widget w) {
+
+		if (!(w instanceof Selectable_widget)) {
+			return false;
+		}
+
+		// size and selected is not checked cause it can change
+		return this.sameProperties_weak(w);
 	}
 }

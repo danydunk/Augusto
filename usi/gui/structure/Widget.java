@@ -1,6 +1,8 @@
 package usi.gui.structure;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 import usi.util.IDManager;
 
@@ -35,6 +37,7 @@ public abstract class Widget implements Comparable<Widget> {
 		this.classs = classs;
 
 		if (x < 0 || y < 0) {
+
 			throw new Exception("Widget:wrong position.");
 		}
 		this.x = x;
@@ -130,18 +133,18 @@ public abstract class Widget implements Comparable<Widget> {
 		return 0;
 	}
 
-	protected boolean sameProperties(final Widget w) {
+	// function that checks if the input widget has exactly the same properties
+	protected boolean sameProperties_strong(final Widget w) {
 
 		// // we use the position +- delta to match
-		// final int delta = 1;
-		// if (w.x > this.x + delta || w.x < this.x - delta) {
-		// return false;
-		// }
-		// if (w.y > this.y + delta || w.y < this.y - delta) {
-		// return false;
-		// }
+		final int delta = 1;
+		if (w.x > this.x + delta || w.x < this.x - delta) {
+			return false;
+		}
+		if (w.y > this.y + delta || w.y < this.y - delta) {
+			return false;
+		}
 
-		// TODO: what if the label changes?
 		if (w.label == null && this.label != null) {
 			return false;
 		}
@@ -166,6 +169,44 @@ public abstract class Widget implements Comparable<Widget> {
 		return true;
 	}
 
+	// function that checks if the input widget has the same most important
+	// properties
+	protected boolean sameProperties_weak(final Widget w) {
+
+		// position and label can vary
+
+		if (w.label == null && this.label != null) {
+			return false;
+		}
+		if (w.label != null && this.label == null) {
+			return false;
+		}
+		if (w.label != null && w.label.length() > 0 && this.label.length() == 0) {
+			return false;
+		}
+		if (w.label != null && w.label.length() == 0 && this.label.length() > 0) {
+			return false;
+		}
+
+		if (w.descriptor == null && this.descriptor != null) {
+			return false;
+		}
+		if (w.descriptor != null && this.descriptor == null) {
+			return false;
+		}
+		if (w.descriptor != null && w.descriptor.length() > 0 && this.descriptor.length() == 0) {
+			return false;
+		}
+		if (w.descriptor != null && w.descriptor.length() == 0 && this.descriptor.length() > 0) {
+			return false;
+		}
+
+		if (!w.classs.equals(this.classs)) {
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * method used to recognise widgets
 	 *
@@ -174,18 +215,29 @@ public abstract class Widget implements Comparable<Widget> {
 	 */
 	abstract public boolean isSame(Widget w);
 
-	public static Widget getWidget(final TestObject to, final IDManager idm) throws Exception {
+	abstract public boolean isSimilar(Widget w);
+
+	/**
+	 * method that transform a TO in the corresponding list of widgets it
+	 * returns a list of widgets cause some TOs are transformed in several
+	 * widgets
+	 *
+	 * @param to
+	 * @param idm
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<Widget> getWidgets(final TestObject to, final IDManager idm)
+			throws Exception {
+
+		final List<Widget> out = new ArrayList<>();
+		TestObject support = to;
 
 		Point p = null;
-		try {
-			p = (Point) to.getProperty("locationOnScreen");
-		} catch (final Exception e) {
-			// widget not visible
-			p = (Point) to.getMappableParent().getProperty("locationOnScreen");
-		}
 
-		final int x = p.x;
-		final int y = p.y;
+		try {
+			p = (Point) support.getProperty("locationOnScreen");
+		} catch (final Exception e) {}
 
 		String type = null;
 		try {
@@ -195,6 +247,11 @@ public abstract class Widget implements Comparable<Widget> {
 		}
 		if (type == null) {
 			// if it is a window
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final String title = to.getProperty("title").toString();
 			final String classs = to.getProperty("class").toString();
 
@@ -205,8 +262,8 @@ public abstract class Widget implements Comparable<Widget> {
 				// modal property not found
 				modale = false;
 			}
-
-			return new Window(to, idm.nextWindowId(), title, classs, x, y, modale);
+			out.add(new Window(to, idm.nextWindowId(), title, classs, x, y, modale));
+			return out;
 		}
 
 		String label = null;
@@ -222,14 +279,31 @@ public abstract class Widget implements Comparable<Widget> {
 		}
 
 		if (type.equals("ButtonUI")) {
-			return new Action_widget(to, idm.nextAWId(), label, type, x, y);
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
+			out.add(new Action_widget(to, idm.nextAWId(), label, type, x, y));
+			return out;
 
 		} else if (type.equals("CheckBoxMenuItemUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final int size = 2;
 			final int selected = Integer.valueOf(to.getProperty("selected").toString());
-			return new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, selected);
+			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, selected));
+			return out;
 
 		} else if (type.equals("CheckBoxUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final int size = 2;
 			final boolean selected = Boolean.valueOf(to.getProperty("selected").toString());
 			int index;
@@ -238,39 +312,100 @@ public abstract class Widget implements Comparable<Widget> {
 			} else {
 				index = 0;
 			}
-			return new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, index);
+			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, index));
+			return out;
 
 		} else if (type.equals("ComboBoxUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final int selected = Integer.valueOf(to.getProperty("selectedIndex").toString());
 			final int size = Integer.valueOf(to.getProperty("itemCount").toString());
-			return new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, selected);
+			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, selected));
+			return out;
 
 		} else if (type.equals("EditorPaneUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			return new Input_widget(to, idm.nextIWId(), label, type, x, y, value);
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			return out;
 
 		} else if (type.equals("FormattedTextFieldUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			return new Input_widget(to, idm.nextIWId(), label, type, x, y, value);
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			return out;
 
 		} else if (type.equals("HyperlinkUI")) {
+			if (p == null) {
+				return out;
+			}
 			// TODO:
 
 		} else if (type.equals("ListUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final int size = Integer.valueOf(to.getProperty("lastVisibleIndex").toString()) + 1;
 			final int selected = Integer.valueOf(to.getProperty("selectedIndex").toString());
-			return new Selectable_widget(to, idm.nextSWId(), label, type, x, y, size, selected);
+			out.add(new Selectable_widget(to, idm.nextSWId(), label, type, x, y, size, selected));
+			return out;
 
 		} else if (type.equals("MenuItemUI")) {
-			final TestObject father = to.getMappableParent();
-			final String fatherlabel = father.getProperty("label").toString();
-			return new Action_widget(to, idm.nextAWId(), fatherlabel + " - " + label, type, x, y);
+			support = to.getMappableParent();
+			while (p == null) {
+				try {
+					p = (Point) support.getProperty("locationOnScreen");
+				} catch (final Exception e) {
+					// widget not visible
+					// we use the position of the first visible ancestor
+					// System.out.println(to.getProperty("uIClassID"));
+					support = support.getMappableParent();
+				}
+			}
+			final int x = p.x;
+			final int y = p.y;
+
+			TestObject father = to.getMappableParent();
+			String fatherlabel = null;
+			while (fatherlabel == null) {
+				try {
+					fatherlabel = father.getProperty("label").toString();
+				} catch (final Exception e) {
+					father = father.getMappableParent();
+				}
+			}
+			out.add(new Action_widget(to, idm.nextAWId(), fatherlabel + " - " + label, type, x, y));
+			return out;
 
 		} else if (type.equals("PasswordFieldUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			return new Input_widget(to, idm.nextIWId(), label, type, x, y, value);
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			return out;
 
 		} else if (type.equals("RadioButtonUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final boolean selected = Boolean.valueOf(to.getProperty("selected").toString());
 			int index;
 			if (selected) {
@@ -278,19 +413,35 @@ public abstract class Widget implements Comparable<Widget> {
 			} else {
 				index = 0;
 			}
-			final int size = Integer.valueOf(to.getProperty("itemCount").toString());
-			return new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, index);
+			final int size = 2;
+			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, index));
+			return out;
 
 		} else if (type.equals("TabbedPaneUI")) {
-			// TODO: deal with tabbed pane
-			// this.addPropertyToMap("selected",
-			// this.to.getProperty("selectedIndex").toString());
-			// this.addPropertyToMap("size",
-			// this.to.getProperty("tabCount").toString());
-			// this.addPropertyToMap("tabs",
-			// this.to.getProperty(".tabs").toString());
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
+			final int tabs = Integer.valueOf(to.getProperty("tabCount").toString());
+			final int selected = Integer.valueOf(to.getProperty("selectedIndex").toString());
+			final Object[] titles = (Object[]) to.getProperty("titleAt");
+
+			// we add a action widget for each tab
+			for (int cont = 0; cont < tabs; cont++) {
+				if (cont == selected) {
+					// the selected is skipped
+					continue;
+				}
+				out.add(new Action_widget(to, idm.nextAWId(), titles[cont].toString(), type, x, y));
+			}
 
 		} else if (type.equals("TableUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final int rowc = Integer.valueOf(to.getProperty("rowCount").toString());
 			final int columnc = Integer.valueOf(to.getProperty("columnCount").toString());
 			final int size = rowc * columnc;
@@ -301,25 +452,50 @@ public abstract class Widget implements Comparable<Widget> {
 				selected += columnc;
 			}
 			selected += columns;
-			return new Selectable_widget(to, idm.nextSWId(), label, type, x, y, size, selected);
+			out.add(new Selectable_widget(to, idm.nextSWId(), label, type, x, y, size, selected));
+			return out;
 
 		} else if (type.equals("TextAreaUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			return new Input_widget(to, idm.nextIWId(), label, type, x, y, value);
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			return out;
 
 		} else if (type.equals("TextFieldUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			return new Input_widget(to, idm.nextIWId(), label, type, x, y, value);
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			return out;
 
 		} else if (type.equals("TextPaneUI")) {
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			return new Input_widget(to, idm.nextIWId(), label, type, x, y, value);
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			return out;
 
 		} else if (type.equals("ToggleButtonUI")) {
-			return new Action_widget(to, idm.nextAWId(), label, type, x, y);
+			if (p == null) {
+				return out;
+			}
+			final int x = p.x;
+			final int y = p.y;
+			out.add(new Action_widget(to, idm.nextAWId(), label, type, x, y));
+			return out;
 
 		}
-		return null;
+		return out;
 	}
 
 	public void setTO(final TestObject to) {

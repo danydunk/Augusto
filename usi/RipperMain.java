@@ -1,10 +1,19 @@
 package usi;
 
+import java.io.File;
+import java.util.List;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
 import resources.usi.RipperMainHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
+import usi.gui.pattern.GUIPatternParser;
+import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.ripping.Ripper;
 import usi.gui.structure.GUI;
+import usi.xml.XMLUtil;
 
 /**
  * Description : Functional Test Script
@@ -12,6 +21,8 @@ import usi.gui.structure.GUI;
  * @author usi
  */
 public class RipperMain extends RipperMainHelper {
+
+	private static String AW_TO_FILTER_PATH = "config" + File.separator + "awfilter.xml";
 
 	/**
 	 * Script Name : <b>RipperMain</b> Generated : <b>Jul 8, 2016 6:18:02 AM</b>
@@ -62,7 +73,8 @@ public class RipperMain extends RipperMainHelper {
 			}
 
 			ExperimentManager.init();
-			final Ripper ripper = new Ripper(ConfigurationManager.getSleepTime());
+			final Ripper ripper = new Ripper(ConfigurationManager.getSleepTime(),
+					this.loadAWtoFilter(AW_TO_FILTER_PATH));
 			final GUI gui = ripper.ripApplication();
 			ExperimentManager.dumpGUI(gui, out_file);
 
@@ -70,5 +82,22 @@ public class RipperMain extends RipperMainHelper {
 			System.out.println("ERROR");
 			e.printStackTrace();
 		}
+	}
+
+	private List<Pattern_action_widget> loadAWtoFilter(final String path) {
+
+		Document doc = null;
+		try {
+			doc = XMLUtil.read(path);
+		} catch (final Exception e) {
+			System.out.println("Filter file not found.");
+			return null;
+		}
+		final Node root = doc.getDocumentElement();
+		final List<Pattern_action_widget> out = GUIPatternParser.createActionsWidgets(root);
+		if (out != null && out.size() > 0) {
+			return out;
+		}
+		return null;
 	}
 }

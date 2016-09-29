@@ -30,9 +30,10 @@ public class Pattern_window extends Pattern_widget<Window> {
 	// private List<Pattern_container> containers;
 
 	public Pattern_window(final String id, final String label, final Cardinality card,
-			final String alloy_correspondence, final Boolean_regexp modal, final boolean root) {
+			final String alloy_correspondence, final Boolean_regexp modal, final boolean root,
+			final String classs) {
 
-		super(id, label, card, alloy_correspondence);
+		super(id, label, card, alloy_correspondence, classs);
 		this.modal = modal;
 		this.root = root;
 		this.action_widgets = new ArrayList<>();
@@ -396,7 +397,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 	 */
 	protected <C extends Widget> List<Map<? extends Pattern_widget<C>, List<C>>> distribute(
 			final List<? extends Pattern_widget<C>> keys,
-			final Map<? extends Pattern_widget<C>, List<C>> map) {
+					final Map<? extends Pattern_widget<C>, List<C>> map) {
 
 		final List<Map<? extends Pattern_widget<C>, List<C>>> out = new ArrayList<>();
 

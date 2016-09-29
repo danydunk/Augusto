@@ -1,0 +1,30 @@
+TESTCASE SIZE = 14
+ACTION 1
+GO TO usi.gui.structure.Window@a088c4d5
+ACTION 2
+CLICK aw3 - Add Account
+ACTION 3
+CLICK aw83 - Cancel
+ACTION 4
+CLICK aw3 - Add Account
+ACTION 5
+CLICK aw83 - Cancel
+ACTION 6
+CLICK aw3 - Add Account
+ACTION 7
+CLICK aw83 - Cancel
+ACTION 8
+CLICK aw3 - Add Account
+ACTION 9
+CLICK aw83 - Cancel
+ACTION 10
+CLICK aw3 - Add Account
+ACTION 11
+CLICK aw83 - Cancel
+ACTION 12
+CLICK aw3 - Add Account
+ACTION 13
+CLICK aw83 - Cancel
+ACTION 14
+CLICK aw3 - Add Account
+TEST CASE RUN CORRECTLY

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filter>
+	<action_widget id="aw1">
+			<label>file - new</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw2">
+			<label>window - .*</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw5">
+			<label>download</label>
+			<class>buttonui</class>
+	</action_widget>
+	<action_widget id="aw6">
+			<label>help - check for updates</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw7">
+			<label>help - download plugins</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw8">
+			<label>help - buddi help</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw9">
+			<label>help - about buddi</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw10">
+			<label>help - buddi tutorial</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw11">
+			<label>date of the transaction.</label>
+			<class>buttonui</class>
+	</action_widget>
+	<action_widget id="aw12">
+			<label>file - save.*</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw13">
+			<label>file - open.*</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw14">
+			<label>view - next budget period</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw15">
+			<label>view - previous budget period</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw16">
+			<label>file - close window</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw17">
+			<label>file - quit buddi</label>
+			<class>menuitemui</class>
+	</action_widget>
+</filter>

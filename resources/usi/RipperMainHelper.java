@@ -20,15 +20,42 @@ import com.rational.test.ft.vp.IFtVerificationPoint;
 import com.ibm.rational.test.ft.object.interfaces.sapwebportal.*;
 /**
  * Script Name   : <b>RipperMain</b><br>
- * Generated     : <b>2016/07/08 6:18:02 AM</b><br>
+ * Generated     : <b>2016/09/19 4:34:52 AM</b><br>
  * Description   : Helper class for script<br>
  * Original Host : Windows 7 amd64 6.1 <br>
  * 
- * @since  July 08, 2016
+ * @since  September 19, 2016
  * @author usi
  */
 public abstract class RipperMainHelper extends RationalTestScript
 {
+	/**
+	 * MyAccounts: with default state.
+	 *		tabCount : 3
+	 * 		.class : javax.swing.JTabbedPane
+	 * 		accessibleContext.accessibleName : My Accounts
+	 * 		.tabs : {My Accounts,My Budget,My Reports}
+	 * 		.classIndex : 0
+	 */
+	protected GuiSubitemTestObject _guiSubitemTestObject() 
+	{
+		return new GuiSubitemTestObject(
+                        getMappedTestObject("_guiSubitemTestObject"));
+	}
+	/**
+	 * MyAccounts: with specific test context and state.
+	 *		tabCount : 3
+	 * 		.class : javax.swing.JTabbedPane
+	 * 		accessibleContext.accessibleName : My Accounts
+	 * 		.tabs : {My Accounts,My Budget,My Reports}
+	 * 		.classIndex : 0
+	 */
+	protected GuiSubitemTestObject _guiSubitemTestObject(TestObject anchor, long flags) 
+	{
+		return new GuiSubitemTestObject(
+                        getMappedTestObject("_guiSubitemTestObject"), anchor, flags);
+	}
+	
 	
 
 	protected RipperMainHelper()
