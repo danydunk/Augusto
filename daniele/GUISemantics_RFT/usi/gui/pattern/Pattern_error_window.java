@@ -6,11 +6,11 @@ public class Pattern_error_window extends Pattern_window {
 
 	private static Pattern_error_window instance;
 	final private Pattern_action_widget paw = new Pattern_action_widget("paw", ".*(ok|next).*",
-			Cardinality.ONE, "");
+			Cardinality.ONE, "", null);
 	final private Pattern_input_widget piw = new Pattern_input_widget("piw", ".*",
-			Cardinality.NONE, "", ".*");
+			Cardinality.NONE, "", ".*", null);
 	final private Pattern_selectable_widget psw = new Pattern_selectable_widget("psw", ".*",
-			Cardinality.NONE, "", ".*");
+			Cardinality.NONE, "", ".*", null);
 
 	static public Pattern_error_window getInstance() {
 
@@ -22,7 +22,7 @@ public class Pattern_error_window extends Pattern_window {
 
 	private Pattern_error_window() {
 
-		super("error_w", ".*", Cardinality.ONE, "", Boolean_regexp.TRUE, false);
+		super("error_w", ".*", Cardinality.ONE, "", Boolean_regexp.TRUE, false, null);
 		this.addWidget(this.paw);
 		this.addWidget(this.piw);
 		this.addWidget(this.psw);

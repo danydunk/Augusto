@@ -1,6 +1,7 @@
 package usi.gui.structure;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -180,80 +181,53 @@ public class Window extends Widget {
 	@Override
 	public boolean isSame(final Widget w) {
 
-		// we do not consider the label or position cause they can change over
-		// time
-
 		if (!(w instanceof Window)) {
 			return false;
 		}
-		// if (!super.sameProperties(w)) {
-		// return false;
-		// }
+
+		// for window we cannot relay on position or labels for recognition
+		if (!super.sameProperties_weak(w)) {
+			return false;
+		}
 
 		// same class
 		if (!w.classs.equals(this.classs)) {
 			return false;
 		}
 
-		// position is not reliable
-		// // we use the position +- delta to match
-		// final int delta = 1;
-		// if (w.x > this.x + delta || w.x < this.x - delta) {
-		// System.out.println("2");
-		//
-		// return false;
-		// }
-		// if (w.y > this.y + delta || w.y < this.y - delta) {
-		// System.out.println("3");
-		//
-		// return false;
-		// }
-
 		// we consider a window to be the same if it has the same widgets
 		final Window win = (Window) w;
-		if (win.getActionWidgets().size() != this.getActionWidgets().size()) {
+
+		final List<Widget> widgets = this.getWidgets();
+		final List<Widget> widgets_bis = win.getWidgets();
+
+		if (widgets.size() != widgets_bis.size()) {
 			return false;
 		}
-		// widgets are ordered by position
-		for (int cont = 0; cont < this.getActionWidgets().size(); cont++) {
-			final Action_widget aw = this.getActionWidgets().get(cont);
-			if (!aw.isSame(win.getActionWidgets().get(cont))) {
-
-				return false;
-			}
-		}
-
-		if (win.getInputWidgets().size() != this.getInputWidgets().size()) {
-
-			return false;
-		}
-		// widgets are ordered by position
-		for (int cont = 0; cont < this.getInputWidgets().size(); cont++) {
-			final Input_widget iw = this.getInputWidgets().get(cont);
-			if (iw instanceof Option_input_widget) {
-				final Option_input_widget oiw = (Option_input_widget) iw;
-				if (!oiw.isSame(win.getInputWidgets().get(cont))) {
-
+		// we iterate trough the widgets which are ordered by position
+		for (int x = 0; x < widgets.size(); x++) {
+			if (widgets.get(x) instanceof Action_widget) {
+				final Action_widget aw = (Action_widget) widgets.get(x);
+				if (!aw.isSimilar(widgets_bis.get(x))) {
 					return false;
 				}
-			} else {
-				if (!iw.isSame(win.getInputWidgets().get(cont))) {
-
+			} else if (widgets.get(x) instanceof Input_widget) {
+				if (widgets.get(x) instanceof Option_input_widget) {
+					final Option_input_widget oiw = (Option_input_widget) widgets.get(x);
+					if (!oiw.isSimilar(widgets_bis.get(x))) {
+						return false;
+					}
+				} else {
+					final Input_widget iw = (Input_widget) widgets.get(x);
+					if (!iw.isSimilar(widgets_bis.get(x))) {
+						return false;
+					}
+				}
+			} else if (widgets.get(x) instanceof Selectable_widget) {
+				final Selectable_widget sw = (Selectable_widget) widgets.get(x);
+				if (!sw.isSimilar(widgets_bis.get(x))) {
 					return false;
 				}
-			}
-		}
-
-		if (win.getSelectableWidgets().size() != this.getSelectableWidgets().size()) {
-
-			return false;
-		}
-		// widgets are ordered by position
-		for (int cont = 0; cont < this.getSelectableWidgets().size(); cont++) {
-			final Selectable_widget iw = this.getSelectableWidgets().get(cont);
-			if (!iw.isSame(win.getSelectableWidgets().get(cont))) {
-
-				return false;
 			}
 		}
 
@@ -266,6 +240,13 @@ public class Window extends Widget {
 		widgs.addAll(this.action_widgets);
 		widgs.addAll(this.input_widgets);
 		widgs.addAll(this.selectable_widgets);
+		Collections.sort(widgs);
 		return widgs;
+	}
+
+	@Override
+	public boolean isSimilar(final Widget w) {
+
+		return super.sameProperties_weak(w);
 	}
 }

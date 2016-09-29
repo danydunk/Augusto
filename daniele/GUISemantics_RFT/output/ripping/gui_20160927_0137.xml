@@ -1,0 +1,839 @@
+<?xml version="1.0" encoding="UTF-8"?><GUI>
+    <window id="w7">
+        <pos>421:134</pos>
+        <class>javax.swing.JDialog</class>
+        <title>Save Database as...</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw72">
+            <pos>853:170</pos>
+            <class>ButtonUI</class>
+            <label>Up One Level</label>
+        </action_widget>
+        <action_widget id="aw73">
+            <pos>873:170</pos>
+            <class>ButtonUI</class>
+            <label>Create New Folder</label>
+        </action_widget>
+        <action_widget id="aw74">
+            <pos>893:170</pos>
+            <class>ButtonUI</class>
+            <label>View Menu</label>
+        </action_widget>
+        <action_widget id="aw67">
+            <pos>440:201</pos>
+            <class>ToggleButtonUI</class>
+            <label>Recent Items</label>
+        </action_widget>
+        <action_widget id="aw68">
+            <pos>440:271</pos>
+            <class>ToggleButtonUI</class>
+            <label>Desktop</label>
+        </action_widget>
+        <action_widget id="aw69">
+            <pos>440:341</pos>
+            <class>ToggleButtonUI</class>
+            <label>My Documents</label>
+        </action_widget>
+        <action_widget id="aw70">
+            <pos>440:411</pos>
+            <class>ToggleButtonUI</class>
+            <label>Computer</label>
+        </action_widget>
+        <action_widget id="aw71">
+            <pos>440:481</pos>
+            <class>ToggleButtonUI</class>
+            <label>Network</label>
+        </action_widget>
+        <action_widget id="aw75">
+            <pos>926:501</pos>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw76">
+            <pos>926:528</pos>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw17">
+            <pos>533:169</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Save in:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw18">
+            <pos>610:503</pos>
+            <class>TextFieldUI</class>
+            <descriptor>File name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw19">
+            <pos>610:531</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw6">
+            <pos>533:201</pos>
+            <class>ListUI</class>
+            <descriptor>Save Database as...</descriptor>
+            <size>1</size>
+            <selected>0</selected>
+        </selectable_widget>
+    </window>
+    <window id="w8">
+        <pos>566:254</pos>
+        <class>com._17od.upm.gui.AboutDialog</class>
+        <title>About UPM</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw77">
+            <pos>697:412</pos>
+            <class>ButtonUI</class>
+            <label>OK</label>
+        </action_widget>
+        <input_widget id="iw20">
+            <pos>569:279</pos>
+            <class>TextAreaUI</class>
+            <descriptor>About UPM</descriptor>
+            <value>Universal Password Manager
+&lt;version unknown&gt;
+
+Copyright © 2005-2010 Adrian Smith &amp; Contributors
+
+adrian@17od.com
+http://upm.sourceforge.net</value>
+        </input_widget>
+    </window>
+    <window id="w9">
+        <pos>568:167</pos>
+        <class>com._17od.upm.gui.OptionsDialog</class>
+        <title>Options</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw78">
+            <pos>803:232</pos>
+            <class>ButtonUI</class>
+            <label>...</label>
+        </action_widget>
+        <action_widget id="aw79">
+            <pos>661:495</pos>
+            <class>ButtonUI</class>
+            <label>OK</label>
+        </action_widget>
+        <action_widget id="aw80">
+            <pos>713:495</pos>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw21">
+            <pos>592:233</pos>
+            <class>TextFieldUI</class>
+            <descriptor>Database To Load On Startup</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw22">
+            <pos>592:277</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Language</descriptor>
+            <value>[options] 1 : 5</value>
+        </input_widget>
+        <input_widget id="iw23">
+            <pos>589:327</pos>
+            <class>CheckBoxUI</class>
+            <label>Enable Proxy</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw24">
+            <pos>592:372</pos>
+            <class>TextFieldUI</class>
+            <descriptor>HTTP Proxy</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw25">
+            <pos>781:372</pos>
+            <class>TextFieldUI</class>
+            <descriptor>Port</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw26">
+            <pos>592:414</pos>
+            <class>TextFieldUI</class>
+            <descriptor>HTTP Proxy Username</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw28">
+            <pos>781:456</pos>
+            <class>CheckBoxUI</class>
+            <label>Hide</label>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw27">
+            <pos>592:457</pos>
+            <class>PasswordFieldUI</class>
+            <descriptor>HTTP Proxy Password</descriptor>
+            <value/>
+        </input_widget>
+    </window>
+    <window id="w10">
+        <pos>421:134</pos>
+        <class>javax.swing.JDialog</class>
+        <title>DB To Open On Startup......</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw86">
+            <pos>853:170</pos>
+            <class>ButtonUI</class>
+            <label>Up One Level</label>
+        </action_widget>
+        <action_widget id="aw87">
+            <pos>873:170</pos>
+            <class>ButtonUI</class>
+            <label>Create New Folder</label>
+        </action_widget>
+        <action_widget id="aw88">
+            <pos>893:170</pos>
+            <class>ButtonUI</class>
+            <label>View Menu</label>
+        </action_widget>
+        <action_widget id="aw81">
+            <pos>440:201</pos>
+            <class>ToggleButtonUI</class>
+            <label>Recent Items</label>
+        </action_widget>
+        <action_widget id="aw82">
+            <pos>440:271</pos>
+            <class>ToggleButtonUI</class>
+            <label>Desktop</label>
+        </action_widget>
+        <action_widget id="aw83">
+            <pos>440:341</pos>
+            <class>ToggleButtonUI</class>
+            <label>My Documents</label>
+        </action_widget>
+        <action_widget id="aw84">
+            <pos>440:411</pos>
+            <class>ToggleButtonUI</class>
+            <label>Computer</label>
+        </action_widget>
+        <action_widget id="aw85">
+            <pos>440:481</pos>
+            <class>ToggleButtonUI</class>
+            <label>Network</label>
+        </action_widget>
+        <action_widget id="aw89">
+            <pos>926:501</pos>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw90">
+            <pos>926:528</pos>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw29">
+            <pos>533:169</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Look in:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw30">
+            <pos>610:503</pos>
+            <class>TextFieldUI</class>
+            <descriptor>File name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw31">
+            <pos>610:531</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw7">
+            <pos>533:201</pos>
+            <class>ListUI</class>
+            <descriptor>DB To Open On Startup......</descriptor>
+            <size>0</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w1">
+        <pos>582:200</pos>
+        <class>com._17od.upm.gui.MainWindow</class>
+        <title>Universal Password Manager</title>
+        <modal>false</modal>
+        <root>true</root>
+        <action_widget id="aw9">
+            <pos>590:230</pos>
+            <class>MenuItemUI</class>
+            <label>Database - New Database</label>
+        </action_widget>
+        <action_widget id="aw10">
+            <pos>590:230</pos>
+            <class>MenuItemUI</class>
+            <label>Database - Open Database</label>
+        </action_widget>
+        <action_widget id="aw11">
+            <pos>590:230</pos>
+            <class>MenuItemUI</class>
+            <label>Database - Open Database From URL</label>
+        </action_widget>
+        <action_widget id="aw12">
+            <pos>590:230</pos>
+            <class>MenuItemUI</class>
+            <label>Database - Sync with Remote Database</label>
+        </action_widget>
+        <action_widget id="aw13">
+            <pos>590:230</pos>
+            <class>MenuItemUI</class>
+            <label>Database - Change Master Password</label>
+        </action_widget>
+        <action_widget id="aw14">
+            <pos>590:230</pos>
+            <class>MenuItemUI</class>
+            <label>Database - Database Properties</label>
+        </action_widget>
+        <action_widget id="aw15">
+            <pos>590:230</pos>
+            <class>MenuItemUI</class>
+            <label>Database - Export</label>
+        </action_widget>
+        <action_widget id="aw16">
+            <pos>590:230</pos>
+            <class>MenuItemUI</class>
+            <label>Database - Import</label>
+        </action_widget>
+        <action_widget id="aw17">
+            <pos>590:230</pos>
+            <class>MenuItemUI</class>
+            <label>Database - Exit</label>
+        </action_widget>
+        <action_widget id="aw18">
+            <pos>647:230</pos>
+            <class>MenuItemUI</class>
+            <label>Account - Add Account</label>
+        </action_widget>
+        <action_widget id="aw19">
+            <pos>647:230</pos>
+            <class>MenuItemUI</class>
+            <label>Account - Edit Account</label>
+        </action_widget>
+        <action_widget id="aw20">
+            <pos>647:230</pos>
+            <class>MenuItemUI</class>
+            <label>Account - Delete Account</label>
+        </action_widget>
+        <action_widget id="aw21">
+            <pos>647:230</pos>
+            <class>MenuItemUI</class>
+            <label>Account - View Account</label>
+        </action_widget>
+        <action_widget id="aw22">
+            <pos>647:230</pos>
+            <class>MenuItemUI</class>
+            <label>Account - Copy Username</label>
+        </action_widget>
+        <action_widget id="aw23">
+            <pos>647:230</pos>
+            <class>MenuItemUI</class>
+            <label>Account - Copy Password</label>
+        </action_widget>
+        <action_widget id="aw24">
+            <pos>700:230</pos>
+            <class>MenuItemUI</class>
+            <label>Help - About</label>
+        </action_widget>
+        <action_widget id="aw1">
+            <pos>591:252</pos>
+            <class>ButtonUI</class>
+            <label>Add Account</label>
+        </action_widget>
+        <action_widget id="aw2">
+            <pos>622:252</pos>
+            <class>ButtonUI</class>
+            <label>Edit Account</label>
+        </action_widget>
+        <action_widget id="aw3">
+            <pos>653:252</pos>
+            <class>ButtonUI</class>
+            <label>Delete Account</label>
+        </action_widget>
+        <action_widget id="aw4">
+            <pos>690:252</pos>
+            <class>ButtonUI</class>
+            <label>Copy Username</label>
+        </action_widget>
+        <action_widget id="aw5">
+            <pos>721:252</pos>
+            <class>ButtonUI</class>
+            <label>Copy Password</label>
+        </action_widget>
+        <action_widget id="aw6">
+            <pos>758:252</pos>
+            <class>ButtonUI</class>
+            <label>Options</label>
+        </action_widget>
+        <action_widget id="aw7">
+            <pos>795:252</pos>
+            <class>ButtonUI</class>
+            <label>Sync with Remote Database</label>
+        </action_widget>
+        <action_widget id="aw8">
+            <pos>737:292</pos>
+            <class>ButtonUI</class>
+            <label>Reset Search</label>
+        </action_widget>
+        <input_widget id="iw1">
+            <pos>609:291</pos>
+            <class>TextFieldUI</class>
+            <descriptor>Universal Password Manager</descriptor>
+            <value/>
+        </input_widget>
+        <selectable_widget id="sw1">
+            <pos>592:317</pos>
+            <class>ListUI</class>
+            <descriptor>Universal Password Manager</descriptor>
+            <size>0</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w2">
+        <pos>421:134</pos>
+        <class>javax.swing.JDialog</class>
+        <title>New Password Database...</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw30">
+            <pos>853:170</pos>
+            <class>ButtonUI</class>
+            <label>Up One Level</label>
+        </action_widget>
+        <action_widget id="aw31">
+            <pos>873:170</pos>
+            <class>ButtonUI</class>
+            <label>Create New Folder</label>
+        </action_widget>
+        <action_widget id="aw32">
+            <pos>893:170</pos>
+            <class>ButtonUI</class>
+            <label>View Menu</label>
+        </action_widget>
+        <action_widget id="aw25">
+            <pos>440:201</pos>
+            <class>ToggleButtonUI</class>
+            <label>Recent Items</label>
+        </action_widget>
+        <action_widget id="aw26">
+            <pos>440:271</pos>
+            <class>ToggleButtonUI</class>
+            <label>Desktop</label>
+        </action_widget>
+        <action_widget id="aw27">
+            <pos>440:341</pos>
+            <class>ToggleButtonUI</class>
+            <label>My Documents</label>
+        </action_widget>
+        <action_widget id="aw28">
+            <pos>440:411</pos>
+            <class>ToggleButtonUI</class>
+            <label>Computer</label>
+        </action_widget>
+        <action_widget id="aw29">
+            <pos>440:481</pos>
+            <class>ToggleButtonUI</class>
+            <label>Network</label>
+        </action_widget>
+        <action_widget id="aw33">
+            <pos>926:501</pos>
+            <class>ButtonUI</class>
+            <label>Save</label>
+        </action_widget>
+        <action_widget id="aw34">
+            <pos>926:528</pos>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw2">
+            <pos>533:169</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Save in:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw3">
+            <pos>610:503</pos>
+            <class>TextFieldUI</class>
+            <descriptor>File name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw4">
+            <pos>610:531</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw2">
+            <pos>533:201</pos>
+            <class>ListUI</class>
+            <descriptor>New Password Database...</descriptor>
+            <size>0</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w3">
+        <pos>421:134</pos>
+        <class>javax.swing.JDialog</class>
+        <title>New Password Database...</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw40">
+            <pos>853:170</pos>
+            <class>ButtonUI</class>
+            <label>Up One Level</label>
+        </action_widget>
+        <action_widget id="aw41">
+            <pos>873:170</pos>
+            <class>ButtonUI</class>
+            <label>Create New Folder</label>
+        </action_widget>
+        <action_widget id="aw42">
+            <pos>893:170</pos>
+            <class>ButtonUI</class>
+            <label>View Menu</label>
+        </action_widget>
+        <action_widget id="aw35">
+            <pos>440:201</pos>
+            <class>ToggleButtonUI</class>
+            <label>Recent Items</label>
+        </action_widget>
+        <action_widget id="aw36">
+            <pos>440:271</pos>
+            <class>ToggleButtonUI</class>
+            <label>Desktop</label>
+        </action_widget>
+        <action_widget id="aw37">
+            <pos>440:341</pos>
+            <class>ToggleButtonUI</class>
+            <label>My Documents</label>
+        </action_widget>
+        <action_widget id="aw38">
+            <pos>440:411</pos>
+            <class>ToggleButtonUI</class>
+            <label>Computer</label>
+        </action_widget>
+        <action_widget id="aw39">
+            <pos>440:481</pos>
+            <class>ToggleButtonUI</class>
+            <label>Network</label>
+        </action_widget>
+        <action_widget id="aw43">
+            <pos>926:501</pos>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw44">
+            <pos>926:528</pos>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw5">
+            <pos>533:169</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Save in:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw6">
+            <pos>610:503</pos>
+            <class>TextFieldUI</class>
+            <descriptor>File name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw7">
+            <pos>610:531</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw3">
+            <pos>533:201</pos>
+            <class>ListUI</class>
+            <descriptor>New Password Database...</descriptor>
+            <size>1</size>
+            <selected>0</selected>
+        </selectable_widget>
+    </window>
+    <window id="w4">
+        <pos>421:134</pos>
+        <class>javax.swing.JDialog</class>
+        <title>Open Password Database...</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw50">
+            <pos>853:170</pos>
+            <class>ButtonUI</class>
+            <label>Up One Level</label>
+        </action_widget>
+        <action_widget id="aw51">
+            <pos>873:170</pos>
+            <class>ButtonUI</class>
+            <label>Create New Folder</label>
+        </action_widget>
+        <action_widget id="aw52">
+            <pos>893:170</pos>
+            <class>ButtonUI</class>
+            <label>View Menu</label>
+        </action_widget>
+        <action_widget id="aw45">
+            <pos>440:201</pos>
+            <class>ToggleButtonUI</class>
+            <label>Recent Items</label>
+        </action_widget>
+        <action_widget id="aw46">
+            <pos>440:271</pos>
+            <class>ToggleButtonUI</class>
+            <label>Desktop</label>
+        </action_widget>
+        <action_widget id="aw47">
+            <pos>440:341</pos>
+            <class>ToggleButtonUI</class>
+            <label>My Documents</label>
+        </action_widget>
+        <action_widget id="aw48">
+            <pos>440:411</pos>
+            <class>ToggleButtonUI</class>
+            <label>Computer</label>
+        </action_widget>
+        <action_widget id="aw49">
+            <pos>440:481</pos>
+            <class>ToggleButtonUI</class>
+            <label>Network</label>
+        </action_widget>
+        <action_widget id="aw53">
+            <pos>926:501</pos>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw54">
+            <pos>926:528</pos>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw8">
+            <pos>533:169</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Look in:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw9">
+            <pos>610:503</pos>
+            <class>TextFieldUI</class>
+            <descriptor>File name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw10">
+            <pos>610:531</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw4">
+            <pos>533:201</pos>
+            <class>ListUI</class>
+            <descriptor>Open Password Database...</descriptor>
+            <size>0</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w5">
+        <pos>613:235</pos>
+        <class>com._17od.upm.gui.OpenDatabaseFromURLDialog</class>
+        <title>Open Database From URL</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw55">
+            <pos>661:426</pos>
+            <class>ButtonUI</class>
+            <label>OK</label>
+        </action_widget>
+        <action_widget id="aw56">
+            <pos>713:426</pos>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw11">
+            <pos>637:297</pos>
+            <class>TextFieldUI</class>
+            <descriptor>URL</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw12">
+            <pos>637:341</pos>
+            <class>TextFieldUI</class>
+            <descriptor>User Name</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw13">
+            <pos>637:385</pos>
+            <class>PasswordFieldUI</class>
+            <descriptor>Password</descriptor>
+            <value/>
+        </input_widget>
+    </window>
+    <window id="w6">
+        <pos>421:134</pos>
+        <class>javax.swing.JDialog</class>
+        <title>Save Database as...</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw62">
+            <pos>853:170</pos>
+            <class>ButtonUI</class>
+            <label>Up One Level</label>
+        </action_widget>
+        <action_widget id="aw63">
+            <pos>873:170</pos>
+            <class>ButtonUI</class>
+            <label>Create New Folder</label>
+        </action_widget>
+        <action_widget id="aw64">
+            <pos>893:170</pos>
+            <class>ButtonUI</class>
+            <label>View Menu</label>
+        </action_widget>
+        <action_widget id="aw57">
+            <pos>440:201</pos>
+            <class>ToggleButtonUI</class>
+            <label>Recent Items</label>
+        </action_widget>
+        <action_widget id="aw58">
+            <pos>440:271</pos>
+            <class>ToggleButtonUI</class>
+            <label>Desktop</label>
+        </action_widget>
+        <action_widget id="aw59">
+            <pos>440:341</pos>
+            <class>ToggleButtonUI</class>
+            <label>My Documents</label>
+        </action_widget>
+        <action_widget id="aw60">
+            <pos>440:411</pos>
+            <class>ToggleButtonUI</class>
+            <label>Computer</label>
+        </action_widget>
+        <action_widget id="aw61">
+            <pos>440:481</pos>
+            <class>ToggleButtonUI</class>
+            <label>Network</label>
+        </action_widget>
+        <action_widget id="aw65">
+            <pos>926:501</pos>
+            <class>ButtonUI</class>
+            <label>Save</label>
+        </action_widget>
+        <action_widget id="aw66">
+            <pos>926:528</pos>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw14">
+            <pos>533:169</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Save in:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw15">
+            <pos>610:503</pos>
+            <class>TextFieldUI</class>
+            <descriptor>File name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw16">
+            <pos>610:531</pos>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw5">
+            <pos>533:201</pos>
+            <class>ListUI</class>
+            <descriptor>Save Database as...</descriptor>
+            <size>0</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <edge type="static">
+        <from>aw76</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw77</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw78</from>
+        <to>w10</to>
+    </edge>
+    <edge type="static">
+        <from>aw79</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw80</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw90</from>
+        <to>w9</to>
+    </edge>
+    <edge type="static">
+        <from>aw9</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw10</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw11</from>
+        <to>w5</to>
+    </edge>
+    <edge type="static">
+        <from>aw24</from>
+        <to>w8</to>
+    </edge>
+    <edge type="static">
+        <from>aw6</from>
+        <to>w9</to>
+    </edge>
+    <edge type="static">
+        <from>aw31</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw34</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw44</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw54</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw55</from>
+        <to>w6</to>
+    </edge>
+    <edge type="static">
+        <from>aw56</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw63</from>
+        <to>w7</to>
+    </edge>
+    <edge type="static">
+        <from>aw66</from>
+        <to>w1</to>
+    </edge>
+</GUI>

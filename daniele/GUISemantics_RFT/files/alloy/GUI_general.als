@@ -118,7 +118,7 @@ pred go [w: Window, t, t': Time, g: Go] {
 	General in Current_window.is_in.t
 	go_pre [w, t]
 	--- effect ---
-	(go_semantics [w, t] and Current_window.is_in.t' = w and 	#Input_widget.content.t' = 0 and #Selectable_widget.selected.t' = 0 and go_success_post [w, t, t']) or
+	(go_semantics [w, t] and Current_window.is_in.t' = w and 	(all iw: Input_widget | iw.content.t = iw.content.(T/first)) and #Selectable_widget.selected.t' = 0 and go_success_post [w, t, t']) or
 	(not go_semantics [w, t] and Current_window.is_in.t' = General and (all iw: Input_widget | iw.content.t' = iw.content.t) and Selectable_widget.selected.t' = Selectable_widget.selected.t and go_fail_post [w, t, t'])
 	--- operation is tracked ---
 	g.where = w and Track.op.t' = g

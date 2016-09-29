@@ -1,0 +1,32 @@
+TESTCASE SIZE = 14
+ACTION 1
+GO TO usi.gui.structure.Window@a088c4d5
+ACTION 2
+CLICK aw3 - Add Account
+ACTION 3
+FILL iw23 - Account WITH test
+ACTION 4
+CLICK aw82 - OK
+ACTION 5
+SELECT sw1 WITH 0
+ACTION 6
+CLICK aw3 - Add Account
+ACTION 7
+FILL iw23 - Account WITH input
+ACTION 8
+CLICK aw82 - OK
+ACTION 9
+SELECT sw1 WITH 0
+ACTION 10
+CLICK aw21 - Account - Edit Account
+ACTION 11
+FILL iw23 - Account WITH input
+ACTION 12
+CLICK aw82 - OK
+ACTION 13
+FILL iw23 - Account WITH test
+ACTION 14
+CLICK aw82 - OK
+FUNCTIONAL ORACLE ERROR
+ERROR AT ACTION 14
+EXPECTED WINDOW w2C:\Users\usi\abtMyDocuments\upm_db - Universal Password Manager BUT IT WAS w10Edit Account

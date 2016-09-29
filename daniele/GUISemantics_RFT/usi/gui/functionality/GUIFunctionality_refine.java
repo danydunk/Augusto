@@ -448,8 +448,8 @@ public class GUIFunctionality_refine {
 					// add constraint
 					this.additional_constraints.add("not(" + property + ")");
 					System.out
-							.println("GET TEST TO DISCOVER WINDOW: new invalid property added - not("
-									+ property + ")");
+					.println("GET TEST TO DISCOVER WINDOW: new invalid property added - not("
+							+ property + ")");
 				}
 			}
 		}
@@ -799,7 +799,7 @@ public class GUIFunctionality_refine {
 
 	private SpecificSemantics semantic4DiscoverEdge(final SpecificSemantics originalSemantic,
 			final Window sourceWindow, final Window targetWindow, final Action_widget actionWidget)
-			throws Exception {
+					throws Exception {
 
 		// Maybe we should check the action that relates them.
 		if (!this.instancePattern.getGui().containsWindow(targetWindow.getId())) {
@@ -905,8 +905,8 @@ public class GUIFunctionality_refine {
 				res = runner.runTestCase(tc);
 			} catch (final Exception e) {
 				System.out
-						.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
-								+ e.getMessage());
+				.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
+						+ e.getMessage());
 				e.printStackTrace();
 				return null;
 			}
@@ -950,7 +950,7 @@ public class GUIFunctionality_refine {
 			final List<GUIAction> action_executed = this.observed_tcs.get(
 					this.observed_tcs.size() - 1).getActions_actually_executed();
 
-			final Ripper ripper = new Ripper(ConfigurationManager.getSleepTime(), this.gui);
+			final Ripper ripper = new Ripper(ConfigurationManager.getSleepTime(), this.gui, null);
 			ripper.ripWindow(action_executed, reached_w);
 			ApplicationHelper.getInstance().closeApplication();
 
@@ -1064,7 +1064,7 @@ public class GUIFunctionality_refine {
 
 					if (!sol.satisfiable()) {
 						System.out
-								.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+						.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 						break mainloop;
 					}
 
@@ -1147,7 +1147,7 @@ public class GUIFunctionality_refine {
 
 					} else {
 						System.out
-						.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
+								.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
 						this.valid_constraint = "";
 						return;
 					}

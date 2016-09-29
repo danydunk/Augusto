@@ -10,9 +10,9 @@ public class Pattern_input_widget extends Pattern_widget<Input_widget> {
 	private final String value;
 
 	public Pattern_input_widget(final String id, final String label, final Cardinality card,
-			final String alloy_correspondence, final String value) {
+			final String alloy_correspondence, final String value, final String classs) {
 
-		super(id, label, card, alloy_correspondence);
+		super(id, label, card, alloy_correspondence, classs);
 		if (value != null) {
 			this.value = value;
 		} else {

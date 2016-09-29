@@ -20,11 +20,11 @@ import com.rational.test.ft.vp.IFtVerificationPoint;
 import com.ibm.rational.test.ft.object.interfaces.sapwebportal.*;
 /**
  * Script Name   : <b>Error_window_test</b><br>
- * Generated     : <b>2016/08/22 5:26:36 AM</b><br>
+ * Generated     : <b>2016/09/15 2:59:53 AM</b><br>
  * Description   : Helper class for script<br>
  * Original Host : Windows 7 amd64 6.1 <br>
  * 
- * @since  August 22, 2016
+ * @since  September 15, 2016
  * @author usi
  */
 public abstract class Error_window_testHelper extends RationalTestScript

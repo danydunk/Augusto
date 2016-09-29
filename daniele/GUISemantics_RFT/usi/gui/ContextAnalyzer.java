@@ -44,7 +44,10 @@ public class ContextAnalyzer {
 		this.containerDescription = new HashMap<TestObject, String>();
 
 		for (final TestObject to : tos) {
+			final boolean showing = Boolean.valueOf(to.getProperty("showing").toString());
+
 			final String classs = to.getProperty("uIClassID").toString();
+
 			if (classs == null) {
 				throw new Exception("ContextAnalyzer: class id not found.");
 			}
@@ -63,13 +66,17 @@ public class ContextAnalyzer {
 
 			// if it is a descriptor
 			if (this.descriptors_classes.contains(classs)) {
+				if (!showing) {
+					continue;
+				}
+				final Object text = to.getProperty("text");
 				final Point p = (Point) to.getProperty("locationOnScreen");
 				final int x = p.x;
 				final int y = p.y;
 				final int width = Integer.valueOf(to.getProperty("width").toString());
 				final int height = Integer.valueOf(to.getProperty("height").toString());
 
-				final Object text = to.getProperty("text");
+				// final Object text = to.getProperty("text");
 				String label = "";
 				if (text != null) {
 					label = text.toString();

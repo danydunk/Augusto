@@ -38,10 +38,10 @@ public class TestCaseRunner {
 		this.gui = gui;
 	}
 
-	public TestCaseRunner(final long sleep) {
-
-		this(sleep, null);
-	}
+	// public TestCaseRunner(final long sleep) {
+	//
+	// this(sleep, null);
+	// }
 
 	public GUITestCaseResult runTestCase(final GUITestCase tc) throws Exception {
 
@@ -57,7 +57,7 @@ public class TestCaseRunner {
 
 		Window curr = null;
 		try {
-			curr = gmanager.getCurrentWindows().get(0);
+			curr = gmanager.getCurrentActiveWindows();
 		} catch (final Exception e) {
 			// System.out.println("exception");
 			if (app.isRunning()) {
@@ -67,7 +67,7 @@ public class TestCaseRunner {
 			}
 			Thread.sleep(1000);
 			gmanager.readGUI();
-			curr = gmanager.getCurrentWindows().get(0);
+			curr = gmanager.getCurrentActiveWindows();
 			// System.out.println(curr);
 
 		}
@@ -88,7 +88,7 @@ public class TestCaseRunner {
 		mainloop: for (int cont = 0; cont < actions.size(); cont++) {
 
 			final GUIAction act = actions.get(cont);
-			curr = gmanager.getCurrentWindows().get(0);
+			curr = gmanager.getCurrentActiveWindows();
 			GUIAction act_to_execute = act;
 
 			if (act instanceof Go) {
@@ -171,18 +171,18 @@ public class TestCaseRunner {
 
 			actions_actually_executed.add(act);
 
-			this.updatedStructuresForSelect(gmanager.getCurrentWindows().get(0));
+			this.updatedStructuresForSelect(gmanager.getCurrentActiveWindows());
 
 			if (tc.containsAction(act)) {
 				actions_executed.add(act);
-				if (gmanager.getCurrentWindows().size() > 0) {
-					results.add(this.getKnownWindowIfAny(gmanager.getCurrentWindows().get(0)));
+				if (gmanager.getCurrentActiveWindows() != null) {
+					results.add(this.getKnownWindowIfAny(gmanager.getCurrentActiveWindows()));
 				} else {
 					results.add(null);
 				}
 			} else {
 				if (go_actions != null && go_actions.get(go_actions.size() - 1) == act) {
-					results.add(this.getKnownWindowIfAny(gmanager.getCurrentWindows().get(0)));
+					results.add(this.getKnownWindowIfAny(gmanager.getCurrentActiveWindows()));
 				}
 			}
 		}
@@ -273,48 +273,47 @@ public class TestCaseRunner {
 				final Window out = new Window(in.getTo(), w.getId(), in.getLabel(), in.getClasss(),
 						in.getX(), in.getY(), in.isModal());
 				out.setRoot(w.isRoot());
-				loop: for (final Action_widget aw : in.getActionWidgets()) {
-					for (final Action_widget aw2 : w.getActionWidgets()) {
-						if (aw2.isSame(aw)) {
+
+				// we can loop only once since if they are the same they must
+				// have the same widgets number
+				for (int x = 0; x < in.getWidgets().size(); x++) {
+					if (w.getWidgets().get(x) instanceof Action_widget) {
+						final Action_widget aw = (Action_widget) in.getWidgets().get(x);
+						if (aw.isSimilar(w.getWidgets().get(x))) {
+							final Action_widget aw2 = (Action_widget) w.getWidgets().get(x);
 							final Action_widget new_aw = new Action_widget(aw2.getId(),
 									aw.getLabel(), aw.getClasss(), aw.getX(), aw.getY());
 							new_aw.setDescriptor(aw.getDescriptor());
 							out.addWidget(new_aw);
-							continue loop;
+						} else {
+							throw new Exception(
+									"TestCaseRunner - getKnownWindowIfAny: action widget not found.");
 						}
-					}
-					throw new Exception(
-							"TestCaseRunner - getKnownWindowIfAny: action widget not found.");
-				}
 
-				loop: for (final Input_widget iw : in.getInputWidgets()) {
-					for (final Input_widget iw2 : w.getInputWidgets()) {
-						if (iw2.isSame(iw)) {
-							if (iw2 instanceof Option_input_widget) {
-								final Option_input_widget oiw = (Option_input_widget) iw;
-								final Option_input_widget new_oiw = new Option_input_widget(
-										iw2.getId(), iw.getLabel(), iw.getClasss(), iw.getX(),
-										iw.getY(), oiw.getSize(), oiw.getSelected());
-								new_oiw.setDescriptor(iw.getDescriptor());
-								out.addWidget(new_oiw);
-							} else {
-								final Input_widget new_iw = new Input_widget(iw2.getId(),
-										iw.getLabel(), iw.getClasss(), iw.getX(), iw.getY(),
-										iw.getValue());
-								new_iw.setDescriptor(iw.getDescriptor());
-								out.addWidget(new_iw);
-							}
-							continue loop;
+					} else if (w.getWidgets().get(x) instanceof Input_widget) {
+						final Input_widget iw = (Input_widget) in.getWidgets().get(x);
+						if (w.getWidgets().get(x) instanceof Option_input_widget) {
+							final Option_input_widget iw2 = (Option_input_widget) w.getWidgets()
+									.get(x);
+							final Option_input_widget oiw = (Option_input_widget) iw;
+							final Option_input_widget new_oiw = new Option_input_widget(
+									iw2.getId(), iw.getLabel(), iw.getClasss(), iw.getX(),
+									iw.getY(), oiw.getSize(), oiw.getSelected());
+							new_oiw.setDescriptor(iw.getDescriptor());
+							out.addWidget(new_oiw);
+						} else {
+							final Input_widget iw2 = (Input_widget) w.getWidgets().get(x);
+							final Input_widget new_iw = new Input_widget(iw2.getId(),
+									iw.getLabel(), iw.getClasss(), iw.getX(), iw.getY(),
+									iw.getValue());
+							new_iw.setDescriptor(iw.getDescriptor());
+							out.addWidget(new_iw);
+
 						}
-					}
-					throw new Exception(
-							"TestCaseRunner - getKnownWindowIfAny: input widget not found.");
-				}
-
-				loop: for (final Selectable_widget sw : in.getSelectableWidgets()) {
-					for (final Selectable_widget sw2 : w.getSelectableWidgets()) {
-						if (sw2.isSame(sw)) {
-
+					} else if (w.getWidgets().get(x) instanceof Selectable_widget) {
+						final Selectable_widget sw = (Selectable_widget) in.getWidgets().get(x);
+						if (sw.isSimilar(w.getWidgets().get(x))) {
+							final Selectable_widget sw2 = (Selectable_widget) w.getWidgets().get(x);
 							final TestObject to = sw.getTo();
 							final TestDataList list = (TestDataList) to.getTestData("list");
 							final ITestDataElementList el_list = list.getElements();
@@ -349,11 +348,11 @@ public class TestCaseRunner {
 									index);
 							new_sw.setDescriptor(sw.getDescriptor());
 							out.addWidget(new_sw);
-							continue loop;
+						} else {
+							throw new Exception(
+									"TestCaseRunner - getKnownWindowIfAny: action widget not found.");
 						}
 					}
-					throw new Exception(
-							"TestCaseRunner - getKnownWindowIfAny: selectable widget not found.");
 				}
 
 				return out;
@@ -364,8 +363,8 @@ public class TestCaseRunner {
 
 	private void dealWithErrorWindow(final GuiStateManager gmanager) throws Exception {
 
-		if (gmanager.getCurrentWindows().size() > 0) {
-			final Window current = gmanager.getCurrentWindows().get(0);
+		if (gmanager.getCurrentActiveWindows() != null) {
+			final Window current = gmanager.getCurrentActiveWindows();
 			final Pattern_error_window err = Pattern_error_window.getInstance();
 			if (err.isMatch(current)) {
 				// we create a click action (the window must have only one

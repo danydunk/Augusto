@@ -813,6 +813,12 @@ public class AlloyUtil {
 					content += System.getProperty("line.separator");
 					content += "all v: " + list + " | not (v in Invalid)";
 					content += System.getProperty("line.separator");
+					if (oiw.getSelected() == -1) {
+						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
+					} else {
+						content += iws.get(iw).getIdentifier() + ".content.(T/first) = "
+								+ iws.get(iw).getIdentifier() + "_value_" + oiw.getSelected();
+					}
 				}
 			} else {
 				String metadata = iw.getLabel() != null ? iw.getLabel() : "";
@@ -823,11 +829,13 @@ public class AlloyUtil {
 					content += "all t: Time | #" + iws.get(iw).getIdentifier()
 							+ ".content.t > 0 => not(" + iws.get(iw).getIdentifier()
 							+ ".content.t in Invalid)";
+					content += System.getProperty("line.separator");
+					content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
 				}
 			}
 
 		}
-		// content += System.getProperty("line.separator");
+		content += System.getProperty("line.separator");
 		Collections.sort(to_order);
 		for (int cont = 0; cont < (to_order.size() - 1); cont++) {
 			if (cont != 0) {

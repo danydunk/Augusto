@@ -5,7 +5,9 @@ import java.util.List;
 
 import usi.action.ActionManager;
 import usi.application.ApplicationHelper;
+import usi.configuration.ConfigurationManager;
 import usi.gui.GuiStateManager;
+import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_error_window;
 import usi.gui.semantic.testcase.Click;
 import usi.gui.semantic.testcase.GUIAction;
@@ -22,22 +24,34 @@ public class Ripper {
 	private final ActionManager actionManager;
 	private GUI gui;
 	private final long sleeptime;
+	private final List<Pattern_action_widget> aw_to_filter;
 
-	public Ripper(final long sleeptime) {
+	public Ripper(final long sleeptime, final List<Pattern_action_widget> aw_to_filter) {
 
 		this.application = ApplicationHelper.getInstance();
 		this.sleeptime = sleeptime;
 		this.action_widget_to_ignore = new ArrayList<>();
 		this.actionManager = new ActionManager(this.sleeptime);
+		if (aw_to_filter == null) {
+			this.aw_to_filter = new ArrayList<>();
+		} else {
+			this.aw_to_filter = aw_to_filter;
+		}
 	}
 
-	public Ripper(final long sleeptime, final GUI gui) {
+	public Ripper(final long sleeptime, final GUI gui,
+			final List<Pattern_action_widget> aw_to_filter) {
 
 		this.application = ApplicationHelper.getInstance();
 		this.sleeptime = sleeptime;
 		this.action_widget_to_ignore = new ArrayList<>();
 		this.gui = gui;
 		this.actionManager = new ActionManager(this.sleeptime);
+		if (aw_to_filter == null) {
+			this.aw_to_filter = new ArrayList<>();
+		} else {
+			this.aw_to_filter = aw_to_filter;
+		}
 	}
 
 	public GUI ripApplication() throws Exception {
@@ -68,63 +82,45 @@ public class Ripper {
 			this.restart_and_go_to_window(actions, w);
 		}
 
-		List<Action_widget> aws = this.filterAWS(w.getActionWidgets());
+		final List<Action_widget> aws = this.filterAWS(w.getActionWidgets());
 
-		for (int cont = 0; cont < aws.size(); cont++) {
+		mainloop: for (int cont = 0; cont < aws.size(); cont++) {
 
 			final Action_widget aw = aws.get(cont);
+
+			// we filter the aws
+			for (final Pattern_action_widget paw : this.aw_to_filter) {
+				if (paw.isMatch(aw)) {
+					continue mainloop;
+				}
+			}
 
 			if (this.action_widget_to_ignore.contains(aw.getClasss())) {
 				continue;
 			}
 			final Click act = new Click(w, null, aw);
-
 			this.actionManager.executeAction(act);
 
-			final List<Window> curr_windows = this.guimanager.readGUI();
+			this.guimanager.readGUI();
 			this.dealWithErrorWindow(this.guimanager);
-
-			if (curr_windows.size() > 0 && w.isSame(curr_windows.get(0))) {
+			final Window curr_window = this.guimanager.getCurrentActiveWindows();
+			if (curr_window != null && w.isSame(curr_window)) {
 				// same window
-				final List<Action_widget> aws2 = curr_windows.get(0).getActionWidgets();
-				// we check that the action widgets are the same
-				// we consider only the widgets that were in the window the
-				// first time we reached it
-				List<Action_widget> new_aws = new ArrayList<>();
-				loop: for (final Action_widget aww : aws) {
-					for (final Action_widget aww2 : aws2) {
-						if (aww2.isSame(aww)) {
-							// aww.setTO(aww2.getTo());
-							new_aws.add(aww);
-							continue loop;
-						}
-					}
-					break loop;
-				}
-				new_aws = this.filterAWS(new_aws);
-				if (new_aws.size() != aws.size() && cont < aws.size() - 1) {
-					// some widgets were missing and there are still actions to
-					// do, we restart the app
-					this.restart_and_go_to_window(actions, w);
-					continue;
-				}
-				aws = new_aws;
+				// aws = curr_window.getActionWidgets();
 				continue;
 			}
 
-			// if the windows are 0 the application was closed
-			if (curr_windows.size() > 0) {
+			// if the windows is null the application was closed
+			if (curr_window != null) {
 
-				final Window current = curr_windows.get(0);
-
-				final Window match = this.isWindowNew(current);
+				final Window match = this.isWindowNew(curr_window);
 				if (match == null) {
 					// new window
-					this.gui.addWindow(current);
-					this.gui.addStaticEdge(aw.getId(), current.getId());
+					this.gui.addWindow(curr_window);
+					this.gui.addStaticEdge(aw.getId(), curr_window.getId());
 					final List<GUIAction> actions_to_current = new ArrayList<>(actions);
 					actions_to_current.add(act);
-					this.ripWindow(actions_to_current, current);
+					this.ripWindow(actions_to_current, curr_window);
 
 				} else {
 					this.gui.addStaticEdge(aw.getId(), match.getId());
@@ -151,10 +147,19 @@ public class Ripper {
 			this.dealWithErrorWindow(this.guimanager);
 			this.actionManager.executeAction(act);
 		}
+		this.guimanager.readGUI();
+		this.dealWithErrorWindow(this.guimanager);
 
-		if (!w.isSame(this.guimanager.readGUI().get(0))) {
-			throw new Exception(
-					"Ripper - restart_and_go_to_window: it was not possible to reach the selected window.");
+		if (!w.isSame(this.guimanager.getCurrentActiveWindows())) {
+			// we read again the gui in case it was a problem of sleeptime
+			Thread.sleep(ConfigurationManager.getSleepTime());
+			this.guimanager.readGUI();
+			this.dealWithErrorWindow(this.guimanager);
+
+			if (!w.isSame(this.guimanager.getCurrentActiveWindows())) {
+				throw new Exception(
+						"Ripper - restart_and_go_to_window: it was not possible to reach the selected window.");
+			}
 		}
 
 		// // we check that the action widgets are the same
@@ -179,8 +184,8 @@ public class Ripper {
 	// TODO: this code is duplicated
 	private void dealWithErrorWindow(final GuiStateManager gmanager) throws Exception {
 
-		if (gmanager.getCurrentWindows().size() > 0) {
-			final Window current = gmanager.getCurrentWindows().get(0);
+		if (gmanager.getCurrentActiveWindows() != null) {
+			final Window current = gmanager.getCurrentActiveWindows();
 			final Pattern_error_window err = Pattern_error_window.getInstance();
 			if (err.isMatch(current)) {
 				// we create a click action (the window must have only one

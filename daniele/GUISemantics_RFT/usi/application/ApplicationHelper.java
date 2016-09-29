@@ -46,7 +46,7 @@ public class ApplicationHelper {
 		try {
 			do {
 
-				Thread.sleep(2000);
+				Thread.sleep(3000);
 
 				this.root = RationalTestScript.getRootTestObject();
 			} while (this.root == null && (System.nanoTime() - delayTime) / 1000000 < 30000);

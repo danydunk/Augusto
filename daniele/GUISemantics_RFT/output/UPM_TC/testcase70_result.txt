@@ -1,0 +1,30 @@
+TESTCASE SIZE = 14
+ACTION 1
+GO TO usi.gui.structure.Window@a088c4d5
+ACTION 2
+CLICK aw3 - Add Account
+ACTION 3
+FILL iw28 - Notes WITH string
+ACTION 4
+CLICK aw82 - OK
+ACTION 5
+CLICK aw3 - Add Account
+ACTION 6
+FILL iw23 - Account WITH string
+ACTION 7
+CLICK aw82 - OK
+ACTION 8
+SELECT sw1 WITH 0
+ACTION 9
+CLICK aw21 - Account - Edit Account
+ACTION 10
+FILL iw23 - Account WITH string
+ACTION 11
+CLICK aw82 - OK
+ACTION 12
+CLICK aw83 - Cancel
+ACTION 13
+CLICK aw22 - Account - Delete Account
+ACTION 14
+CLICK aw124 - Yes
+TEST CASE RUN CORRECTLY

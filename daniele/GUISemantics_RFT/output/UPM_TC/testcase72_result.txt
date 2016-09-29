@@ -1,0 +1,30 @@
+TESTCASE SIZE = 14
+ACTION 1
+GO TO usi.gui.structure.Window@a088c4d5
+ACTION 2
+CLICK aw20 - Account - Add Account
+ACTION 3
+FILL iw25 - Password WITH password
+ACTION 4
+FILL iw26 - null WITH 1
+ACTION 5
+FILL iw25 - Password WITH password
+ACTION 6
+FILL iw26 - null WITH 1
+ACTION 7
+FILL iw25 - Password WITH password
+ACTION 8
+FILL iw26 - null WITH 1
+ACTION 9
+CLICK aw83 - Cancel
+ACTION 10
+CLICK aw20 - Account - Add Account
+ACTION 11
+FILL iw26 - null WITH 1
+ACTION 12
+CLICK aw82 - OK
+ACTION 13
+SELECT sw1 WITH 0
+ACTION 14
+CLICK aw21 - Account - Edit Account
+TEST CASE RUN CORRECTLY

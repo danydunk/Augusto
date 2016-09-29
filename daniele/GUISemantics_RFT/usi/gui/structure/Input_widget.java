@@ -40,6 +40,16 @@ public class Input_widget extends Widget {
 			return false;
 		}
 
-		return this.sameProperties(w);
+		return this.sameProperties_strong(w);
+	}
+
+	@Override
+	public boolean isSimilar(final Widget w) {
+
+		if (!(w instanceof Input_widget)) {
+			return false;
+		}
+
+		return this.sameProperties_weak(w);
 	}
 }

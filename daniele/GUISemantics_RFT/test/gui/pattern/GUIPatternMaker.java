@@ -16,31 +16,31 @@ public class GUIPatternMaker {
 		try {
 			// pw1
 			final Pattern_window pw1 = new Pattern_window("pw1", ".*", Cardinality.SOME, "Initial",
-					Boolean_regexp.ANY, true);
+					Boolean_regexp.ANY, true, null);
 			final Pattern_action_widget paw1 = new Pattern_action_widget("paw1", ".*add.*",
-					Cardinality.SOME, "Trigger");
+					Cardinality.SOME, "Trigger", null);
 			pw1.addWidget(paw1);
 			pattern.addWindow(pw1);
 			// pw2
 			final Pattern_window pw2 = new Pattern_window("pw2", ".*", Cardinality.ONE, "Form",
-					Boolean_regexp.ANY, false);
+					Boolean_regexp.ANY, false, null);
 			final Pattern_action_widget paw2 = new Pattern_action_widget("paw2", ".*next.*",
-					Cardinality.ONE, "Ok");
+					Cardinality.ONE, "Ok", null);
 			final Pattern_action_widget paw3 = new Pattern_action_widget("paw3", ".*back.*",
-					Cardinality.ONE, "Cancel");
+					Cardinality.ONE, "Cancel", null);
 			final Pattern_input_widget piw1 = new Pattern_input_widget("piw1", ".*",
-					Cardinality.SOME, "Input_widget", null);
+					Cardinality.SOME, "Input_widget", null, null);
 			pw2.addWidget(paw2);
 			pw2.addWidget(paw3);
 			pw2.addWidget(piw1);
 			pattern.addWindow(pw2);
 			// pw3
 			final Pattern_window pw3 = new Pattern_window("pw3", ".*", Cardinality.LONE, "Confirm",
-					Boolean_regexp.TRUE, false);
+					Boolean_regexp.TRUE, false, null);
 			final Pattern_action_widget paw4 = new Pattern_action_widget("paw4", ".*ok.*",
-					Cardinality.ONE, "Ok");
+					Cardinality.ONE, "Ok", null);
 			final Pattern_action_widget paw5 = new Pattern_action_widget("paw5", ".*back.*",
-					Cardinality.ONE, "Cancel");
+					Cardinality.ONE, "Cancel", null);
 			pw3.addWidget(paw4);
 			pw3.addWidget(paw5);
 			pattern.addWindow(pw3);
@@ -63,20 +63,20 @@ public class GUIPatternMaker {
 		try {
 			// pw1
 			final Pattern_window pw1 = new Pattern_window("pw1", ".*", Cardinality.SOME, "",
-					Boolean_regexp.ANY, true);
+					Boolean_regexp.ANY, true, null);
 			final Pattern_action_widget paw1 = new Pattern_action_widget("paw1", ".*add.*",
-					Cardinality.SOME, "");
+					Cardinality.SOME, "", null);
 			pw1.addWidget(paw1);
 			pattern.addWindow(pw1);
 			// pw2
 			final Pattern_window pw2 = new Pattern_window("pw2", ".*", Cardinality.ONE, "",
-					Boolean_regexp.ANY, false);
+					Boolean_regexp.ANY, false, null);
 			final Pattern_action_widget paw2 = new Pattern_action_widget("paw2", ".*next.*",
-					Cardinality.ONE, "");
+					Cardinality.ONE, "", null);
 			final Pattern_action_widget paw3 = new Pattern_action_widget("paw3", ".*back.*",
-					Cardinality.ONE, "");
+					Cardinality.ONE, "", null);
 			final Pattern_input_widget piw1 = new Pattern_input_widget("piw1", ".*",
-					Cardinality.SOME, "", null);
+					Cardinality.SOME, "", null, null);
 			pw2.addWidget(paw2);
 			pw2.addWidget(paw3);
 			pw2.addWidget(piw1);
@@ -99,43 +99,43 @@ public class GUIPatternMaker {
 		try {
 			// pw1
 			final Pattern_window pw1 = new Pattern_window("pw1", ".*", Cardinality.SOME, "",
-					Boolean_regexp.ANY, true);
+					Boolean_regexp.ANY, true, null);
 			final Pattern_action_widget paw1 = new Pattern_action_widget("paw1", ".*add.*",
-					Cardinality.SOME, "");
+					Cardinality.SOME, "", null);
 			pw1.addWidget(paw1);
 			pattern.addWindow(pw1);
 			// pw2
 			final Pattern_window pw2 = new Pattern_window("pw2", ".*", Cardinality.ONE, "",
-					Boolean_regexp.ANY, false);
+					Boolean_regexp.ANY, false, null);
 			final Pattern_action_widget paw2 = new Pattern_action_widget("paw2", ".*next.*",
-					Cardinality.ONE, "");
+					Cardinality.ONE, "", null);
 			final Pattern_action_widget paw3 = new Pattern_action_widget("paw3", ".*back.*",
-					Cardinality.ONE, "");
+					Cardinality.ONE, "", null);
 			final Pattern_input_widget piw1 = new Pattern_input_widget("piw1", ".*",
-					Cardinality.SOME, "", null);
+					Cardinality.SOME, "", null, null);
 			pw2.addWidget(paw2);
 			pw2.addWidget(paw3);
 			pw2.addWidget(piw1);
 			pattern.addWindow(pw2);
 			// pw3
 			final Pattern_window pw3 = new Pattern_window("pw3", ".*", Cardinality.LONE, "",
-					Boolean_regexp.TRUE, false);
+					Boolean_regexp.TRUE, false, null);
 			final Pattern_action_widget paw4 = new Pattern_action_widget("paw4", ".*ok.*",
-					Cardinality.ONE, "");
+					Cardinality.ONE, "", null);
 			final Pattern_action_widget paw5 = new Pattern_action_widget("paw5", ".*back.*",
-					Cardinality.ONE, "");
+					Cardinality.ONE, "", null);
 			pw3.addWidget(paw4);
 			pw3.addWidget(paw5);
 			pattern.addWindow(pw3);
 			// pw4
 			final Pattern_window pw4 = new Pattern_window("pw4", ".*", Cardinality.SET, "",
-					Boolean_regexp.ANY, false);
+					Boolean_regexp.ANY, false, null);
 			final Pattern_action_widget paw6 = new Pattern_action_widget("paw6", ".*next.*",
-					Cardinality.ONE, "");
+					Cardinality.ONE, "", null);
 			final Pattern_action_widget paw7 = new Pattern_action_widget("paw7", ".*back.*",
-					Cardinality.ONE, "");
+					Cardinality.ONE, "", null);
 			final Pattern_input_widget piw2 = new Pattern_input_widget("piw2", ".*",
-					Cardinality.SOME, "", null);
+					Cardinality.SOME, "", null, null);
 			pw4.addWidget(paw6);
 			pw4.addWidget(paw7);
 			pw4.addWidget(piw2);
