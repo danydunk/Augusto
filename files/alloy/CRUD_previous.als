@@ -2,6 +2,7 @@
 pred init [t: Time] {
 	no List.contains.t
 	no Track.op.t
+	//no Input_widget.content.t
 	no Selectable_widget.selected.t
  	Current_window.is_in.t = General
 	no Current_crud_op.operation.t
@@ -21,24 +22,24 @@ abstract sig Initial extends Window { }
 abstract sig Confirm extends Window { }
 
 fact {
-	//#Selectable_widget = 1
-	//#Create_trigger > 0
-	//#Read_trigger > 0
-	//#Update_trigger > 0
-	//#Delete_trigger > 0
-	//#Form =1
-	//#Initial = 1
+	#Selectable_widget = 1
+	#Create_trigger > 0
+	#Read_trigger > 0
+	#Update_trigger > 0
+	#Delete_trigger > 0
+	#Form > 0
+	#Initial = 1
 	all vw: View | one ok: Ok | #vw.sws = 0 and vw.aws = ok
 	#View = 1 => #View.iws = #Form.iws
 	#View = 1 => all iw: View.iws | one iww: Form.iws | View.mapping.iw = iww and #View.mapping.iw = 1
 	#View = 1 => 	all iww: Form.iws | one iw: View.iws | View.mapping.iw = iww
 	#View = 1 => 	no iww, iww2: Form.iws | one iw, iw2: View.iws | IW/lt[iww,iww2] and IW/lt[iw2,iw] and View.mapping.iw = iww and View.mapping.iw2 = iww2
 	all iw: Initial | iw.aws = (Create_trigger+Read_trigger+Update_trigger+Delete_trigger) and #iw.iws = 0 and #iw.sws = 1
-	all fw: Form | one ok: Ok,  cancel: Cancel | #fw.iws > 0 and fw.aws = ok+cancel and #fw.sws = 0 and ok.goes in Initial+Confirm and cancel.goes in Initial
+	all fw: Form | one ok: Ok,  cancel: Cancel | #fw.iws > 0 and fw.aws = ok+cancel and #fw.sws = 0 and ok.goes in Initial+Form and cancel.goes in Initial+Form
 	all cw: Confirm | one ok: Ok,  cancel: Cancel | #cw.iws = 0 and #cw.sws = 0 and cw.aws = ok+cancel and ok.goes in Initial+Form and cancel.goes in Initial+Form
 	#Window = #Form + #Initial + #Confirm + #General + #View
 }
----------------Generic CRUD Semantics---------- 
+---------------Generic ADD Semantics----------
 abstract sig Crud_op {}
 one sig CREATE, READ, UPDATE, DELETE extends Crud_op {}
 one sig Current_crud_op {
@@ -99,23 +100,6 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] {
 	o in sw.list.t
 }
 
-pred select_doubleclick_semantics [sw: Selectable_widget, t: Time, o: Object] { }
-pred select_doubleclick_success_post [sw: Selectable_widget, t, t': Time, o: Object] {
-	List.contains.t' = List.contains.t
-	Current_crud_op.operation.t' = Current_crud_op.operation.t
-	Current_window.is_in.t' = View
-	(Current_crud_op.operation.t' = READ and load_form[o, t'] and Selectable_widget.selected.t' = o)
-}
-pred select_doubleclick_fail_post [sw: Selectable_widget, t, t': Time, o: Object] {
-	List.contains.t' = List.contains.t
-	Current_crud_op.operation.t' = Current_crud_op.operation.t
-	Current_window.is_in.t' = Current_window.is_in.t
-	all iw: Input_widget | iw.content.t' = iw.content.t
-}
-pred select_doubleclick_pre[sw: Selectable_widget, t: Time, o: Object] { 
-	o in sw.list.t
-}
-
 pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
 	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
@@ -131,21 +115,21 @@ pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Cancel and Current_window.is_in.t  in Confirm) => (2=(1+1))
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
-	(aw in Create_trigger) => (Current_window.is_in.t' = (Form & aw.goes) and Current_crud_op.operation.t' = CREATE and List.contains.t' = List.contains.t and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #Selectable_widget.selected.t' = 0)
-	(aw in Read_trigger) => (Current_window.is_in.t' = (View & aw.goes) and Current_crud_op.operation.t' = READ and List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t'] and (all sw: Selectable_widget |sw.selected.t' = sw.selected.t))
-	(aw in Update_trigger) => (Current_window.is_in.t' = (Form & aw.goes) and Current_crud_op.operation.t' = UPDATE and List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t']  and (all sw: Selectable_widget |sw.selected.t' = sw.selected.t))
+	(aw in Create_trigger) => (Current_crud_op.operation.t' = CREATE and List.contains.t' = List.contains.t and (all iw: Input_widget | iw.content.t = iw.content.(T/first)) and #Selectable_widget.selected.t' = 0)
+	(aw in Read_trigger) => (Current_crud_op.operation.t' = READ and List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t'] and (all sw: Selectable_widget |sw.selected.t' = sw.selected.t))
+	(aw in Update_trigger) => (Current_crud_op.operation.t' = UPDATE and List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t']  and (all sw: Selectable_widget |sw.selected.t' = sw.selected.t))
 	(aw in Delete_trigger and aw.goes in Confirm) => (Current_crud_op.operation.t' = DELETE and List.contains.t' = List.contains.t  and (all sw: Selectable_widget |sw.selected.t' = sw.selected.t)) and (all iw:Input_widget | iw.content.t' = iw.content.t)
 	
-	(aw in Cancel and Current_window.is_in.t  in Form and Current_crud_op.operation.t in (CREATE+UPDATE)) => (Current_window.is_in.t' = (Initial & aw.goes) and List.contains.t' = List.contains.t and #Current_window.is_in.t.iws.content.t' = 0 and (all iww: (Input_widget - Current_window.is_in.t.iws) | iww.content.t' = iww.content.t) and Selectable_widget.selected.t' = Selectable_widget.selected.t)
+	(aw in Cancel and Current_window.is_in.t  in Form and Current_crud_op.operation.t in (CREATE+UPDATE)) => (List.contains.t' = List.contains.t and #Current_window.is_in.t.iws.content.t' = 0 and (all iww: (Input_widget - Current_window.is_in.t.iws) | iww.content.t' = iww.content.t) and Selectable_widget.selected.t' = Selectable_widget.selected.t)
 	(aw in Cancel and Current_window.is_in.t in Confirm and Current_crud_op.operation.t in (CREATE+UPDATE)) => Current_window.is_in.t' = (Form & aw.goes)
-	(aw in Cancel and Current_window.is_in.t in Confirm and Current_crud_op.operation.t in (DELETE)) => (Current_window.is_in.t' = (Initial & aw.goes) and List.contains.t' = List.contains.t and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and Selectable_widget.selected.t' = Selectable_widget.selected.t)
-	
-	//(aw in Ok and aw.goes in Form) => (List.contains.t' = List.contains.t and (all iw:Input_widget | iw.content.t' = iw.content.t) and Current_crud_op.operation.t' = Current_crud_op.operation.t and Selectable_widget.selected.t' = Selectable_widget.selected.t)
-	(aw in Ok and Current_crud_op.operation.t in CREATE) => (Current_window.is_in.t' = (Initial & aw.goes) and #Selectable_widget.selected.t' = 0 and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and add [t, t'] and #Current_crud_op.operation.t' = 0)
-	(aw in Ok and Current_crud_op.operation.t in UPDATE) => (Current_window.is_in.t' = (Initial & aw.goes) and #Selectable_widget.selected.t' = 0 and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and update [t, t'] and #Current_crud_op.operation.t' = 0)
-	(aw in Ok and Current_crud_op.operation.t in DELETE) => (Current_window.is_in.t' = (Initial & aw.goes) and Current_window.is_in.t' = (Initial & aw.goes) and #Selectable_widget.selected.t' = 0 and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and delete [t, t'] and #Current_crud_op.operation.t' = 0)
-	(aw in Ok and Current_crud_op.operation.t in READ) => (Current_window.is_in.t' = (Initial & aw.goes) and Selectable_widget.selected.t' = Selectable_widget.selected.t and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #Current_crud_op.operation.t' = 0 and List.contains.t' = List.contains.t)
-	(aw in Delete_trigger and aw.goes in Initial) => (#Selectable_widget.selected.t' = 0 and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and delete [t, t'] and #Current_crud_op.operation.t' = 0)
+	(aw in Cancel and Current_window.is_in.t in Confirm and Current_crud_op.operation.t in (DELETE)) => (Current_window.is_in.t' = (Initial & aw.goes) and List.contains.t' = List.contains.t and (all iw: Input_widget | iw.content.t = iw.content.(T/first)) and Selectable_widget.selected.t' = Selectable_widget.selected.t)
+
+	(aw in Ok and aw.goes in Form) => (List.contains.t' = List.contains.t and (all iw:Input_widget | iw.content.t' = iw.content.t) and Current_crud_op.operation.t' = Current_crud_op.operation.t and Selectable_widget.selected.t' = Selectable_widget.selected.t)
+	(aw in Ok and Current_crud_op.operation.t in CREATE and aw.goes = Initial) => (#Selectable_widget.selected.t' = 0 and (all iw: Input_widget | iw.content.t = iw.content.(T/first)) and add [t, t'] and #Current_crud_op.operation.t' = 0)
+	(aw in Ok and Current_crud_op.operation.t in UPDATE and aw.goes = Initial) => (#Selectable_widget.selected.t' = 0 and (all iw: Input_widget | iw.content.t = iw.content.(T/first)) and update [t, t'] and #Current_crud_op.operation.t' = 0)
+	(aw in Ok and Current_crud_op.operation.t in DELETE) => (Current_window.is_in.t' = (Initial & aw.goes) and #Selectable_widget.selected.t' = 0 and (all iw: Input_widget | iw.content.t = iw.content.(T/first)) and delete [t, t'] and #Current_crud_op.operation.t' = 0)
+	(aw in Ok and Current_crud_op.operation.t in READ) => (Current_window.is_in.t' = (Initial & aw.goes) and Selectable_widget.selected.t' = Selectable_widget.selected.t and (all iw: Input_widget | iw.content.t = iw.content.(T/first)) and #Current_crud_op.operation.t' = 0 and List.contains.t' = List.contains.t)
+	(aw in Delete_trigger and aw.goes in Initial) => (#Selectable_widget.selected.t' = 0 and (all iw: Input_widget | iw.content.t = iw.content.(T/first)) and delete [t, t'] and #Current_crud_op.operation.t' = 0)
 }
 pred click_fail_post [aw: Action_widget, t, t': Time]	{
 	List.contains.t' = List.contains.t

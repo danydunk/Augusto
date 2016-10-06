@@ -38,11 +38,6 @@ public class TestCaseRunner {
 		this.gui = gui;
 	}
 
-	// public TestCaseRunner(final long sleep) {
-	//
-	// this(sleep, null);
-	// }
-
 	public GUITestCaseResult runTestCase(final GUITestCase tc) throws Exception {
 
 		final ApplicationHelper app = ApplicationHelper.getInstance();
@@ -129,29 +124,40 @@ public class TestCaseRunner {
 
 			// the index of the action must be adjusted to the real one in the
 			// app
-			if (act instanceof Select) {
-				final Select sel = (Select) act;
+			if ((act instanceof Select) || (act instanceof Select_doubleclick)) {
 
-				final Selectable_widget sw = (Selectable_widget) sel.getWidget();
+				final Selectable_widget sw = (Selectable_widget) act.getWidget();
+				final int ind = (act instanceof Select) ? ((Select) act).getIndex()
+						: ((Select_doubleclick) act).getIndex();
 				final Pair new_p = new Pair(curr, sw);
 				boolean found = false;
 				for (final Pair p : this.select_support_initial.keySet()) {
 					if (p.isSame(new_p)) {
-						if (this.select_support_added_indexes.get(p).size() <= sel.getIndex()) {
+						if (this.select_support_added_indexes.get(p).size() <= ind) {
 							// the selectable widget is not as expected
 							break mainloop;
 						}
-						final int index = this.select_support_added_indexes.get(p).get(
-								sel.getIndex());
-						final GUIAction select = new Select(sel.getWindow(), sel.getOracle(),
-								(Selectable_widget) sel.getWidget(), index);
-						act_to_execute = select;
-						found = true;
-						break;
+						final int index = this.select_support_added_indexes.get(p).get(ind);
+
+						if (act instanceof Select) {
+							final GUIAction select = new Select(act.getWindow(), act.getOracle(),
+									(Selectable_widget) act.getWidget(), index);
+							act_to_execute = select;
+							found = true;
+							break;
+						}
+						if (act instanceof Select_doubleclick) {
+							final GUIAction select_dc = new Select_doubleclick(act.getWindow(),
+									act.getOracle(), (Selectable_widget) act.getWidget(), index);
+							act_to_execute = select_dc;
+							found = true;
+							break;
+						}
 					}
 				}
 				if (!found) {
-					throw new Exception("TestCaseRunner - runTestCase: error in select.");
+					throw new Exception(
+							"TestCaseRunner - runTestCase: error in select or select_doubleclick.");
 				}
 			}
 			// System.out.println("ACTION " + act);
@@ -162,8 +168,8 @@ public class TestCaseRunner {
 			try {
 				this.amanager.executeAction(act_to_execute);
 			} catch (final Exception e) {
-				// System.out.println("ERROR EXECUTING ACTION");
-				// e.printStackTrace();
+				System.out.println("ERROR EXECUTING ACTION");
+				e.printStackTrace();
 				break mainloop;
 			}
 			gmanager.readGUI();

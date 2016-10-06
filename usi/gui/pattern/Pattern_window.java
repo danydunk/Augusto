@@ -451,7 +451,6 @@ public class Pattern_window extends Pattern_widget<Window> {
 		for (int cont = 0; cont < keys.size(); cont++) {
 			indexes.add(0);
 		}
-
 		// All the instances are created
 		while (true) {
 			// a combination is taken
@@ -472,8 +471,26 @@ public class Pattern_window extends Pattern_widget<Window> {
 
 			// the indexes are increased
 			boolean exit = true;
+			// loop: for (int cont = keys.size() - 1; cont >= 0; cont--) {
+			//
+			// if (possibilities_map.get(keys.get(cont)).size() >
+			// (indexes.get(cont) + 1)) {
+			// final Integer i = indexes.remove(cont);
+			// indexes.add(cont, i + 1);
+			// exit = false;
+			// break loop;
+			// }
+			// }
+
 			loop: for (int cont = keys.size() - 1; cont >= 0; cont--) {
+
 				if (possibilities_map.get(keys.get(cont)).size() > (indexes.get(cont) + 1)) {
+					if (indexes.get(cont) == 0 && cont != (keys.size() - 1)) {
+						for (int x = cont + 1; x < keys.size(); x++) {
+							indexes.remove(x);
+							indexes.add(x, 0);
+						}
+					}
 					final Integer i = indexes.remove(cont);
 					indexes.add(cont, i + 1);
 					exit = false;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xml_schemas/Pattern_schema.xsd" 
+<pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../xml_schemas/Pattern_schema.xsd"
 	alloy="CRUD.als">
 	<window id="initial" card="one" alloy="Initial">
 		<title>.*</title>
@@ -28,7 +29,7 @@
 			<size>.*</size>
 		</selectable_widget>
 	</window>
-	<window id="form" card="one" alloy="Form">
+	<window id="form_1" card="one" alloy="Form">
 		<title>.*</title>
 		<class>.*</class>
 		<modal>any</modal>
@@ -47,16 +48,35 @@
 			<text>.*</text>
 		</input_widget>
 	</window>
+	<window id="form_2" card="set" alloy="Form">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>any</modal>
+		<root>false</root>
+		<action_widget id="paw7" card="one" alloy="Ok">
+			<label>.*(next|ok|save).*</label>
+			<class>.*</class>
+		</action_widget>
+		<action_widget id="paw8" card="one" alloy="Cancel">
+			<label>.*(back|cancel|back).*</label>
+			<class>.*</class>
+		</action_widget>
+		<input_widget id="piw2" card="some" alloy="">
+			<label>.*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+	</window>
 	<window id="confirmation" card="lone" alloy="Confirm">
 		<title>.*</title>
 		<class>.*</class>
 		<modal>true</modal>
 		<root>false</root>
-		<action_widget id="paw7" card="one" alloy="Ok">
+		<action_widget id="paw9" card="one" alloy="Ok">
 			<label>.*(confirm|ok|yes).*</label>
 			<class>.*</class>
 		</action_widget>
-		<action_widget id="paw8" card="one" alloy="Cancel">
+		<action_widget id="paw10" card="one" alloy="Cancel">
 			<label>.*(cancel|back|no).*</label>
 			<class>.*</class>
 		</action_widget>
@@ -71,7 +91,7 @@
 		<class>.*</class>
 		<modal>any</modal>
 		<root>false</root>
-		<action_widget id="paw9" card="one" alloy="Ok">
+		<action_widget id="paw13" card="one" alloy="Ok">
 			<label>.*(ok|back).*</label>
 			<class>.*</class>
 		</action_widget>
@@ -83,7 +103,17 @@
 	</window>
 	<edge type="static">
 		<from>paw1</from>
-		<to>form</to>
+		<to>form_1</to>
+	</edge>
+	<edge type="static">
+		<from>paw6</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw10</from>
+		<to>form_2</to>
+		<to>form_1</to>
+		<to>initial</to>
 	</edge>
 	<edge type="dynamic">
 		<from>paw2</from>
@@ -91,33 +121,35 @@
 	</edge>
 	<edge type="dynamic">
 		<from>paw3</from>
-		<to>form</to>		
+		<to>form_1</to>		
 	</edge>
 	<edge type="dynamic">
 		<from>paw4</from>
 		<to>confirmation</to>
-		<to>initial</to>
 	</edge>
 	<edge type="dynamic">
 		<from>paw5</from>
+		<to>form_2</to>
 		<to>confirmation</to>
 		<to>initial</to>		
 	</edge>
-	<edge type="static">
-		<from>paw6</from>
-		<to>initial</to>
-	</edge>
 	<edge type="dynamic">
 		<from>paw7</from>
-		<to>initial</to>
-	</edge>
-	<edge type="dynamic">
-		<from>paw8</from>
-		<to>initial</to>
-		<to>form</to>
+		<to>form_2</to>
+		<to>confirmation</to>
+		<to>initial</to>										
 	</edge>
 	<edge type="static">
+		<from>paw8</from>
+		<to>form_2</to>
+		<to>form_1</to>
+	</edge>
+	<edge type="dynamic">
 		<from>paw9</from>
+		<to>initial</to>
+	</edge>
+	<edge type="static">
+		<from>paw13</from>
 		<to>initial</to>
 	</edge>
 </pattern>

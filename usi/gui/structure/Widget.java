@@ -137,13 +137,13 @@ public abstract class Widget implements Comparable<Widget> {
 	protected boolean sameProperties_strong(final Widget w) {
 
 		// // we use the position +- delta to match
-		final int delta = 1;
-		if (w.x > this.x + delta || w.x < this.x - delta) {
-			return false;
-		}
-		if (w.y > this.y + delta || w.y < this.y - delta) {
-			return false;
-		}
+		// final int delta = 1;
+		// if (w.x > this.x + delta || w.x < this.x - delta) {
+		// return false;
+		// }
+		// if (w.y > this.y + delta || w.y < this.y - delta) {
+		// return false;
+		// }
 
 		if (w.label == null && this.label != null) {
 			return false;

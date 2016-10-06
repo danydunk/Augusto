@@ -30,7 +30,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 public class AlloyTestCaseGenerator {
 
 	private long RUN_INITIAL_TIMEOUT = 1800000; // 30 minutes
-	private int MAX_RUN = 5;
+	private int MAX_RUN = 9;
 
 	final Instance_GUI_pattern instance;
 
@@ -508,7 +508,7 @@ public class AlloyTestCaseGenerator {
 			if (tuple.atom(1).startsWith("Select")) {
 				if (params.size() != 2) {
 					throw new Exception(
-							"AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for select.");
+							"AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for select or select_doubleclick.");
 				}
 				String sw_id = null;
 				String sw_name = null;
@@ -528,7 +528,8 @@ public class AlloyTestCaseGenerator {
 				}
 
 				if (object == null || sw_id == null) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in select.");
+					throw new Exception(
+							"AlloyTestCaseGenerator - analyzeTuples: error in select or select_doubleclick.");
 				}
 
 				// all the tuples connected with the sw
@@ -551,7 +552,7 @@ public class AlloyTestCaseGenerator {
 
 					if (obj_tuples.size() != 1) {
 						throw new Exception(
-								"AlloyTestCaseGenerator - analyzeTuples: error in select.");
+								"AlloyTestCaseGenerator - analyzeTuples: error in select or select_doubleclick.");
 					}
 					final int appeared = this.extractTimeIndex(obj_tuples.get(0).atom(1));
 					if (!map.containsKey(obj)) {
@@ -582,14 +583,20 @@ public class AlloyTestCaseGenerator {
 				}
 
 				if (target_sw == null) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in select.");
+					throw new Exception(
+							"AlloyTestCaseGenerator - analyzeTuples: error in select or select_doubleclick.");
 				}
 
 				final int select_index = ordered.indexOf(object);
 
-				final Select action = new Select(source_window, oracle, target_sw, select_index);
-
-				actions.set(time_index - 1, action);
+				if (tuple.atom(1).startsWith("Select_doubleclick")) {
+					final Select_doubleclick action = new Select_doubleclick(source_window, oracle,
+							target_sw, select_index);
+					actions.set(time_index - 1, action);
+				} else {
+					final Select action = new Select(source_window, oracle, target_sw, select_index);
+					actions.set(time_index - 1, action);
+				}
 				continue;
 			}
 		}
