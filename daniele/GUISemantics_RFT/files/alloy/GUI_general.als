@@ -19,6 +19,10 @@ sig Select extends Operation {
 	wid: one Selectable_widget,
 	selected: one Object
 }
+sig Select_doubleclick extends Operation {
+	widg: one Selectable_widget,
+	selected_o: one Object
+}
 one sig Track { 
 	op: Operation lone -> Time
 }
@@ -26,20 +30,14 @@ pred transition [t, t': Time]  {
 	(one aw: Action_widget, c: Click | click [aw, t, t', c]) or 
 	(one iw: Input_widget, f: Fill, v: Value | fill [iw, t, t', v, f]) or
 	(one sw: Selectable_widget, s: Select, o: Object | select [sw, t, t', o, s]) or
+	(one sw: Selectable_widget, sdc: Select_doubleclick, o: Object | select_doubleclick [sw, t, t', o, sdc]) or
 	(one w: Window, g: Go | go [w, t, t', g])
 }
 pred System {
 	init [T/first]
 	all t: Time - T/last | transition [t, T/next[t]]
 }
-fact{
-	//no t: Time| (not t = T/first) and (not t in ran[Track.op])
-	//no o: Operation | not o in dom [Track.op]
-	//all t: Time | not t = T/first => #Current_window.is_in.t = 1
-	//all t: Time, g: Go | Track.op.t = g => (Current_window.is_in.(T/prev[t]) = General and (not g.where in General))
-	//all t,t':Time| no f, f': Fill | t' = T/next[t] and Track.op.t = f and Track.op.t' =f' and f.filled = (f').filled and f.with = (f').with
-	//all t,t':Time| no s, s': Select | t' = T/next[t] and Track.op.t = s and Track.op.t' =s' and s.selected = (s').selected and s.wid = (s').wid
-}
+
 ----------------Generic GUI Structure ----------------
 abstract sig Window {
 	aws: set Action_widget,
@@ -113,12 +111,23 @@ pred select [sw: Selectable_widget, t, t': Time, o: Object, s: Select] {
 	--- operation is tracked ---
 	s.wid = sw and s.selected = o and Track.op.t' = s
 }
+pred select_doubleclick [sw: Selectable_widget, t, t': Time, o: Object, sdc: Select_doubleclick] { 
+	--- precondition ---
+	sw in Current_window.is_in.t.sws
+	o in sw.list.t
+	select_doubleclick_pre [sw, t, o]
+	--- effect ---
+	(select_doubleclick_semantics  [sw, t, o] and select_doubleclick_success_post [sw, t, t', o]) or
+	(not select_doubleclick_semantics  [sw, t, o] and select_doubleclick_fail_post [sw, t, t', o])
+	--- operation is tracked ---
+	sdc.widg = sw and sdc.selected_o = o and Track.op.t' = sdc
+}
 pred go [w: Window, t, t': Time, g: Go] {
 	--- precondition ---
 	General in Current_window.is_in.t
 	go_pre [w, t]
 	--- effect ---
-	(go_semantics [w, t] and Current_window.is_in.t' = w and 	(all iw: Input_widget | iw.content.t = iw.content.(T/first)) and #Selectable_widget.selected.t' = 0 and go_success_post [w, t, t']) or
+	(go_semantics [w, t] and Current_window.is_in.t' = w and 	(all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #Selectable_widget.selected.t' = 0 and go_success_post [w, t, t']) or
 	(not go_semantics [w, t] and Current_window.is_in.t' = General and (all iw: Input_widget | iw.content.t' = iw.content.t) and Selectable_widget.selected.t' = Selectable_widget.selected.t and go_fail_post [w, t, t'])
 	--- operation is tracked ---
 	g.where = w and Track.op.t' = g

@@ -5,17 +5,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import usi.configuration.ConfigurationManager;
 import usi.gui.pattern.GUI_Pattern;
 import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_input_widget;
 import usi.gui.pattern.Pattern_selectable_widget;
 import usi.gui.pattern.Pattern_window;
 import usi.gui.semantic.SpecificSemantics;
+import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
+import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 
 /**
  * This class represents one instance of a pattern inside a GUI. It reference to
@@ -227,5 +230,34 @@ public class Instance_GUI_pattern {
 			}
 		}
 		return out;
+	}
+
+	public boolean isSemanticsValid() throws Exception {
+
+		if (this.semantics == null) {
+			this.generateSpecificSemantics();
+		}
+		final SpecificSemantics sem = SpecificSemantics.instantiate(this.semantics);
+		String run = "run System for " + ConfigurationManager.getAlloyRunScope();
+		String scopes = " but ";
+		final int ws = AlloyUtil.getWinScope(this.semantics);
+		scopes += ws + " Window";
+		final int aws = AlloyUtil.getAWScope(this.semantics);
+		final int iws = AlloyUtil.getIWScope(this.semantics);
+		final int sws = AlloyUtil.getSWScope(this.semantics);
+		if (aws > -1) {
+			scopes += "," + aws + " Action_widget";
+		}
+		if (iws > -1) {
+			scopes += "," + iws + " Input_widget";
+		}
+		if (sws > -1) {
+			scopes += "," + sws + " Selectable_widget";
+		}
+		run = run + scopes;
+		sem.addRun_command(run);
+		final Module mod = AlloyUtil.compileAlloyModel(sem.toString());
+
+		return AlloyUtil.runCommand(mod, mod.getAllCommands().get(0)).satisfiable();
 	}
 }

@@ -75,6 +75,19 @@ public class Instance_window {
 		this.aw_map.put(paw.getId(), mapping);
 	}
 
+	public void removeAW_mapping(final String paw, final String aw) throws Exception {
+
+		if (!this.pattern.containsWidget(paw)) {
+			throw new Exception("Error in Instance_window: removeAW_mapping");
+		}
+		if (!this.instance.containsWidget(aw)) {
+			throw new Exception("Error in Instance_window: removeAW_mapping");
+		}
+
+		final List<String> mapping = this.aw_map.get(paw);
+		mapping.remove(aw);
+	}
+
 	public void addIW_mapping(final Pattern_input_widget piw, final List<Input_widget> iws)
 			throws Exception {
 

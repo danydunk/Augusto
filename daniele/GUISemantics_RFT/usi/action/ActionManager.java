@@ -9,6 +9,7 @@ import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.Go;
 import usi.gui.semantic.testcase.Select;
+import usi.gui.semantic.testcase.Select_doubleclick;
 import usi.gui.structure.Option_input_widget;
 import usi.gui.structure.Widget;
 import usi.gui.structure.Window;
@@ -25,7 +26,7 @@ public class ActionManager {
 	}
 
 	/*
-	 * 
+	 *
 	 * GUI must be read before calling this method
 	 */
 	public void executeAction(final GUIAction act) throws Exception {
@@ -176,6 +177,26 @@ public class ActionManager {
 			} catch (final Exception e) {
 				throw new Exception("ActionManager - executeAction: error executing select, "
 						+ e.getMessage());
+			}
+		}
+
+		if (act instanceof Select_doubleclick) {
+			final Select_doubleclick select = (Select_doubleclick) act;
+
+			Method method = null;
+			for (final Method m : ms) {
+				if (m.getName().equals("doubleclick")) {
+					method = m;
+					break;
+				}
+			}
+
+			try {
+				method.invoke(c.newInstance(), to, select.getIndex());
+			} catch (final Exception e) {
+				throw new Exception(
+						"ActionManager - executeAction: error executing select_doubleclick, "
+								+ e.getMessage());
 			}
 		}
 

@@ -41,7 +41,32 @@ public class OracleChecker {
 					+ result.getTc().getActions().size() + " BUT EXECUTED ONLY "
 					+ result.getActions_executed().size();
 			this.description_last_check += System.lineSeparator();
+			System.out.println(this.description_last_check);
+			final GUITestCase tc = result.getTc();
+			String out = "TESTCASE SIZE = " + tc.getActions().size();
+			int cont = 1;
+			for (final GUIAction act : tc.getActions()) {
+				out += System.lineSeparator();
+				out += "ACTION " + cont;
+				out += System.lineSeparator();
 
+				if (act instanceof Click) {
+					out += "CLICK " + act.getWidget().getId() + " - " + act.getWidget().getLabel();
+				} else if (act instanceof Fill) {
+					final Fill f = (Fill) act;
+					out += "FILL " + f.getWidget().getId() + " - "
+							+ act.getWidget().getDescriptor() + " WITH " + f.getInput();
+				} else if (act instanceof Select) {
+					final Select s = (Select) act;
+					out += "SELECT " + s.getWidget().getId() + " WITH " + s.getIndex();
+				} else if (act instanceof Go) {
+					final Go g = (Go) act;
+					out += "GO TO " + g.getWidget();
+				}
+				cont++;
+			}
+			out += System.lineSeparator();
+			System.out.println(out);
 			res = 0;
 		}
 
