@@ -16,7 +16,7 @@ import usi.gui.functionality.mapping.Instance_window;
 import usi.gui.pattern.GUI_Pattern;
 import usi.gui.structure.GUI;
 
-public class GUIFunctionalitySearchTest {
+public class GUIFunctionality_search_Test {
 
 	@Test
 	public void test1() {

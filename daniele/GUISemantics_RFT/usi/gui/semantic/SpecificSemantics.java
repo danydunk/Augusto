@@ -245,7 +245,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			// a fact is created to associate the IWS to the window
 			final Fact factIW = AlloyUtil.createFactsForInputWidget(input_widgets,
 					added_windows.get(win));
-			if (!"".equals(factIW.getContent())) {
+			if (!"".equals(factIW.getContent().trim())) {
 				facts.add(factIW);
 			}
 

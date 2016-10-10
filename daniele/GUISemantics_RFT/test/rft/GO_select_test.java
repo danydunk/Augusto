@@ -50,7 +50,7 @@ public class GO_select_test extends GO_select_testHelper {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-					.getAbsolutePath());
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -59,7 +59,7 @@ public class GO_select_test extends GO_select_testHelper {
 			// manual refinement
 			final Window view = new Window("w999", "view", "class", 1, 1, false);
 
-			for (final Input_widget iww : gui.getWindow("w10").getInputWidgets()) {
+			for (final Input_widget iww : gui.getWindow("w13").getInputWidgets()) {
 				if (iww instanceof Option_input_widget) {
 					final Option_input_widget oiw = (Option_input_widget) iww;
 					view.addWidget(new Option_input_widget(iww.getId() + "9", iww.getLabel(), iww
@@ -82,11 +82,11 @@ public class GO_select_test extends GO_select_testHelper {
 					view.getInputWidgets());
 
 			r.getGui().addWindow(view);
-			r.getGui().addDynamicEdge("aw21", "w10");
+			r.getGui().addDynamicEdge("aw21", "w13");
 			r.getGui().addDynamicEdge("aw23", "w999");
 			r.getGui().addDynamicEdge("aw999", "w2");
 			r.getGui().addDynamicEdge("aw22", "w2");
-			r.getGui().addDynamicEdge("aw82", "w2");
+			r.getGui().addDynamicEdge("aw112", "w2");
 
 			r.generateSpecificSemantics();
 			// final String run =
