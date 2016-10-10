@@ -229,8 +229,8 @@ public class AlloyTestCaseGenerator {
 						windid = windid.split("_")[1];
 						final Window target = this.instance.getGui().getWindow(windid);
 						if (target == null) {
-							throw new Exception(
-									"AlloyTestCaseGenerator - analyzeTuples: target window not found in GUI.");
+							// oracle window not found
+							continue;
 						}
 						final List<Action_widget> aws = new ArrayList<>();
 						final List<Input_widget> iws = new ArrayList<>();
@@ -576,7 +576,7 @@ public class AlloyTestCaseGenerator {
 						// TODO: add the correct selected
 						target_sw = new Selectable_widget(sw.getId(), sw.getLabel(),
 								sw.getClasss(), sw.getX(), sw.getY(), sw.getSize()
-										+ objects_in_sw_at_t.size(), 0);
+								+ objects_in_sw_at_t.size(), 0);
 						target_sw.setDescriptor(sw.getDescriptor());
 						break;
 					}

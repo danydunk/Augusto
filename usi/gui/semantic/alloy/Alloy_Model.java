@@ -96,4 +96,9 @@ public class Alloy_Model {
 
 		this.run_commands.add(run);
 	}
+
+	public void clearRunCommands() {
+
+		this.run_commands = new ArrayList<>();
+	}
 }

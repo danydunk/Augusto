@@ -84,8 +84,9 @@ public class OracleChecker {
 				this.description_last_check += System.lineSeparator();
 				this.description_last_check += "ERROR AT ACTION " + (cont + 1);
 				this.description_last_check += System.lineSeparator();
-				this.description_last_check += "EXPECTED WINDOW " + oracle.getId()
-						+ oracle.getLabel() + " BUT IT WAS " + actual.getId() + actual.getLabel();
+				this.description_last_check += "EXPECTED WINDOW " + oracle.getId() + " "
+						+ oracle.getLabel() + " BUT IT WAS " + actual.getId() + " "
+						+ actual.getLabel();
 				this.description_last_check += System.lineSeparator();
 
 				res = (res == 1) ? -1 : res;

@@ -4,11 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.Document;
+
 import resources.test.rft.OracleTestHelper;
-import usi.application.ApplicationHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
-import usi.gui.GuiStateManager;
 import usi.gui.semantic.testcase.Click;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.GUITestCase;
@@ -17,8 +17,11 @@ import usi.gui.semantic.testcase.OracleChecker;
 import usi.gui.semantic.testcase.TestCaseRunner;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
+import usi.gui.structure.GUIParser;
 import usi.gui.structure.Selectable_widget;
+import usi.gui.structure.Widget;
 import usi.gui.structure.Window;
+import usi.xml.XMLUtil;
 
 /**
  * Description : Functional Test Script
@@ -38,46 +41,48 @@ public class OracleTest extends OracleTestHelper {
 	public void testMain(final Object[] args) {
 
 		try {
-			final OracleChecker oracle = new OracleChecker(new GUI());
-			ApplicationHelper application = null;
+			// we load the GUI structure
+			final Document doc = XMLUtil.read(new File(
+					"./files/for_test/xml/upm-full_newripper.xml").getAbsolutePath());
+			final GUI g = GUIParser.parse(doc);
+
+			final OracleChecker oracle = new OracleChecker(g);
 			final String conf_file = "files" + File.separator + "for_test" + File.separator
 					+ "config" + File.separator + "upm.properties";
 			ConfigurationManager.load(conf_file);
 			ExperimentManager.init();
 
-			Window target = new Window("w5", "", "", 1, 1, false);
-			Selectable_widget sw = new Selectable_widget("sw3", "", "", 1, 1, 0, -1);
-			// Action_widget aw = new Action_widget("aw1", "", "", 1, 1);
-			target.addWidget(sw);
-			// target.addWidget(aw);
+			final Window target = g.getWindow("w2");
+			final Window source = g.getWindow("w1");
 
-			application = ApplicationHelper.getInstance();
-			application.startApplication();
-			final GuiStateManager gui = GuiStateManager.getInstance();
-			final List<Window> windows = gui.readGUI();
-			application.closeApplication();
-
-			Action_widget aw = windows.get(0).getActionWidgets().get(0);
-			Click click = new Click(windows.get(0), target, aw);
+			final Action_widget aw = source.getActionWidgets().get(0);
+			Click click = new Click(source, target, aw);
 			List<GUIAction> acts = new ArrayList<>();
 			acts.add(click);
 			GUITestCase tc = new GUITestCase(null, acts, "run");
 
-			final TestCaseRunner runner = new TestCaseRunner(500, new GUI());
+			final TestCaseRunner runner = new TestCaseRunner(500, g);
 			GUITestCaseResult res = runner.runTestCase(tc);
 
 			if (oracle.check(res) != 1) {
+				System.out.println(oracle.getDescriptionOfLastOracleCheck());
 				throw new Exception();
 			}
 
-			target = new Window("w8", "", "", 1, 1, false);
-			sw = new Selectable_widget("sw5", "", "", 1, 1, 1, 0);
-			// aw = new Action_widget("aw1", "", "", 1, 1);
-			target.addWidget(sw);
-			// target.addWidget(aw);
+			final Window target2 = new Window(target.getId(), target.getLabel(),
+					target.getClasss(), target.getX(), target.getY(), target.isModal());
+			for (final Widget w : target.getWidgets()) {
+				if (w instanceof Selectable_widget) {
+					final Selectable_widget s = (Selectable_widget) w;
+					final Selectable_widget sw = new Selectable_widget(s.getId(), s.getLabel(),
+							s.getClasss(), s.getX(), s.getY(), 1, 0);
+					target2.addWidget(sw);
+				} else {
+					target2.addWidget(w);
+				}
+			}
 
-			aw = windows.get(0).getActionWidgets().get(0);
-			click = new Click(windows.get(0), target, aw);
+			click = new Click(source, target2, aw);
 			acts = new ArrayList<>();
 			acts.add(click);
 			tc = new GUITestCase(null, acts, "run");

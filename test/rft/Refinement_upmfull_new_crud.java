@@ -43,7 +43,7 @@ public class Refinement_upmfull_new_crud extends Refinement_upmfull_new_crudHelp
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-					.getAbsolutePath());
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);

@@ -72,8 +72,8 @@ public class ActionManager {
 		}
 		final Method[] ms = c.getDeclaredMethods();
 
-		final TestObject to = this.findWidgetInCurrWindow(act.getWidget(), act.getWindow(),
-				currWind);
+		final Widget wid = this.findWidgetInCurrWindow(act.getWidget(), act.getWindow(), currWind);
+		final TestObject to = wid.getTo();
 		if (to == null) {
 			throw new Exception("ActionManager - executeAction: TO not found.");
 		}
@@ -135,7 +135,7 @@ public class ActionManager {
 			}
 
 			if (fill.getWidget() instanceof Option_input_widget) {
-				final Option_input_widget oiw = (Option_input_widget) fill.getWidget();
+				final Option_input_widget oiw = (Option_input_widget) wid;
 				final int index = Integer.valueOf(fill.getInput());
 				TestObject to_fill = null;
 				if (oiw.getTOS().size() == 1) {
@@ -203,8 +203,7 @@ public class ActionManager {
 		Thread.sleep(this.sleeptime);
 	}
 
-	private TestObject findWidgetInCurrWindow(final Widget w, final Window wind,
-			final Window currWind) {
+	private Widget findWidgetInCurrWindow(final Widget w, final Window wind, final Window currWind) {
 
 		final Widget ww = wind.getWidget(w.getId());
 		final int index = wind.getWidgets().indexOf(ww);
@@ -214,9 +213,9 @@ public class ActionManager {
 		}
 
 		final Widget wid = currWind.getWidgets().get(index);
-		if (!w.isSimilar(wid)) {
+		if (!w.isSame(wid)) {
 			return null;
 		}
-		return wid.getTo();
+		return wid;
 	}
 }

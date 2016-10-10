@@ -66,19 +66,23 @@ public class Option_input_widget extends Input_widget {
 		return this.selected;
 	}
 
-	// @Override
-	// public boolean isSame(final Widget w) {
-	//
-	// if (!(w instanceof Option_input_widget)) {
-	// return false;
-	// }
-	// final Option_input_widget oiw = (Option_input_widget) w;
-	// if (this.size != oiw.size) {
-	// return false;
-	// }
-	// // size and selected is not checked cause it can change
-	// return super.isSame(w);
-	// }
+	@Override
+	public boolean isSame(final Widget w) {
+
+		if (!(w instanceof Option_input_widget)) {
+			return false;
+		}
+
+		if (!super.isSame(w)) {
+			return false;
+		}
+		final Option_input_widget oiw = (Option_input_widget) w;
+		if (this.size != oiw.size) {
+			return false;
+		}
+		// size and selected is not checked cause it can change
+		return super.isSame(w);
+	}
 
 	@Override
 	public boolean isSimilar(final Widget w) {
