@@ -86,7 +86,8 @@ public class AlloyTestCaseGenerator {
 					AlloyUtil.getWinScope(this.instance.getSemantics()),
 					AlloyUtil.getAWScope(this.instance.getSemantics()),
 					AlloyUtil.getIWScope(this.instance.getSemantics()),
-					AlloyUtil.getSWScope(this.instance.getSemantics()));
+					AlloyUtil.getSWScope(this.instance.getSemantics()),
+					AlloyUtil.getValueScope(this.instance.getSemantics()));
 			rc.start();
 			threads.add(rc);
 		}
@@ -144,28 +145,55 @@ public class AlloyTestCaseGenerator {
 
 		final List<Command> run_commands = compiled.getAllCommands();
 
-		final List<RunCommandThread> threads = new ArrayList<>();
+		final List<RunCommandThread[]> threads = new ArrayList<>();
 		for (final Command cmd : run_commands) {
-			final RunCommandThread rc = new RunCommandThread(cmd, compiled, true,
+			final RunCommandThread[] pair = new RunCommandThread[2];
+
+			final RunCommandThread rc1 = new RunCommandThread(cmd, compiled, 0,
 					AlloyUtil.getWinScope(this.instance.getSemantics()),
 					AlloyUtil.getAWScope(this.instance.getSemantics()),
 					AlloyUtil.getIWScope(this.instance.getSemantics()),
-					AlloyUtil.getSWScope(this.instance.getSemantics()));
-			rc.start();
-			threads.add(rc);
+					AlloyUtil.getSWScope(this.instance.getSemantics()),
+					AlloyUtil.getValueScope(this.instance.getSemantics()));
+			rc1.start();
+			final RunCommandThread rc2 = new RunCommandThread(cmd, compiled, -1,
+					AlloyUtil.getWinScope(this.instance.getSemantics()),
+					AlloyUtil.getAWScope(this.instance.getSemantics()),
+					AlloyUtil.getIWScope(this.instance.getSemantics()),
+					AlloyUtil.getSWScope(this.instance.getSemantics()),
+					AlloyUtil.getValueScope(this.instance.getSemantics()));
+			rc2.start();
+			pair[0] = rc1;
+			pair[1] = rc2;
+			threads.add(pair);
 		}
 
 		final List<A4Solution> solutions = new ArrayList<>();
-		for (final RunCommandThread t : threads) {
-			t.join();
-			if (!t.hasExceptions() && t.getSolution() != null && t.getSolution().satisfiable()) {
-				solutions.add(t.getSolution());
-			} else {
-				solutions.add(null);
+		for (final RunCommandThread[] ts : threads) {
+			loop: while (true) {
+				if (!ts[0].isAlive()) {
+					if (!ts[0].hasExceptions() && ts[0].getSolution() != null
+							&& ts[0].getSolution().satisfiable()) {
+						solutions.add(ts[0].getSolution());
+						break loop;
+					} else {
+						solutions.add(null);
+						break loop;
+					}
+				} else {
+					if (!ts[1].isAlive()) {
+						if (!ts[1].hasExceptions() && ts[1].getSolution() != null
+								&& ts[1].getSolution().satisfiable()) {
+							continue loop;
+						} else {
+							solutions.add(null);
+							break loop;
+						}
+					}
+				}
 			}
-			if (t.isAlive()) {
-				t.interrupt();
-			}
+			ts[0].interrupt();
+			ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -576,7 +604,7 @@ public class AlloyTestCaseGenerator {
 						// TODO: add the correct selected
 						target_sw = new Selectable_widget(sw.getId(), sw.getLabel(),
 								sw.getClasss(), sw.getX(), sw.getY(), sw.getSize()
-								+ objects_in_sw_at_t.size(), 0);
+										+ objects_in_sw_at_t.size(), 0);
 						target_sw.setDescriptor(sw.getDescriptor());
 						break;
 					}
@@ -785,36 +813,41 @@ public class AlloyTestCaseGenerator {
 		final private Module alloy_model;
 		private A4Solution solution;
 		private boolean exception;
-		private final boolean minimal;
+		// 1 normal, 0 minimal, -1 max
+		private final int type;
 		private final int win_scope;
 		private final int aw_scope;
 		private final int iw_scope;
 		private final int sw_scope;
+		private final int value_scope;
 
 		public RunCommandThread(final Command run, final Module alloy, final int win_scope,
-				final int aw_scope, final int iw_scope, final int sw_scope) {
+				final int aw_scope, final int iw_scope, final int sw_scope, final int value_scope) {
 
 			this.run_command = run;
 			this.alloy_model = alloy;
 			this.exception = false;
-			this.minimal = false;
+			this.type = 1;
 			this.win_scope = win_scope;
 			this.aw_scope = aw_scope;
 			this.iw_scope = iw_scope;
 			this.sw_scope = sw_scope;
+			this.value_scope = value_scope;
 		}
 
-		public RunCommandThread(final Command run, final Module alloy, final boolean minimal,
-				final int win_scope, final int aw_scope, final int iw_scope, final int sw_scope) {
+		public RunCommandThread(final Command run, final Module alloy, final int type,
+				final int win_scope, final int aw_scope, final int iw_scope, final int sw_scope,
+				final int value_scope) {
 
 			this.run_command = run;
 			this.alloy_model = alloy;
 			this.exception = false;
-			this.minimal = minimal;
+			this.type = type;
 			this.win_scope = win_scope;
 			this.aw_scope = aw_scope;
 			this.iw_scope = iw_scope;
 			this.sw_scope = sw_scope;
+			this.value_scope = value_scope;
 		}
 
 		@Override
@@ -837,6 +870,17 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 				if (win == null) {
+					this.exception = true;
+					return;
+				}
+
+				Sig v = null;
+				for (final Sig s : this.alloy_model.getAllSigs()) {
+					if (s.label.equals("this/Value")) {
+						v = s;
+					}
+				}
+				if (v == null) {
 					this.exception = true;
 					return;
 				}
@@ -904,13 +948,16 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 
-				if (this.minimal && time_scope != -1) {
+				if ((this.type == 0 || this.type == -1) && time_scope != -1) {
 					this.exception = true;
 					return;
 				}
 
-				if (this.minimal) {
+				if (this.type == 0) {
 					time_scope = 3;
+				}
+				if (this.type == -1) {
+					time_scope = 3 + AlloyTestCaseGenerator.this.MAX_RUN - 1;
 				} else {
 					if (time_scope == -1) {
 						time_scope = ConfigurationManager.getTestcaseLength();
@@ -934,6 +981,11 @@ public class AlloyTestCaseGenerator {
 						final CommandScope awscope = new CommandScope(aw, false, this.aw_scope);
 						scopes.add(awscope);
 					}
+					if (this.value_scope > -1) {
+						final CommandScope vscope = new CommandScope(v, false, (this.value_scope
+								+ time_scope - 1));
+						scopes.add(vscope);
+					}
 					if (this.iw_scope > -1) {
 						final CommandScope iwscope = new CommandScope(iw, false, this.iw_scope);
 						scopes.add(iwscope);
@@ -955,12 +1007,17 @@ public class AlloyTestCaseGenerator {
 					final A4Solution solution = AlloyUtil
 							.runCommand(this.alloy_model, run, timeout);
 
+					if (Thread.currentThread().isInterrupted()) {
+						System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
+								+ " INTERRUPTED!");
+						return;
+					}
 					if (solution == null) {
 						// if timeout
 						System.out.println("RUN " + (x + 1) + " COMMAND: " + run.toString()
 								+ " TIMEOUT!");
 						break;
-					} else if (this.minimal && !solution.satisfiable()) {
+					} else if (this.type == 0 && !solution.satisfiable()) {
 
 						time_scope++;
 						if (x + 1 < AlloyTestCaseGenerator.this.MAX_RUN) {
@@ -979,6 +1036,9 @@ public class AlloyTestCaseGenerator {
 						break;
 					}
 				}
+			} catch (final InterruptedException ee) {
+				System.out.println("COMMAND: " + this.run_command.toString() + " INTERRUPTED!");
+				return;
 			} catch (final Exception e) {
 				// e.printStackTrace();
 				this.exception = true;

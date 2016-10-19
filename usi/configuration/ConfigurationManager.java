@@ -7,6 +7,7 @@ import java.util.Properties;
 public class ConfigurationManager {
 
 	private static String autClasspath;
+	private static String guiFile;
 	private static String autBinDirectory;
 	private static String autMainCLass;
 	private static String resetScriptPath;
@@ -43,6 +44,7 @@ public class ConfigurationManager {
 				.getProperty("semantic_refinement_timeout")));
 		ConfigurationManager.setTestcaseLength(Integer.valueOf(properties
 				.getProperty("testcase_length")));
+		ConfigurationManager.setGUIFile(properties.getProperty("gui_file"));
 	}
 
 	public static String getAutClasspath() {
@@ -134,4 +136,15 @@ public class ConfigurationManager {
 
 		return pairwiseTestcase;
 	}
+
+	public static void setGUIFile(final String guiFile) {
+
+		ConfigurationManager.guiFile = guiFile;
+	}
+
+	public static String getGUIFile() {
+
+		return guiFile;
+	}
+
 }

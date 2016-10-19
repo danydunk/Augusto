@@ -181,20 +181,7 @@ public class AlloyUtil {
 	static public A4Solution runCommand(final Module model, final Command run_command)
 			throws Exception {
 
-		final A4Options options = new A4Options();
-		options.solver = A4Options.SatSolver.SAT4J;
-		options.solver = A4Options.SatSolver.SAT4J;
-		options.skolemDepth = 1;
-		options.unrolls = -1;
-		A4Solution solution = null;
-
-		try {
-			solution = TranslateAlloyToKodkod.execute_command(rep, model.getAllReachableSigs(),
-					run_command, options);
-		} catch (final Exception e) {
-			throw new Exception("AlloyUtil - runCommand: error " + e.getMessage());
-		}
-		return solution;
+		return AlloyUtil.runCommand(model, run_command, -1);
 	}
 
 	/**
@@ -204,7 +191,7 @@ public class AlloyUtil {
 	 * @param run_command
 	 *            : command to run
 	 * @param timeout
-	 *            : the maximum time in ms for the command
+	 *            : the maximum time in ms for the command, if < 1 no timeout
 	 * @return a solution
 	 * @throws Exception
 	 */
@@ -237,25 +224,41 @@ public class AlloyUtil {
 					final A4Solution app = TranslateAlloyToKodkod.execute_command(rep,
 							model.getAllReachableSigs(), run_command, options);
 					this.solution = app;
+
 				} catch (final Err e) {
-					e.printStackTrace();
-					this.exception = true;
+					if (!(e.getCause() instanceof ThreadDeath)) {
+						e.printStackTrace();
+						this.exception = true;
+					}
+					System.out.println("STOPPED THREAD");
 				}
 			}
 		}
 
+		Run_command_thread thread = null;
 		try {
-			final Run_command_thread thread = new Run_command_thread();
+
+			thread = new Run_command_thread();
 			thread.start();
-			thread.join(timeout);
+			if (timeout < 1) {
+				thread.join();
+			} else {
+				thread.join(timeout);
+			}
 			if (thread.isAlive()) {
-				thread.interrupt();
+				thread.stop();
 			}
 			if (!thread.hasException()) {
 				return thread.getSolution();
 			} else {
 				throw new Exception("AlloyUtil - runCommand: error in thread.");
 			}
+		} catch (final InterruptedException ee) {
+			thread.stop();
+			// we push down the inturrupt request
+			Thread.currentThread().interrupt();
+			return null;
+
 		} catch (final Exception e) {
 			e.printStackTrace();
 			throw new Exception("AlloyUtil - runCommand: error.");
@@ -1329,6 +1332,17 @@ public class AlloyUtil {
 		return cont;
 	}
 
+	static public int getValueScope(final SpecificSemantics in) {
+
+		int cont = 0;
+		for (final Signature s : in.getSignatures()) {
+			if (s.getIdentifier().contains("_value_")) {
+				cont++;
+			}
+		}
+		return cont;
+	}
+
 	static public int getAWScope(final SpecificSemantics in) {
 
 		int cont = 0;
@@ -1423,6 +1437,7 @@ public class AlloyUtil {
 
 		final int winscope = AlloyUtil.getWinScope(mod);
 		final int awscope = AlloyUtil.getAWScope(mod);
+		final int vscope = AlloyUtil.getValueScope(mod);
 		final int iwscope = AlloyUtil.getIWScope(mod);
 		final int swscope = AlloyUtil.getSWScope(mod);
 
@@ -1441,6 +1456,9 @@ public class AlloyUtil {
 		}
 		if (awscope > -1) {
 			runCom += "," + awscope + " Action_widget ";
+		}
+		if (vscope > -1) {
+			runCom += "," + (vscope + totalscope) + " Value ";
 		}
 		if (iwscope > -1) {
 			runCom += "," + iwscope + " Input_widget ";

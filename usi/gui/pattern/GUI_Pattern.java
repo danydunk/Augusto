@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import usi.gui.structure.GUI;
 import usi.gui.structure.Window;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 
 public class GUI_Pattern {
@@ -34,11 +36,11 @@ public class GUI_Pattern {
 
 	public GUI_Pattern() {
 
-		this.windows = new HashMap<>();
-		this.staticEdgesFrom = HashMultimap.create();
-		this.staticEdgesTo = HashMultimap.create();
-		this.dynamicEdgesFrom = HashMultimap.create();
-		this.dynamicEdgesTo = HashMultimap.create();
+		this.windows = new LinkedHashMap<>();
+		this.staticEdgesFrom = LinkedHashMultimap.create();
+		this.staticEdgesTo = LinkedHashMultimap.create();
+		this.dynamicEdgesFrom = LinkedHashMultimap.create();
+		this.dynamicEdgesTo = LinkedHashMultimap.create();
 		this.aw_window_mapping = new HashMap<>();
 		// this.action_widgets = new ArrayList<>();
 		// this.selectable_widgets = new ArrayList<>();

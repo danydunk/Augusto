@@ -126,13 +126,13 @@ public class GUIWriter {
 			subnode.setTextContent(aw.getClasss());
 			node.appendChild(subnode);
 			// label
-			if (aw.getLabel() != null && aw.getLabel().length() > 0) {
+			if (aw.getLabel() != null) {
 				subnode = this.doc.createElement("label");
 				subnode.setTextContent(aw.getLabel());
 				node.appendChild(subnode);
 			}
 			// descriptor
-			if (aw.getDescriptor() != null && aw.getDescriptor().length() > 0) {
+			if (aw.getDescriptor() != null) {
 				subnode = this.doc.createElement("descriptor");
 				subnode.setTextContent(aw.getDescriptor());
 				node.appendChild(subnode);
@@ -154,13 +154,13 @@ public class GUIWriter {
 			subnode.setTextContent(iw.getClasss());
 			node.appendChild(subnode);
 			// label
-			if (iw.getLabel() != null && iw.getLabel().length() > 0) {
+			if (iw.getLabel() != null) {
 				subnode = this.doc.createElement("label");
 				subnode.setTextContent(iw.getLabel());
 				node.appendChild(subnode);
 			}
 			// descriptor
-			if (iw.getDescriptor() != null && iw.getDescriptor().length() > 0) {
+			if (iw.getDescriptor() != null) {
 				subnode = this.doc.createElement("descriptor");
 				subnode.setTextContent(iw.getDescriptor());
 				node.appendChild(subnode);
@@ -194,13 +194,13 @@ public class GUIWriter {
 			subnode.setTextContent(sw.getClasss());
 			node.appendChild(subnode);
 			// label
-			if (sw.getLabel() != null && sw.getLabel().length() > 0) {
+			if (sw.getLabel() != null) {
 				subnode = this.doc.createElement("label");
 				subnode.setTextContent(sw.getLabel());
 				node.appendChild(subnode);
 			}
 			// descriptor
-			if (sw.getDescriptor() != null && sw.getDescriptor().length() > 0) {
+			if (sw.getDescriptor() != null) {
 				subnode = this.doc.createElement("descriptor");
 				subnode.setTextContent(sw.getDescriptor());
 				node.appendChild(subnode);

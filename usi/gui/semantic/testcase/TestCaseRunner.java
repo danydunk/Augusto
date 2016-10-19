@@ -17,9 +17,6 @@ import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
 
 import com.rational.test.ft.object.interfaces.TestObject;
-import com.rational.test.ft.vp.ITestDataElement;
-import com.rational.test.ft.vp.ITestDataElementList;
-import com.rational.test.ft.vp.impl.TestDataList;
 
 public class TestCaseRunner {
 
@@ -160,11 +157,7 @@ public class TestCaseRunner {
 							"TestCaseRunner - runTestCase: error in select or select_doubleclick.");
 				}
 			}
-			// System.out.println("ACTION " + act);
-			// System.out.println(act.getWidget().getId());
-			// System.out.println(act.getWidget().getLabel());
-			// System.out.println(act.getWindow().getId());
-			// System.out.println(act.getWindow().getLabel());
+
 			try {
 				this.amanager.executeAction(act_to_execute);
 			} catch (final Exception e) {
@@ -198,20 +191,14 @@ public class TestCaseRunner {
 		return res;
 	}
 
-	private void updatedStructuresForSelect(final Window curr) {
+	private void updatedStructuresForSelect(final Window curr) throws Exception {
 
 		if (curr == null) {
 			return;
 		}
 		loop: for (final Selectable_widget sw : curr.getSelectableWidgets()) {
 			final TestObject to = sw.getTo();
-			final TestDataList list = (TestDataList) to.getTestData("list");
-			final ITestDataElementList el_list = list.getElements();
-			final List<String> curr_el = new ArrayList<>();
-			for (int c = 0; c < el_list.getLength(); c++) {
-				final ITestDataElement element = el_list.getElement(c);
-				curr_el.add(element.getElement().toString());
-			}
+			final List<String> curr_el = Selectable_widget.getElements(to);
 
 			final Pair new_p = new Pair(curr, sw);
 			for (final Pair p : this.select_support_initial.keySet()) {
@@ -321,13 +308,7 @@ public class TestCaseRunner {
 						if (sw.isSimilar(w.getWidgets().get(x))) {
 							final Selectable_widget sw2 = (Selectable_widget) w.getWidgets().get(x);
 							final TestObject to = sw.getTo();
-							final TestDataList list = (TestDataList) to.getTestData("list");
-							final ITestDataElementList el_list = list.getElements();
-							final List<String> curr_el = new ArrayList<>();
-							for (int c = 0; c < el_list.getLength(); c++) {
-								final ITestDataElement element = el_list.getElement(c);
-								curr_el.add(element.getElement().toString());
-							}
+							final List<String> curr_el = Selectable_widget.getElements(to);
 
 							int index = -1;
 							int size = 0;

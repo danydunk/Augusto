@@ -11,6 +11,6 @@ public class TextPaneUI extends MainHelper {
 
 	public static void fill(final TestObject testObject, final String text) throws IOException {
 
-		new TextGuiSubitemTestObject(testObject).setProperty("text", text);
+		new TextGuiSubitemTestObject(testObject).setText(text);
 	}
 }

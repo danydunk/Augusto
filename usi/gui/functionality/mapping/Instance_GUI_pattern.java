@@ -243,6 +243,7 @@ public class Instance_GUI_pattern {
 		final int ws = AlloyUtil.getWinScope(this.semantics);
 		scopes += ws + " Window";
 		final int aws = AlloyUtil.getAWScope(this.semantics);
+		final int vs = AlloyUtil.getValueScope(this.semantics);
 		final int iws = AlloyUtil.getIWScope(this.semantics);
 		final int sws = AlloyUtil.getSWScope(this.semantics);
 		if (aws > -1) {
@@ -253,6 +254,9 @@ public class Instance_GUI_pattern {
 		}
 		if (sws > -1) {
 			scopes += "," + sws + " Selectable_widget";
+		}
+		if (vs > -1) {
+			scopes += "," + (vs + ConfigurationManager.getAlloyRunScope()) + " Value";
 		}
 		run = run + scopes;
 		sem.addRun_command(run);
