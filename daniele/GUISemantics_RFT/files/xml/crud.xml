@@ -7,11 +7,11 @@
 		<modal>any</modal>
 		<root>true</root>
 		<action_widget id="paw1" card="some" alloy="Create_trigger">
-			<label>.*(add|new|create).*</label>
+			<label>.*(add|create).*</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw2" card="set" alloy="Read_trigger">
-			<label>.*(read|view).*</label>
+			<label>.*(view).*</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw3" card="some" alloy="Update_trigger">
@@ -19,7 +19,7 @@
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw4" card="some" alloy="Delete_trigger">
-			<label>.*(delete|remove).*</label>
+			<label>.*(delete).*</label>
 			<class>.*</class>
 		</action_widget>
 		<selectable_widget id="psw1" card="one" alloy="">
@@ -34,11 +34,11 @@
 		<modal>any</modal>
 		<root>false</root>
 		<action_widget id="paw5" card="one" alloy="Ok">
-			<label>.*(next|ok|save).*</label>
+			<label>.*(ok|save).*</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw6" card="one" alloy="Cancel">
-			<label>.*(back|cancel|back).*</label>
+			<label>.*(cancel).*</label>
 			<class>.*</class>
 		</action_widget>
 		<input_widget id="piw1" card="some" alloy="">
@@ -57,7 +57,7 @@
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw8" card="one" alloy="Cancel">
-			<label>.*(cancel|back|no).*</label>
+			<label>.*(cancel|no).*</label>
 			<class>.*</class>
 		</action_widget>
 		<input_widget id="piw2" card="none" alloy="">
@@ -85,6 +85,28 @@
 		<from>paw1</from>
 		<to>form</to>
 	</edge>
+	<edge type="static">
+		<from>paw9</from>
+		<to>initial</to>
+	</edge>
+	<edge type="static">
+		<from>paw6</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw5</from>
+		<to>confirmation</to>
+		<to>initial</to>		
+	</edge>
+	<edge type="dynamic">
+		<from>paw7</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw8</from>
+		<to>initial</to>
+		<to>form</to>
+	</edge>
 	<edge type="dynamic">
 		<from>paw2</from>
 		<to>view</to>		
@@ -97,27 +119,5 @@
 		<from>paw4</from>
 		<to>confirmation</to>
 		<to>initial</to>
-	</edge>
-	<edge type="dynamic">
-		<from>paw5</from>
-		<to>confirmation</to>
-		<to>initial</to>		
-	</edge>
-	<edge type="static">
-		<from>paw6</from>
-		<to>initial</to>
-	</edge>
-	<edge type="dynamic">
-		<from>paw7</from>
-		<to>initial</to>
-	</edge>
-	<edge type="dynamic">
-		<from>paw8</from>
-		<to>initial</to>
-		<to>form</to>
-	</edge>
-	<edge type="static">
-		<from>paw9</from>
-		<to>initial</to>
-	</edge>
+	</edge>	
 </pattern>
