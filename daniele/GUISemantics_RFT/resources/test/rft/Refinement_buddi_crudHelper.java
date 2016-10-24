@@ -6,7 +6,7 @@
 // insertion actions.  Any changes made directly to a helper class
 // file will be lost when automatically updated.
 
-package resources.usi;
+package resources.test.rft;
 
 import com.rational.test.ft.object.interfaces.*;
 import com.rational.test.ft.object.interfaces.SAP.*;
@@ -19,21 +19,21 @@ import com.rational.test.ft.script.*;
 import com.rational.test.ft.vp.IFtVerificationPoint;
 import com.ibm.rational.test.ft.object.interfaces.sapwebportal.*;
 /**
- * Script Name   : <b>Main</b><br>
- * Generated     : <b>2016/10/24 5:56:24 AM</b><br>
+ * Script Name   : <b>Refinement_buddi_crud</b><br>
+ * Generated     : <b>2016/10/24 7:04:20 AM</b><br>
  * Description   : Helper class for script<br>
  * Original Host : Windows 7 amd64 6.1 <br>
  * 
  * @since  October 24, 2016
  * @author usi
  */
-public abstract class MainHelper extends RationalTestScript
+public abstract class Refinement_buddi_crudHelper extends RationalTestScript
 {
 	
 
-	protected MainHelper()
+	protected Refinement_buddi_crudHelper()
 	{
-		setScriptName("usi.Main");
+		setScriptName("test.rft.Refinement_buddi_crud");
 	}
 	
 }

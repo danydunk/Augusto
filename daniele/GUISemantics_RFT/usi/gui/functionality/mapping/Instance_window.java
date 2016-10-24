@@ -105,16 +105,17 @@ public class Instance_window {
 	}
 
 	public void
-	addSW_mapping(final Pattern_selectable_widget psw, final List<Selectable_widget> sws)
-			throws Exception {
+			addSW_mapping(final Pattern_selectable_widget psw, final List<Selectable_widget> sws)
+					throws Exception {
 
 		if (!this.pattern.containsWidget(psw.getId())) {
 			throw new Exception("Error in Instance_window: setSW_mapping");
 		}
 		final List<String> mapping = new ArrayList<>();
 		for (final Selectable_widget sw : sws) {
+
 			if (!this.instance.containsWidget(sw.getId())) {
-				throw new Exception("Error in Instance_window: setSW_mapping");
+				throw new Exception("Error in Instance_window: addSW_mapping");
 			}
 			mapping.add(sw.getId());
 		}

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.w3c.dom.Document;
 
-import resources.test.rft.Refinement_upmfull_new_crudHelper;
+import resources.test.rft.Refinement_upmfull_crudHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
 import usi.gui.functionality.GUIFunctionality_refine;
@@ -22,7 +22,7 @@ import usi.xml.XMLUtil;
  *
  * @author usi
  */
-public class Refinement_upmfull_new_crud extends Refinement_upmfull_new_crudHelper {
+public class Refinement_upmfull_crud extends Refinement_upmfull_crudHelper {
 
 	/**
 	 * Script Name : <b>Refinement_upmfull_new_crud</b> Generated : <b>Sep 7,
@@ -43,7 +43,7 @@ public class Refinement_upmfull_new_crud extends Refinement_upmfull_new_crudHelp
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-			.getAbsolutePath());
+					.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);

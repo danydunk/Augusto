@@ -9,20 +9,23 @@ public class TableUI extends MainHelper {
 
 	public static void click(final TestObject to, final int cell) throws Exception {
 
-		final int columnNumber = ((Integer) to.getProperty("columnCount")).intValue();
-		final int selectedRow = cell / columnNumber;
-		final int selectedColumn = cell % columnNumber;
+		// we consider only the rows
+		// final int columnNumber = ((Integer)
+		// to.getProperty("columnCount")).intValue();
+		// final int selectedRow = cell / columnNumber;
+		// final int selectedColumn = cell % columnNumber;
 
-		new GuiSubitemTestObject(to).click(atCell(atRow(selectedRow), atColumn(selectedColumn)));
+		new GuiSubitemTestObject(to).click(atCell(atRow(cell), atColumn(0)));
 	}
 
 	public static void doubleClick(final TestObject to, final int cell) throws Exception {
 
-		final int columnNumber = ((Integer) to.getProperty("columnCount")).intValue();
-		final int selectedRow = cell / columnNumber;
-		final int selectedColumn = cell % columnNumber;
+		// we consider only the rows
+		// final int columnNumber = ((Integer)
+		// to.getProperty("columnCount")).intValue();
+		// final int selectedRow = cell / columnNumber;
+		// final int selectedColumn = cell % columnNumber;
 
-		new GuiSubitemTestObject(to).doubleClick(atCell(atRow(selectedRow),
-				atColumn(selectedColumn)));
+		new GuiSubitemTestObject(to).doubleClick(atCell(atRow(cell), atColumn(0)));
 	}
 }

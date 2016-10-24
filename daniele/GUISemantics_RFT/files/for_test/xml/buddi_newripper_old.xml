@@ -291,7 +291,7 @@
             <value>[options] 2 : 17</value>
         </input_widget>
         <input_widget id="iw28">
-            <pos>277:215</pos>
+            <pos>290:215</pos>
             <class>ComboBoxUI</class>
             <descriptor>Date Format</descriptor>
             <value>[options] 0 : 8</value>
@@ -672,6 +672,7 @@
         <input_widget id="iw89">
             <pos>402:308</pos>
             <class>RadioButtonUI</class>
+            <label/>
             <descriptor>Type</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
@@ -919,12 +920,12 @@
         <action_widget id="aw382">
             <pos>135:130</pos>
             <class>MenuItemUI</class>
-            <label>Edit - Copy Values to Previous Period (Sep 2016  →  Aug 2016)</label>
+            <label>Edit - Copy Values to Previous Period (Oct 2016  →  Sep 2016)</label>
         </action_widget>
         <action_widget id="aw383">
             <pos>135:130</pos>
             <class>MenuItemUI</class>
-            <label>Edit - Copy Values to Next Period (Sep 2016  →  Oct 2016)</label>
+            <label>Edit - Copy Values to Next Period (Oct 2016  →  Nov 2016)</label>
         </action_widget>
         <action_widget id="aw384">
             <pos>135:130</pos>
@@ -1019,16 +1020,18 @@
         <action_widget id="aw367">
             <pos>706:182</pos>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw368">
             <pos>706:191</pos>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <input_widget id="iw84">
             <pos>607:184</pos>
             <class>FormattedTextFieldUI</class>
             <descriptor>Current Budget Period</descriptor>
-            <value>Sep 2016</value>
+            <value>Oct 2016</value>
         </input_widget>
         <input_widget id="iw85">
             <pos>611:544</pos>
@@ -1150,6 +1153,7 @@
         <input_widget id="iw42">
             <pos>1149:285</pos>
             <class>RadioButtonUI</class>
+            <label/>
             <descriptor>Language Editor</descriptor>
             <value>[options] 0 : 2</value>
         </input_widget>
@@ -1488,10 +1492,12 @@
         <action_widget id="aw241">
             <pos>391:136</pos>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw242">
             <pos>391:170</pos>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw243">
             <pos>405:380</pos>
@@ -1525,7 +1531,7 @@
             <pos>158:136</pos>
             <class>FormattedTextFieldUI</class>
             <descriptor>starting on</descriptor>
-            <value>2016/09/27</value>
+            <value>2016/10/11</value>
         </input_widget>
         <input_widget id="iw50">
             <pos>68:169</pos>
@@ -1537,7 +1543,7 @@
             <pos>158:170</pos>
             <class>FormattedTextFieldUI</class>
             <descriptor>Repeat this action</descriptor>
-            <value>2017/09/27</value>
+            <value>2017/10/11</value>
         </input_widget>
         <input_widget id="iw52">
             <pos>167:207</pos>
@@ -2020,6 +2026,7 @@
         <input_widget id="iw6">
             <pos>677:334</pos>
             <class>RadioButtonUI</class>
+            <label/>
             <descriptor>Type</descriptor>
             <value>[options] 0 : 2</value>
         </input_widget>
@@ -2173,7 +2180,7 @@
             <pos>115:313</pos>
             <class>CheckBoxUI</class>
             <label>Show Accounts in Flat Format (no Account Types)</label>
-            <value>[options] 0 : 2</value>
+            <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw65">
             <pos>115:346</pos>
@@ -2359,7 +2366,7 @@
             <pos>109:493</pos>
             <class>FormattedTextFieldUI</class>
             <label>Date of the transaction.</label>
-            <value>2016/09/27</value>
+            <value>2016/10/11</value>
         </input_widget>
         <input_widget id="iw10">
             <pos>231:493</pos>
@@ -2699,7 +2706,7 @@
             <pos>115:313</pos>
             <class>CheckBoxUI</class>
             <label>Show Accounts in Flat Format (no Account Types)</label>
-            <value>[options] 0 : 2</value>
+            <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw21">
             <pos>115:346</pos>
@@ -2881,7 +2888,7 @@
             <value>[options] 2 : 17</value>
         </input_widget>
         <input_widget id="iw72">
-            <pos>277:215</pos>
+            <pos>290:215</pos>
             <class>ComboBoxUI</class>
             <descriptor>Date Format</descriptor>
             <value>[options] 0 : 8</value>

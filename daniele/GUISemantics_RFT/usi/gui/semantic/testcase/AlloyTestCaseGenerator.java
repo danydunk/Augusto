@@ -180,6 +180,7 @@ public class AlloyTestCaseGenerator {
 						solutions.add(null);
 						break loop;
 					}
+
 				} else {
 					if (!ts[1].isAlive()) {
 						if (!ts[1].hasExceptions() && ts[1].getSolution() != null
@@ -604,7 +605,7 @@ public class AlloyTestCaseGenerator {
 						// TODO: add the correct selected
 						target_sw = new Selectable_widget(sw.getId(), sw.getLabel(),
 								sw.getClasss(), sw.getX(), sw.getY(), sw.getSize()
-										+ objects_in_sw_at_t.size(), 0);
+								+ objects_in_sw_at_t.size(), 0);
 						target_sw.setDescriptor(sw.getDescriptor());
 						break;
 					}

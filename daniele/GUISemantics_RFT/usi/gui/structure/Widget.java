@@ -440,19 +440,23 @@ public abstract class Widget implements Comparable<Widget> {
 			if (p == null) {
 				return out;
 			}
+
+			// we consider only the rows
 			final int x = p.x;
 			final int y = p.y;
 			final int rowc = Integer.valueOf(to.getProperty("rowCount").toString());
-			final int columnc = Integer.valueOf(to.getProperty("columnCount").toString());
-			final int size = rowc * columnc;
+			// final int columnc =
+			// Integer.valueOf(to.getProperty("columnCount").toString());
+			// final int size = rowc * columnc;
 			final int rows = Integer.valueOf(to.getProperty("selectedRow").toString());
-			final int columns = Integer.valueOf(to.getProperty("selectedColumn").toString());
-			int selected = 0;
-			for (int cont = 0; cont < rows; cont++) {
-				selected += columnc;
-			}
-			selected += columns;
-			out.add(new Selectable_widget(to, idm.nextSWId(), label, type, x, y, size, selected));
+			// final int columns =
+			// Integer.valueOf(to.getProperty("selectedColumn").toString());
+			// int selected = 0;
+			// for (int cont = 0; cont < rows; cont++) {
+			// selected += columnc;
+			// }
+			// selected += columns;
+			out.add(new Selectable_widget(to, idm.nextSWId(), label, type, x, y, rowc, rows));
 			return out;
 
 		} else if (type.equals("TextAreaUI")) {

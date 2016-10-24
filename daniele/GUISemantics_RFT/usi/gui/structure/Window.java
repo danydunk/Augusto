@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.rational.test.ft.object.interfaces.TestObject;
 
@@ -181,12 +182,34 @@ public class Window extends Widget {
 	@Override
 	public boolean isSame(final Widget w) {
 
+		// System.out.println("CHECKING " + this.id + " " + this.label +
+		// " WITH " + w.id + " "
+		// + w.label);
 		if (!(w instanceof Window)) {
 			return false;
 		}
 
-		// for window we cannot relay on position or labels for recognition
-		if (!super.sameProperties_weak(w)) {
+		// for window we cannot relay on sameProperties_weak beacuse labels can
+		// change
+		// position and label can vary
+
+		if (w.label == null && this.label != null) {
+			return false;
+		}
+		if (w.label != null && this.label == null) {
+			return false;
+		}
+
+		if (w.descriptor == null && this.descriptor != null) {
+			return false;
+		}
+		if (w.descriptor != null && this.descriptor == null) {
+			return false;
+		}
+		if (w.descriptor != null && w.descriptor.length() > 0 && this.descriptor.length() == 0) {
+			return false;
+		}
+		if (w.descriptor != null && w.descriptor.length() == 0 && this.descriptor.length() > 0) {
 			return false;
 		}
 
@@ -198,8 +221,32 @@ public class Window extends Widget {
 		// we consider a window to be the same if it has the same widgets
 		final Window win = (Window) w;
 
-		final List<Widget> widgets = this.getWidgets();
-		final List<Widget> widgets_bis = win.getWidgets();
+		List<Widget> widgets = this.getWidgets();
+		List<Widget> widgets_bis = win.getWidgets();
+		// TODO: is there a better way to do it?
+		// when checking whether 2 windows are the same we skip the elements
+		// under the menu window (it changes according to the windows open)
+		widgets = widgets
+				.stream()
+				.filter(e -> {
+					if (e instanceof Action_widget
+							&& e.getClasss().toLowerCase().equals("menuitemui")
+							&& e.getLabel().toLowerCase().startsWith("window -")) {
+						return false;
+					}
+					return true;
+				}).collect(Collectors.toList());
+
+		widgets_bis = widgets_bis
+				.stream()
+				.filter(e -> {
+					if (e instanceof Action_widget
+							&& e.getClasss().toLowerCase().equals("menuitemui")
+							&& e.getLabel().toLowerCase().startsWith("window -")) {
+						return false;
+					}
+					return true;
+				}).collect(Collectors.toList());
 
 		if (widgets.size() != widgets_bis.size()) {
 			return false;
