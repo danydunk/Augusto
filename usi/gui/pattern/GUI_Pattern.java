@@ -371,6 +371,7 @@ public class GUI_Pattern {
 	public boolean isInstance(final Instance_GUI_pattern in) throws Exception {
 
 		if (in.getGuipattern() != this) {
+			System.out.println("1");
 			return false;
 		}
 
@@ -380,6 +381,7 @@ public class GUI_Pattern {
 			final List<Window> matches = in.getPatternWindowMatches(pw.getId());
 			if (matches.size() < pw.getCardinality().getMin()
 					|| matches.size() > pw.getCardinality().getMax()) {
+
 				return false;
 			}
 		}
@@ -418,6 +420,8 @@ public class GUI_Pattern {
 
 				}
 				if (found_aw_match) {
+					System.out.println("2");
+					System.out.println(pw.getId() + " " + match.getId());
 					return false;
 				}
 				// dynamic

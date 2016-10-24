@@ -7,19 +7,19 @@
 		<modal>any</modal>
 		<root>true</root>
 		<action_widget id="paw1" card="some" alloy="Create_trigger">
-			<label>.*(add|create).*</label>
+			<label>(.*( add | create ).*|^(add |create ).*)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw2" card="set" alloy="Read_trigger">
-			<label>.*(view).*</label>
+			<label>(.* view .*|^view (?!-).*)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw3" card="some" alloy="Update_trigger">
-			<label>.*(edit|update|modify).*</label>
+			<label>(.*( edit | update | modify ).*|^(edit |update |modify )(?!-).*)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw4" card="some" alloy="Delete_trigger">
-			<label>.*(delete).*</label>
+			<label>(.* delete .*|^delete .*)</label>
 			<class>.*</class>
 		</action_widget>
 		<selectable_widget id="psw1" card="one" alloy="">
@@ -34,11 +34,11 @@
 		<modal>any</modal>
 		<root>false</root>
 		<action_widget id="paw5" card="one" alloy="Ok">
-			<label>.*(ok|save).*</label>
+			<label>^(ok|save)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw6" card="one" alloy="Cancel">
-			<label>.*(cancel).*</label>
+			<label>^(cancel)</label>
 			<class>.*</class>
 		</action_widget>
 		<input_widget id="piw1" card="some" alloy="">
@@ -53,11 +53,11 @@
 		<modal>true</modal>
 		<root>false</root>
 		<action_widget id="paw7" card="one" alloy="Ok">
-			<label>.*(confirm|ok|yes).*</label>
+			<label>^(confirm|ok|yes)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw8" card="one" alloy="Cancel">
-			<label>.*(cancel|no).*</label>
+			<label>^(cancel|no)</label>
 			<class>.*</class>
 		</action_widget>
 		<input_widget id="piw2" card="none" alloy="">
@@ -72,7 +72,7 @@
 		<modal>any</modal>
 		<root>false</root>
 		<action_widget id="paw9" card="one" alloy="Ok">
-			<label>.*(ok|back).*</label>
+			<label>^(ok|back)</label>
 			<class>.*</class>
 		</action_widget>
 		<input_widget id="piw3" card="some" alloy="">

@@ -75,9 +75,8 @@ public class GUIPatternParser {
 			final List<Pattern_window> w = gui.getWindows().stream()
 					.filter(e -> e.getId().equals(idTo)).collect(Collectors.toList());
 
-			if (aw.size() != 1 || w.size() != 1) {
-				throw new Exception("GUIParser - createEdge: id not found.");
-			}
+			assert (aw.size() == 1 && w.size() == 1);
+
 			switch (type) {
 			case "static":
 				gui.addStaticEdge(aw.get(0).getId(), w.get(0).getId());
@@ -263,7 +262,7 @@ public class GUIPatternParser {
 	 * @return
 	 */
 	private static List<Pattern_selectable_widget>
-			createSelectableWidgets(final Node nodeContainer) {
+	createSelectableWidgets(final Node nodeContainer) {
 
 		final List<Pattern_selectable_widget> selectables = new ArrayList<>();
 		final List<Node> nodes = getElementNodesList(nodeContainer.getChildNodes(),

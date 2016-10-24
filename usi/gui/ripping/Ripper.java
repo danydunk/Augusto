@@ -1,12 +1,17 @@
 package usi.gui.ripping;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import usi.action.ActionManager;
 import usi.application.ApplicationHelper;
 import usi.configuration.ConfigurationManager;
 import usi.gui.GuiStateManager;
+import usi.gui.pattern.GUIPatternParser;
 import usi.gui.pattern.Pattern_action_widget;
 import usi.gui.pattern.Pattern_error_window;
 import usi.gui.semantic.testcase.Click;
@@ -15,43 +20,52 @@ import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Window;
 import usi.util.IDManager;
+import usi.xml.XMLUtil;
 
 public class Ripper {
 
+	public static String AW_TO_FILTER_PATH = "config" + File.separator + "awfilter.xml";
 	private final List<String> action_widget_to_ignore;
 	private final ApplicationHelper application;
 	private GuiStateManager guimanager;
 	private final ActionManager actionManager;
 	private GUI gui;
 	private final long sleeptime;
-	private final List<Pattern_action_widget> aw_to_filter;
+	private List<Pattern_action_widget> aw_to_filter;
 
-	public Ripper(final long sleeptime, final List<Pattern_action_widget> aw_to_filter) {
+	public Ripper(final long sleeptime, final boolean use_filters) {
 
 		this.application = ApplicationHelper.getInstance();
 		this.sleeptime = sleeptime;
 		this.action_widget_to_ignore = new ArrayList<>();
 		this.actionManager = new ActionManager(this.sleeptime);
-		if (aw_to_filter == null) {
+
+		if (!use_filters) {
 			this.aw_to_filter = new ArrayList<>();
 		} else {
-			this.aw_to_filter = aw_to_filter;
+			this.aw_to_filter = this.loadAWtoFilter(AW_TO_FILTER_PATH);
+			if (this.aw_to_filter == null) {
+				this.aw_to_filter = new ArrayList<>();
+			}
 		}
 	}
 
-	public Ripper(final long sleeptime, final GUI gui,
-			final List<Pattern_action_widget> aw_to_filter) {
+	public Ripper(final long sleeptime, final GUI gui, final boolean use_filters) {
 
 		this.application = ApplicationHelper.getInstance();
 		this.sleeptime = sleeptime;
 		this.action_widget_to_ignore = new ArrayList<>();
 		this.gui = gui;
 		this.actionManager = new ActionManager(this.sleeptime);
-		if (aw_to_filter == null) {
+		if (!use_filters) {
 			this.aw_to_filter = new ArrayList<>();
 		} else {
-			this.aw_to_filter = aw_to_filter;
+			this.aw_to_filter = this.loadAWtoFilter(AW_TO_FILTER_PATH);
+			if (this.aw_to_filter == null) {
+				this.aw_to_filter = new ArrayList<>();
+			}
 		}
+		System.out.println("RIPPER: size of filter = " + this.aw_to_filter.size());
 	}
 
 	public GUI ripApplication() throws Exception {
@@ -226,5 +240,22 @@ public class Ripper {
 			}
 		}
 		return out;
+	}
+
+	private List<Pattern_action_widget> loadAWtoFilter(final String path) {
+
+		Document doc = null;
+		try {
+			doc = XMLUtil.read(path);
+		} catch (final Exception e) {
+			System.out.println("Filter file not found.");
+			return null;
+		}
+		final Node root = doc.getDocumentElement();
+		final List<Pattern_action_widget> out = GUIPatternParser.createActionsWidgets(root);
+		if (out != null && out.size() > 0) {
+			return out;
+		}
+		return null;
 	}
 }

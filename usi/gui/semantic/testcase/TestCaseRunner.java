@@ -166,6 +166,7 @@ public class TestCaseRunner {
 				break mainloop;
 			}
 			gmanager.readGUI();
+
 			this.dealWithErrorWindow(gmanager);
 
 			actions_actually_executed.add(act);
@@ -311,15 +312,17 @@ public class TestCaseRunner {
 							final List<String> curr_el = Selectable_widget.getElements(to);
 
 							int index = -1;
-							int size = 0;
+							// int size = 0;
 							final Pair new_p = new Pair(w, sw);
 							for (final Pair p : this.select_support_initial.keySet()) {
 								if (p.isSame(new_p)) {
-									for (final String el : curr_el) {
-										if (this.select_support_added.get(p).contains(el)) {
-											size++;
-										}
-									}
+									// for (final String el : curr_el) {
+									// if
+									// (this.select_support_added.get(p).contains(el))
+									// {
+									// //size++;
+									// }
+									// }
 
 									if (sw.getSelected() != -1) {
 										final String selected = curr_el.get(sw.getSelected());
@@ -331,8 +334,8 @@ public class TestCaseRunner {
 							}
 
 							final Selectable_widget new_sw = new Selectable_widget(sw2.getId(),
-									sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), size,
-									index);
+									sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(),
+									curr_el.size(), index);
 							new_sw.setDescriptor(sw.getDescriptor());
 							out.addWidget(new_sw);
 						} else {

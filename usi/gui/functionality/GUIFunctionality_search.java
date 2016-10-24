@@ -49,10 +49,7 @@ public class GUIFunctionality_search {
 		final List<Pattern_window> roots = pattern.getWindows().stream()
 				.filter(e -> (e.getRoot() == true)).collect(Collectors.toList());
 
-		if (roots.size() != 1) {
-			throw new Exception(
-					"GUIFunctionality_search - getReachableWindows: wrong number of root windows in pattern.");
-		}
+		assert (roots.size() == 1);
 
 		final Pattern_window root = roots.get(0);
 		final List<Pattern_window> out = new ArrayList<>();
@@ -315,10 +312,10 @@ public class GUIFunctionality_search {
 							}
 						}
 						if (source_pw.getCardinality().getMin() != 0 /*
-						 * &&
-						 * source_pw
-						 * != pw
-						 */) {
+																	 * &&
+																	 * source_pw
+																	 * != pw
+																	 */) {
 							check_optional = true;
 						}
 					}

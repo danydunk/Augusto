@@ -135,6 +135,12 @@ public class ContextAnalyzer {
 		if (to == null) {
 			return null;
 		}
+		try {
+			to.getProperty("uIClassID").toString();
+		} catch (final Exception e) {
+			// it is a window
+			return null;
+		}
 
 		if (this.containerDescription.get(to) != null) {
 			return this.containerDescription.get(to);
