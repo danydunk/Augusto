@@ -4,8 +4,10 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -38,7 +40,10 @@ public class ExperimentManager {
 				"lib" + File.separator + "cobertura" + File.separator + "cobertura.ser",
 				ConfigurationManager.getAutBinDirectory(), };
 		new File(SER_FILE_PATH).delete();
+		final PrintStream stdout = System.out;
+		System.setOut(new PrintStream(new FileOutputStream("cobertura_warnings.out")));
 		net.sourceforge.cobertura.instrument.Main.main(args);
+		System.setOut(stdout);
 		Files.copy(Paths.get(SER_FILE_PATH), Paths.get(SER_RESET_FILE_PATH), REPLACE_EXISTING);
 
 		// generate the file AUT.bat

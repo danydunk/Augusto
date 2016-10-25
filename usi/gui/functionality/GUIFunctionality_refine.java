@@ -61,7 +61,7 @@ public class GUIFunctionality_refine {
 		this.observed_tcs = new ArrayList<>();
 		this.covered_dyn_edges = new ArrayList<>();
 		// this.current_semantic_property =
-		// "one Field_2:Property_unique|one Field_3,Field_4:Property_required|Property_required = (Field_3+Field_4) and Property_unique = (Field_2+Field_4) and Field_3.associated_to = (Input_widget_iw86) and Field_4.associated_to = (Input_widget_iw87) and Field_2.associated_to = (Input_widget_iw91)";
+		// "one Field_3:Property_required|Property_required = (Field_3) and Field_3.associated_to = (Input_widget_iw62)";
 		// this.current_semantic_property =
 		// "one Field_2:Property_unique|one Field_3,Field_4:Property_required|Property_required = (Field_3+Field_4) and Property_unique = (Field_2+Field_4) and Field_3.associated_to = (Input_widget_iw89) and Field_4.associated_to = (Input_widget_iw86) and Field_2.associated_to = (Input_widget_iw87)";
 		this.current_semantic_property = "";
@@ -187,7 +187,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -301,7 +301,7 @@ public class GUIFunctionality_refine {
 				return true;
 			} else {
 				System.out
-						.println("MATCHING WINDOW IS NOT THE EXPECTED ONE. ADAPTING SEMANTIC PROPERTY");
+				.println("MATCHING WINDOW IS NOT THE EXPECTED ONE. ADAPTING SEMANTIC PROPERTY");
 				final String new_prop = this.getAdaptedConstraint(this.instancePattern
 						.getSemantics());
 				if (new_prop == null) {
@@ -398,7 +398,7 @@ public class GUIFunctionality_refine {
 							+ " and click_semantics[Action_widget_" + (aw.getId()) + ",t])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -434,12 +434,12 @@ public class GUIFunctionality_refine {
 					+ " | Current_window.is_in.t = Window_" + to_discover.getId() + ")}";
 			if (this.unsat_commands.contains(run_command)) {
 				System.out
-						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+				.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 				continue;
 
 			}
 			clone.getSemantics().addRun_command(run_command);
-
+			System.out.println(clone.getSemantics());
 			final GUITestCase tc = this.getTestCase(clone.getSemantics());
 
 			if (this.run_and_update(tc, to_discover)) {
@@ -542,8 +542,8 @@ public class GUIFunctionality_refine {
 				res = runner.runTestCase(tc);
 			} catch (final Exception e) {
 				System.out
-						.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
-								+ e.getMessage());
+				.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
+						+ e.getMessage());
 				e.printStackTrace();
 				return null;
 			}
@@ -682,7 +682,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					this.discarded_semantic_properties.remove(this.current_semantic_property);
 					break mainloop;
 				}
@@ -727,7 +727,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
 					this.current_semantic_property = "";
 					return;
 				}
@@ -951,7 +951,18 @@ public class GUIFunctionality_refine {
 				sigs.add(sig);
 			}
 		}
-		sem = new SpecificSemantics(sigs, sem.getFacts(), sem.getPredicates(), sem.getFunctions(),
+
+		final List<Fact> facts = new ArrayList<>();
+		for (final Fact fact : sem.getFacts()) {
+			if (fact.getIdentifier().startsWith("Window_" + new_wind.getId())) {
+				final String[] lines = fact.getContent().split("\\r?\\n");
+				final Fact new_fact = new Fact(fact.getIdentifier(), lines[0]);
+				facts.add(new_fact);
+			} else {
+				facts.add(fact);
+			}
+		}
+		sem = new SpecificSemantics(sigs, facts, sem.getPredicates(), sem.getFunctions(),
 				sem.getOpenStatements());
 		clone.setSpecificSemantics(sem);
 		return clone;
