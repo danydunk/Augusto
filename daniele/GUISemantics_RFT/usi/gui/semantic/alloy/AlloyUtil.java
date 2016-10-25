@@ -41,6 +41,10 @@ import usi.gui.structure.Input_widget;
 import usi.gui.structure.Option_input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
@@ -72,6 +76,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
  */
 public class AlloyUtil {
 
+	private static final String MODULES_PATH = "C:/workspace/GUISemantics_RFT/files/alloy/modules";
 	static A4Reporter rep = new A4Reporter() {
 
 		@Override
@@ -139,9 +144,23 @@ public class AlloyUtil {
 	 */
 	static public Module compileAlloyModel(final String model) throws Exception {
 
+		final Map<String, String> modules = new HashMap<>();
+		try {
+			final File folder = new File(MODULES_PATH);
+			final File[] listOfFiles = folder.listFiles();
+
+			for (final File file : listOfFiles) {
+				if (file.isFile() && file.getName().contains(".als")) {
+					modules.put(file.getName().replace(".als", ""),
+							Files.toString(file, Charsets.UTF_8));
+				}
+			}
+		} catch (final Exception e) {}
+
 		try {
 			final File tmp = saveModelInTmpFile(model);
-			final Module out = CompUtil.parseEverything_fromFile(rep, null, tmp.getAbsolutePath());
+			final Module out = CompUtil.parseEverything_fromFile(rep, modules,
+					tmp.getAbsolutePath());
 			tmp.delete();
 			return out;
 		} catch (final Exception e) {
@@ -159,9 +178,22 @@ public class AlloyUtil {
 	 */
 	static public Module compileAlloyModel(final File model) throws Exception {
 
+		final Map<String, String> modules = new HashMap<>();
 		try {
-			final Module out = CompUtil
-					.parseEverything_fromFile(rep, null, model.getAbsolutePath());
+			final File folder = new File(MODULES_PATH);
+			final File[] listOfFiles = folder.listFiles();
+
+			for (final File file : listOfFiles) {
+				if (file.isFile() && file.getName().contains(".als")) {
+					modules.put(file.getName().replace(".als", ""),
+							Files.toString(file, Charsets.UTF_8));
+				}
+			}
+		} catch (final Exception e) {}
+
+		try {
+			final Module out = CompUtil.parseEverything_fromFile(rep, modules,
+					model.getAbsolutePath());
 			return out;
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -928,7 +960,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1415,8 +1447,8 @@ public class AlloyUtil {
 	 * @throws Exception
 	 */
 	static public Alloy_Model
-	getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult tcr)
-			throws Exception {
+			getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult tcr)
+					throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();

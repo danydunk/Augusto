@@ -102,7 +102,7 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] {
 pred select_doubleclick_semantics [sw: Selectable_widget, t: Time, o: Object] { }
 pred select_doubleclick_success_post [sw: Selectable_widget, t, t': Time, o: Object] {
 	List.contains.t' = List.contains.t
-	Current_crud_op.operation.t' = Current_crud_op.operation.t
+	//Current_crud_op.operation.t' = Current_crud_op.operation.t
 	Current_window.is_in.t' = View
 	(Current_crud_op.operation.t' = READ and load_form[o, t'] and Selectable_widget.selected.t' = o)
 }

@@ -1,5 +1,5 @@
 open util/ordering [Time] as T
-open util/ordering [Input_widget] as IW
+open orderingFIXED [Input_widget] as IW
 open util/ternary
 open util/relation
 -----------------------Utils------------------------
@@ -63,7 +63,7 @@ abstract sig Selectable_widget {
 fact {
 	#General.iws = 0 and #General.aws = 0 and #General.sws = 0
 	all iw: Input_widget | one w: Window | iw in w.iws
-	all aw: Action_widget | one w: Window | aw in w.aws and #aw.goes < 2
+	all aw: Action_widget | one w: Window | aw in w.aws //and #aw.goes < 2
 	all sw: Selectable_widget | one w: Window | sw in w.sws
 	all o: Object | some t: Time | o in Selectable_widget.list.t
 }

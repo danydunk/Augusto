@@ -26,7 +26,7 @@ public class ActionManager {
 	}
 
 	/*
-	 * 
+	 *
 	 * GUI must be read before calling this method
 	 */
 	public void executeAction(final GUIAction act) throws Exception {
@@ -186,7 +186,7 @@ public class ActionManager {
 
 			Method method = null;
 			for (final Method m : ms) {
-				if (m.getName().equals("doubleclick")) {
+				if (m.getName().equals("doubleClick")) {
 					method = m;
 					break;
 				}
