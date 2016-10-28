@@ -193,8 +193,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-			ts[0].interrupt();
-			ts[1].interrupt();
+		ts[0].interrupt();
+		ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -604,8 +604,7 @@ public class AlloyTestCaseGenerator {
 						// target_sw = sw;
 						// TODO: add the correct selected
 						target_sw = new Selectable_widget(sw.getId(), sw.getLabel(),
-								sw.getClasss(), sw.getX(), sw.getY(), sw.getSize()
-								+ objects_in_sw_at_t.size(), 0);
+								sw.getClasss(), sw.getX(), sw.getY(), objects_in_sw_at_t.size(), 0);
 						target_sw.setDescriptor(sw.getDescriptor());
 						break;
 					}

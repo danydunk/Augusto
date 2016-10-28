@@ -217,6 +217,7 @@ public class ActionManager {
 		if (!w.isSame(wid)) {
 			return null;
 		}
+
 		return wid;
 	}
 }

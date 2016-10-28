@@ -25,12 +25,12 @@ public class Action_widget extends Widget {
 		return this.sameProperties_strong(w);
 	}
 
-	@Override
-	public boolean isSimilar(final Widget w) {
-
-		if (!(w instanceof Action_widget)) {
-			return false;
-		}
-		return this.sameProperties_weak(w);
-	}
+	// @Override
+	// public boolean isSimilar(final Widget w) {
+	//
+	// if (!(w instanceof Action_widget)) {
+	// return false;
+	// }
+	// return this.sameProperties_weak(w);
+	// }
 }

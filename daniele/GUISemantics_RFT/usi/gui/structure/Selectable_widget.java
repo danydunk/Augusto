@@ -16,7 +16,7 @@ public class Selectable_widget extends Widget {
 
 	public Selectable_widget(final TestObject to, final String id, final String label,
 			final String classs, final int x, final int y, final int size, final int selected)
-					throws Exception {
+			throws Exception {
 
 		super(to, id, label, classs, x, y);
 		if (size < 0 || selected < -1 || selected > size - 1) {
@@ -58,16 +58,16 @@ public class Selectable_widget extends Widget {
 		return this.sameProperties_strong(w);
 	}
 
-	@Override
-	public boolean isSimilar(final Widget w) {
-
-		if (!(w instanceof Selectable_widget)) {
-			return false;
-		}
-
-		// size and selected is not checked cause it can change
-		return this.sameProperties_weak(w);
-	}
+	// @Override
+	// public boolean isSimilar(final Widget w) {
+	//
+	// if (!(w instanceof Selectable_widget)) {
+	// return false;
+	// }
+	//
+	// // size and selected is not checked cause it can change
+	// return this.sameProperties_weak(w);
+	// }
 
 	public static List<String> getElements(final TestObject to) throws Exception {
 

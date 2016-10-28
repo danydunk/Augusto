@@ -960,7 +960,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1447,8 +1447,8 @@ public class AlloyUtil {
 	 * @throws Exception
 	 */
 	static public Alloy_Model
-			getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult tcr)
-					throws Exception {
+	getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult tcr)
+			throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1517,7 +1517,6 @@ public class AlloyUtil {
 
 		String fact = "";
 		String t = "";
-
 		final Map<String, List<String>> values_used = new HashMap<>();
 		final Map<String, List<String>> values_used_iw = new HashMap<>();
 

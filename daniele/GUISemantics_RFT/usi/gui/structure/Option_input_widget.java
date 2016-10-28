@@ -14,7 +14,7 @@ public class Option_input_widget extends Input_widget {
 
 	public Option_input_widget(final TestObject to, final String id, final String label,
 			final String classs, final int x, final int y, final int size, final int selected)
-					throws Exception {
+			throws Exception {
 
 		super(to, id, label, classs, x, y, String.valueOf(selected));
 		this.tos = new ArrayList<>();
@@ -28,7 +28,7 @@ public class Option_input_widget extends Input_widget {
 
 	public Option_input_widget(final List<TestObject> tos, final String id, final String label,
 			final String classs, final int x, final int y, final int size, final int selected)
-					throws Exception {
+			throws Exception {
 
 		super(tos.get(0), id, label, classs, x, y, String.valueOf(selected));
 		this.tos = tos;
@@ -84,17 +84,17 @@ public class Option_input_widget extends Input_widget {
 		return super.isSame(w);
 	}
 
-	@Override
-	public boolean isSimilar(final Widget w) {
-
-		if (!(w instanceof Option_input_widget)) {
-			return false;
-		}
-		final Option_input_widget oiw = (Option_input_widget) w;
-		// if (this.size != oiw.size) {
-		// return false;
-		// }
-		// size and selected is not checked cause it can change
-		return super.isSimilar(w);
-	}
+	// @Override
+	// public boolean isSimilar(final Widget w) {
+	//
+	// if (!(w instanceof Option_input_widget)) {
+	// return false;
+	// }
+	// final Option_input_widget oiw = (Option_input_widget) w;
+	// // if (this.size != oiw.size) {
+	// // return false;
+	// // }
+	// // size and selected is not checked cause it can change
+	// return super.isSimilar(w);
+	// }
 }
