@@ -76,8 +76,8 @@ pred click [aw: Action_widget, t, t': Time, c: Click] {
 	aw in Current_window.is_in.t.aws
 	click_pre [aw, t]
 	--- effect ---
-	(click_semantics [aw, t] and #aw.goes = 1 and Current_window.is_in.t' = aw.goes and click_success_post [aw, t, t']) or
-	(click_semantics [aw, t]  and not(#aw.goes = 1) and click_success_post [aw, t, t']) or
+	(click_semantics [aw, t] and #aw.goes < 2 and Current_window.is_in.t' = aw.goes and click_success_post [aw, t, t']) or
+	(click_semantics [aw, t]  and not(#aw.goes < 2) and click_success_post [aw, t, t']) or
 	(not click_semantics  [aw, t] and Current_window.is_in.t' = Current_window.is_in.t and click_fail_post [aw, t, t'])
 	--- operation is tracked ---
 	c.clicked = aw and Track.op.t' = c
@@ -132,3 +132,4 @@ pred go [w: Window, t, t': Time, g: Go] {
 	--- operation is tracked ---
 	g.where = w and Track.op.t' = g
 }
+

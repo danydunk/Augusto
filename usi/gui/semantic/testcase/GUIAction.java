@@ -37,7 +37,7 @@ public abstract class GUIAction {
 
 	protected boolean same(final GUIAction act) {
 
-		if (!act.getWidget().isSimilar(this.getWidget())) {
+		if (!act.getWidget().isSame(this.getWidget())) {
 			return false;
 		}
 		if (!act.getWindow().isSame(this.getWindow())) {

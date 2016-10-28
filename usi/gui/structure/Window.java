@@ -255,24 +255,24 @@ public class Window extends Widget {
 		for (int x = 0; x < widgets.size(); x++) {
 			if (widgets.get(x) instanceof Action_widget) {
 				final Action_widget aw = (Action_widget) widgets.get(x);
-				if (!aw.isSimilar(widgets_bis.get(x))) {
+				if (!aw.isSame(widgets_bis.get(x))) {
 					return false;
 				}
 			} else if (widgets.get(x) instanceof Input_widget) {
 				if (widgets.get(x) instanceof Option_input_widget) {
 					final Option_input_widget oiw = (Option_input_widget) widgets.get(x);
-					if (!oiw.isSimilar(widgets_bis.get(x))) {
+					if (!oiw.isSame(widgets_bis.get(x))) {
 						return false;
 					}
 				} else {
 					final Input_widget iw = (Input_widget) widgets.get(x);
-					if (!iw.isSimilar(widgets_bis.get(x))) {
+					if (!iw.isSame(widgets_bis.get(x))) {
 						return false;
 					}
 				}
 			} else if (widgets.get(x) instanceof Selectable_widget) {
 				final Selectable_widget sw = (Selectable_widget) widgets.get(x);
-				if (!sw.isSimilar(widgets_bis.get(x))) {
+				if (!sw.isSame(widgets_bis.get(x))) {
 					return false;
 				}
 			}
@@ -291,9 +291,9 @@ public class Window extends Widget {
 		return widgs;
 	}
 
-	@Override
-	public boolean isSimilar(final Widget w) {
-
-		return super.sameProperties_weak(w);
-	}
+	// @Override
+	// public boolean isSimilar(final Widget w) {
+	//
+	// return super.sameProperties_weak(w);
+	// }
 }

@@ -171,41 +171,45 @@ public abstract class Widget implements Comparable<Widget> {
 
 	// function that checks if the input widget has the same most important
 	// properties
-	protected boolean sameProperties_weak(final Widget w) {
-
-		// position and label can vary
-
-		if (w.label == null && this.label != null) {
-			return false;
-		}
-		if (w.label != null && this.label == null) {
-			return false;
-		}
-		if (w.label != null && w.label.length() > 0 && this.label.length() == 0) {
-			return false;
-		}
-		if (w.label != null && w.label.length() == 0 && this.label.length() > 0) {
-			return false;
-		}
-
-		if (w.descriptor == null && this.descriptor != null) {
-			return false;
-		}
-		if (w.descriptor != null && this.descriptor == null) {
-			return false;
-		}
-		if (w.descriptor != null && w.descriptor.length() > 0 && this.descriptor.length() == 0) {
-			return false;
-		}
-		if (w.descriptor != null && w.descriptor.length() == 0 && this.descriptor.length() > 0) {
-			return false;
-		}
-
-		if (!w.classs.equals(this.classs)) {
-			return false;
-		}
-		return true;
-	}
+	// protected boolean sameProperties_weak(final Widget w) {
+	//
+	// // position and label can vary
+	//
+	// if (w.label == null && this.label != null) {
+	// return false;
+	// }
+	// if (w.label != null && this.label == null) {
+	// return false;
+	// }
+	// if (w.label != null && w.label.length() > 0 && this.label.length() == 0)
+	// {
+	// return false;
+	// }
+	// if (w.label != null && w.label.length() == 0 && this.label.length() > 0)
+	// {
+	// return false;
+	// }
+	//
+	// if (w.descriptor == null && this.descriptor != null) {
+	// return false;
+	// }
+	// if (w.descriptor != null && this.descriptor == null) {
+	// return false;
+	// }
+	// if (w.descriptor != null && w.descriptor.length() > 0 &&
+	// this.descriptor.length() == 0) {
+	// return false;
+	// }
+	// if (w.descriptor != null && w.descriptor.length() == 0 &&
+	// this.descriptor.length() > 0) {
+	// return false;
+	// }
+	//
+	// if (!w.classs.equals(this.classs)) {
+	// return false;
+	// }
+	// return true;
+	// }
 
 	/**
 	 * method used to recognise widgets
@@ -215,7 +219,7 @@ public abstract class Widget implements Comparable<Widget> {
 	 */
 	abstract public boolean isSame(Widget w);
 
-	abstract public boolean isSimilar(Widget w);
+	// abstract public boolean isSimilar(Widget w);
 
 	/**
 	 * method that transform a TO in the corresponding list of widgets it

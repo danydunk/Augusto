@@ -48,10 +48,9 @@ public class TestCaseRunner {
 		gmanager.readGUI();
 
 		Window curr = null;
-		try {
-			curr = gmanager.getCurrentActiveWindows();
-		} catch (final Exception e) {
-			// System.out.println("exception");
+
+		curr = gmanager.getCurrentActiveWindows();
+		if (curr == null) {
 			if (app.isRunning()) {
 				app.restartApplication();
 			} else {
@@ -61,9 +60,9 @@ public class TestCaseRunner {
 			gmanager.readGUI();
 			curr = gmanager.getCurrentActiveWindows();
 			// System.out.println(curr);
-
 		}
 
+		System.out.println(curr);
 		this.select_support_initial = new HashMap<>();
 		this.select_support_added = new HashMap<>();
 		this.select_support_added_indexes = new HashMap<>();
@@ -86,6 +85,8 @@ public class TestCaseRunner {
 			if (act instanceof Go) {
 				final Go go = (Go) act;
 				final Window target = (Window) go.getWidget();
+				System.out.println(curr);
+				System.out.println(target);
 				if (curr.isSame(target)) {
 					// we are already in the right window
 					actions_executed.add(act);
@@ -124,6 +125,7 @@ public class TestCaseRunner {
 			if ((act instanceof Select) || (act instanceof Select_doubleclick)) {
 
 				final Selectable_widget sw = (Selectable_widget) act.getWidget();
+
 				final int ind = (act instanceof Select) ? ((Select) act).getIndex()
 						: ((Select_doubleclick) act).getIndex();
 				final Pair new_p = new Pair(curr, sw);
@@ -134,28 +136,30 @@ public class TestCaseRunner {
 							// the selectable widget is not as expected
 							break mainloop;
 						}
+						final int size = this.select_support_initial.get(p).size()
+								+ this.select_support_added.get(p).size();
 						final int index = this.select_support_added_indexes.get(p).get(ind);
-
+						// TODO: we need to find a way to put the right selected
+						// index
+						final Selectable_widget new_sw = new Selectable_widget(sw.getId(),
+								sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), size, 0);
 						if (act instanceof Select) {
 							final GUIAction select = new Select(act.getWindow(), act.getOracle(),
-									(Selectable_widget) act.getWidget(), index);
+									new_sw, index);
 							act_to_execute = select;
 							found = true;
 							break;
 						}
 						if (act instanceof Select_doubleclick) {
 							final GUIAction select_dc = new Select_doubleclick(act.getWindow(),
-									act.getOracle(), (Selectable_widget) act.getWidget(), index);
+									act.getOracle(), new_sw, index);
 							act_to_execute = select_dc;
 							found = true;
 							break;
 						}
 					}
 				}
-				if (!found) {
-					throw new Exception(
-							"TestCaseRunner - runTestCase: error in select or select_doubleclick.");
-				}
+				assert found;
 			}
 
 			try {
@@ -169,7 +173,7 @@ public class TestCaseRunner {
 
 			this.dealWithErrorWindow(gmanager);
 
-			actions_actually_executed.add(act);
+			actions_actually_executed.add(act_to_execute);
 
 			this.updatedStructuresForSelect(gmanager.getCurrentActiveWindows());
 
@@ -273,16 +277,11 @@ public class TestCaseRunner {
 				for (int x = 0; x < in.getWidgets().size(); x++) {
 					if (w.getWidgets().get(x) instanceof Action_widget) {
 						final Action_widget aw = (Action_widget) in.getWidgets().get(x);
-						if (aw.isSimilar(w.getWidgets().get(x))) {
-							final Action_widget aw2 = (Action_widget) w.getWidgets().get(x);
-							final Action_widget new_aw = new Action_widget(aw2.getId(),
-									aw.getLabel(), aw.getClasss(), aw.getX(), aw.getY());
-							new_aw.setDescriptor(aw.getDescriptor());
-							out.addWidget(new_aw);
-						} else {
-							throw new Exception(
-									"TestCaseRunner - getKnownWindowIfAny: action widget not found.");
-						}
+						final Action_widget aw2 = (Action_widget) w.getWidgets().get(x);
+						final Action_widget new_aw = new Action_widget(aw2.getId(), aw.getLabel(),
+								aw.getClasss(), aw.getX(), aw.getY());
+						new_aw.setDescriptor(aw.getDescriptor());
+						out.addWidget(new_aw);
 
 					} else if (w.getWidgets().get(x) instanceof Input_widget) {
 						final Input_widget iw = (Input_widget) in.getWidgets().get(x);
@@ -306,42 +305,41 @@ public class TestCaseRunner {
 						}
 					} else if (w.getWidgets().get(x) instanceof Selectable_widget) {
 						final Selectable_widget sw = (Selectable_widget) in.getWidgets().get(x);
-						if (sw.isSimilar(w.getWidgets().get(x))) {
-							final Selectable_widget sw2 = (Selectable_widget) w.getWidgets().get(x);
-							final TestObject to = sw.getTo();
-							final List<String> curr_el = Selectable_widget.getElements(to);
+						final Selectable_widget sw2 = (Selectable_widget) w.getWidgets().get(x);
+						// final TestObject to = sw.getTo();
+						// final List<String> curr_el =
+						// Selectable_widget.getElements(to);
+						//
+						// int index = -1;
+						// // int size = 0;
+						// final Pair new_p = new Pair(w, sw);
+						// for (final Pair p :
+						// this.select_support_initial.keySet()) {
+						// if (p.isSame(new_p)) {
+						// // for (final String el : curr_el) {
+						// // if
+						// // (this.select_support_added.get(p).contains(el))
+						// // {
+						// // //size++;
+						// // }
+						// // }
+						//
+						// if (sw.getSelected() != -1) {
+						// final String selected =
+						// curr_el.get(sw.getSelected());
+						// index = this.select_support_added_indexes.get(p).get(
+						// this.select_support_added.get(p).indexOf(selected));
+						// }
+						// break;
+						// }
+						// }
 
-							int index = -1;
-							// int size = 0;
-							final Pair new_p = new Pair(w, sw);
-							for (final Pair p : this.select_support_initial.keySet()) {
-								if (p.isSame(new_p)) {
-									// for (final String el : curr_el) {
-									// if
-									// (this.select_support_added.get(p).contains(el))
-									// {
-									// //size++;
-									// }
-									// }
+						final Selectable_widget new_sw = new Selectable_widget(sw2.getId(),
+								sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), sw.getSize(),
+								sw.getSelected());
+						new_sw.setDescriptor(sw.getDescriptor());
+						out.addWidget(new_sw);
 
-									if (sw.getSelected() != -1) {
-										final String selected = curr_el.get(sw.getSelected());
-										index = this.select_support_added_indexes.get(p).get(
-												this.select_support_added.get(p).indexOf(selected));
-									}
-									break;
-								}
-							}
-
-							final Selectable_widget new_sw = new Selectable_widget(sw2.getId(),
-									sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(),
-									curr_el.size(), index);
-							new_sw.setDescriptor(sw.getDescriptor());
-							out.addWidget(new_sw);
-						} else {
-							throw new Exception(
-									"TestCaseRunner - getKnownWindowIfAny: action widget not found.");
-						}
 					}
 				}
 

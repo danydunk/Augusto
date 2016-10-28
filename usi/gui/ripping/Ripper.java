@@ -118,6 +118,9 @@ public class Ripper {
 			this.guimanager.readGUI();
 			this.dealWithErrorWindow(this.guimanager);
 			final Window curr_window = this.guimanager.getCurrentActiveWindows();
+			if (cont == 3) {
+				System.out.println();
+			}
 			if (curr_window != null && w.isSame(curr_window)) {
 				// same window
 				// aws = curr_window.getActionWidgets();
