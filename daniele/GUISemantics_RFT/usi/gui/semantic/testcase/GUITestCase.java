@@ -15,7 +15,7 @@ public class GUITestCase {
 			final String run_command) throws Exception {
 
 		if (actions == null || actions.size() == 0) {
-			throw new Exception("GUITestCase: null or empty list of actions.");
+			throw new Exception("GUITestCase: empty actions or null initial window.");
 		}
 
 		this.run_command = run_command;

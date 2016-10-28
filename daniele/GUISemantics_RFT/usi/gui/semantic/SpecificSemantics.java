@@ -192,7 +192,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		}
 
 		// we add a fact for the number of windows
-		final Fact win_num = new Fact("windows_number", "#Window = " + (added_windows.size() + 1));
+		final Fact win_num = new Fact("windows_number", "#Window = " + added_windows.size());
 		facts.add(win_num);
 
 		// we iterate each window added (we need to do it in two cicles because

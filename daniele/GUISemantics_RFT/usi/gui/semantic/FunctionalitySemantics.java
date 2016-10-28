@@ -13,7 +13,6 @@ import usi.gui.semantic.alloy.entity.Signature;
 public class FunctionalitySemantics extends Alloy_Model {
 
 	protected Predicate click;
-	protected Predicate go;
 	protected Predicate fill;
 	protected Predicate select;
 	protected Signature window_signature;
@@ -21,7 +20,6 @@ public class FunctionalitySemantics extends Alloy_Model {
 	protected Signature action_w_signature;
 	protected Signature selectable_w_signature;
 	protected Semantic_predicate click_semantics;
-	protected Semantic_predicate go_semantics;
 	protected Semantic_predicate fill_semantics;
 	protected Semantic_predicate select_semantics;
 	protected List<Signature> windows_extensions;
@@ -62,11 +60,8 @@ public class FunctionalitySemantics extends Alloy_Model {
 			if ("select".equals(pred.getIdentifier()) && pred.getInputs().keySet().size() == 4) {
 				this.select = pred;
 			}
-			if ("go".equals(pred.getIdentifier()) && pred.getInputs().keySet().size() == 3) {
-				this.go = pred;
-			}
 		}
-		if (this.click == null || this.fill == null || this.go == null || this.select == null
+		if (this.click == null || this.fill == null || this.select == null
 				|| this.window_signature == null || this.action_w_signature == null
 				|| this.input_w_signature == null || this.selectable_w_signature == null) {
 			throw new Exception("FunctionalitySemantics: error in constructor");
@@ -111,14 +106,8 @@ public class FunctionalitySemantics extends Alloy_Model {
 				this.select_semantics = new Semantic_predicate(pred.getIdentifier(),
 						pred.getContent(), pred.getInputs());
 			}
-			if ("go_semantics".equals(pred.getIdentifier())
-					&& pred.getInputs().keySet().size() == 2) {
-				this.go_semantics = new Semantic_predicate(pred.getIdentifier(), pred.getContent(),
-						pred.getInputs());
-			}
 		}
 		if (this.click_semantics == null
-				|| this.go_semantics == null
 				|| this.fill_semantics == null
 				|| this.select_semantics == null
 				|| (this.windows_extensions.size() + this.action_w_extensions.size()
@@ -131,11 +120,6 @@ public class FunctionalitySemantics extends Alloy_Model {
 	public Semantic_predicate getClickSemantics() {
 
 		return this.click_semantics;
-	}
-
-	public Semantic_predicate getGoSemantics() {
-
-		return this.go_semantics;
 	}
 
 	public Semantic_predicate getFillSemantics() {

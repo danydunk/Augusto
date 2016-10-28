@@ -18,7 +18,6 @@ import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.semantic.testcase.GUITestCaseResult;
-import usi.gui.semantic.testcase.Go;
 import usi.gui.semantic.testcase.OracleChecker;
 import usi.gui.semantic.testcase.Select;
 import usi.gui.semantic.testcase.TestCaseRunner;
@@ -206,7 +205,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 
 		final List<String> testcases_out = new ArrayList<>();
 		System.out.println("COVERING SEMANTIC CASES.");
@@ -312,12 +311,7 @@ public class GUIFunctionality_validate {
 						&& this.windows_to_visit.contains(act.getWindow().getId())) {
 					this.windows_to_visit.remove(act.getWindow().getId());
 				}
-				if (act instanceof Go) {
-					final Go go = (Go) act;
-					if (this.windows_to_visit.contains(go.getWindow().getId())) {
-						this.windows_to_visit.remove(go.getWindow().getId());
-					}
-				} else if (act instanceof Click) {
+				if (act instanceof Click) {
 					final Click click = (Click) act;
 					if (this.aw_to_click.contains(click.getWidget().getId())) {
 						this.aw_to_click.remove(click.getWidget().getId());
@@ -399,9 +393,6 @@ public class GUIFunctionality_validate {
 			} else if (act instanceof Select) {
 				final Select s = (Select) act;
 				out += "SELECT " + s.getWidget().getId() + " WITH " + s.getIndex();
-			} else if (act instanceof Go) {
-				final Go g = (Go) act;
-				out += "GO TO " + g.getWidget();
 			}
 			cont++;
 		}
@@ -529,56 +520,6 @@ public class GUIFunctionality_validate {
 			final String pred = select + " (" + prec + ") and (";
 			// the number of possible combinations
 			final List<String> cases = sem.getSelectSemantics().getCases().get(prec);
-			if (cases.size() == 1 && cases.get(0).trim().equals("2=(1+1)")) {
-				final String run_command = "run {System and {" + click + " (" + prec + ")} }";
-				positive_semantic_cases.add(run_command);
-				continue;
-			}
-			final double n = Math.pow(2, cases.size());
-
-			for (int cont = 0; cont < n; cont++) {
-				String binary = Integer.toBinaryString(cont);
-				for (int c = 0; c < (cases.size() - binary.length()); c++) {
-					binary = "0" + binary;
-				}
-				String sem_pred = "";
-				for (int cont2 = cases.size() - 1; cont2 >= 0; cont2--) {
-					if (cont2 > (binary.length() - 1) || binary.charAt(cont2) == '0') {
-						sem_pred = sem_pred + "not (" + cases.get(cont2) + ")";
-					} else {
-						sem_pred = sem_pred + cases.get(cont2);
-					}
-					if (cont2 > 0) {
-						sem_pred = sem_pred + " and ";
-					}
-				}
-				final String run_command = "run {System and {" + pred + sem_pred + ")} }";
-				if (cont == (n - 1)) {
-					// the last one is the positive case
-					positive_semantic_cases.add(run_command);
-				} else {
-					negative_semantic_cases.add(run_command);
-				}
-			}
-		}
-
-		final String go = "some t: Time, w: Window | Track.op.(T/next[t]) in Go and Track.op.(T/next[t]).where = w and";
-		final String go_edge = "some t: Time, w: Window, g: Go | go [w, t, T/next[t], g] and";
-
-		for (final String prec : sem.getGoSemantics().getCases().keySet()) {
-
-			final String positive_edge = "run {System and {" + go_edge + " (" + prec
-					+ ") and go_semantics[w, t]} }";
-			final List<String> positive_semantic_cases = new ArrayList<>();
-			final String negative_edge = "run {System and {" + go_edge + " (" + prec
-					+ ") and not(go_semantics[w, t])} }";
-			final List<String> negative_semantic_cases = new ArrayList<>();
-			this.edges_cases.put(positive_edge, positive_semantic_cases);
-			this.edges_cases.put(negative_edge, negative_semantic_cases);
-
-			final String pred = go + " (" + prec + ") and (";
-			// the number of possible combinations
-			final List<String> cases = sem.getGoSemantics().getCases().get(prec);
 			if (cases.size() == 1 && cases.get(0).trim().equals("2=(1+1)")) {
 				final String run_command = "run {System and {" + click + " (" + prec + ")} }";
 				positive_semantic_cases.add(run_command);

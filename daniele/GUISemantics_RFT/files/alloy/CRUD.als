@@ -3,7 +3,7 @@ pred init [t: Time] {
 	no List.contains.t
 	no Track.op.t
 	no Selectable_widget.selected.t
- 	Current_window.is_in.t = General
+ 	Current_window.is_in.t = Initial
 	no Current_crud_op.operation.t
 }
 ---------------Generic CRUD Structure ----------
@@ -29,7 +29,7 @@ fact {
 	all iw: Initial | iw.aws = (Create_trigger+Read_trigger+Update_trigger+Delete_trigger) and #iw.iws = 0 and #iw.sws = 1
 	all fw: Form | one ok: Ok,  cancel: Cancel | #fw.iws > 0 and fw.aws = ok+cancel and #fw.sws = 0 and ok.goes in Initial+Confirm and cancel.goes in Initial
 	all cw: Confirm | one ok: Ok,  cancel: Cancel | #cw.iws = 0 and #cw.sws = 0 and cw.aws = ok+cancel and ok.goes in Initial+Form and cancel.goes in Initial+Form
-	#Window = #Form + #Initial + #Confirm + #General + #View
+	#Window = #Form + #Initial + #Confirm + #View
 	#Ok.goes < 2
 	#Create_trigger.goes < 2
 	#Read_trigger.goes < 2
@@ -55,20 +55,7 @@ fact {
 	all t: Time | List.contains.t = Selectable_widget.list.t
 	all f: Field | #f.associated_to = 1
 	all iw: Input_widget | iw in Form.iws => #associated_to.iw = 1
-	all t: Time | (Current_window.is_in.t in Initial or Current_window.is_in.t in General) <=> #Current_crud_op.operation.t = 0
-}
-
-pred go_semantics [w: Window, t: Time] { }
-pred go_success_post [w: Window, t, t': Time] {
-	List.contains.t' = List.contains.t
-	#Current_crud_op.operation.t' = 0
-}
-pred go_fail_post [w: Window, t, t': Time] {
-	List.contains.t' = List.contains.t
-	Current_crud_op.operation.t' = Current_crud_op.operation.t
-}
-pred go_pre[w: Window, t: Time] {
-	w in Initial
+	all t: Time | (Current_window.is_in.t in Initial) <=> #Current_crud_op.operation.t = 0
 }
 
 pred fill_semantics [iw: Input_widget, t: Time, v: Value] { }
@@ -100,7 +87,6 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] {
 pred select_doubleclick_semantics [sw: Selectable_widget, t: Time, o: Object] { }
 pred select_doubleclick_success_post [sw: Selectable_widget, t, t': Time, o: Object] {
 	List.contains.t' = List.contains.t
-	//Current_crud_op.operation.t' = Current_crud_op.operation.t
 	Current_window.is_in.t' = View
 	(Current_crud_op.operation.t' = READ and load_form[o, t'] and Selectable_widget.selected.t' = o)
 }
