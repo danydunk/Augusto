@@ -58,12 +58,12 @@ public class Error_window_test extends Error_window_testHelper {
 			final Click c2 = new Click(initial, null, aw2);
 			acts.add(c2);
 
-			final Window form = gui.getWindow("w13");
-			final Input_widget iw1 = (Input_widget) form.getWidget("iw32");
+			final Window form = gui.getWindow("w8");
+			final Input_widget iw1 = (Input_widget) form.getWidget("iw17");
 			final Fill f1 = new Fill(form, null, iw1, "test");
 			acts.add(f1);
 
-			final Action_widget aw3 = (Action_widget) form.getWidget("aw112");
+			final Action_widget aw3 = (Action_widget) form.getWidget("aw62");
 			final Click c3 = new Click(form, null, aw3);
 			acts.add(c3);
 

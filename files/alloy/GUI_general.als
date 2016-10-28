@@ -12,9 +12,6 @@ sig Fill extends Operation {
 	filled: one Input_widget,
 	with: one Value
 }
-sig Go extends Operation {
-	where: one Window
-}
 sig Select extends Operation {
 	wid: one Selectable_widget,
 	selected: one Object
@@ -30,8 +27,7 @@ pred transition [t, t': Time]  {
 	(one aw: Action_widget, c: Click | click [aw, t, t', c]) or 
 	(one iw: Input_widget, f: Fill, v: Value | fill [iw, t, t', v, f]) or
 	(one sw: Selectable_widget, s: Select, o: Object | select [sw, t, t', o, s]) or
-	(one sw: Selectable_widget, sdc: Select_doubleclick, o: Object | select_doubleclick [sw, t, t', o, sdc]) or
-	(one w: Window, g: Go | go [w, t, t', g])
+	(one sw: Selectable_widget, sdc: Select_doubleclick, o: Object | select_doubleclick [sw, t, t', o, sdc])
 }
 pred System {
 	init [T/first]
@@ -44,7 +40,6 @@ abstract sig Window {
 	iws: set Input_widget,
 	sws: set Selectable_widget
 }
-one sig General extends Window { }
 abstract sig Action_widget {
 	goes: set Window
 }
@@ -61,7 +56,6 @@ abstract sig Selectable_widget {
 	selected: Object lone ->Time
 }
 fact {
-	#General.iws = 0 and #General.aws = 0 and #General.sws = 0
 	all iw: Input_widget | one w: Window | iw in w.iws
 	all aw: Action_widget | one w: Window | aw in w.aws //and #aw.goes < 2
 	all sw: Selectable_widget | one w: Window | sw in w.sws
@@ -122,14 +116,3 @@ pred select_doubleclick [sw: Selectable_widget, t, t': Time, o: Object, sdc: Sel
 	--- operation is tracked ---
 	sdc.widg = sw and sdc.selected_o = o and Track.op.t' = sdc
 }
-pred go [w: Window, t, t': Time, g: Go] {
-	--- precondition ---
-	General in Current_window.is_in.t
-	go_pre [w, t]
-	--- effect ---
-	(go_semantics [w, t] and Current_window.is_in.t' = w and 	(all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #Selectable_widget.selected.t' = 0 and go_success_post [w, t, t']) or
-	(not go_semantics [w, t] and Current_window.is_in.t' = General and (all iw: Input_widget | iw.content.t' = iw.content.t) and Selectable_widget.selected.t' = Selectable_widget.selected.t and go_fail_post [w, t, t'])
-	--- operation is tracked ---
-	g.where = w and Track.op.t' = g
-}
-

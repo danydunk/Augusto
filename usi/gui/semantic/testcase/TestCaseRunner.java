@@ -2,6 +2,7 @@ package usi.gui.semantic.testcase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,9 @@ import usi.gui.structure.Input_widget;
 import usi.gui.structure.Option_input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
+import usi.util.DijkstraAlgorithm;
+import usi.util.Graph;
+import usi.util.Vertex;
 
 import com.rational.test.ft.object.interfaces.TestObject;
 
@@ -59,10 +63,8 @@ public class TestCaseRunner {
 			Thread.sleep(1000);
 			gmanager.readGUI();
 			curr = gmanager.getCurrentActiveWindows();
-			// System.out.println(curr);
 		}
 
-		System.out.println(curr);
 		this.select_support_initial = new HashMap<>();
 		this.select_support_added = new HashMap<>();
 		this.select_support_added_indexes = new HashMap<>();
@@ -72,9 +74,49 @@ public class TestCaseRunner {
 		final List<GUIAction> actions_executed = new ArrayList<>();
 		final List<GUIAction> actions_actually_executed = new ArrayList<>();
 		final List<Window> results = new ArrayList<>();
-		List<GUIAction> go_actions = null;
 
 		this.updatedStructuresForSelect(curr);
+
+		final Window initial = tc.getActions().get(0).getWindow();
+		if (!curr.isSame(initial)) {
+			// if we are not in the right window
+			if (this.gui == null) {
+				throw new Exception(
+						"TestCaseRunner - runTestCase: gui is required to reach initial window.");
+			}
+
+			Window curr_mapped_w = null;
+			for (final Window ww : this.gui.getWindows()) {
+				if (ww.isSame(curr)) {
+					curr_mapped_w = ww;
+					break;
+				}
+			}
+			if (curr_mapped_w == null) {
+				throw new Exception(
+						"TestCaseRunner - runTestCase: current window could not be found in gui.");
+			}
+
+			final List<GUIAction> go_actions = this.getActionSequenceToGO(curr_mapped_w, initial);
+			for (final GUIAction go : go_actions) {
+				try {
+					this.amanager.executeAction(go);
+				} catch (final Exception e) {
+					System.out.println("ERROR EXECUTING ACTION");
+					e.printStackTrace();
+					throw new Exception(
+							"TestCaseRunner - runTestCase: impossible to reach initial window.");
+				}
+				gmanager.readGUI();
+				this.dealWithErrorWindow(gmanager);
+
+				actions_actually_executed.add(go);
+				this.updatedStructuresForSelect(gmanager.getCurrentActiveWindows());
+			}
+		}
+		if (!gmanager.getCurrentActiveWindows().isSame(initial)) {
+			throw new Exception("TestCaseRunner - runTestCase: impossible to reach initial window.");
+		}
 
 		mainloop: for (int cont = 0; cont < actions.size(); cont++) {
 
@@ -82,84 +124,50 @@ public class TestCaseRunner {
 			curr = gmanager.getCurrentActiveWindows();
 			GUIAction act_to_execute = act;
 
-			if (act instanceof Go) {
-				final Go go = (Go) act;
-				final Window target = (Window) go.getWidget();
-				System.out.println(curr);
-				System.out.println(target);
-				if (curr.isSame(target)) {
-					// we are already in the right window
-					actions_executed.add(act);
-					results.add(this.getKnownWindowIfAny(curr));
-					continue;
-				}
-
-				if (this.gui == null) {
-					throw new Exception(
-							"TestCaseRunner - runTestCase: gui is required to perform Go actions.");
-				}
-
-				Window curr_mapped_w = null;
-				for (final Window ww : this.gui.getWindows()) {
-					if (ww.isSame(curr)) {
-						curr_mapped_w = ww;
-						break;
-					}
-				}
-				if (curr_mapped_w == null) {
-					throw new Exception(
-							"TestCaseRunner - runTestCase: current window could not be found in gui.");
-				}
-
-				go_actions = go.getActionSequence(curr_mapped_w, this.gui);
-				actions.addAll(cont + 1, go_actions);
-				actions_executed.add(act);
-				if (go_actions.size() == 0) {
-					results.add(null);
-				}
-				continue;
-			}
-
 			// the index of the action must be adjusted to the real one in the
 			// app
 			if ((act instanceof Select) || (act instanceof Select_doubleclick)) {
+				final boolean abs = (act instanceof Select) ? ((Select) act).isAbstract()
+						: ((Select_doubleclick) act).isAbstract();
+				if (abs) {
+					final Selectable_widget sw = (Selectable_widget) act.getWidget();
 
-				final Selectable_widget sw = (Selectable_widget) act.getWidget();
-
-				final int ind = (act instanceof Select) ? ((Select) act).getIndex()
-						: ((Select_doubleclick) act).getIndex();
-				final Pair new_p = new Pair(curr, sw);
-				boolean found = false;
-				for (final Pair p : this.select_support_initial.keySet()) {
-					if (p.isSame(new_p)) {
-						if (this.select_support_added_indexes.get(p).size() <= ind) {
-							// the selectable widget is not as expected
-							break mainloop;
-						}
-						final int size = this.select_support_initial.get(p).size()
-								+ this.select_support_added.get(p).size();
-						final int index = this.select_support_added_indexes.get(p).get(ind);
-						// TODO: we need to find a way to put the right selected
-						// index
-						final Selectable_widget new_sw = new Selectable_widget(sw.getId(),
-								sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), size, 0);
-						if (act instanceof Select) {
-							final GUIAction select = new Select(act.getWindow(), act.getOracle(),
-									new_sw, index);
-							act_to_execute = select;
-							found = true;
-							break;
-						}
-						if (act instanceof Select_doubleclick) {
-							final GUIAction select_dc = new Select_doubleclick(act.getWindow(),
-									act.getOracle(), new_sw, index);
-							act_to_execute = select_dc;
-							found = true;
-							break;
+					final int ind = (act instanceof Select) ? ((Select) act).getIndex()
+							: ((Select_doubleclick) act).getIndex();
+					final Pair new_p = new Pair(curr, sw);
+					boolean found = false;
+					for (final Pair p : this.select_support_initial.keySet()) {
+						if (p.isSame(new_p)) {
+							if (this.select_support_added_indexes.get(p).size() <= ind) {
+								// the selectable widget is not as expected
+								break mainloop;
+							}
+							final int size = this.select_support_initial.get(p).size()
+									+ this.select_support_added.get(p).size();
+							final int index = this.select_support_added_indexes.get(p).get(ind);
+							// TODO: we need to find a way to put the right
+							// selected
+							// index
+							final Selectable_widget new_sw = new Selectable_widget(sw.getId(),
+									sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), size, 0);
+							if (act instanceof Select) {
+								final GUIAction select = new Select(act.getWindow(),
+										act.getOracle(), new_sw, index, false);
+								act_to_execute = select;
+								found = true;
+								break;
+							}
+							if (act instanceof Select_doubleclick) {
+								final GUIAction select_dc = new Select_doubleclick(act.getWindow(),
+										act.getOracle(), new_sw, index, false);
+								act_to_execute = select_dc;
+								found = true;
+								break;
+							}
 						}
 					}
+					assert found;
 				}
-				assert found;
 			}
 
 			try {
@@ -177,18 +185,13 @@ public class TestCaseRunner {
 
 			this.updatedStructuresForSelect(gmanager.getCurrentActiveWindows());
 
-			if (tc.containsAction(act)) {
-				actions_executed.add(act);
-				if (gmanager.getCurrentActiveWindows() != null) {
-					results.add(this.getKnownWindowIfAny(gmanager.getCurrentActiveWindows()));
-				} else {
-					results.add(null);
-				}
+			actions_executed.add(act);
+			if (gmanager.getCurrentActiveWindows() != null) {
+				results.add(this.getKnownWindowIfAny(gmanager.getCurrentActiveWindows()));
 			} else {
-				if (go_actions != null && go_actions.get(go_actions.size() - 1) == act) {
-					results.add(this.getKnownWindowIfAny(gmanager.getCurrentActiveWindows()));
-				}
+				results.add(null);
 			}
+
 		}
 		app.closeApplication();
 		final GUITestCaseResult res = new GUITestCaseResult(tc, actions_executed, results,
@@ -379,5 +382,46 @@ public class TestCaseRunner {
 
 			return this.w.isSame(p.w) && this.sw.isSame(p.sw);
 		}
+	}
+
+	private List<GUIAction> getActionSequenceToGO(final Window current, final Window targetw)
+			throws Exception {
+
+		final List<GUIAction> out = new ArrayList<>();
+		final Graph g = Graph.convertGUI(this.gui);
+
+		Vertex source = g.getVertex(current.getId());
+		Vertex target = g.getVertex(targetw.getId());
+
+		final DijkstraAlgorithm alg = new DijkstraAlgorithm(g);
+		alg.execute(source);
+		final LinkedList<Vertex> path = alg.getPath(target);
+
+		if (path == null) {
+			throw new Exception(
+					"GUIAction - getActionSequence: action sequence could not be found.");
+		}
+
+		source = path.pop();
+		while (!path.isEmpty()) {
+			target = path.pop();
+			Click click = null;
+			final Window s = this.gui.getWindow(source.getId());
+			final Window t = this.gui.getWindow(target.getId());
+			for (final Action_widget aw : this.gui.getStaticBackwardLinks(t.getId())) {
+				if (s.getWidget(aw.getId()) != null) {
+					click = new Click(s, null, aw);
+					break;
+				}
+			}
+			if (click == null) {
+				throw new Exception(
+						"GUIAction - getActionSequence: error generating action sequence.");
+			}
+			out.add(click);
+			source = target;
+		}
+
+		return out;
 	}
 }

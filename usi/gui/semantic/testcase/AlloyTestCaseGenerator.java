@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import usi.configuration.ConfigurationManager;
 import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.functionality.mapping.Instance_window;
 import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.semantic.testcase.inputdata.DataManager;
@@ -193,8 +192,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-		ts[0].interrupt();
-		ts[1].interrupt();
+			ts[0].interrupt();
+			ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -215,19 +214,15 @@ public class AlloyTestCaseGenerator {
 		final Map<String, String> input_data_map = this.elaborateInputData(solution);
 		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track$0");
 		final List<A4Tuple> curr_wind = AlloyUtil.getTuples(solution, "Current_window$0");
-		if (tracks.size() != curr_wind.size() - 1) {
-			throw new Exception(
-					"AlloyTestCaseGenerator - analyzeTuples: track and curr window must have same size.");
-		}
+		assert (tracks.size() == curr_wind.size() - 1);
+
 		final List<GUIAction> actions = new ArrayList<>(tracks.size());
 		for (final A4Tuple t : tracks) {
 			actions.add(null);
 		}
 
 		for (final A4Tuple tuple : tracks) {
-			if (tuple.arity() != 3) {
-				throw new Exception("AlloyTestCaseGenerator - analyzeTuples: wrong arity of track.");
-			}
+			assert (tuple.arity() == 3);
 
 			final int time_index = this.extractTimeIndex(tuple.atom(2));
 
@@ -235,23 +230,17 @@ public class AlloyTestCaseGenerator {
 			Window oracle = null;
 
 			for (final A4Tuple curr : curr_wind) {
-				// System.out.println("Time$" + (time_index - 1));
+
 				if (this.extractTimeIndex(curr.atom(2)) == (time_index - 1)) {
 					String windid = curr.atom(1).split("\\$")[0];
-					if (windid.startsWith("General")) {
-						// TODO: fix this
-						source_window = new Window("General", "General", "General", 0, 0, false);
-
-					} else {
-						windid = windid.split("_")[1];
-						source_window = this.instance.getGui().getWindow(windid);
-					}
+					windid = windid.split("_")[1];
+					source_window = this.instance.getGui().getWindow(windid);
 				}
 				// oracle
 				if (this.extractTimeIndex(curr.atom(2)) == (time_index)) {
 
 					String windid = curr.atom(1).split("\\$")[0];
-					if (windid.startsWith("General") || windid.startsWith("Undiscovered")) {
+					if (windid.startsWith("Undiscovered")) {
 						continue;
 
 					} else {
@@ -286,18 +275,14 @@ public class AlloyTestCaseGenerator {
 									"Input_widget_" + iw.getId() + "$0");
 							String inputdata = "";
 							for (final A4Tuple value : values) {
-								if (value.arity() != 3) {
-									throw new Exception(
-											"AlloyTestCaseGenerator - analyzeTuples: error retriving input widget value.");
-								}
+								assert (value.arity() == 3);
+
 								if (value.atom(2).equals(tuple.atom(2))) {
 
 									if (iw instanceof Option_input_widget) {
 
 										final String val = (value.atom(1).split("\\$")[0]);
-										// System.out.println("before " + val);
 										inputdata = val.split("_value_")[1];
-
 									} else {
 										// the input data is retrieved
 										inputdata = input_data_map.get(value.atom(1));
@@ -351,19 +336,14 @@ public class AlloyTestCaseGenerator {
 									String selected = "";
 
 									for (final A4Tuple obj : objs) {
-										if (obj.arity() != 3) {
-											throw new Exception(
-													"AlloyTestCaseGenerator - analyzeTuples: error retriving objects for selectable widget.");
-										}
+										assert (obj.arity() == 3);
 
 										if (obj.atom(2).equals(tuple.atom(2))) {
 											if (!map.containsKey(obj.atom(1))) {
 												final List<A4Tuple> appeared = AlloyUtil.getTuples(
 														solution, obj.atom(1));
-												if (appeared.size() != 1) {
-													throw new Exception(
-															"AlloyTestCaseGenerator - analyzeTuples: error ordering objects for selectable widget.");
-												}
+												assert (appeared.size() == 1);
+
 												final int ind = this.extractTimeIndex(appeared.get(
 														0).atom(1));
 												map.put(obj.atom(1), ind);
@@ -372,10 +352,8 @@ public class AlloyTestCaseGenerator {
 												// if it appears two time it
 												// means it is
 												// the selected one
-												if (selected.length() > 0) {
-													throw new Exception(
-															"AlloyTestCaseGenerator - analyzeTuples: error retriving selected for selectable widget.");
-												}
+												assert (selected.length() == 0);
+
 												selected = obj.atom(1);
 											}
 										}
@@ -403,45 +381,9 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-			if (source_window == null) {
-				throw new Exception(
-						"AlloyTestCaseGenerator - analyzeTuples: source window not found.");
-			}
+			assert (source_window != null);
 
 			final List<A4Tuple> params = AlloyUtil.getTuples(solution, tuple.atom(1));
-
-			if (tuple.atom(1).startsWith("Go")) {
-				if (params.size() != 1) {
-					throw new Exception(
-							"AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for go.");
-				}
-				final A4Tuple wid_tuple = params.get(0);
-				if (wid_tuple.atom(1).equals("General$0")) {
-					continue;
-				}
-
-				if (!wid_tuple.atom(1).startsWith("Window_")) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in go.");
-				}
-				String window_id = wid_tuple.atom(1).substring(7);
-				window_id = window_id.split("\\$")[0];
-
-				Window target_w = null;
-				for (final Instance_window w : this.instance.getWindows()) {
-					if (w.getInstance().getId().equals(window_id)) {
-						target_w = w.getInstance();
-						break;
-					}
-				}
-
-				if (target_w == null) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in go.");
-				}
-
-				final Go action = new Go(source_window, oracle, target_w);
-				actions.set(time_index - 1, action);
-				continue;
-			}
 
 			if (tuple.atom(1).startsWith("Fill")) {
 				if (params.size() != 2) {
@@ -461,12 +403,9 @@ public class AlloyTestCaseGenerator {
 						iw_id = iw_id.split("\\$")[0];
 						continue;
 					}
-
 				}
 
-				if (value == null || iw_id == null) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in fill.");
-				}
+				assert (value != null && iw_id != null);
 
 				Input_widget target_iw = null;
 				for (final Input_widget iw : this.instance.getGui().getInput_widgets()) {
@@ -488,30 +427,23 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 
-				if (target_iw == null) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in fill.");
-				}
+				assert (target_iw != null);
 
 				// the input data is retrieved
 				final String inputdata = input_data_map.get(value);
-				if (inputdata == null) {
-					throw new Exception(
-							"AlloyTestCaseGenerator - analyzeTuples: error getting input data.");
-				}
+				assert (inputdata != null);
+
 				final Fill action = new Fill(source_window, oracle, target_iw, inputdata);
 				actions.set(time_index - 1, action);
 				continue;
 			}
 
 			if (tuple.atom(1).startsWith("Click")) {
-				if (params.size() != 1) {
-					throw new Exception(
-							"AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for click.");
-				}
+				assert (params.size() == 1);
 				final A4Tuple wid_tuple = params.get(0);
-				if (!wid_tuple.atom(1).startsWith("Action_widget_")) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in click.");
-				}
+
+				assert (wid_tuple.atom(1).startsWith("Action_widget_"));
+
 				String aw_id = wid_tuple.atom(1).substring(14);
 				aw_id = aw_id.split("\\$")[0];
 
@@ -526,19 +458,15 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 
-				if (target_aw == null) {
-					throw new Exception("AlloyTestCaseGenerator - analyzeTuples: error in click.");
-				}
+				assert (target_aw != null);
 
 				final Click action = new Click(source_window, oracle, target_aw);
 				actions.set(time_index - 1, action);
 				continue;
 			}
 			if (tuple.atom(1).startsWith("Select")) {
-				if (params.size() != 2) {
-					throw new Exception(
-							"AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for select or select_doubleclick.");
-				}
+				assert (params.size() == 2);
+
 				String sw_id = null;
 				String sw_name = null;
 				String object = null;
@@ -556,10 +484,7 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 
-				if (object == null || sw_id == null) {
-					throw new Exception(
-							"AlloyTestCaseGenerator - analyzeTuples: error in select or select_doubleclick.");
-				}
+				assert (object != null && sw_id != null);
 
 				// all the tuples connected with the sw
 				final List<A4Tuple> sw_tuples = AlloyUtil.getTuples(solution, sw_name);
@@ -579,10 +504,8 @@ public class AlloyTestCaseGenerator {
 				for (final String obj : objects_in_sw_at_t) {
 					final List<A4Tuple> obj_tuples = AlloyUtil.getTuples(solution, obj);
 
-					if (obj_tuples.size() != 1) {
-						throw new Exception(
-								"AlloyTestCaseGenerator - analyzeTuples: error in select or select_doubleclick.");
-					}
+					assert (obj_tuples.size() == 1);
+
 					final int appeared = this.extractTimeIndex(obj_tuples.get(0).atom(1));
 					if (!map.containsKey(obj)) {
 						to_order.add(appeared);
@@ -610,19 +533,17 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 
-				if (target_sw == null) {
-					throw new Exception(
-							"AlloyTestCaseGenerator - analyzeTuples: error in select or select_doubleclick.");
-				}
+				assert (target_sw != null);
 
 				final int select_index = ordered.indexOf(object);
 
 				if (tuple.atom(1).startsWith("Select_doubleclick")) {
 					final Select_doubleclick action = new Select_doubleclick(source_window, oracle,
-							target_sw, select_index);
+							target_sw, select_index, true);
 					actions.set(time_index - 1, action);
 				} else {
-					final Select action = new Select(source_window, oracle, target_sw, select_index);
+					final Select action = new Select(source_window, oracle, target_sw,
+							select_index, true);
 					actions.set(time_index - 1, action);
 				}
 				continue;

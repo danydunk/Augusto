@@ -32,7 +32,6 @@ import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.semantic.testcase.GUITestCaseResult;
-import usi.gui.semantic.testcase.Go;
 import usi.gui.semantic.testcase.Select;
 import usi.gui.semantic.testcase.inputdata.DataManager;
 import usi.gui.structure.Action_widget;
@@ -884,71 +883,6 @@ public class AlloyUtil {
 		return fact;
 	}
 
-	// /**
-	// * Method that links Windows signatures with Action Widget Signatures
-	// * according to the structure of the GUI. it requires also the gui and the
-	// * list of added signatures to add fact about the edges
-	// *
-	// * @param aws
-	// * @param window
-	// * @throws Exception
-	// */
-	// public static Fact createFactsForActionWidget(final Map<Action_widget,
-	// Signature> aws,
-	// final Signature window, final Map<Window, Signature> ws, final GUI gui)
-	// throws Exception {
-	//
-	// final Fact initial_fact = createFactsForElement(aws.values(), window,
-	// "aws");
-	// String content = initial_fact.getContent();
-	//
-	// for (final Action_widget aw : aws.keySet()) {
-	// final List<Window> edges = new ArrayList<>();
-	// for (final Window w : gui.getDynamicForwardLinks(aw.getId())) {
-	// if (ws.containsKey(w)) {
-	// edges.add(w);
-	// }
-	// }
-	//
-	// if (edges.size() > 0) {
-	// content += System.getProperty("line.separator") +
-	// aws.get(aw).getIdentifier()
-	// + ".goes = ";
-	// int i = 0;
-	// for (final Window edge : edges) {
-	// content += ws.get(edge).getIdentifier();
-	// content += (i + 1 == edges.size()) ? "" : " + ";
-	// i++;
-	// }
-	// } else {
-	// // we put static links only if there are not dynamic ones
-	// for (final Window w : gui.getStaticForwardLinks(aw.getId())) {
-	// if (ws.containsKey(w)) {
-	// edges.add(w);
-	// }
-	// }
-	//
-	// if (edges.size() > 0) {
-	// content += System.getProperty("line.separator") +
-	// aws.get(aw).getIdentifier()
-	// + ".goes = ";
-	// int i = 0;
-	// for (final Window edge : edges) {
-	// content += ws.get(edge).getIdentifier();
-	// content += (i + 1 == edges.size()) ? "" : " + ";
-	// i++;
-	// }
-	// } else {
-	// content += System.getProperty("line.separator") + "#"
-	// + aws.get(aw).getIdentifier() + ".goes = 0";
-	// }
-	// }
-	// }
-	//
-	// final Fact fact = new Fact(window.getIdentifier() + "_aws", content);
-	// return fact;
-	// }
-
 	/**
 	 * Method that links Windows signatures with Action Widget Signatures
 	 * according to the structure of the GUI. it requires also the gui and the
@@ -1585,13 +1519,6 @@ public class AlloyUtil {
 				fact += " and #(T/nexts[(" + obj + ".appeared)] & Selectable_widget_"
 						+ s.getWidget().getId() + ".list.(" + t + ").appeared) = "
 						+ ((sw.getSize() - 1) - s.getIndex());
-			}
-			if (act instanceof Go) {
-				final Go g = (Go) act;
-
-				fact += "Track.op.(" + t + ") in Go";
-
-				fact += " and Track.op.(" + t + ").where=Window_" + g.getWidget().getId();
 			}
 		}
 		// we deal with the values

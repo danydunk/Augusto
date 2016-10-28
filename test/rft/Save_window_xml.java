@@ -93,9 +93,8 @@ public class Save_window_xml extends Save_window_xmlHelper {
 			}
 
 			list = XMLUtil.searchChildren((Element) ws.item(0), "selectable_widget");
-			final String label = XMLUtil.searchChildren(list.get(0), "descriptor").get(0)
-					.getTextContent();
-			if (!label.contains("Universal Password Manager")) {
+			if (XMLUtil.searchChildren(list.get(0), "descriptor").size() > 0) {
+
 				throw new Exception("");
 			}
 			application.closeApplication();

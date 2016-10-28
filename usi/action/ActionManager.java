@@ -7,7 +7,6 @@ import usi.gui.GuiStateManager;
 import usi.gui.semantic.testcase.Click;
 import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
-import usi.gui.semantic.testcase.Go;
 import usi.gui.semantic.testcase.Select;
 import usi.gui.semantic.testcase.Select_doubleclick;
 import usi.gui.structure.Option_input_widget;
@@ -31,11 +30,6 @@ public class ActionManager {
 	 */
 	public void executeAction(final GUIAction act) throws Exception {
 
-		if (act instanceof Go) {
-			throw new Exception(
-					"ActionManager - executeAction: go actions must be elaborated before execution.");
-		}
-
 		final GuiStateManager guimanager = GuiStateManager.getInstance();
 
 		Window currWind = guimanager.getCurrentActiveWindows();
@@ -47,9 +41,6 @@ public class ActionManager {
 			}
 
 		}
-		// System.out.println(act.getWindow());
-		// System.out.println(act.getWindow().getId());
-		// System.out.println(currWind.getId());
 
 		if (act.getWindow() == null || !currWind.isSame(act.getWindow())) {
 			// we read again the gui in case it was a problem of sleeptime
