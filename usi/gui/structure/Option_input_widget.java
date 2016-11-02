@@ -76,11 +76,11 @@ public class Option_input_widget extends Input_widget {
 		if (!super.isSame(w)) {
 			return false;
 		}
-		final Option_input_widget oiw = (Option_input_widget) w;
-		if (this.size != oiw.size) {
-			return false;
-		}
 		// size and selected is not checked cause it can change
+		// final Option_input_widget oiw = (Option_input_widget) w;
+		// if (this.size != oiw.size) {
+		// return false;
+		// }
 		return super.isSame(w);
 	}
 

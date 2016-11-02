@@ -9,7 +9,7 @@ import java.util.Map;
 import usi.action.ActionManager;
 import usi.application.ApplicationHelper;
 import usi.gui.GuiStateManager;
-import usi.gui.pattern.Pattern_error_window;
+import usi.gui.pattern.dialogs.Pattern_dialogs;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
@@ -31,6 +31,7 @@ public class TestCaseRunner {
 	private Map<Pair, List<String>> select_support_initial;
 	private Map<Pair, List<String>> select_support_added;
 	private Map<Pair, List<Integer>> select_support_added_indexes;
+	private final boolean skip_dialogs = true;
 
 	public TestCaseRunner(final long sleep, final GUI gui) {
 
@@ -108,7 +109,7 @@ public class TestCaseRunner {
 							"TestCaseRunner - runTestCase: impossible to reach initial window.");
 				}
 				gmanager.readGUI();
-				this.dealWithErrorWindow(gmanager);
+				this.dealWithDialogsWindow(gmanager);
 
 				actions_actually_executed.add(go);
 				this.updatedStructuresForSelect(gmanager.getCurrentActiveWindows());
@@ -179,7 +180,7 @@ public class TestCaseRunner {
 			}
 			gmanager.readGUI();
 
-			this.dealWithErrorWindow(gmanager);
+			this.dealWithDialogsWindow(gmanager);
 
 			actions_actually_executed.add(act_to_execute);
 
@@ -352,17 +353,23 @@ public class TestCaseRunner {
 		return in;
 	}
 
-	private void dealWithErrorWindow(final GuiStateManager gmanager) throws Exception {
+	private void dealWithDialogsWindow(final GuiStateManager gmanager) throws Exception {
+
+		if (!this.skip_dialogs) {
+			return;
+		}
 
 		if (gmanager.getCurrentActiveWindows() != null) {
 			final Window current = gmanager.getCurrentActiveWindows();
-			final Pattern_error_window err = Pattern_error_window.getInstance();
-			if (err.isMatch(current)) {
-				// we create a click action (the window must have only one
-				// action widget to match the err window)
-				final Click click = new Click(current, null, current.getActionWidgets().get(0));
-				this.amanager.executeAction(click);
-				gmanager.readGUI();
+			for (final Pattern_dialogs dialog : Pattern_dialogs.values()) {
+
+				if (dialog.isMatch(current)) {
+					final List<GUIAction> acts = dialog.getActionsToGoPast(current);
+					for (final GUIAction act : acts) {
+						this.amanager.executeAction(act);
+						gmanager.readGUI();
+					}
+				}
 			}
 		}
 	}

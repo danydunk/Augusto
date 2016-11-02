@@ -59,11 +59,12 @@ public class GUIFunctionality_refine {
 		this.pattern = this.instancePattern.getGuipattern();
 		this.observed_tcs = new ArrayList<>();
 		this.covered_dyn_edges = new ArrayList<>();
+		this.current_semantic_property = "";
 		// this.current_semantic_property =
 		// "one Field_3:Property_required|Property_required = (Field_3) and Field_3.associated_to = (Input_widget_iw62)";
 		// this.current_semantic_property =
 		// "one Field_2:Property_unique|one Field_3,Field_4:Property_required|Property_required = (Field_3+Field_4) and Property_unique = (Field_2+Field_4) and Field_3.associated_to = (Input_widget_iw89) and Field_4.associated_to = (Input_widget_iw86) and Field_2.associated_to = (Input_widget_iw87)";
-		this.current_semantic_property = "";
+		// this.current_semantic_property = "";
 		this.discarded_semantic_properties = new ArrayList<>();
 		this.unsat_commands = new ArrayList<>();
 	}
@@ -164,7 +165,9 @@ public class GUIFunctionality_refine {
 				for (final Action_widget aw : matched_aws) {
 
 					for (final Window target_window : target_w_matched) {
-
+						if (aw.getId().equals("aw259")) {
+							System.out.println();
+						}
 						final String edge = aw.getId() + " - " + target_window.getId();
 						System.out.println("DISCOVER DYNAMIC EDGE: looking for edge " + edge
 								+ " (from " + paw.getId() + ").");
@@ -210,9 +213,9 @@ public class GUIFunctionality_refine {
 			return false;
 		}
 
-		Action_widget aw = null;
+		String aw = null;
 		if (tc.getActions().get(tc.getActions().size() - 1) instanceof Click) {
-			aw = (Action_widget) tc.getActions().get(tc.getActions().size() - 1).getWidget();
+			aw = tc.getActions().get(tc.getActions().size() - 1).getWidget().getId();
 		}
 
 		final Instance_window found = this.getFoundWindow(tc, target);
@@ -229,12 +232,10 @@ public class GUIFunctionality_refine {
 			// an edge is covered if the window reached is not the same as the
 			// source OR if it was a target window
 			boolean covered_edge = !found.getInstance().getId().equals(source_window.getId());
-			System.out.println("first " + covered_edge);
 			if (aw != null) {
 
-				final Pattern_action_widget paw = this.instancePattern.getPAW_for_AW(aw.getId());
-				System.out.println(paw);
-				System.out.println(found.getPattern().getId());
+				final Pattern_action_widget paw = this.instancePattern.getPAW_for_AW(aw);
+
 				covered_edge = covered_edge
 						| this.pattern.isDyanamicEdge(paw.getId(), found.getPattern().getId());
 			}
@@ -242,7 +243,6 @@ public class GUIFunctionality_refine {
 			final Instance_GUI_pattern old = this.instancePattern.clone();
 
 			if (covered_edge) {
-				System.out.println("enetered");
 				// if we did not stay in the same window
 				if (!this.instancePattern.getGui().containsWindow(found.getInstance().getId())) {
 					// new window was found
@@ -272,9 +272,8 @@ public class GUIFunctionality_refine {
 					new_window = true;
 				}
 				if (aw != null) {
-					this.instancePattern.getGui().addDynamicEdge(aw.getId(),
-							found.getInstance().getId());
-					edge = aw.getId() + " - " + found.getInstance().getId();
+					this.instancePattern.getGui().addDynamicEdge(aw, found.getInstance().getId());
+					edge = aw + " - " + found.getInstance().getId();
 					new_edge = true;
 				}
 				this.instancePattern.generateSpecificSemantics();
@@ -283,9 +282,8 @@ public class GUIFunctionality_refine {
 					// System.out.println(this.instancePattern.getSemantics());
 					System.out.println("SEMANTICS NOT VALID");
 					this.instancePattern = old;
-					if (aw != null) {
-						this.removeAWmapping(aw.getId());
-					}
+					this.cleanInstance(aw);
+
 					return false;
 				}
 			}
@@ -337,7 +335,7 @@ public class GUIFunctionality_refine {
 							.getSemantics());
 					if (new_prop == null) {
 						this.instancePattern = old;
-						this.removeAWmapping(aw.getId());
+						this.cleanInstance(aw);
 						System.out.println("ADAPTATION IMPOSSIBLE.");
 						return false;
 					} else {
@@ -377,37 +375,48 @@ public class GUIFunctionality_refine {
 		} else {
 			System.out.println("MATCHING WINDOW NOT FOUND.");
 			// we remove the edge
-			if (aw != null) {
-				this.removeAWmapping(aw.getId());
-			}
+			this.cleanInstance(aw);
 		}
 		return false;
 	}
 
-	private void removeAWmapping(final String aw) throws Exception {
+	private void cleanInstance(final String aw) throws Exception {
 
-		System.out.println("REMOVING " + aw + " MAPPING");
-		if (aw == null) {
-			return;
-		}
-		for (final Instance_window iw : this.instancePattern.getWindows()) {
-			if (iw.getPAW_for_AW(aw) != null) {
-				iw.removeAW_mapping(iw.getPAW_for_AW(aw).getId(), aw);
+		System.out.println("CLEANING INSTANCE");
+
+		if (aw != null) {
+			System.out.println("REMOVING " + aw + " MAPPING");
+
+			for (final Instance_window iw : this.instancePattern.getWindows()) {
+				if (iw.getPAW_for_AW(aw) != null) {
+					iw.removeAW_mapping(iw.getPAW_for_AW(aw).getId(), aw);
+				}
 			}
+
+			List<Window> ws = this.instancePattern.getGui().getDynamicForwardLinks(aw);
+			for (final Window ww : ws) {
+				this.instancePattern.getGui().removeDynamicEdge(aw, ww.getId());
+			}
+			ws = this.instancePattern.getGui().getStaticForwardLinks(aw);
+			for (final Window ww : ws) {
+				this.instancePattern.getGui().removeStaticEdge(aw, ww.getId());
+			}
+			this.instancePattern.generateSpecificSemantics();
+
+			final List<GUITestCaseResult> new_tcs = new ArrayList<>();
+			for (final GUITestCaseResult tcr : this.observed_tcs) {
+				if (!tcr.getTc().getActions().get(tcr.getTc().getActions().size() - 1).getWidget()
+						.getId().equals(aw)) {
+					new_tcs.add(tcr);
+				}
+			}
+			this.observed_tcs = new_tcs;
 		}
-		List<Window> ws = this.instancePattern.getGui().getDynamicForwardLinks(aw);
-		for (final Window ww : ws) {
-			this.instancePattern.getGui().removeDynamicEdge(aw, ww.getId());
-		}
-		ws = this.instancePattern.getGui().getStaticForwardLinks(aw);
-		for (final Window ww : ws) {
-			this.instancePattern.getGui().removeStaticEdge(aw, ww.getId());
-		}
-		this.instancePattern.generateSpecificSemantics();
+
 		final List<GUITestCaseResult> new_tcs = new ArrayList<>();
 		for (final GUITestCaseResult tcr : this.observed_tcs) {
-			if (!tcr.getTc().getActions().get(tcr.getTc().getActions().size() - 1).getWidget()
-					.getId().equals(aw)) {
+			final String last_w_id = tcr.getResults().get(tcr.getResults().size() - 1).getId();
+			if (this.instancePattern.getGui().containsWindow(last_w_id)) {
 				new_tcs.add(tcr);
 			}
 		}
@@ -434,7 +443,9 @@ public class GUIFunctionality_refine {
 					continue;
 				}
 				for (final Action_widget aw : matched_aws) {
-
+					if (to_discover.getId().equals("view")) {
+						System.out.println();
+					}
 					System.out.println("DISCOVER DYNAMIC WINDOW: looking for "
 							+ to_discover.getId() + " from " + aw.getId() + ".");
 
@@ -701,7 +712,7 @@ public class GUIFunctionality_refine {
 
 		final String runCmd = "run {"
 				+ "System and "
-				+ "(some aw:Action_widget, iw:Input_widget, sw:Selectable_widget, w: Window| one opp:Operation| Track.op.(T/last) = opp and ((opp in Go and opp.where=w and not go_semantics[w, T/prev[T/last]]) or (opp in Click and opp.clicked = aw and not click_semantics[aw, T/prev[T/last]]) or (opp in Fill and opp.filled=iw and not fill_semantics[iw, T/prev[T/last], opp.with])  or (opp in Select and opp.wid=sw and not select_semantics[sw, T/prev[T/last], opp.selected])))}";
+				+ "(some aw:Action_widget, iw:Input_widget, sw:Selectable_widget| one opp:Operation| Track.op.(T/last) = opp and ((opp in Click and opp.clicked = aw and not click_semantics[aw, T/prev[T/last]]) or (opp in Fill and opp.filled=iw and not fill_semantics[iw, T/prev[T/last], opp.with]) or (opp in Select and opp.wid=sw and not select_semantics[sw, T/prev[T/last], opp.selected])))}";
 
 		List<String> true_constraints = new ArrayList<>();
 		true_constraints.add(this.current_semantic_property);
@@ -715,7 +726,6 @@ public class GUIFunctionality_refine {
 			System.out.println("CURRENT SEMANTIC PROPERTY: " + this.current_semantic_property);
 			sem_with.clearRunCommands();
 			sem_with.addRun_command(runCmd);
-			// System.out.println(sem_with);
 			clone_with.setSpecificSemantics(sem_with);
 			final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
 			final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
@@ -724,6 +734,7 @@ public class GUIFunctionality_refine {
 			assert tests.size() < 2;
 
 			if (tests.size() == 0) {
+
 				System.out.println("PROPERTY MAYBE OVERSEMPLIFIED");
 
 				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
@@ -738,15 +749,18 @@ public class GUIFunctionality_refine {
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
 				this.current_semantic_property = new_prop;
+				true_constraints = new ArrayList<>();
+				true_constraints.add(this.current_semantic_property);
+				sem_with = addSemanticConstrain_to_Model(sem_with, true_constraints);
 				continue mainloop;
 			}
 
 			final GUITestCase tc = tests.get(0);
-
 			GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
 			if (res == null) {
 				final TestCaseRunner runner = new TestCaseRunner(
 						ConfigurationManager.getSleepTime(), this.gui);
+				System.out.println(sem_with);
 				res = runner.runTestCase(tc);
 				// we dont need the result (it wastes too much memory)
 				final GUITestCase new_tc = new GUITestCase(null, res.getTc().getActions(), res
@@ -759,13 +773,12 @@ public class GUIFunctionality_refine {
 			} else {
 				System.out.println("TESTCASE ALREADY RUN!!!");
 			}
+			sem_with = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(sem_with, tc));
 
 			switch (oracle.check(res)) {
 			case 1:
 				// the beahviour was the same
 				System.out.println("SAME BEAHVIOUR");
-				sem_with = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(sem_with,
-						tc));
 				break;
 			case -1:
 				System.out.println("DIFFERENT BEAHVIOUR");
@@ -825,7 +838,6 @@ public class GUIFunctionality_refine {
 			}
 			final List<Run_command_thread> threads = new ArrayList<>();
 			for (int cont = 0; cont < batch.size(); cont++) {
-				// the time size is the number of actions +2 (because of Go)
 
 				final Alloy_Model sem = AlloyUtil.getTCaseModel(sem_filtered, batch.get(cont));
 				final Module comp = AlloyUtil.compileAlloyModel(sem.toString());

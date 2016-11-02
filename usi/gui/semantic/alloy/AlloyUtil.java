@@ -33,6 +33,7 @@ import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.semantic.testcase.GUITestCaseResult;
 import usi.gui.semantic.testcase.Select;
+import usi.gui.semantic.testcase.Select_doubleclick;
 import usi.gui.semantic.testcase.inputdata.DataManager;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
@@ -1512,6 +1513,24 @@ public class AlloyUtil {
 				final String obj = "Track.op.(" + t + ")" + ".selected";
 
 				fact += " and Track.op.(" + t + ").wid=Selectable_widget_" + s.getWidget().getId();
+				fact += " and #Selectable_widget_" + s.getWidget().getId() + ".list.(" + t + ")="
+						+ sw.getSize();
+				fact += " and #(T/prevs[(" + obj + ".appeared)] & Selectable_widget_"
+						+ s.getWidget().getId() + ".list.(" + t + ").appeared) = " + s.getIndex();
+				fact += " and #(T/nexts[(" + obj + ".appeared)] & Selectable_widget_"
+						+ s.getWidget().getId() + ".list.(" + t + ").appeared) = "
+						+ ((sw.getSize() - 1) - s.getIndex());
+			}
+
+			if (act instanceof Select_doubleclick) {
+				final Select_doubleclick s = (Select_doubleclick) act;
+				final Selectable_widget sw = (Selectable_widget) s.getWidget();
+
+				fact += "Track.op.(" + t + ") in Select_doubleclick";
+
+				final String obj = "Track.op.(" + t + ")" + ".selected_o";
+
+				fact += " and Track.op.(" + t + ").widg=Selectable_widget_" + s.getWidget().getId();
 				fact += " and #Selectable_widget_" + s.getWidget().getId() + ".list.(" + t + ")="
 						+ sw.getSize();
 				fact += " and #(T/prevs[(" + obj + ".appeared)] & Selectable_widget_"

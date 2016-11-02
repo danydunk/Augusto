@@ -25,7 +25,7 @@ public class ActionManager {
 	}
 
 	/*
-	 *
+	 * 
 	 * GUI must be read before calling this method
 	 */
 	public void executeAction(final GUIAction act) throws Exception {
@@ -90,6 +90,8 @@ public class ActionManager {
 						Thread.sleep(100);
 						method.invoke(c.newInstance(), to);
 					} catch (final Exception ee) {
+						System.out.println("CLICK ERROR");
+						System.out.println(act.getWidget().getId());
 						e.printStackTrace();
 						throw new Exception(
 								"ActionManager - executeAction: error executing click, "
@@ -105,6 +107,8 @@ public class ActionManager {
 						Thread.sleep(100);
 						method.invoke(c.newInstance(), to);
 					} catch (final Exception ee) {
+						System.out.println("CLICK ERROR");
+						System.out.println(act.getWidget().getId());
 						e.printStackTrace();
 						throw new Exception(
 								"ActionManager - executeAction: error executing click, "
@@ -129,23 +133,31 @@ public class ActionManager {
 				final Option_input_widget oiw = (Option_input_widget) wid;
 				final int index = Integer.valueOf(fill.getInput());
 				TestObject to_fill = null;
+
 				if (oiw.getTOS().size() == 1) {
 					to_fill = oiw.getTOS().get(0);
+					try {
+						method.invoke(c.newInstance(), to_fill, index);
+					} catch (final Exception e) {
+						e.printStackTrace();
+						throw new Exception("ActionManager - executeAction: error executing fill, "
+								+ e.getMessage());
+					}
 				} else {
 					to_fill = oiw.getTOS().get(index);
+					try {
+						method.invoke(c.newInstance(), to_fill);
+					} catch (final Exception e) {
+						e.printStackTrace();
+						throw new Exception("ActionManager - executeAction: error executing fill, "
+								+ e.getMessage());
+					}
 				}
-				try {
-					method.invoke(c.newInstance(), to_fill, index);
-				} catch (final Exception e) {
-					e.printStackTrace();
-					throw new Exception("ActionManager - executeAction: error executing fill, "
-							+ e.getMessage());
-				}
+
 			} else {
 				try {
 					method.invoke(c.newInstance(), to, fill.getInput());
 				} catch (final Exception e) {
-					System.out.println("exception2");
 					e.printStackTrace();
 					throw new Exception("ActionManager - executeAction: error executing fill, "
 							+ e.getMessage());
