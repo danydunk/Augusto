@@ -260,6 +260,7 @@ public class Instance_GUI_pattern {
 		}
 		run = run + scopes;
 		sem.addRun_command(run);
+
 		final Module mod = AlloyUtil.compileAlloyModel(sem.toString());
 
 		return AlloyUtil.runCommand(mod, mod.getAllCommands().get(0)).satisfiable();

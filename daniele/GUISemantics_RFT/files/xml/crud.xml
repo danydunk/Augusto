@@ -47,31 +47,12 @@
 			<text>.*</text>
 		</input_widget>
 	</window>
-	<window id="confirmation" card="lone" alloy="Confirm">
-		<title>.*</title>
-		<class>.*</class>
-		<modal>true</modal>
-		<root>false</root>
-		<action_widget id="paw7" card="one" alloy="Ok">
-			<label>^(confirm|ok|yes)</label>
-			<class>.*</class>
-		</action_widget>
-		<action_widget id="paw8" card="one" alloy="Cancel">
-			<label>^(cancel|no)</label>
-			<class>.*</class>
-		</action_widget>
-		<input_widget id="piw2" card="none" alloy="">
-			<label>.*</label>
-			<class>.*</class>
-			<text>.*</text>
-		</input_widget>
-	</window>
 	<window id="view" card="lone" alloy="View">
 		<title>.*</title>
 		<class>.*</class>
 		<modal>any</modal>
 		<root>false</root>
-		<action_widget id="paw9" card="one" alloy="Ok">
+		<action_widget id="paw7" card="one" alloy="Ok">
 			<label>^(ok|back)</label>
 			<class>.*</class>
 		</action_widget>
@@ -86,7 +67,7 @@
 		<to>form</to>
 	</edge>
 	<edge type="static">
-		<from>paw9</from>
+		<from>paw7</from>
 		<to>initial</to>
 	</edge>
 	<edge type="static">
@@ -95,17 +76,7 @@
 	</edge>
 	<edge type="dynamic">
 		<from>paw5</from>
-		<to>confirmation</to>
 		<to>initial</to>		
-	</edge>
-	<edge type="dynamic">
-		<from>paw7</from>
-		<to>initial</to>
-	</edge>
-	<edge type="dynamic">
-		<from>paw8</from>
-		<to>initial</to>
-		<to>form</to>
 	</edge>
 	<edge type="dynamic">
 		<from>paw2</from>
@@ -117,7 +88,6 @@
 	</edge>
 	<edge type="dynamic">
 		<from>paw4</from>
-		<to>confirmation</to>
 		<to>initial</to>
 	</edge>	
 </pattern>

@@ -13,7 +13,7 @@ import usi.configuration.ConfigurationManager;
 import usi.gui.GuiStateManager;
 import usi.gui.pattern.GUIPatternParser;
 import usi.gui.pattern.Pattern_action_widget;
-import usi.gui.pattern.Pattern_error_window;
+import usi.gui.pattern.dialogs.Pattern_dialogs;
 import usi.gui.semantic.testcase.Click;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.structure.Action_widget;
@@ -32,6 +32,7 @@ public class Ripper {
 	private GUI gui;
 	private final long sleeptime;
 	private List<Pattern_action_widget> aw_to_filter;
+	private final boolean skip_dialogs = true;
 
 	public Ripper(final long sleeptime, final boolean use_filters) {
 
@@ -65,7 +66,6 @@ public class Ripper {
 				this.aw_to_filter = new ArrayList<>();
 			}
 		}
-		System.out.println("RIPPER: size of filter = " + this.aw_to_filter.size());
 	}
 
 	public GUI ripApplication() throws Exception {
@@ -116,11 +116,9 @@ public class Ripper {
 			this.actionManager.executeAction(act);
 
 			this.guimanager.readGUI();
-			this.dealWithErrorWindow(this.guimanager);
+			this.dealWithDialogsWindow(this.guimanager);
 			final Window curr_window = this.guimanager.getCurrentActiveWindows();
-			if (cont == 3) {
-				System.out.println();
-			}
+
 			if (curr_window != null && w.isSame(curr_window)) {
 				// same window
 				// aws = curr_window.getActionWidgets();
@@ -161,17 +159,17 @@ public class Ripper {
 		this.guimanager = GuiStateManager.getInstance();
 		for (final GUIAction act : actions) {
 			this.guimanager.readGUI();
-			this.dealWithErrorWindow(this.guimanager);
+			this.dealWithDialogsWindow(this.guimanager);
 			this.actionManager.executeAction(act);
 		}
 		this.guimanager.readGUI();
-		this.dealWithErrorWindow(this.guimanager);
+		this.dealWithDialogsWindow(this.guimanager);
 
 		if (!w.isSame(this.guimanager.getCurrentActiveWindows())) {
 			// we read again the gui in case it was a problem of sleeptime
 			Thread.sleep(ConfigurationManager.getSleepTime());
 			this.guimanager.readGUI();
-			this.dealWithErrorWindow(this.guimanager);
+			this.dealWithDialogsWindow(this.guimanager);
 
 			if (!w.isSame(this.guimanager.getCurrentActiveWindows())) {
 				throw new Exception(
@@ -199,17 +197,23 @@ public class Ripper {
 	}
 
 	// TODO: this code is duplicated
-	private void dealWithErrorWindow(final GuiStateManager gmanager) throws Exception {
+	private void dealWithDialogsWindow(final GuiStateManager gmanager) throws Exception {
+
+		if (!this.skip_dialogs) {
+			return;
+		}
 
 		if (gmanager.getCurrentActiveWindows() != null) {
 			final Window current = gmanager.getCurrentActiveWindows();
-			final Pattern_error_window err = Pattern_error_window.getInstance();
-			if (err.isMatch(current)) {
-				// we create a click action (the window must have only one
-				// action widget to match the err window)
-				final Click click = new Click(current, null, current.getActionWidgets().get(0));
-				this.actionManager.executeAction(click);
-				gmanager.readGUI();
+			for (final Pattern_dialogs dialog : Pattern_dialogs.values()) {
+
+				if (dialog.isMatch(current)) {
+					final List<GUIAction> acts = dialog.getActionsToGoPast(current);
+					for (final GUIAction act : acts) {
+						this.actionManager.executeAction(act);
+						gmanager.readGUI();
+					}
+				}
 			}
 		}
 	}
