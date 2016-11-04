@@ -26,8 +26,7 @@ one sig Track {
 pred transition [t, t': Time]  {
 	(one aw: Action_widget, c: Click | click [aw, t, t', c]) or 
 	(one iw: Input_widget, f: Fill, v: Value | fill [iw, t, t', v, f]) or
-	(one sw: Selectable_widget, s: Select, o: Object | select [sw, t, t', o, s]) or
-	(one sw: Selectable_widget, sdc: Select_doubleclick, o: Object | select_doubleclick [sw, t, t', o, sdc])
+	(one sw: Selectable_widget, s: Select, o: Object | select [sw, t, t', o, s]) 
 }
 pred System {
 	init [T/first]
@@ -104,15 +103,4 @@ pred select [sw: Selectable_widget, t, t': Time, o: Object, s: Select] {
 	(Selectable_widget - sw).selected.t' = (Selectable_widget - sw).selected.t
 	--- operation is tracked ---
 	s.wid = sw and s.selected = o and Track.op.t' = s
-}
-pred select_doubleclick [sw: Selectable_widget, t, t': Time, o: Object, sdc: Select_doubleclick] { 
-	--- precondition ---
-	sw in Current_window.is_in.t.sws
-	o in sw.list.t
-	select_doubleclick_pre [sw, t, o]
-	--- effect ---
-	(select_doubleclick_semantics  [sw, t, o] and select_doubleclick_success_post [sw, t, t', o]) or
-	(not select_doubleclick_semantics  [sw, t, o] and select_doubleclick_fail_post [sw, t, t', o])
-	--- operation is tracked ---
-	sdc.widg = sw and sdc.selected_o = o and Track.op.t' = sdc
 }

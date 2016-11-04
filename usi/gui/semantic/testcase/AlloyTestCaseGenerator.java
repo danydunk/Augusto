@@ -29,7 +29,8 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 public class AlloyTestCaseGenerator {
 
 	private long RUN_INITIAL_TIMEOUT = 1800000; // 30 minutes
-	private int MAX_RUN = 9;
+	private int MAX_RUN;
+	private final int INITAL_TIME_SIZE = 3;
 
 	final Instance_GUI_pattern instance;
 
@@ -46,7 +47,6 @@ public class AlloyTestCaseGenerator {
 			final long initial_timout) {
 
 		this.instance = instance;
-		this.MAX_RUN = max_run;
 		this.RUN_INITIAL_TIMEOUT = initial_timout;
 	}
 
@@ -69,6 +69,7 @@ public class AlloyTestCaseGenerator {
 	 */
 	public List<GUITestCase> generateTestCases() throws Exception {
 
+		this.MAX_RUN = 1;
 		final SpecificSemantics model = this.instance.getSemantics();
 		final String alloy_model = model.toString();
 		// System.out.println("START ALLOY MODEL");
@@ -131,8 +132,9 @@ public class AlloyTestCaseGenerator {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<GUITestCase> generateMinimalTestCases() throws Exception {
+	public List<GUITestCase> generateMinimalTestCases(final int max_time) throws Exception {
 
+		this.MAX_RUN = max_time - this.INITAL_TIME_SIZE + 1;
 		final SpecificSemantics model = this.instance.getSemantics();
 
 		final String alloy_model = model.toString();
@@ -192,8 +194,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-			ts[0].interrupt();
-			ts[1].interrupt();
+		ts[0].interrupt();
+		ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -537,15 +539,10 @@ public class AlloyTestCaseGenerator {
 
 				final int select_index = ordered.indexOf(object);
 
-				if (tuple.atom(1).startsWith("Select_doubleclick")) {
-					final Select_doubleclick action = new Select_doubleclick(source_window, oracle,
-							target_sw, select_index, true);
-					actions.set(time_index - 1, action);
-				} else {
-					final Select action = new Select(source_window, oracle, target_sw,
-							select_index, true);
-					actions.set(time_index - 1, action);
-				}
+				final Select action = new Select(source_window, oracle, target_sw, select_index,
+						true);
+				actions.set(time_index - 1, action);
+
 				continue;
 			}
 		}
@@ -875,10 +872,11 @@ public class AlloyTestCaseGenerator {
 				}
 
 				if (this.type == 0) {
-					time_scope = 3;
+					time_scope = AlloyTestCaseGenerator.this.INITAL_TIME_SIZE;
 				}
 				if (this.type == -1) {
-					time_scope = 3 + AlloyTestCaseGenerator.this.MAX_RUN - 1;
+					time_scope = AlloyTestCaseGenerator.this.INITAL_TIME_SIZE
+							+ AlloyTestCaseGenerator.this.MAX_RUN - 1;
 				} else {
 					if (time_scope == -1) {
 						time_scope = ConfigurationManager.getTestcaseLength();

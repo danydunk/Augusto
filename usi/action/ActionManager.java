@@ -8,7 +8,6 @@ import usi.gui.semantic.testcase.Click;
 import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
 import usi.gui.semantic.testcase.Select;
-import usi.gui.semantic.testcase.Select_doubleclick;
 import usi.gui.structure.Option_input_widget;
 import usi.gui.structure.Widget;
 import usi.gui.structure.Window;
@@ -25,10 +24,12 @@ public class ActionManager {
 	}
 
 	/*
-	 * 
-	 * GUI must be read before calling this method
+	 *
+	 * GUI must be read before calling this method This function returns true if
+	 * the action was executed, false if it could not be executed because the
+	 * widget was disabled It throws an exception if there is no
 	 */
-	public void executeAction(final GUIAction act) throws Exception {
+	public boolean executeAction(final GUIAction act) throws Exception {
 
 		final GuiStateManager guimanager = GuiStateManager.getInstance();
 
@@ -37,7 +38,7 @@ public class ActionManager {
 			guimanager.readGUI();
 			currWind = guimanager.getCurrentActiveWindows();
 			if (currWind == null) {
-				throw new Exception("ActionManager - executeAction: no current window.");
+				return false;
 			}
 
 		}
@@ -48,7 +49,7 @@ public class ActionManager {
 			guimanager.readGUI();
 			currWind = guimanager.getCurrentActiveWindows();
 			if (act.getWindow() == null || !currWind.isSame(act.getWindow())) {
-				throw new Exception("ActionManager - executeAction: wrong source reference.");
+				return false;
 			}
 		}
 
@@ -59,14 +60,18 @@ public class ActionManager {
 					.loadClass("usi.action.ui." + className);
 
 		} catch (final ClassNotFoundException e) {
-			throw new Exception("ActionManager - ActionManager: " + className + " not found.");
+			e.printStackTrace();
+			return false;
 		}
 		final Method[] ms = c.getDeclaredMethods();
 
 		final Widget wid = this.findWidgetInCurrWindow(act.getWidget(), act.getWindow(), currWind);
 		final TestObject to = wid.getTo();
-		if (to == null) {
-			throw new Exception("ActionManager - executeAction: TO not found.");
+		assert (to != null);
+
+		if (!Boolean.valueOf(to.getProperty("enabled").toString())) {
+
+			return false;
 		}
 
 		if (act instanceof Click) {
@@ -90,12 +95,8 @@ public class ActionManager {
 						Thread.sleep(100);
 						method.invoke(c.newInstance(), to);
 					} catch (final Exception ee) {
-						System.out.println("CLICK ERROR");
-						System.out.println(act.getWidget().getId());
 						e.printStackTrace();
-						throw new Exception(
-								"ActionManager - executeAction: error executing click, "
-										+ ee.getMessage());
+						return false;
 					}
 				}
 
@@ -107,12 +108,8 @@ public class ActionManager {
 						Thread.sleep(100);
 						method.invoke(c.newInstance(), to);
 					} catch (final Exception ee) {
-						System.out.println("CLICK ERROR");
-						System.out.println(act.getWidget().getId());
 						e.printStackTrace();
-						throw new Exception(
-								"ActionManager - executeAction: error executing click, "
-										+ ee.getMessage());
+						return false;
 					}
 				}
 			}
@@ -140,8 +137,7 @@ public class ActionManager {
 						method.invoke(c.newInstance(), to_fill, index);
 					} catch (final Exception e) {
 						e.printStackTrace();
-						throw new Exception("ActionManager - executeAction: error executing fill, "
-								+ e.getMessage());
+						return false;
 					}
 				} else {
 					to_fill = oiw.getTOS().get(index);
@@ -149,8 +145,7 @@ public class ActionManager {
 						method.invoke(c.newInstance(), to_fill);
 					} catch (final Exception e) {
 						e.printStackTrace();
-						throw new Exception("ActionManager - executeAction: error executing fill, "
-								+ e.getMessage());
+						return false;
 					}
 				}
 
@@ -159,8 +154,7 @@ public class ActionManager {
 					method.invoke(c.newInstance(), to, fill.getInput());
 				} catch (final Exception e) {
 					e.printStackTrace();
-					throw new Exception("ActionManager - executeAction: error executing fill, "
-							+ e.getMessage());
+					return false;
 				}
 			}
 		}
@@ -179,32 +173,13 @@ public class ActionManager {
 			try {
 				method.invoke(c.newInstance(), to, select.getIndex());
 			} catch (final Exception e) {
-				throw new Exception("ActionManager - executeAction: error executing select, "
-						+ e.getMessage());
-			}
-		}
-
-		if (act instanceof Select_doubleclick) {
-			final Select_doubleclick select = (Select_doubleclick) act;
-
-			Method method = null;
-			for (final Method m : ms) {
-				if (m.getName().equals("doubleClick")) {
-					method = m;
-					break;
-				}
-			}
-
-			try {
-				method.invoke(c.newInstance(), to, select.getIndex());
-			} catch (final Exception e) {
-				throw new Exception(
-						"ActionManager - executeAction: error executing select_doubleclick, "
-								+ e.getMessage());
+				e.printStackTrace();
+				return false;
 			}
 		}
 
 		Thread.sleep(this.sleeptime);
+		return true;
 	}
 
 	private Widget findWidgetInCurrWindow(final Widget w, final Window wind, final Window currWind) {

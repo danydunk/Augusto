@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry excluding="config/|files/|lib/|output/|resources/for_test/|scripts/|templates/" kind="src" path=""/>
 	<classpathentry kind="con" path="com.rational.test.ft.libraries.FT_LIBRARIES"/>
 	<classpathentry kind="con" path="com.rational.test.ft.libraries.FT_TESTOBJECT"/>
@@ -25,7 +25,7 @@
 	<classpathentry kind="lib" path="lib/cobertura/lib/xom-1.0b3.jar"/>
 	<classpathentry kind="lib" path="lib/cobertura/cobertura.jar"/>
 	<classpathentry kind="lib" path="lib/alloy4.2.jar"/>
+	<classpathentry kind="lib" path="lib/jmockit-1.28/jmockit1.org/jmockit.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="lib/jmockit-1.25/jmockit1.org/jmockit.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

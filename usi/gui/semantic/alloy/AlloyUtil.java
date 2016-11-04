@@ -30,10 +30,8 @@ import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.semantic.testcase.Click;
 import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
-import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.semantic.testcase.GUITestCaseResult;
 import usi.gui.semantic.testcase.Select;
-import usi.gui.semantic.testcase.Select_doubleclick;
 import usi.gui.semantic.testcase.inputdata.DataManager;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
@@ -895,7 +893,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1355,7 +1353,7 @@ public class AlloyUtil {
 	 * @throws Exception
 	 */
 	static public Alloy_Model getTCaseModelOpposite(final SpecificSemantics mod,
-			final GUITestCase tc) throws Exception {
+			final List<GUIAction> acts) throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1363,7 +1361,7 @@ public class AlloyUtil {
 		final List<Predicate> preds = mod.getPredicates();
 		final List<String> opens = mod.getOpenStatements();
 
-		final String fact = getFactForTC(tc);
+		final String fact = getFactForTC(acts);
 
 		final Fact new_fact = new Fact("testcase", "not(" + fact + ")");
 		facts.add(new_fact);
@@ -1382,7 +1380,7 @@ public class AlloyUtil {
 	 * @throws Exception
 	 */
 	static public Alloy_Model
-	getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult tcr)
+	getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult res)
 			throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
@@ -1391,15 +1389,15 @@ public class AlloyUtil {
 		final List<Predicate> preds = mod.getPredicates();
 		final List<String> opens = mod.getOpenStatements();
 
-		String fact = getFactForTC(tcr.getTc());
+		String fact = getFactForTC(res.getTc().getActions());
 
 		fact += " and Current_window.is_in.(T/last)=Window_"
-				+ tcr.getResults().get(tcr.getActions_executed().size() - 1).getId();
+				+ res.getResults().get(res.getActions_executed().size() - 1).getId();
 
 		final Fact new_fact = new Fact("testcase", fact);
 		facts.add(new_fact);
 
-		final int time_size = tcr.getActions_executed().size() + 1;
+		final int time_size = res.getTc().getActions().size() + 1;
 		final int op_size = time_size - 1;
 
 		final int winscope = AlloyUtil.getWinScope(mod);
@@ -1448,14 +1446,13 @@ public class AlloyUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	static private String getFactForTC(final GUITestCase tc) throws Exception {
+	static private String getFactForTC(final List<GUIAction> acts) throws Exception {
 
 		String fact = "";
 		String t = "";
 		final Map<String, List<String>> values_used = new HashMap<>();
 		final Map<String, List<String>> values_used_iw = new HashMap<>();
 
-		final List<GUIAction> acts = tc.getActions();
 		for (int cont = 0; cont < acts.size(); cont++) {
 			final GUIAction act = acts.get(cont);
 
@@ -1513,24 +1510,6 @@ public class AlloyUtil {
 				final String obj = "Track.op.(" + t + ")" + ".selected";
 
 				fact += " and Track.op.(" + t + ").wid=Selectable_widget_" + s.getWidget().getId();
-				fact += " and #Selectable_widget_" + s.getWidget().getId() + ".list.(" + t + ")="
-						+ sw.getSize();
-				fact += " and #(T/prevs[(" + obj + ".appeared)] & Selectable_widget_"
-						+ s.getWidget().getId() + ".list.(" + t + ").appeared) = " + s.getIndex();
-				fact += " and #(T/nexts[(" + obj + ".appeared)] & Selectable_widget_"
-						+ s.getWidget().getId() + ".list.(" + t + ").appeared) = "
-						+ ((sw.getSize() - 1) - s.getIndex());
-			}
-
-			if (act instanceof Select_doubleclick) {
-				final Select_doubleclick s = (Select_doubleclick) act;
-				final Selectable_widget sw = (Selectable_widget) s.getWidget();
-
-				fact += "Track.op.(" + t + ") in Select_doubleclick";
-
-				final String obj = "Track.op.(" + t + ")" + ".selected_o";
-
-				fact += " and Track.op.(" + t + ").widg=Selectable_widget_" + s.getWidget().getId();
 				fact += " and #Selectable_widget_" + s.getWidget().getId() + ".list.(" + t + ")="
 						+ sw.getSize();
 				fact += " and #(T/prevs[(" + obj + ".appeared)] & Selectable_widget_"

@@ -50,7 +50,7 @@ public class GO_select_test extends GO_select_testHelper {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-					.getAbsolutePath());
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -97,7 +97,7 @@ public class GO_select_test extends GO_select_testHelper {
 			r.getSemantics().addRun_command(run2);
 
 			final AlloyTestCaseGenerator tcgen = new AlloyTestCaseGenerator(r);
-			final List<GUITestCase> tests = tcgen.generateMinimalTestCases();
+			final List<GUITestCase> tests = tcgen.generateMinimalTestCases(8);
 			if (tests.size() > 1) {
 				throw new Exception("");
 			}

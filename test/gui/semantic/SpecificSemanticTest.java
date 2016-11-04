@@ -66,9 +66,6 @@ public class SpecificSemanticTest {
 		// System.out.println(specsem);
 		assertNotNull(specsem);
 
-		// / One is the abstract + the 2 matched
-		assertEquals(3, specsem.getConcrete_windows().size());
-
 		// System.out.println(specsem.toString());
 		// /
 		final Signature s1 = AlloyUtil.searchSignatureInList(specsem.getSignatures(), "Window_w1");

@@ -29,7 +29,7 @@ public class OracleChecker {
 	 * @param result
 	 * @return
 	 */
-	public int check(final GUITestCaseResult result) {
+	public int check(final GUITestCaseResult result, final boolean only_last) {
 
 		this.description_last_check = "";
 		int res = 1;
@@ -41,9 +41,14 @@ public class OracleChecker {
 					+ result.getTc().getActions().size() + " BUT EXECUTED ONLY "
 					+ result.getActions_executed().size();
 			this.description_last_check += System.lineSeparator();
+			res = 0;
 		}
-
-		for (int cont = 0; cont < result.getActions_executed().size(); cont++) {
+		int cont = 0;
+		if (only_last) {
+			res = 1;
+			cont = result.getActions_executed().size() - 1;
+		}
+		for (; cont < result.getActions_executed().size(); cont++) {
 			final Window oracle = result.getTc().getActions().get(cont).getOracle();
 			if (oracle == null) {
 				continue;
