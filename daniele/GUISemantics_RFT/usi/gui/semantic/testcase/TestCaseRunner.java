@@ -61,7 +61,7 @@ public class TestCaseRunner {
 			} else {
 				app.startApplication();
 			}
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 			gmanager.readGUI();
 			curr = gmanager.getCurrentActiveWindows();
 		}
@@ -127,21 +127,22 @@ public class TestCaseRunner {
 
 			// the index of the action must be adjusted to the real one in the
 			// app
-			if ((act instanceof Select) || (act instanceof Select_doubleclick)) {
-				final boolean abs = (act instanceof Select) ? ((Select) act).isAbstract()
-						: ((Select_doubleclick) act).isAbstract();
+			if ((act instanceof Select)) {
+				final Select sel = (Select) act;
+				final boolean abs = sel.isAbstract();
+
 				if (abs) {
 					final Selectable_widget sw = (Selectable_widget) act.getWidget();
 
-					final int ind = (act instanceof Select) ? ((Select) act).getIndex()
-							: ((Select_doubleclick) act).getIndex();
+					int ind = sel.getIndex();
 					final Pair new_p = new Pair(curr, sw);
 					boolean found = false;
 					for (final Pair p : this.select_support_initial.keySet()) {
 						if (p.isSame(new_p)) {
 							if (this.select_support_added_indexes.get(p).size() <= ind) {
-								// the selectable widget is not as expected
-								break mainloop;
+								// the selectable widget is not as expected so
+								// we select the last index
+								ind = this.select_support_added_indexes.get(p).size() - 1;
 							}
 							final int size = this.select_support_initial.get(p).size()
 									+ this.select_support_added.get(p).size();
@@ -151,46 +152,34 @@ public class TestCaseRunner {
 							// index
 							final Selectable_widget new_sw = new Selectable_widget(sw.getId(),
 									sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), size, 0);
-							if (act instanceof Select) {
-								final GUIAction select = new Select(act.getWindow(),
-										act.getOracle(), new_sw, index, false);
-								act_to_execute = select;
-								found = true;
-								break;
-							}
-							if (act instanceof Select_doubleclick) {
-								final GUIAction select_dc = new Select_doubleclick(act.getWindow(),
-										act.getOracle(), new_sw, index, false);
-								act_to_execute = select_dc;
-								found = true;
-								break;
-							}
+							final GUIAction select = new Select(act.getWindow(), act.getOracle(),
+									new_sw, index, false);
+							act_to_execute = select;
+							found = true;
+							break;
 						}
 					}
 					assert found;
 				}
 			}
 
-			try {
-				this.amanager.executeAction(act_to_execute);
-			} catch (final Exception e) {
-				System.out.println("ERROR EXECUTING ACTION");
-				e.printStackTrace();
-				break mainloop;
-			}
-			gmanager.readGUI();
+			if (this.amanager.executeAction(act_to_execute)) {
 
-			this.dealWithDialogsWindow(gmanager);
+				gmanager.readGUI();
 
-			actions_actually_executed.add(act_to_execute);
+				this.dealWithDialogsWindow(gmanager);
 
-			this.updatedStructuresForSelect(gmanager.getCurrentActiveWindows());
+				actions_actually_executed.add(act_to_execute);
 
-			actions_executed.add(act);
-			if (gmanager.getCurrentActiveWindows() != null) {
-				results.add(this.getKnownWindowIfAny(gmanager.getCurrentActiveWindows()));
-			} else {
-				results.add(null);
+				this.updatedStructuresForSelect(gmanager.getCurrentActiveWindows());
+
+				actions_executed.add(act);
+
+				if (gmanager.getCurrentActiveWindows() != null) {
+					results.add(this.getKnownWindowIfAny(gmanager.getCurrentActiveWindows()));
+				} else {
+					results.add(null);
+				}
 			}
 
 		}

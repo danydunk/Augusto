@@ -49,6 +49,7 @@ public class GUIFunctionality_refine {
 	private List<GUITestCaseResult> observed_tcs;
 	private final List<String> covered_dyn_edges;
 	private List<String> unsat_commands;
+	private final long beginTime = System.currentTimeMillis();
 
 	public GUIFunctionality_refine(final Instance_GUI_pattern instancePattern, final GUI gui)
 			throws Exception {
@@ -81,7 +82,12 @@ public class GUIFunctionality_refine {
 
 			this.discoverDynamicEdges();
 			this.discoverWindows();
-			this.discoverWindows_special();
+			// if we reached timeout we exit
+			if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
+					.getRefinementTimeout()) {
+				System.out.println("TIMEOUT IN STRUCTURAL REFINEMENT");
+				break;
+			}
 			// if something has changed we iterate again
 		} while (!old_current_semantic_property.equals(this.current_semantic_property)
 				|| this.anyChanges(old_instancePattern));
@@ -144,7 +150,7 @@ public class GUIFunctionality_refine {
 
 	private void discoverDynamicEdges() throws Exception {
 
-		for (final Pattern_window target : this.pattern.getWindows()) {
+		mainloop: for (final Pattern_window target : this.pattern.getWindows()) {
 			final List<Window> target_w_matched = this.instancePattern
 					.getPatternWindowMatches(target.getId());
 			// if target_w_matched is empty it means the pattern_window was not
@@ -165,9 +171,14 @@ public class GUIFunctionality_refine {
 				for (final Action_widget aw : matched_aws) {
 
 					for (final Window target_window : target_w_matched) {
-						if (aw.getId().equals("aw259")) {
-							System.out.println();
+
+						// if we reached timeout
+						if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
+								.getRefinementTimeout()) {
+							System.out.println("TIMEOUT IN DISCOVER EDGES");
+							break mainloop;
 						}
+
 						final String edge = aw.getId() + " - " + target_window.getId();
 						System.out.println("DISCOVER DYNAMIC EDGE: looking for edge " + edge
 								+ " (from " + paw.getId() + ").");
@@ -438,14 +449,20 @@ public class GUIFunctionality_refine {
 					.getId())) {
 				final List<Action_widget> matched_aws = this.instancePattern.getAWS_for_PAW(paw
 						.getId());
+
 				// if the paw has no matches
 				if (matched_aws == null || matched_aws.size() == 0) {
 					continue;
 				}
 				for (final Action_widget aw : matched_aws) {
-					if (to_discover.getId().equals("view")) {
-						System.out.println();
+
+					// if we reached timeout
+					if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
+							.getRefinementTimeout()) {
+						System.out.println("TIMEOUT IN DISCOVER WINDOWS");
+						break mainloop;
 					}
+
 					System.out.println("DISCOVER DYNAMIC WINDOW: looking for "
 							+ to_discover.getId() + " from " + aw.getId() + ".");
 
@@ -457,7 +474,7 @@ public class GUIFunctionality_refine {
 							+ " and click_semantics[Action_widget_" + (aw.getId()) + ",t])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -474,38 +491,6 @@ public class GUIFunctionality_refine {
 		}
 	}
 
-	private void discoverWindows_special() throws Exception {
-
-		mainloop: for (final Pattern_window to_discover : this.pattern.getWindows()) {
-			final List<Window> target_w_matched = this.instancePattern
-					.getPatternWindowMatches(to_discover.getId());
-			// if target_w_matched is not empty it means the pattern_window was
-			// already found
-			if (target_w_matched.size() > 0) {
-				continue;
-			}
-
-			System.out.println("DISCOVER DYNAMIC WINDOW: looking for " + to_discover.getId());
-
-			final Instance_GUI_pattern clone = this.createConcreteWindowFromPattern(to_discover,
-					null);
-			final String run_command = "run{System and(some t: Time"
-					+ " | Current_window.is_in.t = Window_" + to_discover.getId() + ")}";
-			if (this.unsat_commands.contains(run_command)) {
-				System.out
-				.println("DISCOVER WINDOW: this run command was previusly observed as unsat.");
-				continue;
-
-			}
-			clone.getSemantics().addRun_command(run_command);
-			final GUITestCase tc = this.getTestCase(clone.getSemantics());
-
-			if (this.run_and_update(tc, to_discover)) {
-				continue mainloop;
-			}
-		}
-	}
-
 	/*
 	 * method that returns a constraint consistent with all the test cases seen
 	 * so far Method used in the findWindow method because constraints in that
@@ -517,7 +502,7 @@ public class GUIFunctionality_refine {
 		System.out.println("GET ADAPTED CONSTRAINT: start.");
 		while (true) {
 
-			// // we pop a random testcase from the observed ones
+			// we pop a random testcase from the observed ones
 			// final Random ran = new Random();
 			// final int index = ran.nextInt(this.observed_tcs.size());
 			// final GUITestCaseResult res = this.observed_tcs.get(index);
@@ -541,6 +526,7 @@ public class GUIFunctionality_refine {
 
 			if (sol.satisfiable()) {
 				final String new_prop = AlloyUtil.extractProperty(sol, new_sem);
+				System.out.println(new_prop);
 				if (this.validateProperty(new_prop, in_sem, tcs)) {
 					System.out.println("GET ADAPTED CONSTRAINT: found new constraint: " + new_prop);
 					return new_prop;
@@ -549,6 +535,7 @@ public class GUIFunctionality_refine {
 					continue;
 				}
 			} else {
+				System.out.println(new_sem);
 				System.out.println("GET ADAPTED CONSTRAINT: null end.");
 				return null;
 			}
@@ -575,7 +562,7 @@ public class GUIFunctionality_refine {
 		return out;
 	}
 
-	private Instance_window getFoundWindow(final GUITestCase tc, final Pattern_window target)
+	private Instance_window getFoundWindow(GUITestCase tc, final Pattern_window target)
 			throws Exception {
 
 		System.out.println("GET FOUND WINDOW: start.");
@@ -599,22 +586,11 @@ public class GUIFunctionality_refine {
 			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime(),
 					this.gui);
 			GUITestCaseResult res = null;
-			try {
-				res = runner.runTestCase(tc);
-			} catch (final Exception e) {
-				System.out
-				.println("GET FOUND WINDOW: test case was not able to run correctly, returning null. "
-						+ e.getMessage());
-				e.printStackTrace();
-				return null;
-			}
-			// the testcase was not run completely
-			if (res.getActions_executed().size() != tc.getActions().size()
-					|| res.getResults().get(tc.getActions().size() - 1) == null) {
-				return null;
-			}
+
+			res = runner.runTestCase(tc);
+			// res = this.last_used_instance.updateTCResult(res);
 			// the window reached after the last action was executed
-			reached_w = res.getResults().get(tc.getActions().size() - 1);
+			reached_w = res.getResults().get(res.getActions_executed().size() - 1);
 
 			if (this.gui.getWindow(reached_w.getId()) == null) {
 				// the window is new, we add it and rip it
@@ -636,6 +612,7 @@ public class GUIFunctionality_refine {
 			final GUITestCaseResult new_res = new GUITestCaseResult(new_tc,
 					res.getActions_executed(), res.getResults(), res.getActions_actually_executed());
 			this.observed_tcs.add(new_res);
+			tc = new_tc;
 		}
 
 		final Window previus = tc.getActions().get(tc.getActions().size() - 1).getWindow();
@@ -706,13 +683,14 @@ public class GUIFunctionality_refine {
 
 	private void semanticPropertyRefine() throws Exception {
 
+		int size = -1;
 		final long beginTime = System.currentTimeMillis();
 
 		final OracleChecker oracle = new OracleChecker(this.gui);
 
 		final String runCmd = "run {"
 				+ "System and "
-				+ "(some aw:Action_widget, iw:Input_widget, sw:Selectable_widget| one opp:Operation| Track.op.(T/last) = opp and ((opp in Click and opp.clicked = aw and not click_semantics[aw, T/prev[T/last]]) or (opp in Fill and opp.filled=iw and not fill_semantics[iw, T/prev[T/last], opp.with]) or (opp in Select and opp.wid=sw and not select_semantics[sw, T/prev[T/last], opp.selected])))}";
+				+ "(all opp:Operation| some aw:Action_widget, iw:Input_widget, sw:Selectable_widget|  Track.op.(T/last) = opp <=> ((opp in Click and opp.clicked = aw and not click_semantics[aw, T/prev[T/last]]) or (opp in Fill and opp.filled=iw and not fill_semantics[iw, T/prev[T/last], opp.with]) or (opp in Select and opp.wid=sw and not select_semantics[sw, T/prev[T/last], opp.selected])))}";
 
 		List<String> true_constraints = new ArrayList<>();
 		true_constraints.add(this.current_semantic_property);
@@ -721,19 +699,36 @@ public class GUIFunctionality_refine {
 		SpecificSemantics sem_with = addSemanticConstrain_to_Model(
 				this.instancePattern.getSemantics(), true_constraints);
 
-		mainloop: while ((System.currentTimeMillis() - beginTime) < ConfigurationManager
-				.getSemanticRefinementTimeout()) {
+		mainloop: while (size <= ConfigurationManager.getRefinementAlloyTimeScope()) {
+
+			if ((System.currentTimeMillis() - beginTime) >= ConfigurationManager
+					.getRefinementTimeout()) {
+				System.out.println("SEMANTIC REFINEMENT TIMEOUT");
+				break;
+			}
 			System.out.println("CURRENT SEMANTIC PROPERTY: " + this.current_semantic_property);
 			sem_with.clearRunCommands();
-			sem_with.addRun_command(runCmd);
-			clone_with.setSpecificSemantics(sem_with);
-			final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
-			final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
+
+			List<GUITestCase> tests = null;
+			if (size == -1) {
+				sem_with.addRun_command(runCmd);
+				clone_with.setSpecificSemantics(sem_with);
+				final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
+				tests = test_gen.generateMinimalTestCases(ConfigurationManager
+						.getRefinementAlloyTimeScope());
+			} else {
+				sem_with.addRun_command(runCmd + " for " + ConfigurationManager.getAlloyRunScope()
+						+ " but " + size + " Time");
+				clone_with.setSpecificSemantics(sem_with);
+				final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
+				tests = test_gen.generateTestCases();
+			}
 			sem_with.clearRunCommands();
 
 			assert tests.size() < 2;
 
 			if (tests.size() == 0) {
+				size = -1;
 
 				System.out.println("PROPERTY MAYBE OVERSEMPLIFIED");
 
@@ -756,12 +751,13 @@ public class GUIFunctionality_refine {
 			}
 
 			final GUITestCase tc = tests.get(0);
+
 			GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
 			if (res == null) {
 				final TestCaseRunner runner = new TestCaseRunner(
 						ConfigurationManager.getSleepTime(), this.gui);
-				System.out.println(sem_with);
 				res = runner.runTestCase(tc);
+
 				// we dont need the result (it wastes too much memory)
 				final GUITestCase new_tc = new GUITestCase(null, res.getTc().getActions(), res
 						.getTc().getRunCommand());
@@ -773,16 +769,24 @@ public class GUIFunctionality_refine {
 			} else {
 				System.out.println("TESTCASE ALREADY RUN!!!");
 			}
-			sem_with = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(sem_with, tc));
+			sem_with = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(sem_with, res
+					.getTc().getActions()));
 
-			switch (oracle.check(res)) {
+			final GUITestCaseResult res2 = clone_with.updateTCResult(res);
+			if (res2 != null) {
+				res = res2;
+			}
+
+			switch (oracle.check(res, true)) {
 			case 1:
 				// the beahviour was the same
 				System.out.println("SAME BEAHVIOUR");
+				size = res.getTc().getActions().size() + 2;
 				break;
+			case 0:
 			case -1:
 				System.out.println("DIFFERENT BEAHVIOUR");
-
+				size = -1;
 				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
 						+ ")");
 
@@ -799,9 +803,7 @@ public class GUIFunctionality_refine {
 				true_constraints.add(this.current_semantic_property);
 				sem_with = addSemanticConstrain_to_Model(sem_with, true_constraints);
 				break;
-			case 0:
-				throw new Exception(
-						"GUIFunctionality_refine - semanticPropertyRefine: it was not possible to run the whole testcase.");
+
 			}
 		}
 		System.out.println("SEMANTIC PROPERTY REFINE: end.");
@@ -909,9 +911,9 @@ public class GUIFunctionality_refine {
 			final SpecificSemantics constrained = addSemanticConstrain_to_Model(sem, constraints);
 			final Instance_GUI_pattern clone = this.instancePattern.clone();
 			clone.setSpecificSemantics(constrained);
-
 			final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
-			final List<GUITestCase> tests = test_gen.generateMinimalTestCases();
+			final List<GUITestCase> tests = test_gen.generateMinimalTestCases(ConfigurationManager
+					.getRefinementAlloyTimeScope());
 
 			assert tests.size() < 2;
 
@@ -1087,4 +1089,5 @@ public class GUIFunctionality_refine {
 			}
 		}
 	}
+
 }

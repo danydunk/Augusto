@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2006 Rogério Liesenfeld
+  ~ This file is subject to the terms of the MIT license (see LICENSE.txt).
+  -->
+<html>
+<head>
+   <title>The JMockit testing toolkit</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <meta name="description"
+         content="Home of the JMockit open source project.
+                  JMockit is a Java toolkit for developer testing, including mocking APIs and a code coverage tool.">
+   <link rel="stylesheet" type="text/css" href="prettify.css"/>
+   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+   <script type="text/javascript" src="highlight.pack.js"></script>
+   <script type="text/javascript">hljs.initHighlightingOnLoad()</script>
+</head>
+<body>
+<h1 class="header">
+   <a href="http://jmockit.org">JMockit</a>
+   <span>An automated testing toolkit for Java</span>
+</h1>
+<table class="navBar"><tr>
+   <th><a href="about.html">About</a></th>
+   <th><a href="gettingStarted.html">Getting&nbsp;started</a></th>
+   <th><a href="tutorial.html">Tutorial</a></th>
+   <th><a href="api1x/overview-summary.html">API documentation</a></th>
+   <th><a href="http://github.com/jmockit/jmockit1">Source</a></th>
+   <th><a href="http://github.com/jmockit/jmockit1/issues">Issues</a></th>
+   <th><a href="changes.html">Release notes</a></th>
+</tr></table>
+
+<h2>Features</h2>
+<ul>
+   <li>mocking API with expressive recording & verification syntax</li>
+   <li>small but powerful faking API for replacing implementations</li>
+   <li>out-of-container integration testing for Java EE and Spring-based apps</li>
+   <li>code coverage tool with line and path metrics</li>
+</ul>
+
+<h2>Example</h2>
+<pre><code>public class ExampleTest {
+   @Tested ServiceAbc <b>tested</b>;
+   @Injectable DependencyXyz <b>mockXyz</b>;
+
+   @Test
+   public void doOperationAbc(@Mocked final AnotherDependency anyInstance) {
+      new Expectations() {{
+         anyInstance.doSomething(<b>anyString</b>); <b>result</b> = 123;
+         AnotherDependency.<em>someStaticMethod</em>(); <b>result</b> = new IOException();
+      }};
+
+      <b>tested</b>.doOperationAbc("some data");
+
+      new Verifications() {{ <b>mockXyz</b>.complexOperation(true, <b>anyInt</b>, null); <b>times</b> = 1; }};
+   }
+}
+</code></pre>
+
+<h2>Get JMockit</h2>
+<p>
+   Download
+   <a href="https://github.com/jmockit/artifacts1x/raw/master/jmockit-1.28.zip"><strong>jmockit-1.28.zip</strong></a>
+   or use Maven:
+</p>
+<pre><code>&lt;dependency>
+   &lt;groupId>org.jmockit&lt;/groupId> &lt;artifactId>jmockit&lt;/artifactId> &lt;version>1.28&lt;/version>
+   &lt;scope>test&lt;/scope>
+&lt;/dependency>
+</code></pre>
+</body>
+</html>

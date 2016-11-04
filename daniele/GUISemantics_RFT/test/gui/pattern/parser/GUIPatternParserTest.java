@@ -29,11 +29,10 @@ public class GUIPatternParserTest {
 
 		// TO DO: check semantics
 		// Assert.assertNotNull(gui.getAlloy_metamodel());
-		assertEquals("Number of Windows", 4, gui.getWindows().size());
+		assertEquals("Number of Windows", 3, gui.getWindows().size());
 
 		Pattern_window w1 = null;
 		Pattern_window w2 = null;
-		Pattern_window w3 = null;
 		for (final Pattern_window w : gui.getWindows()) {
 			if ("initial".equals(w.getId())) {
 				w1 = w;
@@ -41,22 +40,16 @@ public class GUIPatternParserTest {
 			if ("form".equals(w.getId())) {
 				w2 = w;
 			}
-			if ("confirmation".equals(w.getId())) {
-				w3 = w;
-			}
 		}
 
 		Assert.assertNotNull(w1);
 		Assert.assertNotNull(w2);
-		Assert.assertNotNull(w3);
 
 		// Test Window's titles
 		assertEquals("Title windows", ".*", w1.getLabel());
 		assertEquals("Title windows", ".*", w2.getLabel());
-		assertEquals("Title windows", ".*", w3.getLabel());
 
 		assertEquals("Modal windows", Boolean_regexp.ANY, w1.getModal());
-		assertEquals("Modal windows", Boolean_regexp.TRUE, w3.getModal());
 
 		assertEquals("Alloy corresponding", "Initial", w1.getAlloyCorrespondence());
 

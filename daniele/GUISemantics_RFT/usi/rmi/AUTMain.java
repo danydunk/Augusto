@@ -9,6 +9,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 
+import mockit.Mock;
 import mockit.MockUp;
 import net.sourceforge.cobertura.coveragedata.CoverageDataFileHandler;
 import net.sourceforge.cobertura.coveragedata.ProjectData;
@@ -34,10 +35,10 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 			System.out.println("Impossibile creare o registrare l'oggetto");
 			System.exit(1);
 		}
+		new SystemMock();
 
-		// TODO: fix time mock
-		// Mockit.setUpMock(SystemMock.class);
-		// new MockUp<System>(){};
+		// TODO: fix final time mock
+		// System.out.println(SystemMock.currentTimeMillis());
 
 		try {
 			final Class<?> autClass = Class.forName(args[0]);
@@ -65,7 +66,6 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
@@ -113,15 +113,22 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 		}
 	}
 
-	// @MockClass(realClass = System.class)
-	public class SystemMock extends MockUp<System> {
+	public final static class SystemMock extends MockUp<System> {
 
-		private static final long referenceT = 1433356618285L;
+		private static final long startT = System.currentTimeMillis();
 
-		// @Mock
-		// public static long currentTimeMillis() {
-		// final long startT = System.nanoTime();
-		// return referenceT + (System.nanoTime() - startT) / 1000000L;
-		// }
+		private static final long referenceT = 1477564991731L;
+
+		public SystemMock() {
+
+			super();
+			System.out.println(startT);
+		}
+
+		@Mock
+		public static long currentTimeMillis() {
+
+			return referenceT + (System.nanoTime() - startT) / 1000000L;
+		}
 	}
 }

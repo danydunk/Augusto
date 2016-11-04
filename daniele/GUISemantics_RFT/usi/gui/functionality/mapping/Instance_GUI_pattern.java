@@ -13,6 +13,14 @@ import usi.gui.pattern.Pattern_selectable_widget;
 import usi.gui.pattern.Pattern_window;
 import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
+import usi.gui.semantic.alloy.Alloy_Model;
+import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
+import usi.gui.semantic.testcase.Click;
+import usi.gui.semantic.testcase.Fill;
+import usi.gui.semantic.testcase.GUIAction;
+import usi.gui.semantic.testcase.GUITestCase;
+import usi.gui.semantic.testcase.GUITestCaseResult;
+import usi.gui.semantic.testcase.Select;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
@@ -264,5 +272,97 @@ public class Instance_GUI_pattern {
 		final Module mod = AlloyUtil.compileAlloyModel(sem.toString());
 
 		return AlloyUtil.runCommand(mod, mod.getAllCommands().get(0)).satisfiable();
+	}
+
+	/**
+	 * Function that updates a testcase results by removing all the actions not
+	 * executed in the TC for which the semantics was unknonwn
+	 *
+	 * @param res
+	 * @return
+	 * @throws Exception
+	 */
+	public GUITestCaseResult updateTCResult(final GUITestCaseResult res) throws Exception {
+
+		if (res.getTc().getActions().size() == res.getActions_executed().size()) {
+			return res;
+		}
+		final List<GUIAction> actions = new ArrayList<>();
+		final List<GUIAction> actions_executed = new ArrayList<>();
+		final List<GUIAction> actions_actually_executed = res.getActions_actually_executed();
+		final List<Window> results = new ArrayList<>();
+		Window last = null;
+		boolean smth_changed = false;
+		int y = 0;
+		for (int x = 0; x < res.getTc().getActions().size(); x++) {
+			final GUIAction act_to_execute = res.getTc().getActions().get(x);
+			if (y >= res.getActions_executed().size()
+					|| !act_to_execute.isSame(res.getActions_executed().get(y))) {
+
+				if (last != null && !act_to_execute.getWindow().getId().equals(last.getId())) {
+					continue;
+				}
+				if (act_to_execute instanceof Click) {
+					if (this.getSemantics().getClickSemantics().getContent().trim().length() == 0) {
+						// semantics is empty, therefore this action can be
+						// skipped
+						smth_changed = true;
+						continue;
+					}
+				}
+				if (act_to_execute instanceof Fill) {
+					if (this.getSemantics().getFillSemantics().getContent().trim().length() == 0) {
+						// semantics is empty, therefore this action can be
+						// skipped
+						smth_changed = true;
+						continue;
+					}
+
+				}
+				if (act_to_execute instanceof Select) {
+					if (this.getSemantics().getSelectSemantics().getContent().trim().length() == 0) {
+						// semantics is empty, therefore this action can be
+						// skipped
+						smth_changed = true;
+						continue;
+					}
+				}
+
+				actions.add(act_to_execute);
+				actions_executed.add(act_to_execute);
+				if (y > 0) {
+					last = res.getResults().get(y - 1);
+				}
+				results.add(last);
+
+			} else {
+				actions.add(act_to_execute);
+				actions_executed.add(act_to_execute);
+				results.add(res.getResults().get(y));
+				y++;
+			}
+		}
+
+		if (!smth_changed) {
+			return res;
+		}
+
+		GUITestCaseResult new_res = new GUITestCaseResult(new GUITestCase(res.getTc()
+				.getAlloySolution(), actions, res.getTc().getRunCommand()), actions_executed,
+				results, actions_actually_executed);
+
+		final Alloy_Model sem = AlloyUtil.getTCaseModel(this.getSemantics(), new_res);
+		final Instance_GUI_pattern clone = this.clone();
+		clone.setSpecificSemantics(SpecificSemantics.instantiate(sem));
+		final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
+		final List<GUITestCase> tests = test_gen.generateTestCases();
+		assert (tests.size() < 2);
+		if (tests.size() == 1) {
+			new_res = new GUITestCaseResult(tests.get(0), actions_executed, results,
+					actions_actually_executed);
+			return new_res;
+		} else {
+			return null;
+		}
 	}
 }

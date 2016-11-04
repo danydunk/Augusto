@@ -136,7 +136,7 @@ public class GUIFunctionality_validate {
 			final List<GUITestCaseResult> to_rerun = new ArrayList<>();
 
 			for (final GUITestCaseResult res : results) {
-				if (oracle.check(res) == 0) {
+				if (oracle.check(res, false) == 0) {
 					// if the testcase is not run completely
 					to_rerun.add(res);
 					// we dont need the result
@@ -146,7 +146,7 @@ public class GUIFunctionality_validate {
 							res.getActions_executed(), res.getResults(),
 							res.getActions_actually_executed());
 					working_sem_bis = SpecificSemantics.instantiate(AlloyUtil
-							.getTCaseModelOpposite(working_sem_bis, tc));
+							.getTCaseModelOpposite(working_sem_bis, res.getTc().getActions()));
 					this.completely_executed_tcs.add(new_res);
 
 				} else {
@@ -205,7 +205,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 
 		final List<String> testcases_out = new ArrayList<>();
 		System.out.println("COVERING SEMANTIC CASES.");

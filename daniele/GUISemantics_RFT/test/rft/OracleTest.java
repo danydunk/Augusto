@@ -64,7 +64,7 @@ public class OracleTest extends OracleTestHelper {
 			final TestCaseRunner runner = new TestCaseRunner(500, g);
 			GUITestCaseResult res = runner.runTestCase(tc);
 
-			if (oracle.check(res) != 1) {
+			if (oracle.check(res, false) != 1) {
 				System.out.println(oracle.getDescriptionOfLastOracleCheck());
 				throw new Exception();
 			}
@@ -89,7 +89,7 @@ public class OracleTest extends OracleTestHelper {
 
 			res = runner.runTestCase(tc);
 
-			if (oracle.check(res) != -1) {
+			if (oracle.check(res, false) != -1) {
 				throw new Exception();
 			}
 

@@ -65,9 +65,8 @@ public class ExperimentManager {
 					+ File.separator + "instrumented" + ";"
 					+ ConfigurationManager.getAutBinDirectory() + ";"
 					+ System.getProperty("user.dir") + File.separator + "lib" + File.separator
-					+ "jmockit" + File.separator + "jmockit.jar" + ";" + " -javaagent:"
-					+ System.getProperty("user.dir") + File.separator + "lib" + File.separator
-					+ "jmockit" + File.separator + "jmockit.jar"
+					+ "jmockit.jar" + ";" + " -javaagent:" + System.getProperty("user.dir")
+					+ File.separator + "lib" + File.separator + "jmockit.jar"
 					+ " -Dnet.sourceforge.cobertura.datafile=\"" + System.getProperty("user.dir")
 					+ File.separator + "lib" + File.separator + "cobertura" + File.separator
 					+ "cobertura.ser\"" + " " + "usi.rmi.AUTMain" + " "

@@ -12,8 +12,9 @@ public class ConfigurationManager {
 	private static String autMainCLass;
 	private static String resetScriptPath;
 	private static int alloyRunScope = 9;
+	private static int alloyRefinementTimeScope = 9;
 	private static long sleepTime = 600;
-	private static long semanticRefinementTimeout = 1800000;// 30min
+	private static long refinementTimeout = 1800000;// 30min
 	private static int testcaseLength = 15;
 	private static boolean pairwiseTestcase = false;
 
@@ -40,11 +41,12 @@ public class ConfigurationManager {
 		ConfigurationManager.setAlloyRunScope(Integer.valueOf(properties
 				.getProperty("alloy_run_scope")));
 		ConfigurationManager.setSleepTime(Long.valueOf(properties.getProperty("sleep_time")));
-		setSemanticRefinementTimeout(Long.valueOf(properties
-				.getProperty("semantic_refinement_timeout")));
+		setRefinementTimeout(Long.valueOf(properties.getProperty("refinement_timeout")));
 		ConfigurationManager.setTestcaseLength(Integer.valueOf(properties
 				.getProperty("testcase_length")));
 		ConfigurationManager.setGUIFile(properties.getProperty("gui_file"));
+		ConfigurationManager.setRefinementAlloyTimeScope(Integer.valueOf(properties
+				.getProperty("refinment_alloy_time_scope")));
 	}
 
 	public static String getAutClasspath() {
@@ -102,19 +104,29 @@ public class ConfigurationManager {
 		ConfigurationManager.alloyRunScope = alloyRunScope;
 	}
 
+	public static int getRefinementAlloyTimeScope() {
+
+		return ConfigurationManager.alloyRefinementTimeScope;
+	}
+
+	public static void setRefinementAlloyTimeScope(final int alloyRefinementTimeScope) {
+
+		ConfigurationManager.alloyRefinementTimeScope = alloyRefinementTimeScope;
+	}
+
 	public static String getResetScriptPath() {
 
 		return ConfigurationManager.resetScriptPath;
 	}
 
-	public static long getSemanticRefinementTimeout() {
+	public static long getRefinementTimeout() {
 
-		return ConfigurationManager.semanticRefinementTimeout;
+		return ConfigurationManager.refinementTimeout;
 	}
 
-	public static void setSemanticRefinementTimeout(final long semanticRefinementTimeout) {
+	public static void setRefinementTimeout(final long semanticRefinementTimeout) {
 
-		ConfigurationManager.semanticRefinementTimeout = semanticRefinementTimeout;
+		ConfigurationManager.refinementTimeout = semanticRefinementTimeout;
 	}
 
 	public static int getTestcaseLength() {

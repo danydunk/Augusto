@@ -82,22 +82,6 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] {
 	o in sw.list.t
 }
 
-pred select_doubleclick_semantics [sw: Selectable_widget, t: Time, o: Object] { }
-pred select_doubleclick_success_post [sw: Selectable_widget, t, t': Time, o: Object] {
-	List.contains.t' = List.contains.t
-	Current_window.is_in.t' = View
-	(Current_crud_op.operation.t' = READ and load_form[o, t'] and Selectable_widget.selected.t' = o)
-}
-pred select_doubleclick_fail_post [sw: Selectable_widget, t, t': Time, o: Object] {
-	List.contains.t' = List.contains.t
-	Current_crud_op.operation.t' = Current_crud_op.operation.t
-	Current_window.is_in.t' = Current_window.is_in.t
-	all iw: Input_widget | iw.content.t' = iw.content.t
-}
-pred select_doubleclick_pre[sw: Selectable_widget, t: Time, o: Object] { 
-	o in sw.list.t
-}
-
 pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
 	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
