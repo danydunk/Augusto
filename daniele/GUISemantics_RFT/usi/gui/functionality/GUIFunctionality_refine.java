@@ -689,7 +689,7 @@ public class GUIFunctionality_refine {
 
 		final String runCmd = "run {"
 				+ "System and "
-				+ "(all opp:Operation| some aw:Action_widget, iw:Input_widget, sw:Selectable_widget|  Track.op.(T/last) = opp <=> ((opp in Click and opp.clicked = aw and not click_semantics[aw, T/prev[T/last]]) or (opp in Fill and opp.filled=iw and not fill_semantics[iw, T/prev[T/last], opp.with]) or (opp in Select and opp.wid=sw and not select_semantics[sw, T/prev[T/last], opp.selected])))}";
+				+ "(all t: Time| (t = T/last) <=> ((Track.op.t in Click and not click_semantics[Track.op.t.clicked, T/prev[t]]) or (Track.op.t in Fill and not fill_semantics[Track.op.t.filled, T/prev[t], Track.op.t.with]) or (Track.op.t in Select and not select_semantics[Track.op.t.wid, T/prev[t], Track.op.t.selected])))}";
 
 		List<String> true_constraints = new ArrayList<>();
 		true_constraints.add(this.current_semantic_property);
@@ -711,6 +711,7 @@ public class GUIFunctionality_refine {
 			List<GUITestCase> tests = null;
 			if (size == -1) {
 				sem_with.addRun_command(runCmd);
+				System.out.println(sem_with);
 				clone_with.setSpecificSemantics(sem_with);
 				final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
 				tests = test_gen.generateMinimalTestCases(ConfigurationManager
@@ -763,6 +764,7 @@ public class GUIFunctionality_refine {
 				final GUITestCaseResult new_res = new GUITestCaseResult(new_tc,
 						res.getActions_executed(), res.getResults(),
 						res.getActions_actually_executed());
+				res = new_res;
 
 			} else {
 				System.out.println("TESTCASE ALREADY RUN!!!");

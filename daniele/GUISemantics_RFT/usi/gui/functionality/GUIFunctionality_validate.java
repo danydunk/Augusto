@@ -91,8 +91,12 @@ public class GUIFunctionality_validate {
 				this.gui);
 		final List<GUITestCaseResult> results = new ArrayList<>();
 		for (final GUITestCase tc : testcases) {
-
-			results.add(runner.runTestCase(tc));
+			GUITestCaseResult res = runner.runTestCase(tc);
+			final GUITestCaseResult res2 = this.instancePattern.updateTCResult(res);
+			if (res2 != null) {
+				res = res2;
+			}
+			results.add(res);
 		}
 		return results;
 	}
@@ -205,7 +209,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 
 		final List<String> testcases_out = new ArrayList<>();
 		System.out.println("COVERING SEMANTIC CASES.");
