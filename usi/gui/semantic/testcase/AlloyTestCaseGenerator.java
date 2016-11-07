@@ -195,7 +195,7 @@ public class AlloyTestCaseGenerator {
 				}
 			}
 		ts[0].interrupt();
-		ts[1].interrupt();
+		// ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();

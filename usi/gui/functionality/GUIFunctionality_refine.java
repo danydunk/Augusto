@@ -200,7 +200,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -474,7 +474,7 @@ public class GUIFunctionality_refine {
 							+ " and click_semantics[Action_widget_" + (aw.getId()) + ",t])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -515,7 +515,8 @@ public class GUIFunctionality_refine {
 			final List<String> constraints = new ArrayList<>(this.discarded_semantic_properties);
 			Alloy_Model sem = null;
 			try {
-				sem = AlloyUtil.getTCaseModel(in_sem, res);
+				sem = AlloyUtil.getTCaseModel(in_sem, res.getTc().getActions(), res.getResults()
+						.get(res.getResults().size() - 1));
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
@@ -526,7 +527,6 @@ public class GUIFunctionality_refine {
 
 			if (sol.satisfiable()) {
 				final String new_prop = AlloyUtil.extractProperty(sol, new_sem);
-				System.out.println(new_prop);
 				if (this.validateProperty(new_prop, in_sem, tcs)) {
 					System.out.println("GET ADAPTED CONSTRAINT: found new constraint: " + new_prop);
 					return new_prop;
@@ -535,7 +535,6 @@ public class GUIFunctionality_refine {
 					continue;
 				}
 			} else {
-				System.out.println(new_sem);
 				System.out.println("GET ADAPTED CONSTRAINT: null end.");
 				return null;
 			}
@@ -738,7 +737,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					this.discarded_semantic_properties.remove(this.current_semantic_property);
 					break mainloop;
 				}
@@ -764,7 +763,6 @@ public class GUIFunctionality_refine {
 				final GUITestCaseResult new_res = new GUITestCaseResult(new_tc,
 						res.getActions_executed(), res.getResults(),
 						res.getActions_actually_executed());
-				this.observed_tcs.add(new_res);
 
 			} else {
 				System.out.println("TESTCASE ALREADY RUN!!!");
@@ -776,6 +774,7 @@ public class GUIFunctionality_refine {
 			if (res2 != null) {
 				res = res2;
 			}
+			this.observed_tcs.add(res);
 
 			switch (oracle.check(res, true)) {
 			case 1:
@@ -794,7 +793,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
 					this.current_semantic_property = "";
 					return;
 				}
@@ -841,7 +840,9 @@ public class GUIFunctionality_refine {
 			final List<Run_command_thread> threads = new ArrayList<>();
 			for (int cont = 0; cont < batch.size(); cont++) {
 
-				final Alloy_Model sem = AlloyUtil.getTCaseModel(sem_filtered, batch.get(cont));
+				final Alloy_Model sem = AlloyUtil.getTCaseModel(sem_filtered, batch.get(cont)
+						.getTc().getActions(),
+						batch.get(cont).getResults().get(batch.get(cont).getResults().size() - 1));
 				final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
 				final Run_command_thread run = new Run_command_thread(comp, comp.getAllCommands()
 						.get(0));

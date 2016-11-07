@@ -292,7 +292,7 @@ public class Instance_GUI_pattern {
 		final List<GUIAction> actions_actually_executed = res.getActions_actually_executed();
 		final List<Window> results = new ArrayList<>();
 		Window last = null;
-		boolean smth_changed = false;
+		boolean tc_changed = false;
 		int y = 0;
 		for (int x = 0; x < res.getTc().getActions().size(); x++) {
 			final GUIAction act_to_execute = res.getTc().getActions().get(x);
@@ -302,11 +302,12 @@ public class Instance_GUI_pattern {
 				if (last != null && !act_to_execute.getWindow().getId().equals(last.getId())) {
 					continue;
 				}
+
 				if (act_to_execute instanceof Click) {
 					if (this.getSemantics().getClickSemantics().getContent().trim().length() == 0) {
 						// semantics is empty, therefore this action can be
 						// skipped
-						smth_changed = true;
+						tc_changed = true;
 						continue;
 					}
 				}
@@ -314,7 +315,7 @@ public class Instance_GUI_pattern {
 					if (this.getSemantics().getFillSemantics().getContent().trim().length() == 0) {
 						// semantics is empty, therefore this action can be
 						// skipped
-						smth_changed = true;
+						tc_changed = true;
 						continue;
 					}
 
@@ -323,7 +324,7 @@ public class Instance_GUI_pattern {
 					if (this.getSemantics().getSelectSemantics().getContent().trim().length() == 0) {
 						// semantics is empty, therefore this action can be
 						// skipped
-						smth_changed = true;
+						tc_changed = true;
 						continue;
 					}
 				}
@@ -343,15 +344,16 @@ public class Instance_GUI_pattern {
 			}
 		}
 
-		if (!smth_changed) {
-			return res;
-		}
-
 		GUITestCaseResult new_res = new GUITestCaseResult(new GUITestCase(res.getTc()
 				.getAlloySolution(), actions, res.getTc().getRunCommand()), actions_executed,
 				results, actions_actually_executed);
 
-		final Alloy_Model sem = AlloyUtil.getTCaseModel(this.getSemantics(), new_res);
+		if (!tc_changed) {
+			return res;
+		}
+
+		final Alloy_Model sem = AlloyUtil.getTCaseModel(this.getSemantics(), new_res.getTc()
+				.getActions(), null);
 		final Instance_GUI_pattern clone = this.clone();
 		clone.setSpecificSemantics(SpecificSemantics.instantiate(sem));
 		final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);

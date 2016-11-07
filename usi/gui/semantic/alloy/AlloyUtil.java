@@ -30,7 +30,6 @@ import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.semantic.testcase.Click;
 import usi.gui.semantic.testcase.Fill;
 import usi.gui.semantic.testcase.GUIAction;
-import usi.gui.semantic.testcase.GUITestCaseResult;
 import usi.gui.semantic.testcase.Select;
 import usi.gui.semantic.testcase.inputdata.DataManager;
 import usi.gui.structure.Action_widget;
@@ -1379,9 +1378,8 @@ public class AlloyUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	static public Alloy_Model
-	getTCaseModel(final SpecificSemantics mod, final GUITestCaseResult res)
-			throws Exception {
+	static public Alloy_Model getTCaseModel(final SpecificSemantics mod,
+			final List<GUIAction> acts, final Window reached) throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1389,15 +1387,16 @@ public class AlloyUtil {
 		final List<Predicate> preds = mod.getPredicates();
 		final List<String> opens = mod.getOpenStatements();
 
-		String fact = getFactForTC(res.getTc().getActions());
+		String fact = getFactForTC(acts);
 
-		fact += " and Current_window.is_in.(T/last)=Window_"
-				+ res.getResults().get(res.getActions_executed().size() - 1).getId();
+		if (reached != null) {
+			fact += " and Current_window.is_in.(T/last)=Window_" + reached.getId();
+		}
 
 		final Fact new_fact = new Fact("testcase", fact);
 		facts.add(new_fact);
 
-		final int time_size = res.getTc().getActions().size() + 1;
+		final int time_size = acts.size() + 1;
 		final int op_size = time_size - 1;
 
 		final int winscope = AlloyUtil.getWinScope(mod);
