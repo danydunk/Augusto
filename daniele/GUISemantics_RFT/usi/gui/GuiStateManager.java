@@ -16,7 +16,6 @@ import com.rational.test.ft.TargetGoneException;
 import com.rational.test.ft.object.interfaces.RootTestObject;
 import com.rational.test.ft.object.interfaces.TestObject;
 import com.rational.test.ft.script.Property;
-import com.rational.test.ft.script.RationalTestScript;
 import com.rational.test.ft.script.SubitemFactory;
 
 public class GuiStateManager {
@@ -47,7 +46,6 @@ public class GuiStateManager {
 
 	private GuiStateManager(final RootTestObject root) throws Exception {
 
-		RationalTestScript.unregisterAll();
 		this.root = root;
 		// this.properties[0] = new Property("showing", "true");
 		// this.properties[0] = new Property("active", "true");
@@ -84,7 +82,7 @@ public class GuiStateManager {
 
 		for (int cont = 0; cont < 5; cont++) {
 			try {
-				RationalTestScript.unregisterAll();
+				// RationalTestScript.unregisterAll();
 				Thread.sleep(200);
 				windows = this.root.find(SubitemFactory.atChild(this.properties));
 
@@ -122,7 +120,7 @@ public class GuiStateManager {
 				}
 			}
 			if (window == null) {
-				RationalTestScript.unregisterAll();
+				// RationalTestScript.unregisterAll();
 				Thread.sleep(200);
 				windows = this.root.find(SubitemFactory.atChild(this.properties));
 			}
