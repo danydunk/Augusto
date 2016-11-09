@@ -8,13 +8,13 @@ import java.util.List;
 
 import org.junit.Test;
 
+import test.gui.GUIStructureMaker;
 import test.gui.pattern.GUIPatternMaker;
-import test.gui.structure.GUIStructureMaker;
 import usi.gui.functionality.GUIFunctionality_search;
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.functionality.mapping.Instance_window;
-import usi.gui.pattern.GUI_Pattern;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
+import usi.gui.functionality.instance.Instance_window;
 import usi.gui.structure.GUI;
+import usi.pattern.structure.GUI_Pattern;
 
 public class GUIFunctionality_search_Test {
 

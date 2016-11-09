@@ -16,10 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import usi.configuration.ConfigurationManager;
-import usi.gui.pattern.Cardinality;
-import usi.gui.pattern.Pattern_action_widget;
-import usi.gui.pattern.Pattern_input_widget;
-import usi.gui.pattern.Pattern_selectable_widget;
+import usi.configuration.PathsManager;
 import usi.gui.semantic.FunctionalitySemantics;
 import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.entity.AlloyEntity;
@@ -27,17 +24,21 @@ import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Function;
 import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
-import usi.gui.semantic.testcase.Click;
-import usi.gui.semantic.testcase.Fill;
-import usi.gui.semantic.testcase.GUIAction;
-import usi.gui.semantic.testcase.Select;
-import usi.gui.semantic.testcase.inputdata.DataManager;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Option_input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
+import usi.pattern.structure.Cardinality;
+import usi.pattern.structure.Pattern_action_widget;
+import usi.pattern.structure.Pattern_input_widget;
+import usi.pattern.structure.Pattern_selectable_widget;
+import usi.testcase.inputdata.DataManager;
+import usi.testcase.structure.Click;
+import usi.testcase.structure.Fill;
+import usi.testcase.structure.GUIAction;
+import usi.testcase.structure.Select;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -73,7 +74,6 @@ import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
  */
 public class AlloyUtil {
 
-	private static final String MODULES_PATH = "C:/workspace/GUISemantics_RFT/files/alloy/modules";
 	static A4Reporter rep = new A4Reporter() {
 
 		@Override
@@ -143,7 +143,7 @@ public class AlloyUtil {
 
 		final Map<String, String> modules = new HashMap<>();
 		try {
-			final File folder = new File(MODULES_PATH);
+			final File folder = new File(PathsManager.getAlloyModulesFolder());
 			final File[] listOfFiles = folder.listFiles();
 
 			for (final File file : listOfFiles) {
@@ -177,7 +177,7 @@ public class AlloyUtil {
 
 		final Map<String, String> modules = new HashMap<>();
 		try {
-			final File folder = new File(MODULES_PATH);
+			final File folder = new File(PathsManager.getAlloyModulesFolder());
 			final File[] listOfFiles = folder.listFiles();
 
 			for (final File file : listOfFiles) {

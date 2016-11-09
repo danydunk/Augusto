@@ -9,11 +9,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import test.gui.structure.GUIStructureMaker;
+import test.gui.GUIStructureMaker;
 import usi.gui.functionality.GUIFunctionality_search;
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.pattern.GUI_Pattern;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
 import usi.gui.structure.GUI;
+import usi.pattern.structure.GUI_Pattern;
 
 public class GUI_Pattern_test {
 

@@ -8,15 +8,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.functionality.mapping.Instance_window;
-import usi.gui.pattern.Cardinality;
-import usi.gui.pattern.GUI_Pattern;
-import usi.gui.pattern.Pattern_action_widget;
-import usi.gui.pattern.Pattern_window;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
+import usi.gui.functionality.instance.Instance_window;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Window;
+import usi.pattern.structure.Cardinality;
+import usi.pattern.structure.GUI_Pattern;
+import usi.pattern.structure.Pattern_action_widget;
+import usi.pattern.structure.Pattern_window;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
@@ -27,6 +27,7 @@ public class GUIFunctionality_search {
 	private GUI_Pattern gui_pattern;
 	private Map<Pattern_window, List<Window>> possible_matches_wm;
 	private Table<Pattern_window, Window, List<Instance_window>> matches_table_wm;
+	private List<Window> matches_to_root;
 
 	public GUIFunctionality_search(final GUI gui) {
 
@@ -37,21 +38,15 @@ public class GUIFunctionality_search {
 	 * Function that finds all the pattern windows reachable from the root
 	 * pattern window of the pattern with static edges.
 	 *
-	 *
 	 * @param pattern
 	 * @return
 	 * @throws Exception
 	 *             if the number of root windows in the pattern is different
 	 *             than 1
 	 */
-	private List<Pattern_window> getReachableWindows(final GUI_Pattern pattern) throws Exception {
+	private List<Pattern_window> getReachableWindows(final Pattern_window root,
+			final GUI_Pattern pattern) throws Exception {
 
-		final List<Pattern_window> roots = pattern.getWindows().stream()
-				.filter(e -> (e.getRoot() == true)).collect(Collectors.toList());
-
-		assert (roots.size() == 1);
-
-		final Pattern_window root = roots.get(0);
 		final List<Pattern_window> out = new ArrayList<>();
 		this.recursion(out, root, pattern);
 		return out;
@@ -76,18 +71,23 @@ public class GUIFunctionality_search {
 
 		this.gui_pattern = pattern;
 		final List<Instance_GUI_pattern> out = new ArrayList<>();
+		// root window
+		final List<Pattern_window> roots = pattern.getWindows().stream()
+				.filter(e -> (e.isRoot() == true)).collect(Collectors.toList());
+		assert (roots.size() == 1);
+		final Pattern_window root = roots.get(0);
 
 		// the windows in the GUI are reduced to only the windows that can match
 		// the windows in the pattern
 		// list that contains for each pattern window
 		// all the possible windows that can match
-		Map<Pattern_window, List<Window>> possible_matches = new LinkedHashMap<>();
+		final Map<Pattern_window, List<Window>> possible_matches = new LinkedHashMap<>();
 		// table that contains for each window_pattern and window the possible
-		// instances
-		Table<Pattern_window, Window, List<Instance_window>> matches_table = HashBasedTable
+		// instance
+		final Table<Pattern_window, Window, List<Instance_window>> matches_table = HashBasedTable
 				.create();
 
-		for (final Pattern_window pw : this.getReachableWindows(pattern)) {
+		for (final Pattern_window pw : this.getReachableWindows(root, pattern)) {
 			final List<Window> windows = new ArrayList<>();
 			possible_matches.put(pw, windows);
 
@@ -98,41 +98,27 @@ public class GUIFunctionality_search {
 					matches_table.put(pw, w, instances);
 				}
 			}
-			// if the possible matches are less than the minimum number required
-			// for the pattern window the pattern cannot be found
-			// if (windows.size() < pw.getCardinality().getMin()) {
-			// return out;
-			// }
+
 		}
 
 		// the windows found are partitioned into sets of connected windows
 		// by recursively following the edges
 		this.possible_matches_wm = possible_matches;
 		this.matches_table_wm = matches_table;
+		this.matches_to_root = new ArrayList<>();
 
 		while (true) {
-			possible_matches = copyMap(this.possible_matches_wm);
-			matches_table = copyTable(this.matches_table_wm);
+			final List<Window> matches_to_root_copy = new ArrayList<>(this.matches_to_root);
 
 			final List<Entry<Window, Pattern_window>> tuples = new ArrayList<>();
-
-			for (final Entry<Pattern_window, List<Window>> entry : this.possible_matches_wm
-					.entrySet()) {
-				for (final Window w : entry.getValue()) {
-					final Entry<Window, Pattern_window> e = new AbstractMap.SimpleEntry<>(w,
-							entry.getKey());
+			// we create a tuple for each match of the root window
+			for (final Window w : possible_matches.get(root)) {
+				// we filter the ones that are already part of a instance
+				if (!this.matches_to_root.contains(w)) {
+					final Entry<Window, Pattern_window> e = new AbstractMap.SimpleEntry<>(w, root);
 					tuples.add(e);
 				}
 			}
-			// modified to guarantee entry order
-			// for (final Pattern_window pw : this.possible_matches_wm.keySet())
-			// {
-			// for (final Window w : this.possible_matches_wm.get(pw)) {
-			// final Entry<Window, Pattern_window> entry = new
-			// AbstractMap.SimpleEntry<>(w, pw);
-			// tuples.add(entry);
-			// }
-			// }
 
 			for (final Entry<Window, Pattern_window> entry : tuples) {
 
@@ -142,7 +128,7 @@ public class GUIFunctionality_search {
 
 					// the cardinality of each pattern window is verified
 					boolean check = true;
-					for (final Pattern_window pw : this.getReachableWindows(pattern)) {
+					for (final Pattern_window pw : this.getReachableWindows(root, pattern)) {
 						final List<Instance_window> instances = match.getWindows().stream()
 								.filter(e -> e.getPattern() == pw).collect(Collectors.toList());
 
@@ -161,13 +147,16 @@ public class GUIFunctionality_search {
 						break;
 					}
 				}
-				this.possible_matches_wm = copyMap(possible_matches);
-				this.matches_table_wm = copyTable(matches_table);
+				this.matches_to_root = matches_to_root_copy;
 			}
 
-			// the number of remained windows
-			final int wn = tableSize(this.matches_table_wm);
-			if (wn == 0 || wn == tableSize(matches_table)) {
+			// the number of root window matches is equal to the total of
+			// possibilities
+			if (this.matches_to_root.size() == this.possible_matches_wm.get(root).size()) {
+				break;
+			}
+			// if the number of root windows matched has not changed
+			if (this.matches_to_root.size() == matches_to_root_copy.size()) {
 				break;
 			}
 		}
@@ -186,7 +175,6 @@ public class GUIFunctionality_search {
 	private Instance_GUI_pattern traverse(final Window w, final Pattern_window pw,
 			Instance_GUI_pattern igp) throws Exception {
 
-		// System.out.println(w.getId()+" - "+pw.getId());
 		// if the window is already part of the instance_gui_pattern
 		if (pw == igp.getPW_for_W(w.getId())) {
 			return igp;
@@ -195,8 +183,11 @@ public class GUIFunctionality_search {
 		if (igp.getPW_for_W(w.getId()) != null) {
 			return null;
 		}
-
+		if (pw.isRoot()) {
+			this.matches_to_root.add(w);
+		}
 		boolean correct = false;
+
 		final Instance_GUI_pattern igp_copy = igp.clone();
 		final List<Instance_window> inst = this.matches_table_wm.get(pw, w);
 		if (inst != null) {
@@ -212,12 +203,6 @@ public class GUIFunctionality_search {
 					continue;
 				}
 
-				// the working structures are saved
-				final Map<Pattern_window, List<Window>> possible_matches_copy = copyMap(this.possible_matches_wm);
-				final Table<Pattern_window, Window, List<Instance_window>> matches_table_copy = copyTable(this.matches_table_wm);
-
-				// the instance_windows that match this one are remove
-				this.adaptWorkStructures(instance);
 				// the instance_gui pattern_is updated
 				igp.addWindow(instance);
 				igp.getGui().addWindow(instance.getInstance());
@@ -312,10 +297,10 @@ public class GUIFunctionality_search {
 							}
 						}
 						if (source_pw.getCardinality().getMin() != 0 /*
-																	 * &&
-																	 * source_pw
-																	 * != pw
-																	 */) {
+						 * &&
+						 * source_pw
+						 * != pw
+						 */) {
 							check_optional = true;
 						}
 					}
@@ -323,7 +308,6 @@ public class GUIFunctionality_search {
 						correct = true;
 					}
 				}
-
 				if (correct) {
 					break;
 				}
@@ -343,11 +327,6 @@ public class GUIFunctionality_search {
 
 				// marked.addAll(new ArrayList<Instance_window>());
 				marked.addAll(newMarked);
-
-				this.possible_matches_wm = copyMap(possible_matches_copy);
-				this.matches_table_wm = copyTable(matches_table_copy);
-				// igp.removeWindow(instance);
-				// igp.getGui().removeWindow(instance.getInstance());
 				igp = igp_copy.clone();
 			}
 		}
@@ -356,78 +335,5 @@ public class GUIFunctionality_search {
 		} else {
 			return null;
 		}
-	}
-
-	/*
-	 * Function that removes all the instances that are not feasible if the
-	 * input window is added to the the output instance
-	 */
-	private void adaptWorkStructures(final Instance_window iw) {
-
-		final List<Map.Entry<Pattern_window, List<Instance_window>>> entries = this.matches_table_wm
-				.column(iw.getInstance())
-				.entrySet()
-				.stream()
-				.map(e -> {
-					final List<Instance_window> l = new ArrayList<>(e.getValue().parallelStream()
-							.filter(ee -> !iw.isOverlap(ee)).collect(Collectors.toList()));
-					return new AbstractMap.SimpleEntry<Pattern_window, List<Instance_window>>(e
-							.getKey(), l);
-				}).collect(Collectors.toList());
-
-		for (final Entry<Pattern_window, List<Instance_window>> entry : entries) {
-			this.matches_table_wm.put(entry.getKey(), iw.getInstance(), entry.getValue());
-			if (entry.getValue().size() == 0) {
-				this.possible_matches_wm.get(entry.getKey()).remove(iw.getInstance());
-			}
-		}
-	}
-
-	private static <T, TT> Map<T, List<TT>> copyMap(final Map<T, List<TT>> in) {
-
-		final Map<T, List<TT>> out = new LinkedHashMap<T, List<TT>>();
-		for (final T k : in.keySet()) {
-			final List<TT> l = new ArrayList<>();
-			for (final TT el : in.get(k)) {
-				l.add(el);
-			}
-			out.put(k, l);
-		}
-		return out;
-	}
-
-	private static <T, TT, TTT> Table<T, TT, List<TTT>> copyTable(final Table<T, TT, List<TTT>> in) {
-
-		final Table<T, TT, List<TTT>> out = HashBasedTable.create();
-		for (final Table.Cell<T, TT, List<TTT>> c : in.cellSet()) {
-			final List<TTT> liw = new ArrayList<>();
-			if (c.getValue() != null) {
-				for (final TTT iw : c.getValue()) {
-					liw.add(iw);
-				}
-			}
-			out.put(c.getRowKey(), c.getColumnKey(), liw);
-		}
-		return out;
-	}
-
-	// private static <T, TT> int mapSize(Map<T, List<TT>> in) {
-	// int size = 0;
-	// for(T k : in.keySet()) {
-	// size += in.get(k).size();
-	// }
-	// return size;
-	// }
-
-	private static <T, TT, TTT> int tableSize(final Table<T, TT, List<TTT>> in) {
-
-		int size = 0;
-		for (final Table.Cell<T, TT, List<TTT>> c : in.cellSet()) {
-			if (c.getValue() != null) {
-				size += c.getValue().size();
-			}
-		}
-
-		return size;
 	}
 }

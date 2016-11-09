@@ -1,6 +1,6 @@
 package usi.gui.semantic.alloy.entity;
 
-import usi.gui.pattern.Cardinality;
+import usi.pattern.structure.Cardinality;
 
 public class TernaryRelation {
 	private final String name;

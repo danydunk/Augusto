@@ -9,16 +9,16 @@ import org.w3c.dom.Document;
 import resources.test.rft.Error_window_testHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
-import usi.gui.semantic.testcase.Click;
-import usi.gui.semantic.testcase.Fill;
-import usi.gui.semantic.testcase.GUIAction;
-import usi.gui.semantic.testcase.GUITestCase;
-import usi.gui.semantic.testcase.TestCaseRunner;
+import usi.gui.GUIParser;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
-import usi.gui.structure.GUIParser;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Window;
+import usi.testcase.TestCaseRunner;
+import usi.testcase.structure.Click;
+import usi.testcase.structure.Fill;
+import usi.testcase.structure.GUIAction;
+import usi.testcase.structure.GUITestCase;
 import usi.xml.XMLUtil;
 
 /**
@@ -69,8 +69,7 @@ public class Error_window_test extends Error_window_testHelper {
 
 			final GUITestCase tc = new GUITestCase(null, acts, "run");
 
-			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime(),
-					gui);
+			final TestCaseRunner runner = new TestCaseRunner(gui);
 			runner.runTestCase(tc);
 
 		} catch (final Exception e) {

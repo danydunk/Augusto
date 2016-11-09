@@ -122,4 +122,54 @@ public class XMLUtil {
 		}
 		return out;
 	}
+
+	/**
+	 * Return the first node from a NodeList with a given name passed as
+	 * parameter
+	 *
+	 * @param childWin
+	 * @param name
+	 * @return
+	 */
+	public static Node getElementNode(final NodeList childWin, final String name) {
+
+		// FOR each GUI child:
+		for (int ch = 0; ch < childWin.getLength(); ch++) {
+
+			final Node nChild = childWin.item(ch);
+			if (nChild.getNodeType() == Node.ELEMENT_NODE) {
+
+				if (name.equals(nChild.getNodeName())) {
+					return nChild;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Retrieve All elements from the list that have a given name
+	 *
+	 * @param childWin
+	 *            List of Nodes
+	 * @param name
+	 *            Name to match
+	 * @return
+	 */
+	public static List<Node> getElementNodesList(final NodeList childWin, final String name) {
+
+		final List<Node> retrievedNodes = new ArrayList<>();
+		// FOR each GUI child:
+		for (int ch = 0; ch < childWin.getLength(); ch++) {
+
+			final Node nChild = childWin.item(ch);
+			if (nChild.getNodeType() == Node.ELEMENT_NODE) {
+
+				if (name.equals(nChild.getNodeName())) {
+					retrievedNodes.add(nChild);
+				}
+			}
+		}
+		return retrievedNodes;
+	}
 }

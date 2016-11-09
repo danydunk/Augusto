@@ -5,7 +5,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import usi.gui.semantic.testcase.inputdata.DataManager;
+import usi.testcase.inputdata.DataManager;
 
 public class DataManagerTest {
 

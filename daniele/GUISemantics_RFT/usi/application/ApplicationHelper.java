@@ -3,9 +3,19 @@ package usi.application;
 import java.io.File;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
 
+import org.w3c.dom.Document;
+
+import usi.configuration.ConfigurationManager;
 import usi.gui.GuiStateManager;
+import usi.gui.structure.Window;
+import usi.pattern.dialogs.Pattern_dialogs;
 import usi.rmi.RemoteCoberturaInterface;
+import usi.testcase.GUITestCaseParser;
+import usi.testcase.structure.GUIAction;
+import usi.testcase.structure.GUITestCase;
+import usi.xml.XMLUtil;
 
 import com.rational.test.ft.object.interfaces.RootTestObject;
 import com.rational.test.ft.object.interfaces.TestObject;
@@ -16,10 +26,11 @@ public class ApplicationHelper {
 
 	private RootTestObject root;
 	private boolean running;
+	private GUITestCase initial;
 
 	private static ApplicationHelper instance;
 
-	public static ApplicationHelper getInstance() {
+	public static ApplicationHelper getInstance() throws Exception {
 
 		if (instance == null) {
 			instance = new ApplicationHelper();
@@ -27,10 +38,15 @@ public class ApplicationHelper {
 		return instance;
 	}
 
-	private ApplicationHelper() {
+	private ApplicationHelper() throws Exception {
 
 		this.running = false;
 		this.root = null;
+		if (ConfigurationManager.getInitialActions().length() > 0) {
+			final Document doc = XMLUtil.read(new File(ConfigurationManager.getInitialActions())
+					.getAbsolutePath());
+			this.initial = GUITestCaseParser.parse(doc);
+		}
 	}
 
 	public void startApplication() throws Exception {
@@ -55,6 +71,17 @@ public class ApplicationHelper {
 		}
 		GuiStateManager.create(this.root);
 		this.running = true;
+
+		if (this.initial != null) {
+			final GuiStateManager gmanager = GuiStateManager.getInstance();
+			for (final GUIAction act : this.initial.getActions()) {
+				gmanager.readGUI();
+				this.dealWithDialogsWindow(gmanager);
+				ActionManager.executeAction(act);
+			}
+			gmanager.readGUI();
+			this.dealWithDialogsWindow(gmanager);
+		}
 	}
 
 	public void closeApplication() {
@@ -95,5 +122,23 @@ public class ApplicationHelper {
 	public boolean isRunning() {
 
 		return this.running;
+	}
+
+	// TODO: this code is duplicated
+	private void dealWithDialogsWindow(final GuiStateManager gmanager) throws Exception {
+
+		if (gmanager.getCurrentActiveWindows() != null) {
+			final Window current = gmanager.getCurrentActiveWindows();
+			for (final Pattern_dialogs dialog : Pattern_dialogs.values()) {
+
+				if (dialog.isMatch(current)) {
+					final List<GUIAction> acts = dialog.getActionsToGoPast(current);
+					for (final GUIAction act : acts) {
+						ActionManager.executeAction(act);
+						gmanager.readGUI();
+					}
+				}
+			}
+		}
 	}
 }

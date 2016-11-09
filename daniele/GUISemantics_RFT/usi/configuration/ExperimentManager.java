@@ -20,6 +20,9 @@ import org.w3c.dom.Document;
 
 import usi.gui.GUIWriter;
 import usi.gui.structure.GUI;
+import usi.testcase.GUITestCaseResult;
+import usi.testcase.GUITestCaseWriter;
+import usi.testcase.OracleChecker;
 import usi.util.DateUtility;
 import usi.xml.XMLUtil;
 
@@ -89,12 +92,11 @@ public class ExperimentManager {
 		if (gui == null) {
 			throw new Exception("ExperimentManager - dumpGUI: null gui.");
 		}
-		final GUIWriter writer = new GUIWriter();
-		final Document doc = writer.writeGUI(gui);
+		final Document doc = GUIWriter.writeGUI(gui);
 
 		String out_f;
 		if (path == null) {
-			out_f = "output" + File.separator + "ripping" + File.separator + "gui_"
+			out_f = PathsManager.getRipperOutputFolder() + File.separator + "gui_"
 					+ (DateUtility.now() + ".xml");
 		} else {
 			out_f = path;
@@ -102,24 +104,22 @@ public class ExperimentManager {
 		XMLUtil.save(out_f, doc);
 	}
 
-	public static void dumpTCresult(final List<String> results, final String coverage)
-			throws Exception {
+	public static void dumpTCresults(final String directory, final List<GUITestCaseResult> results,
+			final GUI gui) throws Exception {
 
-		final String directory = "output" + File.separator + "testcases_result_"
-				+ DateUtility.now();
-		new File(directory).mkdir();
 		int cont = 1;
-		for (final String result : results) {
+		for (final GUITestCaseResult result : results) {
+			XMLUtil.save(directory + File.separator + "testcase" + cont + ".xml",
+					GUITestCaseWriter.writeGUITestCase(result.getTc()));
+			final OracleChecker checker = new OracleChecker(gui);
+			checker.check(result, false);
 			final PrintWriter writer = new PrintWriter(directory + File.separator + "testcase"
 					+ cont + "_result.txt", "UTF-8");
-			writer.print(result);
+			writer.print(checker.getDescriptionOfLastOracleCheck());
 			writer.close();
 			cont++;
 		}
-		final PrintWriter writer = new PrintWriter(
-				directory + File.separator + "coverage_info.txt", "UTF-8");
-		writer.print(coverage);
-		writer.close();
+
 	}
 
 	public static void resetCoverage() throws IOException {
@@ -136,5 +136,24 @@ public class ExperimentManager {
 		out[0] = globalCobertura.getLineCoverageRate();
 		out[1] = globalCobertura.getBranchCoverageRate();
 		return out;
+	}
+
+	public static String createResultsFolder() {
+
+		final String directory = PathsManager.getOutputFolder() + "results_" + DateUtility.now();
+		createFolder(directory);
+		return directory;
+	}
+
+	public static void createFolder(final String path) {
+
+		new File(path).mkdir();
+	}
+
+	public static void moveFile(final String file, final String outfolder) throws IOException {
+
+		final File afile = new File(file);
+		final File dest = new File(outfolder + File.separator + afile.getName());
+		Files.copy(afile.toPath(), dest.toPath());
 	}
 }

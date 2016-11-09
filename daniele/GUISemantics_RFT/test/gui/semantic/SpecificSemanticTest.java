@@ -11,12 +11,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import test.gui.GUIStructureMaker;
 import test.gui.pattern.GUIPatternMaker;
-import test.gui.structure.GUIStructureMaker;
 import usi.gui.functionality.GUIFunctionality_search;
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.functionality.mapping.Instance_window;
-import usi.gui.pattern.GUI_Pattern;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
+import usi.gui.functionality.instance.Instance_window;
 import usi.gui.semantic.FunctionalitySemantics;
 import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
@@ -25,6 +24,7 @@ import usi.gui.semantic.alloy.entity.AlloyEntity;
 import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.structure.GUI;
+import usi.pattern.structure.GUI_Pattern;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 
 public class SpecificSemanticTest {

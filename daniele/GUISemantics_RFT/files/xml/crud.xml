@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xml_schemas/Pattern_schema.xsd" 
-	alloy="CRUD.als">
+	alloy="CRUD.als" name="CRUD">
 	<window id="initial" card="one" alloy="Initial">
 		<title>.*</title>
 		<class>.*</class>
 		<modal>any</modal>
 		<root>true</root>
 		<action_widget id="paw1" card="some" alloy="Create_trigger">
-			<label>(.*( add | create ).*|^(add |create ).*)</label>
+			<label>(.*( new |add | create ).*|^(new (?!-)|add |create ).*|^(new|add|create)$)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw2" card="set" alloy="Read_trigger">
-			<label>(.* view .*|^view (?!-).*)</label>
+			<label>(.* view .*|^view (?!-).*|^view$)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw3" card="some" alloy="Update_trigger">
-			<label>(.*( edit | update | modify ).*|^(edit |update |modify )(?!-).*)</label>
+			<label>(.*( edit | update | modify ).*|^(edit (?!-)|update |modify ).*|^(edit|update|modify)$)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw4" card="some" alloy="Delete_trigger">
-			<label>(.* delete .*|^delete .*)</label>
+			<label>(.* delete .*|^delete .*|^delete$)</label>
 			<class>.*</class>
 		</action_widget>
 		<selectable_widget id="psw1" card="one" alloy="">

@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
-import test.gui.structure.GUIStructureMaker;
+import test.gui.GUIStructureMaker;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;

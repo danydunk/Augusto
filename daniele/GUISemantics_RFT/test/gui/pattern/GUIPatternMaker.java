@@ -1,18 +1,18 @@
 package test.gui.pattern;
 
-import usi.gui.pattern.Boolean_regexp;
-import usi.gui.pattern.Cardinality;
-import usi.gui.pattern.GUI_Pattern;
-import usi.gui.pattern.Pattern_action_widget;
-import usi.gui.pattern.Pattern_input_widget;
-import usi.gui.pattern.Pattern_window;
+import usi.pattern.structure.Boolean_regexp;
+import usi.pattern.structure.Cardinality;
+import usi.pattern.structure.GUI_Pattern;
+import usi.pattern.structure.Pattern_action_widget;
+import usi.pattern.structure.Pattern_input_widget;
+import usi.pattern.structure.Pattern_window;
 
 public class GUIPatternMaker {
 
 	// single form, confirmation
 	public static GUI_Pattern instance1() {
 
-		final GUI_Pattern pattern = new GUI_Pattern();
+		final GUI_Pattern pattern = new GUI_Pattern("test");
 		try {
 			// pw1
 			final Pattern_window pw1 = new Pattern_window("pw1", ".*", Cardinality.SOME, "Initial",
@@ -59,7 +59,7 @@ public class GUIPatternMaker {
 	// single form, no confirmation
 	public static GUI_Pattern instance2() {
 
-		final GUI_Pattern pattern = new GUI_Pattern();
+		final GUI_Pattern pattern = new GUI_Pattern("test");
 		try {
 			// pw1
 			final Pattern_window pw1 = new Pattern_window("pw1", ".*", Cardinality.SOME, "",
@@ -95,7 +95,7 @@ public class GUIPatternMaker {
 	// multiple form, confirmation
 	public static GUI_Pattern instance3() {
 
-		final GUI_Pattern pattern = new GUI_Pattern();
+		final GUI_Pattern pattern = new GUI_Pattern("test");
 		try {
 			// pw1
 			final Pattern_window pw1 = new Pattern_window("pw1", ".*", Cardinality.SOME, "",
