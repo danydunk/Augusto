@@ -9,18 +9,18 @@ import org.w3c.dom.Document;
 import resources.test.rft.OracleTestHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
-import usi.gui.semantic.testcase.Click;
-import usi.gui.semantic.testcase.GUIAction;
-import usi.gui.semantic.testcase.GUITestCase;
-import usi.gui.semantic.testcase.GUITestCaseResult;
-import usi.gui.semantic.testcase.OracleChecker;
-import usi.gui.semantic.testcase.TestCaseRunner;
+import usi.gui.GUIParser;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
-import usi.gui.structure.GUIParser;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Widget;
 import usi.gui.structure.Window;
+import usi.testcase.GUITestCaseResult;
+import usi.testcase.OracleChecker;
+import usi.testcase.TestCaseRunner;
+import usi.testcase.structure.Click;
+import usi.testcase.structure.GUIAction;
+import usi.testcase.structure.GUITestCase;
 import usi.xml.XMLUtil;
 
 /**
@@ -61,10 +61,10 @@ public class OracleTest extends OracleTestHelper {
 			acts.add(click);
 			GUITestCase tc = new GUITestCase(null, acts, "run");
 
-			final TestCaseRunner runner = new TestCaseRunner(500, g);
+			final TestCaseRunner runner = new TestCaseRunner(g);
 			GUITestCaseResult res = runner.runTestCase(tc);
 
-			if (oracle.check(res, false) != 1) {
+			if (!oracle.check(res, false)) {
 				System.out.println(oracle.getDescriptionOfLastOracleCheck());
 				throw new Exception();
 			}
@@ -89,7 +89,7 @@ public class OracleTest extends OracleTestHelper {
 
 			res = runner.runTestCase(tc);
 
-			if (oracle.check(res, false) != -1) {
+			if (oracle.check(res, false)) {
 				throw new Exception();
 			}
 

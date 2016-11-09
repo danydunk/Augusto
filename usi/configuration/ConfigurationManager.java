@@ -1,30 +1,39 @@
 package usi.configuration;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
 public class ConfigurationManager {
 
+	private static String loaded_file = null;
+	// AUT setting
 	private static String autClasspath;
-	private static String guiFile;
 	private static String autBinDirectory;
 	private static String autMainCLass;
 	private static String resetScriptPath;
-	private static int alloyRunScope = 9;
-	private static int alloyRefinementTimeScope = 9;
 	private static long sleepTime = 600;
+	private static String initial_actions = "";
+	private static int alloyRunScope = 10;
+	private static String ripperFilters = "";
+	// path to the GUI file
+	private static String guiFile;
+	// refinement settings
 	private static long refinementTimeout = 1800000;// 30min
+	private static int alloyRefinementTimeScope = 10;
+	// testcase settings
 	private static int testcaseLength = 15;
 	private static boolean pairwiseTestcase = false;
+	// for multithreading
+	private static int multithreading_batch_size = 8;
 
 	public static void load() throws Exception {
 
-		load("config" + File.separator + "aut.properties");
+		load(PathsManager.getConfigurationFolder() + "aut.properties");
 	}
 
 	public static void load(final String configuration_file_path) throws Exception {
 
+		loaded_file = configuration_file_path;
 		final Properties properties = new Properties();
 		try {
 			properties.load(new FileInputStream(configuration_file_path));
@@ -47,6 +56,48 @@ public class ConfigurationManager {
 		ConfigurationManager.setGUIFile(properties.getProperty("gui_file"));
 		ConfigurationManager.setRefinementAlloyTimeScope(Integer.valueOf(properties
 				.getProperty("refinment_alloy_time_scope")));
+		ConfigurationManager.setMultithreadingBatchSize(Integer.valueOf(properties
+				.getProperty("multithreading_batch_size")));
+		try {
+			ConfigurationManager.setInitialActions(properties.getProperty("initial_actions"));
+		} catch (final Exception e) {
+			ConfigurationManager.setInitialActions("");
+		}
+		try {
+			ConfigurationManager.setRipperFilters(properties.getProperty("ripper_filters"));
+		} catch (final Exception e) {
+			ConfigurationManager.setRipperFilters("");
+		}
+	}
+
+	public static String getLoadedFilePath() {
+
+		return loaded_file;
+	}
+
+	public static int getMultithreadingBatchSize() {
+
+		return multithreading_batch_size;
+	}
+
+	private static void setMultithreadingBatchSize(final int in) {
+
+		multithreading_batch_size = in;
+	}
+
+	public static String getRipperFilters() {
+
+		return ripperFilters;
+	}
+
+	private static void setRipperFilters(final String f) {
+
+		if (f == null) {
+			ConfigurationManager.ripperFilters = "";
+
+		} else {
+			ConfigurationManager.ripperFilters = f;
+		}
 	}
 
 	public static String getAutClasspath() {
@@ -54,7 +105,7 @@ public class ConfigurationManager {
 		return autClasspath;
 	}
 
-	public static void setAutClasspath(final String autClasspath) {
+	private static void setAutClasspath(final String autClasspath) {
 
 		ConfigurationManager.autClasspath = autClasspath;
 	}
@@ -64,7 +115,7 @@ public class ConfigurationManager {
 		return autBinDirectory;
 	}
 
-	public static void setAutBinDirectory(final String autBinDirectory) {
+	private static void setAutBinDirectory(final String autBinDirectory) {
 
 		ConfigurationManager.autBinDirectory = autBinDirectory;
 	}
@@ -74,12 +125,12 @@ public class ConfigurationManager {
 		return autMainCLass;
 	}
 
-	public static void setAutMainCLass(final String autMainCLass) {
+	private static void setAutMainCLass(final String autMainCLass) {
 
 		ConfigurationManager.autMainCLass = autMainCLass;
 	}
 
-	public static void setResetScriptPath(final String resetScriptPath) {
+	private static void setResetScriptPath(final String resetScriptPath) {
 
 		ConfigurationManager.resetScriptPath = resetScriptPath;
 	}
@@ -89,7 +140,7 @@ public class ConfigurationManager {
 		return sleepTime;
 	}
 
-	public static void setSleepTime(final long sleepTime) {
+	private static void setSleepTime(final long sleepTime) {
 
 		ConfigurationManager.sleepTime = sleepTime;
 	}
@@ -99,7 +150,7 @@ public class ConfigurationManager {
 		return ConfigurationManager.alloyRunScope;
 	}
 
-	public static void setAlloyRunScope(final int alloyRunScope) {
+	private static void setAlloyRunScope(final int alloyRunScope) {
 
 		ConfigurationManager.alloyRunScope = alloyRunScope;
 	}
@@ -109,7 +160,7 @@ public class ConfigurationManager {
 		return ConfigurationManager.alloyRefinementTimeScope;
 	}
 
-	public static void setRefinementAlloyTimeScope(final int alloyRefinementTimeScope) {
+	private static void setRefinementAlloyTimeScope(final int alloyRefinementTimeScope) {
 
 		ConfigurationManager.alloyRefinementTimeScope = alloyRefinementTimeScope;
 	}
@@ -124,7 +175,7 @@ public class ConfigurationManager {
 		return ConfigurationManager.refinementTimeout;
 	}
 
-	public static void setRefinementTimeout(final long semanticRefinementTimeout) {
+	private static void setRefinementTimeout(final long semanticRefinementTimeout) {
 
 		ConfigurationManager.refinementTimeout = semanticRefinementTimeout;
 	}
@@ -134,12 +185,12 @@ public class ConfigurationManager {
 		return testcaseLength;
 	}
 
-	public static void setTestcaseLength(final int testcaseLength) {
+	private static void setTestcaseLength(final int testcaseLength) {
 
 		ConfigurationManager.testcaseLength = testcaseLength;
 	}
 
-	public static void setPairwiseTestcase(final boolean pairwiseTestcase) {
+	private static void setPairwiseTestcase(final boolean pairwiseTestcase) {
 
 		ConfigurationManager.pairwiseTestcase = pairwiseTestcase;
 	}
@@ -149,7 +200,7 @@ public class ConfigurationManager {
 		return pairwiseTestcase;
 	}
 
-	public static void setGUIFile(final String guiFile) {
+	private static void setGUIFile(final String guiFile) {
 
 		ConfigurationManager.guiFile = guiFile;
 	}
@@ -159,4 +210,17 @@ public class ConfigurationManager {
 		return guiFile;
 	}
 
+	private static void setInitialActions(final String s) {
+
+		if (s == null) {
+			ConfigurationManager.initial_actions = "";
+		} else {
+			ConfigurationManager.initial_actions = s;
+		}
+	}
+
+	public static String getInitialActions() {
+
+		return ConfigurationManager.initial_actions;
+	}
 }

@@ -9,13 +9,13 @@ import java.util.List;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import usi.gui.GUIParser;
 import usi.gui.functionality.GUIFunctionality_search;
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.functionality.mapping.Instance_window;
-import usi.gui.pattern.GUIPatternParser;
-import usi.gui.pattern.GUI_Pattern;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
+import usi.gui.functionality.instance.Instance_window;
 import usi.gui.structure.GUI;
-import usi.gui.structure.GUIParser;
+import usi.pattern.GUIPatternParser;
+import usi.pattern.structure.GUI_Pattern;
 import usi.xml.XMLUtil;
 
 public class PatternRecognitionTest {
@@ -32,7 +32,7 @@ public class PatternRecognitionTest {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-					.getAbsolutePath());
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -43,7 +43,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -71,13 +71,13 @@ public class PatternRecognitionTest {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/buddi_newripper.xml")
-					.getAbsolutePath());
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
 			final List<Instance_GUI_pattern> res = gfs.match(pattern);
 
-			assertEquals(2, res.size());
+			assertEquals(4, res.size());
 
 		} catch (final Exception e) {
 			e.printStackTrace();

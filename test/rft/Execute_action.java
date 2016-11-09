@@ -4,14 +4,14 @@ import java.io.File;
 import java.util.List;
 
 import resources.test.rft.Execute_actionHelper;
-import usi.action.ActionManager;
+import usi.application.ActionManager;
 import usi.application.ApplicationHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
 import usi.gui.GuiStateManager;
-import usi.gui.semantic.testcase.Click;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.Window;
+import usi.testcase.structure.Click;
 
 /**
  * Description : Functional Test Script
@@ -45,8 +45,7 @@ public class Execute_action extends Execute_actionHelper {
 			final Action_widget aw = windows.get(0).getActionWidgets().get(0);
 
 			final Click click = new Click(windows.get(0), null, aw);
-			final ActionManager manager = new ActionManager(500);
-			manager.executeAction(click);
+			ActionManager.executeAction(click);
 			windows = gui.readGUI();
 
 			if (!windows.get(0).getLabel().contains("Universal Password Manager")) {

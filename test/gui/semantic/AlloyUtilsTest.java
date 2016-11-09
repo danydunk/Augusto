@@ -11,12 +11,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import test.gui.GUIStructureMaker;
 import test.gui.pattern.GUIPatternMaker;
-import test.gui.structure.GUIStructureMaker;
 import usi.gui.functionality.GUIFunctionality_search;
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.pattern.Cardinality;
-import usi.gui.pattern.GUI_Pattern;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
 import usi.gui.semantic.FunctionalitySemantics;
 import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
@@ -28,6 +26,8 @@ import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.semantic.alloy.entity.TernaryRelation;
 import usi.gui.structure.GUI;
+import usi.pattern.structure.Cardinality;
+import usi.pattern.structure.GUI_Pattern;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;

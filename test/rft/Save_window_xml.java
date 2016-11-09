@@ -8,17 +8,17 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import resources.test.rft.Save_window_xmlHelper;
-import usi.action.ActionManager;
+import usi.application.ActionManager;
 import usi.application.ApplicationHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
+import usi.gui.GUIParser;
 import usi.gui.GUIWriter;
 import usi.gui.GuiStateManager;
-import usi.gui.semantic.testcase.Click;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
-import usi.gui.structure.GUIParser;
 import usi.gui.structure.Window;
+import usi.testcase.structure.Click;
 import usi.xml.XMLUtil;
 
 /**
@@ -55,8 +55,7 @@ public class Save_window_xml extends Save_window_xmlHelper {
 				final Action_widget aw = windows.get(0).getActionWidgets().get(0);
 
 				final Click click = new Click(windows.get(0), null, aw);
-				final ActionManager manager = new ActionManager(500);
-				manager.executeAction(click);
+				ActionManager.executeAction(click);
 				windows = gui.readGUI();
 				final GUIWriter writer = new GUIWriter();
 

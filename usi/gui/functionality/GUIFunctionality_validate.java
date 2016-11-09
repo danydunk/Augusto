@@ -6,26 +6,24 @@ import java.util.List;
 import java.util.Map;
 
 import usi.configuration.ConfigurationManager;
-import usi.configuration.ExperimentManager;
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
 import usi.gui.semantic.FunctionalitySemantics;
 import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.semantic.alloy.entity.Fact;
-import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
-import usi.gui.semantic.testcase.Click;
-import usi.gui.semantic.testcase.Fill;
-import usi.gui.semantic.testcase.GUIAction;
-import usi.gui.semantic.testcase.GUITestCase;
-import usi.gui.semantic.testcase.GUITestCaseResult;
-import usi.gui.semantic.testcase.OracleChecker;
-import usi.gui.semantic.testcase.Select;
-import usi.gui.semantic.testcase.TestCaseRunner;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
+import usi.testcase.AlloyTestCaseGenerator;
+import usi.testcase.GUITestCaseResult;
+import usi.testcase.TestCaseRunner;
+import usi.testcase.structure.Click;
+import usi.testcase.structure.Fill;
+import usi.testcase.structure.GUIAction;
+import usi.testcase.structure.GUITestCase;
+import usi.testcase.structure.Select;
 
 public class GUIFunctionality_validate {
 
@@ -44,8 +42,8 @@ public class GUIFunctionality_validate {
 	private Map<String, List<String>> edges_cases;
 
 	// number of times a run command can be executed
-	final int MAX_RUN = 3;
-	final int batch_size = 7;
+	final int MAX_RUN = 2;
+	final int batch_size = ConfigurationManager.getMultithreadingBatchSize();
 
 	public GUIFunctionality_validate(final Instance_GUI_pattern instancePattern, final GUI gui)
 			throws Exception {
@@ -87,8 +85,7 @@ public class GUIFunctionality_validate {
 	private List<GUITestCaseResult> runTestCases(final List<GUITestCase> testcases)
 			throws Exception {
 
-		final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime(),
-				this.gui);
+		final TestCaseRunner runner = new TestCaseRunner(this.gui);
 		final List<GUITestCaseResult> results = new ArrayList<>();
 		for (final GUITestCase tc : testcases) {
 			GUITestCaseResult res = runner.runTestCase(tc);
@@ -101,10 +98,10 @@ public class GUIFunctionality_validate {
 		return results;
 	}
 
-	private List<String> execute() throws Exception {
+	private List<GUITestCaseResult> execute() throws Exception {
 
 		System.gc();
-		final List<String> out = new ArrayList<>();
+		final List<GUITestCaseResult> out = new ArrayList<>();
 
 		SpecificSemantics working_sem_bis = new SpecificSemantics(this.working_sem.getSignatures(),
 				this.working_sem.getFacts(), this.working_sem.getPredicates(),
@@ -132,18 +129,16 @@ public class GUIFunctionality_validate {
 					testcases_filtered.add(tc);
 				}
 			}
-
-			results.addAll(this.runTestCases(testcases_filtered));
-
-			final OracleChecker oracle = new OracleChecker(this.gui);
-
+			final List<GUITestCaseResult> r = this.runTestCases(testcases_filtered);
+			results.addAll(r);
+			out.addAll(r);
 			final List<GUITestCaseResult> to_rerun = new ArrayList<>();
 
 			for (final GUITestCaseResult res : results) {
-				if (oracle.check(res, false) == 0) {
+				if (res.getActions_executed().size() < res.getTc().getActions().size()) {
 					// if the testcase is not run completely
 					to_rerun.add(res);
-					// we dont need the result
+					// we don't need the result
 					final GUITestCase tc = new GUITestCase(null, res.getActions_executed(), res
 							.getTc().getRunCommand());
 					final GUITestCaseResult new_res = new GUITestCaseResult(tc,
@@ -167,16 +162,11 @@ public class GUIFunctionality_validate {
 				if (edge != null && !this.covered_edges.contains(edge)) {
 					this.covered_edges.add(edge);
 				}
-
-				out.add(this.printTCdescription(res.getTc())
-						+ oracle.getDescriptionOfLastOracleCheck());
 			}
-
-			System.out.println(to_rerun.size() + " TESTCASES WERE NOT RUN COMPLETELY.");
-
 			if (to_rerun.size() == 0) {
 				break;
 			}
+			System.out.println(to_rerun.size() + " TESTCASES WERE NOT RUN COMPLETELY.");
 
 			working_sem_bis = new SpecificSemantics(working_sem_bis.getSignatures(),
 					working_sem_bis.getFacts(), working_sem_bis.getPredicates(),
@@ -189,13 +179,9 @@ public class GUIFunctionality_validate {
 		return out;
 	}
 
-	public void validate() throws Exception {
+	public List<GUITestCaseResult> validate() throws Exception {
 
-		final double[] cov_before = ExperimentManager.getCoverage();
-		String coverage = "COVERAGE ACHIEVED DURING REFINEMENT:" + System.lineSeparator()
-				+ "statement " + cov_before[0] + ", branch " + cov_before[1];
-
-		ExperimentManager.resetCoverage();
+		final List<GUITestCaseResult> out = new ArrayList<>();
 
 		final List<Fact> facts = this.instancePattern.getSemantics().getFacts();
 		// fact to eliminate final redundandt actions
@@ -211,7 +197,6 @@ public class GUIFunctionality_validate {
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
 						.getSemantics().getOpenStatements());
 
-		final List<String> testcases_out = new ArrayList<>();
 		System.out.println("COVERING SEMANTIC CASES.");
 
 		List<String> run_commands = this.getAllSemanticCases();
@@ -232,47 +217,48 @@ public class GUIFunctionality_validate {
 				this.working_sem.addRun_command(run);
 			}
 
-			testcases_out.addAll(this.execute());
+			out.addAll(this.execute());
 			batch_num++;
 		}
 
-		System.out.println("COVERING PAIRWISE.");
-		for (final String s : this.covered_edges) {
-			System.out.println(s);
-		}
+		if (ConfigurationManager.getPairwiseTestcase()) {
+			System.out.println("COVERING PAIRWISE.");
 
-		run_commands = new ArrayList<>();
-		// covered_edges at this point contains all the edges that can be
-		// covered
-		for (int x = 0; x < this.covered_edges.size(); x++) {
-			for (int y = x + 1; y < this.covered_edges.size(); y++) {
-				run_commands.add(this.combineRunCommands(this.covered_edges.get(x),
-						this.covered_edges.get(y)));
+			run_commands = new ArrayList<>();
+			// covered_edges at this point contains all the edges that can be
+			// covered
+			for (int x = 0; x < this.covered_edges.size(); x++) {
+				for (int y = x + 1; y < this.covered_edges.size(); y++) {
+					run_commands.add(this.combineRunCommands(this.covered_edges.get(x),
+							this.covered_edges.get(y)));
+				}
+			}
+
+			System.out.println(run_commands.size() + " TESTCASES. RUNNING THEM IN BATCHES OF "
+					+ this.batch_size + ".");
+			// we need to reduce the scope because one run goes in out of
+			// memeory
+			// final int old_tc_size = ConfigurationManager.getTestcaseLength();
+			// ConfigurationManager.setTestcaseLength(12);
+			batch_num = 0;
+			while (((batch_num * this.batch_size)) < run_commands.size()) {
+				System.out.println("BATCH " + (batch_num + 1));
+				this.working_sem = new SpecificSemantics(this.working_sem.getSignatures(),
+						this.working_sem.getFacts(), this.working_sem.getPredicates(),
+						this.working_sem.getFunctions(), this.working_sem.getOpenStatements());
+
+				for (int cont = 0; ((batch_num * this.batch_size) + cont) < run_commands.size()
+						&& cont < this.batch_size; cont++) {
+					final String run = run_commands.get(((batch_num * this.batch_size) + cont));
+					this.working_sem.addRun_command(run);
+				}
+
+				out.addAll(this.execute());
+				batch_num++;
 			}
 		}
 
-		System.out.println(run_commands.size() + " TESTCASES. RUNNING THEM IN BATCHES OF "
-				+ this.batch_size + ".");
-		// we need to reduce the scope because one run goes in out of memeory
-		// final int old_tc_size = ConfigurationManager.getTestcaseLength();
-		// ConfigurationManager.setTestcaseLength(12);
-		batch_num = 0;
-		while (((batch_num * this.batch_size)) < run_commands.size()) {
-			System.out.println("BATCH " + (batch_num + 1));
-			this.working_sem = new SpecificSemantics(this.working_sem.getSignatures(),
-					this.working_sem.getFacts(), this.working_sem.getPredicates(),
-					this.working_sem.getFunctions(), this.working_sem.getOpenStatements());
-
-			for (int cont = 0; ((batch_num * this.batch_size) + cont) < run_commands.size()
-					&& cont < this.batch_size; cont++) {
-				final String run = run_commands.get(((batch_num * this.batch_size) + cont));
-				this.working_sem.addRun_command(run);
-			}
-
-			testcases_out.addAll(this.execute());
-			batch_num++;
-		}
-		System.out.println("COVERING OTHER STRUCTURAL ELEMENTS.");
+		System.out.println("COVERING REMAINING STRUCTURAL ELEMENTS.");
 		// ConfigurationManager.setTestcaseLength(old_tc_size);
 
 		run_commands = this.getAdditionalRunCommands(this.completely_executed_tcs);
@@ -292,16 +278,10 @@ public class GUIFunctionality_validate {
 				this.working_sem.addRun_command(run);
 			}
 
-			testcases_out.addAll(this.execute());
+			out.addAll(this.execute());
 			batch_num++;
 		}
-
-		final double[] cov_after = ExperimentManager.getCoverage();
-
-		coverage += System.lineSeparator() + "COVERAGE ACHIEVED DURING VALIDATION:"
-				+ System.lineSeparator() + "statement " + cov_after[0] + ", branch " + cov_after[1];
-		ExperimentManager.dumpTCresult(testcases_out, coverage);
-
+		return out;
 	}
 
 	// function that returns additional run commands to cover uncovered
@@ -379,44 +359,19 @@ public class GUIFunctionality_validate {
 		return "run {System and {(" + run1_mod + ") and (" + run2_mod + ")} }";
 	}
 
-	private String printTCdescription(final GUITestCase tc) {
-
-		String out = "TESTCASE SIZE = " + tc.getActions().size();
-		int cont = 1;
-		for (final GUIAction act : tc.getActions()) {
-			out += System.lineSeparator();
-			out += "ACTION " + cont;
-			out += System.lineSeparator();
-
-			if (act instanceof Click) {
-				out += "CLICK " + act.getWidget().getId() + " - " + act.getWidget().getLabel();
-			} else if (act instanceof Fill) {
-				final Fill f = (Fill) act;
-				out += "FILL " + f.getWidget().getId() + " - " + act.getWidget().getDescriptor()
-						+ " WITH " + f.getInput();
-			} else if (act instanceof Select) {
-				final Select s = (Select) act;
-				out += "SELECT " + s.getWidget().getId() + " WITH " + s.getIndex();
-			}
-			cont++;
-		}
-		out += System.lineSeparator();
-		return out;
-	}
-
 	protected void generate_run_commands(final FunctionalitySemantics sem) throws Exception {
 
 		this.edges_cases = new HashMap<>();
 
-		final String click = "some t: Time, aw: Action_widget | Track.op.(T/next[t]) in Click and Track.op.(T/next[t]).clicked = aw and";
-		final String click_edge = "some t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and";
+		final String click = "some t: Time | Track.op.(T/next[t]) in Click and";
+		final String click_edge = "some t: Time | click [Track.op.(T/next[t]).clicked, t, T/next[t], Track.op.(T/next[t])] and";
 		for (final String prec : sem.getClickSemantics().getCases().keySet()) {
 
 			final String positive_edge = "run {System and {" + click_edge + " (" + prec
-					+ ") and click_semantics[aw, t]} }";
+					+ ") and click_semantics[Track.op.(T/next[t]).clicked, t]} }";
 			final List<String> positive_semantic_cases = new ArrayList<>();
 			final String negative_edge = "run {System and {" + click_edge + " (" + prec
-					+ ") and not(click_semantics[aw, t])} }";
+					+ ") and not(click_semantics[Track.op.(T/next[t]).clicked, t])} }";
 			final List<String> negative_semantic_cases = new ArrayList<>();
 			this.edges_cases.put(positive_edge, positive_semantic_cases);
 			this.edges_cases.put(negative_edge, negative_semantic_cases);
@@ -457,16 +412,22 @@ public class GUIFunctionality_validate {
 			}
 		}
 
-		final String fill = "some t: Time, iw: Input_widget, v: Value | Track.op.(T/next[t]) in Fill and Track.op.(T/next[t]).filled = iw and Track.op.(T/next[t]).with = v and";
-		final String fill_edge = "some t: Time, iw: Input_widget, v: Value, f: Fill | fill [iw, t, T/next[t], v, f] and";
+		final String fill = "some t: Time | Track.op.(T/next[t]) in Fill and";
+		final String fill_edge = "some t: Time | fill [Track.op.(T/next[t]).filled, t, T/next[t], Track.op.(T/next[t]).with, Track.op.(T/next[t])] and";
 
 		for (final String prec : sem.getFillSemantics().getCases().keySet()) {
 
-			final String positive_edge = "run {System and {" + fill_edge + " (" + prec
-					+ ") and fill_semantics[iw, t, v]} }";
+			final String positive_edge = "run {System and {"
+					+ fill_edge
+					+ " ("
+					+ prec
+					+ ") and fill_semantics[Track.op.(T/next[t]).filled, t, Track.op.(T/next[t]).with]} }";
 			final List<String> positive_semantic_cases = new ArrayList<>();
-			final String negative_edge = "run {System and {" + fill_edge + " (" + prec
-					+ ") and not(fill_semantics[iw, t, v])} }";
+			final String negative_edge = "run {System and {"
+					+ fill_edge
+					+ " ("
+					+ prec
+					+ ") and not(fill_semantics[Track.op.(T/next[t]).filled, t, Track.op.(T/next[t]).with])} }";
 			final List<String> negative_semantic_cases = new ArrayList<>();
 			this.edges_cases.put(positive_edge, positive_semantic_cases);
 			this.edges_cases.put(negative_edge, negative_semantic_cases);
@@ -507,16 +468,22 @@ public class GUIFunctionality_validate {
 			}
 		}
 
-		final String select = "some t: Time, sw: Selectable_widget, o: Object | Track.op.(T/next[t]) in Select and Track.op.(T/next[t]).wid = sw and Track.op.(T/next[t]).selected = o and";
-		final String select_edge = "some t: Time, sw: Selectable_widget, o: Object, s: Select | select [sw, t, T/next[t], o, s] and";
+		final String select = "some t: Time | Track.op.(T/next[t]) in Select and";
+		final String select_edge = "some t: Time | select [Track.op.(T/next[t]).wid, t, T/next[t], Track.op.(T/next[t]).selected_o, Track.op.(T/next[t])] and";
 
 		for (final String prec : sem.getSelectSemantics().getCases().keySet()) {
 
-			final String positive_edge = "run {System and {" + select_edge + " (" + prec
-					+ ") and select_semantics[sw, t, o]} }";
+			final String positive_edge = "run {System and {"
+					+ select_edge
+					+ " ("
+					+ prec
+					+ ") and select_semantics[Track.op.(T/next[t]).wid, t, Track.op.(T/next[t]).selected_o]} }";
 			final List<String> positive_semantic_cases = new ArrayList<>();
-			final String negative_edge = "run {System and {" + select_edge + " (" + prec
-					+ ") and not(select_semantics[sw, t, o])} }";
+			final String negative_edge = "run {System and {"
+					+ select_edge
+					+ " ("
+					+ prec
+					+ ") and not(select_semantics[Track.op.(T/next[t]).wid, t, Track.op.(T/next[t]).selected_o])} }";
 			final List<String> negative_semantic_cases = new ArrayList<>();
 			this.edges_cases.put(positive_edge, positive_semantic_cases);
 			this.edges_cases.put(negative_edge, negative_semantic_cases);

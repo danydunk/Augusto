@@ -9,12 +9,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import usi.gui.pattern.Boolean_regexp;
-import usi.gui.pattern.GUIPatternParser;
-import usi.gui.pattern.GUI_Pattern;
-import usi.gui.pattern.Pattern_action_widget;
-import usi.gui.pattern.Pattern_input_widget;
-import usi.gui.pattern.Pattern_window;
+import usi.pattern.GUIPatternParser;
+import usi.pattern.structure.Boolean_regexp;
+import usi.pattern.structure.GUI_Pattern;
+import usi.pattern.structure.Pattern_action_widget;
+import usi.pattern.structure.Pattern_input_widget;
+import usi.pattern.structure.Pattern_window;
 import usi.xml.XMLUtil;
 
 public class GUIPatternParserTest {
@@ -73,8 +73,10 @@ public class GUIPatternParserTest {
 				}
 			}
 		}
-		assertEquals("Label actions",
-				"(.*( edit | update | modify ).*|^(edit |update |modify )(?!-).*)", paw.getLabel());
+		assertEquals(
+				"Label actions",
+				"(.*( edit | update | modify ).*|^(edit (?!-)|update |modify ).*|^(edit|update|modify)$)",
+				paw.getLabel());
 		assertEquals("Label actions", ".*", piw.getLabel());
 
 		// Test forward link

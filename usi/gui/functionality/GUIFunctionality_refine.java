@@ -6,34 +6,34 @@ import java.util.stream.Collectors;
 
 import usi.application.ApplicationHelper;
 import usi.configuration.ConfigurationManager;
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.functionality.mapping.Instance_window;
-import usi.gui.pattern.Cardinality;
-import usi.gui.pattern.GUI_Pattern;
-import usi.gui.pattern.Pattern_action_widget;
-import usi.gui.pattern.Pattern_input_widget;
-import usi.gui.pattern.Pattern_selectable_widget;
-import usi.gui.pattern.Pattern_widget;
-import usi.gui.pattern.Pattern_window;
-import usi.gui.ripping.Ripper;
+import usi.gui.Ripper;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
+import usi.gui.functionality.instance.Instance_window;
 import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.semantic.alloy.Alloy_Model;
 import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Signature;
-import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
-import usi.gui.semantic.testcase.Click;
-import usi.gui.semantic.testcase.GUIAction;
-import usi.gui.semantic.testcase.GUITestCase;
-import usi.gui.semantic.testcase.GUITestCaseResult;
-import usi.gui.semantic.testcase.OracleChecker;
-import usi.gui.semantic.testcase.TestCaseRunner;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Widget;
 import usi.gui.structure.Window;
+import usi.pattern.structure.Cardinality;
+import usi.pattern.structure.GUI_Pattern;
+import usi.pattern.structure.Pattern_action_widget;
+import usi.pattern.structure.Pattern_input_widget;
+import usi.pattern.structure.Pattern_selectable_widget;
+import usi.pattern.structure.Pattern_widget;
+import usi.pattern.structure.Pattern_window;
+import usi.testcase.AlloyTestCaseGenerator;
+import usi.testcase.GUITestCaseResult;
+import usi.testcase.OracleChecker;
+import usi.testcase.TestCaseRunner;
+import usi.testcase.structure.Click;
+import usi.testcase.structure.GUIAction;
+import usi.testcase.structure.GUITestCase;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
@@ -200,7 +200,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -474,7 +474,7 @@ public class GUIFunctionality_refine {
 							+ " and click_semantics[Action_widget_" + (aw.getId()) + ",t])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -582,8 +582,7 @@ public class GUIFunctionality_refine {
 		if (prev_res != null) {
 			reached_w = prev_res.getResults().get(prev_res.getActions_executed().size() - 1);
 		} else {
-			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime(),
-					this.gui);
+			final TestCaseRunner runner = new TestCaseRunner(this.gui);
 			GUITestCaseResult res = null;
 
 			res = runner.runTestCase(tc);
@@ -596,8 +595,7 @@ public class GUIFunctionality_refine {
 				this.gui.addWindow(reached_w);
 				final List<GUIAction> action_executed = res.getActions_actually_executed();
 
-				final Ripper ripper = new Ripper(ConfigurationManager.getSleepTime(), this.gui,
-						true);
+				final Ripper ripper = new Ripper(this.gui);
 				ripper.ripWindow(action_executed, reached_w);
 				ApplicationHelper.getInstance().closeApplication();
 			}
@@ -737,7 +735,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					this.discarded_semantic_properties.remove(this.current_semantic_property);
 					break mainloop;
 				}
@@ -753,8 +751,7 @@ public class GUIFunctionality_refine {
 
 			GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
 			if (res == null) {
-				final TestCaseRunner runner = new TestCaseRunner(
-						ConfigurationManager.getSleepTime(), this.gui);
+				final TestCaseRunner runner = new TestCaseRunner(this.gui);
 				res = runner.runTestCase(tc);
 
 				// we dont need the result (it wastes too much memory)
@@ -777,14 +774,11 @@ public class GUIFunctionality_refine {
 			}
 			this.observed_tcs.add(res);
 
-			switch (oracle.check(res, true)) {
-			case 1:
+			if (oracle.check(res, true)) {
 				// the beahviour was the same
 				System.out.println("SAME BEAHVIOUR");
 				size = res.getTc().getActions().size() + 2;
-				break;
-			case 0:
-			case -1:
+			} else {
 				System.out.println("DIFFERENT BEAHVIOUR");
 				size = -1;
 				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
@@ -794,7 +788,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
 					this.current_semantic_property = "";
 					return;
 				}
@@ -802,8 +796,6 @@ public class GUIFunctionality_refine {
 				true_constraints = new ArrayList<>();
 				true_constraints.add(this.current_semantic_property);
 				sem_with = addSemanticConstrain_to_Model(sem_with, true_constraints);
-				break;
-
 			}
 		}
 		System.out.println("SEMANTIC PROPERTY REFINE: end.");
@@ -830,13 +822,13 @@ public class GUIFunctionality_refine {
 		constraints.add(prop);
 		sem_filtered = addSemanticConstrain_to_Model(sem_filtered, constraints);
 
-		// we divide the testcases to check in batches of 10
+		// we divide the testcases to check in batches
 		int batchn = 0;
-
-		while ((batchn * 10) < tcs.size()) {
+		final int batch_size = ConfigurationManager.getMultithreadingBatchSize();
+		while ((batchn * batch_size) < tcs.size()) {
 			final List<GUITestCaseResult> batch = new ArrayList<>();
-			for (int x = 0; x < 10 && ((batchn * 10) + x) < tcs.size(); x++) {
-				batch.add(tcs.get(((batchn * 10) + x)));
+			for (int x = 0; x < batch_size && ((batchn * batch_size) + x) < tcs.size(); x++) {
+				batch.add(tcs.get(((batchn * batch_size) + x)));
 			}
 			final List<Run_command_thread> threads = new ArrayList<>();
 			for (int cont = 0; cont < batch.size(); cont++) {

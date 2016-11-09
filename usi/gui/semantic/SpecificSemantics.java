@@ -7,12 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.pattern.Cardinality;
-import usi.gui.pattern.Pattern_action_widget;
-import usi.gui.pattern.Pattern_input_widget;
-import usi.gui.pattern.Pattern_selectable_widget;
-import usi.gui.pattern.Pattern_window;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
 import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.semantic.alloy.Alloy_Model;
 import usi.gui.semantic.alloy.entity.Fact;
@@ -24,6 +19,11 @@ import usi.gui.structure.Input_widget;
 import usi.gui.structure.Option_input_widget;
 import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
+import usi.pattern.structure.Cardinality;
+import usi.pattern.structure.Pattern_action_widget;
+import usi.pattern.structure.Pattern_input_widget;
+import usi.pattern.structure.Pattern_selectable_widget;
+import usi.pattern.structure.Pattern_window;
 
 import com.google.common.collect.Lists;
 

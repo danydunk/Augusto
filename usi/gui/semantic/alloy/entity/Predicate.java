@@ -6,10 +6,12 @@ import java.util.List;
 
 public class Predicate extends AlloyEntity {
 
-	protected final String content;
+	protected String content;
 	protected final LinkedHashMap<Signature, List<String>> inputs;
 
-	public Predicate(final String name, final String content, final LinkedHashMap<Signature, List<String>> inputs) {
+	public Predicate(final String name, final String content,
+			final LinkedHashMap<Signature, List<String>> inputs) {
+
 		super(name);
 		if (content != null) {
 			this.content = content.trim();

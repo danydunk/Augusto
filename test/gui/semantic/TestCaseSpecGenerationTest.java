@@ -11,16 +11,16 @@ import org.junit.Test;
 
 import test.gui.semantic.alloy.entity.SignatureTest;
 import usi.gui.functionality.GUIFunctionality_validate;
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.functionality.mapping.Instance_window;
-import usi.gui.pattern.Cardinality;
-import usi.gui.pattern.GUI_Pattern;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
+import usi.gui.functionality.instance.Instance_window;
 import usi.gui.semantic.FunctionalitySemantics;
 import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.semantic.alloy.entity.Function;
 import usi.gui.semantic.alloy.entity.Predicate;
 import usi.gui.semantic.alloy.entity.Signature;
 import usi.gui.structure.GUI;
+import usi.pattern.structure.Cardinality;
+import usi.pattern.structure.GUI_Pattern;
 
 public class TestCaseSpecGenerationTest {
 
@@ -79,7 +79,7 @@ public class TestCaseSpecGenerationTest {
 				"(aw in Ok and Current_window.is_in.t  in Form and (#aw.goes = 1 and aw.goes in Form)) => filled_required_in_w_test [Current_window.is_in.t, t]"
 						+ System.getProperty("line.separator")
 						+ "(aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0) => (filled_required_test [t] and unique_test [t])",
-				in3);
+						in3);
 
 		// System.out.println(click_s.getContent());
 		final Predicate fill_s = new Predicate("fill_semantics", "", in2);
@@ -102,8 +102,8 @@ public class TestCaseSpecGenerationTest {
 	public void test() {
 
 		try {
-			final Instance_GUI_pattern inst = new Instance_GUI_pattern(new GUI(),
-					new GUI_Pattern(), new ArrayList<Instance_window>());
+			final Instance_GUI_pattern inst = new Instance_GUI_pattern(new GUI(), new GUI_Pattern(
+					"test"), new ArrayList<Instance_window>());
 			final FunctionalitySemantics fs = this.getFunctSemantics();
 
 			final Wrapper wr = new Wrapper(inst, new GUI());

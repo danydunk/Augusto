@@ -25,6 +25,64 @@ public class Semantic_predicate extends Predicate {
 
 	private void detetcCases() throws Exception {
 
+		if (this.identifier.equals("click_semantics")) {
+			this.content = this.content.replace("(aw ", "(Track.op.(T/next[t]).clicked ");
+			this.content = this.content.replace(" aw ", " Track.op.(T/next[t]).clicked ");
+			this.content = this.content.replace(" aw)", " Track.op.(T/next[t]).clicked)");
+			this.content = this.content.replace("#aw ", "#Track.op.(T/next[t]).clicked ");
+			this.content = this.content.replace("#aw)", "#Track.op.(T/next[t]).clicked)");
+			this.content = this.content.replace("(aw.", "(Track.op.(T/next[t]).clicked.");
+			this.content = this.content.replace(" aw.", " Track.op.(T/next[t]).clicked.");
+			this.content = this.content.replace("aw.", "Track.op.(T/next[t]).clicked.");
+			this.content = this.content.replace(".aw)", ".Track.op.(T/next[t]).clicked)");
+			this.content = this.content.replace(".aw ", ".Track.op.(T/next[t]).clicked ");
+
+		}
+		if (this.identifier.equals("fill_semantics")) {
+			this.content = this.content.replace("(iw ", "(Track.op.(T/next[t]).filled ");
+			this.content = this.content.replace(" iw ", " Track.op.(T/next[t]).filled ");
+			this.content = this.content.replace(" iw)", " Track.op.(T/next[t]).filled)");
+			this.content = this.content.replace("#iw ", "#Track.op.(T/next[t]).filled ");
+			this.content = this.content.replace("#iw)", "#Track.op.(T/next[t]).filled)");
+			this.content = this.content.replace("(iw.", "(Track.op.(T/next[t]).filled.");
+			this.content = this.content.replace(" iw.", " Track.op.(T/next[t]).filled.");
+			this.content = this.content.replace("iw.", "Track.op.(T/next[t]).filled.");
+			this.content = this.content.replace(".iw)", ".Track.op.(T/next[t]).filled)");
+			this.content = this.content.replace(".iw ", ".Track.op.(T/next[t]).filled ");
+			this.content = this.content.replace("(v ", "(Track.op.(T/next[t]).with ");
+			this.content = this.content.replace(" v ", " Track.op.(T/next[t]).with ");
+			this.content = this.content.replace(" v)", " Track.op.(T/next[t]).with)");
+			this.content = this.content.replace("#v ", "#Track.op.(T/next[t]).with ");
+			this.content = this.content.replace("#v)", "#Track.op.(T/next[t]).with)");
+			this.content = this.content.replace("(v.", "(Track.op.(T/next[t]).with.");
+			this.content = this.content.replace(" v.", " Track.op.(T/next[t]).with.");
+			this.content = this.content.replace("v.", "Track.op.(T/next[t]).with.");
+			this.content = this.content.replace(".v)", ".Track.op.(T/next[t]).with)");
+			this.content = this.content.replace(".v ", ".Track.op.(T/next[t]).with ");
+		}
+		if (this.identifier.equals("select_semantics")) {
+			this.content = this.content.replace("(sw ", "(Track.op.(T/next[t]).wid ");
+			this.content = this.content.replace(" sw ", " Track.op.(T/next[t]).wid ");
+			this.content = this.content.replace(" sw)", " Track.op.(T/next[t]).wid)");
+			this.content = this.content.replace("#sw ", "#Track.op.(T/next[t]).wid ");
+			this.content = this.content.replace("#sw)", "#Track.op.(T/next[t]).wid)");
+			this.content = this.content.replace("(sw.", "(Track.op.(T/next[t]).wid.");
+			this.content = this.content.replace(" sw.", " Track.op.(T/next[t]).wid.");
+			this.content = this.content.replace("sw.", "Track.op.(T/next[t]).wid.");
+			this.content = this.content.replace(".sw)", ".Track.op.(T/next[t]).wid)");
+			this.content = this.content.replace(".sw ", ".Track.op.(T/next[t]).wid ");
+			this.content = this.content.replace("(o ", "(Track.op.(T/next[t]).selected_o ");
+			this.content = this.content.replace(" o ", " Track.op.(T/next[t]).selected_o ");
+			this.content = this.content.replace(" o)", " Track.op.(T/next[t]).selected_o)");
+			this.content = this.content.replace("#o ", "#Track.op.(T/next[t]).selected_o ");
+			this.content = this.content.replace("#o)", "#Track.op.(T/next[t]).selected_o)");
+			this.content = this.content.replace("(o.", "(Track.op.(T/next[t]).selected_o.");
+			this.content = this.content.replace(" o.", " Track.op.(T/next[t]).selected_o.");
+			this.content = this.content.replace("o.", "Track.op.(T/next[t]).selected_o.");
+			this.content = this.content.replace(".o)", ".Track.op.(T/next[t]).selected_o)");
+			this.content = this.content.replace(".o ", ".Track.op.(T/next[t]).selected_o ");
+		}
+
 		final String separator = System.getProperty("line.separator");
 		final String[] lines = this.content.split(separator);
 		if (lines.length == 1 && "true".equals(lines[0].trim())) {

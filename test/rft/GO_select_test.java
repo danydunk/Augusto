@@ -8,20 +8,20 @@ import org.w3c.dom.Document;
 import resources.test.rft.GO_select_testHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
+import usi.gui.GUIParser;
 import usi.gui.functionality.GUIFunctionality_search;
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.functionality.mapping.Instance_window;
-import usi.gui.pattern.GUIPatternParser;
-import usi.gui.pattern.GUI_Pattern;
-import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
-import usi.gui.semantic.testcase.GUITestCase;
-import usi.gui.semantic.testcase.TestCaseRunner;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
+import usi.gui.functionality.instance.Instance_window;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
-import usi.gui.structure.GUIParser;
 import usi.gui.structure.Input_widget;
 import usi.gui.structure.Option_input_widget;
 import usi.gui.structure.Window;
+import usi.pattern.GUIPatternParser;
+import usi.pattern.structure.GUI_Pattern;
+import usi.testcase.AlloyTestCaseGenerator;
+import usi.testcase.TestCaseRunner;
+import usi.testcase.structure.GUITestCase;
 import usi.xml.XMLUtil;
 
 /**
@@ -50,7 +50,7 @@ public class GO_select_test extends GO_select_testHelper {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-			.getAbsolutePath());
+					.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -102,8 +102,7 @@ public class GO_select_test extends GO_select_testHelper {
 				throw new Exception("");
 			}
 
-			final TestCaseRunner runner = new TestCaseRunner(ConfigurationManager.getSleepTime(),
-					gui);
+			final TestCaseRunner runner = new TestCaseRunner(gui);
 			runner.runTestCase(tests.get(0));
 		} catch (final Exception e) {
 			System.out.println("ERROR");

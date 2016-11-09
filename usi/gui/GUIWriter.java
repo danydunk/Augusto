@@ -24,13 +24,7 @@ import usi.gui.structure.Window;
  */
 public class GUIWriter {
 
-	private Document doc;
-
-	public GUIWriter() {
-
-	}
-
-	public Document writeGUI(final GUI gui) throws Exception {
+	public static Document writeGUI(final GUI gui) throws Exception {
 
 		if (gui == null) {
 			throw new Exception("GUIWriter - writeGUI: null input.");
@@ -38,29 +32,29 @@ public class GUIWriter {
 
 		final DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		final DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-		this.doc = docBuilder.newDocument();
-		final Element gui_tag = this.doc.createElement("GUI");
-		this.doc.appendChild(gui_tag);
+		final Document doc = docBuilder.newDocument();
+		final Element gui_tag = doc.createElement("GUI");
+		doc.appendChild(gui_tag);
 
 		final List<Action_widget> aws = new ArrayList<>();
 
 		for (final Window w : gui.getWindows()) {
 			aws.addAll(w.getActionWidgets());
-			final Element el = this.writeWindow(w);
+			final Element el = writeWindow(w, doc);
 			gui_tag.appendChild(el);
 		}
 
 		for (final Action_widget aw : aws) {
 			List<Window> winds = gui.getStaticForwardLinks(aw.getId());
 			if (winds.size() > 0) {
-				final Element edge = this.doc.createElement("edge");
+				final Element edge = doc.createElement("edge");
 				edge.setAttribute("type", "static");
 				gui_tag.appendChild(edge);
-				final Element from = this.doc.createElement("from");
+				final Element from = doc.createElement("from");
 				from.setTextContent(aw.getId());
 				edge.appendChild(from);
 				for (final Window ww : winds) {
-					final Element to = this.doc.createElement("to");
+					final Element to = doc.createElement("to");
 					to.setTextContent(ww.getId());
 					edge.appendChild(to);
 				}
@@ -68,72 +62,72 @@ public class GUIWriter {
 
 			winds = gui.getDynamicForwardLinks(aw.getId());
 			if (winds.size() > 0) {
-				final Element edge = this.doc.createElement("edge");
+				final Element edge = doc.createElement("edge");
 				edge.setAttribute("type", "dynamic");
 				gui_tag.appendChild(edge);
-				final Element from = this.doc.createElement("from");
+				final Element from = doc.createElement("from");
 				from.setTextContent(aw.getId());
 				edge.appendChild(from);
 				for (final Window ww : winds) {
-					final Element to = this.doc.createElement("to");
+					final Element to = doc.createElement("to");
 					to.setTextContent(ww.getId());
 					edge.appendChild(to);
 				}
 			}
 		}
 
-		return this.doc;
+		return doc;
 	}
 
-	private Element writeWindow(final Window in) throws Exception {
+	public static Element writeWindow(final Window in, final Document doc) throws Exception {
 
-		final Element out = this.doc.createElement("window");
+		final Element out = doc.createElement("window");
 		out.setAttribute("id", in.getId());
 		// position
 		String pos = String.valueOf(in.getX()) + ":" + String.valueOf(in.getY());
-		Element node = this.doc.createElement("pos");
+		Element node = doc.createElement("pos");
 		node.setTextContent(pos);
 		out.appendChild(node);
 		// class
-		node = this.doc.createElement("class");
+		node = doc.createElement("class");
 		node.setTextContent(in.getClasss());
 		out.appendChild(node);
 		// title is added
-		node = this.doc.createElement("title");
+		node = doc.createElement("title");
 		node.setTextContent(in.getLabel());
 		out.appendChild(node);
 		// modal is added
-		node = this.doc.createElement("modal");
+		node = doc.createElement("modal");
 		node.setTextContent(String.valueOf(in.isModal()));
 		out.appendChild(node);
 		// root is added
-		node = this.doc.createElement("root");
+		node = doc.createElement("root");
 		node.setTextContent(String.valueOf(in.isRoot()));
 		out.appendChild(node);
 
 		// action widgets are added
 		for (final Action_widget aw : in.getActionWidgets()) {
-			node = this.doc.createElement("action_widget");
+			node = doc.createElement("action_widget");
 			node.setAttribute("id", aw.getId());
 			out.appendChild(node);
 			// position
 			pos = String.valueOf(aw.getX()) + ":" + String.valueOf(aw.getY());
-			Element subnode = this.doc.createElement("pos");
+			Element subnode = doc.createElement("pos");
 			subnode.setTextContent(pos);
 			node.appendChild(subnode);
 			// class
-			subnode = this.doc.createElement("class");
+			subnode = doc.createElement("class");
 			subnode.setTextContent(aw.getClasss());
 			node.appendChild(subnode);
 			// label
 			if (aw.getLabel() != null) {
-				subnode = this.doc.createElement("label");
+				subnode = doc.createElement("label");
 				subnode.setTextContent(aw.getLabel());
 				node.appendChild(subnode);
 			}
 			// descriptor
 			if (aw.getDescriptor() != null) {
-				subnode = this.doc.createElement("descriptor");
+				subnode = doc.createElement("descriptor");
 				subnode.setTextContent(aw.getDescriptor());
 				node.appendChild(subnode);
 			}
@@ -141,27 +135,27 @@ public class GUIWriter {
 
 		// input widgets are added
 		for (final Input_widget iw : in.getInputWidgets()) {
-			node = this.doc.createElement("input_widget");
+			node = doc.createElement("input_widget");
 			node.setAttribute("id", iw.getId());
 			out.appendChild(node);
 			// position
 			pos = String.valueOf(iw.getX()) + ":" + String.valueOf(iw.getY());
-			Element subnode = this.doc.createElement("pos");
+			Element subnode = doc.createElement("pos");
 			subnode.setTextContent(pos);
 			node.appendChild(subnode);
 			// class
-			subnode = this.doc.createElement("class");
+			subnode = doc.createElement("class");
 			subnode.setTextContent(iw.getClasss());
 			node.appendChild(subnode);
 			// label
 			if (iw.getLabel() != null) {
-				subnode = this.doc.createElement("label");
+				subnode = doc.createElement("label");
 				subnode.setTextContent(iw.getLabel());
 				node.appendChild(subnode);
 			}
 			// descriptor
 			if (iw.getDescriptor() != null) {
-				subnode = this.doc.createElement("descriptor");
+				subnode = doc.createElement("descriptor");
 				subnode.setTextContent(iw.getDescriptor());
 				node.appendChild(subnode);
 			}
@@ -174,43 +168,43 @@ public class GUIWriter {
 			} else {
 				value = iw.getValue();
 			}
-			subnode = this.doc.createElement("value");
+			subnode = doc.createElement("value");
 			subnode.setTextContent(value);
 			node.appendChild(subnode);
 		}
 
 		// selectable widgets are added
 		for (final Selectable_widget sw : in.getSelectableWidgets()) {
-			node = this.doc.createElement("selectable_widget");
+			node = doc.createElement("selectable_widget");
 			node.setAttribute("id", sw.getId());
 			out.appendChild(node);
 			// position
 			pos = String.valueOf(sw.getX()) + ":" + String.valueOf(sw.getY());
-			Element subnode = this.doc.createElement("pos");
+			Element subnode = doc.createElement("pos");
 			subnode.setTextContent(pos);
 			node.appendChild(subnode);
 			// class
-			subnode = this.doc.createElement("class");
+			subnode = doc.createElement("class");
 			subnode.setTextContent(sw.getClasss());
 			node.appendChild(subnode);
 			// label
 			if (sw.getLabel() != null) {
-				subnode = this.doc.createElement("label");
+				subnode = doc.createElement("label");
 				subnode.setTextContent(sw.getLabel());
 				node.appendChild(subnode);
 			}
 			// descriptor
 			if (sw.getDescriptor() != null) {
-				subnode = this.doc.createElement("descriptor");
+				subnode = doc.createElement("descriptor");
 				subnode.setTextContent(sw.getDescriptor());
 				node.appendChild(subnode);
 			}
 			// size
-			subnode = this.doc.createElement("size");
+			subnode = doc.createElement("size");
 			subnode.setTextContent(String.valueOf(sw.getSize()));
 			node.appendChild(subnode);
 			// selected
-			subnode = this.doc.createElement("selected");
+			subnode = doc.createElement("selected");
 			subnode.setTextContent(String.valueOf(sw.getSelected()));
 			node.appendChild(subnode);
 		}

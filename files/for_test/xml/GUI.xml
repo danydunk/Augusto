@@ -48,6 +48,13 @@
 			<label>field2</label>
 			<value></value>
 		</input_widget>
+		<selectable_widget id="sw1">
+			<pos>1:1</pos>
+			<class>class</class>			
+			<label>field2</label>
+			<size>0</size>
+			<selected>-1</selected>
+		</selectable_widget>
 	</window>
 	<window id="w3">
 		<pos>1:1</pos>

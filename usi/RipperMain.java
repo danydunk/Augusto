@@ -3,7 +3,7 @@ package usi;
 import resources.usi.RipperMainHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
-import usi.gui.ripping.Ripper;
+import usi.gui.Ripper;
 import usi.gui.structure.GUI;
 
 /**
@@ -62,7 +62,7 @@ public class RipperMain extends RipperMainHelper {
 			}
 
 			ExperimentManager.init();
-			final Ripper ripper = new Ripper(ConfigurationManager.getSleepTime(), true);
+			final Ripper ripper = new Ripper();
 			final GUI gui = ripper.ripApplication();
 			ExperimentManager.dumpGUI(gui, out_file);
 

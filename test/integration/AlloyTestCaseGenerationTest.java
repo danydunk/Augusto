@@ -11,16 +11,16 @@ import java.util.List;
 import org.junit.Test;
 
 import usi.gui.functionality.GUIFunctionality_validate;
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.functionality.mapping.Instance_window;
-import usi.gui.pattern.GUI_Pattern;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
+import usi.gui.functionality.instance.Instance_window;
 import usi.gui.semantic.FunctionalitySemantics;
 import usi.gui.semantic.SpecificSemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.semantic.alloy.Alloy_Model;
-import usi.gui.semantic.testcase.AlloyTestCaseGenerator;
-import usi.gui.semantic.testcase.GUITestCase;
 import usi.gui.structure.GUI;
+import usi.pattern.structure.GUI_Pattern;
+import usi.testcase.AlloyTestCaseGenerator;
+import usi.testcase.structure.GUITestCase;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 public class AlloyTestCaseGenerationTest {
@@ -62,8 +62,8 @@ public class AlloyTestCaseGenerationTest {
 			final Alloy_Model func_spec = AlloyUtil.loadAlloyModelFromString(spec_model);
 			final SpecificSemantics spec_sem = SpecificSemantics.instantiate(func_spec);
 
-			final Instance_GUI_pattern inst = new Instance_GUI_pattern(new GUI(),
-					new GUI_Pattern(), new ArrayList<Instance_window>()) {
+			final Instance_GUI_pattern inst = new Instance_GUI_pattern(new GUI(), new GUI_Pattern(
+					"test"), new ArrayList<Instance_window>()) {
 
 				@Override
 				public void generateSpecificSemantics() throws Exception {
@@ -89,8 +89,8 @@ public class AlloyTestCaseGenerationTest {
 					return null;
 				}
 			}
-			final Instance_GUI_pattern inst2 = new Instance_GUI_pattern(new GUI(),
-					new GUI_Pattern(), new ArrayList<Instance_window>());
+			final Instance_GUI_pattern inst2 = new Instance_GUI_pattern(new GUI(), new GUI_Pattern(
+					"test"), new ArrayList<Instance_window>());
 			final Wrapper2 wr = new Wrapper2(inst2, null);
 			final List<String> runs = wr.generate(inst.getSemantics());
 			for (final String run : runs) {

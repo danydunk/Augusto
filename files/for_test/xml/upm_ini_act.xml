@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<GUITestCase>
+    <run_command/>
+    <action>
+        <type>click</type>
+        <widget>aw1</widget>
+        <source_window>
+            <window id="w1">
+                <pos>551:289</pos>
+                <class>javax.swing.JDialog</class>
+                <title>Master Password...</title>
+                <modal>true</modal>
+                <root>true</root>
+                <action_widget id="aw1">
+                    <pos>642:372</pos>
+                    <class>ButtonUI</class>
+                    <label>OK</label>
+                </action_widget>
+                <action_widget id="aw2">
+                    <pos>723:372</pos>
+                    <class>ButtonUI</class>
+                    <label>Cancel</label>
+                </action_widget>
+                <input_widget id="iw1">
+                    <pos>611:343</pos>
+                    <class>PasswordFieldUI</class>
+                    <descriptor>Please enter the master password for this database</descriptor>
+                    <value/>
+                </input_widget>
+            </window>
+        </source_window>
+    </action>
+</GUITestCase>

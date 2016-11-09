@@ -8,13 +8,13 @@ import org.w3c.dom.Document;
 import resources.test.rft.Refinement_buddi_crudHelper;
 import usi.configuration.ConfigurationManager;
 import usi.configuration.ExperimentManager;
+import usi.gui.GUIParser;
 import usi.gui.functionality.GUIFunctionality_refine;
 import usi.gui.functionality.GUIFunctionality_search;
-import usi.gui.functionality.mapping.Instance_GUI_pattern;
-import usi.gui.pattern.GUIPatternParser;
-import usi.gui.pattern.GUI_Pattern;
+import usi.gui.functionality.instance.Instance_GUI_pattern;
 import usi.gui.structure.GUI;
-import usi.gui.structure.GUIParser;
+import usi.pattern.GUIPatternParser;
+import usi.pattern.structure.GUI_Pattern;
 import usi.xml.XMLUtil;
 
 /**
