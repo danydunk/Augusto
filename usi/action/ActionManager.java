@@ -24,12 +24,22 @@ public class ActionManager {
 	}
 
 	/*
-	 *
+	 * 
 	 * GUI must be read before calling this method This function returns true if
 	 * the action was executed, false if it could not be executed because the
 	 * widget was disabled It throws an exception if there is no
 	 */
 	public boolean executeAction(final GUIAction act) throws Exception {
+
+		try {
+			return this.executeAction_core(act);
+		} catch (final Exception e) {
+			GuiStateManager.getInstance().readGUI();
+			return this.executeAction_core(act);
+		}
+	}
+
+	private boolean executeAction_core(final GUIAction act) throws Exception {
 
 		final GuiStateManager guimanager = GuiStateManager.getInstance();
 
