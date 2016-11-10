@@ -1,0 +1,31 @@
+TESTCASE SIZE = 14
+ACTION 1
+CLICK aw20 - Account - Add Account
+ACTION 2
+FILL iw21 - URL WITH 0
+ACTION 3
+CLICK aw63 - Cancel
+ACTION 4
+CLICK aw20 - Account - Add Account
+ACTION 5
+FILL iw21 - URL WITH ddd
+ACTION 6
+FILL iw22 - Notes WITH test
+ACTION 7
+FILL iw21 - URL WITH ddd
+ACTION 8
+CLICK aw63 - Cancel
+ACTION 9
+CLICK aw20 - Account - Add Account
+ACTION 10
+FILL iw21 - URL WITH ddd
+ACTION 11
+FILL iw22 - Notes WITH 0
+ACTION 12
+CLICK aw63 - Cancel
+ACTION 13
+CLICK aw20 - Account - Add Account
+ACTION 14
+CLICK aw63 - Cancel
+
+TEST CASE RUN CORRECTLY

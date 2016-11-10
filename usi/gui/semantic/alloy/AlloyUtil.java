@@ -892,7 +892,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1422,7 +1422,7 @@ public class AlloyUtil {
 			runCom += "," + awscope + " Action_widget ";
 		}
 		if (vscope > -1) {
-			runCom += "," + (vscope + totalscope) + " Value ";
+			runCom += "," + (vscope + (op_size * 2 / 3)) + " Value ";
 		}
 		if (iwscope > -1) {
 			runCom += "," + iwscope + " Input_widget ";

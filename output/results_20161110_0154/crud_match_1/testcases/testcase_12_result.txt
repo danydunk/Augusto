@@ -1,0 +1,31 @@
+TESTCASE SIZE = 14
+ACTION 1
+CLICK aw20 - Account - Add Account
+ACTION 2
+CLICK aw62 - OK
+ACTION 3
+CLICK aw20 - Account - Add Account
+ACTION 4
+FILL iw17 - Account WITH generic string
+ACTION 5
+CLICK aw63 - Cancel
+ACTION 6
+SELECT sw1 WITH 0
+ACTION 7
+CLICK aw20 - Account - Add Account
+ACTION 8
+CLICK aw63 - Cancel
+ACTION 9
+SELECT sw1 WITH 0
+ACTION 10
+CLICK aw5 - Delete Account
+ACTION 11
+CLICK aw20 - Account - Add Account
+ACTION 12
+CLICK aw63 - Cancel
+ACTION 13
+CLICK aw20 - Account - Add Account
+ACTION 14
+CLICK aw62 - OK
+
+TEST CASE RUN CORRECTLY

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xml_schemas/Pattern_schema.xsd" 
+	alloy="CRUD.als" name="CRUD">
+	<window id="initial" card="one" alloy="Initial">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>any</modal>
+		<root>true</root>
+		<action_widget id="paw1" card="some" alloy="Create_trigger">
+			<label>(.*( new |add | create ).*|^(new |add |create ).*|^(new|add|create)$)</label>
+			<class>.*</class>
+		</action_widget>
+		<action_widget id="paw2" card="set" alloy="Read_trigger">
+			<label>(.* view .*|^view (?!-).*|^view$)</label>
+			<class>.*</class>
+		</action_widget>
+		<action_widget id="paw3" card="some" alloy="Update_trigger">
+			<label>(.*( edit | update | modify ).*|^(edit |update |modify )(?!-).*|^(edit|update|modify)$)</label>
+			<class>.*</class>
+		</action_widget>
+		<action_widget id="paw4" card="some" alloy="Delete_trigger">
+			<label>(.* delete .*|^delete .*|^delete^)</label>
+			<class>.*</class>
+		</action_widget>
+		<selectable_widget id="psw1" card="one" alloy="">
+			<label>.*</label>
+			<class>.*</class>
+			<size>.*</size>
+		</selectable_widget>
+	</window>
+	<window id="form" card="one" alloy="Form">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>any</modal>
+		<root>false</root>
+		<action_widget id="paw5" card="one" alloy="Ok">
+			<label>^(ok|save)</label>
+			<class>.*</class>
+		</action_widget>
+		<action_widget id="paw6" card="one" alloy="Cancel">
+			<label>^(cancel)</label>
+			<class>.*</class>
+		</action_widget>
+		<input_widget id="piw1" card="some" alloy="">
+			<label>.*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+	</window>
+	<window id="view" card="lone" alloy="View">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>any</modal>
+		<root>false</root>
+		<action_widget id="paw7" card="one" alloy="Ok">
+			<label>^(ok|back)</label>
+			<class>.*</class>
+		</action_widget>
+		<input_widget id="piw3" card="some" alloy="">
+			<label>.*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+	</window>
+	<edge type="static">
+		<from>paw1</from>
+		<to>form</to>
+	</edge>
+	<edge type="static">
+		<from>paw7</from>
+		<to>initial</to>
+	</edge>
+	<edge type="static">
+		<from>paw6</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw5</from>
+		<to>initial</to>		
+	</edge>
+	<edge type="dynamic">
+		<from>paw2</from>
+		<to>view</to>		
+	</edge>
+	<edge type="dynamic">
+		<from>paw3</from>
+		<to>form</to>		
+	</edge>
+	<edge type="dynamic">
+		<from>paw4</from>
+		<to>initial</to>
+	</edge>	
+</pattern>

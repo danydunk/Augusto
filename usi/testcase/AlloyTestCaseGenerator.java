@@ -200,7 +200,7 @@ public class AlloyTestCaseGenerator {
 				}
 			}
 		ts[0].interrupt();
-		// ts[1].interrupt();
+		ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -906,8 +906,8 @@ public class AlloyTestCaseGenerator {
 						scopes.add(awscope);
 					}
 					if (this.value_scope > -1) {
-						final CommandScope vscope = new CommandScope(v, false, (this.value_scope
-								+ time_scope - 1));
+						final CommandScope vscope = new CommandScope(v, false,
+								(this.value_scope + ((time_scope - 1) * 2 / 3)));
 						scopes.add(vscope);
 					}
 					if (this.iw_scope > -1) {

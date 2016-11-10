@@ -200,7 +200,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -474,7 +474,7 @@ public class GUIFunctionality_refine {
 							+ " and click_semantics[Action_widget_" + (aw.getId()) + ",t])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -735,7 +735,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					this.discarded_semantic_properties.remove(this.current_semantic_property);
 					break mainloop;
 				}
@@ -788,7 +788,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
 					this.current_semantic_property = "";
 					return;
 				}
@@ -949,8 +949,8 @@ public class GUIFunctionality_refine {
 					this.discarded_semantic_properties.add("not(" + property + ")");
 					current = "";
 					// add constraint
-					System.out.println("GET TESTCASEE: new invalid property added - not("
-							+ property + ")");
+					System.out.println("GET TESTCASE: new invalid property added - not(" + property
+							+ ")");
 				}
 			}
 		}
