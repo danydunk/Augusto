@@ -101,6 +101,9 @@ public class AlloyTestCaseGenerator {
 		for (final RunCommandThread t : threads) {
 			t.join();
 
+			// if (t.getSolution() == null) {
+			// System.out.println(this.instance.getSemantics());
+			// }
 			if (!t.hasExceptions() && t.getSolution() != null && t.getSolution().satisfiable()) {
 				solutions.add(t.getSolution());
 			} else {
@@ -199,8 +202,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-		ts[0].interrupt();
-		ts[1].interrupt();
+			ts[0].interrupt();
+			ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
