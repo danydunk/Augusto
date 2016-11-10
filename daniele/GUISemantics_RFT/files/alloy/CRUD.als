@@ -83,14 +83,10 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] {
 }
 
 pred click_semantics [aw: Action_widget, t: Time] {
-	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
-	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
+	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] 
+	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] 
 	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in READ) => (2=(1+1))
 	(aw in Delete_trigger) => (2=(1+1))
-	(aw in Read_trigger) => (2=(1+1))
-	(aw in Update_trigger) => (2=(1+1))
-	(aw in Create_trigger) => (2=(1+1))
-	(aw in Cancel and Current_window.is_in.t  in Form) => (2=(1+1))
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Create_trigger) => (Current_crud_op.operation.t' = CREATE and List.contains.t' = List.contains.t and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #Selectable_widget.selected.t' = 0)
@@ -125,9 +121,9 @@ pred filled_required_test [w: Form, t: Time] {
 pred  unique_test [w: Form, t: Time] { 
 	all p: Property_unique | all o2: List.contains.t | p.associated_to in w.iws and ((#p.has_value.o2 = 1) => p.associated_to.content.t != p.has_value.o2) //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
 }
-pred valid_data_test [w: Form, t: Time] {
-	all v: w.iws.content.t | not(v in Invalid)
-}
+//pred valid_data_test [w: Form, t: Time] {
+//	all v: w.iws.content.t | not(v in Invalid)
+//}
 pred  unique_for_update_test [w: Form, t: Time] { 
 	all p: Property_unique | all o2: (List.contains.t-Selectable_widget.selected.t) | p.associated_to in w.iws and ((#p.has_value.o2 = 1) => p.associated_to.content.t != p.has_value.o2) //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
 }

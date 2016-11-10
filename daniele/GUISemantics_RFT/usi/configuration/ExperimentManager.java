@@ -109,13 +109,14 @@ public class ExperimentManager {
 
 		int cont = 1;
 		for (final GUITestCaseResult result : results) {
-			XMLUtil.save(directory + File.separator + "testcase" + cont + ".xml",
+			XMLUtil.save(directory + File.separator + "testcase_" + cont + ".xml",
 					GUITestCaseWriter.writeGUITestCase(result.getTc()));
 			final OracleChecker checker = new OracleChecker(gui);
 			checker.check(result, false);
-			final PrintWriter writer = new PrintWriter(directory + File.separator + "testcase"
+			final PrintWriter writer = new PrintWriter(directory + File.separator + "testcase_"
 					+ cont + "_result.txt", "UTF-8");
-			writer.print(checker.getDescriptionOfLastOracleCheck());
+			writer.print(result.getTc().toString() + System.getProperty("line.separator")
+					+ checker.getDescriptionOfLastOracleCheck());
 			writer.close();
 			cont++;
 		}
@@ -140,7 +141,8 @@ public class ExperimentManager {
 
 	public static String createResultsFolder() {
 
-		final String directory = PathsManager.getOutputFolder() + "results_" + DateUtility.now();
+		final String directory = PathsManager.getOutputFolder() + "results_" + DateUtility.now()
+				+ File.separator;
 		createFolder(directory);
 		return directory;
 	}

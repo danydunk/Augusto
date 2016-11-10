@@ -18,6 +18,11 @@
     <metadata>generic-input-data</metadata>
     <values>
       <valid>generic string</valid>
+      <valid>aaa</valid> 
+      <valid>bbb</valid>
+      <valid>ccc</valid>
+      <valid>ddd</valid>
+      <valid>eee</valid>
       <valid>0</valid>
       <valid>generic</valid>
       <valid>string</valid>

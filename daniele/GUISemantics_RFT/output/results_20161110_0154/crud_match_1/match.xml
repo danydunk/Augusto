@@ -1,0 +1,750 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<instance_GUI_pattern>
+    <GUI_pattern>CRUD</GUI_pattern>
+    <windows>
+        <instance_window instance_id="w2" pattern_id="initial">
+            <mapping>
+                <pattern>paw1</pattern>
+                <instance>aw20</instance>
+            </mapping>
+            <mapping>
+                <pattern>paw1</pattern>
+                <instance>aw3</instance>
+            </mapping>
+            <mapping>
+                <pattern>paw2</pattern>
+                <instance>aw23</instance>
+            </mapping>
+            <mapping>
+                <pattern>paw3</pattern>
+                <instance>aw21</instance>
+            </mapping>
+            <mapping>
+                <pattern>paw3</pattern>
+                <instance>aw4</instance>
+            </mapping>
+            <mapping>
+                <pattern>paw4</pattern>
+                <instance>aw22</instance>
+            </mapping>
+            <mapping>
+                <pattern>paw4</pattern>
+                <instance>aw5</instance>
+            </mapping>
+            <mapping>
+                <pattern>psw1</pattern>
+                <instance>sw1</instance>
+            </mapping>
+        </instance_window>
+        <instance_window instance_id="w8" pattern_id="form">
+            <mapping>
+                <pattern>paw5</pattern>
+                <instance>aw62</instance>
+            </mapping>
+            <mapping>
+                <pattern>paw6</pattern>
+                <instance>aw63</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw1</pattern>
+                <instance>iw17</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw1</pattern>
+                <instance>iw18</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw1</pattern>
+                <instance>iw20</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw1</pattern>
+                <instance>iw19</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw1</pattern>
+                <instance>iw21</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw1</pattern>
+                <instance>iw22</instance>
+            </mapping>
+        </instance_window>
+        <instance_window instance_id="w11" pattern_id="view">
+            <mapping>
+                <pattern>paw7</pattern>
+                <instance>aw69</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw32</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw33</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw35</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw34</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw36</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw37</instance>
+            </mapping>
+        </instance_window>
+    </windows>
+    <semantics>open util/ordering [Time] as T&#13;
+open orderingFIXED [Input_widget] as IW&#13;
+open util/ternary&#13;
+open util/relation&#13;
+sig Time { }&#13;
+abstract sig Operation { }&#13;
+sig Click extends Operation {&#13;
+	clicked: Action_widget,&#13;
+}&#13;
+sig Fill extends Operation {&#13;
+	filled: Input_widget,&#13;
+	with: Value,&#13;
+}&#13;
+sig Select extends Operation {&#13;
+	wid: Selectable_widget,&#13;
+	selected: Object,&#13;
+}&#13;
+sig Select_doubleclick extends Operation {&#13;
+	widg: Selectable_widget,&#13;
+	selected_o: Object,&#13;
+}&#13;
+one sig Track {&#13;
+	op: Operation lone -&gt; Time,&#13;
+}&#13;
+abstract sig Window {&#13;
+	aws: set Action_widget,&#13;
+	iws: set Input_widget,&#13;
+	sws: set Selectable_widget,&#13;
+}&#13;
+abstract sig Action_widget {&#13;
+	goes: set Window,&#13;
+}&#13;
+sig Value { }&#13;
+sig Invalid in Value { }&#13;
+abstract sig Input_widget {&#13;
+	content: Value lone -&gt; Time,&#13;
+}&#13;
+sig Object {&#13;
+	appeared: Time,&#13;
+}&#13;
+abstract sig Selectable_widget {&#13;
+	list: Object -&gt; Time,&#13;
+	selected: Object lone -&gt; Time,&#13;
+}&#13;
+one sig Current_window {&#13;
+	is_in: Window one -&gt; Time,&#13;
+}&#13;
+abstract sig Ok extends Action_widget { }&#13;
+abstract sig Cancel extends Action_widget { }&#13;
+abstract sig Create_trigger extends Action_widget { }&#13;
+abstract sig Read_trigger extends Action_widget { }&#13;
+abstract sig Update_trigger extends Action_widget { }&#13;
+abstract sig Delete_trigger extends Action_widget { }&#13;
+abstract sig Form extends Window { }&#13;
+abstract sig View extends Window {&#13;
+	mapping: Input_widget -&gt; Input_widget,&#13;
+}&#13;
+abstract sig Initial extends Window { }&#13;
+abstract sig Crud_op { }&#13;
+one sig CREATE extends Crud_op { }&#13;
+one sig READ extends Crud_op { }&#13;
+one sig UPDATE extends Crud_op { }&#13;
+one sig Current_crud_op {&#13;
+	operation: Crud_op lone -&gt; Time,&#13;
+}&#13;
+sig Field {&#13;
+	associated_to: Input_widget,&#13;
+	has_value: Value lone -&gt; Object,&#13;
+}&#13;
+sig Property_unique in Field { }&#13;
+sig Property_required in Field { }&#13;
+one sig List {&#13;
+	contains: Object -&gt; Time,&#13;
+}&#13;
+one sig Window_w11 extends View { }&#13;
+one sig Window_w2 extends Initial { }&#13;
+one sig Window_w8 extends Form { }&#13;
+one sig Input_widget_iw32 extends Input_widget { }&#13;
+one sig Input_widget_iw33 extends Input_widget { }&#13;
+one sig Input_widget_iw35_value_0 extends Value { }&#13;
+one sig Input_widget_iw35_value_1 extends Value { }&#13;
+one sig Input_widget_iw35 extends Input_widget { }&#13;
+one sig Input_widget_iw34 extends Input_widget { }&#13;
+one sig Input_widget_iw36 extends Input_widget { }&#13;
+one sig Input_widget_iw37 extends Input_widget { }&#13;
+one sig Action_widget_aw69 extends Ok { }&#13;
+one sig Action_widget_aw20 extends Create_trigger { }&#13;
+one sig Action_widget_aw21 extends Update_trigger { }&#13;
+one sig Action_widget_aw22 extends Delete_trigger { }&#13;
+one sig Action_widget_aw23 extends Read_trigger { }&#13;
+one sig Action_widget_aw3 extends Create_trigger { }&#13;
+one sig Action_widget_aw4 extends Update_trigger { }&#13;
+one sig Action_widget_aw5 extends Delete_trigger { }&#13;
+one sig Selectable_widget_sw1 extends Selectable_widget { }&#13;
+one sig Input_widget_iw17 extends Input_widget { }&#13;
+one sig Input_widget_iw18 extends Input_widget { }&#13;
+one sig Input_widget_iw20_value_0 extends Value { }&#13;
+one sig Input_widget_iw20_value_1 extends Value { }&#13;
+one sig Input_widget_iw20 extends Input_widget { }&#13;
+one sig Input_widget_iw19 extends Input_widget { }&#13;
+one sig Input_widget_iw21 extends Input_widget { }&#13;
+one sig Input_widget_iw22 extends Input_widget { }&#13;
+one sig Action_widget_aw62 extends Ok { }&#13;
+one sig Action_widget_aw63 extends Cancel { }&#13;
+fact fact1{&#13;
+	all iw: Input_widget | one w: Window | iw in w.iws&#13;
+	all aw: Action_widget | one w: Window | aw in w.aws //and #aw.goes &lt; 2&#13;
+	all sw: Selectable_widget | one w: Window | sw in w.sws&#13;
+	all o: Object | some t: Time | o in Selectable_widget.list.t&#13;
+&#13;
+}&#13;
+fact fact2{&#13;
+	all vw: View | one ok: Ok | #vw.sws = 0 and vw.aws = ok&#13;
+	#View = 1 =&gt; #View.iws = #Form.iws&#13;
+	#View = 1 =&gt; all iw: View.iws | one iww: Form.iws | View.mapping.iw = iww and #View.mapping.iw = 1&#13;
+	#View = 1 =&gt; 	all iww: Form.iws | one iw: View.iws | View.mapping.iw = iww&#13;
+	#View = 1 =&gt; 	no iww, iww2: Form.iws | one iw, iw2: View.iws | IW/lt[iww,iww2] and IW/lt[iw2,iw] and View.mapping.iw = iww and View.mapping.iw2 = iww2&#13;
+	all iw: Initial | iw.aws = (Create_trigger+Read_trigger+Update_trigger+Delete_trigger) and #iw.iws = 0 and #iw.sws = 1&#13;
+	all fw: Form | one ok: Ok,  cancel: Cancel | #fw.iws &gt; 0 and fw.aws = ok+cancel and #fw.sws = 0 and ok.goes in Initial and cancel.goes in Initial&#13;
+	#Window = #Form + #Initial + #View&#13;
+	#Ok.goes &lt; 2&#13;
+	#Create_trigger.goes &lt; 2&#13;
+	#Read_trigger.goes &lt; 2&#13;
+	#Update_trigger.goes &lt; 2&#13;
+	#Delete_trigger.goes &lt; 2&#13;
+&#13;
+}&#13;
+fact fact3{&#13;
+	#Field = #Form.iws&#13;
+	all t: Time | List.contains.t = Selectable_widget.list.t&#13;
+	all f: Field | #f.associated_to = 1&#13;
+	all iw: Input_widget | iw in Form.iws =&gt; #associated_to.iw = 1&#13;
+	all t: Time | (Current_window.is_in.t in Initial) &lt;=&gt; #Current_crud_op.operation.t = 0&#13;
+&#13;
+}&#13;
+fact windows_number{&#13;
+	#Window = 3&#13;
+&#13;
+}&#13;
+fact Window_w11_iws{&#13;
+	Window_w11.iws = Input_widget_iw32 + Input_widget_iw33 + Input_widget_iw35 + Input_widget_iw34 + Input_widget_iw36 + Input_widget_iw37&#13;
+	all t: Time | #Input_widget_iw32.content.t &gt; 0 =&gt; not(Input_widget_iw32.content.t in Invalid)&#13;
+	#Input_widget_iw32.content.(T/first) = 0&#13;
+	all t: Time | #Input_widget_iw33.content.t &gt; 0 =&gt; not(Input_widget_iw33.content.t in Invalid)&#13;
+	#Input_widget_iw33.content.(T/first) = 0&#13;
+	no f: Fill | f.filled in (Input_widget - Input_widget_iw35) and f.with in (Input_widget_iw35_value_0+Input_widget_iw35_value_1)&#13;
+	all f: Fill |  f.filled in Input_widget_iw35 =&gt; f.with in (Input_widget_iw35_value_0+Input_widget_iw35_value_1)&#13;
+	all v: (Input_widget_iw35_value_0+Input_widget_iw35_value_1) | not (v in Invalid)&#13;
+	Input_widget_iw35.content.(T/first) = Input_widget_iw35_value_1&#13;
+	all t: Time | #Input_widget_iw34.content.t &gt; 0 =&gt; not(Input_widget_iw34.content.t in Invalid)&#13;
+	#Input_widget_iw34.content.(T/first) = 0&#13;
+	all t: Time | #Input_widget_iw36.content.t &gt; 0 =&gt; not(Input_widget_iw36.content.t in Invalid)&#13;
+	#Input_widget_iw36.content.(T/first) = 0&#13;
+	all t: Time | #Input_widget_iw37.content.t &gt; 0 =&gt; not(Input_widget_iw37.content.t in Invalid)&#13;
+	#Input_widget_iw37.content.(T/first) = 0&#13;
+	IW/next[Input_widget_iw32]=Input_widget_iw33 and IW/next[Input_widget_iw33]=Input_widget_iw35 and IW/next[Input_widget_iw35]=Input_widget_iw34 and IW/next[Input_widget_iw34]=Input_widget_iw36 and IW/next[Input_widget_iw36]=Input_widget_iw37&#13;
+&#13;
+}&#13;
+fact Window_w11_aws{&#13;
+	Window_w11.aws = Action_widget_aw69&#13;
+	Action_widget_aw69.goes = Window_w2&#13;
+&#13;
+}&#13;
+fact Window_w2_aws{&#13;
+	Window_w2.aws = Action_widget_aw20 + Action_widget_aw21 + Action_widget_aw22 + Action_widget_aw23 + Action_widget_aw3 + Action_widget_aw4 + Action_widget_aw5&#13;
+	Action_widget_aw20.goes = Window_w8&#13;
+	Action_widget_aw21.goes = Window_w8&#13;
+	Action_widget_aw22.goes = Window_w2&#13;
+	Action_widget_aw23.goes = Window_w11&#13;
+	Action_widget_aw3.goes = Window_w8&#13;
+	Action_widget_aw4.goes = Window_w8&#13;
+	Action_widget_aw5.goes = Window_w2&#13;
+&#13;
+}&#13;
+fact Window_w2_sws{&#13;
+	Window_w2.sws = Selectable_widget_sw1&#13;
+&#13;
+}&#13;
+fact Window_w8_iws{&#13;
+	Window_w8.iws = Input_widget_iw17 + Input_widget_iw18 + Input_widget_iw20 + Input_widget_iw19 + Input_widget_iw21 + Input_widget_iw22&#13;
+	all t: Time | #Input_widget_iw17.content.t &gt; 0 =&gt; not(Input_widget_iw17.content.t in Invalid)&#13;
+	#Input_widget_iw17.content.(T/first) = 0&#13;
+	all t: Time | #Input_widget_iw18.content.t &gt; 0 =&gt; not(Input_widget_iw18.content.t in Invalid)&#13;
+	#Input_widget_iw18.content.(T/first) = 0&#13;
+	no f: Fill | f.filled in (Input_widget - Input_widget_iw20) and f.with in (Input_widget_iw20_value_0+Input_widget_iw20_value_1)&#13;
+	all f: Fill |  f.filled in Input_widget_iw20 =&gt; f.with in (Input_widget_iw20_value_0+Input_widget_iw20_value_1)&#13;
+	all v: (Input_widget_iw20_value_0+Input_widget_iw20_value_1) | not (v in Invalid)&#13;
+	Input_widget_iw20.content.(T/first) = Input_widget_iw20_value_1&#13;
+	all t: Time | #Input_widget_iw19.content.t &gt; 0 =&gt; not(Input_widget_iw19.content.t in Invalid)&#13;
+	#Input_widget_iw19.content.(T/first) = 0&#13;
+	all t: Time | #Input_widget_iw21.content.t &gt; 0 =&gt; not(Input_widget_iw21.content.t in Invalid)&#13;
+	#Input_widget_iw21.content.(T/first) = 0&#13;
+	all t: Time | #Input_widget_iw22.content.t &gt; 0 =&gt; not(Input_widget_iw22.content.t in Invalid)&#13;
+	#Input_widget_iw22.content.(T/first) = 0&#13;
+	IW/next[Input_widget_iw17]=Input_widget_iw18 and IW/next[Input_widget_iw18]=Input_widget_iw20 and IW/next[Input_widget_iw20]=Input_widget_iw19 and IW/next[Input_widget_iw19]=Input_widget_iw21 and IW/next[Input_widget_iw21]=Input_widget_iw22&#13;
+&#13;
+}&#13;
+fact Window_w8_aws{&#13;
+	Window_w8.aws = Action_widget_aw62 + Action_widget_aw63&#13;
+	Action_widget_aw62.goes = Window_w2 + Window_w2&#13;
+	Action_widget_aw63.goes = Window_w2&#13;
+&#13;
+}&#13;
+fact semantic_property{&#13;
+	one Field_5:Property_unique|Property_unique = (Field_5) and #Property_required = 0 and Field_5.associated_to = (Input_widget_iw17)&#13;
+&#13;
+}&#13;
+pred transition [t, t': Time] {&#13;
+	(one aw: Action_widget, c: Click | click [aw, t, t', c]) or&#13;
+	(one iw: Input_widget, f: Fill, v: Value | fill [iw, t, t', v, f]) or&#13;
+	(one sw: Selectable_widget, s: Select, o: Object | select [sw, t, t', o, s])&#13;
+}&#13;
+pred System [] {&#13;
+	init [T/first]&#13;
+	all t: Time - T/last | transition [t, T/next[t]]&#13;
+}&#13;
+pred click [aw: Action_widget, t, t': Time, c: Click] {&#13;
+	--- precondition ---&#13;
+	aw in Current_window.is_in.t.aws&#13;
+	click_pre [aw, t]&#13;
+	--- effect ---&#13;
+	(click_semantics [aw, t] and #aw.goes &lt; 2 and Current_window.is_in.t' = aw.goes and click_success_post [aw, t, t']) or&#13;
+	(click_semantics [aw, t]  and not(#aw.goes &lt; 2) and click_success_post [aw, t, t']) or&#13;
+	(not click_semantics  [aw, t] and Current_window.is_in.t' = Current_window.is_in.t and click_fail_post [aw, t, t'])&#13;
+	--- operation is tracked ---&#13;
+	c.clicked = aw and Track.op.t' = c&#13;
+}&#13;
+pred fill [iw: Input_widget, t, t': Time, v: Value, f: Fill] {&#13;
+	--- precondition ---&#13;
+	iw in Current_window.is_in.t.iws&#13;
+	fill_pre [iw, t, v]&#13;
+	--- effect ---&#13;
+	(fill_semantics  [iw, t, v] and iw.content.t' = v and fill_success_post [iw, t, t', v]) or&#13;
+	(not fill_semantics  [iw, t, v] and iw.content.t' = iw.content.t and fill_fail_post [iw, t, t', v])&#13;
+	--- general postcondition ---&#13;
+	Current_window.is_in.t' = Current_window.is_in.t&#13;
+	all iww: (Input_widget - iw) | iww.content.t' = iww.content.t&#13;
+	all sw:Selectable_widget | sw.selected.t' = sw.selected.t&#13;
+	--- operation is tracked ---&#13;
+	f.filled = iw and f.with = v and Track.op.t' = f&#13;
+}&#13;
+pred select [sw: Selectable_widget, t, t': Time, o: Object, s: Select] {&#13;
+	--- precondition ---&#13;
+	sw in Current_window.is_in.t.sws&#13;
+	o in sw.list.t&#13;
+	select_pre [sw, t, o]&#13;
+	--- effect ---&#13;
+	(select_semantics  [sw, t, o] and sw.selected.t' = o and select_success_post [sw, t, t', o]) or&#13;
+	(not select_semantics  [sw, t, o] and sw.selected.t' = sw.selected.t and select_fail_post [sw, t, t', o])&#13;
+	--- general postcondition ---&#13;
+	Current_window.is_in.t' = Current_window.is_in.t&#13;
+	all iw: Input_widget | iw.content.t' = iw.content.t&#13;
+	(Selectable_widget - sw).selected.t' = (Selectable_widget - sw).selected.t&#13;
+	--- operation is tracked ---&#13;
+	s.wid = sw and s.selected = o and Track.op.t' = s&#13;
+}&#13;
+pred init [t: Time] {&#13;
+	no List.contains.t&#13;
+	no Track.op.t&#13;
+	no Selectable_widget.selected.t&#13;
+	Current_window.is_in.t = Initial&#13;
+	no Current_crud_op.operation.t&#13;
+}&#13;
+pred fill_semantics [iw: Input_widget, t: Time, v: Value] {&#13;
+	&#13;
+}&#13;
+pred fill_success_post [iw: Input_widget, t, t': Time, v: Value] {&#13;
+	List.contains.t' = List.contains.t&#13;
+	Current_crud_op.operation.t' = Current_crud_op.operation.t&#13;
+}&#13;
+pred fill_fail_post [iw: Input_widget, t, t': Time, v: Value] {&#13;
+	List.contains.t' = List.contains.t&#13;
+	Current_crud_op.operation.t' = Current_crud_op.operation.t&#13;
+}&#13;
+pred fill_pre [iw: Input_widget, t: Time, v: Value] {&#13;
+	not Current_crud_op.operation.t = READ&#13;
+}&#13;
+pred select_semantics [sw: Selectable_widget, t: Time, o: Object] {&#13;
+	&#13;
+}&#13;
+pred select_success_post [sw: Selectable_widget, t, t': Time, o: Object] {&#13;
+	List.contains.t' = List.contains.t&#13;
+	Current_crud_op.operation.t' = Current_crud_op.operation.t&#13;
+}&#13;
+pred select_fail_post [sw: Selectable_widget, t, t': Time, o: Object] {&#13;
+	List.contains.t' = List.contains.t&#13;
+	Current_crud_op.operation.t' = Current_crud_op.operation.t&#13;
+}&#13;
+pred select_pre [sw: Selectable_widget, t: Time, o: Object] {&#13;
+	o in sw.list.t&#13;
+}&#13;
+pred click_semantics [aw: Action_widget, t: Time] {&#13;
+	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in CREATE) =&gt; filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]&#13;
+	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in UPDATE) =&gt; filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]&#13;
+	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in READ) =&gt; (2=(1+1))&#13;
+	(aw in Delete_trigger) =&gt; (2=(1+1))&#13;
+	(aw in Read_trigger) =&gt; (2=(1+1))&#13;
+	(aw in Update_trigger) =&gt; (2=(1+1))&#13;
+	(aw in Create_trigger) =&gt; (2=(1+1))&#13;
+	(aw in Cancel and Current_window.is_in.t  in Form) =&gt; (2=(1+1))&#13;
+}&#13;
+pred click_success_post [aw: Action_widget, t, t': Time] {&#13;
+	(aw in Create_trigger) =&gt; (Current_crud_op.operation.t' = CREATE and List.contains.t' = List.contains.t and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #Selectable_widget.selected.t' = 0)&#13;
+	(aw in Read_trigger) =&gt; (Current_crud_op.operation.t' = READ and List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t'] and Selectable_widget.selected.t' = Selectable_widget.selected.t)&#13;
+	(aw in Update_trigger) =&gt; (Current_crud_op.operation.t' = UPDATE and List.contains.t' = List.contains.t and load_form[Selectable_widget.selected.t, t']  and Selectable_widget.selected.t' = Selectable_widget.selected.t)&#13;
+	(aw in Delete_trigger) =&gt; (#Selectable_widget.selected.t' = 0 and delete [t, t'] and #Current_crud_op.operation.t' = 0)&#13;
+	&#13;
+	(aw in Cancel and Current_window.is_in.t  in Form) =&gt; (#Current_crud_op.operation.t' =0 and List.contains.t' = List.contains.t and #Selectable_widget.selected.t' = 0)&#13;
+	&#13;
+	(aw in Ok and Current_crud_op.operation.t in CREATE) =&gt; (#Selectable_widget.selected.t' = 0 and add [t, t'] and #Current_crud_op.operation.t' = 0)&#13;
+	(aw in Ok and Current_crud_op.operation.t in UPDATE) =&gt; (#Selectable_widget.selected.t' = 0 and update [t, t'] and #Current_crud_op.operation.t' = 0)&#13;
+	(aw in Ok and Current_window.is_in.t  in View) =&gt; (#Selectable_widget.selected.t' = 0  and #Current_crud_op.operation.t' = 0 and List.contains.t' = List.contains.t)&#13;
+}&#13;
+pred click_fail_post [aw: Action_widget, t, t': Time] {&#13;
+	List.contains.t' = List.contains.t&#13;
+	(all iw:Input_widget | iw.content.t' = iw.content.t)&#13;
+	(all sw:Selectable_widget | sw.selected.t' = sw.selected.t)&#13;
+	Current_crud_op.operation.t' = Current_crud_op.operation.t&#13;
+}&#13;
+pred click_pre [aw: Action_widget, t: Time] {&#13;
+	(aw in Read_trigger) =&gt; #Selectable_widget.selected.t = 1&#13;
+	(aw in Update_trigger) =&gt; #Selectable_widget.selected.t = 1&#13;
+	(aw in Delete_trigger) =&gt; #Selectable_widget.selected.t = 1&#13;
+}&#13;
+pred add [t, t': Time] {&#13;
+	one o: Object |all f: Field | not(o in List.contains.t) and o.appeared = t' and f.has_value.o = f.associated_to.content.t and List.contains.t' = List.contains.t+o&#13;
+}&#13;
+pred filled_required_test [w: Form, t: Time] {&#13;
+	all iw: w.iws | (iw in Property_required.associated_to) =&gt; #iw.content.t = 1&#13;
+}&#13;
+pred unique_test [w: Form, t: Time] {&#13;
+	all p: Property_unique | all o2: List.contains.t | p.associated_to in w.iws and ((#p.has_value.o2 = 1) =&gt; p.associated_to.content.t != p.has_value.o2) //and ((#p.has_value.o2 = 0) =&gt; #p.associated_to.content.t = 1)&#13;
+}&#13;
+pred valid_data_test [w: Form, t: Time] {&#13;
+	all v: w.iws.content.t | not(v in Invalid)&#13;
+}&#13;
+pred unique_for_update_test [w: Form, t: Time] {&#13;
+	all p: Property_unique | all o2: (List.contains.t-Selectable_widget.selected.t) | p.associated_to in w.iws and ((#p.has_value.o2 = 1) =&gt; p.associated_to.content.t != p.has_value.o2) //and ((#p.has_value.o2 = 0) =&gt; #p.associated_to.content.t = 1)&#13;
+}&#13;
+pred load_form [o: Object, t': Time] {&#13;
+	all f: Field | f.associated_to.content.t' = f.has_value.o&#13;
+	all iw: View.iws | iw.content.t' = View.mapping.iw.content.t'&#13;
+}&#13;
+pred update [t, t': Time] {&#13;
+	one o: Object | all f: Field | not(o in List.contains.t) and o.appeared = Selectable_widget.selected.t.appeared and f.has_value.o = f.associated_to.content.t and List.contains.t' = (List.contains.t - Selectable_widget.selected.t)+o&#13;
+}&#13;
+pred delete [t, t': Time] {&#13;
+	List.contains.t' = List.contains.t - Selectable_widget.selected.t&#13;
+}&#13;
+&#13;
+</semantics>
+    <GUI>
+        <window id="w8">
+            <pos>519:125</pos>
+            <class>com._17od.upm.gui.AccountDialog</class>
+            <title>Add Account</title>
+            <modal>true</modal>
+            <root>false</root>
+            <action_widget id="aw61">
+                <pos>774:245</pos>
+                <class>ButtonUI</class>
+                <label>Generate</label>
+            </action_widget>
+            <action_widget id="aw62">
+                <pos>661:536</pos>
+                <class>ButtonUI</class>
+                <label>OK</label>
+            </action_widget>
+            <action_widget id="aw63">
+                <pos>713:536</pos>
+                <class>ButtonUI</class>
+                <label>Cancel</label>
+            </action_widget>
+            <input_widget id="iw17">
+                <pos>603:165</pos>
+                <class>TextFieldUI</class>
+                <descriptor>Account</descriptor>
+                <value/>
+            </input_widget>
+            <input_widget id="iw18">
+                <pos>603:205</pos>
+                <class>TextFieldUI</class>
+                <descriptor>User Id</descriptor>
+                <value/>
+            </input_widget>
+            <input_widget id="iw20">
+                <pos>856:245</pos>
+                <class>CheckBoxUI</class>
+                <label>Hide</label>
+                <value>[options] 1 : 2</value>
+            </input_widget>
+            <input_widget id="iw19">
+                <pos>603:246</pos>
+                <class>PasswordFieldUI</class>
+                <descriptor>Password</descriptor>
+                <value>BVsNKKln</value>
+            </input_widget>
+            <input_widget id="iw21">
+                <pos>603:288</pos>
+                <class>TextFieldUI</class>
+                <descriptor>URL</descriptor>
+                <value/>
+            </input_widget>
+            <input_widget id="iw22">
+                <pos>604:329</pos>
+                <class>TextAreaUI</class>
+                <descriptor>Notes</descriptor>
+                <value/>
+            </input_widget>
+        </window>
+        <window id="w11">
+            <pos>519:125</pos>
+            <class>com._17od.upm.gui.AccountDialog</class>
+            <title>View Account</title>
+            <modal>true</modal>
+            <root>false</root>
+            <action_widget id="aw68">
+                <pos>774:245</pos>
+                <class>ButtonUI</class>
+                <label>Generate</label>
+            </action_widget>
+            <action_widget id="aw69">
+                <pos>696:536</pos>
+                <class>ButtonUI</class>
+                <label>OK</label>
+            </action_widget>
+            <input_widget id="iw32">
+                <pos>603:165</pos>
+                <class>TextFieldUI</class>
+                <descriptor>Account</descriptor>
+                <value/>
+            </input_widget>
+            <input_widget id="iw33">
+                <pos>603:205</pos>
+                <class>TextFieldUI</class>
+                <descriptor>User Id</descriptor>
+                <value/>
+            </input_widget>
+            <input_widget id="iw35">
+                <pos>856:245</pos>
+                <class>CheckBoxUI</class>
+                <label>Hide</label>
+                <value>[options] 1 : 2</value>
+            </input_widget>
+            <input_widget id="iw34">
+                <pos>603:246</pos>
+                <class>PasswordFieldUI</class>
+                <descriptor>Password</descriptor>
+                <value>awSawsIZ</value>
+            </input_widget>
+            <input_widget id="iw36">
+                <pos>603:288</pos>
+                <class>TextFieldUI</class>
+                <descriptor>URL</descriptor>
+                <value/>
+            </input_widget>
+            <input_widget id="iw37">
+                <pos>604:329</pos>
+                <class>TextAreaUI</class>
+                <descriptor>Notes</descriptor>
+                <value/>
+            </input_widget>
+        </window>
+        <window id="w2">
+            <pos>582:200</pos>
+            <class>com._17od.upm.gui.MainWindow</class>
+            <title>C:\Users\usi\abtMyDocuments\upm_db - Universal Password Manager</title>
+            <modal>false</modal>
+            <root>false</root>
+            <action_widget id="aw11">
+                <pos>590:230</pos>
+                <class>MenuItemUI</class>
+                <label>Database - New Database</label>
+            </action_widget>
+            <action_widget id="aw12">
+                <pos>590:230</pos>
+                <class>MenuItemUI</class>
+                <label>Database - Open Database</label>
+            </action_widget>
+            <action_widget id="aw13">
+                <pos>590:230</pos>
+                <class>MenuItemUI</class>
+                <label>Database - Open Database From URL</label>
+            </action_widget>
+            <action_widget id="aw14">
+                <pos>590:230</pos>
+                <class>MenuItemUI</class>
+                <label>Database - Sync with Remote Database</label>
+            </action_widget>
+            <action_widget id="aw15">
+                <pos>590:230</pos>
+                <class>MenuItemUI</class>
+                <label>Database - Change Master Password</label>
+            </action_widget>
+            <action_widget id="aw16">
+                <pos>590:230</pos>
+                <class>MenuItemUI</class>
+                <label>Database - Database Properties</label>
+            </action_widget>
+            <action_widget id="aw17">
+                <pos>590:230</pos>
+                <class>MenuItemUI</class>
+                <label>Database - Export</label>
+            </action_widget>
+            <action_widget id="aw18">
+                <pos>590:230</pos>
+                <class>MenuItemUI</class>
+                <label>Database - Import</label>
+            </action_widget>
+            <action_widget id="aw19">
+                <pos>590:230</pos>
+                <class>MenuItemUI</class>
+                <label>Database - Exit</label>
+            </action_widget>
+            <action_widget id="aw20">
+                <pos>647:230</pos>
+                <class>MenuItemUI</class>
+                <label>Account - Add Account</label>
+            </action_widget>
+            <action_widget id="aw21">
+                <pos>647:230</pos>
+                <class>MenuItemUI</class>
+                <label>Account - Edit Account</label>
+            </action_widget>
+            <action_widget id="aw22">
+                <pos>647:230</pos>
+                <class>MenuItemUI</class>
+                <label>Account - Delete Account</label>
+            </action_widget>
+            <action_widget id="aw23">
+                <pos>647:230</pos>
+                <class>MenuItemUI</class>
+                <label>Account - View Account</label>
+            </action_widget>
+            <action_widget id="aw24">
+                <pos>647:230</pos>
+                <class>MenuItemUI</class>
+                <label>Account - Copy Username</label>
+            </action_widget>
+            <action_widget id="aw25">
+                <pos>647:230</pos>
+                <class>MenuItemUI</class>
+                <label>Account - Copy Password</label>
+            </action_widget>
+            <action_widget id="aw26">
+                <pos>700:230</pos>
+                <class>MenuItemUI</class>
+                <label>Help - About</label>
+            </action_widget>
+            <action_widget id="aw3">
+                <pos>591:252</pos>
+                <class>ButtonUI</class>
+                <label>Add Account</label>
+            </action_widget>
+            <action_widget id="aw4">
+                <pos>622:252</pos>
+                <class>ButtonUI</class>
+                <label>Edit Account</label>
+            </action_widget>
+            <action_widget id="aw5">
+                <pos>653:252</pos>
+                <class>ButtonUI</class>
+                <label>Delete Account</label>
+            </action_widget>
+            <action_widget id="aw6">
+                <pos>690:252</pos>
+                <class>ButtonUI</class>
+                <label>Copy Username</label>
+            </action_widget>
+            <action_widget id="aw7">
+                <pos>721:252</pos>
+                <class>ButtonUI</class>
+                <label>Copy Password</label>
+            </action_widget>
+            <action_widget id="aw8">
+                <pos>758:252</pos>
+                <class>ButtonUI</class>
+                <label>Options</label>
+            </action_widget>
+            <action_widget id="aw9">
+                <pos>795:252</pos>
+                <class>ButtonUI</class>
+                <label>Sync with Remote Database</label>
+            </action_widget>
+            <action_widget id="aw10">
+                <pos>737:292</pos>
+                <class>ButtonUI</class>
+                <label>Reset Search</label>
+            </action_widget>
+            <input_widget id="iw2">
+                <pos>609:291</pos>
+                <class>TextFieldUI</class>
+                <value/>
+            </input_widget>
+            <selectable_widget id="sw1">
+                <pos>592:317</pos>
+                <class>ListUI</class>
+                <size>0</size>
+                <selected>-1</selected>
+            </selectable_widget>
+        </window>
+        <edge type="static">
+            <from>aw62</from>
+            <to>w2</to>
+        </edge>
+        <edge type="dynamic">
+            <from>aw62</from>
+            <to>w2</to>
+        </edge>
+        <edge type="static">
+            <from>aw63</from>
+            <to>w2</to>
+        </edge>
+        <edge type="static">
+            <from>aw69</from>
+            <to>w2</to>
+        </edge>
+        <edge type="static">
+            <from>aw20</from>
+            <to>w8</to>
+        </edge>
+        <edge type="dynamic">
+            <from>aw21</from>
+            <to>w8</to>
+        </edge>
+        <edge type="dynamic">
+            <from>aw22</from>
+            <to>w2</to>
+        </edge>
+        <edge type="dynamic">
+            <from>aw23</from>
+            <to>w11</to>
+        </edge>
+        <edge type="static">
+            <from>aw3</from>
+            <to>w8</to>
+        </edge>
+        <edge type="dynamic">
+            <from>aw4</from>
+            <to>w8</to>
+        </edge>
+        <edge type="dynamic">
+            <from>aw5</from>
+            <to>w2</to>
+        </edge>
+    </GUI>
+</instance_GUI_pattern>

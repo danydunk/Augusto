@@ -200,6 +200,9 @@ public class GUIFunctionality_validate {
 		System.out.println("COVERING SEMANTIC CASES.");
 
 		List<String> run_commands = this.getAllSemanticCases();
+		for (int x = 0; x < run_commands.size(); x++) {
+			System.out.println((x + 1) + " " + run_commands.get(x));
+		}
 
 		System.out.println(run_commands.size() + " TESTCASES. RUNNING THEM IN BATCHES OF "
 				+ this.batch_size + ".");
@@ -233,7 +236,9 @@ public class GUIFunctionality_validate {
 							this.covered_edges.get(y)));
 				}
 			}
-
+			for (int x = 0; x < run_commands.size(); x++) {
+				System.out.println((x + 1) + " " + run_commands.get(x));
+			}
 			System.out.println(run_commands.size() + " TESTCASES. RUNNING THEM IN BATCHES OF "
 					+ this.batch_size + ".");
 			// we need to reduce the scope because one run goes in out of
@@ -262,6 +267,9 @@ public class GUIFunctionality_validate {
 		// ConfigurationManager.setTestcaseLength(old_tc_size);
 
 		run_commands = this.getAdditionalRunCommands(this.completely_executed_tcs);
+		for (int x = 0; x < run_commands.size(); x++) {
+			System.out.println((x + 1) + " " + run_commands.get(x));
+		}
 		System.out.println(run_commands.size() + " TESTCASES. RUNNING THEM IN BATCHES OF "
 				+ this.batch_size + ".");
 

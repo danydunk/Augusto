@@ -1,0 +1,31 @@
+TESTCASE SIZE = 14
+ACTION 1
+CLICK aw20 - Account - Add Account
+ACTION 2
+FILL iw17 - Account WITH aaa
+ACTION 3
+CLICK aw62 - OK
+ACTION 4
+SELECT sw1 WITH 0
+ACTION 5
+CLICK aw4 - Edit Account
+ACTION 6
+CLICK aw62 - OK
+ACTION 7
+CLICK aw20 - Account - Add Account
+ACTION 8
+FILL iw17 - Account WITH aaa
+ACTION 9
+CLICK aw63 - Cancel
+ACTION 10
+CLICK aw20 - Account - Add Account
+ACTION 11
+FILL iw17 - Account WITH aaa
+ACTION 12
+CLICK aw62 - OK
+ACTION 13
+CLICK aw62 - OK
+ACTION 14
+CLICK aw63 - Cancel
+
+TEST CASE RUN CORRECTLY
