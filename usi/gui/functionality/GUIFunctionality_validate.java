@@ -9,7 +9,6 @@ import usi.configuration.ConfigurationManager;
 import usi.gui.functionality.instance.Instance_GUI_pattern;
 import usi.gui.semantic.FunctionalitySemantics;
 import usi.gui.semantic.SpecificSemantics;
-import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.semantic.alloy.entity.Fact;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
@@ -34,12 +33,12 @@ public class GUIFunctionality_validate {
 	private final List<String> iw_to_fill;
 	private final List<String> sw_to_select;
 	private final List<GUITestCaseResult> completely_executed_tcs;
-	private final List<String> covered_edges;
 	private SpecificSemantics working_sem;
 	// map that constains as key the run command to cover a edge positively or
 	// negatively and as values the run commands to cover all the possibles
 	// semantic cases
 	private Map<String, List<String>> edges_cases;
+	List<String> edges;
 
 	// number of times a run command can be executed
 	final int MAX_RUN = 2;
@@ -48,7 +47,6 @@ public class GUIFunctionality_validate {
 	public GUIFunctionality_validate(final Instance_GUI_pattern instancePattern, final GUI gui)
 			throws Exception {
 
-		this.covered_edges = new ArrayList<>();
 		this.completely_executed_tcs = new ArrayList<>();
 		this.instancePattern = instancePattern;
 		this.gui = gui;
@@ -58,6 +56,14 @@ public class GUIFunctionality_validate {
 		this.sw_to_select = new ArrayList<>();
 		this.init();
 		this.generate_run_commands(instancePattern.getSemantics());
+
+		this.edges = new ArrayList<>();
+		for (final Action_widget aw : instancePattern.getGui().getAction_widgets()) {
+			for (final Window w : instancePattern.getGui().getDynamicForwardLinks(aw.getId())) {
+				final String edge = aw.getId() + " -> " + w.getId();
+				this.edges.add(edge);
+			}
+		}
 	}
 
 	protected void init() {
@@ -100,7 +106,6 @@ public class GUIFunctionality_validate {
 
 	private List<GUITestCaseResult> execute() throws Exception {
 
-		System.gc();
 		final List<GUITestCaseResult> out = new ArrayList<>();
 
 		SpecificSemantics working_sem_bis = new SpecificSemantics(this.working_sem.getSignatures(),
@@ -144,8 +149,9 @@ public class GUIFunctionality_validate {
 					final GUITestCaseResult new_res = new GUITestCaseResult(tc,
 							res.getActions_executed(), res.getResults(),
 							res.getActions_actually_executed());
-					working_sem_bis = SpecificSemantics.instantiate(AlloyUtil
-							.getTCaseModelOpposite(working_sem_bis, res.getTc().getActions()));
+					// working_sem_bis = SpecificSemantics.instantiate(AlloyUtil
+					// .getTCaseModelOpposite(working_sem_bis,
+					// res.getTc().getActions()));
 					this.completely_executed_tcs.add(new_res);
 
 				} else {
@@ -158,10 +164,6 @@ public class GUIFunctionality_validate {
 					this.completely_executed_tcs.add(new_res);
 				}
 
-				final String edge = this.getEdgeFromSemanticCase(res.getTc().getRunCommand());
-				if (edge != null && !this.covered_edges.contains(edge)) {
-					this.covered_edges.add(edge);
-				}
 			}
 			if (to_rerun.size() == 0) {
 				break;
@@ -195,7 +197,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
@@ -228,12 +230,15 @@ public class GUIFunctionality_validate {
 			System.out.println("COVERING PAIRWISE.");
 
 			run_commands = new ArrayList<>();
-			// covered_edges at this point contains all the edges that can be
-			// covered
-			for (int x = 0; x < this.covered_edges.size(); x++) {
-				for (int y = x + 1; y < this.covered_edges.size(); y++) {
-					run_commands.add(this.combineRunCommands(this.covered_edges.get(x),
-							this.covered_edges.get(y)));
+
+			for (int x = 0; x < this.edges.size(); x++) {
+				for (int y = x + 1; y < this.edges.size(); y++) {
+					final String edge1 = this.edges.get(x);
+					final String edge2 = this.edges.get(y);
+					final String[] first = edge1.split(" -> ");
+					final String[] second = edge2.split(" -> ");
+
+					run_commands.add(this.getEdgeCommand(first[1], first[0], second[1], second[0]));
 				}
 			}
 			for (int x = 0; x < run_commands.size(); x++) {
@@ -358,14 +363,14 @@ public class GUIFunctionality_validate {
 		return new_run_commands;
 	}
 
-	private String combineRunCommands(final String run1, final String run2) {
-
-		String run1_mod = run1.replace("run {System and {", "");
-		String run2_mod = run2.replace("run {System and {", "");
-		run1_mod = run1_mod.replace("} }", "");
-		run2_mod = run2_mod.replace("} }", "");
-		return "run {System and {(" + run1_mod + ") and (" + run2_mod + ")} }";
-	}
+	// private String combineRunCommands(final String run1, final String run2) {
+	//
+	// String run1_mod = run1.replace("run {System and {", "");
+	// String run2_mod = run2.replace("run {System and {", "");
+	// run1_mod = run1_mod.replace("} }", "");
+	// run2_mod = run2_mod.replace("} }", "");
+	// return "run {System and {(" + run1_mod + ") and (" + run2_mod + ")} }";
+	// }
 
 	protected void generate_run_commands(final FunctionalitySemantics sem) throws Exception {
 
@@ -553,13 +558,26 @@ public class GUIFunctionality_validate {
 		return null;
 	}
 
-	private String getEdgeFromSemanticCase(final String sem_case) {
+	// private String getEdgeFromSemanticCase(final String sem_case) {
+	//
+	// for (final String key : this.edges_cases.keySet()) {
+	// if (this.edges_cases.get(key).contains(sem_case)) {
+	// return key;
+	// }
+	// }
+	// return null;
+	// }
 
-		for (final String key : this.edges_cases.keySet()) {
-			if (this.edges_cases.get(key).contains(sem_case)) {
-				return key;
-			}
-		}
-		return null;
+	private String getEdgeCommand(final String dest1, final String aw1, final String dest2,
+			final String aw2) {
+
+		String run = "some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+		run += "Track.op.(T/next[t1]) = Action_widget_" + aw1
+				+ " and Track.op.(T/next[t2]) = Action_widget_" + aw2
+				+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
+				+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
+				+ " and click_semantics[Action_widget_" + aw1
+				+ ", t1] and click_semantics[Action_widget_" + aw2 + ", t2]";
+		return run;
 	}
 }
