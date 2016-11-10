@@ -571,13 +571,13 @@ public class GUIFunctionality_validate {
 	private String getEdgeCommand(final String dest1, final String aw1, final String dest2,
 			final String aw2) {
 
-		String run = "some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
-		run += "Track.op.(T/next[t1]) = Action_widget_" + aw1
-				+ " and Track.op.(T/next[t2]) = Action_widget_" + aw2
+		String run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+		run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+				+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
 				+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
 				+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
 				+ " and click_semantics[Action_widget_" + aw1
-				+ ", t1] and click_semantics[Action_widget_" + aw2 + ", t2]";
+				+ ", t1] and click_semantics[Action_widget_" + aw2 + ", t2])}";
 		return run;
 	}
 }
