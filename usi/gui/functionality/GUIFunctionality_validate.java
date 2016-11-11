@@ -63,6 +63,11 @@ public class GUIFunctionality_validate {
 				final String edge = aw.getId() + " -> " + w.getId();
 				this.edges.add(edge);
 			}
+			// for (final Window w :
+			// instancePattern.getGui().getStaticForwardLinks(aw.getId())) {
+			// final String edge = aw.getId() + " -> " + w.getId();
+			// this.edges.add(edge);
+			// }
 		}
 	}
 
@@ -120,10 +125,19 @@ public class GUIFunctionality_validate {
 
 		for (int cont = 0; cont < this.MAX_RUN; cont++) {
 			final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(work_instance);
-			final List<GUITestCase> testcases = generator.generateTestCases();
+			List<GUITestCase> testcases = generator.generateTestCases();
 
 			final List<GUITestCase> testcases_filtered = new ArrayList<>();
 			final List<GUITestCaseResult> results = new ArrayList<>();
+
+			// we dont need the alloy result
+			final List<GUITestCase> tests = new ArrayList<>();
+			for (final GUITestCase tc : testcases) {
+				final GUITestCase tc2 = new GUITestCase(null, tc.getActions(), tc.getRunCommand());
+				tests.add(tc2);
+
+			}
+			testcases = tests;
 
 			// we filter out the already run test cases
 			for (final GUITestCase tc : testcases) {
@@ -155,13 +169,7 @@ public class GUIFunctionality_validate {
 					this.completely_executed_tcs.add(new_res);
 
 				} else {
-					// we dont need the result
-					final GUITestCase tc = new GUITestCase(null, res.getTc().getActions(), res
-							.getTc().getRunCommand());
-					final GUITestCaseResult new_res = new GUITestCaseResult(tc,
-							res.getActions_executed(), res.getResults(),
-							res.getActions_actually_executed());
-					this.completely_executed_tcs.add(new_res);
+					this.completely_executed_tcs.add(res);
 				}
 
 			}
@@ -187,17 +195,18 @@ public class GUIFunctionality_validate {
 
 		final List<Fact> facts = this.instancePattern.getSemantics().getFacts();
 		// fact to eliminate final redundandt actions
-		final Fact new_fact = new Fact(
-				"filter_redundant_actions",
-				"all t: Time | not (Track.op.t in Select and Track.op.(T/next[t]) in Select and Track.op.t.wid = Track.op.(T/next[t]).wid)"
-						+ System.lineSeparator()
-						+ "all t: Time | not (Track.op.t in Fill and Track.op.(T/next[t]) in Fill and Track.op.t.filled = Track.op.(T/next[t]).filled)");
-		facts.add(new_fact);
+		// final Fact new_fact = new Fact(
+		// "filter_redundant_actions",
+		// "all t: Time | not (Track.op.t in Select and Track.op.(T/next[t]) in Select and Track.op.t.wid = Track.op.(T/next[t]).wid)"
+		// + System.lineSeparator()
+		// +
+		// "all t: Time | not (Track.op.t in Fill and Track.op.(T/next[t]) in Fill and Track.op.t.filled = Track.op.(T/next[t]).filled)");
+		// facts.add(new_fact);
 
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
@@ -238,7 +247,8 @@ public class GUIFunctionality_validate {
 					final String[] first = edge1.split(" -> ");
 					final String[] second = edge2.split(" -> ");
 
-					run_commands.add(this.getEdgeCommand(first[1], first[0], second[1], second[0]));
+					run_commands.addAll(this.getEdgeCommand(first[1], first[0], second[1],
+							second[0]));
 				}
 			}
 			for (int x = 0; x < run_commands.size(); x++) {
@@ -568,9 +578,10 @@ public class GUIFunctionality_validate {
 	// return null;
 	// }
 
-	private String getEdgeCommand(final String dest1, final String aw1, final String dest2,
+	private List<String> getEdgeCommand(final String dest1, final String aw1, final String dest2,
 			final String aw2) {
 
+		final List<String> out = new ArrayList<>();
 		String run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
 		run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
 				+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
@@ -578,6 +589,27 @@ public class GUIFunctionality_validate {
 				+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
 				+ " and click_semantics[Action_widget_" + aw1
 				+ ", t1] and click_semantics[Action_widget_" + aw2 + ", t2])}";
-		return run;
+		out.add(run);
+		run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+		run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+				+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+				+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
+				+ " and not (click_semantics[Action_widget_" + aw1
+				+ ", t1]) and click_semantics[Action_widget_" + aw2 + ", t2])}";
+		out.add(run);
+		run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+		run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+				+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+				+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
+				+ " and click_semantics[Action_widget_" + aw1
+				+ ", t1] and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
+		out.add(run);
+		run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+		run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+				+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+				+ " and not (click_semantics[Action_widget_" + aw1
+				+ ", t1]) and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
+		out.add(run);
+		return out;
 	}
 }
