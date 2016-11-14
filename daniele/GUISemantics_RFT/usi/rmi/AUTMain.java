@@ -122,7 +122,6 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 		public SystemMock() {
 
 			super();
-			System.out.println(startT);
 		}
 
 		@Mock

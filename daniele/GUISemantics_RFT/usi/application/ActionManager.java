@@ -17,7 +17,7 @@ import com.rational.test.ft.object.interfaces.TestObject;
 public class ActionManager {
 
 	/*
-	 *
+	 * 
 	 * GUI must be read before calling this method This function returns true if
 	 * the action was executed, false if it could not be executed because the
 	 * widget was disabled It throws an exception if there is no
@@ -101,14 +101,14 @@ public class ActionManager {
 			final Fill fill = (Fill) act;
 
 			Method method = null;
-			for (final Method m : ms) {
-				if (m.getName().equals("fill")) {
-					method = m;
-					break;
-				}
-			}
 
 			if (fill.getWidget() instanceof Option_input_widget) {
+				for (final Method m : ms) {
+					if (m.getName().equals("select")) {
+						method = m;
+						break;
+					}
+				}
 				final Option_input_widget oiw = (Option_input_widget) wid;
 				final int index = Integer.valueOf(fill.getInput());
 				TestObject to_fill = null;
@@ -132,6 +132,12 @@ public class ActionManager {
 				}
 
 			} else {
+				for (final Method m : ms) {
+					if (m.getName().equals("fill")) {
+						method = m;
+						break;
+					}
+				}
 				method.invoke(c.newInstance(), to, fill.getInput());
 			}
 		}

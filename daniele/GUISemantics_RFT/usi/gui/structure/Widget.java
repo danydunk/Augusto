@@ -325,6 +325,13 @@ public abstract class Widget implements Comparable<Widget> {
 			}
 			final int x = p.x;
 			final int y = p.y;
+			final boolean editable = Boolean.valueOf(to.getProperty("editable").toString());
+			if (editable) {
+				final String value = to.getProperty("text").toString();
+				out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+				return out;
+			}
+
 			final int selected = Integer.valueOf(to.getProperty("selectedIndex").toString());
 			final int size = Integer.valueOf(to.getProperty("itemCount").toString());
 			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, selected));

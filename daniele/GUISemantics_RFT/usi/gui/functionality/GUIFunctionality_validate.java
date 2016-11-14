@@ -63,11 +63,10 @@ public class GUIFunctionality_validate {
 				final String edge = aw.getId() + " -> " + w.getId();
 				this.edges.add(edge);
 			}
-			// for (final Window w :
-			// instancePattern.getGui().getStaticForwardLinks(aw.getId())) {
-			// final String edge = aw.getId() + " -> " + w.getId();
-			// this.edges.add(edge);
-			// }
+			for (final Window w : instancePattern.getGui().getStaticForwardLinks(aw.getId())) {
+				final String edge = aw.getId() + " -> " + w.getId();
+				this.edges.add(edge);
+			}
 		}
 	}
 
@@ -206,7 +205,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
@@ -579,7 +578,10 @@ public class GUIFunctionality_validate {
 	// }
 
 	private List<String> getEdgeCommand(final String dest1, final String aw1, final String dest2,
-			final String aw2) {
+			final String aw2) throws Exception {
+
+		final boolean first = this.instancePattern.getGui().isDynamicEdge(aw1, dest1);
+		final boolean second = this.instancePattern.getGui().isDynamicEdge(aw2, dest2);
 
 		final List<String> out = new ArrayList<>();
 		String run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
@@ -590,26 +592,34 @@ public class GUIFunctionality_validate {
 				+ " and click_semantics[Action_widget_" + aw1
 				+ ", t1] and click_semantics[Action_widget_" + aw2 + ", t2])}";
 		out.add(run);
-		run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
-		run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-				+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-				+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
-				+ " and not (click_semantics[Action_widget_" + aw1
-				+ ", t1]) and click_semantics[Action_widget_" + aw2 + ", t2])}";
-		out.add(run);
-		run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
-		run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-				+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-				+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
-				+ " and click_semantics[Action_widget_" + aw1
-				+ ", t1] and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
-		out.add(run);
-		run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
-		run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-				+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-				+ " and not (click_semantics[Action_widget_" + aw1
-				+ ", t1]) and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
-		out.add(run);
+
+		if (first) {
+			run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+			run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+					+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+					+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
+					+ " and not (click_semantics[Action_widget_" + aw1
+					+ ", t1]) and click_semantics[Action_widget_" + aw2 + ", t2])}";
+			out.add(run);
+		}
+
+		if (second) {
+			run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+			run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+					+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+					+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
+					+ " and click_semantics[Action_widget_" + aw1
+					+ ", t1] and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
+			out.add(run);
+		}
+		if (first && second) {
+			run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+			run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+					+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+					+ " and not (click_semantics[Action_widget_" + aw1
+					+ ", t1]) and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
+			out.add(run);
+		}
 		return out;
 	}
 }

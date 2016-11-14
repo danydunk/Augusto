@@ -8,10 +8,17 @@
     </values>
   </DATA>
   <DATA>
-    <metadata>password</metadata>
+    <metadata>starting</metadata>
     <values>
-      <valid>password</valid>
-      <valid>pass</valid>
+      <valid>2016/11/14</valid>
+      <valid>2016/11/15</valid>
+    </values>
+  </DATA>
+  <DATA>
+    <metadata>ending</metadata>
+    <values>
+      <valid>2017/11/14</valid>
+      <valid>2017/8/14</valid>
     </values>
   </DATA>
   <DATA>
@@ -32,6 +39,44 @@
       <invalid>\\\**///</invalid>
       <invalid>**///\\\**</invalid>
       <invalid>**\\\///**</invalid>
+    </values>
+  </DATA>
+  <DATA>
+    <metadata>password</metadata>
+    <values>
+      <valid>password</valid>
+      <valid>pass</valid>
+    </values>
+  </DATA>
+  <DATA type="itemized">
+    <metadata>from</metadata>
+    <values>
+      <valid>1</valid>
+      <invalid>0</invalid>
+      <invalid>2</invalid>
+      <invalid>3</invalid>
+      <invalid>4</invalid>
+      <invalid>5</invalid>
+      <invalid>6</invalid>
+      <invalid>7</invalid>
+      <invalid>8</invalid>
+    </values>
+  </DATA>
+  <DATA type="itemized">
+    <metadata>to</metadata>
+    <values>
+      <valid>4</valid>
+      <valid>5</valid>
+      <valid>6</valid>
+      <valid>7</valid>
+      <valid>8</valid>
+      <valid>9</valid>
+      <valid>10</valid>
+      <invalid>0</invalid>
+      <invalid>2</invalid>
+      <invalid>3</invalid>
+      <invalid>11</invalid>
+      <invalid>12</invalid>
     </values>
   </DATA>
 </DATASET>

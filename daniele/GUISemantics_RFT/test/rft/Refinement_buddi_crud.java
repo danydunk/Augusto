@@ -43,13 +43,13 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/buddi_newripper.xml")
-			.getAbsolutePath());
+					.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
 			final List<Instance_GUI_pattern> res = gfs.match(pattern);
 
-			Instance_GUI_pattern match = res.get(1);
+			Instance_GUI_pattern match = res.get(0);
 
 			match.generateSpecificSemantics();
 			final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);

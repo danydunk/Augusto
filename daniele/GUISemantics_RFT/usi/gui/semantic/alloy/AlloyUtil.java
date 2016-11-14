@@ -810,16 +810,21 @@ public class AlloyUtil {
 	 * @throws Exception
 	 */
 	static public Fact createFactsForInputWidget(final Map<Input_widget, Signature> iws,
-			final Signature window) throws Exception {
+			final Signature window, final boolean invalid) throws Exception {
 
 		final Fact initial_fact = createFactsForElement(iws.values(), window, "iws");
 		String content = initial_fact.getContent();
 		final DataManager dm = DataManager.getInstance();
+
 		// to fix the problem of the view window
 		// TODO: find another solution
 		final List<Input_widget> to_order = new ArrayList<>();
 
 		for (final Input_widget iw : iws.keySet()) {
+			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
+			metadata += " ";
+			metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+
 			to_order.add(iw);
 			if (iw instanceof Option_input_widget) {
 				final Option_input_widget oiw = (Option_input_widget) iw;
@@ -827,13 +832,38 @@ public class AlloyUtil {
 					content += System.getProperty("line.separator");
 					content += "no f: Fill | f.filled in " + iws.get(iw).getIdentifier();
 				} else {
+					// the list of elements
 					String list = "(";
-					for (int cc = 0; cc < oiw.getSize(); cc++) {
-						list += iws.get(iw).getIdentifier() + "_value_" + cc;
-						if (cc < oiw.getSize() - 1) {
+					String valid_fact = "";
+					if ((dm.getInvalidItemizedData(metadata).size() + dm.getValidItemizedData(
+							metadata).size()) > 0) {
+						for (final Integer i : dm.getInvalidItemizedData(metadata)) {
+							list += iws.get(iw).getIdentifier() + "_value_" + i;
 							list += "+";
 						}
+
+						for (final Integer i : dm.getValidItemizedData(metadata)) {
+							list += iws.get(iw).getIdentifier() + "_value_" + i;
+							list += "+";
+							valid_fact += "not(" + iws.get(iw).getIdentifier() + "_value_" + i
+									+ " in Invalid) and ";
+						}
+						if (valid_fact.length() > 0) {
+							valid_fact = valid_fact.substring(0, valid_fact.length() - 5);
+						}
+
+						list = list.substring(0, list.length() - 1);
+					} else {
+						for (int cc = 0; cc < oiw.getSize(); cc++) {
+							list += iws.get(iw).getIdentifier() + "_value_" + cc;
+							if (cc < oiw.getSize() - 1) {
+								list += "+";
+							}
+						}
+						valid_fact += "all v: " + list + " | not (v in Invalid)";
+
 					}
+
 					list += ")";
 
 					content += System.getProperty("line.separator");
@@ -842,28 +872,28 @@ public class AlloyUtil {
 					content += System.getProperty("line.separator");
 					content += "all f: Fill |  f.filled in " + iws.get(iw).getIdentifier()
 							+ " => f.with in " + list;
-					content += System.getProperty("line.separator");
-					content += "all v: " + list + " | not (v in Invalid)";
-					content += System.getProperty("line.separator");
-					if (oiw.getSelected() == -1) {
-						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
-					} else {
-						content += iws.get(iw).getIdentifier() + ".content.(T/first) = "
-								+ iws.get(iw).getIdentifier() + "_value_" + oiw.getSelected();
+					if (invalid) {
+						content += System.getProperty("line.separator");
+						content += valid_fact;
 					}
 				}
-			} else {
-				String metadata = iw.getLabel() != null ? iw.getLabel() : "";
-				metadata += " ";
-				metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
-				if (dm.getInvalidData(metadata).size() == 0) {
-					content += System.getProperty("line.separator");
-					content += "all t: Time | #" + iws.get(iw).getIdentifier()
-							+ ".content.t > 0 => not(" + iws.get(iw).getIdentifier()
-							+ ".content.t in Invalid)";
-					content += System.getProperty("line.separator");
+				content += System.getProperty("line.separator");
+				if (oiw.getSelected() == -1) {
 					content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
+				} else {
+					content += iws.get(iw).getIdentifier() + ".content.(T/first) = "
+							+ iws.get(iw).getIdentifier() + "_value_" + oiw.getSelected();
 				}
+
+			} else {
+
+				if (invalid && dm.getInvalidData(metadata).size() == 0) {
+					content += System.getProperty("line.separator");
+					content += "all f: Fill | f.filled = " + iws.get(iw).getIdentifier()
+							+ " => not(f.with in Invalid)";
+					content += System.getProperty("line.separator");
+				}
+				content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
 			}
 
 		}
@@ -892,7 +922,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1360,7 +1390,14 @@ public class AlloyUtil {
 		final List<Predicate> preds = mod.getPredicates();
 		final List<String> opens = mod.getOpenStatements();
 
-		final String fact = getFactForTC(acts);
+		boolean invalid = false;
+		for (final Signature sig : sigs) {
+			if (sig.getIdentifier().equals("Invalid")) {
+				invalid = true;
+			}
+		}
+
+		final String fact = getFactForTC(acts, invalid);
 
 		final Fact new_fact = new Fact("testcase", "not(" + fact + ")");
 		facts.add(new_fact);
@@ -1387,7 +1424,14 @@ public class AlloyUtil {
 		final List<Predicate> preds = mod.getPredicates();
 		final List<String> opens = mod.getOpenStatements();
 
-		String fact = getFactForTC(acts);
+		boolean invalid = false;
+		for (final Signature sig : sigs) {
+			if (sig.getIdentifier().equals("Invalid")) {
+				invalid = true;
+			}
+		}
+
+		String fact = getFactForTC(acts, invalid);
 
 		if (reached != null) {
 			fact += " and Current_window.is_in.(T/last)=Window_" + reached.getId();
@@ -1445,7 +1489,8 @@ public class AlloyUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	static private String getFactForTC(final List<GUIAction> acts) throws Exception {
+	static private String getFactForTC(final List<GUIAction> acts, final boolean invalid)
+			throws Exception {
 
 		String fact = "";
 		String t = "";
@@ -1571,10 +1616,12 @@ public class AlloyUtil {
 			if (valid == -1) {
 				throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
 			}
-			if (valid == 1) {
-				fact += " and not(" + values_used.get(s).get(0) + " in Invalid)";
-			} else {
-				fact += " and " + values_used.get(s).get(0) + " in Invalid";
+			if (invalid) {
+				if (valid == 1) {
+					fact += " and not(" + values_used.get(s).get(0) + " in Invalid)";
+				} else {
+					fact += " and " + values_used.get(s).get(0) + " in Invalid";
+				}
 			}
 		}
 

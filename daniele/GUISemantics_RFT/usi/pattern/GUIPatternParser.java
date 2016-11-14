@@ -41,6 +41,17 @@ public class GUIPatternParser {
 			throw new Exception("GUI_Pattern - parse: error loading alloy metamodel");
 		}
 
+		final Node alloy_without = nNodeGUI.getAttributes().getNamedItem(
+				"alloy_without_unvalid_data");
+		if (alloy_without != null) {
+			try {
+				gui.loadSemantics_without(alloy_without.getTextContent());
+			} catch (final Exception e) {
+				e.printStackTrace();
+				throw new Exception("GUI_Pattern - parse: error loading alloy metamodel");
+			}
+		}
+
 		final NodeList childWin = nNodeGUI.getChildNodes();
 		final List<Pattern_action_widget> aws = new ArrayList<>();
 		// FOR each GUI's child:

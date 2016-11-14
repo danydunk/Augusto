@@ -18,6 +18,8 @@ public class DataManager {
 	private static DataManager instance = null;
 	private final HashMap<String, List<String>> validDataMap = new HashMap<>();
 	private final HashMap<String, List<String>> invalidDataMap = new HashMap<>();
+	private final HashMap<String, List<Integer>> validItemizedDataMap = new HashMap<>();
+	private final HashMap<String, List<Integer>> invalidItemizedDataMap = new HashMap<>();
 	private final List<String> discardedWords = Lists.newArrayList("the", "in", "these", "this",
 			"that", "of", "an", "and");
 	private final List<String> specialCharacters = Lists.newArrayList(":", ";", ".");
@@ -68,6 +70,38 @@ public class DataManager {
 		return out;
 	}
 
+	public List<Integer> getValidItemizedData(final String descriptor) throws Exception {
+
+		if (descriptor == null) {
+			throw new Exception("DataManager - getValidItemizedData: null input.");
+		}
+		final List<Integer> out = new ArrayList<>();
+		final List<String> descriptors = this.splitDescriptor(descriptor);
+		for (final String s : descriptors) {
+			final List<Integer> values = this.validItemizedDataMap.get(s);
+			if (values != null && values.size() > 0) {
+				out.addAll(values);
+			}
+		}
+		return out;
+	}
+
+	public List<Integer> getInvalidItemizedData(final String descriptor) throws Exception {
+
+		if (descriptor == null) {
+			throw new Exception("DataManager - getInvalidItemizedData: null input.");
+		}
+		final List<Integer> out = new ArrayList<>();
+		final List<String> descriptors = this.splitDescriptor(descriptor);
+		for (final String s : descriptors) {
+			final List<Integer> values = this.invalidItemizedDataMap.get(s);
+			if (values != null && values.size() > 0) {
+				out.addAll(values);
+			}
+		}
+		return out;
+	}
+
 	public List<String> getValidGenericData() {
 
 		final List<String> out = new ArrayList<>();
@@ -105,37 +139,70 @@ public class DataManager {
 			final List<Element> children = rootElement.getChildren();
 			for (final Element nodo : children) {
 
-				if (!nodo.getName().equals("DATA")) {
-					throw new Exception("DataManager - loadDataFromXMLFile: node DATA not found.");
-				}
-				// get the metadata
-				final String metadata = nodo.getChildText("metadata").trim();
-				if (this.invalidDataMap.containsKey(metadata)
-						|| this.validDataMap.containsKey(metadata)) {
-					throw new Exception("DataManager - loadDataFromXMLFile: error.");
-				}
-				final List<String> valid = new ArrayList<>();
-				final List<String> invalid = new ArrayList<>();
-				this.validDataMap.put(metadata, valid);
-				this.invalidDataMap.put(metadata, invalid);
+				assert (nodo.getName().equals("DATA"));
 
-				// recupero i valori
-				if ((nodo.getChild("values") != null)
-						&& (nodo.getChild("values").getChildren() != null)) {
-					final List<Element> values = nodo.getChild("values").getChildren();
+				if (nodo.getAttribute("type") != null
+						&& nodo.getAttribute("type").getValue().equals("itemized")) {
+					// if it is itemized
+					// get the metadata
+					final String metadata = nodo.getChildText("metadata").trim();
+					assert (!this.invalidItemizedDataMap.containsKey(metadata) && !this.validItemizedDataMap
+							.containsKey(metadata));
 
-					for (final Element valueNode : values) {
-						switch (valueNode.getName()) {
-						case "valid":
-							valid.add(valueNode.getTextTrim());
-							break;
-						case "invalid":
-							invalid.add(valueNode.getTextTrim());
-							break;
-						default:
-							throw new Exception(
-									"DataManager - loadDataFromXMLFile: value type not found.");
+					final List<Integer> valid = new ArrayList<>();
+					final List<Integer> invalid = new ArrayList<>();
+					this.validItemizedDataMap.put(metadata, valid);
+					this.invalidItemizedDataMap.put(metadata, invalid);
 
+					// recupero i valori
+					if ((nodo.getChild("values") != null)
+							&& (nodo.getChild("values").getChildren() != null)) {
+						final List<Element> values = nodo.getChild("values").getChildren();
+
+						for (final Element valueNode : values) {
+							switch (valueNode.getName()) {
+							case "valid":
+								valid.add(Integer.valueOf(valueNode.getTextTrim()));
+								break;
+							case "invalid":
+								invalid.add(Integer.valueOf(valueNode.getTextTrim()));
+								break;
+							default:
+								throw new Exception(
+										"DataManager - loadDataFromXMLFile: value type not found.");
+
+							}
+						}
+					}
+				} else {
+					// get the metadata
+					final String metadata = nodo.getChildText("metadata").trim();
+					assert (!this.invalidDataMap.containsKey(metadata) && !this.validDataMap
+							.containsKey(metadata));
+
+					final List<String> valid = new ArrayList<>();
+					final List<String> invalid = new ArrayList<>();
+					this.validDataMap.put(metadata, valid);
+					this.invalidDataMap.put(metadata, invalid);
+
+					// recupero i valori
+					if ((nodo.getChild("values") != null)
+							&& (nodo.getChild("values").getChildren() != null)) {
+						final List<Element> values = nodo.getChild("values").getChildren();
+
+						for (final Element valueNode : values) {
+							switch (valueNode.getName()) {
+							case "valid":
+								valid.add(valueNode.getTextTrim());
+								break;
+							case "invalid":
+								invalid.add(valueNode.getTextTrim());
+								break;
+							default:
+								throw new Exception(
+										"DataManager - loadDataFromXMLFile: value type not found.");
+
+							}
 						}
 					}
 				}

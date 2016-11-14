@@ -17,6 +17,7 @@ import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
 import usi.pattern.dialogs.Pattern_dialogs;
 import usi.testcase.structure.Click;
+import usi.testcase.structure.Fill;
 import usi.testcase.structure.GUIAction;
 import usi.testcase.structure.GUITestCase;
 import usi.testcase.structure.Select;
@@ -143,6 +144,27 @@ public class TestCaseRunner {
 								// the selectable widget is not as expected so
 								// we select the last index
 								ind = this.select_support_added_indexes.get(p).size() - 1;
+								if (ind == -1) {
+									System.out.println("error in select");
+									for (final GUIAction aa : tc.getActions()) {
+										if (aa instanceof Click) {
+											System.out.println("CLICK " + aa.getWidget().getId());
+										}
+										if (aa instanceof Fill) {
+											final Fill f = (Fill) aa;
+											System.out.println("FILL " + aa.getWidget().getId()
+													+ " with " + f.getInput());
+
+										}
+										if (aa instanceof Select) {
+											final Select f = (Select) aa;
+											System.out.println("SELECT " + aa.getWidget().getId()
+													+ " with " + f.getIndex());
+										}
+									}
+									continue mainloop;
+								}
+
 							}
 							final int size = this.select_support_initial.get(p).size()
 									+ this.select_support_added.get(p).size();

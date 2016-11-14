@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import usi.gui.functionality.instance.Instance_GUI_pattern;
+import usi.gui.functionality.instance.Instance_window;
 import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.semantic.alloy.Alloy_Model;
 import usi.gui.semantic.alloy.entity.Fact;
@@ -24,6 +25,7 @@ import usi.pattern.structure.Pattern_action_widget;
 import usi.pattern.structure.Pattern_input_widget;
 import usi.pattern.structure.Pattern_selectable_widget;
 import usi.pattern.structure.Pattern_window;
+import usi.testcase.inputdata.DataManager;
 
 import com.google.common.collect.Lists;
 
@@ -142,7 +144,32 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 	static public SpecificSemantics generate(final Instance_GUI_pattern in) throws Exception {
 
-		final FunctionalitySemantics func_semantics = in.getGuipattern().getSemantics();
+		// we check whether we have invalid inputdata for this instance
+		final DataManager dm = DataManager.getInstance();
+		boolean unvalid_data = false;
+		mainloop: for (final Instance_window iww : in.getWindows()) {
+			for (final Pattern_input_widget piw : iww.getPattern().getInputWidgets()) {
+				for (final Input_widget iw : iww.getIWS_for_PIW(piw.getId())) {
+					String metadata = iw.getLabel() != null ? iw.getLabel() : "";
+					metadata += " ";
+					metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+					if (dm.getInvalidData(metadata).size() > 0) {
+						unvalid_data = true;
+						break mainloop;
+					}
+				}
+			}
+		}
+
+		FunctionalitySemantics func_semantics = null;
+		// if there is not unvalid data we use the semantics without (it is
+		// quicker)
+		if (!unvalid_data && in.getGuipattern().getSemantics_without_unvalid() != null) {
+			func_semantics = in.getGuipattern().getSemantics_without_unvalid();
+		} else {
+			func_semantics = in.getGuipattern().getSemantics();
+		}
+
 		if (func_semantics == null) {
 			throw new Exception(
 					"SpecificSemantics - generate: semantics is missing in gui pattern.");
@@ -228,15 +255,44 @@ public class SpecificSemantics extends FunctionalitySemantics {
 							break;
 						}
 					}
-					if (value == null) {
-						throw new Exception(
-								"SpecificSemantics - generate: value signature not found.");
-					}
-					for (int cc = 0; cc < oiw.getSize(); cc++) {
-						final Signature values = new Signature("Input_widget_" + iw.getId()
-								+ "_value_" + cc, Cardinality.ONE, false,
-								Lists.newArrayList(value), false);
-						signatures.add(values);
+					assert (value != null);
+
+					String metadata = iw.getLabel() != null ? iw.getLabel() : "";
+					metadata += " ";
+					metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+					if ((dm.getInvalidItemizedData(metadata).size() + dm.getValidItemizedData(
+							metadata).size()) > 0) {
+						// if there are some valid or unvalid data we add only
+						// them
+						Signature invalid = null;
+						for (final Signature sign : signatures) {
+							if (sign.getIdentifier().equals("Invalid")) {
+								invalid = sign;
+								break;
+							}
+						}
+						assert (value != null);
+						for (final Integer i : dm.getInvalidItemizedData(metadata)) {
+							assert (invalid != null);
+							final Signature values = new Signature("Input_widget_" + iw.getId()
+									+ "_value_" + i, Cardinality.ONE, false,
+									Lists.newArrayList(invalid), false);
+							signatures.add(values);
+						}
+						for (final Integer i : dm.getValidItemizedData(metadata)) {
+							final Signature values = new Signature("Input_widget_" + iw.getId()
+									+ "_value_" + i, Cardinality.ONE, false,
+									Lists.newArrayList(value), false);
+							signatures.add(values);
+						}
+					} else {
+						// otherwise we add them all
+						for (int cc = 0; cc < oiw.getSize(); cc++) {
+							final Signature values = new Signature("Input_widget_" + iw.getId()
+									+ "_value_" + cc, Cardinality.ONE, false,
+									Lists.newArrayList(value), false);
+							signatures.add(values);
+						}
 					}
 				}
 				signatures.add(sigIW);
@@ -244,7 +300,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			}
 			// a fact is created to associate the IWS to the window
 			final Fact factIW = AlloyUtil.createFactsForInputWidget(input_widgets,
-					added_windows.get(win));
+					added_windows.get(win), unvalid_data);
 			if (!"".equals(factIW.getContent().trim())) {
 				facts.add(factIW);
 			}
