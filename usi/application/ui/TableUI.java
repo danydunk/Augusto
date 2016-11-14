@@ -16,6 +16,7 @@ public class TableUI extends MainHelper {
 		// final int selectedColumn = cell % columnNumber;
 
 		new GuiSubitemTestObject(to).click(atCell(atRow(cell), atColumn(0)));
+		new GuiSubitemTestObject(to).click(atCell(atRow(cell), atColumn(0)));
 	}
 
 	public static void doubleClick(final TestObject to, final int cell) throws Exception {

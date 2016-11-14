@@ -33,7 +33,7 @@ public class AlloyTestCaseGenerationTest {
 			String s;
 
 			BufferedReader br = new BufferedReader(new FileReader(
-					"./files/alloy/GUI_general_old.als"));
+					"./files/for_test/alloy/GUI_general_old.als"));
 			while ((s = br.readLine()) != null) {
 				gui_s += s + System.getProperty("line.separator");
 			}

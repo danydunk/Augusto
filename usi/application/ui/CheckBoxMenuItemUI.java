@@ -7,7 +7,7 @@ import com.rational.test.ft.object.interfaces.ToggleGUITestObject;
 
 public class CheckBoxMenuItemUI extends MainHelper {
 
-	public static void fill(final TestObject testObject, final long index) throws Exception {
+	public static void select(final TestObject testObject, final long index) throws Exception {
 
 		if (!(index == 0 || index == 1)) {
 			throw new Exception("CheckBoxMenuItemUI - fill: wrong index " + index);

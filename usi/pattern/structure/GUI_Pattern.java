@@ -13,10 +13,13 @@ import java.util.stream.Collectors;
 
 import usi.configuration.PathsManager;
 import usi.gui.functionality.instance.Instance_GUI_pattern;
+import usi.gui.functionality.instance.Instance_window;
 import usi.gui.semantic.FunctionalitySemantics;
 import usi.gui.semantic.alloy.AlloyUtil;
 import usi.gui.structure.Action_widget;
 import usi.gui.structure.GUI;
+import usi.gui.structure.Input_widget;
+import usi.gui.structure.Selectable_widget;
 import usi.gui.structure.Window;
 
 import com.google.common.collect.HashMultimap;
@@ -32,6 +35,7 @@ public class GUI_Pattern {
 	private Multimap<String, String> dynamicEdgesFrom;
 	private Multimap<String, String> dynamicEdgesTo;
 	private FunctionalitySemantics semantics;
+	private FunctionalitySemantics semantics_without_unvalid;
 	private final String name;
 
 	public GUI_Pattern(final String name) {
@@ -326,6 +330,16 @@ public class GUI_Pattern {
 		return this.aw_window_mapping.get(aw);
 	}
 
+	public FunctionalitySemantics getSemantics_without_unvalid() {
+
+		return this.semantics_without_unvalid;
+	}
+
+	public void setSemantics_without_unvalid(final FunctionalitySemantics in) {
+
+		this.semantics_without_unvalid = in;
+	}
+
 	public FunctionalitySemantics getSemantics() {
 
 		return this.semantics;
@@ -338,8 +352,14 @@ public class GUI_Pattern {
 
 	public void loadSemantics(final String filename) throws Exception {
 
-		final File gui_model = new File(PathsManager.getAlloyModelsFolder() + "GUI_general.als");
-		final File alloy_metamodel = new File("./files/alloy/" + filename);
+		this.semantics = this.loadAlloyModel("GUI_general.als", filename);
+	}
+
+	private FunctionalitySemantics loadAlloyModel(final String general, final String filename)
+			throws Exception {
+
+		final File gui_model = new File(PathsManager.getAlloyModelsFolder() + general);
+		final File alloy_metamodel = new File(PathsManager.getAlloyModelsFolder() + filename);
 		if (alloy_metamodel.exists() && !alloy_metamodel.isDirectory() && gui_model.exists()
 				&& !gui_model.isDirectory()) {
 			// the content of the 2 files is read
@@ -360,8 +380,15 @@ public class GUI_Pattern {
 			final String model = gui_s + func_s;
 			final FunctionalitySemantics semantics = FunctionalitySemantics.instantiate(AlloyUtil
 					.loadAlloyModelFromString(model));
-			this.semantics = semantics;
+			return semantics;
 		}
+		return null;
+	}
+
+	public void loadSemantics_without(final String filename) throws Exception {
+
+		this.semantics_without_unvalid = this.loadAlloyModel("GUI_general_without_unvalid.als",
+				filename);
 	}
 
 	public boolean containsWindow(final String id) {
@@ -377,7 +404,6 @@ public class GUI_Pattern {
 	public boolean isInstance(final Instance_GUI_pattern in) throws Exception {
 
 		if (in.getGuipattern() != this) {
-			System.out.println("1");
 			return false;
 		}
 
@@ -389,6 +415,33 @@ public class GUI_Pattern {
 					|| matches.size() > pw.getCardinality().getMax()) {
 
 				return false;
+			}
+		}
+
+		for (final Instance_window iww : in.getWindows()) {
+			for (final Pattern_action_widget paw : iww.getPattern().getActionWidgets()) {
+				final List<Action_widget> aws = iww.getAWS_for_PAW(paw.getId());
+				if (aws.size() < paw.getCardinality().getMin()
+						|| aws.size() > paw.getCardinality().getMax()) {
+
+					return false;
+				}
+			}
+			for (final Pattern_selectable_widget psw : iww.getPattern().getSelectableWidgets()) {
+				final List<Selectable_widget> sws = iww.getSWS_for_PSW(psw.getId());
+				if (sws.size() < psw.getCardinality().getMin()
+						|| sws.size() > psw.getCardinality().getMax()) {
+
+					return false;
+				}
+			}
+			for (final Pattern_input_widget piw : iww.getPattern().getInputWidgets()) {
+				final List<Input_widget> iws = iww.getIWS_for_PIW(piw.getId());
+				if (iws.size() < piw.getCardinality().getMin()
+						|| iws.size() > piw.getCardinality().getMax()) {
+
+					return false;
+				}
 			}
 		}
 
@@ -426,7 +479,6 @@ public class GUI_Pattern {
 
 				}
 				if (found_aw_match) {
-					System.out.println("2");
 					System.out.println(pw.getId() + " " + match.getId());
 					return false;
 				}

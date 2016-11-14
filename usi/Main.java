@@ -126,11 +126,20 @@ public class Main extends MainHelper {
 					System.setOut(reflog);
 
 					final Instance_GUI_pattern instance = candidate_instances.get(pattern).get(y);
+
+					// to remove
+					candidate_instances.get(pattern).get(y).generateSpecificSemantics();
+					XMLUtil.save(match_folder + File.separator + "pre_match.xml",
+							Instance_GUI_patternWriter.writeInstanceGUIPattern(candidate_instances
+									.get(pattern).get(y)));
+					// end
+
 					final GUIFunctionality_refine refiner = new GUIFunctionality_refine(instance,
 							gui);
 					final Instance_GUI_pattern refined_instance = refiner.refine();
+					refined_instances.add(refined_instance);
+
 					if (refined_instance != null) {
-						refined_instances.add(refined_instance);
 						XMLUtil.save(match_folder + File.separator + "match.xml",
 								Instance_GUI_patternWriter
 								.writeInstanceGUIPattern(refined_instance));
@@ -151,19 +160,22 @@ public class Main extends MainHelper {
 			for (int x = 0; x < patterns.length; x++) {
 				final GUI_Pattern pattern = patterns[x];
 				for (int y = 0; y < true_instances.get(pattern).size(); y++) {
-					final String match_folder = out_folder + File.separator + patterns_name[x]
-							+ "_match_" + (y + 1) + File.separator + "testcases" + File.separator;
-					ExperimentManager.createFolder(match_folder);
-					final PrintStream vallog = new PrintStream(new FileOutputStream(match_folder
-							+ "validator.log"));
-					System.setOut(vallog);
-					final Instance_GUI_pattern instance = true_instances.get(pattern).get(y);
+					if (true_instances.get(pattern).get(y) != null) {
+						final String match_folder = out_folder + File.separator + patterns_name[x]
+								+ "_match_" + (y + 1) + File.separator + "testcases"
+								+ File.separator;
+						ExperimentManager.createFolder(match_folder);
+						final PrintStream vallog = new PrintStream(new FileOutputStream(
+								match_folder + "validator.log"));
+						System.setOut(vallog);
+						final Instance_GUI_pattern instance = true_instances.get(pattern).get(y);
 
-					final GUIFunctionality_validate validator = new GUIFunctionality_validate(
-							instance, gui);
-					final List<GUITestCaseResult> results = validator.validate();
-					ExperimentManager.dumpTCresults(match_folder, results, gui);
-					vallog.close();
+						final GUIFunctionality_validate validator = new GUIFunctionality_validate(
+								instance, gui);
+						final List<GUITestCaseResult> results = validator.validate();
+						ExperimentManager.dumpTCresults(match_folder, results, gui);
+						vallog.close();
+					}
 				}
 			}
 			System.setOut(generallog);

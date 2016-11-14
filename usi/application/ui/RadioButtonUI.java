@@ -7,7 +7,7 @@ import com.rational.test.ft.object.interfaces.ToggleGUITestObject;
 
 public class RadioButtonUI extends MainHelper {
 
-	public static void fill(final TestObject testObject) throws Exception {
+	public static void select(final TestObject testObject) throws Exception {
 
 		new ToggleGUITestObject(testObject).clickToState(SELECTED);
 	}

@@ -101,9 +101,6 @@ public class AlloyTestCaseGenerator {
 		for (final RunCommandThread t : threads) {
 			t.join();
 
-			if (t.getSolution() == null) {
-				System.out.println(this.instance.getSemantics());
-			}
 			if (!t.hasExceptions() && t.getSolution() != null && t.getSolution().satisfiable()) {
 				solutions.add(t.getSolution());
 			} else {
@@ -306,12 +303,12 @@ public class AlloyTestCaseGenerator {
 								if (t.arity() == 2
 										&& t.atom(1).equals("Input_widget_" + iw.getId() + "$0")) {
 									if (iw instanceof Option_input_widget) {
-										// System.out.println(inputdata);
 										final Option_input_widget oiw = (Option_input_widget) iw;
 
 										if (inputdata.length() == 0) {
 											inputdata = String.valueOf(oiw.getSelected());
 										}
+
 										final Option_input_widget new_oiw = new Option_input_widget(
 												oiw.getId(), oiw.getLabel(), oiw.getClasss(),
 												oiw.getX(), oiw.getY(), oiw.getSize(),
@@ -585,14 +582,14 @@ public class AlloyTestCaseGenerator {
 				fill = sig;
 			}
 		}
-		if (invalid == null || value == null || fill == null) {
-			throw new Exception(
-					"AlloyTestCaseGenerator - elaborateInputData: signatures not found.");
-		}
+		assert (value != null && fill != null);
 
 		List<String> fill_atoms = AlloyUtil.getElementsInSet(solution, fill);
 		final List<String> value_atoms = AlloyUtil.getElementsInSet(solution, value);
-		List<String> invalid_atoms = AlloyUtil.getElementsInSet(solution, invalid);
+		List<String> invalid_atoms = new ArrayList<>();
+		if (invalid != null) {
+			invalid_atoms = AlloyUtil.getElementsInSet(solution, invalid);
+		}
 		List<String> valid_atoms = new ArrayList<>();
 		for (final String a : value_atoms) {
 			if (!invalid_atoms.contains(a)) {

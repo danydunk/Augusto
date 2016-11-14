@@ -200,7 +200,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -336,7 +336,6 @@ public class GUIFunctionality_refine {
 				assert vsem.size() < 2;
 
 				String prop = (vsem.size() == 1) ? vsem.get(0) : this.current_semantic_property;
-				System.out.println(prop);
 				if (!this.validateProperty(prop, this.instancePattern.getSemantics(),
 						this.observed_tcs)) {
 					System.out.println("ADAPTING SEMANTIC PROPERTY");
@@ -474,7 +473,7 @@ public class GUIFunctionality_refine {
 							+ " and click_semantics[Action_widget_" + (aw.getId()) + ",t])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -507,19 +506,28 @@ public class GUIFunctionality_refine {
 			// final int index = ran.nextInt(this.observed_tcs.size());
 			// final GUITestCaseResult res = this.observed_tcs.get(index);
 
-			// we use the last inserted testcase
-			final GUITestCaseResult res = this.observed_tcs.get(this.observed_tcs.size() - 1);
-			final List<GUITestCaseResult> tcs = this.observed_tcs.stream()
-					.filter(e -> !e.equals(res)).collect(Collectors.toList());
-
+			List<GUITestCaseResult> tcs = new ArrayList<>();
 			final List<String> constraints = new ArrayList<>(this.discarded_semantic_properties);
 			Alloy_Model sem = null;
-			try {
-				sem = AlloyUtil.getTCaseModel(in_sem, res.getTc().getActions(), res.getResults()
-						.get(res.getResults().size() - 1));
-			} catch (final Exception e) {
-				e.printStackTrace();
+
+			if (this.observed_tcs.size() > 0) {
+				// we use the last inserted testcase
+				final GUITestCaseResult res = this.observed_tcs.get(this.observed_tcs.size() - 1);
+				tcs = this.observed_tcs.stream().filter(e -> !e.equals(res))
+						.collect(Collectors.toList());
+
+				try {
+					sem = AlloyUtil.getTCaseModel(in_sem, res.getTc().getActions(), res
+							.getResults().get(res.getResults().size() - 1));
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				sem = SpecificSemantics.instantiate(in_sem);
+				sem.clearRunCommands();
+				sem.addRun_command("run {System}");
 			}
+
 			final SpecificSemantics new_sem = addSemanticConstrain_to_Model(sem, constraints);
 
 			final Module comp = AlloyUtil.compileAlloyModel(new_sem.toString());
@@ -735,7 +743,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					this.discarded_semantic_properties.remove(this.current_semantic_property);
 					break mainloop;
 				}
@@ -788,7 +796,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
 					this.current_semantic_property = "";
 					return;
 				}
@@ -836,6 +844,7 @@ public class GUIFunctionality_refine {
 				final Alloy_Model sem = AlloyUtil.getTCaseModel(sem_filtered, batch.get(cont)
 						.getTc().getActions(),
 						batch.get(cont).getResults().get(batch.get(cont).getResults().size() - 1));
+
 				final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
 				final Run_command_thread run = new Run_command_thread(comp, comp.getAllCommands()
 						.get(0));
@@ -846,7 +855,6 @@ public class GUIFunctionality_refine {
 
 			while (alive) {
 				alive = false;
-
 				for (final Run_command_thread run : threads) {
 					if (run.isAlive()) {
 						alive = true;
