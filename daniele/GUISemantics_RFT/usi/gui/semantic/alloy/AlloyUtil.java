@@ -1075,7 +1075,6 @@ public class AlloyUtil {
 		String constraint = "";
 
 		// we retrieve all the atoms related to this sigs
-		final List<String> atoms = new ArrayList<>();
 		// map used to create the exists part of the fact
 		final Map<String, List<String>> map_sig_atoms = new HashMap<>();
 
@@ -1092,15 +1091,12 @@ public class AlloyUtil {
 			String new_constraint = "";
 			for (final String ss : sig_atom) {
 
-				// if the atom was not already added
-				if (!atoms.contains(ss)) {
-					// if (new_exist.length() > 0) {
-					// new_exist += ",";
-					// }
-					// new_exist += ss;
-					map_sig_atoms.get(signame).add(ss);
-					atoms.add(ss);
-				}
+				// if (new_exist.length() > 0) {
+				// new_exist += ",";
+				// }
+				// new_exist += ss;
+				map_sig_atoms.get(signame).add(ss);
+
 				new_constraint += ss;
 
 				if (sig_atom.indexOf(ss) != sig_atom.size() - 1) {
@@ -1143,7 +1139,6 @@ public class AlloyUtil {
 		}
 
 		// for all the atoms found
-		final List<String> processed_atoms = new ArrayList<>();
 		for (final Sig s : properties.keySet()) {
 
 			final List<Field> fields_appoggio = new ArrayList<Field>();
@@ -1176,10 +1171,9 @@ public class AlloyUtil {
 				}
 			}
 
-			for (final String atom : atoms) {
-				if (processed_atoms.contains(atom)) {
-					continue;
-				}
+			final String signame = s.label.replace("this/", "");
+			for (final String atom : map_sig_atoms.get(signame)) {
+
 				for (final Field f : fields) {
 					final A4TupleSet ts = sol.eval(f);
 					final Iterator<A4Tuple> tupi = ts.iterator();
@@ -1187,7 +1181,7 @@ public class AlloyUtil {
 
 					while (tupi.hasNext()) {
 						final A4Tuple tup = tupi.next();
-						if (!tup.atom(0).equals(atom.replace("_", "$"))) {
+						if (!tup.atom(0).replace("$", "_").equals(atom)) {
 							continue;
 						}
 						switch (tup.arity()) {
@@ -1231,7 +1225,6 @@ public class AlloyUtil {
 					constraint += new_constraint;
 
 				}
-				processed_atoms.add(atom);
 			}
 		}
 		if (exists.equals("")) {

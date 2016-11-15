@@ -176,7 +176,7 @@ public class AlloyUtilsTest {
 		final Instance_GUI_pattern in = res.get(0);
 
 		final SpecificSemantics specsem = SpecificSemantics.generate(in);
-		specsem.addRun_command("run {System and {one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and ((aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0)) and (not (unique_test [t]) and not (filled_required_test [t]))} } for 9");
+		specsem.addRun_command("run {System and {one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and ((aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0)) and (not (unique_test [Current_window.is_in.t,t]) and not (filled_required_test [Current_window.is_in.t,t]))} } for 9");
 
 		// Save it, and verify if it can be reloaded
 		final String plainConcreteModel = specsem.toString();

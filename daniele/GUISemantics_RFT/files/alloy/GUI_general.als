@@ -16,10 +16,6 @@ sig Select extends Operation {
 	wid: one Selectable_widget,
 	selected: one Object
 }
-sig Select_doubleclick extends Operation {
-	widg: one Selectable_widget,
-	selected_o: one Object
-}
 one sig Track { 
 	op: Operation lone -> Time
 }

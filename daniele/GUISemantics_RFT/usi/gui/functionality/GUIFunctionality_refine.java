@@ -724,6 +724,7 @@ public class GUIFunctionality_refine {
 			} else {
 				sem_with.addRun_command(runCmd + " for " + ConfigurationManager.getAlloyRunScope()
 						+ " but " + size + " Time");
+
 				clone_with.setSpecificSemantics(sem_with);
 				final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
 				tests = test_gen.generateTestCases();
