@@ -8,6 +8,9 @@ abstract sig Operation { }
 sig Click extends Operation {
 	clicked: one Action_widget
 }
+sig Object {
+	appeared: one Time
+}
 sig Fill extends Operation {
 	filled: one Input_widget,
 	with: one Value
@@ -103,21 +106,23 @@ fact {
 }
 
 ---------------Generic ADD Semantics----------
-sig Field {
-	associated_to: one Input_widget,
-	has_value: Value lone -> Object
+one sig Property_unique{
+	uniques: set Input_widget
+} 
+one sig Property_required{
+	requireds: set Input_widget
 }
-sig Property_unique, Property_required in Field { }
-sig Object { }
+sig Object_inlist extends Object{
+	vs: Value lone ->Input_widget
+}
 one sig List { 
-	contains: Object set -> Time
+	contains: Object_inlist set -> Time
 }
 fact {
-	#Field = #Input_widget
-	all f: Field |  #f.associated_to = 1
-	all iw: Input_widget | #associated_to.iw = 1
+	all o: Object_inlist| #o.vs <= #Form.iws
+	//all t: Time | List.contains.t = Selectable_widget.list.t
+	//all t: Time | (Current_window.is_in.t in Initial) <=> #Current_crud_op.operation.t = 0
 }
-
 pred go_semantics [w: Window, t: Time] { }
 pred go_success_post [w: Window, t, t': Time] {
 	List.contains.t' = List.contains.t
@@ -137,9 +142,9 @@ pred fill_fail_post [iw: Input_widget, t, t': Time, v: Value] {
 }
 
 pred click_semantics [aw: Action_widget, t: Time] {
-	(aw in Ok and Current_window.is_in.t  in Form and (#aw.goes = 1 and aw.goes in Form)) => filled_required_in_w_test [Current_window.is_in.t, t] 
-	(aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0) => (filled_required_test [t] and unique_test [t])
-	(aw in Ok and Current_window.is_in.t  in Confirm) => (filled_required_test [t] and unique_test [t])
+	(aw in Ok and Current_window.is_in.t  in Form and (#aw.goes = 1 and aw.goes in Form)) => filled_required_test [Current_window.is_in.t, t] 
+	(aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0) => (filled_required_test [Current_window.is_in.t,t] and unique_test [Current_window.is_in.t,t])
+	(aw in Ok and Current_window.is_in.t  in Confirm) => (filled_required_test [Current_window.is_in.t,t] and unique_test [Current_window.is_in.t,t])
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
 	aw in Cancel => (#Current_window.is_in.t.iws.content.t' = 0 and List.contains.t' = List.contains.t and (Input_widget - Current_window.is_in.t.iws).content.t' = (Input_widget - Current_window.is_in.t.iws).content.t)
@@ -153,14 +158,11 @@ pred click_fail_post [aw: Action_widget, t, t': Time]	{
 	Input_widget.content.t' = Input_widget.content.t
 }
 pred add [t, t': Time] {
-	one o: Object | all f: Field | f.has_value.o = f.associated_to.content.t and List.contains.t' = List.contains.t+o
+	one o: Object_inlist |all iw: Form.iws | not(o in List.contains.t) and o.appeared = t' and o.vs.iw = iw.content.t and List.contains.t' = List.contains.t+o
 }
-pred filled_required_in_w_test [w: Form, t: Time] { 
-	all iw: w.iws | (iw in Property_required.associated_to) => #iw.content.t = 1
+pred filled_required_test [w: Form, t: Time] { 
+	all iw: w.iws | (iw in Property_required.requireds) => #iw.content.t = 1
 }
-pred  filled_required_test [t: Time] { 
-	all iw: Input_widget | (iw in Property_required.associated_to) => #iw.content.t = 1
-}
-pred  unique_test [t: Time] { 
-	all p: Property_unique | all o2: List.contains.t | (#p.has_value.o2 = 1) => p.associated_to.content.t != p.has_value.o2
+pred  unique_test [w: Form, t: Time] { 
+	all iw: w.iws | all o: List.contains.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
 }

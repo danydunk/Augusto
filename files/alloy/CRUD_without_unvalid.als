@@ -26,13 +26,14 @@ fact {
 	#View = 1 => 	all iww: Form.iws | one iw: View.iws | View.mapping.iw = iww
 	#View = 1 => 	no iww, iww2: Form.iws | one iw, iw2: View.iws | IW/lt[iww,iww2] and IW/lt[iw2,iw] and View.mapping.iw = iww and View.mapping.iw2 = iww2
 	all iw: Initial | iw.aws = (Create_trigger+Read_trigger+Update_trigger+Delete_trigger) and #iw.iws = 0 and #iw.sws = 1
-	all fw: Form | one ok: Ok,  cancel: Cancel | #fw.iws > 0 and fw.aws = ok+cancel and #fw.sws = 0 and ok.goes in Initial and cancel.goes in Initial
+	all fw: Form | one ok: Ok,  cancel: Cancel | #fw.iws > 0 and fw.aws = ok+cancel and #fw.sws = 0 //and ok.goes in Initial and cancel.goes in Initial
 	#Window = #Form + #Initial + #View
 	#Ok.goes < 2
 	#Create_trigger.goes < 2
 	#Read_trigger.goes < 2
 	#Update_trigger.goes < 2
 	#Delete_trigger.goes < 2
+	all iw: (Input_widget-Form.iws) | not(iw in Property_unique.uniques) and not(iw in Property_required.requireds)
 }
 ---------------Generic CRUD Semantics---------- 
 abstract sig Crud_op {}
@@ -40,20 +41,22 @@ one sig CREATE, READ, UPDATE extends Crud_op {}
 one sig Current_crud_op {
 	operation: Crud_op lone -> Time
 }
-sig Field {
-	associated_to: one Input_widget,
-	has_value: Value lone -> Object
+one sig Property_unique{
+	uniques: set Input_widget
+} 
+one sig Property_required{
+	requireds: set Input_widget
 }
-sig Property_unique, Property_required in Field { }
+sig Object_inlist extends Object{
+	vs: Value lone ->Input_widget
+}
 one sig List { 
-	contains: Object set -> Time
+	contains: Object_inlist set -> Time
 }
 fact {
-	#Field = #Form.iws
+	all o: Object_inlist| #o.vs <= #Form.iws
 	all t: Time | List.contains.t = Selectable_widget.list.t
-	all f: Field | #f.associated_to = 1
-	all iw: Input_widget | iw in Form.iws => #associated_to.iw = 1
-	all t: Time | (Current_window.is_in.t in Initial) <=> #Current_crud_op.operation.t = 0
+	//all t: Time | (Current_window.is_in.t in Initial) <=> #Current_crud_op.operation.t = 0
 }
 
 pred fill_semantics [iw: Input_widget, t: Time, v: Value] { }
@@ -83,8 +86,8 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] {
 }
 
 pred click_semantics [aw: Action_widget, t: Time] {
-	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] 
-	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] 
+	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t]
+	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t]
 	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in READ) => (2=(1+1))
 	(aw in Delete_trigger) => (2=(1+1))
 }
@@ -113,26 +116,23 @@ pred click_pre[aw: Action_widget, t: Time] {
 }
 
 pred add [t, t': Time] {
-	one o: Object |all f: Field | not(o in List.contains.t) and o.appeared = t' and f.has_value.o = f.associated_to.content.t and List.contains.t' = List.contains.t+o
+	one o: Object_inlist |all iw: Form.iws | not(o in List.contains.t) and o.appeared = t' and o.vs.iw = iw.content.t and List.contains.t' = List.contains.t+o
 }
 pred filled_required_test [w: Form, t: Time] { 
-	all iw: w.iws | (iw in Property_required.associated_to) => #iw.content.t = 1
+	all iw: w.iws | (iw in Property_required.requireds) => #iw.content.t = 1
 }
 pred  unique_test [w: Form, t: Time] { 
-	all p: Property_unique | all o2: List.contains.t | p.associated_to in w.iws and ((#p.has_value.o2 = 1) => p.associated_to.content.t != p.has_value.o2) //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
+	all iw: w.iws | all o: List.contains.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
 }
-//pred valid_data_test [w: Form, t: Time] {
-//	all v: w.iws.content.t | not(v in Invalid)
-//}
-pred  unique_for_update_test [w: Form, t: Time] { 
-	all p: Property_unique | all o2: (List.contains.t-Selectable_widget.selected.t) | p.associated_to in w.iws and ((#p.has_value.o2 = 1) => p.associated_to.content.t != p.has_value.o2) //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
+pred  unique_for_update_test [w: Form, t: Time] {
+	all iw: w.iws | all o: (List.contains.t-Selectable_widget.selected.t) | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
 }
 pred load_form [o: Object, t': Time] {
-	all f: Field | f.associated_to.content.t' = f.has_value.o
+	all iw: Form.iws | iw.content.t' = o.vs.iw
 	all iw: View.iws | iw.content.t' = View.mapping.iw.content.t'
 }
 pred update [t, t': Time] {
-	one o: Object | all f: Field | not(o in List.contains.t) and o.appeared = Selectable_widget.selected.t.appeared and f.has_value.o = f.associated_to.content.t and List.contains.t' = (List.contains.t - Selectable_widget.selected.t)+o
+	one o: Object | all iw: Form.iws | not(o in List.contains.t) and o.appeared = Selectable_widget.selected.t.appeared and o.vs.iw = iw.content.t and List.contains.t' = (List.contains.t - Selectable_widget.selected.t)+o
 }
 pred delete [t, t': Time] {
 	List.contains.t' = List.contains.t - Selectable_widget.selected.t

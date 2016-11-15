@@ -349,10 +349,18 @@ public class AlloyTestCaseGenerator {
 											if (!map.containsKey(obj.atom(1))) {
 												final List<A4Tuple> appeared = AlloyUtil.getTuples(
 														solution, obj.atom(1));
-												assert (appeared.size() == 1);
+												assert (appeared.size() > 1);
 
-												final int ind = this.extractTimeIndex(appeared.get(
-														0).atom(1));
+												int ind = -1;
+												for (final A4Tuple tt : appeared) {
+													if (tt.arity() == 2
+															&& tt.atom(1).startsWith("Time")) {
+
+														ind = this.extractTimeIndex(tt.atom(1));
+														break;
+													}
+												}
+												assert (ind != -1);
 												map.put(obj.atom(1), ind);
 												to_order.add(ind);
 											} else {
@@ -511,9 +519,15 @@ public class AlloyTestCaseGenerator {
 				for (final String obj : objects_in_sw_at_t) {
 					final List<A4Tuple> obj_tuples = AlloyUtil.getTuples(solution, obj);
 
-					assert (obj_tuples.size() == 1);
-
-					final int appeared = this.extractTimeIndex(obj_tuples.get(0).atom(1));
+					assert (obj_tuples.size() > 1);
+					int appeared = -1;
+					for (final A4Tuple tt : obj_tuples) {
+						if (tt.arity() == 2 && tt.atom(1).startsWith("Time")) {
+							appeared = this.extractTimeIndex(tt.atom(1));
+							break;
+						}
+					}
+					assert (appeared != -1);
 					if (!map.containsKey(obj)) {
 						to_order.add(appeared);
 						map.put(obj, appeared);

@@ -38,12 +38,12 @@ public class Refinement_upmfull_crud extends Refinement_upmfull_crudHelper {
 			ConfigurationManager.load("./files/for_test/config/upm.properties");
 			ExperimentManager.init();
 			// we load a gui pattern
-			Document doc = XMLUtil.read(new File("./files/xml/crud.xml").getAbsolutePath());
+			Document doc = XMLUtil.read(new File("./files/guipatterns/crud.xml").getAbsolutePath());
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
 			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-					.getAbsolutePath());
+			.getAbsolutePath());
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -57,6 +57,10 @@ public class Refinement_upmfull_crud extends Refinement_upmfull_crudHelper {
 			if (match == null) {
 				throw new Exception("");
 			}
+		} catch (final AssertionError ee) {
+			System.out.println("assertion");
+			ee.printStackTrace();
+
 		} catch (final Exception e) {
 			e.printStackTrace();
 			System.out.println("ERROR");
