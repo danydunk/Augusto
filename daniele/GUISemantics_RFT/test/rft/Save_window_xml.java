@@ -1,6 +1,11 @@
 package test.rft;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.w3c.dom.Document;
@@ -8,18 +13,18 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import resources.test.rft.Save_window_xmlHelper;
-import usi.application.ActionManager;
-import usi.application.ApplicationHelper;
-import usi.configuration.ConfigurationManager;
-import usi.configuration.ExperimentManager;
-import usi.gui.GUIParser;
-import usi.gui.GUIWriter;
-import usi.gui.GuiStateManager;
-import usi.gui.structure.Action_widget;
-import usi.gui.structure.GUI;
-import usi.gui.structure.Window;
-import usi.testcase.structure.Click;
-import usi.xml.XMLUtil;
+import src.usi.application.ActionManager;
+import src.usi.application.ApplicationHelper;
+import src.usi.configuration.ConfigurationManager;
+import src.usi.configuration.ExperimentManager;
+import src.usi.gui.GUIParser;
+import src.usi.gui.GUIWriter;
+import src.usi.gui.GuiStateManager;
+import src.usi.gui.structure.Action_widget;
+import src.usi.gui.structure.GUI;
+import src.usi.gui.structure.Window;
+import src.usi.testcase.structure.Click;
+import src.usi.xml.XMLUtil;
 
 /**
  * Description : Functional Test Script
@@ -39,14 +44,20 @@ public class Save_window_xml extends Save_window_xmlHelper {
 	public void testMain(final Object[] args) {
 
 		try {
-			final String out_file = "files" + File.separator + "for_test" + File.separator
-					+ "output" + File.separator + "out.xml";
+			final String out_file = "." + File.separator + "files" + File.separator + "for_test"
+					+ File.separator + "output" + File.separator + "out.xml";
 			ApplicationHelper application = null;
 			try {
-				final String conf_file = "files" + File.separator + "for_test" + File.separator
-						+ "config" + File.separator + "upm.properties";
-				ConfigurationManager.load(conf_file);
+				Files.copy(Save_window_xml.class
+						.getResourceAsStream("/files/for_test/config/upm.properties"), Paths
+						.get(System.getProperty("user.dir") + File.separator + "conf.properties"),
+						REPLACE_EXISTING);
+
+				ConfigurationManager.load(System.getProperty("user.dir") + File.separator
+						+ "conf.properties");
 				ExperimentManager.init();
+				Files.delete(Paths.get(System.getProperty("user.dir") + File.separator
+						+ "conf.properties"));
 				application = ApplicationHelper.getInstance();
 				application.startApplication();
 				final GuiStateManager gui = GuiStateManager.getInstance();
@@ -57,17 +68,16 @@ public class Save_window_xml extends Save_window_xmlHelper {
 				final Click click = new Click(windows.get(0), null, aw);
 				ActionManager.executeAction(click);
 				windows = gui.readGUI();
-				final GUIWriter writer = new GUIWriter();
 
 				g.addWindow(windows.get(0));
-				final Document doc = writer.writeGUI(g);
+				final Document doc = GUIWriter.writeGUI(g);
 
-				usi.xml.XMLUtil.save(out_file, doc);
+				src.usi.xml.XMLUtil.save(out_file, doc);
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 			// oracle starting
-			final Document d = XMLUtil.read(out_file);
+			final Document d = XMLUtil.read(new FileInputStream(out_file));
 			final NodeList ws = d.getElementsByTagName("window");
 			if (ws.getLength() != 1) {
 				throw new Exception("");

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xml_schemas/Pattern_schema.xsd" 
+<pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	alloy="CRUD.als" alloy_without_unvalid_data="CRUD_without_unvalid.als" name="CRUD">
 	<window id="initial" card="one" alloy="Initial">
 		<title>.*</title>

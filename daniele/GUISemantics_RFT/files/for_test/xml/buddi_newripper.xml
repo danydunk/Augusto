@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><GUI>
+﻿<?xml version="1.0" encoding="UTF-8"?><GUI>
     <window id="w7">
         <pos>100:100</pos>
         <class>org.homeunix.thecave.buddi.view.PreferencesFrame</class>
@@ -999,7 +999,7 @@
             <pos>13:332</pos>
             <class>ComboBoxUI</class>
             <label>&lt;html&gt;Transaction description, such as the&lt;br&gt;store or person with whom the&lt;br&gt;transaction was done.&lt;/html&gt;</label>
-            <value>[options] -1 : 0</value>
+            <value/>
         </input_widget>
         <input_widget id="iw55">
             <pos>298:332</pos>

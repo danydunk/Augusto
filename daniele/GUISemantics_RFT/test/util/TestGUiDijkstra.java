@@ -8,14 +8,14 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
-import test.gui.GUIStructureMaker;
-import usi.gui.structure.Action_widget;
-import usi.gui.structure.GUI;
-import usi.gui.structure.Input_widget;
-import usi.gui.structure.Window;
-import usi.util.DijkstraAlgorithm;
-import usi.util.Graph;
-import usi.util.Vertex;
+import src.usi.gui.structure.Action_widget;
+import src.usi.gui.structure.GUI;
+import src.usi.gui.structure.Input_widget;
+import src.usi.gui.structure.Window;
+import src.usi.util.DijkstraAlgorithm;
+import src.usi.util.Graph;
+import src.usi.util.Vertex;
+import test.usi.gui.GUIStructureMaker;
 
 public class TestGUiDijkstra {
 

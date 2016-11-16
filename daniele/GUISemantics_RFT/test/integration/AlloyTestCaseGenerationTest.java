@@ -10,17 +10,17 @@ import java.util.List;
 
 import org.junit.Test;
 
-import usi.gui.functionality.GUIFunctionality_validate;
-import usi.gui.functionality.instance.Instance_GUI_pattern;
-import usi.gui.functionality.instance.Instance_window;
-import usi.gui.semantic.FunctionalitySemantics;
-import usi.gui.semantic.SpecificSemantics;
-import usi.gui.semantic.alloy.AlloyUtil;
-import usi.gui.semantic.alloy.Alloy_Model;
-import usi.gui.structure.GUI;
-import usi.pattern.structure.GUI_Pattern;
-import usi.testcase.AlloyTestCaseGenerator;
-import usi.testcase.structure.GUITestCase;
+import src.usi.gui.functionality.GUIFunctionality_validate;
+import src.usi.gui.functionality.instance.Instance_GUI_pattern;
+import src.usi.gui.functionality.instance.Instance_window;
+import src.usi.gui.structure.GUI;
+import src.usi.pattern.structure.GUI_Pattern;
+import src.usi.semantic.FunctionalitySemantics;
+import src.usi.semantic.SpecificSemantics;
+import src.usi.semantic.alloy.AlloyUtil;
+import src.usi.semantic.alloy.Alloy_Model;
+import src.usi.testcase.AlloyTestCaseGenerator;
+import src.usi.testcase.structure.GUITestCase;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 public class AlloyTestCaseGenerationTest {

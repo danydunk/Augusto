@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import usi.util.*;
+import src.usi.util.*;
 
 public class TestDijkstraAlgorithm {
 
