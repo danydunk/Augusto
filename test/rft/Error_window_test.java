@@ -1,25 +1,29 @@
 package test.rft;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.Document;
 
 import resources.test.rft.Error_window_testHelper;
-import usi.configuration.ConfigurationManager;
-import usi.configuration.ExperimentManager;
-import usi.gui.GUIParser;
-import usi.gui.structure.Action_widget;
-import usi.gui.structure.GUI;
-import usi.gui.structure.Input_widget;
-import usi.gui.structure.Window;
-import usi.testcase.TestCaseRunner;
-import usi.testcase.structure.Click;
-import usi.testcase.structure.Fill;
-import usi.testcase.structure.GUIAction;
-import usi.testcase.structure.GUITestCase;
-import usi.xml.XMLUtil;
+import src.usi.configuration.ConfigurationManager;
+import src.usi.configuration.ExperimentManager;
+import src.usi.gui.GUIParser;
+import src.usi.gui.structure.Action_widget;
+import src.usi.gui.structure.GUI;
+import src.usi.gui.structure.Input_widget;
+import src.usi.gui.structure.Window;
+import src.usi.testcase.TestCaseRunner;
+import src.usi.testcase.structure.Click;
+import src.usi.testcase.structure.Fill;
+import src.usi.testcase.structure.GUIAction;
+import src.usi.testcase.structure.GUITestCase;
+import src.usi.xml.XMLUtil;
 
 /**
  * Description : Functional Test Script
@@ -39,12 +43,20 @@ public class Error_window_test extends Error_window_testHelper {
 	public void testMain(final Object[] args) {
 
 		try {
-			ConfigurationManager.load("./files/for_test/config/upm_notempty.properties");
+			Files.copy(Error_window_test.class
+					.getResourceAsStream("/files/for_test/config/upm_notempty.properties"), Paths
+					.get(System.getProperty("user.dir") + File.separator + "conf.properties"),
+					REPLACE_EXISTING);
+
+			ConfigurationManager.load(System.getProperty("user.dir") + File.separator
+					+ "conf.properties");
 			ExperimentManager.init();
+			Files.delete(Paths.get(System.getProperty("user.dir") + File.separator
+					+ "conf.properties"));
 
 			// we load the GUI structure
-			final Document doc = XMLUtil.read(new File(
-					"./files/for_test/xml/upm-full_newripper.xml").getAbsolutePath());
+			final Document doc = XMLUtil.read(Error_window_test.class
+					.getResourceAsStream("/files/for_test/xml/upm-full_newripper.xml"));
 			final GUI gui = GUIParser.parse(doc);
 			final List<GUIAction> acts = new ArrayList<>();
 

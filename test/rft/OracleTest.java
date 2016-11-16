@@ -1,27 +1,31 @@
 package test.rft;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.Document;
 
 import resources.test.rft.OracleTestHelper;
-import usi.configuration.ConfigurationManager;
-import usi.configuration.ExperimentManager;
-import usi.gui.GUIParser;
-import usi.gui.structure.Action_widget;
-import usi.gui.structure.GUI;
-import usi.gui.structure.Selectable_widget;
-import usi.gui.structure.Widget;
-import usi.gui.structure.Window;
-import usi.testcase.GUITestCaseResult;
-import usi.testcase.OracleChecker;
-import usi.testcase.TestCaseRunner;
-import usi.testcase.structure.Click;
-import usi.testcase.structure.GUIAction;
-import usi.testcase.structure.GUITestCase;
-import usi.xml.XMLUtil;
+import src.usi.configuration.ConfigurationManager;
+import src.usi.configuration.ExperimentManager;
+import src.usi.gui.GUIParser;
+import src.usi.gui.structure.Action_widget;
+import src.usi.gui.structure.GUI;
+import src.usi.gui.structure.Selectable_widget;
+import src.usi.gui.structure.Widget;
+import src.usi.gui.structure.Window;
+import src.usi.testcase.GUITestCaseResult;
+import src.usi.testcase.OracleChecker;
+import src.usi.testcase.TestCaseRunner;
+import src.usi.testcase.structure.Click;
+import src.usi.testcase.structure.GUIAction;
+import src.usi.testcase.structure.GUITestCase;
+import src.usi.xml.XMLUtil;
 
 /**
  * Description : Functional Test Script
@@ -42,15 +46,21 @@ public class OracleTest extends OracleTestHelper {
 
 		try {
 			// we load the GUI structure
-			final Document doc = XMLUtil.read(new File(
-					"./files/for_test/xml/upm-full_newripper.xml").getAbsolutePath());
+			final Document doc = XMLUtil.read(OracleTest.class
+					.getResourceAsStream("/files/for_test/xml/upm-full_newripper.xml"));
 			final GUI g = GUIParser.parse(doc);
 
 			final OracleChecker oracle = new OracleChecker(g);
-			final String conf_file = "files" + File.separator + "for_test" + File.separator
-					+ "config" + File.separator + "upm.properties";
-			ConfigurationManager.load(conf_file);
+			Files.copy(
+					OracleTest.class.getResourceAsStream("/files/for_test/config/upm.properties"),
+					Paths.get(System.getProperty("user.dir") + File.separator + "conf.properties"),
+					REPLACE_EXISTING);
+
+			ConfigurationManager.load(System.getProperty("user.dir") + File.separator
+					+ "conf.properties");
 			ExperimentManager.init();
+			Files.delete(Paths.get(System.getProperty("user.dir") + File.separator
+					+ "conf.properties"));
 
 			final Window target = g.getWindow("w2");
 			final Window source = g.getWindow("w1");

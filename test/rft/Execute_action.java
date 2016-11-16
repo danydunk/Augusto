@@ -1,17 +1,21 @@
 package test.rft;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import resources.test.rft.Execute_actionHelper;
-import usi.application.ActionManager;
-import usi.application.ApplicationHelper;
-import usi.configuration.ConfigurationManager;
-import usi.configuration.ExperimentManager;
-import usi.gui.GuiStateManager;
-import usi.gui.structure.Action_widget;
-import usi.gui.structure.Window;
-import usi.testcase.structure.Click;
+import src.usi.application.ActionManager;
+import src.usi.application.ApplicationHelper;
+import src.usi.configuration.ConfigurationManager;
+import src.usi.configuration.ExperimentManager;
+import src.usi.gui.GuiStateManager;
+import src.usi.gui.structure.Action_widget;
+import src.usi.gui.structure.Window;
+import src.usi.testcase.structure.Click;
 
 /**
  * Description : Functional Test Script
@@ -31,11 +35,20 @@ public class Execute_action extends Execute_actionHelper {
 	public void testMain(final Object[] args) {
 
 		try {
-			ApplicationHelper application = null;
-			final String conf_file = "files" + File.separator + "for_test" + File.separator
-					+ "config" + File.separator + "upm.properties";
-			ConfigurationManager.load(conf_file);
+
+			Files.copy(Execute_action.class
+					.getResourceAsStream("/files/for_test/config/upm.properties"), Paths.get(System
+					.getProperty("user.dir") + File.separator + "conf.properties"),
+					REPLACE_EXISTING);
+
+			ConfigurationManager.load(System.getProperty("user.dir") + File.separator
+					+ "conf.properties");
 			ExperimentManager.init();
+			Files.delete(Paths.get(System.getProperty("user.dir") + File.separator
+					+ "conf.properties"));
+
+			ApplicationHelper application = null;
+
 			application = ApplicationHelper.getInstance();
 			application.startApplication();
 			final GuiStateManager gui = GuiStateManager.getInstance();

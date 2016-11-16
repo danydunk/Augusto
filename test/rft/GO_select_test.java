@@ -1,28 +1,32 @@
 package test.rft;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.w3c.dom.Document;
 
 import resources.test.rft.GO_select_testHelper;
-import usi.configuration.ConfigurationManager;
-import usi.configuration.ExperimentManager;
-import usi.gui.GUIParser;
-import usi.gui.functionality.GUIFunctionality_search;
-import usi.gui.functionality.instance.Instance_GUI_pattern;
-import usi.gui.functionality.instance.Instance_window;
-import usi.gui.structure.Action_widget;
-import usi.gui.structure.GUI;
-import usi.gui.structure.Input_widget;
-import usi.gui.structure.Option_input_widget;
-import usi.gui.structure.Window;
-import usi.pattern.GUIPatternParser;
-import usi.pattern.structure.GUI_Pattern;
-import usi.testcase.AlloyTestCaseGenerator;
-import usi.testcase.TestCaseRunner;
-import usi.testcase.structure.GUITestCase;
-import usi.xml.XMLUtil;
+import src.usi.configuration.ConfigurationManager;
+import src.usi.configuration.ExperimentManager;
+import src.usi.gui.GUIParser;
+import src.usi.gui.functionality.GUIFunctionality_search;
+import src.usi.gui.functionality.instance.Instance_GUI_pattern;
+import src.usi.gui.functionality.instance.Instance_window;
+import src.usi.gui.structure.Action_widget;
+import src.usi.gui.structure.GUI;
+import src.usi.gui.structure.Input_widget;
+import src.usi.gui.structure.Option_input_widget;
+import src.usi.gui.structure.Window;
+import src.usi.pattern.GUIPatternParser;
+import src.usi.pattern.structure.GUI_Pattern;
+import src.usi.testcase.AlloyTestCaseGenerator;
+import src.usi.testcase.TestCaseRunner;
+import src.usi.testcase.structure.GUITestCase;
+import src.usi.xml.XMLUtil;
 
 /**
  * Description : Functional Test Script
@@ -42,15 +46,24 @@ public class GO_select_test extends GO_select_testHelper {
 	public void testMain(final Object[] args) {
 
 		try {
-			ConfigurationManager.load("./files/for_test/config/upm_notempty.properties");
+			Files.copy(GO_select_test.class
+					.getResourceAsStream("/files/for_test/config/upm_notempty.properties"), Paths
+					.get(System.getProperty("user.dir") + File.separator + "conf.properties"),
+					REPLACE_EXISTING);
+
+			ConfigurationManager.load(System.getProperty("user.dir") + File.separator
+					+ "conf.properties");
 			ExperimentManager.init();
+			Files.delete(Paths.get(System.getProperty("user.dir") + File.separator
+					+ "conf.properties"));
 			// we load a gui pattern
-			Document doc = XMLUtil.read(new File("./files/xml/crud.xml").getAbsolutePath());
+			Document doc = XMLUtil.read(GO_select_test.class
+					.getResourceAsStream("/files/guipatterns/crud.xml"));
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
-			doc = XMLUtil.read(new File("./files/for_test/xml/upm-full_newripper.xml")
-					.getAbsolutePath());
+			doc = XMLUtil.read(GO_select_test.class
+					.getResourceAsStream("/files/for_test/xml/upm-full_newripper.xml"));
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
