@@ -2,6 +2,8 @@
 import socket
 import sys
 
+arg = sys.argv[1]
+
 HOST = 'research.inf.usi.ch'    # The remote host
 PORT = 50000              # The same port as used by the server
 s = None
@@ -22,7 +24,7 @@ for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):
 if s is None:
     print 'could not open socket'
     sys.exit(1)
-s.sendall($TRAVIS_COMMIT)
+s.sendall(arg)
 data = s.recv(1024)
 s.close()
 if data == "ok":

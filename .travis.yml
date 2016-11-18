@@ -2,7 +2,7 @@ language: java
 
 install: true
 
-script: python CI-client.py
+script: python CI-client.py $TRAVIS_COMMIT
 
 jdk:
   - oraclejdk8
