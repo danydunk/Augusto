@@ -22,7 +22,7 @@ for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):
         continue
     break
 if s is None:
-    print 'could not open socket'
+    print "could not open socket"
     sys.exit(1)
 s.sendall(arg)
 data = s.recv(1024)
