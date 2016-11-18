@@ -1,8 +1,8 @@
 language: java
 
-script: CI-client.py
+install: true
 
-sudo: true
+script: python CI-client.py
 
 jdk:
   - oraclejdk8
