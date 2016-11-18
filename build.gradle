@@ -27,60 +27,66 @@ sourceSets{
 		}
 	}	
 }
+
 task copyTemplates(type: Copy) {
 	from 'templates'
 	into 'build/classes/main/templates'
-	}
-task copyFiles(type: Copy) {
-	from 'files'
-	into 'build/classes/main/files'
 }
+
+//task copyFiles(type: Copy) {
+//	from 'files'
+//	into 'build/classes/main/files'
+//}
+
 task copyDatastore(type: Copy) {
 	from 'resources/DatastoreDefinition.rftdsd'
 	into 'build/classes/main/resources/'
 }
-task copyMainRTDF(type: Copy) {
+
+task copyDatastoreMain(type: Copy) {
+	from 'src/usi/*.testsuite'
+	into 'build/classes/main/src/usi/'
+}
+
+task copyDatastoreTest(type: Copy) {
+	from 'test/rft/*.testsuite'
+	into 'build/classes/main/test/rft/'
+}
+
+task copyMains(type: Copy) {
 	from 'resources/src/usi/'
 	exclude '*.class'
 	exclude '*.java'
 	into 'build/classes/main/resources/src/usi/'
 }
-task copyMainrftxmap(type: Copy) {
-	from 'resources/src/usi/'
-	exclude '*.class'
-	exclude '*.java'
-	into 'build/classes/main/resources/src/usi/'
-}
-task copyTestRTDF(type: Copy) {
+
+task copyTest(type: Copy) {
 	from 'resources/test/rft/'
 	exclude '*.class'
 	exclude '*.java'
 	into 'build/classes/main/resources/test/rft/'
 }
-task copyTestrftxmap(type: Copy) {
-	from 'resources/test/rft/'
-	exclude '*.class'
-	exclude '*.java'
-	into 'build/classes/main/resources/test/rft/'
-}
+
 compileJava.doLast {
 	tasks.copyTemplates.execute()
 	tasks.copyFiles.execute()
 	tasks.copyDatastore.execute()
-	tasks.copyMainRTDF.execute()
-	tasks.copyMainrftxmap.execute()
-	tasks.copyTestRTDF.execute()
-	tasks.copyTestrftxmap.execute()
-
+	tasks.copyDatastoreMain.execute()
+	tasks.copyDatastoreTest.execute()
+	tasks.copyMains.execute()
+	tasks.copyTest.execute()
 }
+
 task createMain(type:Exec) {
 
-	commandLine 'cmd', '/c', "echo java -Xmx9g -Xss512m -cp C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar;"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback src.usi.Main "+projectDir+" > Main.bat"
+	commandLine 'cmd', '/c', "echo java -Xmx9g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback src.usi.Main "+projectDir+" > Main.bat"
 }
+
 task createMainRipper(type:Exec) {
 
-	commandLine 'cmd', '/c', "echo java -Xmx9g -Xss512m -cp C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar;"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback src.usi.RipperMain "+projectDir+" > Ripper.bat"
+	commandLine 'cmd', '/c', "echo java -Xmx9g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback src.usi.RipperMain "+projectDir+" > Ripper.bat"
 }
+
 build.dependsOn 'createMain'
 build.dependsOn 'createMainRipper'
 task deployBuddi(type:Exec) {
