@@ -27,6 +27,7 @@ if s is None:
 s.sendall(arg)
 data = s.recv(2)
 s.close()
+print "received "+data
 if data.strip() == "ok":
     exit(0)
 else:
