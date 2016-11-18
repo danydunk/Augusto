@@ -1,0 +1,8 @@
+*.class
+.classpath
+.gradle
+.project
+.settings
+*.bat
+build
+files/for_test/alloy/generated_model.als

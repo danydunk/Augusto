@@ -46,9 +46,11 @@ public class ExperimentManager {
 
 		new File(SER_FILE_PATH).delete();
 		final PrintStream stdout = System.out;
-		System.setOut(new PrintStream(new FileOutputStream(System.getProperty("user.dir")
-				+ File.separator + "cobertura_warnings.out")));
+		final PrintStream stream = new PrintStream(new FileOutputStream(
+				System.getProperty("user.dir") + File.separator + "cobertura_warnings.out"));
+		System.setOut(stream);
 		net.sourceforge.cobertura.instrument.InstrumentMain.instrument(args);
+		stream.close();
 		System.setOut(stdout);
 		Files.copy(Paths.get(SER_FILE_PATH), Paths.get(SER_RESET_FILE_PATH), REPLACE_EXISTING);
 
@@ -66,8 +68,9 @@ public class ExperimentManager {
 			out.newLine();
 			out.write("java -Xbootclasspath/p:" + PathsManager.getProjectRoot() + "lib"
 					+ File.separator + "abtJFileChooser.jar;" + " -cp "
-					+ PathsManager.getProjectRoot() + "build" + File.separator + "classes" + File.separator + "main;"
-					+ PathsManager.getProjectRoot() + "lib" + File.separator + "*;"
+					+ PathsManager.getProjectRoot() + "build" + File.separator + "classes"
+					+ File.separator + "main;" + PathsManager.getProjectRoot() + "lib"
+					+ File.separator + "*;"
 					+ new File(ConfigurationManager.getAutBinDirectory()).getParent()
 					+ File.separator + "instrumented" + ";"
 					+ ConfigurationManager.getAutClasspath() + ";"
