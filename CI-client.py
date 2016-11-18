@@ -25,9 +25,9 @@ if s is None:
     print "could not open socket"
     sys.exit(1)
 s.sendall(arg)
-data = s.recv(1024)
+data = s.recv(2)
 s.close()
-if data == "ok":
+if data.strip() == "ok":
     exit(0)
 else:
     exit(-1)

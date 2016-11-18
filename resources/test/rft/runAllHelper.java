@@ -8,33 +8,22 @@
 
 package resources.test.rft;
 
-import com.rational.test.ft.object.interfaces.*;
-import com.rational.test.ft.object.interfaces.SAP.*;
-import com.rational.test.ft.object.interfaces.WPF.*;
-import com.rational.test.ft.object.interfaces.siebel.*;
-import com.rational.test.ft.object.interfaces.flex.*;
-import com.rational.test.ft.object.interfaces.dojo.*;
-import com.rational.test.ft.object.interfaces.generichtmlsubdomain.*;
-import com.rational.test.ft.script.*;
-import com.rational.test.ft.vp.IFtVerificationPoint;
-import com.ibm.rational.test.ft.object.interfaces.sapwebportal.*;
+import com.rational.test.ft.script.RationalTestScript;
+
 /**
- * Script Name   : <b>runAll</b><br>
- * Generated     : <b>2016/11/18 12:11:26 AM</b><br>
- * Description   : Helper class for script<br>
+ * Script Name : <b>runAll</b><br>
+ * Generated : <b>2016/11/18 12:11:26 AM</b><br>
+ * Description : Helper class for script<br>
  * Original Host : Windows 7 amd64 6.1 <br>
- * 
- * @since  November 18, 2016
+ *
+ * @since November 18, 2016
  * @author usi
  */
-public abstract class runAllHelper extends RationalTestScript
-{
-	
+public abstract class runAllHelper extends RationalTestScript {
 
-	protected runAllHelper()
-	{
-		setScriptName("test.rft.runAll");
+	protected runAllHelper() {
+
+		this.setScriptName("test.rft.runAll");
 	}
-	
-}
 
+}
