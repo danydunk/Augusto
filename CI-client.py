@@ -30,4 +30,4 @@ s.close()
 if data == "ok":
     exit(0)
 else:
-    exit(-1)
+    exit(-1)
