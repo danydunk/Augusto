@@ -31,4 +31,3 @@ if data == "ok":
     exit(0)
 else:
     exit(-1)
-
