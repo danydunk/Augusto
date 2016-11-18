@@ -1,7 +1,6 @@
 package src.usi.application;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
@@ -45,8 +44,7 @@ public class ApplicationHelper {
 		this.running = false;
 		this.root = null;
 		if (ConfigurationManager.getInitialActions().length() > 0) {
-			final Document doc = XMLUtil.read(new FileInputStream(ConfigurationManager
-					.getInitialActions()));
+			final Document doc = XMLUtil.read(ConfigurationManager.getInitialActions());
 			this.initial = GUITestCaseParser.parse(doc);
 		}
 	}
@@ -55,7 +53,7 @@ public class ApplicationHelper {
 
 		RationalTestScript.unregisterAll();
 
-		RationalTestScript.shellExecute(PathsManager.getAUTPath() + "AUT.bat");
+		RationalTestScript.shellExecute(PathsManager.getAUTPath());
 		System.gc();
 
 		final long delayTime = System.nanoTime();

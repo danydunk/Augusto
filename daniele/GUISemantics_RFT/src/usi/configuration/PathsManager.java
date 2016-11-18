@@ -4,20 +4,63 @@ import java.io.File;
 
 public class PathsManager {
 
-	private static final String GUIPATTERNS_FOLDER = "/files/guipatterns/";
+	private static String PROJECT_ROOT = System.getProperty("user.dir") + File.separator;
+	private static final String GUIPATTERNS_FOLDER = "files" + File.separator + "guipatterns"
+			+ File.separator + "";
+	private static final String ALLOY_MODULES_PATH = "files" + File.separator + "alloy"
+			+ File.separator + "modules" + File.separator + "";
+	private static final String ALLOY_MODELS_PATH = "files" + File.separator + "alloy"
+			+ File.separator + "";
+	private static final String INPUTDATA_FILE_PATH = "files" + File.separator + "inputdata"
+			+ File.separator + "dataset.xml";
+	private static final String AUT_PATH = "AUT.bat";
+
 	private static final String CONF_FOLDER = System.getProperty("user.dir") + File.separator;
-	private static final String ALLOY_MODULES_PATH = "/files/alloy/modules/";
-	private static final String ALLOY_MODELS_PATH = "/files/alloy/";
-	private static final String INPUTDATA_FILE_PATH = "/files/inputdata/dataset.xml";
-	private static final String OUTPUT_FOLDER = System.getProperty("user.dir") + File.separator
-			+ "output" + File.separator;
-	private static final String RIPPER_OUTPUT_FOLDER = OUTPUT_FOLDER + File.separator + "ripping"
-			+ File.separator;
-	private static final String AUT_PATH = System.getProperty("user.dir") + File.separator;
+	private static final String OUTPUT_FOLDER = System.getProperty("user.dir") + File.separator;
+	private static final String RIPPER_OUTPUT_FOLDER = System.getProperty("user.dir")
+			+ File.separator + "ripper_output" + File.separator;
+
+	public static void setProjectRoot(final String root) throws Exception {
+
+		if (!new File(root).isDirectory()) {
+			throw new Exception("PathsManager - wrong project root.");
+		}
+		PROJECT_ROOT = root + File.separator;
+	}
+
+	public static String getProjectRoot() {
+
+		return PROJECT_ROOT;
+	}
 
 	public static String getAUTPath() {
 
-		return AUT_PATH;
+		return PROJECT_ROOT + AUT_PATH;
+	}
+
+	public static String getGUIPatternsFolder() {
+
+		return PROJECT_ROOT + GUIPATTERNS_FOLDER;
+	}
+
+	public static String getAlloyModulesFolder() {
+
+		return PROJECT_ROOT + ALLOY_MODULES_PATH;
+	}
+
+	public static String getAlloyModelsFolder() {
+
+		return PROJECT_ROOT + ALLOY_MODELS_PATH;
+	}
+
+	public static String getInputdataFilePath() {
+
+		return PROJECT_ROOT + INPUTDATA_FILE_PATH;
+	}
+
+	public static String getConfigurationFolder() {
+
+		return CONF_FOLDER;
 	}
 
 	public static String getOutputFolder() {
@@ -29,30 +72,4 @@ public class PathsManager {
 
 		return RIPPER_OUTPUT_FOLDER;
 	}
-
-	public static String getGUIPatternsFolder() {
-
-		return GUIPATTERNS_FOLDER;
-	}
-
-	public static String getAlloyModulesFolder() {
-
-		return ALLOY_MODULES_PATH;
-	}
-
-	public static String getAlloyModelsFolder() {
-
-		return ALLOY_MODELS_PATH;
-	}
-
-	public static String getInputdataFilePath() {
-
-		return INPUTDATA_FILE_PATH;
-	}
-
-	public static String getConfigurationFolder() {
-
-		return CONF_FOLDER;
-	}
-
 }

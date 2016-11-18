@@ -2,7 +2,6 @@ package src.usi.xml;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,10 +67,10 @@ public class XMLUtil {
 	/*
 	 * function that reads a XML from a path
 	 */
-	public static Document read(final InputStream fXmlFile) throws Exception {
+	public static Document read(final String path) throws Exception {
 
 		try {
-
+			final File fXmlFile = new File(path);
 			final DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			final DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			final Document doc = dBuilder.parse(fXmlFile);

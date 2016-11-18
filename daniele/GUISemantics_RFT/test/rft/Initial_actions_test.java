@@ -1,16 +1,12 @@
 package test.rft;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import resources.test.rft.Initial_actions_testHelper;
 import src.usi.application.ApplicationHelper;
 import src.usi.configuration.ConfigurationManager;
 import src.usi.configuration.ExperimentManager;
+import src.usi.configuration.PathsManager;
 import src.usi.gui.GuiStateManager;
 import src.usi.gui.structure.Window;
 
@@ -28,38 +24,29 @@ public class Initial_actions_test extends Initial_actions_testHelper {
 	 *
 	 * @since 2016/11/07
 	 * @author usi
+	 * @throws Exception
 	 */
-	public void testMain(final Object[] args) {
+	public void testMain(final Object[] args) throws Exception {
 
-		try {
-			ApplicationHelper application = null;
+		ApplicationHelper application = null;
 
-			Files.copy(Initial_actions_test.class
-					.getResourceAsStream("/files/for_test/config/upm_ini_actions.properties"),
-					Paths.get(System.getProperty("user.dir") + File.separator + "conf.properties"),
-					REPLACE_EXISTING);
+		ConfigurationManager.load(PathsManager.getProjectRoot()
+				+ "/files/for_test/config/upm_ini_actions.properties");
+		ExperimentManager.init();
 
-			ConfigurationManager.load(System.getProperty("user.dir") + File.separator
-					+ "conf.properties");
-			ExperimentManager.init();
-			Files.delete(Paths.get(System.getProperty("user.dir") + File.separator
-					+ "conf.properties"));
-			application = ApplicationHelper.getInstance();
-			application.startApplication();
-			final GuiStateManager gui = GuiStateManager.getInstance();
+		application = ApplicationHelper.getInstance();
+		application.startApplication();
+		final GuiStateManager gui = GuiStateManager.getInstance();
 
-			final List<Window> windows = gui.readGUI();
+		final List<Window> windows = gui.readGUI();
 
-			if (windows.get(0).getActionWidgets().size() == 2) {
-				application.closeApplication();
-
-				throw new Exception();
-			}
-
+		if (windows.get(0).getActionWidgets().size() == 2) {
 			application.closeApplication();
-		} catch (final Exception e) {
-			System.out.println("ERROR");
-			e.printStackTrace();
+			throw new Exception();
 		}
+
+		application.closeApplication();
+
+		ExperimentManager.cleanUP();
 	}
 }

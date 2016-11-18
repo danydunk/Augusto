@@ -1,7 +1,6 @@
 package src.usi;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -51,24 +50,15 @@ public class Main extends MainHelper {
 	public void testMain(final Object[] args) throws Exception {
 
 		switch (args.length) {
-		case 0:
-			ConfigurationManager.load();
-			break;
-
-		case 2:
-			if (args[0].toString().equals("--conf")) {
-				ConfigurationManager.load(args[1].toString());
-			} else {
-				System.out.println("Error: unknown input parameter.");
-				return;
-			}
+		case 1:
+			PathsManager.setProjectRoot(args[0].toString());
 			break;
 
 		default:
 			System.out.println("Error: wrong number of parameters.");
-			return;
+			// return;
 		}
-		System.out.println("CIAO");
+		ConfigurationManager.load();
 		ExperimentManager.init();
 		final String out_folder = ExperimentManager.createResultsFolder();
 		// we set the stdout as a log file
@@ -80,19 +70,17 @@ public class Main extends MainHelper {
 
 			ExperimentManager.moveFile(ConfigurationManager.getLoadedFilePath(), out_folder);
 			// GUI
-			final GUI gui = GUIParser.parse(XMLUtil.read(new FileInputStream(ConfigurationManager
-					.getGUIFile())));
+			final GUI gui = GUIParser.parse(XMLUtil.read(ConfigurationManager.getGUIFile()));
 			ExperimentManager.moveFile(ConfigurationManager.getGUIFile(), out_folder);
 			// guipatterns
 			final GUI_Pattern[] patterns = new GUI_Pattern[Patterns.values().length];
 			final String[] patterns_name = new String[Patterns.values().length];
 			for (int x = 0; x < Patterns.values().length; x++) {
-				patterns[x] = GUIPatternParser.parse(XMLUtil.read(Main.class
-						.getResourceAsStream(PathsManager.getGUIPatternsFolder()
-								+ Patterns.values()[x].name)));
+				patterns[x] = GUIPatternParser.parse(XMLUtil.read(PathsManager
+						.getGUIPatternsFolder() + Patterns.values()[x].name));
 				patterns_name[x] = Patterns.values()[x].name.replace(".xml", "");
 			}
-
+			System.out.println(patterns.length);
 			// search
 			final GUIFunctionality_search searcher = new GUIFunctionality_search(gui);
 			final Map<GUI_Pattern, List<Instance_GUI_pattern>> candidate_instances = new HashMap<>();
@@ -109,7 +97,7 @@ public class Main extends MainHelper {
 				final GUI_Pattern pattern = patterns[x];
 				final List<Instance_GUI_pattern> refined_instances = new ArrayList<>();
 				true_instances.put(pattern, refined_instances);
-				for (int y = 1; y < candidate_instances.get(pattern).size(); y++) {
+				for (int y = 0; y < candidate_instances.get(pattern).size(); y++) {
 					final String match_folder = out_folder + File.separator + patterns_name[x]
 							+ "_match_" + (y + 1) + File.separator;
 					ExperimentManager.createFolder(match_folder);
@@ -135,7 +123,7 @@ public class Main extends MainHelper {
 					if (refined_instance != null) {
 						XMLUtil.save(match_folder + File.separator + "match.xml",
 								Instance_GUI_patternWriter
-										.writeInstanceGUIPattern(refined_instance));
+								.writeInstanceGUIPattern(refined_instance));
 					}
 					reflog.close();
 				}
@@ -181,6 +169,8 @@ public class Main extends MainHelper {
 			System.setOut(generallog);
 			System.out.println("ERROR");
 			e.printStackTrace();
+		} finally {
+			ExperimentManager.cleanUP();
 		}
 	}
 }

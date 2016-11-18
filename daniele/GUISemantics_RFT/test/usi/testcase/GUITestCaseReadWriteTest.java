@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import src.usi.configuration.PathsManager;
 import src.usi.gui.GUIParser;
 import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.GUI;
@@ -28,8 +29,7 @@ public class GUITestCaseReadWriteTest {
 	@Test
 	public void test1() throws Exception {
 
-		Document doc = XMLUtil.read(GUITestCaseReadWriteTest.class
-				.getResourceAsStream("/files/for_test/xml/GUI.xml"));
+		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/GUI.xml");
 		Assert.assertNotNull(doc);
 		final GUI gui = GUIParser.parse(doc);
 		final Click click = new Click(gui.getWindow("w1"), gui.getWindow("w2"), (Action_widget) gui

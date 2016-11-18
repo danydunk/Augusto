@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,7 +40,8 @@ import src.usi.testcase.structure.Fill;
 import src.usi.testcase.structure.GUIAction;
 import src.usi.testcase.structure.Select;
 
-import com.google.common.io.CharStreams;
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
@@ -73,8 +73,6 @@ import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
  *
  */
 public class AlloyUtil {
-
-	private static final String[] ADDITIONAL_MODULES = { "orderingFIXED.als" };
 
 	static A4Reporter rep = new A4Reporter() {
 
@@ -144,13 +142,17 @@ public class AlloyUtil {
 	static public Module compileAlloyModel(final String model) throws Exception {
 
 		final Map<String, String> modules = new HashMap<>();
+		try {
+			final File folder = new File(PathsManager.getAlloyModulesFolder());
+			final File[] listOfFiles = folder.listFiles();
 
-		for (final String module : ADDITIONAL_MODULES) {
-			AlloyUtil.class.getResourceAsStream(PathsManager.getAlloyModulesFolder() + module);
-			final String mod = CharStreams.toString(new InputStreamReader(AlloyUtil.class
-					.getResourceAsStream(PathsManager.getAlloyModulesFolder() + module), "UTF-8"));
-			modules.put(module.replace(".als", ""), mod);
-		}
+			for (final File file : listOfFiles) {
+				if (file.isFile() && file.getName().contains(".als")) {
+					modules.put(file.getName().replace(".als", ""),
+							Files.toString(file, Charsets.UTF_8));
+				}
+			}
+		} catch (final Exception e) {}
 
 		try {
 			final File tmp = saveModelInTmpFile(model);
@@ -174,13 +176,17 @@ public class AlloyUtil {
 	static public Module compileAlloyModel(final File model) throws Exception {
 
 		final Map<String, String> modules = new HashMap<>();
+		try {
+			final File folder = new File(PathsManager.getAlloyModulesFolder());
+			final File[] listOfFiles = folder.listFiles();
 
-		for (final String module : ADDITIONAL_MODULES) {
-			AlloyUtil.class.getResourceAsStream(PathsManager.getAlloyModulesFolder() + module);
-			final String mod = CharStreams.toString(new InputStreamReader(AlloyUtil.class
-					.getResourceAsStream(PathsManager.getAlloyModulesFolder() + module), "UTF-8"));
-			modules.put(module.replace(".als", ""), mod);
-		}
+			for (final File file : listOfFiles) {
+				if (file.isFile() && file.getName().contains(".als")) {
+					modules.put(file.getName().replace(".als", ""),
+							Files.toString(file, Charsets.UTF_8));
+				}
+			}
+		} catch (final Exception e) {}
 
 		try {
 			final Module out = CompUtil.parseEverything_fromFile(rep, modules,
@@ -885,8 +891,8 @@ public class AlloyUtil {
 					content += System.getProperty("line.separator");
 					content += "all f: Fill | f.filled = " + iws.get(iw).getIdentifier()
 							+ " => not(f.with in Invalid)";
-					content += System.getProperty("line.separator");
 				}
+				content += System.getProperty("line.separator");
 				content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
 			}
 
@@ -916,7 +922,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1453,7 +1459,7 @@ public class AlloyUtil {
 			runCom += "," + awscope + " Action_widget ";
 		}
 		if (vscope > -1) {
-			runCom += "," + (vscope + (op_size * 2 / 3)) + " Value ";
+			runCom += "," + (vscope + (op_size * 1 / 2)) + " Value ";
 		}
 		if (iwscope > -1) {
 			runCom += "," + iwscope + " Input_widget ";

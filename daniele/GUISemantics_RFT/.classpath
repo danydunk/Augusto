@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_111"/>
-	<classpathentry excluding="config/|files/|lib/|output/|resources/for_test/|scripts/|templates/|usi/gui/functionality/GUIFunctionality_search_old.java" kind="src" path=""/>
+	<classpathentry excluding="build/|config/|files/|lib/|output/|resources/for_test/|scripts/|templates/|usi/gui/functionality/GUIFunctionality_search_old.java" kind="src" path=""/>
 	<classpathentry kind="con" path="com.rational.test.ft.libraries.FT_LIBRARIES"/>
 	<classpathentry kind="con" path="com.rational.test.ft.libraries.FT_TESTOBJECT"/>
 	<classpathentry kind="con" path="com.rational.test.ft.libraries.FT_CUSTOMIZATION"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/asm-4.1.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/asm-analysis-4.1.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/asm-commons-4.1.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/asm-tree-4.1.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/asm-util-4.1.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/icu4j-2.6.1.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/jaxen-1.1-beta-8.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/jetty-6.1.14.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/jetty-util-6.1.14.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/log4j-1.2.9.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/servlet-api-2.5-6.1.14.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/tagsoup-0.9.7.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/xmlParserAPIs-2.6.2.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/lib/xom-1.0b3.jar"/>
-	<classpathentry kind="lib" path="lib/cobertura/cobertura.jar"/>
-	<classpathentry kind="lib" path="lib/jmockit-1.28/jmockit1.org/jmockit.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="lib/alloy4.2.jar"/>
+	<classpathentry kind="lib" path="lib/abtJFileChooser.jar"/>
+	<classpathentry kind="lib" path="lib/alloy4.2_2015-02-22.jar"/>
+	<classpathentry kind="lib" path="lib/asm-5.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/asm-analysis-5.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/asm-commons-5.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/asm-tree-5.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/asm-util-5.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/cobertura-2.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/guava-19.0.jar"/>
+	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/jaxen-1.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-6.1.14.jar"/>
+	<classpathentry kind="lib" path="lib/jetty-util-6.1.14.jar"/>
+	<classpathentry kind="lib" path="lib/jmockit-1.29.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="lib/logback-classic-1.0.13.jar"/>
+	<classpathentry kind="lib" path="lib/logback-core-1.0.13.jar"/>
+	<classpathentry kind="lib" path="lib/oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api-2.5-6.1.14.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

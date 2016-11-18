@@ -1,6 +1,5 @@
 package src.usi.gui;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -245,7 +244,7 @@ public class Ripper {
 
 		Document doc = null;
 		try {
-			doc = XMLUtil.read(new FileInputStream(path));
+			doc = XMLUtil.read(path);
 		} catch (final Exception e) {
 			System.out.println("Filter file not found.");
 			return null;

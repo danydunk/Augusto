@@ -1,10 +1,5 @@
 package test.rft;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +8,7 @@ import org.w3c.dom.Document;
 import resources.test.rft.OracleTestHelper;
 import src.usi.configuration.ConfigurationManager;
 import src.usi.configuration.ExperimentManager;
+import src.usi.configuration.PathsManager;
 import src.usi.gui.GUIParser;
 import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.GUI;
@@ -41,71 +37,62 @@ public class OracleTest extends OracleTestHelper {
 	 *
 	 * @since 2016/08/29
 	 * @author usi
+	 * @throws Exception
 	 */
-	public void testMain(final Object[] args) {
+	public void testMain(final Object[] args) throws Exception {
 
-		try {
-			// we load the GUI structure
-			final Document doc = XMLUtil.read(OracleTest.class
-					.getResourceAsStream("/files/for_test/xml/upm-full_newripper.xml"));
-			final GUI g = GUIParser.parse(doc);
+		// we load the GUI structure
+		final Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+				+ "/files/for_test/xml/upm.xml");
+		final GUI g = GUIParser.parse(doc);
 
-			final OracleChecker oracle = new OracleChecker(g);
-			Files.copy(
-					OracleTest.class.getResourceAsStream("/files/for_test/config/upm.properties"),
-					Paths.get(System.getProperty("user.dir") + File.separator + "conf.properties"),
-					REPLACE_EXISTING);
+		final OracleChecker oracle = new OracleChecker(g);
 
-			ConfigurationManager.load(System.getProperty("user.dir") + File.separator
-					+ "conf.properties");
-			ExperimentManager.init();
-			Files.delete(Paths.get(System.getProperty("user.dir") + File.separator
-					+ "conf.properties"));
+		ConfigurationManager.load(PathsManager.getProjectRoot()
+				+ "/files/for_test/config/upm.properties");
+		ExperimentManager.init();
 
-			final Window target = g.getWindow("w2");
-			final Window source = g.getWindow("w1");
+		final Window target = g.getWindow("w2");
+		final Window source = g.getWindow("w1");
 
-			final Action_widget aw = source.getActionWidgets().get(0);
-			Click click = new Click(source, target, aw);
-			List<GUIAction> acts = new ArrayList<>();
-			acts.add(click);
-			GUITestCase tc = new GUITestCase(null, acts, "run");
+		final Action_widget aw = source.getActionWidgets().get(0);
+		Click click = new Click(source, target, aw);
+		List<GUIAction> acts = new ArrayList<>();
+		acts.add(click);
+		GUITestCase tc = new GUITestCase(null, acts, "run");
 
-			final TestCaseRunner runner = new TestCaseRunner(g);
-			GUITestCaseResult res = runner.runTestCase(tc);
+		final TestCaseRunner runner = new TestCaseRunner(g);
+		GUITestCaseResult res = runner.runTestCase(tc);
 
-			if (!oracle.check(res, false)) {
-				System.out.println(oracle.getDescriptionOfLastOracleCheck());
-				throw new Exception();
-			}
-
-			final Window target2 = new Window(target.getId(), target.getLabel(),
-					target.getClasss(), target.getX(), target.getY(), target.isModal());
-			for (final Widget w : target.getWidgets()) {
-				if (w instanceof Selectable_widget) {
-					final Selectable_widget s = (Selectable_widget) w;
-					final Selectable_widget sw = new Selectable_widget(s.getId(), s.getLabel(),
-							s.getClasss(), s.getX(), s.getY(), 1, 0);
-					target2.addWidget(sw);
-				} else {
-					target2.addWidget(w);
-				}
-			}
-
-			click = new Click(source, target2, aw);
-			acts = new ArrayList<>();
-			acts.add(click);
-			tc = new GUITestCase(null, acts, "run");
-
-			res = runner.runTestCase(tc);
-
-			if (oracle.check(res, false)) {
-				throw new Exception();
-			}
-
-		} catch (final Exception e) {
-			System.out.println("ERROR");
-			e.printStackTrace();
+		if (!oracle.check(res, false)) {
+			System.out.println(oracle.getDescriptionOfLastOracleCheck());
+			throw new Exception();
 		}
+
+		final Window target2 = new Window(target.getId(), target.getLabel(), target.getClasss(),
+				target.getX(), target.getY(), target.isModal());
+		for (final Widget w : target.getWidgets()) {
+			if (w instanceof Selectable_widget) {
+				final Selectable_widget s = (Selectable_widget) w;
+				final Selectable_widget sw = new Selectable_widget(s.getId(), s.getLabel(),
+						s.getClasss(), s.getX(), s.getY(), 1, 0);
+				target2.addWidget(sw);
+			} else {
+				target2.addWidget(w);
+			}
+		}
+
+		click = new Click(source, target2, aw);
+		acts = new ArrayList<>();
+		acts.add(click);
+		tc = new GUITestCase(null, acts, "run");
+
+		res = runner.runTestCase(tc);
+
+		if (oracle.check(res, false)) {
+			throw new Exception();
+		}
+
+		ExperimentManager.cleanUP();
 	}
 }
