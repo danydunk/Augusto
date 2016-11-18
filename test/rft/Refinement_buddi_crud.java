@@ -1,10 +1,5 @@
 package test.rft;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.w3c.dom.Document;
@@ -12,6 +7,7 @@ import org.w3c.dom.Document;
 import resources.test.rft.Refinement_buddi_crudHelper;
 import src.usi.configuration.ConfigurationManager;
 import src.usi.configuration.ExperimentManager;
+import src.usi.configuration.PathsManager;
 import src.usi.gui.GUIParser;
 import src.usi.gui.functionality.GUIFunctionality_refine;
 import src.usi.gui.functionality.GUIFunctionality_search;
@@ -35,45 +31,34 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 	 *
 	 * @since 2016/10/24
 	 * @author usi
+	 * @throws Exception
 	 */
-	public void testMain(final Object[] args) {
+	public void testMain(final Object[] args) throws Exception {
 
-		try {
-			Files.copy(Refinement_buddi_crud.class
-					.getResourceAsStream("/files/for_test/config/buddi.properties"), Paths
-					.get(System.getProperty("user.dir") + File.separator + "conf.properties"),
-					REPLACE_EXISTING);
+		ConfigurationManager.load(PathsManager.getProjectRoot()
+				+ "/files/for_test/config/buddi.properties");
+		ExperimentManager.init();
 
-			ConfigurationManager.load(System.getProperty("user.dir") + File.separator
-					+ "conf.properties");
-			ExperimentManager.init();
-			Files.delete(Paths.get(System.getProperty("user.dir") + File.separator
-					+ "conf.properties"));
+		// we load a gui pattern
+		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/xml/crud.xml");
+		final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
-			// we load a gui pattern
-			Document doc = XMLUtil.read(Refinement_buddi_crud.class
-					.getResourceAsStream("/files/xml/crud.xml"));
-			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+		// we load the GUI structure
+		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/buddi.xml");
+		final GUI gui = GUIParser.parse(doc);
 
-			// we load the GUI structure
-			doc = XMLUtil.read(Refinement_buddi_crud.class
-					.getResourceAsStream("/files/for_test/xml/buddi_newripper.xml"));
-			final GUI gui = GUIParser.parse(doc);
+		final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+		final List<Instance_GUI_pattern> res = gfs.match(pattern);
 
-			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
-			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+		Instance_GUI_pattern match = res.get(0);
 
-			Instance_GUI_pattern match = res.get(0);
-
-			match.generateSpecificSemantics();
-			final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
-			match = refiner.refine();
-			if (match == null) {
-				throw new Exception("");
-			}
-		} catch (final Exception e) {
-			e.printStackTrace();
-			System.out.println("ERROR");
+		match.generateSpecificSemantics();
+		final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
+		match = refiner.refine();
+		if (match == null) {
+			throw new Exception("");
 		}
+
+		ExperimentManager.cleanUP();
 	}
 }

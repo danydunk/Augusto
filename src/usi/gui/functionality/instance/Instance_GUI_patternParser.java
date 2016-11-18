@@ -48,8 +48,7 @@ public class Instance_GUI_patternParser {
 		// Pattern
 		final Node patternn = XMLUtil.getElementNode(root.getChildNodes(), "GUI_pattern");
 		final String pattername = patternn.getTextContent();
-		final Document doc2 = XMLUtil.read(Instance_GUI_pattern.class
-				.getResourceAsStream(pattern_folder + File.separator + pattername + ".xml"));
+		final Document doc2 = XMLUtil.read(pattern_folder + File.separator + pattername + ".xml");
 		final GUI_Pattern pattern = GUIPatternParser.parse(doc2);
 		// GUI
 		final Node guin = XMLUtil.getElementNode(root.getChildNodes(), "GUI");

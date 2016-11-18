@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import src.usi.configuration.PathsManager;
 import src.usi.pattern.GUIPatternParser;
 import src.usi.pattern.structure.Boolean_regexp;
 import src.usi.pattern.structure.GUI_Pattern;
@@ -21,8 +22,8 @@ public class GUIPatternParserTest {
 	@Test
 	public void testParserGUIPattern1() throws Exception {
 
-		final Document doc = XMLUtil.read(GUIPatternParserTest.class
-				.getResourceAsStream("/files/guipatterns/CRUD.xml"));
+		final Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+				+ "/files/guipatterns/CRUD.xml");
 		Assert.assertNotNull(doc);
 
 		final GUI_Pattern gui = GUIPatternParser.parse(doc);

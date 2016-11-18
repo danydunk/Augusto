@@ -98,6 +98,7 @@ public class AlloyTestCaseGenerator {
 		}
 
 		final List<A4Solution> solutions = new ArrayList<>();
+
 		for (final RunCommandThread t : threads) {
 			t.join();
 
@@ -112,11 +113,14 @@ public class AlloyTestCaseGenerator {
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
+
 		for (int cont = 0; cont < solutions.size(); cont++) {
 			final A4Solution sol = solutions.get(cont);
 			if (sol != null) {
 				out.add(this.analyzeTuples(sol,
 						this.instance.getSemantics().getRun_commands().get(cont)));
+			} else {
+				out.add(null);
 			}
 		}
 
@@ -199,8 +203,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-		ts[0].interrupt();
-		ts[1].interrupt();
+			ts[0].interrupt();
+			ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -209,6 +213,8 @@ public class AlloyTestCaseGenerator {
 			if (sol != null) {
 				out.add(this.analyzeTuples(sol,
 						this.instance.getSemantics().getRun_commands().get(cont)));
+			} else {
+				out.add(null);
 			}
 		}
 
@@ -921,7 +927,7 @@ public class AlloyTestCaseGenerator {
 					}
 					if (this.value_scope > -1) {
 						final CommandScope vscope = new CommandScope(v, false,
-								(this.value_scope + ((time_scope - 1) * 2 / 3)));
+								(this.value_scope + ((time_scope - 1) * 1 / 2)));
 						scopes.add(vscope);
 					}
 					if (this.iw_scope > -1) {

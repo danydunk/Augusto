@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import src.usi.configuration.PathsManager;
 import src.usi.gui.GUIParser;
 import src.usi.gui.functionality.GUIFunctionality_search;
 import src.usi.gui.functionality.instance.Instance_GUI_pattern;
@@ -16,7 +17,6 @@ import src.usi.gui.structure.GUI;
 import src.usi.pattern.GUIPatternParser;
 import src.usi.pattern.structure.GUI_Pattern;
 import src.usi.xml.XMLUtil;
-import test.rft.Error_window_test;
 
 public class PatternRecognitionTest {
 
@@ -27,13 +27,12 @@ public class PatternRecognitionTest {
 		try {
 
 			// we load a gui pattern
-			Document doc = XMLUtil.read(Error_window_test.class
-					.getResourceAsStream("/files/guipatterns/crud.xml"));
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/crud.xml");
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
-			doc = XMLUtil.read(Error_window_test.class
-					.getResourceAsStream("/files/for_test/xml/upm-full_newripper.xml"));
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/upm.xml");
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -67,13 +66,12 @@ public class PatternRecognitionTest {
 		try {
 
 			// we load a gui pattern
-			Document doc = XMLUtil.read(Error_window_test.class
-					.getResourceAsStream("/files/guipatterns/crud.xml"));
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/crud.xml");
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
-			doc = XMLUtil.read(Error_window_test.class
-					.getResourceAsStream("/files/for_test/xml/buddi_newripper.xml"));
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/buddi.xml");
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);

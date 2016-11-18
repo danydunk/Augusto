@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import src.usi.configuration.PathsManager;
 import src.usi.gui.GUIParser;
 import src.usi.gui.functionality.instance.Instance_GUI_pattern;
 import src.usi.gui.functionality.instance.Instance_GUI_patternParser;
@@ -30,16 +31,14 @@ public class Instance_GUI_pattern_ReadWriteTest {
 	@Test
 	public void test() throws Exception {
 
-		Document doc = XMLUtil.read(Instance_GUI_pattern_ReadWriteTest.class
-				.getResourceAsStream("/files/for_test/xml/GUI.xml"));
+		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/GUI.xml");
 		Assert.assertNotNull(doc);
 		final GUI loadedgui = GUIParser.parse(doc);
 		final GUI gui = new GUI();
 		gui.addWindow(loadedgui.getWindow("w2"));
 		gui.addWindow(loadedgui.getWindow("w3"));
 
-		doc = XMLUtil.read(Instance_GUI_pattern_ReadWriteTest.class
-				.getResourceAsStream("/files/guipatterns/CRUD.xml"));
+		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/guipatterns/CRUD.xml");
 		Assert.assertNotNull(doc);
 
 		final GUI_Pattern pattern = GUIPatternParser.parse(doc);

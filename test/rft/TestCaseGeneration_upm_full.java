@@ -1,10 +1,5 @@
 package test.rft;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.w3c.dom.Document;
@@ -12,6 +7,7 @@ import org.w3c.dom.Document;
 import resources.test.rft.TestCaseGeneration_upm_fullHelper;
 import src.usi.configuration.ConfigurationManager;
 import src.usi.configuration.ExperimentManager;
+import src.usi.configuration.PathsManager;
 import src.usi.gui.GUIParser;
 import src.usi.gui.functionality.GUIFunctionality_refine;
 import src.usi.gui.functionality.GUIFunctionality_search;
@@ -44,23 +40,16 @@ public class TestCaseGeneration_upm_full extends TestCaseGeneration_upm_fullHelp
 
 		try {
 			// we load a gui pattern
-			Document doc = XMLUtil.read(Error_window_test.class
-					.getResourceAsStream("/files/xml/crud.xml"));
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/xml/crud.xml");
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
-			Files.copy(
-					Object.class.getResourceAsStream("/files/for_test/config/upm_tc.properties"),
-					Paths.get(System.getProperty("user.dir") + File.separator + "conf.properties"),
-					REPLACE_EXISTING);
 
-			ConfigurationManager.load(System.getProperty("user.dir") + File.separator
-					+ "conf.properties");
+			ConfigurationManager.load(PathsManager.getProjectRoot()
+					+ "/files/for_test/config/upm_tc.properties");
 			ExperimentManager.init();
-			Files.delete(Paths.get(System.getProperty("user.dir") + File.separator
-					+ "conf.properties"));
 
 			// we load the GUI structure
-			doc = XMLUtil.read(Error_window_test.class
-					.getResourceAsStream("/files/for_test/xml/upm-full_newripper.xml"));
+			doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/for_test/xml/upm-full_newripper.xml");
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -92,6 +81,8 @@ public class TestCaseGeneration_upm_full extends TestCaseGeneration_upm_fullHelp
 		} catch (final Exception e) {
 			e.printStackTrace();
 			System.out.println("ERROR");
+		} finally {
+			ExperimentManager.cleanUP();
 		}
 	}
 }

@@ -29,45 +29,52 @@ import src.usi.xml.XMLUtil;
 
 public class ExperimentManager {
 
-	private static final String SER_FILE_PATH = System.getProperty("user.dir") + File.separator
+	private static final String SER_FILE_PATH = PathsManager.getProjectRoot() + File.separator
 			+ "cobertura.ser";
-	private static final String SER_RESET_FILE_PATH = System.getProperty("user.dir")
+	private static final String SER_RESET_FILE_PATH = PathsManager.getProjectRoot()
 			+ File.separator + "cobertura_reset.ser";
 
 	public static void init() throws Exception {
 
 		// instrument the application for cobertura analysis
 		final String args[] = {
+				"--auxClasspath",
+				ConfigurationManager.getAutClasspath(),
 				"--destination",
 				(new File(ConfigurationManager.getAutBinDirectory()).getParent() + File.separator + "instrumented"),
 				"--datafile", SER_FILE_PATH, ConfigurationManager.getAutBinDirectory(), };
+
 		new File(SER_FILE_PATH).delete();
 		final PrintStream stdout = System.out;
-		System.setOut(new PrintStream(new FileOutputStream("cobertura_warnings.out")));
-		net.sourceforge.cobertura.instrument.Main.main(args);
+		System.setOut(new PrintStream(new FileOutputStream(System.getProperty("user.dir")
+				+ File.separator + "cobertura_warnings.out")));
+		net.sourceforge.cobertura.instrument.InstrumentMain.instrument(args);
 		System.setOut(stdout);
 		Files.copy(Paths.get(SER_FILE_PATH), Paths.get(SER_RESET_FILE_PATH), REPLACE_EXISTING);
 
 		// generate the file AUT.bat
 		FileWriter autBatFile;
 		try {
-			autBatFile = new FileWriter(PathsManager.getAUTPath() + "AUT.bat");
+			autBatFile = new FileWriter(PathsManager.getAUTPath());
 			final BufferedWriter out = new BufferedWriter(autBatFile);
+			out.write("cd " + PathsManager.getProjectRoot());
+			out.newLine();
 			out.write("call " + ConfigurationManager.getResetScriptPath());
 			out.newLine();
 			out.newLine();
 			out.write("TITLE case_study");
 			out.newLine();
-			out.write("java -Xbootclasspath/p:" + "./lib" + File.separator + "abtJFileChooser.jar;"
-					+ " -cp %CLASSPATH%;" + "./lib" + File.separator + "cobertura" + File.separator
-					+ "cobertura.jar;" + ConfigurationManager.getAutClasspath() + ";"
+			out.write("java -Xbootclasspath/p:" + PathsManager.getProjectRoot() + "lib"
+					+ File.separator + "abtJFileChooser.jar;" + " -cp "
+					+ PathsManager.getProjectRoot() + "lib" + File.separator + "*;"
 					+ new File(ConfigurationManager.getAutBinDirectory()).getParent()
 					+ File.separator + "instrumented" + ";"
-					+ ConfigurationManager.getAutBinDirectory() + ";" + "./lib" + File.separator
-					+ "jmockit.jar" + ";" + " -javaagent:" + "./lib" + File.separator
-					+ "jmockit.jar" + " -Dnet.sourceforge.cobertura.datafile=\"" + SER_FILE_PATH
-					+ "\"" + " " + "src.usi.application.rmi.AUTMain" + " "
-					+ ConfigurationManager.getAutMainCLass() + " 1 > nul 2 > nul");
+					+ ConfigurationManager.getAutClasspath() + ";"
+					+ ConfigurationManager.getAutBinDirectory() + ";" + " -javaagent:"
+					+ PathsManager.getProjectRoot() + "lib" + File.separator + "jmockit-1.29.jar"
+					+ " -Dnet.sourceforge.cobertura.datafile=\"" + SER_FILE_PATH + "\"" + " "
+					+ "src.usi.application.rmi.AUTMain" + " "
+					+ ConfigurationManager.getAutMainCLass());
 
 			out.flush();
 			out.close();
@@ -77,20 +84,16 @@ public class ExperimentManager {
 		}
 	}
 
-	public static void dumpGUI(final GUI gui, final String path) throws Exception {
+	public static void dumpGUI(final GUI gui) throws Exception {
 
 		if (gui == null) {
 			throw new Exception("ExperimentManager - dumpGUI: null gui.");
 		}
 		final Document doc = GUIWriter.writeGUI(gui);
 
-		String out_f;
-		if (path == null) {
-			out_f = PathsManager.getRipperOutputFolder() + File.separator + "gui_"
-					+ (DateUtility.now() + ".xml");
-		} else {
-			out_f = path;
-		}
+		final String out_f = PathsManager.getRipperOutputFolder() + File.separator + "gui_"
+				+ (DateUtility.now() + ".xml");
+
 		XMLUtil.save(out_f, doc);
 	}
 
@@ -131,6 +134,10 @@ public class ExperimentManager {
 
 	public static String createResultsFolder() {
 
+		if (!new File(PathsManager.getOutputFolder()).exists()) {
+			createFolder(PathsManager.getOutputFolder());
+
+		}
 		final String directory = PathsManager.getOutputFolder() + "results_" + DateUtility.now()
 				+ File.separator;
 		createFolder(directory);
@@ -153,5 +160,14 @@ public class ExperimentManager {
 
 		final File dest = new File(outfolder);
 		Files.copy(file, dest.toPath());
+	}
+
+	public static void cleanUP() {
+
+		new File(PathsManager.getAUTPath()).delete();
+		new File(SER_FILE_PATH).delete();
+		new File(SER_RESET_FILE_PATH).delete();
+		new File(System.getProperty("user.dir") + File.separator + "cobertura_warnings.out")
+				.delete();
 	}
 }

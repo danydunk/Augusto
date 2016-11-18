@@ -1,10 +1,5 @@
 package test.rft;
 
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 import resources.test.rft.Execute_actionHelper;
@@ -12,6 +7,7 @@ import src.usi.application.ActionManager;
 import src.usi.application.ApplicationHelper;
 import src.usi.configuration.ConfigurationManager;
 import src.usi.configuration.ExperimentManager;
+import src.usi.configuration.PathsManager;
 import src.usi.gui.GuiStateManager;
 import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.Window;
@@ -31,43 +27,33 @@ public class Execute_action extends Execute_actionHelper {
 	 *
 	 * @since 2016/07/08
 	 * @author usi
+	 * @throws Exception
 	 */
-	public void testMain(final Object[] args) {
+	public void testMain(final Object[] args) throws Exception {
 
-		try {
+		ConfigurationManager.load(PathsManager.getProjectRoot()
+				+ "/files/for_test/config/upm.properties");
+		ExperimentManager.init();
 
-			Files.copy(Execute_action.class
-					.getResourceAsStream("/files/for_test/config/upm.properties"), Paths.get(System
-					.getProperty("user.dir") + File.separator + "conf.properties"),
-					REPLACE_EXISTING);
+		ApplicationHelper application = null;
 
-			ConfigurationManager.load(System.getProperty("user.dir") + File.separator
-					+ "conf.properties");
-			ExperimentManager.init();
-			Files.delete(Paths.get(System.getProperty("user.dir") + File.separator
-					+ "conf.properties"));
+		application = ApplicationHelper.getInstance();
+		application.startApplication();
+		final GuiStateManager gui = GuiStateManager.getInstance();
 
-			ApplicationHelper application = null;
+		List<Window> windows = gui.readGUI();
 
-			application = ApplicationHelper.getInstance();
-			application.startApplication();
-			final GuiStateManager gui = GuiStateManager.getInstance();
+		final Action_widget aw = windows.get(0).getActionWidgets().get(0);
 
-			List<Window> windows = gui.readGUI();
+		final Click click = new Click(windows.get(0), null, aw);
+		ActionManager.executeAction(click);
+		windows = gui.readGUI();
 
-			final Action_widget aw = windows.get(0).getActionWidgets().get(0);
-
-			final Click click = new Click(windows.get(0), null, aw);
-			ActionManager.executeAction(click);
-			windows = gui.readGUI();
-
-			if (!windows.get(0).getLabel().contains("Universal Password Manager")) {
-				throw new Exception();
-			}
-			application.closeApplication();
-		} catch (final Exception e) {
-			System.out.println("ERROR");
-			e.printStackTrace();
+		if (!windows.get(0).getLabel().contains("Universal Password Manager")) {
+			throw new Exception();
 		}
+		application.closeApplication();
+
+		ExperimentManager.cleanUP();
 	}
 }

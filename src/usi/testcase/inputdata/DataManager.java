@@ -1,6 +1,6 @@
 package src.usi.testcase.inputdata;
 
-import java.io.InputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,13 +124,12 @@ public class DataManager {
 
 	private void loadDataFromXMLFile() throws Exception {
 
-		final InputStream is = DataManager.class.getResourceAsStream(PathsManager
-				.getInputdataFilePath());
+		final File dataSet = new File(PathsManager.getInputdataFilePath());
 
-		if (is != null) {
+		if (dataSet.exists()) {
 			final SAXBuilder builder = new SAXBuilder();
 
-			final Document document = builder.build(is);
+			final Document document = builder.build(dataSet);
 
 			final Element rootElement = document.getRootElement();
 			if (!rootElement.getName().equals("DATASET")) {

@@ -3,6 +3,7 @@ package src.usi;
 import resources.src.usi.RipperMainHelper;
 import src.usi.configuration.ConfigurationManager;
 import src.usi.configuration.ExperimentManager;
+import src.usi.configuration.PathsManager;
 import src.usi.gui.Ripper;
 import src.usi.gui.structure.GUI;
 
@@ -31,29 +32,9 @@ public class RipperMain extends RipperMainHelper {
 	public void testMain(final Object[] args) {
 
 		try {
-			String out_file = null;
 			switch (args.length) {
-			case 0:
-				ConfigurationManager.load();
-				break;
-
-			case 2:
-				if (args[0].toString().equals("--conf")) {
-					ConfigurationManager.load(args[1].toString());
-				} else if (args[0].toString().equals("--outxml")) {
-					out_file = args[1].toString();
-				} else {
-					System.out.println("Error: unknown input parameter.");
-					return;
-				}
-				break;
-			case 4:
-				if (!args[0].toString().equals("--conf") || !args[2].toString().equals("--outxml")) {
-					System.out.println("Error: unknown input parameter.");
-					return;
-				}
-				ConfigurationManager.load(args[1].toString());
-				out_file = args[3].toString();
+			case 1:
+				PathsManager.setProjectRoot(args[0].toString());
 				break;
 
 			default:
@@ -61,14 +42,17 @@ public class RipperMain extends RipperMainHelper {
 				return;
 			}
 
+			ConfigurationManager.load();
 			ExperimentManager.init();
 			final Ripper ripper = new Ripper();
 			final GUI gui = ripper.ripApplication();
-			ExperimentManager.dumpGUI(gui, out_file);
+			ExperimentManager.dumpGUI(gui);
 
 		} catch (final Exception e) {
-			System.out.println("ERROR");
 			e.printStackTrace();
+			System.out.println("ERROR");
+		} finally {
+			ExperimentManager.cleanUP();
 		}
 	}
 }

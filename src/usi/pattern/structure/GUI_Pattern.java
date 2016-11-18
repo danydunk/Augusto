@@ -1,9 +1,8 @@
 package src.usi.pattern.structure;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -359,26 +358,18 @@ public class GUI_Pattern {
 	private FunctionalitySemantics loadAlloyModel(final String general, final String filename)
 			throws Exception {
 
-		final InputStream gui_model = GUI_Pattern.class.getResourceAsStream(PathsManager
-				.getAlloyModelsFolder() + general);
-		final InputStream alloy_metamodel = GUI_Pattern.class.getResourceAsStream(PathsManager
-				.getAlloyModelsFolder() + filename);
-		// final File gui_model = new File(GUI_Pattern.class.getResource(
-		// PathsManager.getAlloyModelsFolder() + general).toURI());
-		// final File alloy_metamodel = new File(Object.class.getResource(
-		// PathsManager.getAlloyModelsFolder() + filename).toURI());
+		final File gui_model = new File(PathsManager.getAlloyModelsFolder() + general);
+		final File alloy_metamodel = new File(PathsManager.getAlloyModelsFolder() + filename);
 		if (alloy_metamodel != null && gui_model != null) {
 			// the content of the 2 files is read
-			final Reader reader1 = new InputStreamReader(gui_model);
-			BufferedReader br = new BufferedReader(reader1);
+			BufferedReader br = new BufferedReader(new FileReader(gui_model));
 			String gui_s = "";
 			String s;
 			while ((s = br.readLine()) != null) {
 				gui_s += s + System.getProperty("line.separator");
 			}
 			br.close();
-			final Reader reader2 = new InputStreamReader(alloy_metamodel);
-			br = new BufferedReader(reader2);
+			br = new BufferedReader(new FileReader(alloy_metamodel));
 			String func_s = "";
 			while ((s = br.readLine()) != null) {
 				func_s += s + System.getProperty("line.separator");

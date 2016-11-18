@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
+import src.usi.configuration.PathsManager;
 import src.usi.gui.GUIParser;
 import src.usi.gui.GUIWriter;
 import src.usi.gui.structure.Action_widget;
@@ -25,8 +26,7 @@ public class GUIReadWriteTest {
 	@Test
 	public void testParserGUI1() throws Exception {
 
-		Document doc = XMLUtil.read(GUIReadWriteTest.class
-				.getResourceAsStream("/files/for_test/xml/GUI.xml"));
+		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/GUI.xml");
 		Assert.assertNotNull(doc);
 		final GUI gui = GUIParser.parse(doc);
 		assertEquals("Number of Windows", 3, gui.getWindows().size());
