@@ -43,16 +43,6 @@ task copyDatastore(type: Copy) {
 	into 'build/classes/main/resources/'
 }
 
-task copyDatastoreMain(type: Copy) {
-	from 'src/usi/*.testsuite'
-	into 'build/classes/main/src/usi/'
-}
-
-task copyDatastoreTest(type: Copy) {
-	from 'test/rft/*.testsuite'
-	into 'build/classes/main/test/rft/'
-}
-
 task copyMains(type: Copy) {
 	from 'resources/src/usi/'
 	exclude '*.class'
@@ -69,10 +59,8 @@ task copyTest(type: Copy) {
 
 compileJava.doLast {
 	tasks.copyTemplates.execute()
-	tasks.copyFiles.execute()
+//	tasks.copyFiles.execute()
 	tasks.copyDatastore.execute()
-	tasks.copyDatastoreMain.execute()
-	tasks.copyDatastoreTest.execute()
 	tasks.copyMains.execute()
 	tasks.copyTest.execute()
 }
