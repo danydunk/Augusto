@@ -66,6 +66,7 @@ public class ExperimentManager {
 			out.newLine();
 			out.write("java -Xbootclasspath/p:" + PathsManager.getProjectRoot() + "lib"
 					+ File.separator + "abtJFileChooser.jar;" + " -cp "
+					+ PathsManager.getProjectRoot() + "build" + File.separator + "classes" + File.separator + "main;"
 					+ PathsManager.getProjectRoot() + "lib" + File.separator + "*;"
 					+ new File(ConfigurationManager.getAutBinDirectory()).getParent()
 					+ File.separator + "instrumented" + ";"

@@ -1,5 +1,8 @@
 package test.rft;
 
+import com.rational.test.ft.script.RationalTestScriptError;
+import com.rational.test.ft.UserStoppedScriptError;
+
 import resources.test.rft.runAllHelper;
 import src.usi.configuration.ExperimentManager;
 
@@ -31,6 +34,14 @@ public class runAll extends runAllHelper {
 			new Refinement_upmfull_crud().testMain(args);
 			new Save_window_xml().testMain(args);
 			new TestCaseGeneration_upm_full().testMain(args);
+		}catch(UserStoppedScriptError a){
+			error = true;
+			System.out.println("RFT STOPPED");
+			a.printStackTrace();
+		}catch(RationalTestScriptError a){
+			error = true;
+			System.out.println("RFT ERROR");
+			a.printStackTrace();
 		} catch (final AssertionError ee) {
 			error = true;
 			System.out.println("ASSERTION ERROR");
