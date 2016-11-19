@@ -1,13 +1,10 @@
 package src.usi.application;
 
 import java.io.File;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.List;
 
 import org.w3c.dom.Document;
 
-import src.usi.application.rmi.RemoteCoberturaInterface;
 import src.usi.configuration.ConfigurationManager;
 import src.usi.configuration.PathsManager;
 import src.usi.gui.GuiStateManager;
@@ -96,20 +93,12 @@ public class ApplicationHelper {
 			return;
 		}
 		TestObject[] tos = null;
-		try {
-			final Registry registry = LocateRegistry.getRegistry(2007);
-			final RemoteCoberturaInterface rmo = (RemoteCoberturaInterface) registry
-					.lookup("RemoteCobertura");
-			rmo.getCoverage();
-			tos = this.root.find(SubitemFactory.atChild("showing", "true", "enabled", "true"));
-			tos[0].getProcess().kill();
-			GuiStateManager.destroy();
-			this.running = false;
-		} catch (final Exception e) {
-			this.forceClose();
-			GuiStateManager.destroy();
-			this.running = false;
-		}
+
+		tos = this.root.find(SubitemFactory.atChild("showing", "true", "enabled", "true"));
+		tos[0].getProcess().kill();
+		GuiStateManager.destroy();
+		this.running = false;
+
 	}
 
 	public void forceClose() {
