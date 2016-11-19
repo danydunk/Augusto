@@ -40,7 +40,8 @@ public class TestCaseGeneration_upm_full extends TestCaseGeneration_upm_fullHelp
 
 		try {
 			// we load a gui pattern
-			Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/xml/crud.xml");
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/crud.xml");
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			ConfigurationManager.load(PathsManager.getProjectRoot()
@@ -48,8 +49,7 @@ public class TestCaseGeneration_upm_full extends TestCaseGeneration_upm_fullHelp
 			ExperimentManager.init();
 
 			// we load the GUI structure
-			doc = XMLUtil.read(PathsManager.getProjectRoot()
-					+ "/files/for_test/xml/upm-full_newripper.xml");
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/upm.xml");
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
