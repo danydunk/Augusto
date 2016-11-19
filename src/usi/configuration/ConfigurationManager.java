@@ -3,6 +3,8 @@ package src.usi.configuration;
 import java.io.FileInputStream;
 import java.util.Properties;
 
+import src.usi.application.ApplicationHelper;
+
 public class ConfigurationManager {
 
 	private static String loaded_file = null;
@@ -69,6 +71,7 @@ public class ConfigurationManager {
 		} catch (final Exception e) {
 			ConfigurationManager.setRipperFilters("");
 		}
+		ApplicationHelper.reset();
 	}
 
 	public static String getLoadedFilePath() {

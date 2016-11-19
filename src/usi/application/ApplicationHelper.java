@@ -39,6 +39,11 @@ public class ApplicationHelper {
 		return instance;
 	}
 
+	public static void reset() throws Exception {
+
+		instance = new ApplicationHelper();
+	}
+
 	private ApplicationHelper() throws Exception {
 
 		this.running = false;
