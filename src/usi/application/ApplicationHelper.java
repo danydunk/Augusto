@@ -89,13 +89,15 @@ public class ApplicationHelper {
 	public void closeApplication() {
 
 		if (this.root == null) {
-			this.forceClose();
+			// this.forceClose();
 			return;
 		}
 		TestObject[] tos = null;
 
 		tos = this.root.find(SubitemFactory.atChild("showing", "true", "enabled", "true"));
-		tos[0].getProcess().kill();
+		if (tos.length > 0) {
+			tos[0].getProcess().kill();
+		}
 		GuiStateManager.destroy();
 		this.running = false;
 

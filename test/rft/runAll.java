@@ -65,13 +65,13 @@ public class runAll extends runAllHelper {
 			ApplicationHelper application = null;
 			try {
 				application = ApplicationHelper.getInstance();
+				application.closeApplication();
 			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				if (error) {
 					System.exit(-1);
 				}
 			}
-			application.closeApplication();
 
 			if (error) {
 				System.exit(-1);
