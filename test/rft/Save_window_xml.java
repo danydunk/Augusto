@@ -40,36 +40,32 @@ public class Save_window_xml extends Save_window_xmlHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
-		final String out_file = PathsManager.getProjectRoot() + File.separator + "files"
-				+ File.separator + "for_test" + File.separator + "output" + File.separator
-				+ "out.xml";
+		final String out_file = PathsManager.getProjectRoot() + File.separator + "out.xml";
 		ApplicationHelper application = null;
-		try {
 
-			ConfigurationManager.load(PathsManager.getProjectRoot()
-					+ "/files/for_test/config/upm.properties");
-			ExperimentManager.init();
+		ConfigurationManager.load(PathsManager.getProjectRoot()
+				+ "/files/for_test/config/upm.properties");
+		ExperimentManager.init();
 
-			application = ApplicationHelper.getInstance();
-			application.startApplication();
-			final GuiStateManager gui = GuiStateManager.getInstance();
-			final GUI g = new GUI();
-			List<Window> windows = gui.readGUI();
-			final Action_widget aw = windows.get(0).getActionWidgets().get(0);
+		application = ApplicationHelper.getInstance();
+		application.startApplication();
+		final GuiStateManager gui = GuiStateManager.getInstance();
+		final GUI g = new GUI();
+		List<Window> windows = gui.readGUI();
+		final Action_widget aw = windows.get(0).getActionWidgets().get(0);
 
-			final Click click = new Click(windows.get(0), null, aw);
-			ActionManager.executeAction(click);
-			windows = gui.readGUI();
+		final Click click = new Click(windows.get(0), null, aw);
+		ActionManager.executeAction(click);
+		windows = gui.readGUI();
 
-			g.addWindow(windows.get(0));
-			final Document doc = GUIWriter.writeGUI(g);
+		g.addWindow(windows.get(0));
+		final Document doc = GUIWriter.writeGUI(g);
 
-			src.usi.xml.XMLUtil.save(out_file, doc);
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
+		src.usi.xml.XMLUtil.save(out_file, doc);
+
 		// oracle starting
 		final Document d = XMLUtil.read(out_file);
+		new File(out_file).delete();
 		final NodeList ws = d.getElementsByTagName("window");
 		if (ws.getLength() != 1) {
 			throw new Exception("");
@@ -87,12 +83,12 @@ public class Save_window_xml extends Save_window_xmlHelper {
 		}
 		application.closeApplication();
 
-		final GUI g = GUIParser.parse(d);
-		if (g.getWindows().size() != 1) {
+		final GUI gg = GUIParser.parse(d);
+		if (gg.getWindows().size() != 1) {
 			throw new Exception("");
 		}
 
-		if (g.getWindows().get(0).getActionWidgets().size() != 24) {
+		if (gg.getWindows().get(0).getActionWidgets().size() != 24) {
 			throw new Exception("");
 		}
 
