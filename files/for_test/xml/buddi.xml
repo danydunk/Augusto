@@ -1733,7 +1733,7 @@
             <pos>231:493</pos>
             <class>ComboBoxUI</class>
             <label>&lt;html&gt;Transaction description, such as the&lt;br&gt;store or person with whom the&lt;br&gt;transaction was done.&lt;/html&gt;</label>
-            <value>[options] -1 : 0</value>
+            <value/>
         </input_widget>
         <input_widget id="iw11">
             <pos>460:493</pos>
