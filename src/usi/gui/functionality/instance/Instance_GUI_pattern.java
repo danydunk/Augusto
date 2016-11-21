@@ -9,6 +9,7 @@ import src.usi.configuration.ConfigurationManager;
 import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.GUI;
 import src.usi.gui.structure.Input_widget;
+import src.usi.gui.structure.Option_input_widget;
 import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Window;
 import src.usi.pattern.structure.GUI_Pattern;
@@ -354,14 +355,24 @@ public class Instance_GUI_pattern {
 			return new_res;
 		}
 
-		// final List<String> values = new ArrayList<>();
+		final List<String> values = new ArrayList<>();
+		for (final GUIAction act : new_res.getTc().getActions()) {
+			if (act instanceof Fill) {
+				final Fill f = (Fill) act;
+				if (!(f.getWidget() instanceof Option_input_widget)
+						&& !values.contains(f.getInput())) {
+					values.add(f.getInput());
+				}
+			}
+
+		}
 
 		final Alloy_Model sem = AlloyUtil.getTCaseModel(this.getSemantics(), new_res.getTc()
 				.getActions(), null);
 		final Instance_GUI_pattern clone = this.clone();
 		clone.setSpecificSemantics(SpecificSemantics.instantiate(sem));
 		final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
-		final List<GUITestCase> tests = test_gen.generateTestCases();
+		final List<GUITestCase> tests = test_gen.generateTestCases(values);
 		assert (tests.size() < 2);
 		if (tests.size() == 1) {
 			new_res = new GUITestCaseResult(tests.get(0), actions_executed, results,

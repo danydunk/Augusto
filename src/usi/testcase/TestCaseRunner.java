@@ -195,9 +195,9 @@ public class TestCaseRunner {
 
 				this.dealWithDialogsWindow(gmanager);
 
-				if (cont == actions.size() - 2) {
-					System.out.println();
-				}
+				// if (cont == actions.size() - 2) {
+				// System.out.println();
+				// }
 
 				actions_actually_executed.add(act_to_execute);
 
@@ -306,11 +306,11 @@ public class TestCaseRunner {
 					// selecting an element can modify the position of
 					// the
 					// widget
-						if (e instanceof Selectable_widget) {
-							return false;
-						}
-						return true;
-					}).collect(Collectors.toList());
+					if (e instanceof Selectable_widget) {
+						return false;
+					}
+					return true;
+				}).collect(Collectors.toList());
 
 				final List<Widget> widgets2 = w.getWidgets().stream().filter(e -> {
 
@@ -318,11 +318,11 @@ public class TestCaseRunner {
 					// selecting an element can modify the position of
 					// the
 					// widget
-						if (e instanceof Selectable_widget) {
-							return false;
-						}
-						return true;
-					}).collect(Collectors.toList());
+					if (e instanceof Selectable_widget) {
+						return false;
+					}
+					return true;
+				}).collect(Collectors.toList());
 
 				for (int x = 0; x < widgets.size(); x++) {
 					if (widgets2.get(x) instanceof Action_widget) {

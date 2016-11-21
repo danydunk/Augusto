@@ -17,7 +17,7 @@ import com.rational.test.ft.object.interfaces.TestObject;
 public class ActionManager {
 
 	/*
-	 *
+	 * 
 	 * GUI must be read before calling this method This function returns true if
 	 * the action was executed, false if it could not be executed because the
 	 * widget was disabled It throws an exception if there is no
@@ -78,7 +78,6 @@ public class ActionManager {
 		}
 
 		if (act instanceof Click) {
-			final Click click = (Click) act;
 
 			Method method = null;
 			for (final Method m : ms) {

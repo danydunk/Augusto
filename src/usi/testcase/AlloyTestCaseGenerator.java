@@ -60,6 +60,11 @@ public class AlloyTestCaseGenerator {
 		this.instance = instance;
 	}
 
+	public List<GUITestCase> generateTestCases() throws Exception {
+
+		return this.generateTestCases(null);
+	}
+
 	/**
 	 * Function that generates GUI test cases running the run commands contained
 	 * in a specific semantics. Each command is run until completion or timeout.
@@ -72,7 +77,7 @@ public class AlloyTestCaseGenerator {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<GUITestCase> generateTestCases() throws Exception {
+	public List<GUITestCase> generateTestCases(final List<String> values) throws Exception {
 
 		this.MAX_RUN = 1;
 		final SpecificSemantics model = this.instance.getSemantics();
@@ -117,8 +122,10 @@ public class AlloyTestCaseGenerator {
 		for (int cont = 0; cont < solutions.size(); cont++) {
 			final A4Solution sol = solutions.get(cont);
 			if (sol != null) {
-				out.add(this.analyzeTuples(sol,
-						this.instance.getSemantics().getRun_commands().get(cont)));
+				if (values == null) {
+					out.add(this.analyzeTuples(sol, this.instance.getSemantics().getRun_commands()
+							.get(cont), values));
+				}
 			} else {
 				out.add(null);
 			}
@@ -203,8 +210,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-			ts[0].interrupt();
-			ts[1].interrupt();
+		ts[0].interrupt();
+		ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -212,7 +219,7 @@ public class AlloyTestCaseGenerator {
 			final A4Solution sol = solutions.get(cont);
 			if (sol != null) {
 				out.add(this.analyzeTuples(sol,
-						this.instance.getSemantics().getRun_commands().get(cont)));
+						this.instance.getSemantics().getRun_commands().get(cont), null));
 			} else {
 				out.add(null);
 			}
@@ -221,10 +228,15 @@ public class AlloyTestCaseGenerator {
 		return out;
 	}
 
-	protected GUITestCase analyzeTuples(final A4Solution solution, final String run)
-			throws Exception {
+	protected GUITestCase analyzeTuples(final A4Solution solution, final String run,
+			final List<String> vs) throws Exception {
 
-		final Map<String, String> input_data_map = this.elaborateInputData(solution);
+		Map<String, String> input_data_map = null;
+		if (vs == null || vs.size() == 0) {
+			input_data_map = this.elaborateInputData(solution, vs);
+		} else {
+			input_data_map = this.elaborateInputData(solution);
+		}
 		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track$0");
 		final List<A4Tuple> curr_wind = AlloyUtil.getTuples(solution, "Current_window$0");
 		assert (tracks.size() == curr_wind.size() - 1);
@@ -407,10 +419,7 @@ public class AlloyTestCaseGenerator {
 			final List<A4Tuple> params = AlloyUtil.getTuples(solution, tuple.atom(1));
 
 			if (tuple.atom(1).startsWith("Fill")) {
-				if (params.size() != 2) {
-					throw new Exception(
-							"AlloyTestCaseGenerator - analyzeTuples: wrong number of tuples for fill.");
-				}
+				assert (params.size() == 2);
 
 				String iw_id = null;
 				String value = null;
@@ -637,10 +646,8 @@ public class AlloyTestCaseGenerator {
 		for (final String fill_atom : fill_atoms) {
 
 			final List<A4Tuple> tuples = AlloyUtil.getTuples(solution, fill_atom);
-			if (tuples.size() != 2) {
-				throw new Exception(
-						"AlloyTestCaseGenerator - elaborateInputData: wrong tuples number for fill.");
-			}
+			assert (tuples.size() == 2);
+
 			String iw = null;
 			String v = null;
 			for (final A4Tuple tuple : tuples) {
@@ -651,10 +658,8 @@ public class AlloyTestCaseGenerator {
 				}
 
 			}
-			if (v == null || iw == null) {
-				throw new Exception(
-						"AlloyTestCaseGenerator - elaborateInputData: input widget or value not found.");
-			}
+			assert (v != null && iw != null);
+
 			String iw_id = iw.substring(13);
 			iw_id = iw_id.split("\\$")[0];
 			Input_widget inpw = null;
@@ -665,10 +670,8 @@ public class AlloyTestCaseGenerator {
 					break;
 				}
 			}
-			if (inpw == null) {
-				throw new Exception(
-						"AlloyTestCaseGenerator - elaborateInputData: input widget not found in instance.");
-			}
+			assert (inpw != null);
+
 			if (inpw instanceof Option_input_widget) {
 				// for the option input widget we just use the value index
 				// provided by alloy
@@ -690,9 +693,8 @@ public class AlloyTestCaseGenerator {
 				} else if (invalid_atoms.contains(v)) {
 					data = dm.getInvalidData(metadata);
 				}
-				if (data == null) {
-					throw new Exception("AlloyTestCaseGenerator - elaborateInputData: error.");
-				}
+				assert (data != null);
+
 				if (data_for_value.containsKey(v)) {
 					final List<String> new_list = new ArrayList<>();
 					// we calculate the intersection between the values already
@@ -740,10 +742,147 @@ public class AlloyTestCaseGenerator {
 			final int index = r.nextInt(possible_values.size());
 			final String val = possible_values.get(index);
 			used_values.add(val);
-			if (out.containsKey(key)) {
-				throw new Exception("AlloyTestCaseGenerator - elaborateInputData: error.");
-			}
+			assert (!out.containsKey(key));
+
 			out.put(key, val);
+		}
+
+		return out;
+	}
+
+	private Map<String, String> elaborateInputData(final A4Solution solution,
+			final List<String> values) throws Exception {
+
+		final Map<String, String> out = new HashMap<>();
+		final DataManager dm = DataManager.getInstance();
+		Sig value = null;
+		Sig invalid = null;
+		Sig fill = null;
+		for (final Sig sig : solution.getAllReachableSigs()) {
+			if ("this/Value".equals(sig.label)) {
+				value = sig;
+			}
+			if ("this/Invalid".equals(sig.label)) {
+				invalid = sig;
+			}
+			if ("this/Fill".equals(sig.label)) {
+				fill = sig;
+			}
+		}
+		assert (value != null && fill != null);
+
+		List<String> fill_atoms = AlloyUtil.getElementsInSet(solution, fill);
+
+		final Map<Integer, String> map_time_filled = new HashMap<>();
+		final List<Integer> to_order = new ArrayList<>();
+
+		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track$0");
+		for (final A4Tuple tuple : tracks) {
+			assert (tuple.arity() == 3);
+
+			final int time_index = this.extractTimeIndex(tuple.atom(2));
+			if (tuple.atom(1).startsWith("Fill")) {
+				final List<A4Tuple> params = AlloyUtil.getTuples(solution, tuple.atom(1));
+				assert (params.size() == 2);
+
+				String v = null;
+
+				for (final A4Tuple t : params) {
+					if (t.atom(1).toLowerCase().startsWith("value")) {
+						v = t.atom(1);
+						break;
+					}
+				}
+				map_time_filled.put(time_index, v);
+				to_order.add(time_index);
+			}
+		}
+
+		if (to_order.size() != values.size()) {
+			throw new Exception(
+					"AlloyTestCaseGeneration - elaborateInputData: not enough inputdata provided.");
+		}
+		Collections.sort(to_order);
+		final List<String> sorted_values = new ArrayList<>();
+		for (final int a : to_order) {
+			sorted_values.add(map_time_filled.get(a));
+		}
+
+		final List<String> value_atoms = AlloyUtil.getElementsInSet(solution, value);
+		List<String> invalid_atoms = new ArrayList<>();
+		if (invalid != null) {
+			invalid_atoms = AlloyUtil.getElementsInSet(solution, invalid);
+		}
+		List<String> valid_atoms = new ArrayList<>();
+		for (final String a : value_atoms) {
+			if (!invalid_atoms.contains(a)) {
+				valid_atoms.add(a);
+			}
+		}
+		// in the atoms extracted the underscore is substituted with the dollar
+		fill_atoms = fill_atoms
+				.stream()
+				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
+						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
+
+		invalid_atoms = invalid_atoms
+				.stream()
+				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
+						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
+
+		valid_atoms = valid_atoms
+				.stream()
+				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
+						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
+
+		// for each valid value we look for all its uses in the solution
+
+		for (final String fill_atom : fill_atoms) {
+
+			final List<A4Tuple> tuples = AlloyUtil.getTuples(solution, fill_atom);
+			assert (tuples.size() == 2);
+
+			String iw = null;
+			String v = null;
+			for (final A4Tuple tuple : tuples) {
+				if (tuple.arity() == 2 && tuple.atom(1).toLowerCase().contains("value")) {
+					v = tuple.atom(1);
+				} else if (tuple.arity() == 2 && tuple.atom(1).startsWith("Input_widget")) {
+					iw = tuple.atom(1);
+				}
+
+			}
+			assert (v != null && iw != null);
+
+			String iw_id = iw.substring(13);
+			iw_id = iw_id.split("\\$")[0];
+			Input_widget inpw = null;
+			// the corresponding iw is searched in the instance
+			for (final Input_widget i_w : this.instance.getGui().getInput_widgets()) {
+				if (i_w.getId().equals(iw_id)) {
+					inpw = i_w;
+					break;
+				}
+			}
+			assert (inpw != null);
+
+			if (inpw instanceof Option_input_widget) {
+				// for the option input widget we just use the value index
+				// provided by alloy
+				// this is possible because of the fact added in the model that
+				// constrains the possible values associated to the optional
+				// input widget
+				String val = v.split("\\$")[0].trim();
+				val = val.replace("Input_widget_" + inpw.getId() + "_value_", "");
+				out.put(v, val);
+
+			} else {
+				assert (sorted_values.contains(v));
+
+				if (!out.containsKey(v)) {
+					out.put(v, values.get(sorted_values.indexOf(v)));
+				}
+			}
 		}
 
 		return out;
