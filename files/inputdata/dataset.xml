@@ -51,10 +51,9 @@
   <DATA>
     <metadata>amount</metadata>
     <values>
-      <valid>0</valid>
-      <valid>10</valid>
-	  <valid>100</valid>
-      <valid>1000</valid>
+      <valid>0.00</valid>
+      <valid>10.00</valid>
+	  <valid>100.00</valid>
     </values>
   </DATA>
   <DATA type="itemized">
