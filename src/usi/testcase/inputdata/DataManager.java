@@ -43,6 +43,12 @@ public class DataManager {
 		if (descriptor == null) {
 			throw new Exception("DataManager - getValidData: null input.");
 		}
+		final String desc = descriptor.trim().toLowerCase();
+
+		if (this.validDataMap.containsKey(desc)) {
+			return this.validDataMap.get(desc);
+		}
+
 		final List<String> out = new ArrayList<>();
 		final List<String> descriptors = this.splitDescriptor(descriptor);
 		for (final String s : descriptors) {
@@ -59,6 +65,12 @@ public class DataManager {
 		if (descriptor == null) {
 			throw new Exception("DataManager - getInvalidData: null input.");
 		}
+		final String desc = descriptor.trim().toLowerCase();
+
+		if (this.invalidDataMap.containsKey(desc)) {
+			return this.invalidDataMap.get(desc);
+		}
+
 		final List<String> out = new ArrayList<>();
 		final List<String> descriptors = this.splitDescriptor(descriptor);
 		for (final String s : descriptors) {
@@ -75,15 +87,14 @@ public class DataManager {
 		if (descriptor == null) {
 			throw new Exception("DataManager - getValidItemizedData: null input.");
 		}
-		final List<Integer> out = new ArrayList<>();
-		final List<String> descriptors = this.splitDescriptor(descriptor);
-		for (final String s : descriptors) {
-			final List<Integer> values = this.validItemizedDataMap.get(s);
-			if (values != null && values.size() > 0) {
-				out.addAll(values);
-			}
+		final String desc = descriptor.trim().toLowerCase();
+
+		// for itemized data there must be a perfect match with the metadata
+		if (this.validItemizedDataMap.containsKey(desc)) {
+			return this.validItemizedDataMap.get(desc);
 		}
-		return out;
+
+		return new ArrayList<>();
 	}
 
 	public List<Integer> getInvalidItemizedData(final String descriptor) throws Exception {
@@ -91,15 +102,14 @@ public class DataManager {
 		if (descriptor == null) {
 			throw new Exception("DataManager - getInvalidItemizedData: null input.");
 		}
-		final List<Integer> out = new ArrayList<>();
-		final List<String> descriptors = this.splitDescriptor(descriptor);
-		for (final String s : descriptors) {
-			final List<Integer> values = this.invalidItemizedDataMap.get(s);
-			if (values != null && values.size() > 0) {
-				out.addAll(values);
-			}
+		final String desc = descriptor.trim().toLowerCase();
+
+		// for itemized data there must be a perfect match with the metadata
+		if (this.invalidItemizedDataMap.containsKey(desc)) {
+			return this.invalidItemizedDataMap.get(desc);
 		}
-		return out;
+
+		return new ArrayList<>();
 	}
 
 	public List<String> getValidGenericData() {
@@ -145,7 +155,7 @@ public class DataManager {
 						&& nodo.getAttribute("type").getValue().equals("itemized")) {
 					// if it is itemized
 					// get the metadata
-					final String metadata = nodo.getChildText("metadata").trim();
+					final String metadata = nodo.getChildText("metadata").toLowerCase().trim();
 					assert (!this.invalidItemizedDataMap.containsKey(metadata) && !this.validItemizedDataMap
 							.containsKey(metadata));
 
@@ -176,7 +186,7 @@ public class DataManager {
 					}
 				} else {
 					// get the metadata
-					final String metadata = nodo.getChildText("metadata").trim();
+					final String metadata = nodo.getChildText("metadata").toLowerCase().trim();
 					assert (!this.invalidDataMap.containsKey(metadata) && !this.validDataMap
 							.containsKey(metadata));
 

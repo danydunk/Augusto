@@ -76,8 +76,8 @@ public class ExperimentManager {
 					+ ConfigurationManager.getAutClasspath() + ";"
 					+ ConfigurationManager.getAutBinDirectory() + ";" + " -javaagent:"
 					+ PathsManager.getProjectRoot() + "lib" + File.separator + "jmockit-1.29.jar"
-					+ " -Dnet.sourceforge.cobertura.datafile=\"" + SER_FILE_PATH + "\"" + " "
-					+ ConfigurationManager.getAutMainCLass());
+					+ " -Dnet.sourceforge.cobertura.datafile=\"" + SER_FILE_PATH + "\""
+					+ " src.usi.application.AUTMain " + ConfigurationManager.getAutMainCLass());
 
 			out.flush();
 			out.close();
@@ -171,6 +171,6 @@ public class ExperimentManager {
 		new File(SER_FILE_PATH).delete();
 		new File(SER_RESET_FILE_PATH).delete();
 		new File(System.getProperty("user.dir") + File.separator + "cobertura_warnings.out")
-		.delete();
+				.delete();
 	}
 }

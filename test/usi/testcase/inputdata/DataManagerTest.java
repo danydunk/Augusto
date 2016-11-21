@@ -17,7 +17,11 @@ public class DataManagerTest {
 			assertEquals(11, dm.getValidGenericData().size());
 			// assertEquals(1, dm.getInvalidData("url").size());
 			assertEquals(4, dm.getValidData("password and, url").size());
-			assertEquals(1, dm.getValidItemizedData("from and, url").size());
+			assertEquals(
+					1,
+					dm.getValidItemizedData(
+							"<html>The account or category to<br>transfer the money from.</html>")
+							.size());
 			assertEquals("password", dm.getValidData("password").get(0));
 		} catch (final Exception e) {
 			e.printStackTrace();

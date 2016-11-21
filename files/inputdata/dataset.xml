@@ -8,14 +8,14 @@
     </values>
   </DATA>
   <DATA>
-    <metadata>starting</metadata>
+    <metadata>starting on</metadata>
     <values>
       <valid>2016/11/14</valid>
       <valid>2016/11/15</valid>
     </values>
   </DATA>
   <DATA>
-    <metadata>ending</metadata>
+    <metadata>ending after</metadata>
     <values>
       <valid>2017/11/14</valid>
       <valid>2017/8/14</valid>
@@ -48,8 +48,17 @@
       <valid>pass</valid>
     </values>
   </DATA>
+  <DATA>
+    <metadata>amount</metadata>
+    <values>
+      <valid>0</valid>
+      <valid>10</valid>
+	  <valid>100</valid>
+      <valid>1000</valid>
+    </values>
+  </DATA>
   <DATA type="itemized">
-    <metadata>from</metadata>
+    <metadata>&lt;html&gt;The account or category to&lt;br&gt;transfer the money from.&lt;/html&gt;</metadata>
     <values>
       <valid>1</valid>
       <invalid>0</invalid>
@@ -63,7 +72,7 @@
     </values>
   </DATA>
   <DATA type="itemized">
-    <metadata>to</metadata>
+    <metadata>&lt;html&gt;The account or category to&lt;br&gt;transfer the money to.&lt;/html&gt;</metadata>
     <values>
       <valid>4</valid>
       <valid>5</valid>
