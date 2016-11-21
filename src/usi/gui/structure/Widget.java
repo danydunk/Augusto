@@ -369,7 +369,7 @@ public abstract class Widget implements Comparable<Widget> {
 			}
 			final int x = p.x;
 			final int y = p.y;
-			final int size = Integer.valueOf(to.getProperty("lastVisibleIndex").toString()) + 1;
+			final int size = Integer.valueOf(to.getProperty(".itemCount").toString());
 			final int selected = Integer.valueOf(to.getProperty("selectedIndex").toString());
 			out.add(new Selectable_widget(to, idm.nextSWId(), label, type, x, y, size, selected));
 			return out;
