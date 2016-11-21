@@ -234,6 +234,12 @@ public class Window extends Widget {
 							&& e.getLabel().toLowerCase().startsWith("window -")) {
 						return false;
 					}
+					// we deal with selectable widgets separately cause
+					// selecting an element can modify the position of the
+					// widget
+					if (e instanceof Selectable_widget) {
+						return false;
+					}
 					return true;
 				}).collect(Collectors.toList());
 
@@ -245,10 +251,19 @@ public class Window extends Widget {
 							&& e.getLabel().toLowerCase().startsWith("window -")) {
 						return false;
 					}
+					// we deal with selectable widgets separately cause
+					// selecting an element can modify the position of the
+					// widget
+					if (e instanceof Selectable_widget) {
+						return false;
+					}
 					return true;
 				}).collect(Collectors.toList());
 
 		if (widgets.size() != widgets_bis.size()) {
+			return false;
+		}
+		if (this.getSelectableWidgets().size() != win.getSelectableWidgets().size()) {
 			return false;
 		}
 		// we iterate trough the widgets which are ordered by position
@@ -275,6 +290,13 @@ public class Window extends Widget {
 				if (!sw.isSame(widgets_bis.get(x))) {
 					return false;
 				}
+			}
+		}
+
+		for (int x = 0; x < this.getSelectableWidgets().size(); x++) {
+			final Selectable_widget sw = this.getSelectableWidgets().get(x);
+			if (!sw.isSame(win.getSelectableWidgets().get(x))) {
+				return false;
 			}
 		}
 

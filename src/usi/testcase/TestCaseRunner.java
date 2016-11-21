@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import src.usi.application.ActionManager;
 import src.usi.application.ApplicationHelper;
@@ -14,6 +15,7 @@ import src.usi.gui.structure.GUI;
 import src.usi.gui.structure.Input_widget;
 import src.usi.gui.structure.Option_input_widget;
 import src.usi.gui.structure.Selectable_widget;
+import src.usi.gui.structure.Widget;
 import src.usi.gui.structure.Window;
 import src.usi.pattern.dialogs.Pattern_dialogs;
 import src.usi.testcase.structure.Click;
@@ -193,7 +195,7 @@ public class TestCaseRunner {
 
 				this.dealWithDialogsWindow(gmanager);
 
-				if (cont == actions.size() - 1) {
+				if (cont == actions.size() - 2) {
 					System.out.println();
 				}
 
@@ -295,20 +297,46 @@ public class TestCaseRunner {
 
 				// we can loop only once since if they are the same they must
 				// have the same widgets number
-				for (int x = 0; x < in.getWidgets().size(); x++) {
-					if (w.getWidgets().get(x) instanceof Action_widget) {
-						final Action_widget aw = (Action_widget) in.getWidgets().get(x);
-						final Action_widget aw2 = (Action_widget) w.getWidgets().get(x);
+				// we need to filter out the selectable widgets cause their
+				// position might change when they are scrolled
+
+				final List<Widget> widgets = in.getWidgets().stream().filter(e -> {
+
+					// we deal with selectable widgets separately cause
+					// selecting an element can modify the position of
+					// the
+					// widget
+						if (e instanceof Selectable_widget) {
+							return false;
+						}
+						return true;
+					}).collect(Collectors.toList());
+
+				final List<Widget> widgets2 = w.getWidgets().stream().filter(e -> {
+
+					// we deal with selectable widgets separately cause
+					// selecting an element can modify the position of
+					// the
+					// widget
+						if (e instanceof Selectable_widget) {
+							return false;
+						}
+						return true;
+					}).collect(Collectors.toList());
+
+				for (int x = 0; x < widgets.size(); x++) {
+					if (widgets2.get(x) instanceof Action_widget) {
+						final Action_widget aw = (Action_widget) widgets.get(x);
+						final Action_widget aw2 = (Action_widget) widgets2.get(x);
 						final Action_widget new_aw = new Action_widget(aw2.getId(), aw.getLabel(),
 								aw.getClasss(), aw.getX(), aw.getY());
 						new_aw.setDescriptor(aw.getDescriptor());
 						out.addWidget(new_aw);
 
-					} else if (w.getWidgets().get(x) instanceof Input_widget) {
-						final Input_widget iw = (Input_widget) in.getWidgets().get(x);
-						if (w.getWidgets().get(x) instanceof Option_input_widget) {
-							final Option_input_widget iw2 = (Option_input_widget) w.getWidgets()
-									.get(x);
+					} else if (widgets2.get(x) instanceof Input_widget) {
+						final Input_widget iw = (Input_widget) widgets.get(x);
+						if (widgets2.get(x) instanceof Option_input_widget) {
+							final Option_input_widget iw2 = (Option_input_widget) widgets2.get(x);
 							final Option_input_widget oiw = (Option_input_widget) iw;
 							final Option_input_widget new_oiw = new Option_input_widget(
 									iw2.getId(), iw.getLabel(), iw.getClasss(), iw.getX(),
@@ -316,7 +344,7 @@ public class TestCaseRunner {
 							new_oiw.setDescriptor(iw.getDescriptor());
 							out.addWidget(new_oiw);
 						} else {
-							final Input_widget iw2 = (Input_widget) w.getWidgets().get(x);
+							final Input_widget iw2 = (Input_widget) widgets2.get(x);
 							final Input_widget new_iw = new Input_widget(iw2.getId(),
 									iw.getLabel(), iw.getClasss(), iw.getX(), iw.getY(),
 									iw.getValue());
@@ -324,36 +352,13 @@ public class TestCaseRunner {
 							out.addWidget(new_iw);
 
 						}
-					} else if (w.getWidgets().get(x) instanceof Selectable_widget) {
-						final Selectable_widget sw = (Selectable_widget) in.getWidgets().get(x);
-						final Selectable_widget sw2 = (Selectable_widget) w.getWidgets().get(x);
-						// final TestObject to = sw.getTo();
-						// final List<String> curr_el =
-						// Selectable_widget.getElements(to);
-						//
-						// int index = -1;
-						// // int size = 0;
-						// final Pair new_p = new Pair(w, sw);
-						// for (final Pair p :
-						// this.select_support_initial.keySet()) {
-						// if (p.isSame(new_p)) {
-						// // for (final String el : curr_el) {
-						// // if
-						// // (this.select_support_added.get(p).contains(el))
-						// // {
-						// // //size++;
-						// // }
-						// // }
-						//
-						// if (sw.getSelected() != -1) {
-						// final String selected =
-						// curr_el.get(sw.getSelected());
-						// index = this.select_support_added_indexes.get(p).get(
-						// this.select_support_added.get(p).indexOf(selected));
-						// }
-						// break;
-						// }
-						// }
+					}
+				}
+
+				for (int x = 0; x < in.getSelectableWidgets().size(); x++) {
+					if (w.getSelectableWidgets().get(x) instanceof Selectable_widget) {
+						final Selectable_widget sw = in.getSelectableWidgets().get(x);
+						final Selectable_widget sw2 = w.getSelectableWidgets().get(x);
 
 						final Selectable_widget new_sw = new Selectable_widget(sw2.getId(),
 								sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), sw.getSize(),
@@ -362,6 +367,7 @@ public class TestCaseRunner {
 						out.addWidget(new_sw);
 
 					}
+
 				}
 
 				return out;
