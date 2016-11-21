@@ -345,15 +345,16 @@ public class Instance_GUI_pattern {
 			}
 		}
 
-		if (!tc_changed) {
-			final GUITestCaseResult new_res = new GUITestCaseResult(res.getTc(), res.getTc()
-					.getActions(), res.getResults(), actions_actually_executed);
-			return new_res;
-		}
-
 		GUITestCaseResult new_res = new GUITestCaseResult(new GUITestCase(res.getTc()
 				.getAlloySolution(), actions, res.getTc().getRunCommand()), actions_executed,
 				results, actions_actually_executed);
+
+		if (!tc_changed) {
+
+			return new_res;
+		}
+
+		// final List<String> values = new ArrayList<>();
 
 		final Alloy_Model sem = AlloyUtil.getTCaseModel(this.getSemantics(), new_res.getTc()
 				.getActions(), null);
