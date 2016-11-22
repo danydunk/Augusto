@@ -2,6 +2,11 @@
 import socket
 import sys
 
+def getPacket(s):
+	s.read()
+	
+
+
 arg = sys.argv[1]
 
 HOST = 'research.inf.usi.ch'    # The remote host
@@ -25,12 +30,21 @@ if s is None:
     print "could not open socket"
     sys.exit(1)
 s.sendall(arg)
-data = s.recv(2)
+
+msg = ""
+while True:
+	received = s.recv(1024)
+	if not received:
+		break	
+	msg += received
 s.close()
-print "received "+data
-if data.strip() == "ok":
-    exit(0)
+	
+assert(msg.endswith("CIBUILD=OK") or msg.endswith("CIBUILD=KO"))
+
+print "Logs:"
+print msg.strip("CIBUILD=OK").strip("CIBUILD=KO")
+	
+if msg.endswith("CIBUILD=OK"):
+	exit(0)
 else:
-    exit(-1)
-	
-	
+	exit(-1)
