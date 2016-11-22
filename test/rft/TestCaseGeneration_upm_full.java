@@ -9,16 +9,11 @@ import src.usi.configuration.ConfigurationManager;
 import src.usi.configuration.ExperimentManager;
 import src.usi.configuration.PathsManager;
 import src.usi.gui.GUIParser;
-import src.usi.gui.functionality.GUIFunctionality_refine;
-import src.usi.gui.functionality.GUIFunctionality_search;
 import src.usi.gui.functionality.GUIFunctionality_validate;
 import src.usi.gui.functionality.instance.Instance_GUI_pattern;
+import src.usi.gui.functionality.instance.Instance_GUI_patternParser;
 import src.usi.gui.structure.GUI;
-import src.usi.pattern.GUIPatternParser;
-import src.usi.pattern.structure.GUI_Pattern;
-import src.usi.semantic.SpecificSemantics;
-import src.usi.semantic.alloy.Alloy_Model;
-import src.usi.semantic.alloy.structure.Fact;
+import src.usi.testcase.GUITestCaseResult;
 import src.usi.xml.XMLUtil;
 
 /**
@@ -35,54 +30,31 @@ public class TestCaseGeneration_upm_full extends TestCaseGeneration_upm_fullHelp
 	 *
 	 * @since 2016/09/05
 	 * @author usi
+	 * @throws Exception
 	 */
-	public void testMain(final Object[] args) {
+	public void testMain(final Object[] args) throws Exception {
 
-		try {
-			// we load a gui pattern
-			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
-					+ "/files/guipatterns/crud.xml");
-			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+		ConfigurationManager.load(PathsManager.getProjectRoot()
+				+ "/files/for_test/config/upm_tc.properties");
+		ExperimentManager.init();
 
-			ConfigurationManager.load(PathsManager.getProjectRoot()
-					+ "/files/for_test/config/upm_tc.properties");
-			ExperimentManager.init();
+		// we load the GUI structure
+		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/upm.xml");
+		final GUI gui = GUIParser.parse(doc);
 
-			// we load the GUI structure
-			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/upm.xml");
-			final GUI gui = GUIParser.parse(doc);
+		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/UPMmatch.xml");
+		final Instance_GUI_pattern match = Instance_GUI_patternParser.parse(doc);
 
-			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
-			final List<Instance_GUI_pattern> res = gfs.match(pattern);
-			Instance_GUI_pattern match = res.get(0);
-
-			if (match == null) {
-				throw new Exception();
-			}
-			match.generateSpecificSemantics();
-
-			final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
-			match = refiner.refine();
-			match.generateSpecificSemantics();
-
-			final String constraint = "one Field_5:Property_unique|#Property_required = 0 and Property_unique = (Field_5) and Field_5.associated_to = (Input_widget_iw23)";
-			final Fact newfact = new Fact("", constraint);
-			final List<Fact> facts = match.getSemantics().getFacts();
-			facts.add(newfact);
-
-			final Alloy_Model mod = new Alloy_Model(match.getSemantics().getSignatures(), facts,
-					match.getSemantics().getPredicates(), match.getSemantics().getFunctions(),
-					match.getSemantics().getOpenStatements());
-			match.setSpecificSemantics(SpecificSemantics.instantiate(mod));
-
-			final GUIFunctionality_validate validator = new GUIFunctionality_validate(match, gui);
-			validator.validate();
-
-		} catch (final Exception e) {
-			e.printStackTrace();
-			System.out.println("ERROR");
-		} finally {
-			ExperimentManager.cleanUP();
+		if (match == null) {
+			throw new Exception();
 		}
+
+		final GUIFunctionality_validate validator = new GUIFunctionality_validate(match, gui);
+		final List<GUITestCaseResult> testcases = validator.validate();
+
+		System.out.println("size = " + testcases.size());
+
+		ExperimentManager.cleanUP();
+
 	}
 }

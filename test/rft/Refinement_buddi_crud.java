@@ -15,6 +15,7 @@ import src.usi.gui.functionality.instance.Instance_GUI_pattern;
 import src.usi.gui.structure.GUI;
 import src.usi.pattern.GUIPatternParser;
 import src.usi.pattern.structure.GUI_Pattern;
+import src.usi.semantic.alloy.structure.Fact;
 import src.usi.xml.XMLUtil;
 
 /**
@@ -61,5 +62,15 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 			throw new Exception("");
 		}
 
+		String sem_prop = null;
+		for (final Fact fact : match.getSemantics().getFacts()) {
+			if (fact.getIdentifier().equals("semantic_property")) {
+				sem_prop = fact.getContent();
+			}
+		}
+
+		if (!sem_prop.contains("Property_required_0.requireds = (Input_widget_iw1)")) {
+			throw new Exception("");
+		}
 	}
 }

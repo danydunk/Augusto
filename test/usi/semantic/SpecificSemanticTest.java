@@ -106,6 +106,7 @@ public class SpecificSemanticTest {
 				"./files/for_test/alloy/generated_model.als");
 		final Alloy_Model loadedModelAlloyComplete = AlloyUtil
 				.loadAlloyModelFromFile(fileConcreteModel);
+
 		assertNotNull(loadedModelAlloyComplete);
 
 		assertEquals(specsem.getSignatures().size(), loadedModelAlloyComplete.getSignatures()
@@ -128,6 +129,7 @@ public class SpecificSemanticTest {
 		// The mit API includes predicates in function.
 		assertTrue(moduleAlloyMit.getAllFunc().size() >= loadedModelAlloyComplete.getFunctions()
 				.size());
+		new File("./files/for_test/alloy/generated_model.als").delete();
 
 	}
 }

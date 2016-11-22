@@ -80,7 +80,6 @@ public class Main extends MainHelper {
 						.getGUIPatternsFolder() + Patterns.values()[x].name));
 				patterns_name[x] = Patterns.values()[x].name.replace(".xml", "");
 			}
-			System.out.println(patterns.length);
 			// search
 			final GUIFunctionality_search searcher = new GUIFunctionality_search(gui);
 			final Map<GUI_Pattern, List<Instance_GUI_pattern>> candidate_instances = new HashMap<>();
@@ -108,11 +107,12 @@ public class Main extends MainHelper {
 
 					final Instance_GUI_pattern instance = candidate_instances.get(pattern).get(y);
 
-					// to remove
-					candidate_instances.get(pattern).get(y).generateSpecificSemantics();
-					XMLUtil.save(match_folder + File.separator + "pre_match.xml",
-							Instance_GUI_patternWriter.writeInstanceGUIPattern(candidate_instances
-									.get(pattern).get(y)));
+					// // to remove
+					// candidate_instances.get(pattern).get(y).generateSpecificSemantics();
+					// XMLUtil.save(match_folder + File.separator +
+					// "pre_match.xml",
+					// Instance_GUI_patternWriter.writeInstanceGUIPattern(candidate_instances
+					// .get(pattern).get(y)));
 					// end
 
 					final GUIFunctionality_refine refiner = new GUIFunctionality_refine(instance,

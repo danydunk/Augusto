@@ -54,8 +54,10 @@ public class ConfigurationManager {
 				.getProperty("alloy_run_scope")));
 		ConfigurationManager.setSleepTime(Long.valueOf(properties.getProperty("sleep_time")));
 		setRefinementTimeout(Long.valueOf(properties.getProperty("refinement_timeout")));
+
 		ConfigurationManager.setTestcaseLength(Integer.valueOf(properties
 				.getProperty("testcase_length")));
+
 		ConfigurationManager.setGUIFile(properties.getProperty("gui_file"));
 		ConfigurationManager.setRefinementAlloyTimeScope(Integer.valueOf(properties
 				.getProperty("refinment_alloy_time_scope")));
