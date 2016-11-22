@@ -15,7 +15,7 @@ public class ConfigurationManager {
 	private static String resetScriptPath;
 	private static long sleepTime = 600;
 	private static String initial_actions = "";
-	private static int alloyRunScope = 10;
+	private static int alloyRunScope = 4;
 	private static String ripperFilters = "";
 	// path to the GUI file
 	private static String guiFile;
@@ -23,7 +23,7 @@ public class ConfigurationManager {
 	private static long refinementTimeout = 1800000;// 30min
 	private static int alloyRefinementTimeScope = 10;
 	// testcase settings
-	private static int testcaseLength = 15;
+	private static int testcaseLength = 8;
 	private static boolean pairwiseTestcase = false;
 	// for multithreading
 	private static int multithreading_batch_size = 8;

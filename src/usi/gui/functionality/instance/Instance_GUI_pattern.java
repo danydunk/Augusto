@@ -265,7 +265,7 @@ public class Instance_GUI_pattern {
 			scopes += "," + sws + " Selectable_widget";
 		}
 		if (vs > -1) {
-			scopes += "," + (vs + (ConfigurationManager.getAlloyRunScope() * 1 / 2)) + " Value";
+			scopes += "," + (vs + (ConfigurationManager.getAlloyRunScope() * 2 / 3)) + " Value";
 		}
 		run = run + scopes;
 		sem.addRun_command(run);

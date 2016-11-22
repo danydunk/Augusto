@@ -110,7 +110,8 @@ public class AlloyTestCaseGenerator {
 			if (!t.hasExceptions() && t.getSolution() != null && t.getSolution().satisfiable()) {
 				solutions.add(t.getSolution());
 			} else {
-				solutions.add(null);
+
+				solutions.add(t.getSolution());
 			}
 			if (t.isAlive()) {
 				t.interrupt();
@@ -122,10 +123,11 @@ public class AlloyTestCaseGenerator {
 		for (int cont = 0; cont < solutions.size(); cont++) {
 			final A4Solution sol = solutions.get(cont);
 			if (sol != null) {
-				if (values == null) {
+				if (sol.satisfiable()) {
 					out.add(this.analyzeTuples(sol, this.instance.getSemantics().getRun_commands()
 							.get(cont), values));
 				}
+
 			} else {
 				out.add(null);
 			}
@@ -194,7 +196,7 @@ public class AlloyTestCaseGenerator {
 						solutions.add(ts[0].getSolution());
 						break loop;
 					} else {
-						solutions.add(null);
+						solutions.add(ts[0].getSolution());
 						break loop;
 					}
 
@@ -204,7 +206,7 @@ public class AlloyTestCaseGenerator {
 								&& ts[1].getSolution().satisfiable()) {
 							continue loop;
 						} else {
-							solutions.add(null);
+							solutions.add(ts[1].getSolution());
 							break loop;
 						}
 					}
@@ -218,8 +220,10 @@ public class AlloyTestCaseGenerator {
 		for (int cont = 0; cont < solutions.size(); cont++) {
 			final A4Solution sol = solutions.get(cont);
 			if (sol != null) {
-				out.add(this.analyzeTuples(sol,
-						this.instance.getSemantics().getRun_commands().get(cont), null));
+				if (sol.satisfiable()) {
+					out.add(this.analyzeTuples(sol, this.instance.getSemantics().getRun_commands()
+							.get(cont), null));
+				}
 			} else {
 				out.add(null);
 			}
@@ -233,9 +237,9 @@ public class AlloyTestCaseGenerator {
 
 		Map<String, String> input_data_map = null;
 		if (vs == null || vs.size() == 0) {
-			input_data_map = this.elaborateInputData(solution, vs);
-		} else {
 			input_data_map = this.elaborateInputData(solution);
+		} else {
+			input_data_map = this.elaborateInputData(solution, vs);
 		}
 		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track$0");
 		final List<A4Tuple> curr_wind = AlloyUtil.getTuples(solution, "Current_window$0");
@@ -1066,7 +1070,7 @@ public class AlloyTestCaseGenerator {
 					}
 					if (this.value_scope > -1) {
 						final CommandScope vscope = new CommandScope(v, false,
-								(this.value_scope + ((time_scope - 1) * 1 / 2)));
+								(this.value_scope + ((time_scope - 1) * 2 / 3)));
 						scopes.add(vscope);
 					}
 					if (this.iw_scope > -1) {

@@ -767,6 +767,13 @@ public class GUIFunctionality_refine {
 				continue mainloop;
 			}
 
+			if (tests.get(0) == null) {
+				// it means we reached timeout
+				System.out.println("TESTCASE GENERATION TIMEOUT");
+				break;
+
+			}
+
 			final GUITestCase tc = tests.get(0);
 
 			GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
@@ -945,6 +952,7 @@ public class GUIFunctionality_refine {
 			}
 
 			if (tests.get(0) == null) {
+				// it means we reached timeout
 				return null;
 			}
 

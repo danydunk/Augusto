@@ -132,8 +132,11 @@ public class GUIFunctionality_validate {
 			// we dont need the alloy result
 			final List<GUITestCase> tests = new ArrayList<>();
 			for (final GUITestCase tc : testcases) {
-				final GUITestCase tc2 = new GUITestCase(null, tc.getActions(), tc.getRunCommand());
-				tests.add(tc2);
+				if (tc != null) {
+					final GUITestCase tc2 = new GUITestCase(null, tc.getActions(),
+							tc.getRunCommand());
+					tests.add(tc2);
+				}
 
 			}
 			testcases = tests;
