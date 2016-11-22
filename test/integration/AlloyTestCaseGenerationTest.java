@@ -83,8 +83,8 @@ public class AlloyTestCaseGenerationTest {
 				}
 
 				@Override
-				protected GUITestCase analyzeTuples(final A4Solution solution, final String run)
-						throws Exception {
+				protected GUITestCase analyzeTuples(final A4Solution solution, final String run,
+						final List<String> v) throws Exception {
 
 					return null;
 				}
