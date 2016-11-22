@@ -26,6 +26,7 @@ public class runAll extends runAllHelper {
 
 		boolean error = false;
 		try {
+
 			System.out.println("ERROR WINDOW TEST");
 			new Error_window_test().testMain(args);
 			System.out.println("EXECUTE ACTION TEST");
