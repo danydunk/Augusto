@@ -55,10 +55,11 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 		match.generateSpecificSemantics();
 		final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
 		match = refiner.refine();
+		ExperimentManager.cleanUP();
+
 		if (match == null) {
 			throw new Exception("");
 		}
 
-		ExperimentManager.cleanUP();
 	}
 }

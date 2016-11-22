@@ -56,6 +56,22 @@
 	  <valid>100.00</valid>
     </values>
   </DATA>
+  <DATA>
+    <metadata>amount</metadata>
+    <values>
+      <valid>0.00</valid>
+      <valid>10.00</valid>
+	  <valid>100.00</valid>
+    </values>
+  </DATA>
+  <DATA>
+    <metadata>starting balance</metadata>
+    <values>
+      <valid>0.00</valid>
+      <valid>10.00</valid>
+	  <valid>100.00</valid>
+    </values>
+  </DATA>
   <DATA type="itemized">
     <metadata>&lt;html&gt;The account or category to&lt;br&gt;transfer the money from.&lt;/html&gt;</metadata>
     <values>

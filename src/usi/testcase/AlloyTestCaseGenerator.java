@@ -212,8 +212,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-		ts[0].interrupt();
-		ts[1].interrupt();
+			ts[0].interrupt();
+			ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -700,12 +700,17 @@ public class AlloyTestCaseGenerator {
 				assert (data != null);
 
 				if (data_for_value.containsKey(v)) {
-					final List<String> new_list = new ArrayList<>();
+					List<String> new_list = new ArrayList<>();
 					// we calculate the intersection between the values already
 					// available for this value and the new ones
-					for (final String s : data_for_value.get(v)) {
-						if (data.contains(s)) {
-							new_list.add(s);
+
+					if (data.size() == 0) {
+						new_list = data_for_value.get(v);
+					} else {
+						for (final String s : data_for_value.get(v)) {
+							if (data.contains(s)) {
+								new_list.add(s);
+							}
 						}
 					}
 					data_for_value.put(v, new_list);
@@ -722,6 +727,7 @@ public class AlloyTestCaseGenerator {
 			final List<String> possible_values = new ArrayList<>();
 			for (final String s : data_for_value.get(key)) {
 				if (!used_values.contains(s)) {
+
 					possible_values.add(s);
 				}
 			}

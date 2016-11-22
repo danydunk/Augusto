@@ -76,8 +76,8 @@ public class AlloyTestCaseGenerationTest {
 
 		r.generateSpecificSemantics();
 		r.getSemantics()
-		.addRun_command(
-				"run {System and (some t1,t2: Time| not(t1=t2) and Track.op.t1 in Fill and Track.op.t2 in Fill and not(Track.op.t2.with = Track.op.t1.with) and Track.op.t2.filled = Input_widget_iw17 and Track.op.t1.filled = Input_widget_iw17)}for 5 but 4 Time,3 Operation, 10 Value");
+				.addRun_command(
+						"run {System and (some t1,t2: Time| not(t1=t2) and Track.op.t1 in Fill and Track.op.t2 in Fill and not(Track.op.t2.with = Track.op.t1.with) and Track.op.t2.filled = Input_widget_iw17 and Track.op.t1.filled = Input_widget_iw17)}for 5 but 4 Time,3 Operation, 10 Value");
 
 		final List<String> values = new ArrayList<>();
 		values.add("ciao");
@@ -145,12 +145,9 @@ public class AlloyTestCaseGenerationTest {
 			r.getSemantics().addRun_command(run);
 		}
 
-		r.getSemantics().addRun_command("run {System}");
-		r.getSemantics().addRun_command("run {System} for 7");
-		r.getSemantics().addRun_command("run {System} for 7 but 5 Time");
-		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(r, 1, 40000);
+		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(r, 1, 60000);
 		final List<GUITestCase> tests = generator.generateTestCases();
-		assertEquals(9, tests.size());
+		assertEquals(6, tests.size());
 	}
 
 	class Wrapper2 extends GUIFunctionality_validate {
