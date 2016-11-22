@@ -161,6 +161,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			}
 		}
 
+		final int option_values = 0;
+
 		FunctionalitySemantics func_semantics = null;
 		// if there is not unvalid data we use the semantics without (it is
 		// quicker)

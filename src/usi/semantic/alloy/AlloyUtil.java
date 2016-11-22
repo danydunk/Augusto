@@ -1603,7 +1603,7 @@ public class AlloyUtil {
 					}
 					valid = 1;
 				} else {
-					throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
+					valid = 1;
 				}
 			}
 			if (valid == -1) {
