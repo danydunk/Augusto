@@ -57,14 +57,6 @@
     </values>
   </DATA>
   <DATA>
-    <metadata>amount</metadata>
-    <values>
-      <valid>0.00</valid>
-      <valid>10.00</valid>
-	  <valid>100.00</valid>
-    </values>
-  </DATA>
-  <DATA>
     <metadata>starting balance</metadata>
     <values>
       <valid>0.00</valid>
