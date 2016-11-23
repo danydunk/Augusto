@@ -52,9 +52,10 @@ public class TestCaseGeneration_upm_full extends TestCaseGeneration_upm_fullHelp
 		final GUIFunctionality_validate validator = new GUIFunctionality_validate(match, gui);
 		final List<GUITestCaseResult> testcases = validator.validate();
 
-		System.out.println("size = " + testcases.size());
-
 		ExperimentManager.cleanUP();
 
+		if (testcases.size() != 35) {
+			throw new Exception();
+		}
 	}
 }

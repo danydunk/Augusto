@@ -41,7 +41,7 @@ public class Error_window_test extends Error_window_testHelper {
 	public void testMain(final Object[] args) throws Exception {
 
 		ConfigurationManager.load(PathsManager.getProjectRoot()
-				+ "/files/for_test/config/upm_notempty.properties");
+				+ "\\files\\for_test\\config\\upm_notempty.properties");
 		ExperimentManager.init();
 
 		// we load the GUI structure

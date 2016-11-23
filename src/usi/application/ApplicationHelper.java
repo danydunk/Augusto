@@ -1,6 +1,5 @@
 package src.usi.application;
 
-import java.io.File;
 import java.util.List;
 
 import org.w3c.dom.Document;
@@ -53,6 +52,7 @@ public class ApplicationHelper {
 
 	public void startApplication() throws Exception {
 
+		this.running = false;
 		RationalTestScript.unregisterAll();
 
 		RationalTestScript.shellExecute(PathsManager.getAUTPath());
@@ -69,7 +69,11 @@ public class ApplicationHelper {
 				this.root = RationalTestScript.getRootTestObject();
 			} while (this.root == null && (System.nanoTime() - delayTime) / 1000000 < 30000);
 		} catch (final Exception e) {
-			throw new Exception("ApplicationHelper - startApplication: error, " + e.getMessage());
+			e.printStackTrace();
+			throw new Exception("ApplicationHelper - startApplication: error");
+		}
+		if (this.root == null) {
+			throw new Exception("ApplicationHelper - startApplication: error");
 		}
 		GuiStateManager.create(this.root);
 		this.running = true;
@@ -86,27 +90,35 @@ public class ApplicationHelper {
 		}
 	}
 
-	public void closeApplication() {
+	public void closeApplication() throws Exception {
 
 		if (this.root == null) {
-			// this.forceClose();
-			return;
-		}
-		TestObject[] tos = null;
+			this.forceClose();
+		} else {
+			TestObject[] tos = null;
 
-		tos = this.root.find(SubitemFactory.atChild("showing", "true", "enabled", "true"));
-		if (tos.length > 0) {
-			tos[0].getProcess().kill();
+			tos = this.root.find(SubitemFactory.atChild("showing", "true", "enabled", "true"));
+			if (tos.length > 0) {
+				tos[0].getProcess().kill();
+			} else {
+				this.forceClose();
+			}
 		}
-		GuiStateManager.destroy();
 		this.running = false;
-
+		GuiStateManager.destroy();
 	}
 
-	public void forceClose() {
+	public void forceClose() throws Exception {
 
-		RationalTestScript.shellExecute(System.getProperty("user.dir") + File.separator
-				+ "AppScript" + File.separator + "closeapplication.bat");
+		try {
+			final Runtime rt = Runtime.getRuntime();
+			rt.exec("taskkill /FI \"windowtitle eq Administrator:  case_study*\"");
+			rt.exec("taskkill /FI \"windowtitle eq case_study*\"");
+			this.running = false;
+
+		} catch (final Exception e) {
+			throw new Exception("ApplicationHelper - forceClose: error.");
+		}
 	}
 
 	public void restartApplication() throws Exception {
