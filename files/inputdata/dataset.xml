@@ -35,10 +35,6 @@
       <valid>string</valid>
       <valid>input</valid>
       <valid>test</valid>            
-      <invalid>///**\\\</invalid>
-      <invalid>\\\**///</invalid>
-      <invalid>**///\\\**</invalid>
-      <invalid>**\\\///**</invalid>
     </values>
   </DATA>
   <DATA>
