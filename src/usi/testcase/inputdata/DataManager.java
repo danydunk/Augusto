@@ -112,20 +112,10 @@ public class DataManager {
 		return new ArrayList<>();
 	}
 
-	public List<String> getValidGenericData() {
+	public List<String> getGenericData() {
 
 		final List<String> out = new ArrayList<>();
 		final List<String> values = this.validDataMap.get("generic-input-data");
-		if (values != null && values.size() > 0) {
-			out.addAll(values);
-		}
-		return out;
-	}
-
-	public List<String> getInvalidGenericData() {
-
-		final List<String> out = new ArrayList<>();
-		final List<String> values = this.invalidDataMap.get("generic-input-data");
 		if (values != null && values.size() > 0) {
 			out.addAll(values);
 		}

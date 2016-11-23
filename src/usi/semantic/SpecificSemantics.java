@@ -144,24 +144,37 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 	static public SpecificSemantics generate(final Instance_GUI_pattern in) throws Exception {
 
+		// lists that contains all the iws that are going to use to compute the
+		// additional constraints on the values
+		final List<Input_widget> iws_generic = new ArrayList<>();
+		final List<Input_widget> iws_not_generic = new ArrayList<>();
 		// we check whether we have invalid inputdata for this instance
 		final DataManager dm = DataManager.getInstance();
 		boolean unvalid_data = false;
-		mainloop: for (final Instance_window iww : in.getWindows()) {
+		for (final Instance_window iww : in.getWindows()) {
 			for (final Pattern_input_widget piw : iww.getPattern().getInputWidgets()) {
 				for (final Input_widget iw : iww.getIWS_for_PIW(piw.getId())) {
 					String metadata = iw.getLabel() != null ? iw.getLabel() : "";
 					metadata += " ";
 					metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
-					if (dm.getInvalidData(metadata).size() > 0) {
-						unvalid_data = true;
-						break mainloop;
+					if (iw instanceof Option_input_widget) {
+						if (dm.getInvalidItemizedData(metadata).size() > 0) {
+							unvalid_data = true;
+						}
+					} else {
+						if ((dm.getInvalidData(metadata).size() + dm.getValidData(metadata).size()) > 0) {
+							iws_not_generic.add(iw);
+						} else {
+							iws_generic.add(iw);
+						}
+
+						if (dm.getInvalidData(metadata).size() > 0) {
+							unvalid_data = true;
+						}
 					}
 				}
 			}
 		}
-
-		final int option_values = 0;
 
 		FunctionalitySemantics func_semantics = null;
 		// if there is not unvalid data we use the semantics without (it is
@@ -172,10 +185,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			func_semantics = in.getGuipattern().getSemantics();
 		}
 
-		if (func_semantics == null) {
-			throw new Exception(
-					"SpecificSemantics - generate: semantics is missing in gui pattern.");
-		}
+		assert (func_semantics == null);
+
 		// these lists are going to be used to create the specific semantics
 		final List<Signature> signatures = new ArrayList<>(func_semantics.getSignatures());
 		final List<Fact> facts = new ArrayList<>(func_semantics.getFacts());
@@ -207,10 +218,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			final Signature w_sig = AlloyUtil.searchSignatureInList(to_search,
 					pw.getAlloyCorrespondence());
 
-			if (w_sig == null) {
-				throw new Exception("SpecificSemantics - generate: wrong alloy corrispondence "
-						+ pw.getAlloyCorrespondence());
-			}
+			assert (w_sig == null);
 
 			final Signature concreteWinSig = new Signature("Window_" + win.getId(),
 					Cardinality.ONE, false, Lists.newArrayList(w_sig), false);
@@ -246,57 +254,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 				final Signature sigIW = new Signature("Input_widget_" + iw.getId(),
 						Cardinality.ONE, false, Lists.newArrayList(piw_sig), false);
-				// if the widget is a option input widget we create a signature
-				// to contain its values
-				if (iw instanceof Option_input_widget) {
-					final Option_input_widget oiw = (Option_input_widget) iw;
-					Signature value = null;
-					for (final Signature sign : signatures) {
-						if (sign.getIdentifier().equals("Value")) {
-							value = sign;
-							break;
-						}
-					}
-					assert (value != null);
 
-					String metadata = iw.getLabel() != null ? iw.getLabel() : "";
-					metadata += " ";
-					metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
-					if ((dm.getInvalidItemizedData(metadata).size() + dm.getValidItemizedData(
-							metadata).size()) > 0) {
-						// if there are some valid or unvalid data we add only
-						// them
-						Signature invalid = null;
-						for (final Signature sign : signatures) {
-							if (sign.getIdentifier().equals("Invalid")) {
-								invalid = sign;
-								break;
-							}
-						}
-						assert (value != null);
-						for (final Integer i : dm.getInvalidItemizedData(metadata)) {
-							assert (invalid != null);
-							final Signature values = new Signature("Input_widget_" + iw.getId()
-									+ "_value_" + i, Cardinality.ONE, false,
-									Lists.newArrayList(invalid), false);
-							signatures.add(values);
-						}
-						for (final Integer i : dm.getValidItemizedData(metadata)) {
-							final Signature values = new Signature("Input_widget_" + iw.getId()
-									+ "_value_" + i, Cardinality.ONE, false,
-									Lists.newArrayList(value), false);
-							signatures.add(values);
-						}
-					} else {
-						// otherwise we add them all
-						for (int cc = 0; cc < oiw.getSize(); cc++) {
-							final Signature values = new Signature("Input_widget_" + iw.getId()
-									+ "_value_" + cc, Cardinality.ONE, false,
-									Lists.newArrayList(value), false);
-							signatures.add(values);
-						}
-					}
-				}
 				signatures.add(sigIW);
 				input_widgets.put(iw, sigIW);
 			}
@@ -359,9 +317,53 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			}
 		}
 
+		// now we add additional constrains on the values
+		String values_fact_content = "";
+		for (final Input_widget iw : iws_generic) {
+			for (final Input_widget iw2 : iws_not_generic) {
+				values_fact_content += System.getProperty("line.separator");
+				values_fact_content += "#(filled.Input_widget_" + iw.getId() + ".with & "
+						+ "filled.Input_widget_" + iw2.getId() + ".with) = 0";
+			}
+		}
+
+		for (int x = 0; x < iws_not_generic.size(); x++) {
+			final Input_widget iw = iws_not_generic.get(x);
+			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
+			metadata += " ";
+			metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+			for (int y = x + 1; y < iws_not_generic.size(); y++) {
+				final Input_widget iw2 = iws_not_generic.get(y);
+				String metadata2 = iw2.getLabel() != null ? iw2.getLabel() : "";
+				metadata2 += " ";
+				metadata2 = iw2.getDescriptor() != null ? iw2.getDescriptor() : "";
+				final List<String> l1 = dm.getValidData(metadata);
+				l1.addAll(dm.getInvalidData(metadata));
+				final List<String> l2 = dm.getValidData(metadata2);
+				l2.addAll(dm.getInvalidData(metadata2));
+				if (!intersection(l1, l2)) {
+					values_fact_content += System.getProperty("line.separator");
+					values_fact_content += "#(filled.Input_widget_" + iw.getId() + ".with & "
+							+ "filled.Input_widget_" + iw2.getId() + ".with) = 0";
+				}
+			}
+		}
+		// we add a fact for the number of windows
+		final Fact values_fact = new Fact("values_constrints", values_fact_content);
+		facts.add(values_fact);
+
 		final Alloy_Model specific_model = new Alloy_Model(signatures, facts, predicates,
 				functions, opens);
 		return instantiate(specific_model);
 	}
 
+	private static boolean intersection(final List<String> l1, final List<String> l2) {
+
+		for (final String s : l1) {
+			if (l2.contains(s)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
