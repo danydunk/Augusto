@@ -73,10 +73,12 @@ public class Error_window_test extends Error_window_testHelper {
 
 		final TestCaseRunner runner = new TestCaseRunner(gui);
 		final GUITestCaseResult res = runner.runTestCase(tc);
+
 		ExperimentManager.cleanUP();
 
 		if (!res.getResults().get(res.getResults().size() - 1).getId().equals(form.getId())) {
 			throw new Exception();
 		}
+
 	}
 }
