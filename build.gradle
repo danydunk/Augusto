@@ -33,6 +33,11 @@ task copyTemplates(type: Copy) {
 	into 'build/classes/main/templates'
 }
 
+task copyTemplatesTest(type: Copy) {
+	from 'templates'
+	into 'build/classes/test/templates'
+}
+
 //task copyFiles(type: Copy) {
 //	from 'files'
 //	into 'build/classes/main/files'
@@ -43,6 +48,11 @@ task copyDatastore(type: Copy) {
 	into 'build/classes/main/resources/'
 }
 
+task copyDatastoreTest(type: Copy) {
+	from 'resources/DatastoreDefinition.rftdsd'
+	into 'build/classes/test/resources/'
+}
+
 task copyMains(type: Copy) {
 	from 'resources/src/usi/'
 	exclude '*.class'
@@ -50,19 +60,65 @@ task copyMains(type: Copy) {
 	into 'build/classes/main/resources/src/usi/'
 }
 
-task copyTest(type: Copy) {
+task copyMainsTest(type: Copy) {
+	from 'resources/src/usi/'
+	exclude '*.class'
+	exclude '*.java'
+	into 'build/classes/test/resources/src/usi/'
+}
+
+task copyMains2(type: Copy) {
+	from 'src/usi/'
+	include '*.testsuite'
+	into 'build/classes/main/src/usi/'
+}
+
+task copyMains2Test(type: Copy) {
+	from 'src/usi/'
+	include '*.testsuite'
+	into 'build/classes/test/src/usi/'
+}
+
+task copyTestMain(type: Copy) {
 	from 'resources/test/rft/'
 	exclude '*.class'
 	exclude '*.java'
 	into 'build/classes/main/resources/test/rft/'
 }
 
+task copyTestMainTest(type: Copy) {
+	from 'resources/test/rft/'
+	exclude '*.class'
+	exclude '*.java'
+	into 'build/classes/test/resources/test/rft/'
+}
+
+task copyTestMain2(type: Copy) {
+	from 'test/rft/'
+	include '*.testsuite'
+	into 'build/classes/main/test/rft/'
+}
+
+task copyTestMain2Test(type: Copy) {
+	from 'test/rft/'
+	include '*.testsuite'
+	into 'build/classes/test/test/rft/'
+}
+
 compileJava.doLast {
 	tasks.copyTemplates.execute()
+	tasks.copyTemplatesTest.execute()
 //	tasks.copyFiles.execute()
 	tasks.copyDatastore.execute()
+	tasks.copyDatastoreTest.execute()
 	tasks.copyMains.execute()
-	tasks.copyTest.execute()
+	tasks.copyMains2.execute()
+	tasks.copyMainsTest.execute()
+	tasks.copyMains2Test.execute()
+	tasks.copyTestMain.execute()
+	tasks.copyTestMain2.execute()
+	tasks.copyTestMainTest.execute()
+	tasks.copyTestMain2Test.execute()
 }
 
 task createMain(type:Exec) {
