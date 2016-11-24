@@ -146,6 +146,7 @@ public class TestCaseRunner {
 								// the selectable widget is not as expected so
 								// we select the last index
 								ind = this.select_support_added_indexes.get(p).size() - 1;
+								// TO REMOVE
 								if (ind == -1) {
 									System.out.println("error in select");
 									for (final GUIAction aa : tc.getActions()) {
@@ -164,7 +165,7 @@ public class TestCaseRunner {
 													+ " with " + f.getIndex());
 										}
 									}
-									continue mainloop;
+									assert (false);
 								}
 
 							}
