@@ -1331,9 +1331,11 @@ public class AlloyUtil {
 	static public int getValueScope(final SpecificSemantics in) {
 
 		int cont = 0;
-		for (final Signature s : in.getSignatures()) {
-			if (s.getIdentifier().contains("_value_")) {
+		for (final Fact f : in.getFacts()) {
+			String s = f.getContent();
+			while (s.indexOf(".content.(T/first) = 1") != -1) {
 				cont++;
+				s = s.substring(s.indexOf(".content.(T/first) = 1") + 22);
 			}
 		}
 		return cont;
@@ -1494,10 +1496,13 @@ public class AlloyUtil {
 	static private String getFactForTC(final List<GUIAction> acts, final boolean invalid)
 			throws Exception {
 
+		final DataManager dm = DataManager.getInstance();
 		String fact = "";
 		String t = "";
 		final Map<String, List<String>> values_used = new HashMap<>();
 		final Map<String, List<Input_widget>> values_used_iw = new HashMap<>();
+		final Map<Input_widget, List<String>> values_used_itemized = new HashMap<>();
+		final Map<Input_widget, List<Integer>> values_used_iw_itemized = new HashMap<>();
 
 		for (int cont = 0; cont < acts.size(); cont++) {
 			final GUIAction act = acts.get(cont);
@@ -1542,6 +1547,17 @@ public class AlloyUtil {
 						values_used.put(new_value, new ArrayList<String>());
 					}
 					values_used.get(new_value).add("Track.op.(" + t + ").with");
+				} else {
+					if (!values_used_itemized.containsKey(f.getWidget())) {
+						values_used_itemized.put((Input_widget) f.getWidget(),
+								new ArrayList<String>());
+					}
+					if (!values_used_iw_itemized.containsKey(f.getWidget())) {
+						values_used_iw_itemized.put((Input_widget) f.getWidget(),
+								new ArrayList<Integer>());
+					}
+					values_used_itemized.get(f.getWidget()).add("Track.op.(" + t + ").with");
+					values_used_iw_itemized.get(f.getWidget()).add(Integer.valueOf(f.getInput()));
 				}
 			}
 
@@ -1583,42 +1599,71 @@ public class AlloyUtil {
 			}
 
 			// we check if the value is valid or invalid
-			// TODO: this works only if the input values are not duplicated
-			// between different descriptors
-			int valid = -1;
-			final DataManager dm = DataManager.getInstance();
-			for (final String desc : values_used_iw.get(s)) {
+			for (final Input_widget iw : values_used_iw.get(s)) {
 
-				if (dm.getValidData(desc).contains(s)) {
-					if (valid == 0) {
-						throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
-					}
-					valid = 1;
-				} else if (dm.getInvalidData(desc).contains(s)) {
-					if (valid == 1) {
-						throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
-					}
-					valid = 0;
-				} else if (dm.getValidGenericData().contains(s)) {
-					if (valid == 0) {
-						throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
-					}
-					valid = 1;
+				String metadata = iw.getLabel() != null ? iw.getLabel() : "";
+				metadata += " ";
+				metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+
+				if (dm.getInvalidData(metadata).contains(s)) {
+					assert (invalid);
+					fact += " and " + values_used.get(s).get(0) + " in Input_widget_" + iw.getId()
+							+ ".invalid";
+
 				} else {
-					valid = 1;
+					if (invalid) {
+						fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
+								+ iw.getId() + ".invalid)";
+					}
 				}
 			}
-			if (valid == -1) {
-				throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
-			}
-			if (invalid) {
-				if (valid == 1) {
-					fact += " and not(" + values_used.get(s).get(0) + " in Invalid)";
-				} else {
-					fact += " and " + values_used.get(s).get(0) + " in Invalid";
+
+		}
+
+		// we deal with itemized data
+		assert (values_used_itemized.keySet().size() == values_used_iw_itemized.keySet().size());
+		for (final Input_widget iw : values_used_itemized.keySet()) {
+			assert (values_used_iw_itemized.get(iw).size() == values_used_itemized.get(iw).size());
+			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
+			metadata += " ";
+			metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+
+			for (int x = 0; x < values_used_iw_itemized.get(iw).size(); x++) {
+
+				if (invalid) {
+					if (dm.getInvalidItemizedData(metadata).contains(
+							values_used_iw_itemized.get(iw).get(x))) {
+						fact += " and " + values_used_itemized.get(iw).get(x) + " in Input_widget_"
+								+ iw.getId() + ".invalid";
+					} else {
+						fact += " and not(" + values_used_itemized.get(iw).get(x)
+								+ " in Input_widget_" + iw.getId() + ".invalid)";
+					}
+				}
+
+				final Option_input_widget oiw = (Option_input_widget) iw;
+				if (oiw.getSelected() != -1) {
+					if (oiw.getSelected() == values_used_iw_itemized.get(iw).get(x)) {
+						fact += " and " + values_used_itemized.get(iw).get(x) + " == Input_widget_"
+								+ iw.getId() + ".content.(T/first)";
+					} else {
+						fact += " and not(" + values_used_itemized.get(iw).get(x)
+								+ " == Input_widget_" + iw.getId() + ".content.(T/first))";
+					}
+				}
+				for (int y = x + 1; y < values_used_iw_itemized.get(iw).size(); y++) {
+					if (values_used_iw_itemized.get(iw).get(x) == values_used_iw_itemized.get(iw)
+							.get(y)) {
+						fact += " and " + values_used_itemized.get(iw).get(x) + " = "
+								+ values_used_itemized.get(iw).get(y);
+					} else {
+						fact += " and not(" + values_used_itemized.get(iw).get(x) + " = "
+								+ values_used_itemized.get(iw).get(y) + ")";
+					}
 				}
 			}
 		}
+
 		fact = "one t: Time | " + fact;
 		return fact;
 
