@@ -1,10 +1,13 @@
 package src.usi.application;
 
 import java.lang.reflect.Method;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import src.usi.configuration.ConfigurationManager;
 import src.usi.gui.GuiStateManager;
 import src.usi.gui.structure.Option_input_widget;
+import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Widget;
 import src.usi.gui.structure.Window;
 import src.usi.testcase.structure.Click;
@@ -162,18 +165,52 @@ public class ActionManager {
 	private static Widget findWidgetInCurrWindow(final Widget w, final Window wind,
 			final Window currWind) {
 
-		final Widget ww = wind.getWidget(w.getId());
-		final int index = wind.getWidgets().indexOf(ww);
+		// we need to handle selectable widget differently because when scrolled
+		// the position in the list changes
+		if (w instanceof Selectable_widget) {
 
-		if (index == -1) {
-			return null;
+			final Widget ww = wind.getWidget(w.getId());
+			final int index = wind.getSelectableWidgets().indexOf(ww);
+
+			if (index == -1) {
+				return null;
+			}
+
+			final Widget wid = currWind.getSelectableWidgets().get(index);
+			if (!w.isSame(wid)) {
+				return null;
+			}
+			return wid;
+
+		} else {
+			final Widget ww = wind.getWidget(w.getId());
+
+			final List<Widget> widgets = wind.getWidgets().stream().filter(e -> {
+				if (!(e instanceof Selectable_widget)) {
+					return true;
+				}
+				return false;
+			}).collect(Collectors.toList());
+
+			final List<Widget> widgets2 = currWind.getWidgets().stream().filter(e -> {
+				if (!(e instanceof Selectable_widget)) {
+					return true;
+				}
+				return false;
+			}).collect(Collectors.toList());
+
+			final int index = widgets.indexOf(ww);
+
+			if (index == -1) {
+				return null;
+			}
+
+			final Widget wid = widgets2.get(index);
+			if (!w.isSame(wid)) {
+				return null;
+			}
+
+			return wid;
 		}
-
-		final Widget wid = currWind.getWidgets().get(index);
-		if (!w.isSame(wid)) {
-			return null;
-		}
-
-		return wid;
 	}
 }
