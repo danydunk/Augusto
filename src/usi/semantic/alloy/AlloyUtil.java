@@ -931,7 +931,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1644,11 +1644,11 @@ public class AlloyUtil {
 				final Option_input_widget oiw = (Option_input_widget) iw;
 				if (oiw.getSelected() != -1) {
 					if (oiw.getSelected() == values_used_iw_itemized.get(iw).get(x)) {
-						fact += " and " + values_used_itemized.get(iw).get(x) + " == Input_widget_"
+						fact += " and " + values_used_itemized.get(iw).get(x) + " = Input_widget_"
 								+ iw.getId() + ".content.(T/first)";
 					} else {
 						fact += " and not(" + values_used_itemized.get(iw).get(x)
-								+ " == Input_widget_" + iw.getId() + ".content.(T/first))";
+								+ " = Input_widget_" + iw.getId() + ".content.(T/first))";
 					}
 				}
 				for (int y = x + 1; y < values_used_iw_itemized.get(iw).size(); y++) {
