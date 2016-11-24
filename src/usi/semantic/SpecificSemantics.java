@@ -185,7 +185,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			func_semantics = in.getGuipattern().getSemantics();
 		}
 
-		assert (func_semantics == null);
+		assert (func_semantics != null);
 
 		// these lists are going to be used to create the specific semantics
 		final List<Signature> signatures = new ArrayList<>(func_semantics.getSignatures());
@@ -218,7 +218,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			final Signature w_sig = AlloyUtil.searchSignatureInList(to_search,
 					pw.getAlloyCorrespondence());
 
-			assert (w_sig == null);
+			assert (w_sig != null);
 
 			final Signature concreteWinSig = new Signature("Window_" + win.getId(),
 					Cardinality.ONE, false, Lists.newArrayList(w_sig), false);
