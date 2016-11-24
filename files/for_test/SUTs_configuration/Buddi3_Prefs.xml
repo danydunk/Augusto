@@ -44,6 +44,9 @@
   <void property="showFlatAccounts">
    <boolean>true</boolean>
   </void>
+  <void property="showFlatBudget">
+   <boolean>true</boolean>
+  </void>
   <void property="showTooltips">
    <boolean>true</boolean>
   </void>
