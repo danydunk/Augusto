@@ -82,9 +82,9 @@ public class AlloyTestCaseGenerator {
 		this.MAX_RUN = 1;
 		final SpecificSemantics model = this.instance.getSemantics();
 		final String alloy_model = model.toString();
-		System.out.println("START ALLOY MODEL");
-		System.out.println(model);
-		System.out.println("END ALLOY MODEL");
+		// System.out.println("START ALLOY MODEL");
+		// System.out.println(model);
+		// System.out.println("END ALLOY MODEL");
 
 		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
 
@@ -705,7 +705,7 @@ public class AlloyTestCaseGenerator {
 					final List<Integer> used_values = new ArrayList<>();
 					for (final String k : out.keySet()) {
 						if (k.endsWith("_" + inpw.getId())) {
-							final int i = Integer.valueOf(k.split("_")[0]);
+							final int i = Integer.valueOf(out.get(k));
 							used_values.add(i);
 						}
 					}
