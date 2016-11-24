@@ -19,11 +19,16 @@ public class Selectable_widget extends Widget {
 			throws Exception {
 
 		super(to, id, label, classs, x, y);
-		if (size < 0 || selected < -1 || selected > size - 1) {
+		if (size < 0 || selected < -1) {
 			throw new Exception("Selectable_widget: wrong size or selected.");
 		}
+		if (selected > size - 1) {
+			// it can happen (it is kinda of a bug)
+			this.selected = -1;
+		} else {
+			this.selected = selected;
+		}
 		this.size = size;
-		this.selected = selected;
 	}
 
 	public Selectable_widget(final String id, final String label, final String classs, final int x,
