@@ -30,6 +30,11 @@
       <valid>ccc</valid>
       <valid>ddd</valid>
       <valid>eee</valid>
+	  <valid>fff</valid>
+	  <valid>ggg</valid>
+	  <valid>hhh</valid>
+	  <valid>iii</valid>
+	  <valid>lll</valid>
       <valid>0</valid>
       <valid>generic</valid>
       <valid>string</valid>

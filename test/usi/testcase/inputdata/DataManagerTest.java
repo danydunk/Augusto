@@ -14,7 +14,7 @@ public class DataManagerTest {
 
 		try {
 			final DataManager dm = DataManager.getInstance();
-			assertEquals(11, dm.getValidGenericData().size());
+			assertEquals(16, dm.getValidGenericData().size());
 			// assertEquals(1, dm.getInvalidData("url").size());
 			assertEquals(4, dm.getValidData("password and, url").size());
 			assertEquals(
