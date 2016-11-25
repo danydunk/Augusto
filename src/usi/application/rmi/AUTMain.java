@@ -24,6 +24,7 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 
 		System.out.println("Setting up RMI.");
 		try {
+			System.setProperty("java.rmi.server.hostname", "127.0.0.1");
 			LocateRegistry.createRegistry(2007);
 			final Registry registry = LocateRegistry.getRegistry(2007);
 			registry.rebind("RemoteCobertura", new AUTMain());

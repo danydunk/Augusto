@@ -101,6 +101,7 @@ public class ApplicationHelper {
 
 		System.out.println("CLOSING SUT");
 		try {
+			System.setProperty("java.rmi.server.hostname", "127.0.0.1");
 			final Registry registry = LocateRegistry.getRegistry(2007);
 			final RemoteCoberturaInterface rmo = (RemoteCoberturaInterface) registry
 					.lookup("RemoteCobertura");
@@ -108,7 +109,7 @@ public class ApplicationHelper {
 		} catch (final Exception e) {
 			e.printStackTrace();
 			System.out
-					.println("ApplicationHelper: RMI error while clossing application. Moving on.");
+			.println("ApplicationHelper: RMI error while clossing application. Moving on.");
 		}
 
 		if (this.root == null) {

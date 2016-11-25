@@ -12,6 +12,9 @@
     <values>
       <valid>2016/11/14</valid>
       <valid>2016/11/15</valid>
+	  <valid>2016/11/16</valid>
+	  <valid>2016/11/17</valid>
+	  <valid>2016/11/18</valid>
     </values>
   </DATA>
   <DATA>
@@ -19,6 +22,9 @@
     <values>
       <valid>2017/11/14</valid>
       <valid>2017/8/14</valid>
+	  <valid>2017/8/15</valid>
+	  <valid>2017/8/16</valid>
+	  <valid>2017/8/17</valid>					
     </values>
   </DATA>
   <DATA>
@@ -35,6 +41,9 @@
 	  <valid>hhh</valid>
 	  <valid>iii</valid>
 	  <valid>lll</valid>
+	  <valid>mmm</valid>
+	  <valid>nnn</valid>
+	  <valid>ooo</valid>
       <valid>0</valid>
       <valid>generic</valid>
       <valid>string</valid>
@@ -55,6 +64,8 @@
       <valid>0.00</valid>
       <valid>10.00</valid>
 	  <valid>100.00</valid>
+	  <valid>50.00</valid>
+	  <valid>60.00</valid>
     </values>
   </DATA>
   <DATA>
@@ -63,6 +74,8 @@
       <valid>0.00</valid>
       <valid>10.00</valid>
 	  <valid>100.00</valid>
+	  <valid>50.00</valid>
+	  <valid>60.00</valid>
     </values>
   </DATA>
   <DATA type="itemized">
