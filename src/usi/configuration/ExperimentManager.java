@@ -77,7 +77,7 @@ public class ExperimentManager {
 					+ PathsManager.getProjectRoot() + "lib" + File.separator + "jmockit-1.29.jar"
 					+ " -Dnet.sourceforge.cobertura.datafile=\"" + SER_FILE_PATH + "\""
 					+ " src.usi.application.rmi.AUTMain " + ConfigurationManager.getAutMainCLass()
-					+ " > aut.log 2>&1");
+					+ " >> aut.log 2>&1");
 
 			out.flush();
 			out.close();
@@ -172,6 +172,6 @@ public class ExperimentManager {
 		new File(SER_RESET_FILE_PATH).delete();
 		new File(System.getProperty("user.dir") + File.separator + "aut.log").delete();
 		new File(System.getProperty("user.dir") + File.separator + "cobertura_warnings.out")
-				.delete();
+		.delete();
 	}
 }
