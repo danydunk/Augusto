@@ -39,9 +39,9 @@ abstract sig Action_widget {
 	goes: set Window
 }
 sig Value { }
-sig Invalid in Value { }
 abstract sig Input_widget {
-	content: Value lone -> Time
+	content: Value lone -> Time,
+	invalid: set Value
 }
 sig Object {
 	appeared: one Time

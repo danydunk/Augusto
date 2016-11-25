@@ -310,8 +310,9 @@ public class AlloyTestCaseGenerator {
 
 									if (iw instanceof Option_input_widget) {
 
-										final String val = (value.atom(1).split("\\$")[0]);
-										inputdata = val.split("_value_")[1];
+										inputdata = input_data_map.get(value.atom(1) + "_"
+												+ iw.getId());
+
 									} else {
 										// the input data is retrieved
 										inputdata = input_data_map.get(value.atom(1));
@@ -326,6 +327,10 @@ public class AlloyTestCaseGenerator {
 										&& t.atom(1).equals("Input_widget_" + iw.getId() + "$0")) {
 									if (iw instanceof Option_input_widget) {
 										final Option_input_widget oiw = (Option_input_widget) iw;
+
+										if (inputdata == null) {
+											System.out.println();
+										}
 
 										if (inputdata.length() == 0) {
 											inputdata = String.valueOf(oiw.getSelected());
@@ -464,7 +469,13 @@ public class AlloyTestCaseGenerator {
 				assert (target_iw != null);
 
 				// the input data is retrieved
-				final String inputdata = input_data_map.get(value);
+				String inputdata = null;
+				if (target_iw instanceof Option_input_widget) {
+					inputdata = input_data_map.get(value + "_" + target_iw.getId());
+				} else {
+					inputdata = input_data_map.get(value);
+
+				}
 				assert (inputdata != null);
 
 				final Fill action = new Fill(source_window, oracle, target_iw, inputdata);
@@ -602,14 +613,10 @@ public class AlloyTestCaseGenerator {
 		final Map<String, String> out = new HashMap<>();
 		final DataManager dm = DataManager.getInstance();
 		Sig value = null;
-		Sig invalid = null;
 		Sig fill = null;
 		for (final Sig sig : solution.getAllReachableSigs()) {
 			if ("this/Value".equals(sig.label)) {
 				value = sig;
-			}
-			if ("this/Invalid".equals(sig.label)) {
-				invalid = sig;
 			}
 			if ("this/Fill".equals(sig.label)) {
 				fill = sig;
@@ -618,35 +625,41 @@ public class AlloyTestCaseGenerator {
 		assert (value != null && fill != null);
 
 		List<String> fill_atoms = AlloyUtil.getElementsInSet(solution, fill);
-		final List<String> value_atoms = AlloyUtil.getElementsInSet(solution, value);
-		List<String> invalid_atoms = new ArrayList<>();
-		if (invalid != null) {
-			invalid_atoms = AlloyUtil.getElementsInSet(solution, invalid);
-		}
-		List<String> valid_atoms = new ArrayList<>();
-		for (final String a : value_atoms) {
-			if (!invalid_atoms.contains(a)) {
-				valid_atoms.add(a);
-			}
-		}
+		List<String> value_atoms = AlloyUtil.getElementsInSet(solution, value);
+
 		// in the atoms extracted the underscore is substituted with the dollar
 		fill_atoms = fill_atoms
 				.stream()
 				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
 						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
 
-		invalid_atoms = invalid_atoms
-				.stream()
-				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
-						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
-
-		valid_atoms = valid_atoms
+		value_atoms = value_atoms
 				.stream()
 				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
 						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
 
 		final Map<String, List<String>> data_for_value = new HashMap<>();
-		// for each valid value we look for all its uses in the solution
+
+		// we deal with the initial values
+		for (final Input_widget iw : this.instance.getGui().getInput_widgets()) {
+			if (iw instanceof Option_input_widget) {
+				final Option_input_widget oiw = (Option_input_widget) iw;
+				final List<A4Tuple> tups = AlloyUtil.getTuples(solution,
+						"Input_widget_" + iw.getId() + "$0");
+				String first = null;
+				for (final A4Tuple tup : tups) {
+					if (tup.arity() == 3 && tup.atom(2).startsWith("Time$0")) {
+						first = tup.atom(1);
+						break;
+					}
+				}
+				if (first != null) {
+					out.put(first + "_" + iw.getId(), String.valueOf(oiw.getSelected()));
+					continue;
+				}
+			}
+		}
+
 		for (final String fill_atom : fill_atoms) {
 
 			final List<A4Tuple> tuples = AlloyUtil.getTuples(solution, fill_atom);
@@ -654,15 +667,23 @@ public class AlloyTestCaseGenerator {
 
 			String iw = null;
 			String v = null;
+			List<String> invalid_values = null;
 			for (final A4Tuple tuple : tuples) {
 				if (tuple.arity() == 2 && tuple.atom(1).toLowerCase().contains("value")) {
 					v = tuple.atom(1);
 				} else if (tuple.arity() == 2 && tuple.atom(1).startsWith("Input_widget")) {
 					iw = tuple.atom(1);
+					invalid_values = new ArrayList<String>();
+					final List<A4Tuple> inv_tuples = AlloyUtil.getTuples(solution, iw);
+					for (final A4Tuple tup : inv_tuples) {
+						if (tup.arity() == 2 && tup.atom(1).startsWith("Value")) {
+							invalid_values.add(tup.atom(1));
+						}
+					}
 				}
 
 			}
-			assert (v != null && iw != null);
+			assert (v != null && iw != null && invalid_values != null);
 
 			String iw_id = iw.substring(13);
 			iw_id = iw_id.split("\\$")[0];
@@ -677,14 +698,27 @@ public class AlloyTestCaseGenerator {
 			assert (inpw != null);
 
 			if (inpw instanceof Option_input_widget) {
-				// for the option input widget we just use the value index
-				// provided by alloy
-				// this is possible because of the fact added in the model that
-				// constrains the possible values associated to the optional
-				// input widget
-				String val = v.split("\\$")[0].trim();
-				val = val.replace("Input_widget_" + inpw.getId() + "_value_", "");
-				out.put(v, val);
+				if (!out.containsKey(v + "_" + inpw.getId())) {
+					final Option_input_widget oiw = (Option_input_widget) inpw;
+					String val = null;
+					// all the already used values are taken out
+					final List<Integer> used_values = new ArrayList<>();
+					for (final String k : out.keySet()) {
+						if (k.endsWith("_" + inpw.getId())) {
+							final int i = Integer.valueOf(out.get(k));
+							used_values.add(i);
+						}
+					}
+
+					for (int x = 0; x < oiw.getSize(); x++) {
+						if (!used_values.contains(x)) {
+							val = String.valueOf(x);
+							break;
+						}
+					}
+
+					out.put(v + "_" + inpw.getId(), val);
+				}
 
 			} else {
 				String metadata = inpw.getLabel() != null ? inpw.getLabel() : "";
@@ -692,10 +726,11 @@ public class AlloyTestCaseGenerator {
 				metadata = inpw.getDescriptor() != null ? inpw.getDescriptor() : "";
 
 				List<String> data = null;
-				if (valid_atoms.contains(v)) {
-					data = dm.getValidData(metadata);
-				} else if (invalid_atoms.contains(v)) {
+				if (invalid_values.contains(v)) {
 					data = dm.getInvalidData(metadata);
+					assert (data.size() > 0);
+				} else {
+					data = dm.getValidData(metadata);
 				}
 				assert (data != null);
 
@@ -713,6 +748,11 @@ public class AlloyTestCaseGenerator {
 							}
 						}
 					}
+					if (invalid_values.contains(v) && new_list.size() == 0) {
+						throw new Exception(
+								"AlloyTestCaseGeneration - not enough invalid input data.");
+					}
+
 					data_for_value.put(v, new_list);
 				} else {
 					data_for_value.put(v, data);
@@ -732,12 +772,8 @@ public class AlloyTestCaseGenerator {
 				}
 			}
 			if (possible_values.isEmpty()) {
-				List<String> generics = null;
-				if (valid_atoms.contains(key)) {
-					generics = dm.getValidGenericData();
-				} else {
-					generics = dm.getInvalidGenericData();
-				}
+				final List<String> generics = dm.getGenericData();
+
 				for (final String s : generics) {
 					if (!used_values.contains(s)) {
 						possible_values.add(s);
@@ -764,16 +800,11 @@ public class AlloyTestCaseGenerator {
 			final List<String> values) throws Exception {
 
 		final Map<String, String> out = new HashMap<>();
-		final DataManager dm = DataManager.getInstance();
 		Sig value = null;
-		Sig invalid = null;
 		Sig fill = null;
 		for (final Sig sig : solution.getAllReachableSigs()) {
 			if ("this/Value".equals(sig.label)) {
 				value = sig;
-			}
-			if ("this/Invalid".equals(sig.label)) {
-				invalid = sig;
 			}
 			if ("this/Fill".equals(sig.label)) {
 				fill = sig;
@@ -783,7 +814,9 @@ public class AlloyTestCaseGenerator {
 
 		List<String> fill_atoms = AlloyUtil.getElementsInSet(solution, fill);
 
-		final Map<Integer, String> map_time_filled = new HashMap<>();
+		// final Map<Integer, String> map_time_filled = new HashMap<>();
+		final Map<String, Integer> map_filled_time = new HashMap<>();
+
 		final List<Integer> to_order = new ArrayList<>();
 
 		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track$0");
@@ -792,60 +825,58 @@ public class AlloyTestCaseGenerator {
 
 			final int time_index = this.extractTimeIndex(tuple.atom(2));
 			if (tuple.atom(1).startsWith("Fill")) {
-				final List<A4Tuple> params = AlloyUtil.getTuples(solution, tuple.atom(1));
-				assert (params.size() == 2);
+				map_filled_time.put(tuple.atom(1), time_index);
 
-				String v = null;
-
-				for (final A4Tuple t : params) {
-					if (t.atom(1).toLowerCase().startsWith("value")) {
-						v = t.atom(1);
-						break;
-					}
-				}
-				map_time_filled.put(time_index, v);
+				// final List<A4Tuple> params = AlloyUtil.getTuples(solution,
+				// tuple.atom(1));
+				// assert (params.size() == 2);
+				//
+				// String v = null;
+				//
+				// for (final A4Tuple t : params) {
+				// if (t.atom(1).toLowerCase().startsWith("value")) {
+				// v = t.atom(1);
+				// break;
+				// }
+				// }
+				// map_time_filled.put(time_index, v);
 				to_order.add(time_index);
 			}
 		}
 
-		if (to_order.size() != values.size()) {
-			throw new Exception(
-					"AlloyTestCaseGeneration - elaborateInputData: not enough inputdata provided.");
-		}
-		Collections.sort(to_order);
-		final List<String> sorted_values = new ArrayList<>();
-		for (final int a : to_order) {
-			sorted_values.add(map_time_filled.get(a));
-		}
+		assert (to_order.size() == values.size());
 
-		final List<String> value_atoms = AlloyUtil.getElementsInSet(solution, value);
-		List<String> invalid_atoms = new ArrayList<>();
-		if (invalid != null) {
-			invalid_atoms = AlloyUtil.getElementsInSet(solution, invalid);
-		}
-		List<String> valid_atoms = new ArrayList<>();
-		for (final String a : value_atoms) {
-			if (!invalid_atoms.contains(a)) {
-				valid_atoms.add(a);
-			}
-		}
+		Collections.sort(to_order);
+		// final List<String> sorted_values = new ArrayList<>();
+		// for (final int a : to_order) {
+		// sorted_values.add(map_time_filled.get(a));
+		// }
+
 		// in the atoms extracted the underscore is substituted with the dollar
 		fill_atoms = fill_atoms
 				.stream()
 				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
 						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
 
-		invalid_atoms = invalid_atoms
-				.stream()
-				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
-						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
-
-		valid_atoms = valid_atoms
-				.stream()
-				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
-						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
-
-		// for each valid value we look for all its uses in the solution
+		// we deal with the initial values
+		for (final Input_widget iw : this.instance.getGui().getInput_widgets()) {
+			if (iw instanceof Option_input_widget) {
+				final Option_input_widget oiw = (Option_input_widget) iw;
+				final List<A4Tuple> tups = AlloyUtil.getTuples(solution,
+						"Input_widget_" + iw.getId() + "$0");
+				String first = null;
+				for (final A4Tuple tup : tups) {
+					if (tup.arity() == 3 && tup.atom(2).startsWith("Time$0")) {
+						first = tup.atom(1);
+						break;
+					}
+				}
+				if (first != null) {
+					out.put(first + "_" + iw.getId(), String.valueOf(oiw.getSelected()));
+					continue;
+				}
+			}
+		}
 
 		for (final String fill_atom : fill_atoms) {
 
@@ -876,21 +907,20 @@ public class AlloyTestCaseGenerator {
 			}
 			assert (inpw != null);
 
+			assert (map_filled_time.containsKey(fill_atom));
+
+			final int index = to_order.indexOf(map_filled_time.get(fill_atom));
+
 			if (inpw instanceof Option_input_widget) {
-				// for the option input widget we just use the value index
-				// provided by alloy
-				// this is possible because of the fact added in the model that
-				// constrains the possible values associated to the optional
-				// input widget
-				String val = v.split("\\$")[0].trim();
-				val = val.replace("Input_widget_" + inpw.getId() + "_value_", "");
-				out.put(v, val);
+
+				if (!out.containsKey(v + "_" + inpw.getId())) {
+					out.put(v + "_" + inpw.getId(), values.get(index));
+				}
 
 			} else {
-				assert (sorted_values.contains(v));
 
 				if (!out.containsKey(v)) {
-					out.put(v, values.get(sorted_values.indexOf(v)));
+					out.put(v, values.get(index));
 				}
 			}
 		}

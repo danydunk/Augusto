@@ -826,76 +826,85 @@ public class AlloyUtil {
 			metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
 
 			to_order.add(iw);
-			if (iw instanceof Option_input_widget) {
-				final Option_input_widget oiw = (Option_input_widget) iw;
-				if (oiw.getSize() == 0) {
-					content += System.getProperty("line.separator");
-					content += "no f: Fill | f.filled in " + iws.get(iw).getIdentifier();
-				} else {
-					// the list of elements
-					String list = "(";
-					String valid_fact = "";
+			if (invalid) {
+
+				if (iw instanceof Option_input_widget) {
+					int n_valid = -1;
+					int n_invalid = -1;
+					final Option_input_widget oiw = (Option_input_widget) iw;
+
 					if ((dm.getInvalidItemizedData(metadata).size() + dm.getValidItemizedData(
 							metadata).size()) > 0) {
-						for (final Integer i : dm.getInvalidItemizedData(metadata)) {
-							list += iws.get(iw).getIdentifier() + "_value_" + i;
-							list += "+";
-						}
 
-						for (final Integer i : dm.getValidItemizedData(metadata)) {
-							list += iws.get(iw).getIdentifier() + "_value_" + i;
-							list += "+";
-							valid_fact += "not(" + iws.get(iw).getIdentifier() + "_value_" + i
-									+ " in Invalid) and ";
-						}
-						if (valid_fact.length() > 0) {
-							valid_fact = valid_fact.substring(0, valid_fact.length() - 5);
-						}
-
-						list = list.substring(0, list.length() - 1);
+						n_valid = dm.getValidItemizedData(metadata).size();
+						n_invalid = dm.getInvalidItemizedData(metadata).size();
 					} else {
-						for (int cc = 0; cc < oiw.getSize(); cc++) {
-							list += iws.get(iw).getIdentifier() + "_value_" + cc;
-							if (cc < oiw.getSize() - 1) {
-								list += "+";
-							}
-						}
-						valid_fact += "all v: " + list + " | not (v in Invalid)";
-
+						n_valid = oiw.getSize();
+						n_invalid = 0;
 					}
 
-					list += ")";
+					assert (n_valid != -1 && n_invalid != -1);
+					content += System.getProperty("line.separator");
+					content += "#(filled." + iws.get(iw).getIdentifier() + ".with & "
+							+ iws.get(iw).getIdentifier() + ".invalid) <= " + n_invalid;
+					content += System.getProperty("line.separator");
+					content += "#((filled." + iws.get(iw).getIdentifier() + ".with + "
+							+ iws.get(iw).getIdentifier() + ".content.(T/first)) - "
+							+ iws.get(iw).getIdentifier() + ".invalid) <= " + n_valid;
 
 					content += System.getProperty("line.separator");
-					content += "no f: Fill | f.filled in (Input_widget - "
-							+ iws.get(iw).getIdentifier() + ") and f.with in " + list;
-					content += System.getProperty("line.separator");
-					content += "all f: Fill |  f.filled in " + iws.get(iw).getIdentifier()
-							+ " => f.with in " + list;
-					if (invalid) {
-						content += System.getProperty("line.separator");
-						content += valid_fact;
+					if (oiw.getSelected() == -1) {
+						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
+					} else {
+						content += "#" + iws.get(iw).getIdentifier()
+								+ ".content.(T/first) = 1 and not(" + iws.get(iw).getIdentifier()
+								+ ".content.(T/first) in " + iws.get(iw).getIdentifier()
+								+ ".invalid)";
 					}
-				}
-				content += System.getProperty("line.separator");
-				if (oiw.getSelected() == -1) {
-					content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
 				} else {
-					content += iws.get(iw).getIdentifier() + ".content.(T/first) = "
-							+ iws.get(iw).getIdentifier() + "_value_" + oiw.getSelected();
+					if ((dm.getInvalidData(metadata).size() + dm.getValidData(metadata).size()) > 0) {
+						if (dm.getInvalidData(metadata).size() == 0) {
+							content += System.getProperty("line.separator");
+							content += "#(filled." + iws.get(iw).getIdentifier() + ".with & "
+									+ iws.get(iw).getIdentifier() + ".invalid) = 0";
+						}
+						if (dm.getValidData(metadata).size() == 0) {
+							content += System.getProperty("line.separator");
+							content += "#(filled." + iws.get(iw).getIdentifier() + ".with " + " - "
+									+ iws.get(iw).getIdentifier() + ".invalid) = 0";
+						}
+
+					} else {
+						content += System.getProperty("line.separator");
+						content += "#(filled." + iws.get(iw).getIdentifier() + ".with & "
+								+ iws.get(iw).getIdentifier() + ".invalid) = 0";
+					}
+					content += System.getProperty("line.separator");
+					content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
 				}
 
 			} else {
-
-				if (invalid && dm.getInvalidData(metadata).size() == 0) {
+				// if there are not invalid values
+				if (iw instanceof Option_input_widget) {
+					final Option_input_widget oiw = (Option_input_widget) iw;
 					content += System.getProperty("line.separator");
-					content += "all f: Fill | f.filled = " + iws.get(iw).getIdentifier()
-							+ " => not(f.with in Invalid)";
-				}
-				content += System.getProperty("line.separator");
-				content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
-			}
+					content += "#(filled." + iws.get(iw).getIdentifier() + ".with + "
+							+ iws.get(iw).getIdentifier() + ".content.(T/first)) <= "
+							+ oiw.getSize();
 
+					content += System.getProperty("line.separator");
+					if (oiw.getSelected() == -1) {
+						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
+					} else {
+						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 1";
+					}
+
+				} else {
+
+					content += System.getProperty("line.separator");
+					content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
+				}
+			}
 		}
 		content += System.getProperty("line.separator");
 		Collections.sort(to_order);
@@ -922,7 +931,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1322,9 +1331,11 @@ public class AlloyUtil {
 	static public int getValueScope(final SpecificSemantics in) {
 
 		int cont = 0;
-		for (final Signature s : in.getSignatures()) {
-			if (s.getIdentifier().contains("_value_")) {
+		for (final Fact f : in.getFacts()) {
+			String s = f.getContent();
+			while (s.indexOf(".content.(T/first) = 1") != -1) {
 				cont++;
+				s = s.substring(s.indexOf(".content.(T/first) = 1") + 22);
 			}
 		}
 		return cont;
@@ -1485,10 +1496,13 @@ public class AlloyUtil {
 	static private String getFactForTC(final List<GUIAction> acts, final boolean invalid)
 			throws Exception {
 
+		final DataManager dm = DataManager.getInstance();
 		String fact = "";
 		String t = "";
 		final Map<String, List<String>> values_used = new HashMap<>();
-		final Map<String, List<String>> values_used_iw = new HashMap<>();
+		final Map<String, List<Input_widget>> values_used_iw = new HashMap<>();
+		final Map<Input_widget, List<String>> values_used_itemized = new HashMap<>();
+		final Map<Input_widget, List<Integer>> values_used_iw_itemized = new HashMap<>();
 
 		for (int cont = 0; cont < acts.size(); cont++) {
 			final GUIAction act = acts.get(cont);
@@ -1516,25 +1530,34 @@ public class AlloyUtil {
 
 				fact += " and Track.op.(" + t + ").filled=Input_widget_" + f.getWidget().getId();
 
-				if (f.getWidget() instanceof Option_input_widget) {
-					fact += " and Track.op.(" + t + ").with=Input_widget_" + f.getWidget().getId()
-							+ "_value_" + f.getInput();
-				} else {
+				if (!(f.getWidget() instanceof Option_input_widget)) {
+
 					String new_value = "";
 					new_value += f.getInput();
 					if (!values_used_iw.containsKey(new_value)) {
-						values_used_iw.put(new_value, new ArrayList<String>());
+						values_used_iw.put(new_value, new ArrayList<Input_widget>());
 					}
 					if (f.getWidget().getLabel() != null && f.getWidget().getLabel().length() > 0) {
-						values_used_iw.get(new_value).add(f.getWidget().getLabel());
+						values_used_iw.get(new_value).add((Input_widget) f.getWidget());
 					} else {
-						values_used_iw.get(new_value).add(f.getWidget().getDescriptor());
+						values_used_iw.get(new_value).add((Input_widget) f.getWidget());
 					}
 
 					if (!values_used.containsKey(new_value)) {
 						values_used.put(new_value, new ArrayList<String>());
 					}
 					values_used.get(new_value).add("Track.op.(" + t + ").with");
+				} else {
+					if (!values_used_itemized.containsKey(f.getWidget())) {
+						values_used_itemized.put((Input_widget) f.getWidget(),
+								new ArrayList<String>());
+					}
+					if (!values_used_iw_itemized.containsKey(f.getWidget())) {
+						values_used_iw_itemized.put((Input_widget) f.getWidget(),
+								new ArrayList<Integer>());
+					}
+					values_used_itemized.get(f.getWidget()).add("Track.op.(" + t + ").with");
+					values_used_iw_itemized.get(f.getWidget()).add(Integer.valueOf(f.getInput()));
 				}
 			}
 
@@ -1576,47 +1599,71 @@ public class AlloyUtil {
 			}
 
 			// we check if the value is valid or invalid
-			// TODO: this works only if the input values are not duplicated
-			// between different descriptors
-			int valid = -1;
-			final DataManager dm = DataManager.getInstance();
-			for (final String desc : values_used_iw.get(s)) {
+			for (final Input_widget iw : values_used_iw.get(s)) {
 
-				if (dm.getValidData(desc).contains(s)) {
-					if (valid == 0) {
-						throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
-					}
-					valid = 1;
-				} else if (dm.getInvalidData(desc).contains(s)) {
-					if (valid == 1) {
-						throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
-					}
-					valid = 0;
-				} else if (dm.getInvalidGenericData().contains(s)) {
-					if (valid == 1) {
-						throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
-					}
-					valid = 0;
-				} else if (dm.getValidGenericData().contains(s)) {
-					if (valid == 0) {
-						throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
-					}
-					valid = 1;
+				String metadata = iw.getLabel() != null ? iw.getLabel() : "";
+				metadata += " ";
+				metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+
+				if (dm.getInvalidData(metadata).contains(s)) {
+					assert (invalid);
+					fact += " and " + values_used.get(s).get(0) + " in Input_widget_" + iw.getId()
+							+ ".invalid";
+
 				} else {
-					valid = 1;
+					if (invalid) {
+						fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
+								+ iw.getId() + ".invalid)";
+					}
 				}
 			}
-			if (valid == -1) {
-				throw new Exception("AlloyModel - getTCaseModelOpposite: error.");
-			}
-			if (invalid) {
-				if (valid == 1) {
-					fact += " and not(" + values_used.get(s).get(0) + " in Invalid)";
-				} else {
-					fact += " and " + values_used.get(s).get(0) + " in Invalid";
+
+		}
+
+		// we deal with itemized data
+		assert (values_used_itemized.keySet().size() == values_used_iw_itemized.keySet().size());
+		for (final Input_widget iw : values_used_itemized.keySet()) {
+			assert (values_used_iw_itemized.get(iw).size() == values_used_itemized.get(iw).size());
+			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
+			metadata += " ";
+			metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+
+			for (int x = 0; x < values_used_iw_itemized.get(iw).size(); x++) {
+
+				if (invalid) {
+					if (dm.getInvalidItemizedData(metadata).contains(
+							values_used_iw_itemized.get(iw).get(x))) {
+						fact += " and " + values_used_itemized.get(iw).get(x) + " in Input_widget_"
+								+ iw.getId() + ".invalid";
+					} else {
+						fact += " and not(" + values_used_itemized.get(iw).get(x)
+								+ " in Input_widget_" + iw.getId() + ".invalid)";
+					}
+				}
+
+				final Option_input_widget oiw = (Option_input_widget) iw;
+				if (oiw.getSelected() != -1) {
+					if (oiw.getSelected() == values_used_iw_itemized.get(iw).get(x)) {
+						fact += " and " + values_used_itemized.get(iw).get(x) + " = Input_widget_"
+								+ iw.getId() + ".content.(T/first)";
+					} else {
+						fact += " and not(" + values_used_itemized.get(iw).get(x)
+								+ " = Input_widget_" + iw.getId() + ".content.(T/first))";
+					}
+				}
+				for (int y = x + 1; y < values_used_iw_itemized.get(iw).size(); y++) {
+					if (values_used_iw_itemized.get(iw).get(x) == values_used_iw_itemized.get(iw)
+							.get(y)) {
+						fact += " and " + values_used_itemized.get(iw).get(x) + " = "
+								+ values_used_itemized.get(iw).get(y);
+					} else {
+						fact += " and not(" + values_used_itemized.get(iw).get(x) + " = "
+								+ values_used_itemized.get(iw).get(y) + ")";
+					}
 				}
 			}
 		}
+
 		fact = "one t: Time | " + fact;
 		return fact;
 

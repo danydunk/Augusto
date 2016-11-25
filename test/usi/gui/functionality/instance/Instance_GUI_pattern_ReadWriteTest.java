@@ -82,5 +82,6 @@ public class Instance_GUI_pattern_ReadWriteTest {
 				.getSWS_for_PSW("psw1"));
 		assertEquals(inst.getWindows().get(1).getIWS_for_PIW("piw1").size(),
 				inst.getWindows().get(1).getIWS_for_PIW("piw1").size());
+
 	}
 }

@@ -106,8 +106,9 @@ public class ApplicationHelper {
 					.lookup("RemoteCobertura");
 			rmo.saveCoverage();
 		} catch (final Exception e) {
+			e.printStackTrace();
 			System.out
-			.println("ApplicationHelper: RMI error while clossing application. Moving on.");
+					.println("ApplicationHelper: RMI error while clossing application. Moving on.");
 		}
 
 		if (this.root == null) {
