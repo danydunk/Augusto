@@ -55,6 +55,7 @@ public class ApplicationHelper {
 
 	public void startApplication() throws Exception {
 
+		System.out.println("STARTING SUT");
 		this.running = false;
 		RationalTestScript.unregisterAll();
 
@@ -66,7 +67,7 @@ public class ApplicationHelper {
 		this.root = null;
 		try {
 			do {
-
+				System.out.println("GETTING ROOT OBJECT");
 				Thread.sleep(3000);
 
 				this.root = RationalTestScript.getRootTestObject();
@@ -76,12 +77,14 @@ public class ApplicationHelper {
 			throw new Exception("ApplicationHelper - startApplication: error");
 		}
 		if (this.root == null) {
+			System.out.println("NULL ROOT OBJECT");
 			throw new Exception("ApplicationHelper - startApplication: error");
 		}
 		GuiStateManager.create(this.root);
 		this.running = true;
 
 		if (this.initial != null) {
+			System.out.println("EXECUTING INITIAL ACTIONS");
 			final GuiStateManager gmanager = GuiStateManager.getInstance();
 			for (final GUIAction act : this.initial.getActions()) {
 				gmanager.readGUI();
@@ -91,10 +94,12 @@ public class ApplicationHelper {
 			gmanager.readGUI();
 			this.dealWithDialogsWindow(gmanager);
 		}
+		System.out.println("SUT STARTED");
 	}
 
 	public void closeApplication() throws Exception {
 
+		System.out.println("CLOSING SUT");
 		try {
 			final Registry registry = LocateRegistry.getRegistry(2007);
 			final RemoteCoberturaInterface rmo = (RemoteCoberturaInterface) registry
@@ -102,10 +107,11 @@ public class ApplicationHelper {
 			rmo.saveCoverage();
 		} catch (final Exception e) {
 			System.out
-					.println("ApplicationHelper: RMI error while clossing application. Moving on.");
+			.println("ApplicationHelper: RMI error while clossing application. Moving on.");
 		}
 
 		if (this.root == null) {
+			System.out.println("NULL ROOT OBJECT");
 			this.forceClose();
 		} else {
 			TestObject[] tos = null;
@@ -119,9 +125,12 @@ public class ApplicationHelper {
 		}
 		this.running = false;
 		GuiStateManager.destroy();
+		System.out.println("SUT CLOSED");
 	}
 
 	public void forceClose() throws Exception {
+
+		System.out.println("SUT FORCECLOSE");
 
 		try {
 			final Runtime rt = Runtime.getRuntime();

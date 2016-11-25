@@ -22,14 +22,14 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 
 	public static void main(final String[] args) {
 
-		System.out.println("Creazione e registrazione dell'oggetto");
+		System.out.println("Setting up RMI.");
 		try {
 			LocateRegistry.createRegistry(2007);
 			final Registry registry = LocateRegistry.getRegistry(2007);
 			registry.rebind("RemoteCobertura", new AUTMain());
 		} catch (final RemoteException e) {
 			e.printStackTrace();
-			System.out.println("Impossibile creare o registrare l'oggetto");
+			System.out.println("Impossibile to set up RMI.");
 			System.exit(1);
 		}
 		new SystemMock();
