@@ -123,7 +123,7 @@ public class Main extends MainHelper {
 					if (refined_instance != null) {
 						XMLUtil.save(match_folder + File.separator + "match.xml",
 								Instance_GUI_patternWriter
-								.writeInstanceGUIPattern(refined_instance));
+										.writeInstanceGUIPattern(refined_instance));
 					}
 					reflog.close();
 				}
@@ -165,6 +165,8 @@ public class Main extends MainHelper {
 			System.out.println("COVERAGE ACHIEVED DURING VALIDATION:" + System.lineSeparator()
 					+ "statement " + cov_after[0] + ", branch " + cov_after[1]);
 			generallog.close();
+			ExperimentManager.cleanUP();
+
 		} catch (final Exception e) {
 			System.setOut(generallog);
 			System.out.println("ERROR");

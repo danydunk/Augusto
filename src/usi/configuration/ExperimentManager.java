@@ -44,7 +44,6 @@ public class ExperimentManager {
 				(new File(ConfigurationManager.getAutBinDirectory()).getParent() + File.separator + "instrumented"),
 				"--datafile", SER_FILE_PATH, ConfigurationManager.getAutBinDirectory(), };
 
-		new File(SER_FILE_PATH).delete();
 		final PrintStream stdout = System.out;
 		final PrintStream stream = new PrintStream(new FileOutputStream(
 				System.getProperty("user.dir") + File.separator + "cobertura_warnings.out"));
@@ -77,7 +76,7 @@ public class ExperimentManager {
 					+ ConfigurationManager.getAutBinDirectory() + ";" + " -javaagent:"
 					+ PathsManager.getProjectRoot() + "lib" + File.separator + "jmockit-1.29.jar"
 					+ " -Dnet.sourceforge.cobertura.datafile=\"" + SER_FILE_PATH + "\""
-					+ " src.usi.application.AUTMain " + ConfigurationManager.getAutMainCLass());
+					+ " src.usi.application.rmi.AUTMain " + ConfigurationManager.getAutMainCLass());
 
 			out.flush();
 			out.close();

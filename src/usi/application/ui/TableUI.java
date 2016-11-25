@@ -16,6 +16,7 @@ public class TableUI extends MainHelper {
 		// final int selectedColumn = cell % columnNumber;
 
 		new GuiSubitemTestObject(to).click(atCell(atRow(cell), atColumn(0)));
+		Thread.sleep(100);
 		new GuiSubitemTestObject(to).click(atCell(atRow(cell), atColumn(0)));
 	}
 

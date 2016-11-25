@@ -1,9 +1,12 @@
 package src.usi.application;
 
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.List;
 
 import org.w3c.dom.Document;
 
+import src.usi.application.rmi.RemoteCoberturaInterface;
 import src.usi.configuration.ConfigurationManager;
 import src.usi.configuration.PathsManager;
 import src.usi.gui.GuiStateManager;
@@ -91,6 +94,16 @@ public class ApplicationHelper {
 	}
 
 	public void closeApplication() throws Exception {
+
+		try {
+			final Registry registry = LocateRegistry.getRegistry(2007);
+			final RemoteCoberturaInterface rmo = (RemoteCoberturaInterface) registry
+					.lookup("RemoteCobertura");
+			rmo.saveCoverage();
+		} catch (final Exception e) {
+			System.out
+					.println("ApplicationHelper: RMI error while clossing application. Moving on.");
+		}
 
 		if (this.root == null) {
 			this.forceClose();

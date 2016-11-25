@@ -47,6 +47,7 @@ public class RipperMain extends RipperMainHelper {
 			final Ripper ripper = new Ripper();
 			final GUI gui = ripper.ripApplication();
 			ExperimentManager.dumpGUI(gui);
+			ExperimentManager.cleanUP();
 
 		} catch (final Exception e) {
 			e.printStackTrace();
