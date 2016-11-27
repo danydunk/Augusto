@@ -931,7 +931,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1567,7 +1567,7 @@ public class AlloyUtil {
 
 				fact += "Track.op.(" + t + ") in Select";
 
-				final String obj = "Track.op.(" + t + ")" + ".selected";
+				final String obj = "Track.op.(" + t + ")" + ".which";
 
 				fact += " and Track.op.(" + t + ").wid=Selectable_widget_" + s.getWidget().getId();
 				fact += " and #Selectable_widget_" + s.getWidget().getId() + ".list.(" + t + ")="

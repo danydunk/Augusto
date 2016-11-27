@@ -71,16 +71,16 @@ public class Semantic_predicate extends Predicate {
 			this.content = this.content.replace("sw.", "Track.op.(T/next[t]).wid.");
 			this.content = this.content.replace(".sw)", ".Track.op.(T/next[t]).wid)");
 			this.content = this.content.replace(".sw ", ".Track.op.(T/next[t]).wid ");
-			this.content = this.content.replace("(o ", "(Track.op.(T/next[t]).selected_o ");
-			this.content = this.content.replace(" o ", " Track.op.(T/next[t]).selected_o ");
-			this.content = this.content.replace(" o)", " Track.op.(T/next[t]).selected_o)");
-			this.content = this.content.replace("#o ", "#Track.op.(T/next[t]).selected_o ");
-			this.content = this.content.replace("#o)", "#Track.op.(T/next[t]).selected_o)");
-			this.content = this.content.replace("(o.", "(Track.op.(T/next[t]).selected_o.");
-			this.content = this.content.replace(" o.", " Track.op.(T/next[t]).selected_o.");
-			this.content = this.content.replace("o.", "Track.op.(T/next[t]).selected_o.");
-			this.content = this.content.replace(".o)", ".Track.op.(T/next[t]).selected_o)");
-			this.content = this.content.replace(".o ", ".Track.op.(T/next[t]).selected_o ");
+			this.content = this.content.replace("(o ", "(Track.op.(T/next[t]).which ");
+			this.content = this.content.replace(" o ", " Track.op.(T/next[t]).which ");
+			this.content = this.content.replace(" o)", " Track.op.(T/next[t]).which)");
+			this.content = this.content.replace("#o ", "#Track.op.(T/next[t]).which ");
+			this.content = this.content.replace("#o)", "#Track.op.(T/next[t]).which)");
+			this.content = this.content.replace("(o.", "(Track.op.(T/next[t]).which.");
+			this.content = this.content.replace(" o.", " Track.op.(T/next[t]).which.");
+			this.content = this.content.replace("o.", "Track.op.(T/next[t]).which.");
+			this.content = this.content.replace(".o)", ".Track.op.(T/next[t]).which)");
+			this.content = this.content.replace(".o ", ".Track.op.(T/next[t]).which ");
 		}
 
 		final String separator = System.getProperty("line.separator");
