@@ -349,7 +349,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			}
 		}
 		// we add a fact for the number of windows
-		final Fact values_fact = new Fact("values_constrints", values_fact_content);
+		final Fact values_fact = new Fact("values_constraints", values_fact_content);
 		facts.add(values_fact);
 
 		final Alloy_Model specific_model = new Alloy_Model(signatures, facts, predicates,

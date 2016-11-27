@@ -76,12 +76,13 @@ public class AlloyTestCaseGenerationTest {
 
 		r.generateSpecificSemantics();
 		r.getSemantics()
-				.addRun_command(
-						"run {System and (some t1,t2: Time| not(t1=t2) and Track.op.t1 in Fill and Track.op.t2 in Fill and not(Track.op.t2.with = Track.op.t1.with) and Track.op.t2.filled = Input_widget_iw17 and Track.op.t1.filled = Input_widget_iw17)}for 5 but 4 Time,3 Operation, 10 Value");
+		.addRun_command(
+				"run {System and (some t1,t2: Time| t2 = T/next[t1] and not(t1=t2) and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.(T/next[t2]) in Fill and not(Track.op.t2.with = Track.op.t1.with) and Track.op.t2.filled = Input_widget_iw17 and Track.op.t1.filled = Input_widget_iw17 and Track.op.(T/next[t2]).filled = Input_widget_iw20)}for 5 but 5 Time,4 Operation, 10 Value");
 
 		final List<String> values = new ArrayList<>();
 		values.add("ciao");
 		values.add("ciao2");
+		values.add("1");
 
 		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(r, 1, 40000);
 		final List<GUITestCase> tests = generator.generateTestCases(values);
@@ -90,7 +91,8 @@ public class AlloyTestCaseGenerationTest {
 		assertEquals("ciao", f.getInput());
 		f = (Fill) tests.get(0).getActions().get(2);
 		assertEquals("ciao2", f.getInput());
-
+		f = (Fill) tests.get(0).getActions().get(3);
+		assertEquals("1", f.getInput());
 	}
 
 	@Test

@@ -61,11 +61,6 @@ public class GUIFunctionality_refine {
 		this.observed_tcs = new ArrayList<>();
 		this.covered_dyn_edges = new ArrayList<>();
 		this.current_semantic_property = "";
-		// this.current_semantic_property =
-		// "one Field_3:Property_required|Property_required = (Field_3) and Field_3.associated_to = (Input_widget_iw62)";
-		// this.current_semantic_property =
-		// "one Field_2:Property_unique|one Field_3,Field_4:Property_required|Property_required = (Field_3+Field_4) and Property_unique = (Field_2+Field_4) and Field_3.associated_to = (Input_widget_iw89) and Field_4.associated_to = (Input_widget_iw86) and Field_2.associated_to = (Input_widget_iw87)";
-		// this.current_semantic_property = "";
 		this.discarded_semantic_properties = new ArrayList<>();
 		this.unsat_commands = new ArrayList<>();
 	}
@@ -709,9 +704,11 @@ public class GUIFunctionality_refine {
 		final List<Fact> facts = sem_with.getFacts();
 		final Fact new_fact = new Fact(
 				"filter_redundant_actions",
-				"all t: Time | not (Track.op.t in Select and Track.op.(T/next[t]) in Select and Track.op.t.wid = Track.op.(T/next[t]).wid)"
+				"all t: Time | not (Track.op.(T/next[t]) in Select and Track.op.t.wid.selected.t = Track.op.(T/next[t]).which)"
 						+ System.lineSeparator()
-						+ "all t: Time | not (Track.op.t in Fill and Track.op.(T/next[t]) in Fill and Track.op.t.filled = Track.op.(T/next[t]).filled)");
+						+ "all t: Time | not (Track.op.(T/next[t]) in Fill and Track.op.t.filled.content.t = Track.op.(T/next[t]).with)"
+						+ System.lineSeparator()
+						+ "all t: Time | not (Track.op.t in Click and Track.op.(T/next[t]) in Click and Track.op.t.clicked = Track.op.(T/next[t]).clicked)");
 		facts.add(new_fact);
 		sem_with = new SpecificSemantics(sem_with.getSignatures(), facts, sem_with.getPredicates(),
 				sem_with.getFunctions(), sem_with.getOpenStatements());

@@ -68,6 +68,7 @@ public class GUIFunctionality_validate {
 				this.edges.add(edge);
 			}
 		}
+
 	}
 
 	protected void init() {
@@ -193,22 +194,29 @@ public class GUIFunctionality_validate {
 
 	public List<GUITestCaseResult> validate() throws Exception {
 
-		final List<GUITestCaseResult> out = new ArrayList<>();
-
+		// we add a fact to filter redundant actions
 		final List<Fact> facts = this.instancePattern.getSemantics().getFacts();
-		// fact to eliminate final redundandt actions
-		// final Fact new_fact = new Fact(
-		// "filter_redundant_actions",
-		// "all t: Time | not (Track.op.t in Select and Track.op.(T/next[t]) in Select and Track.op.t.wid = Track.op.(T/next[t]).wid)"
-		// + System.lineSeparator()
-		// +
-		// "all t: Time | not (Track.op.t in Fill and Track.op.(T/next[t]) in Fill and Track.op.t.filled = Track.op.(T/next[t]).filled)");
-		// facts.add(new_fact);
+		final Fact new_fact = new Fact(
+				"filter_redundant_actions",
+				"all t: Time | not (Track.op.(T/next[t]) in Select and Track.op.t.wid.selected.t = Track.op.(T/next[t]).which)"
+						+ System.lineSeparator()
+						+ "all t: Time | not (Track.op.(T/next[t]) in Fill and Track.op.t.filled.content.t = Track.op.(T/next[t]).with)"
+						+ System.lineSeparator()
+						+ "all t: Time | not (Track.op.t in Click and Track.op.(T/next[t]) in Click and Track.op.t.clicked = Track.op.(T/next[t]).clicked)");
+
+		facts.add(new_fact);
+		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
+				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
+				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
+				.getSemantics().getOpenStatements());
+		this.instancePattern.setSpecificSemantics(sem);
+
+		final List<GUITestCaseResult> out = new ArrayList<>();
 
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 

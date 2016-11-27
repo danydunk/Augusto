@@ -9,7 +9,6 @@ import src.usi.configuration.ConfigurationManager;
 import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.GUI;
 import src.usi.gui.structure.Input_widget;
-import src.usi.gui.structure.Option_input_widget;
 import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Window;
 import src.usi.pattern.structure.GUI_Pattern;
@@ -359,10 +358,7 @@ public class Instance_GUI_pattern {
 		for (final GUIAction act : new_res.getTc().getActions()) {
 			if (act instanceof Fill) {
 				final Fill f = (Fill) act;
-				if (!(f.getWidget() instanceof Option_input_widget)
-						&& !values.contains(f.getInput())) {
-					values.add(f.getInput());
-				}
+				values.add(f.getInput());
 			}
 
 		}

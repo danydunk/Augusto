@@ -14,7 +14,7 @@ sig Fill extends Operation {
 }
 sig Select extends Operation {
 	wid: one Selectable_widget,
-	selected: one Object
+	which: one Object
 }
 one sig Track { 
 	op: Operation lone -> Time
@@ -98,5 +98,5 @@ pred select [sw: Selectable_widget, t, t': Time, o: Object, s: Select] {
 	all iw: Input_widget | iw.content.t' = iw.content.t
 	(Selectable_widget - sw).selected.t' = (Selectable_widget - sw).selected.t
 	--- operation is tracked ---
-	s.wid = sw and s.selected = o and Track.op.t' = s
+	s.wid = sw and s.which = o and Track.op.t' = s
 }

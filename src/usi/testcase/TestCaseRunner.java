@@ -145,30 +145,9 @@ public class TestCaseRunner {
 								// the selectable widget is not as expected so
 								// we select the last index
 								ind = this.select_support_added_indexes.get(p).size() - 1;
-								// TO REMOVE
-								// if (ind == -1) {
-								// System.out.println("error in select");
-								// for (final GUIAction aa : tc.getActions()) {
-								// if (aa instanceof Click) {
-								// System.out.println("CLICK " +
-								// aa.getWidget().getId());
-								// }
-								// if (aa instanceof Fill) {
-								// final Fill f = (Fill) aa;
-								// System.out.println("FILL " +
-								// aa.getWidget().getId()
-								// + " with " + f.getInput());
-								//
-								// }
-								// if (aa instanceof Select) {
-								// final Select f = (Select) aa;
-								// System.out.println("SELECT " +
-								// aa.getWidget().getId()
-								// + " with " + f.getIndex());
-								// }
-								// }
-								// assert (false);
-								// }
+								if (ind == -1) {
+									continue;
+								}
 
 							}
 							final int size = this.select_support_initial.get(p).size()
@@ -309,11 +288,11 @@ public class TestCaseRunner {
 					// selecting an element can modify the position of
 					// the
 					// widget
-					if (e instanceof Selectable_widget) {
-						return false;
-					}
-					return true;
-				}).collect(Collectors.toList());
+						if (e instanceof Selectable_widget) {
+							return false;
+						}
+						return true;
+					}).collect(Collectors.toList());
 
 				final List<Widget> widgets2 = w.getWidgets().stream().filter(e -> {
 
@@ -321,11 +300,11 @@ public class TestCaseRunner {
 					// selecting an element can modify the position of
 					// the
 					// widget
-					if (e instanceof Selectable_widget) {
-						return false;
-					}
-					return true;
-				}).collect(Collectors.toList());
+						if (e instanceof Selectable_widget) {
+							return false;
+						}
+						return true;
+					}).collect(Collectors.toList());
 
 				for (int x = 0; x < widgets.size(); x++) {
 					if (widgets2.get(x) instanceof Action_widget) {
