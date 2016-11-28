@@ -126,7 +126,7 @@ pred  unique_test [w: Form, t: Time] {
 	all iw: w.iws | all o: List.contains.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
 }
 pred valid_data_test [w: Form, t: Time] {
-	all iw: w.iws | not(iw.content.t in iw.invalid)
+	all iw: w.iws | #iw.invalid > 0 => not(iw.content.t in iw.invalid)
 }
 pred  unique_for_update_test [w: Form, t: Time] {
 	all iw: w.iws | all o: (List.contains.t-Selectable_widget.selected.t) | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)

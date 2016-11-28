@@ -82,9 +82,9 @@ public class AlloyTestCaseGenerator {
 		this.MAX_RUN = 1;
 		final SpecificSemantics model = this.instance.getSemantics();
 		final String alloy_model = model.toString();
-		System.out.println("START ALLOY MODEL");
-		System.out.println(model);
-		System.out.println("END ALLOY MODEL");
+		// System.out.println("START ALLOY MODEL");
+		// System.out.println(model);
+		// System.out.println("END ALLOY MODEL");
 
 		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
 
@@ -156,9 +156,9 @@ public class AlloyTestCaseGenerator {
 		final SpecificSemantics model = this.instance.getSemantics();
 
 		final String alloy_model = model.toString();
-		System.out.println("START ALLOY MODEL");
-		System.out.println(model);
-		System.out.println("END ALLOY MODEL");
+		// System.out.println("START ALLOY MODEL");
+		// System.out.println(model);
+		// System.out.println("END ALLOY MODEL");
 
 		final Module compiled = AlloyUtil.compileAlloyModel(alloy_model);
 
@@ -304,9 +304,9 @@ public class AlloyTestCaseGenerator {
 									"Input_widget_" + iw.getId() + "$0");
 							String inputdata = "";
 							for (final A4Tuple value : values) {
-								assert (value.arity() == 3);
+								assert (value.arity() <= 3);
 
-								if (value.atom(2).equals(tuple.atom(2))) {
+								if (value.arity() == 3 && value.atom(2).equals(tuple.atom(2))) {
 
 									if (iw instanceof Option_input_widget) {
 
