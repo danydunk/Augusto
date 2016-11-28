@@ -53,8 +53,7 @@ public class TestCaseGeneration_upm_full extends TestCaseGeneration_upm_fullHelp
 		final List<GUITestCaseResult> testcases = validator.validate();
 
 		ExperimentManager.cleanUP();
-
-		if (testcases.size() != 35) {
+		if (testcases.size() != 33) {
 			throw new Exception();
 		}
 	}

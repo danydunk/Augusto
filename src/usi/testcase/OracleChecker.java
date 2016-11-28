@@ -105,44 +105,44 @@ public class OracleChecker {
 
 				out = false;
 			}
-			// if (!weak) {
-			for (final Input_widget iw : oracle.getInputWidgets()) {
-				final Input_widget actual_iw = (Input_widget) actual.getWidget(iw.getId());
-				if (actual_iw == null) {
-					this.description_last_check += "FUNCTIONAL ORACLE ERROR";
-					this.description_last_check += System.lineSeparator();
-					this.description_last_check += "ERROR AT ACTION " + (cont + 1);
-					this.description_last_check += System.lineSeparator();
-					this.description_last_check += "INPUT WIDGET " + iw.getId() + " NOT FOUND";
-					this.description_last_check += System.lineSeparator();
+			if (!weak) {
+				for (final Input_widget iw : oracle.getInputWidgets()) {
+					final Input_widget actual_iw = (Input_widget) actual.getWidget(iw.getId());
+					if (actual_iw == null) {
+						this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+						this.description_last_check += System.lineSeparator();
+						this.description_last_check += "ERROR AT ACTION " + (cont + 1);
+						this.description_last_check += System.lineSeparator();
+						this.description_last_check += "INPUT WIDGET " + iw.getId() + " NOT FOUND";
+						this.description_last_check += System.lineSeparator();
 
-					out = false;
-					continue;
-				}
-				if (!actual_iw.getValue().equals(iw.getValue())) {
-					// TODO: change it
-					// we manage iw that have a standard value
-					final Window ww = this.gui.getWindow(oracle.getId());
-					final Input_widget iw_gui = (Input_widget) ww.getWidget(actual_iw.getId());
-					// if the iw has a standard value and the oracle expects
-					// nothing it is ok
-					if (iw_gui.getValue() != null && iw_gui.getValue().length() > 0
-							&& iw.getValue().length() == 0) {
+						out = false;
 						continue;
 					}
+					if (!actual_iw.getValue().equals(iw.getValue())) {
+						// TODO: change it
+						// we manage iw that have a standard value
+						final Window ww = this.gui.getWindow(oracle.getId());
+						final Input_widget iw_gui = (Input_widget) ww.getWidget(actual_iw.getId());
+						// if the iw has a standard value and the oracle expects
+						// nothing it is ok
+						if (iw_gui.getValue() != null && iw_gui.getValue().length() > 0
+								&& iw.getValue().length() == 0) {
+							continue;
+						}
 
-					this.description_last_check += "FUNCTIONAL ORACLE ERROR";
-					this.description_last_check += System.lineSeparator();
-					this.description_last_check += "ERROR AT ACTION " + (cont + 1);
-					this.description_last_check += System.lineSeparator();
-					this.description_last_check += "EXPECTED INPUT WIDGET " + iw.getId()
-							+ " VALUE " + iw.getValue() + " BUT IT WAS " + actual_iw.getValue();
-					this.description_last_check += System.lineSeparator();
+						this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+						this.description_last_check += System.lineSeparator();
+						this.description_last_check += "ERROR AT ACTION " + (cont + 1);
+						this.description_last_check += System.lineSeparator();
+						this.description_last_check += "EXPECTED INPUT WIDGET " + iw.getId()
+								+ " VALUE " + iw.getValue() + " BUT IT WAS " + actual_iw.getValue();
+						this.description_last_check += System.lineSeparator();
 
-					out = false;
+						out = false;
+					}
 				}
 			}
-			// }
 			for (final Selectable_widget sw : oracle.getSelectableWidgets()) {
 				final Selectable_widget actual_sw = (Selectable_widget) actual
 						.getWidget(sw.getId());

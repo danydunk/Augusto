@@ -40,6 +40,8 @@ public class runAll extends runAllHelper {
 			new Initial_actions_test().testMain(args);
 			System.out.println("ORACLE TEST");
 			new OracleTest().testMain(args);
+			System.out.println("REFINEMENT BUDDI INVALID TEST");
+			new Refinement_buddi_crud_invalid().testMain(args);
 			System.out.println("REFINEMENT BUDDI TEST");
 			new Refinement_buddi_crud().testMain(args);
 			System.out.println("REFINEMENT UPM TEST");

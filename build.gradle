@@ -38,10 +38,6 @@ task copyTemplatesTest(type: Copy) {
 	into 'build/classes/test/templates'
 }
 
-//task copyFiles(type: Copy) {
-//	from 'files'
-//	into 'build/classes/main/files'
-//}
 
 task copyDatastore(type: Copy) {
 	from 'resources/DatastoreDefinition.rftdsd'
@@ -108,7 +104,6 @@ task copyTestMain2Test(type: Copy) {
 compileJava.doLast {
 	tasks.copyTemplates.execute()
 	tasks.copyTemplatesTest.execute()
-//	tasks.copyFiles.execute()
 	tasks.copyDatastore.execute()
 	tasks.copyDatastoreTest.execute()
 	tasks.copyMains.execute()
@@ -148,3 +143,11 @@ commandLine 'cmd', '/c', "java -ea -Xmx9g -Xss512m -cp \"C:\\Program Files\\IBM\
 testall.dependsOn 'build'
 testall.dependsOn 'deployBuddi'
 testall.dependsOn 'deployUPM'
+
+task runtest(type:Exec) {
+
+commandLine 'cmd', '/c', "java -ea -Xmx9g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback test.rft.$test "+projectDir+" 2>&1"
+}
+runtest.dependsOn 'build'
+runtest.dependsOn 'deployBuddi'
+runtest.dependsOn 'deployUPM'
