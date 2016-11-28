@@ -20,7 +20,8 @@ for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):
         s = None
         continue
     try:
-        s.connect(sa)
+		s.settimeout(18000)
+		s.connect(sa)
     except socket.error as msg:
         s.close()
         s = None
@@ -38,7 +39,7 @@ while True:
 		break	
 	msg += received
 s.close()
-	
+print msg
 assert(msg.endswith("CIBUILD=OK") or msg.endswith("CIBUILD=KO"))
 
 print "Logs:"
