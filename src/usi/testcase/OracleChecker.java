@@ -28,7 +28,7 @@ public class OracleChecker {
 	 * @param result
 	 * @return
 	 */
-	public boolean check(final GUITestCaseResult result, final boolean only_last) {
+	public boolean check(final GUITestCaseResult result, final boolean weak) {
 
 		this.description_last_check = "";
 		boolean out = true;
@@ -42,7 +42,7 @@ public class OracleChecker {
 			out = false;
 		}
 		int cont = 0;
-		if (only_last) {
+		if (weak) {
 			out = true;
 			cont = result.getActions_executed().size() - 1;
 		}
@@ -105,7 +105,7 @@ public class OracleChecker {
 
 				out = false;
 			}
-
+			// if (!weak) {
 			for (final Input_widget iw : oracle.getInputWidgets()) {
 				final Input_widget actual_iw = (Input_widget) actual.getWidget(iw.getId());
 				if (actual_iw == null) {
@@ -142,7 +142,7 @@ public class OracleChecker {
 					out = false;
 				}
 			}
-
+			// }
 			for (final Selectable_widget sw : oracle.getSelectableWidgets()) {
 				final Selectable_widget actual_sw = (Selectable_widget) actual
 						.getWidget(sw.getId());

@@ -196,7 +196,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -469,7 +469,7 @@ public class GUIFunctionality_refine {
 							+ " and click_semantics[Action_widget_" + (aw.getId()) + ",t])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -704,11 +704,11 @@ public class GUIFunctionality_refine {
 		final List<Fact> facts = sem_with.getFacts();
 		final Fact new_fact = new Fact(
 				"filter_redundant_actions",
-				"all t: Time | not (Track.op.(T/next[t]) in Select and Track.op.t.wid.selected.t = Track.op.(T/next[t]).which)"
+				"no t: Time | #Track.op.t = 1 and Track.op.t in Select and Track.op.t.wid.selected.(T/prev[t]) = Track.op.t.which"
 						+ System.lineSeparator()
-						+ "all t: Time | not (Track.op.(T/next[t]) in Fill and Track.op.t.filled.content.t = Track.op.(T/next[t]).with)"
+						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.t.filled.content.(T/prev[t]) = Track.op.t.with"
 						+ System.lineSeparator()
-						+ "all t: Time | not (Track.op.t in Click and Track.op.(T/next[t]) in Click and Track.op.t.clicked = Track.op.(T/next[t]).clicked)");
+						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click  and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
 		facts.add(new_fact);
 		sem_with = new SpecificSemantics(sem_with.getSignatures(), facts, sem_with.getPredicates(),
 				sem_with.getFunctions(), sem_with.getOpenStatements());
@@ -753,7 +753,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					this.discarded_semantic_properties.remove(this.current_semantic_property);
 					break mainloop;
 				}
@@ -821,7 +821,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
 					this.current_semantic_property = "";
 					return;
 				}
