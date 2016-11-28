@@ -156,7 +156,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 				for (final Input_widget iw : iww.getIWS_for_PIW(piw.getId())) {
 					String metadata = iw.getLabel() != null ? iw.getLabel() : "";
 					metadata += " ";
-					metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+					metadata += iw.getDescriptor() != null ? iw.getDescriptor() : "";
 					if (iw instanceof Option_input_widget) {
 						if (dm.getInvalidItemizedData(metadata).size() > 0) {
 							unvalid_data = true;
@@ -322,8 +322,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		for (final Input_widget iw : iws_generic) {
 			for (final Input_widget iw2 : iws_not_generic) {
 				values_fact_content += System.getProperty("line.separator");
-				values_fact_content += "#(filled.Input_widget_" + iw.getId() + ".with & "
-						+ "filled.Input_widget_" + iw2.getId() + ".with) = 0";
+				values_fact_content += "#((filled.Input_widget_" + iw.getId() + ").with & "
+						+ "(filled.Input_widget_" + iw2.getId() + ").with) = 0";
 			}
 		}
 
@@ -343,8 +343,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 				l2.addAll(dm.getInvalidData(metadata2));
 				if (!intersection(l1, l2)) {
 					values_fact_content += System.getProperty("line.separator");
-					values_fact_content += "#(filled.Input_widget_" + iw.getId() + ".with & "
-							+ "filled.Input_widget_" + iw2.getId() + ".with) = 0";
+					values_fact_content += "#((filled.Input_widget_" + iw.getId() + ").with & "
+							+ "(filled.Input_widget_" + iw2.getId() + ").with) = 0";
 				}
 			}
 		}

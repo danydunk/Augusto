@@ -843,12 +843,16 @@ public class AlloyUtil {
 						n_invalid = 0;
 					}
 
+					// if the relations is higher than 15 it becomes unsat
+					n_valid = Math.min(n_valid, 14);
+					n_invalid = Math.min(n_invalid, 14);
+
 					assert (n_valid != -1 && n_invalid != -1);
 					content += System.getProperty("line.separator");
-					content += "#(filled." + iws.get(iw).getIdentifier() + ".with & "
+					content += "#((filled." + iws.get(iw).getIdentifier() + ").with & "
 							+ iws.get(iw).getIdentifier() + ".invalid) <= " + n_invalid;
 					content += System.getProperty("line.separator");
-					content += "#((filled." + iws.get(iw).getIdentifier() + ".with + "
+					content += "#(((filled." + iws.get(iw).getIdentifier() + ").with + "
 							+ iws.get(iw).getIdentifier() + ".content.(T/first)) - "
 							+ iws.get(iw).getIdentifier() + ".invalid) <= " + n_valid;
 
@@ -865,18 +869,18 @@ public class AlloyUtil {
 					if ((dm.getInvalidData(metadata).size() + dm.getValidData(metadata).size()) > 0) {
 						if (dm.getInvalidData(metadata).size() == 0) {
 							content += System.getProperty("line.separator");
-							content += "#(filled." + iws.get(iw).getIdentifier() + ".with & "
+							content += "#((filled." + iws.get(iw).getIdentifier() + ").with & "
 									+ iws.get(iw).getIdentifier() + ".invalid) = 0";
 						}
 						if (dm.getValidData(metadata).size() == 0) {
 							content += System.getProperty("line.separator");
-							content += "#(filled." + iws.get(iw).getIdentifier() + ".with " + " - "
-									+ iws.get(iw).getIdentifier() + ".invalid) = 0";
+							content += "#((filled." + iws.get(iw).getIdentifier() + ").with "
+									+ " - " + iws.get(iw).getIdentifier() + ".invalid) = 0";
 						}
 
 					} else {
 						content += System.getProperty("line.separator");
-						content += "#(filled." + iws.get(iw).getIdentifier() + ".with & "
+						content += "#((filled." + iws.get(iw).getIdentifier() + ").with & "
 								+ iws.get(iw).getIdentifier() + ".invalid) = 0";
 					}
 					content += System.getProperty("line.separator");
@@ -888,7 +892,7 @@ public class AlloyUtil {
 				if (iw instanceof Option_input_widget) {
 					final Option_input_widget oiw = (Option_input_widget) iw;
 					content += System.getProperty("line.separator");
-					content += "#(filled." + iws.get(iw).getIdentifier() + ".with + "
+					content += "#((filled." + iws.get(iw).getIdentifier() + ").with + "
 							+ iws.get(iw).getIdentifier() + ".content.(T/first)) <= "
 							+ oiw.getSize();
 
@@ -931,7 +935,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();

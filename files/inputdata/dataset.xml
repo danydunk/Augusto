@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <DATASET>
   <DATA>
-    <metadata>url</metadata>
-    <values>
-      <valid>http://localhost/upm/dbServer1</valid>
-      <valid>http://localhost/upm/dbServer</valid>
-    </values>
-  </DATA>
-  <DATA>
     <metadata>starting on</metadata>
     <values>
       <valid>2016/11/14</valid>
@@ -49,13 +42,6 @@
       <valid>string</valid>
       <valid>input</valid>
       <valid>test</valid>            
-    </values>
-  </DATA>
-  <DATA>
-    <metadata>password</metadata>
-    <values>
-      <valid>password</valid>
-      <valid>pass</valid>
     </values>
   </DATA>
   <DATA>
