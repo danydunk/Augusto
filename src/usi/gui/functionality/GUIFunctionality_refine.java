@@ -245,6 +245,7 @@ public class GUIFunctionality_refine {
 
 				covered_edge = covered_edge
 						| this.pattern.isDyanamicEdge(paw.getId(), found.getPattern().getId());
+
 			}
 
 			final Instance_GUI_pattern old = this.instancePattern.clone();
@@ -292,6 +293,14 @@ public class GUIFunctionality_refine {
 					this.cleanInstance(aw);
 
 					return false;
+				}
+			} else {
+				// we add the edge that we were meant to cover
+				if (!this.instancePattern.getGui().isDynamicEdge(aw,
+						tc.getActions().get(tc.getActions().size() - 1).getWindow().getId())) {
+					this.instancePattern.getGui().addDynamicEdge(aw,
+							tc.getActions().get(tc.getActions().size() - 1).getOracle().getId());
+					this.instancePattern.generateSpecificSemantics();
 				}
 			}
 
@@ -345,6 +354,7 @@ public class GUIFunctionality_refine {
 						System.out.println("ADAPTATION IMPOSSIBLE.");
 						return false;
 					} else {
+
 						prop = new_prop;
 					}
 				}
@@ -375,7 +385,12 @@ public class GUIFunctionality_refine {
 					// modified
 					this.unsat_commands = new ArrayList<>();
 				}
-
+				// we remove the edge not reached
+				if (this.instancePattern.getGui().isDynamicEdge(aw,
+						tc.getActions().get(tc.getActions().size() - 1).getWindow().getId())) {
+					this.instancePattern.getGui().removeDynamicEdge(aw,
+							tc.getActions().get(tc.getActions().size() - 1).getOracle().getId());
+				}
 			}
 
 		} else {
