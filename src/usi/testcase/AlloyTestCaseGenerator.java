@@ -212,8 +212,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-			ts[0].interrupt();
-			ts[1].interrupt();
+		ts[0].interrupt();
+		ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -812,7 +812,7 @@ public class AlloyTestCaseGenerator {
 		}
 		assert (value != null && fill != null);
 
-		List<String> fill_atoms = AlloyUtil.getElementsInSet(solution, fill);
+		final List<String> fill_atoms = new ArrayList<>();
 
 		// final Map<Integer, String> map_time_filled = new HashMap<>();
 		final Map<String, Integer> map_filled_time = new HashMap<>();
@@ -826,6 +826,7 @@ public class AlloyTestCaseGenerator {
 			final int time_index = this.extractTimeIndex(tuple.atom(2));
 			if (tuple.atom(1).startsWith("Fill")) {
 				map_filled_time.put(tuple.atom(1), time_index);
+				fill_atoms.add(tuple.atom(1));
 
 				// final List<A4Tuple> params = AlloyUtil.getTuples(solution,
 				// tuple.atom(1));
@@ -851,12 +852,6 @@ public class AlloyTestCaseGenerator {
 		// for (final int a : to_order) {
 		// sorted_values.add(map_time_filled.get(a));
 		// }
-
-		// in the atoms extracted the underscore is substituted with the dollar
-		fill_atoms = fill_atoms
-				.stream()
-				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
-						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
 
 		// we deal with the initial values
 		for (final Input_widget iw : this.instance.getGui().getInput_widgets()) {
