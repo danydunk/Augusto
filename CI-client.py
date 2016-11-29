@@ -30,7 +30,7 @@ for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):
 if s is None:
     print "could not open socket"
     sys.exit(1)
-if arg1 == "first":
+if arg2 == "first":
 	s.sendall(arg)
 else:
 	s.sendall("reconnect")
@@ -57,7 +57,7 @@ try:
 except socket.timeout as msg:
 	s.close
 	s = None
-	if arg1 == "third":
+	if arg2 == "third":
 		exit(-1)
 	else:
 		exit(0)
