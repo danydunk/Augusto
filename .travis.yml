@@ -5,7 +5,9 @@ env:
     - CMD=first 
     - CMD=second    
     - CMD=third
-
+matrix:
+    fast_finish: true
+    
 script: travis_wait 300 python CI-client.py $TRAVIS_COMMIT $CMD
 
 jdk:

@@ -14,14 +14,17 @@ arg2 = sys.argv[2]
 HOST = 'research.inf.usi.ch'    # The remote host
 PORT = 50000              # The same port as used by the server
 
-ln = ""
-with open("finished.txt") as fh:
-	for line in fh:
-		ln += line
-ln = ln.strip()
-if ln == "finished":
-	exit(0)
-
+try:
+	ln = ""
+	with open("finished.txt") as fh:
+		for line in fh:
+			ln += line
+	ln = ln.strip()
+	if ln == "finished":
+		exit(0)
+except:
+	pass
+	
 started = time.time()
 
 if arg2 == "first":
