@@ -2,9 +2,9 @@ language: java
 install: true
 
 env:
+    - CMD=first 
+    - CMD=second    
     - CMD=third
-    - CMD=second
-    - CMD=first    
 
 script: travis_wait 300 python CI-client.py $TRAVIS_COMMIT $CMD
 
