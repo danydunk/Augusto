@@ -511,6 +511,12 @@ public class GUIFunctionality_refine {
 		System.out.println("GET ADAPTED CONSTRAINT: start.");
 		while (true) {
 
+			if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
+					.getRefinementTimeout()) {
+				System.out.println("TIMEOUT IN GET ADAPTED CONSTRAINT");
+				break;
+			}
+
 			// we pop a random testcase from the observed ones
 			// final Random ran = new Random();
 			// final int index = ran.nextInt(this.observed_tcs.size());
@@ -557,6 +563,7 @@ public class GUIFunctionality_refine {
 				return null;
 			}
 		}
+		return null;
 	}
 
 	private static SpecificSemantics addSemanticConstrain_to_Model(final Alloy_Model sem,

@@ -1,7 +1,8 @@
 # Echo client program
 import socket
 import sys
-
+import time
+import os
 
 def getPacket(s):
 	s.read()
@@ -12,41 +13,78 @@ arg2 = sys.argv[2]
 
 HOST = 'research.inf.usi.ch'    # The remote host
 PORT = 50000              # The same port as used by the server
-s = None
-for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):
-    af, socktype, proto, canonname, sa = res
-    try:
-        s = socket.socket(af, socktype, proto)
-    except socket.error as msg:
-        s = None
-        continue
-    try:
-		s.connect(sa)
-    except socket.error as msg:
-        s.close()
-        s = None
-        continue
-    break
-if s is None:
-    print "could not open socket"
-    sys.exit(1)
+
+ln = ""
+with open("finished.txt") as fh:
+	for line in fh:
+		ln += line
+ln = ln.strip()
+if ln == "finished":
+	exit(0)
+
+started = time.time()
+
 if arg2 == "first":
+	s = None
+	for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):
+		af, socktype, proto, canonname, sa = res
+		try:
+			s = socket.socket(af, socktype, proto)
+		except socket.error as msg:
+			s = None
+			continue
+		try:
+			s.connect(sa)
+		except socket.error as msg:
+			s.close()
+			s = None
+			continue
+		break
+	if s is None:
+		print "could not open socket"
+		sys.exit(-1)
 	s.sendall(arg)
-else:
-	s.sendall("reconnect")
-	
-msg = ""
-try:
-	s.settimeout(60.0)
+	data = s.recv(20).strip()
+	s.close()
+	if not(data == 'started'):
+		print data
+		exit(-1)
+
+while 1:
+	s = None
+	for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):
+		af, socktype, proto, canonname, sa = res
+		try:
+			s = socket.socket(af, socktype, proto)
+		except socket.error as msg:
+			s = None
+			continue
+		try:
+			s.connect(sa)
+		except socket.error as msg:
+			s.close()
+			s = None
+			continue
+		break
+	if s is None:
+		print "could not open socket"
+		sys.exit(-1)
+	s.sendall("gimmeresult")
+	msg = ""
 	while True:
 		received = s.recv(1024)
 		if not received:
 			break	
 		msg += received
 	s.close()
-	print msg
+	msg.strip()
+	if msg == 'running':
+		if (time.time() - started) > 2700:
+			print 'timeout'
+			exit(0)
+		continue
 	assert(msg.endswith("CIBUILD=OK") or msg.endswith("CIBUILD=KO"))
-
+	os.system("echo finished > finished.txt")
 	print "Logs:"
 	print msg.strip("CIBUILD=OK").strip("CIBUILD=KO")
 	
@@ -54,10 +92,3 @@ try:
 		exit(0)
 	else:
 		exit(-1)
-except socket.timeout as msg:
-	s.close
-	s = None
-	if arg2 == "third":
-		exit(-1)
-	else:
-		exit(0)
