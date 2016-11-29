@@ -2,12 +2,13 @@
 import socket
 import sys
 
+
 def getPacket(s):
 	s.read()
 	
-
-
+print "starting"
 arg = sys.argv[1]
+arg2 = sys.argv[2]
 
 HOST = 'research.inf.usi.ch'    # The remote host
 PORT = 50000              # The same port as used by the server
@@ -20,7 +21,6 @@ for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):
         s = None
         continue
     try:
-		print s.gettimeout()
 		s.connect(sa)
     except socket.error as msg:
         s.close()
@@ -30,22 +30,34 @@ for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):
 if s is None:
     print "could not open socket"
     sys.exit(1)
-s.sendall(arg)
-
-msg = ""
-while True:
-	received = s.recv(1024)
-	if not received:
-		break	
-	msg += received
-s.close()
-print msg
-assert(msg.endswith("CIBUILD=OK") or msg.endswith("CIBUILD=KO"))
-
-print "Logs:"
-print msg.strip("CIBUILD=OK").strip("CIBUILD=KO")
-	
-if msg.endswith("CIBUILD=OK"):
-	exit(0)
+if arg1 == "first":
+	s.sendall(arg)
 else:
-	exit(-1)
+	s.sendall("reconnect")
+	
+msg = ""
+try:
+	s.settimeout(60.0)
+	while True:
+		received = s.recv(1024)
+		if not received:
+			break	
+		msg += received
+	s.close()
+	print msg
+	assert(msg.endswith("CIBUILD=OK") or msg.endswith("CIBUILD=KO"))
+
+	print "Logs:"
+	print msg.strip("CIBUILD=OK").strip("CIBUILD=KO")
+	
+	if msg.endswith("CIBUILD=OK"):
+		exit(0)
+	else:
+		exit(-1)
+except socket.timeout as msg:
+	s.close
+	s = None
+	if arg1 == "third":
+		exit(-1)
+	else:
+		exit(0)

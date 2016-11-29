@@ -1,8 +1,11 @@
 language: java
-
+env:
+    CMD=first
+    CMD=second
+    CMD=third
 install: true
 
-script: travis_wait 300 python CI-client.py $TRAVIS_COMMIT
+script: travis_wait 300 python CI-client.py $TRAVIS_COMMIT $CMD
 
 jdk:
   - oraclejdk8
