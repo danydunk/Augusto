@@ -16,13 +16,15 @@ PORT = 50000              # The same port as used by the server
 
 try:
 	ln = ""
-	with open("finished.txt") as fh:
+	with open("./finished.txt") as fh:
 		for line in fh:
+			print line
 			ln += line
 	ln = ln.strip()
 	if ln == "finished":
 		exit(0)
 except:
+	print "excpetion"
 	pass
 	
 started = time.time()
@@ -90,7 +92,7 @@ while 1:
 		print msg
 		exit(-1)
 	assert(msg.endswith("CIBUILD=OK") or msg.endswith("CIBUILD=KO"))
-	os.system("echo finished > finished.txt")
+	os.system("echo finished > ./finished.txt")
 	print "Logs:"
 	print msg.strip("CIBUILD=OK").strip("CIBUILD=KO")
 	
