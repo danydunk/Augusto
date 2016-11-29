@@ -1,11 +1,12 @@
 language: java
+install: true
+
 matrix:
     env:
         CMD=third
         CMD=second
         CMD=first
 
-install: true
 
 script: travis_wait 300 python CI-client.py $TRAVIS_COMMIT $CMD
 
