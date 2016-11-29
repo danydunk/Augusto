@@ -86,6 +86,9 @@ while 1:
 			print 'timeout'
 			exit(0)
 		continue
+	if msg.startswith('error'):
+		print msg
+		exit(-1)
 	assert(msg.endswith("CIBUILD=OK") or msg.endswith("CIBUILD=KO"))
 	os.system("echo finished > finished.txt")
 	print "Logs:"
