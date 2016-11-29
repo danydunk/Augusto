@@ -1,8 +1,9 @@
 language: java
-env:
-    CMD=third
-    CMD=second
-    CMD=first
+matrix:
+    env:
+        CMD=third
+        CMD=second
+        CMD=first
 
 install: true
 
