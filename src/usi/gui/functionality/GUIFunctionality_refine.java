@@ -205,15 +205,15 @@ public class GUIFunctionality_refine {
 
 						// we generate the testcase
 						final GUITestCase tc = this.getTestCase(clone.getSemantics());
-						this.run_and_update(tc, target);
+						this.run_and_update(tc, target, target_window);
 					}
 				}
 			}
 		}
 	}
 
-	private boolean run_and_update(final GUITestCase tc, final Pattern_window target)
-			throws Exception {
+	private boolean run_and_update(final GUITestCase tc, final Pattern_window target,
+			final Window target_w) throws Exception {
 
 		if (tc == null) {
 			System.out.println("TESTCASE NOT FOUND.");
@@ -296,10 +296,9 @@ public class GUIFunctionality_refine {
 				}
 			} else {
 				// we add the edge that we were meant to cover
-				if (!this.instancePattern.getGui().isDynamicEdge(aw,
-						tc.getActions().get(tc.getActions().size() - 1).getWindow().getId())) {
-					this.instancePattern.getGui().addDynamicEdge(aw,
-							tc.getActions().get(tc.getActions().size() - 1).getOracle().getId());
+				if (target_w != null
+						&& !this.instancePattern.getGui().isDynamicEdge(aw, target_w.getId())) {
+					this.instancePattern.getGui().addDynamicEdge(aw, target_w.getId());
 					this.instancePattern.generateSpecificSemantics();
 				}
 			}
@@ -386,8 +385,8 @@ public class GUIFunctionality_refine {
 					this.unsat_commands = new ArrayList<>();
 				}
 				// we remove the edge not reached
-				if (this.instancePattern.getGui().isDynamicEdge(aw,
-						tc.getActions().get(tc.getActions().size() - 1).getWindow().getId())) {
+				if (target_w != null
+						&& this.instancePattern.getGui().isDynamicEdge(aw, target_w.getId())) {
 					this.instancePattern.getGui().removeDynamicEdge(aw,
 							tc.getActions().get(tc.getActions().size() - 1).getOracle().getId());
 				}
@@ -493,7 +492,7 @@ public class GUIFunctionality_refine {
 
 					final GUITestCase tc = this.getTestCase(clone.getSemantics());
 
-					if (this.run_and_update(tc, to_discover)) {
+					if (this.run_and_update(tc, to_discover, null)) {
 						continue mainloop;
 					}
 				}

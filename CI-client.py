@@ -20,7 +20,7 @@ for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):
         s = None
         continue
     try:
-		s.settimeout(18000)
+		print s.gettimeout()
 		s.connect(sa)
     except socket.error as msg:
         s.close()
