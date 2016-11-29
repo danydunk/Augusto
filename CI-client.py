@@ -7,7 +7,6 @@ import os
 def getPacket(s):
 	s.read()
 	
-print "starting"
 arg = sys.argv[1]
 arg2 = sys.argv[2]
 
