@@ -13,19 +13,6 @@ arg2 = sys.argv[2]
 
 HOST = 'research.inf.usi.ch'    # The remote host
 PORT = 50000              # The same port as used by the server
-
-try:
-	ln = ""
-	with open("./finished.txt") as fh:
-		for line in fh:
-			print line
-			ln += line
-	ln = ln.strip()
-	if ln == "finished":
-		exit(0)
-except:
-	print "excpetion"
-	pass
 	
 started = time.time()
 
@@ -88,11 +75,16 @@ while 1:
 			print 'timeout'
 			exit(0)
 		continue
+		
+	if msg == "error - not testing":
+		print "Testing was finished"
+		exit(0)
+		
 	if msg.startswith('error'):
 		print msg
 		exit(-1)
 	assert(msg.endswith("CIBUILD=OK") or msg.endswith("CIBUILD=KO"))
-	os.system("echo finished > ./finished.txt")
+
 	print "Logs:"
 	print msg.strip("CIBUILD=OK").strip("CIBUILD=KO")
 	
