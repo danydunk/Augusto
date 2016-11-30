@@ -134,6 +134,7 @@ public class ActionManager {
 				}
 
 			} else {
+
 				for (final Method m : ms) {
 					if (m.getName().equals("fill")) {
 						method = m;

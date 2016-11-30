@@ -705,6 +705,7 @@ public class GUIFunctionality_refine {
 
 	private void semanticPropertyRefine() throws Exception {
 
+		String first_prop = null;
 		int size = -1;
 		final long beginTime = System.currentTimeMillis();
 
@@ -734,7 +735,33 @@ public class GUIFunctionality_refine {
 		sem_with = new SpecificSemantics(sem_with.getSignatures(), facts, sem_with.getPredicates(),
 				sem_with.getFunctions(), sem_with.getOpenStatements());
 
-		mainloop: while (size <= ConfigurationManager.getRefinementAlloyTimeScope()) {
+		mainloop: while (size <= ConfigurationManager.getRefinementAlloyTimeScope() + 1) {
+
+			if (size == ConfigurationManager.getRefinementAlloyTimeScope()) {
+				// if we reached the end we try again to find a property (in
+				// case the one we found was overly simple)
+				System.out.println("REACHED THE END OF THE LOOP. FOUNDING ALTERNATIVE.");
+				if (first_prop != null) {
+					break;
+				}
+				size = -1;
+				first_prop = this.current_semantic_property;
+				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
+						+ ")");
+
+				final String new_prop = this.getAdaptedConstraint(this.instancePattern
+						.getSemantics());
+				if (new_prop == null) {
+					System.out.println("ALTERNATIVE NOT FOUND.");
+					this.current_semantic_property = "";
+					break;
+				}
+				System.out.println("ALTERNATIVE FOUND: " + this.current_semantic_property);
+				this.current_semantic_property = new_prop;
+				true_constraints = new ArrayList<>();
+				true_constraints.add(this.current_semantic_property);
+				sem_with = addSemanticConstrain_to_Model(sem_with, true_constraints);
+			}
 
 			if ((System.currentTimeMillis() - beginTime) >= ConfigurationManager
 					.getRefinementTimeout()) {
@@ -774,7 +801,7 @@ public class GUIFunctionality_refine {
 						.getSemantics());
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					this.discarded_semantic_properties.remove(this.current_semantic_property);
 					break mainloop;
 				}
@@ -841,10 +868,9 @@ public class GUIFunctionality_refine {
 				final String new_prop = this.getAdaptedConstraint(this.instancePattern
 						.getSemantics());
 				if (new_prop == null) {
-					System.out
-					.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY. SEMANTIC PROPERTY NOT FOUND!");
+					System.out.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY.");
 					this.current_semantic_property = "";
-					return;
+					break;
 				}
 				this.current_semantic_property = new_prop;
 				true_constraints = new ArrayList<>();
@@ -852,6 +878,17 @@ public class GUIFunctionality_refine {
 				sem_with = addSemanticConstrain_to_Model(sem_with, true_constraints);
 			}
 		}
+		if (this.current_semantic_property.length() == 0) {
+			if (first_prop != null
+					&& this.validateProperty(first_prop, this.instancePattern.getSemantics(),
+							this.observed_tcs)) {
+				this.current_semantic_property = first_prop;
+			}
+		}
+		if (this.current_semantic_property.length() > 0) {
+			System.out.println("SEMANTIC PROPERTY FOUND.");
+		}
+
 		System.out.println("SEMANTIC PROPERTY REFINE: end.");
 	}
 
