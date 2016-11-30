@@ -51,10 +51,10 @@ abstract sig Selectable_widget {
 	selected: Object lone ->Time
 }
 fact {
-	all iw: Input_widget | one w: Window | iw in w.iws
-	all aw: Action_widget | one w: Window | aw in w.aws //and #aw.goes < 2
-	all sw: Selectable_widget | one w: Window | sw in w.sws
-	all o: Object | some t: Time | o in Selectable_widget.list.t
+	all iw: Input_widget | iw in Window.iws
+	all aw: Action_widget | aw in Window.aws
+	all sw: Selectable_widget | sw in Window.sws
+	//all o: Object | some t: Time | o in Selectable_widget.list.t
 }
 ----------------Generic GUI Semantics ---------------
 one sig Current_window {

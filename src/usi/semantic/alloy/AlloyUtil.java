@@ -246,9 +246,7 @@ public class AlloyUtil {
 			public void run() {
 
 				final A4Options options = new A4Options();
-				options.solver = A4Options.SatSolver.SAT4J;
-				options.skolemDepth = 1;
-				options.unrolls = -1;
+
 				try {
 					final A4Solution app = TranslateAlloyToKodkod.execute_command(rep,
 							model.getAllReachableSigs(), run_command, options);

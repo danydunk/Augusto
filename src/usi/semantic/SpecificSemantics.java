@@ -320,10 +320,16 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		// now we add additional constrains on the values
 		String values_fact_content = "";
 		for (final Input_widget iw : iws_generic) {
+			String newline = "#((filled.Input_widget_" + iw.getId() + ").with & (";
 			for (final Input_widget iw2 : iws_not_generic) {
+				newline += "(filled.Input_widget_" + iw2.getId() + ").with +";
+			}
+			if (!newline.equals("#((filled.Input_widget_" + iw.getId() + ").with & (")) {
+				newline = newline.substring(0, newline.length() - 2);
+				newline += ")) = 0";
 				values_fact_content += System.getProperty("line.separator");
-				values_fact_content += "#((filled.Input_widget_" + iw.getId() + ").with & "
-						+ "(filled.Input_widget_" + iw2.getId() + ").with) = 0";
+				values_fact_content += newline;
+
 			}
 		}
 
@@ -332,6 +338,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
 			metadata += " ";
 			metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+			String newline = "#((filled.Input_widget_" + iw.getId() + ").with & (";
+
 			for (int y = x + 1; y < iws_not_generic.size(); y++) {
 				final Input_widget iw2 = iws_not_generic.get(y);
 				String metadata2 = iw2.getLabel() != null ? iw2.getLabel() : "";
@@ -342,11 +350,17 @@ public class SpecificSemantics extends FunctionalitySemantics {
 				final List<String> l2 = dm.getValidData(metadata2);
 				l2.addAll(dm.getInvalidData(metadata2));
 				if (!intersection(l1, l2)) {
-					values_fact_content += System.getProperty("line.separator");
-					values_fact_content += "#((filled.Input_widget_" + iw.getId() + ").with & "
-							+ "(filled.Input_widget_" + iw2.getId() + ").with) = 0";
+					newline += "(filled.Input_widget_" + iw2.getId() + ").with +";
 				}
 			}
+			if (!newline.equals("#((filled.Input_widget_" + iw.getId() + ").with & (")) {
+				newline = newline.substring(0, newline.length() - 2);
+				newline += ")) = 0";
+				values_fact_content += System.getProperty("line.separator");
+				values_fact_content += newline;
+
+			}
+
 		}
 		// we add a fact for the number of windows
 		final Fact values_fact = new Fact("values_constraints", values_fact_content);

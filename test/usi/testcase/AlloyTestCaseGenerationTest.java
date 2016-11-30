@@ -218,6 +218,27 @@ public class AlloyTestCaseGenerationTest {
 		assertEquals(6, tests.size());
 	}
 
+	@Test
+	public void test4() throws Exception {
+
+		// we load a gui pattern
+		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/guipatterns/crud.xml");
+		final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+		// we load the GUI structure
+		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/buddi.xml");
+		final GUI gui = GUIParser.parse(doc);
+
+		final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+		final List<Instance_GUI_pattern> res = gfs.match(pattern);
+		final Instance_GUI_pattern r = res.get(1);
+		r.generateSpecificSemantics();
+		r.getSemantics().addRun_command("run {System}for 5 ");
+		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(r, 1, 60000);
+		final List<GUITestCase> tests = generator.generateTestCases();
+		assertEquals(1, tests.size());
+	}
+
 	class Wrapper2 extends GUIFunctionality_validate {
 
 		public Wrapper2(final Instance_GUI_pattern instancePattern, final GUI gui) throws Exception {
