@@ -756,7 +756,7 @@ public class GUIFunctionality_refine {
 					this.current_semantic_property = "";
 					break;
 				}
-				System.out.println("ALTERNATIVE FOUND: " + this.current_semantic_property);
+				System.out.println("ALTERNATIVE FOUND: " + new_prop);
 				this.current_semantic_property = new_prop;
 				true_constraints = new ArrayList<>();
 				true_constraints.add(this.current_semantic_property);
@@ -878,12 +878,10 @@ public class GUIFunctionality_refine {
 				sem_with = addSemanticConstrain_to_Model(sem_with, true_constraints);
 			}
 		}
-		if (this.current_semantic_property.length() == 0) {
-			if (first_prop != null
-					&& this.validateProperty(first_prop, this.instancePattern.getSemantics(),
-							this.observed_tcs)) {
-				this.current_semantic_property = first_prop;
-			}
+		if (first_prop != null
+				&& this.validateProperty(first_prop, this.instancePattern.getSemantics(),
+						this.observed_tcs)) {
+			this.current_semantic_property = first_prop;
 		}
 		if (this.current_semantic_property.length() > 0) {
 			System.out.println("SEMANTIC PROPERTY FOUND.");
