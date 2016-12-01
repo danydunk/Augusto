@@ -19,21 +19,21 @@ import com.rational.test.ft.script.*;
 import com.rational.test.ft.vp.IFtVerificationPoint;
 import com.ibm.rational.test.ft.object.interfaces.sapwebportal.*;
 /**
- * Script Name   : <b>ApplicationHelperTest</b><br>
- * Generated     : <b>2016/12/01 5:46:40 AM</b><br>
+ * Script Name   : <b>Emptyfill_test</b><br>
+ * Generated     : <b>2016/12/01 3:05:45 AM</b><br>
  * Description   : Helper class for script<br>
  * Original Host : Windows 7 amd64 6.1 <br>
  * 
  * @since  December 01, 2016
  * @author usi
  */
-public abstract class ApplicationHelperTestHelper extends RationalTestScript
+public abstract class Emptyfill_testHelper extends RationalTestScript
 {
 	
 
-	protected ApplicationHelperTestHelper()
+	protected Emptyfill_testHelper()
 	{
-		setScriptName("test.rft.ApplicationHelperTest");
+		setScriptName("test.rft.Emptyfill_test");
 	}
 	
 }

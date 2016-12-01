@@ -212,8 +212,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-		ts[0].interrupt();
-		ts[1].interrupt();
+			ts[0].interrupt();
+			ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -708,8 +708,8 @@ public class AlloyTestCaseGenerator {
 								used_values.add(i);
 							}
 						}
-
-						for (int x = 0; x < oiw.getSize(); x++) {
+						int x = (oiw.getSelected() == -1) ? 1 : 0;
+						for (; x < oiw.getSize(); x++) {
 							if (!used_values.contains(x)) {
 								val = String.valueOf(x);
 								break;

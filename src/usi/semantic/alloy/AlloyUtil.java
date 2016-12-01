@@ -837,13 +837,13 @@ public class AlloyUtil {
 						n_valid = dm.getValidItemizedData(metadata).size();
 						n_invalid = dm.getInvalidItemizedData(metadata).size();
 					} else {
-						n_valid = oiw.getSize();
+						n_valid = (oiw.getSelected() == -1) ? oiw.getSize() - 1 : oiw.getSize();
 						n_invalid = 0;
 					}
 
-					// if the relations is higher than 15 it becomes unsat
-					n_valid = Math.min(n_valid, 14);
-					n_invalid = Math.min(n_invalid, 14);
+					// if the relations is higher than 10 it becomes unsat
+					n_valid = Math.min(n_valid, 10);
+					n_invalid = Math.min(n_invalid, 10);
 
 					assert (n_valid != -1 && n_invalid != -1);
 					content += System.getProperty("line.separator");
@@ -889,10 +889,11 @@ public class AlloyUtil {
 				// if there are not invalid values
 				if (iw instanceof Option_input_widget) {
 					final Option_input_widget oiw = (Option_input_widget) iw;
+
+					final int size = (oiw.getSelected() == -1) ? oiw.getSize() - 1 : oiw.getSize();
 					content += System.getProperty("line.separator");
 					content += "#((filled." + iws.get(iw).getIdentifier() + ").with + "
-							+ iws.get(iw).getIdentifier() + ".content.(T/first)) <= "
-							+ oiw.getSize();
+							+ iws.get(iw).getIdentifier() + ".content.(T/first)) <= " + size;
 
 					content += System.getProperty("line.separator");
 					if (oiw.getSelected() == -1) {

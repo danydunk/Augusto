@@ -26,7 +26,9 @@ public class runAll extends runAllHelper {
 
 		boolean error = false;
 		try {
-			System.out.println("APPLICATIONHELPER TEST");
+			System.out.println("EMPTY FILL TEST");
+			new Emptyfill_test().testMain(args);
+			System.out.println("APPLICATION HELPER TEST");
 			new ApplicationHelperTest().testMain(args);
 			System.out.println("COBERTURA TEST");
 			new CoberturaTest().testMain(args);
