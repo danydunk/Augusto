@@ -68,7 +68,7 @@ public class ApplicationHelper {
 		try {
 			do {
 				System.out.println("GETTING ROOT OBJECT");
-				Thread.sleep(3000);
+				Thread.sleep(5000);
 
 				this.root = RationalTestScript.getRootTestObject();
 			} while (this.root == null && (System.nanoTime() - delayTime) / 1000000 < 30000);
@@ -109,7 +109,7 @@ public class ApplicationHelper {
 		} catch (final Exception e) {
 			e.printStackTrace();
 			System.out
-			.println("ApplicationHelper: RMI error while clossing application. Moving on.");
+			.println("ApplicationHelper: RMI error while closing application. Moving on.");
 		}
 
 		if (this.root == null) {
