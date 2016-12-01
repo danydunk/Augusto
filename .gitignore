@@ -10,3 +10,5 @@ build
 files/for_test/alloy/generated_model.als
 cobertura.ser.lock
 aut.log
+aut.properties
+result*

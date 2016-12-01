@@ -9,6 +9,7 @@ public class EditorPaneUI extends MainHelper {
 
 	public static void setText(final TestObject testObject, final String text) throws Exception {
 
+		new TextGuiSubitemTestObject(testObject).click();
 		new TextGuiSubitemTestObject(testObject).setProperty("text", text);
 	}
 }
