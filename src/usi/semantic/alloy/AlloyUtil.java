@@ -1540,11 +1540,7 @@ public class AlloyUtil {
 					if (!values_used_iw.containsKey(new_value)) {
 						values_used_iw.put(new_value, new ArrayList<Input_widget>());
 					}
-					if (f.getWidget().getLabel() != null && f.getWidget().getLabel().length() > 0) {
-						values_used_iw.get(new_value).add((Input_widget) f.getWidget());
-					} else {
-						values_used_iw.get(new_value).add((Input_widget) f.getWidget());
-					}
+					values_used_iw.get(new_value).add((Input_widget) f.getWidget());
 
 					if (!values_used.containsKey(new_value)) {
 						values_used.put(new_value, new ArrayList<String>());
@@ -1560,7 +1556,13 @@ public class AlloyUtil {
 								new ArrayList<Integer>());
 					}
 					values_used_itemized.get(f.getWidget()).add("Track.op.(" + t + ").with");
-					values_used_iw_itemized.get(f.getWidget()).add(Integer.valueOf(f.getInput()));
+					if (f.getInput() != null) {
+						values_used_iw_itemized.get(f.getWidget()).add(
+								Integer.valueOf(f.getInput()));
+					} else {
+						values_used_iw_itemized.get(f.getWidget()).add(-1);
+
+					}
 				}
 			}
 

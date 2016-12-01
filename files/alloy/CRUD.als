@@ -80,9 +80,9 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] {
 }
 
 pred click_semantics [aw: Action_widget, t: Time] {
-	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
-	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
-	(aw in Ok and Current_window.is_in.t  in Form and Current_crud_op.operation.t in READ) => (2=(1+1))
+	(aw in Ok and Current_window.is_in.t in Form and Current_crud_op.operation.t in CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
+	(aw in Ok and Current_window.is_in.t in Form and Current_crud_op.operation.t in UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
+	(aw in Ok and Current_window.is_in.t in Form and Current_crud_op.operation.t in READ) => (2=(1+1))
 	(aw in Delete_trigger) => (2=(1+1))
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {

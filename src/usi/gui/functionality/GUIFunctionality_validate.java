@@ -208,7 +208,7 @@ public class GUIFunctionality_validate {
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -216,7 +216,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
@@ -396,7 +396,7 @@ public class GUIFunctionality_validate {
 
 		this.edges_cases = new HashMap<>();
 
-		final String click = "some t: Time | Track.op.(T/next[t]) in Click and";
+		final String click = "some t: Time | #Track.op.(T/next[t]) = 1 and Track.op.(T/next[t]) in Click and";
 		final String click_edge = "some t: Time | click [Track.op.(T/next[t]).clicked, t, T/next[t], Track.op.(T/next[t])] and";
 		for (final String prec : sem.getClickSemantics().getCases().keySet()) {
 
@@ -445,7 +445,7 @@ public class GUIFunctionality_validate {
 			}
 		}
 
-		final String fill = "some t: Time | Track.op.(T/next[t]) in Fill and";
+		final String fill = "some t: Time | #Track.op.(T/next[t]) = 1 and Track.op.(T/next[t]) in Fill and";
 		final String fill_edge = "some t: Time | fill [Track.op.(T/next[t]).filled, t, T/next[t], Track.op.(T/next[t]).with, Track.op.(T/next[t])] and";
 
 		for (final String prec : sem.getFillSemantics().getCases().keySet()) {
@@ -501,7 +501,7 @@ public class GUIFunctionality_validate {
 			}
 		}
 
-		final String select = "some t: Time | Track.op.(T/next[t]) in Select and";
+		final String select = "some t: Time | #Track.op.(T/next[t]) = 1 and Track.op.(T/next[t]) in Select and";
 		final String select_edge = "some t: Time | select [Track.op.(T/next[t]).wid, t, T/next[t], Track.op.(T/next[t]).selected_o, Track.op.(T/next[t])] and";
 
 		for (final String prec : sem.getSelectSemantics().getCases().keySet()) {
@@ -595,7 +595,7 @@ public class GUIFunctionality_validate {
 		final boolean second = this.instancePattern.getGui().isDynamicEdge(aw2, dest2);
 
 		final List<String> out = new ArrayList<>();
-		String run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+		String run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
 		run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
 				+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
 				+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
@@ -605,7 +605,7 @@ public class GUIFunctionality_validate {
 		out.add(run);
 
 		if (first) {
-			run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+			run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
 			run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
 					+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
 					+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
@@ -615,7 +615,7 @@ public class GUIFunctionality_validate {
 		}
 
 		if (second) {
-			run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+			run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
 			run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
 					+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
 					+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
@@ -624,7 +624,7 @@ public class GUIFunctionality_validate {
 			out.add(run);
 		}
 		if (first && second) {
-			run = "run {System and (some t1,t2: Time | Track.op.(T/next[t1]) in Click and Track.op.(T/next[t2]) in Click and ";
+			run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
 			run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
 					+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
 					+ " and not (click_semantics[Action_widget_" + aw1
