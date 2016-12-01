@@ -76,7 +76,8 @@ public class GUITestCase {
 				final Fill fill1 = (Fill) act1;
 				final Fill fill2 = (Fill) act2;
 
-				if (!fill1.getInput().equals(fill2.getInput())) {
+				if ((fill1.getInput() != null && !fill1.getInput().equals(fill2.getInput()))
+						|| (fill1.getInput() == null && fill2.getInput() != null)) {
 					return false;
 				}
 

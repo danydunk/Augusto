@@ -428,7 +428,7 @@ public class AlloyTestCaseGenerator {
 			final List<A4Tuple> params = AlloyUtil.getTuples(solution, tuple.atom(1));
 
 			if (tuple.atom(1).startsWith("Fill")) {
-				assert (params.size() == 2);
+				assert (params.size() <= 2);
 
 				String iw_id = null;
 				String value = null;
@@ -444,7 +444,7 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 
-				assert (value != null && iw_id != null);
+				assert (iw_id != null);
 
 				Input_widget target_iw = null;
 				for (final Input_widget iw : this.instance.getGui().getInput_widgets()) {
@@ -470,14 +470,15 @@ public class AlloyTestCaseGenerator {
 
 				// the input data is retrieved
 				String inputdata = null;
-				if (target_iw instanceof Option_input_widget) {
-					inputdata = input_data_map.get(value + "_" + target_iw.getId());
-				} else {
-					inputdata = input_data_map.get(value);
+				if (value != null) {
+					if (target_iw instanceof Option_input_widget) {
+						inputdata = input_data_map.get(value + "_" + target_iw.getId());
+					} else {
+						inputdata = input_data_map.get(value);
 
+					}
+					assert (inputdata != null);
 				}
-				assert (inputdata != null);
-
 				final Fill action = new Fill(source_window, oracle, target_iw, inputdata);
 				actions.set(time_index - 1, action);
 				continue;
@@ -663,7 +664,6 @@ public class AlloyTestCaseGenerator {
 		for (final String fill_atom : fill_atoms) {
 
 			final List<A4Tuple> tuples = AlloyUtil.getTuples(solution, fill_atom);
-			assert (tuples.size() == 2);
 
 			String iw = null;
 			String v = null;
@@ -681,9 +681,8 @@ public class AlloyTestCaseGenerator {
 						}
 					}
 				}
-
 			}
-			assert (v != null && iw != null && invalid_values != null);
+			assert (iw != null && invalid_values != null);
 
 			String iw_id = iw.substring(13);
 			iw_id = iw_id.split("\\$")[0];
@@ -696,66 +695,68 @@ public class AlloyTestCaseGenerator {
 				}
 			}
 			assert (inpw != null);
-
-			if (inpw instanceof Option_input_widget) {
-				if (!out.containsKey(v + "_" + inpw.getId())) {
-					final Option_input_widget oiw = (Option_input_widget) inpw;
-					String val = null;
-					// all the already used values are taken out
-					final List<Integer> used_values = new ArrayList<>();
-					for (final String k : out.keySet()) {
-						if (k.endsWith("_" + inpw.getId())) {
-							final int i = Integer.valueOf(out.get(k));
-							used_values.add(i);
-						}
-					}
-
-					for (int x = 0; x < oiw.getSize(); x++) {
-						if (!used_values.contains(x)) {
-							val = String.valueOf(x);
-							break;
-						}
-					}
-
-					out.put(v + "_" + inpw.getId(), val);
-				}
-
-			} else {
-				String metadata = inpw.getLabel() != null ? inpw.getLabel() : "";
-				metadata += " ";
-				metadata = inpw.getDescriptor() != null ? inpw.getDescriptor() : "";
-
-				List<String> data = null;
-				if (invalid_values.contains(v)) {
-					data = dm.getInvalidData(metadata);
-					assert (data.size() > 0);
-				} else {
-					data = dm.getValidData(metadata);
-				}
-				assert (data != null);
-
-				if (data_for_value.containsKey(v)) {
-					List<String> new_list = new ArrayList<>();
-					// we calculate the intersection between the values already
-					// available for this value and the new ones
-
-					if (data.size() == 0) {
-						new_list = data_for_value.get(v);
-					} else {
-						for (final String s : data_for_value.get(v)) {
-							if (data.contains(s)) {
-								new_list.add(s);
+			if (v != null) {
+				if (inpw instanceof Option_input_widget) {
+					if (!out.containsKey(v + "_" + inpw.getId())) {
+						final Option_input_widget oiw = (Option_input_widget) inpw;
+						String val = null;
+						// all the already used values are taken out
+						final List<Integer> used_values = new ArrayList<>();
+						for (final String k : out.keySet()) {
+							if (k.endsWith("_" + inpw.getId())) {
+								final int i = Integer.valueOf(out.get(k));
+								used_values.add(i);
 							}
 						}
-					}
-					if (invalid_values.contains(v) && new_list.size() == 0) {
-						throw new Exception(
-								"AlloyTestCaseGeneration - not enough invalid input data.");
+
+						for (int x = 0; x < oiw.getSize(); x++) {
+							if (!used_values.contains(x)) {
+								val = String.valueOf(x);
+								break;
+							}
+						}
+
+						out.put(v + "_" + inpw.getId(), val);
 					}
 
-					data_for_value.put(v, new_list);
 				} else {
-					data_for_value.put(v, data);
+					String metadata = inpw.getLabel() != null ? inpw.getLabel() : "";
+					metadata += " ";
+					metadata = inpw.getDescriptor() != null ? inpw.getDescriptor() : "";
+
+					List<String> data = null;
+					if (invalid_values.contains(v)) {
+						data = dm.getInvalidData(metadata);
+						assert (data.size() > 0);
+					} else {
+						data = dm.getValidData(metadata);
+					}
+					assert (data != null);
+
+					if (data_for_value.containsKey(v)) {
+						List<String> new_list = new ArrayList<>();
+						// we calculate the intersection between the values
+						// already
+						// available for this value and the new ones
+
+						if (data.size() == 0) {
+							new_list = data_for_value.get(v);
+						} else {
+							for (final String s : data_for_value.get(v)) {
+								if (data.contains(s)) {
+									new_list.add(s);
+								}
+							}
+						}
+						if (invalid_values.contains(v) && new_list.size() == 0) {
+							throw new Exception(
+									"AlloyTestCaseGeneration - not enough invalid input data.");
+						}
+
+						data_for_value.put(v, new_list);
+					} else {
+						data_for_value.put(v, data);
+					}
 				}
 			}
 		}
@@ -876,7 +877,6 @@ public class AlloyTestCaseGenerator {
 		for (final String fill_atom : fill_atoms) {
 
 			final List<A4Tuple> tuples = AlloyUtil.getTuples(solution, fill_atom);
-			assert (tuples.size() == 2);
 
 			String iw = null;
 			String v = null;
@@ -888,7 +888,7 @@ public class AlloyTestCaseGenerator {
 				}
 
 			}
-			assert (v != null && iw != null);
+			assert (iw != null);
 
 			String iw_id = iw.substring(13);
 			iw_id = iw_id.split("\\$")[0];
@@ -907,15 +907,16 @@ public class AlloyTestCaseGenerator {
 			final int index = to_order.indexOf(map_filled_time.get(fill_atom));
 
 			if (inpw instanceof Option_input_widget) {
-
-				if (!out.containsKey(v + "_" + inpw.getId())) {
-					out.put(v + "_" + inpw.getId(), values.get(index));
+				if (v != null) {
+					if (!out.containsKey(v + "_" + inpw.getId())) {
+						out.put(v + "_" + inpw.getId(), values.get(index));
+					}
 				}
-
 			} else {
-
-				if (!out.containsKey(v)) {
-					out.put(v, values.get(index));
+				if (v != null) {
+					if (!out.containsKey(v)) {
+						out.put(v, values.get(index));
+					}
 				}
 			}
 		}

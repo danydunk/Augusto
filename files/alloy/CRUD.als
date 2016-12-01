@@ -63,6 +63,7 @@ pred fill_fail_post [iw: Input_widget, t, t': Time, v: Value] {
 }
 pred fill_pre[iw: Input_widget, t: Time, v: Value] { 
 	not Current_crud_op.operation.t = READ
+	#iw.content.(T/first) = 1 => not(v = none)
 }
 
 pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }

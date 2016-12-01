@@ -933,7 +933,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1586,38 +1586,46 @@ public class AlloyUtil {
 		for (int c = 0; c < keys.size(); c++) {
 			final String s = keys.get(c);
 			// we deal with the equals
-			final List<String> fills = values_used.get(s);
-			if (fills.size() > 1) {
-				String prev = fills.get(0);
-				for (int cont = 1; cont < fills.size(); cont++) {
-					fact += " and " + prev + "=" + fills.get(cont);
-					prev = fills.get(cont);
-				}
-			}
-			// we deal with the differents
-			for (int cc = c + 1; cc < keys.size(); cc++) {
-				final String ss = keys.get(cc);
-				fact += " and " + values_used.get(s).get(0) + "!=" + values_used.get(ss).get(0);
-			}
-
-			// we check if the value is valid or invalid
-			for (final Input_widget iw : values_used_iw.get(s)) {
-
-				String metadata = iw.getLabel() != null ? iw.getLabel() : "";
-				metadata += " ";
-				metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
-
-				if (dm.getInvalidData(metadata).contains(s)) {
-					assert (invalid);
-					fact += " and " + values_used.get(s).get(0) + " in Input_widget_" + iw.getId()
-							+ ".invalid";
-
-				} else {
-					if (invalid) {
-						fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
-								+ iw.getId() + ".invalid)";
+			if (s != null) {
+				final List<String> fills = values_used.get(s);
+				if (fills.size() > 1) {
+					String prev = fills.get(0);
+					for (int cont = 1; cont < fills.size(); cont++) {
+						fact += " and " + prev + "=" + fills.get(cont);
+						prev = fills.get(cont);
 					}
 				}
+				// we deal with the differents
+				for (int cc = c + 1; cc < keys.size(); cc++) {
+					final String ss = keys.get(cc);
+					fact += " and " + values_used.get(s).get(0) + "!=" + values_used.get(ss).get(0);
+				}
+
+				// we check if the value is valid or invalid
+				for (final Input_widget iw : values_used_iw.get(s)) {
+
+					String metadata = iw.getLabel() != null ? iw.getLabel() : "";
+					metadata += " ";
+					metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+
+					if (dm.getInvalidData(metadata).contains(s)) {
+						assert (invalid);
+						fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
+								+ iw.getId() + ".invalid";
+
+					} else {
+						if (invalid) {
+							fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
+									+ iw.getId() + ".invalid)";
+						}
+					}
+				}
+			} else {
+				final List<String> fills = values_used.get(s);
+				for (int cont = 0; cont < fills.size(); cont++) {
+					fact += " and " + fills.get(cont) + "=none";
+				}
+
 			}
 
 		}

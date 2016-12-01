@@ -20,7 +20,7 @@ import com.rational.test.ft.object.interfaces.TestObject;
 public class ActionManager {
 
 	/*
-	 * 
+	 *
 	 * GUI must be read before calling this method This function returns true if
 	 * the action was executed, false if it could not be executed because the
 	 * widget was disabled It throws an exception if there is no
@@ -112,7 +112,10 @@ public class ActionManager {
 					}
 				}
 				final Option_input_widget oiw = (Option_input_widget) wid;
-				final int index = Integer.valueOf(fill.getInput());
+				int index = 0;
+				if (fill.getInput() != null) {
+					index = Integer.valueOf(fill.getInput());
+				}
 				TestObject to_fill = null;
 
 				if (oiw.getTOS().size() == 1) {
@@ -141,7 +144,11 @@ public class ActionManager {
 						break;
 					}
 				}
-				method.invoke(c.newInstance(), to, fill.getInput());
+				String in = "";
+				if (fill.getInput() != null) {
+					in = fill.getInput();
+				}
+				method.invoke(c.newInstance(), to, in);
 			}
 		}
 

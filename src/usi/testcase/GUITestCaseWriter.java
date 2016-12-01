@@ -43,9 +43,11 @@ public class GUITestCaseWriter {
 			if (act instanceof Fill) {
 				final Fill f = (Fill) act;
 				type.setTextContent("fill");
-				final Element v = doc.createElement("input");
-				v.setTextContent(f.getInput());
-				action.appendChild(v);
+				if (f.getInput() != null) {
+					final Element v = doc.createElement("input");
+					v.setTextContent(f.getInput());
+					action.appendChild(v);
+				}
 			}
 			if (act instanceof Select) {
 				final Select s = (Select) act;

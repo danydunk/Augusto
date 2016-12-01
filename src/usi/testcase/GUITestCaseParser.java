@@ -91,8 +91,11 @@ public class GUITestCaseParser {
 			if (!(widget instanceof Input_widget)) {
 				throw new Exception();
 			}
+			String input = null;
 			final Node inputn = XMLUtil.getElementNode(actionn.getChildNodes(), "input");
-			final String input = inputn.getTextContent();
+			if (inputn != null) {
+				input = inputn.getTextContent();
+			}
 			final Input_widget iw = (Input_widget) widget;
 			final Fill f = new Fill(source, oracle, iw, input);
 			return f;

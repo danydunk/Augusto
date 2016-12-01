@@ -10,7 +10,7 @@ sig Click extends Operation {
 }
 sig Fill extends Operation {
 	filled: one Input_widget,
-	with: one Value
+	with: lone Value
 }
 sig Select extends Operation {
 	wid: one Selectable_widget,
@@ -21,7 +21,8 @@ one sig Track {
 }
 pred transition [t, t': Time]  {
 	(one aw: Action_widget, c: Click | click [aw, t, t', c]) or 
-	(one iw: Input_widget, f: Fill, v: Value | fill [iw, t, t', v, f]) or
+	(one iw: Input_widget, v: Value, f: Fill| fill [iw, t, t', v, f]) or
+	(one iw: Input_widget, f: Fill| fill [iw, t, t', none, f]) or	
 	(one sw: Selectable_widget, s: Select, o: Object | select [sw, t, t', o, s]) 
 }
 pred System {
