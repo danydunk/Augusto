@@ -6,6 +6,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
+import java.util.Date;
 
 import mockit.Mock;
 import mockit.MockUp;
@@ -34,6 +35,7 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 			System.exit(1);
 		}
 		new SystemMock();
+		new DateMock();
 
 		try {
 			final Class<?> autClass = Class.forName(args[0]);
@@ -72,6 +74,24 @@ public class AUTMain extends UnicastRemoteObject implements RemoteCoberturaInter
 
 		@Mock
 		public static long currentTimeMillis() {
+
+			return referenceT + (System.nanoTime() - startT) / 1000000L;
+		}
+	}
+
+	public final static class DateMock extends MockUp<Date> {
+
+		private static final long startT = System.currentTimeMillis();
+
+		private static final long referenceT = 1477564991731L;
+
+		public DateMock() {
+
+			super();
+		}
+
+		@Mock
+		public static long getTime() {
 
 			return referenceT + (System.nanoTime() - startT) / 1000000L;
 		}
