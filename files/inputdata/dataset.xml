@@ -49,6 +49,7 @@
     <values>
       <valid>1.00</valid>
       <valid>10.00</valid>
+	  <valid>15.00</valid>
 	  <valid>100.00</valid>
 	  <valid>50.00</valid>
 	  <valid>60.00</valid>
@@ -57,8 +58,9 @@
   <DATA>
     <metadata>starting balance</metadata>
     <values>
-      <valid>0.00</valid>
+      <valid>1.00</valid>
       <valid>10.00</valid>
+	  <valid>15.00</valid>
 	  <valid>100.00</valid>
 	  <valid>50.00</valid>
 	  <valid>60.00</valid>
