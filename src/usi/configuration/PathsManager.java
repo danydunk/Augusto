@@ -18,7 +18,7 @@ public class PathsManager {
 	private static final String CONF_FOLDER = System.getProperty("user.dir") + File.separator;
 	private static final String OUTPUT_FOLDER = System.getProperty("user.dir") + File.separator;
 	private static final String RIPPER_OUTPUT_FOLDER = System.getProperty("user.dir")
-			+ File.separator + "ripper_output" + File.separator;
+			+ File.separator;
 
 	public static void setProjectRoot(final String root) throws Exception {
 
