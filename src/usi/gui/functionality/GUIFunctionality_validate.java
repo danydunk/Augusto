@@ -14,6 +14,7 @@ import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Window;
 import src.usi.semantic.FunctionalitySemantics;
 import src.usi.semantic.SpecificSemantics;
+import src.usi.semantic.alloy.AlloyUtil;
 import src.usi.semantic.alloy.structure.Fact;
 import src.usi.testcase.AlloyTestCaseGenerator;
 import src.usi.testcase.GUITestCaseResult;
@@ -208,7 +209,7 @@ public class GUIFunctionality_validate {
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -240,8 +241,13 @@ public class GUIFunctionality_validate {
 				final String run = run_commands.get(((batch_num * this.batch_size) + cont));
 				this.working_sem.addRun_command(run);
 			}
+			final List<GUITestCaseResult> results = this.execute();
+			for (final GUITestCaseResult r : results) {
+				this.working_sem = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(
+						this.working_sem, r.getActions_executed()));
+			}
 
-			out.addAll(this.execute());
+			out.addAll(results);
 			batch_num++;
 		}
 
@@ -283,7 +289,13 @@ public class GUIFunctionality_validate {
 					this.working_sem.addRun_command(run);
 				}
 
-				out.addAll(this.execute());
+				final List<GUITestCaseResult> results = this.execute();
+				for (final GUITestCaseResult r : results) {
+					this.working_sem = SpecificSemantics.instantiate(AlloyUtil
+							.getTCaseModelOpposite(this.working_sem, r.getActions_executed()));
+				}
+
+				out.addAll(results);
 				batch_num++;
 			}
 		}
@@ -311,7 +323,13 @@ public class GUIFunctionality_validate {
 				this.working_sem.addRun_command(run);
 			}
 
-			out.addAll(this.execute());
+			final List<GUITestCaseResult> results = this.execute();
+			for (final GUITestCaseResult r : results) {
+				this.working_sem = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(
+						this.working_sem, r.getActions_executed()));
+			}
+
+			out.addAll(results);
 			batch_num++;
 		}
 		return out;
