@@ -7,7 +7,7 @@
 		<modal>any</modal>
 		<root>true</root>
 		<action_widget id="paw1" card="some" alloy="Create_trigger">
-			<label>(.*( new |add | create ).*|^(new (?!-)|add |create ).*|^(new|add|create)$)</label>
+			<label>(.*( new | add | create ).*|^(new (?!-)|add |create ).*|^(new|add|create)$)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw2" card="set" alloy="Read_trigger">
@@ -19,7 +19,7 @@
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw4" card="some" alloy="Delete_trigger">
-			<label>(.* delete .*|^delete .*|^delete$)</label>
+			<label>(.*( delete | remove ).*|^(delete |remove ).*|^(delete|remove)$)</label>
 			<class>.*</class>
 		</action_widget>
 		<selectable_widget id="psw1" card="one" alloy="">

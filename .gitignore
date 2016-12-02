@@ -12,3 +12,4 @@ cobertura.ser.lock
 aut.log
 aut.properties
 result*
+gui_*.xml
