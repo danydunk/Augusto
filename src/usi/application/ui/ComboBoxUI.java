@@ -21,4 +21,9 @@ public class ComboBoxUI extends MainHelper {
 		combo.click(atIndex((int) itemCount));
 	}
 
+	public static void fill(final TestObject testObject, final String text) throws Exception {
+
+		new TextSelectGuiSubitemTestObject(testObject).click();
+		new TextSelectGuiSubitemTestObject(testObject).setProperty("text", text);
+	}
 }
