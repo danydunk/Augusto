@@ -18,10 +18,8 @@ public class MenuItemUI extends MainHelper {
 				father = father.getMappableParent();
 			}
 		}
-
 		new ToggleGUITestObject(father).click();
 		sleep(0.2);
 		new ToggleGUITestObject(testObject).click();
 	}
-
 }

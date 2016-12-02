@@ -30,4 +30,9 @@ public class TableUI extends MainHelper {
 
 		new GuiSubitemTestObject(to).doubleClick(atCell(atRow(cell), atColumn(0)));
 	}
+
+	public static void deselect(final TestObject testObject) {
+
+		new GuiSubitemTestObject(testObject).setState(DESELECT_ALL);
+	}
 }

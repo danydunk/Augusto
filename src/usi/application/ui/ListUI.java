@@ -17,4 +17,9 @@ public class ListUI extends MainHelper {
 
 		new SelectGuiSubitemTestObject(testObject).doubleClick(atIndex((int) itemIndex));
 	}
+
+	public static void deselect(final TestObject testObject) {
+
+		new SelectGuiSubitemTestObject(testObject).setState(DESELECT_ALL);
+	}
 }
