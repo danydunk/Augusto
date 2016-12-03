@@ -18,14 +18,6 @@ import src.usi.pattern.structure.Pattern_selectable_widget;
 import src.usi.pattern.structure.Pattern_window;
 import src.usi.semantic.SpecificSemantics;
 import src.usi.semantic.alloy.AlloyUtil;
-import src.usi.semantic.alloy.Alloy_Model;
-import src.usi.testcase.AlloyTestCaseGenerator;
-import src.usi.testcase.GUITestCaseResult;
-import src.usi.testcase.structure.Click;
-import src.usi.testcase.structure.Fill;
-import src.usi.testcase.structure.GUIAction;
-import src.usi.testcase.structure.GUITestCase;
-import src.usi.testcase.structure.Select;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 
 /**
@@ -282,100 +274,111 @@ public class Instance_GUI_pattern {
 	 * @return
 	 * @throws Exception
 	 */
-	public GUITestCaseResult updateTCResult(final GUITestCaseResult res) throws Exception {
-
-		if (res.getTc().getActions().size() == res.getActions_executed().size()) {
-			return res;
-		}
-		final List<GUIAction> actions = new ArrayList<>();
-		final List<GUIAction> actions_executed = new ArrayList<>();
-		final List<GUIAction> actions_actually_executed = res.getActions_actually_executed();
-		final List<Window> results = new ArrayList<>();
-		Window last = null;
-		boolean tc_changed = false;
-		int y = 0;
-		for (int x = 0; x < res.getTc().getActions().size(); x++) {
-			final GUIAction act_to_execute = res.getTc().getActions().get(x);
-			if (y >= res.getActions_executed().size()
-					|| !act_to_execute.isSame(res.getActions_executed().get(y))) {
-
-				if (last != null && !act_to_execute.getWindow().getId().equals(last.getId())) {
-					tc_changed = true;
-					break;
-				}
-
-				if (act_to_execute instanceof Click) {
-					if (this.getSemantics().getClickSemantics().getContent().trim().length() == 0) {
-						// semantics is empty, therefore this action can be
-						// skipped
-						tc_changed = true;
-						continue;
-					}
-				}
-				if (act_to_execute instanceof Fill) {
-					if (this.getSemantics().getFillSemantics().getContent().trim().length() == 0) {
-						// semantics is empty, therefore this action can be
-						// skipped
-						tc_changed = true;
-						continue;
-					}
-
-				}
-				if (act_to_execute instanceof Select) {
-					if (this.getSemantics().getSelectSemantics().getContent().trim().length() == 0) {
-						// semantics is empty, therefore this action can be
-						// skipped
-						tc_changed = true;
-						continue;
-					}
-				}
-
-				actions.add(act_to_execute);
-				actions_executed.add(act_to_execute);
-				if (y > 0) {
-					last = res.getResults().get(y - 1);
-				}
-				results.add(last);
-
-			} else {
-				actions.add(act_to_execute);
-				actions_executed.add(act_to_execute);
-				results.add(res.getResults().get(y));
-				y++;
-			}
-		}
-
-		GUITestCaseResult new_res = new GUITestCaseResult(new GUITestCase(res.getTc()
-				.getAlloySolution(), actions, res.getTc().getRunCommand()), actions_executed,
-				results, actions_actually_executed);
-
-		if (!tc_changed) {
-
-			return new_res;
-		}
-
-		final List<String> values = new ArrayList<>();
-		for (final GUIAction act : new_res.getTc().getActions()) {
-			if (act instanceof Fill) {
-				final Fill f = (Fill) act;
-				values.add(f.getInput());
-			}
-
-		}
-
-		final Alloy_Model sem = AlloyUtil.getTCaseModel(this.getSemantics(), new_res.getTc()
-				.getActions(), null);
-		final Instance_GUI_pattern clone = this.clone();
-		clone.setSpecificSemantics(SpecificSemantics.instantiate(sem));
-		final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
-		final List<GUITestCase> tests = test_gen.generateTestCases(values);
-		assert (tests.size() < 2);
-		if (tests.size() == 1) {
-			new_res = new GUITestCaseResult(tests.get(0), actions_executed, results,
-					actions_actually_executed);
-			return new_res;
-		} else {
-			return null;
-		}
-	}
+	// public GUITestCaseResult updateTCResult(final GUITestCaseResult res)
+	// throws Exception {
+	//
+	// if (res.getTc().getActions().size() == res.getActions_executed().size())
+	// {
+	// return res;
+	// }
+	// final List<GUIAction> actions = new ArrayList<>();
+	// final List<GUIAction> actions_executed = new ArrayList<>();
+	// final List<GUIAction> actions_actually_executed =
+	// res.getActions_actually_executed();
+	// final List<Window> results = new ArrayList<>();
+	// Window last = null;
+	// boolean tc_changed = false;
+	// int y = 0;
+	// for (int x = 0; x < res.getTc().getActions().size(); x++) {
+	// final GUIAction act_to_execute = res.getTc().getActions().get(x);
+	// if (y >= res.getActions_executed().size()
+	// || !act_to_execute.isSame(res.getActions_executed().get(y))) {
+	//
+	// if (last != null &&
+	// !act_to_execute.getWindow().getId().equals(last.getId())) {
+	// tc_changed = true;
+	// break;
+	// }
+	//
+	// if (act_to_execute instanceof Click) {
+	// if (this.getSemantics().getClickSemantics().getContent().trim().length()
+	// == 0) {
+	// // semantics is empty, therefore this action can be
+	// // skipped
+	// tc_changed = true;
+	// continue;
+	// }
+	// }
+	// if (act_to_execute instanceof Fill) {
+	// if (this.getSemantics().getFillSemantics().getContent().trim().length()
+	// == 0) {
+	// // semantics is empty, therefore this action can be
+	// // skipped
+	// tc_changed = true;
+	// continue;
+	// }
+	//
+	// }
+	// if (act_to_execute instanceof Select) {
+	// if (this.getSemantics().getSelectSemantics().getContent().trim().length()
+	// == 0) {
+	// // semantics is empty, therefore this action can be
+	// // skipped
+	// tc_changed = true;
+	// continue;
+	// }
+	// }
+	//
+	// actions.add(act_to_execute);
+	// actions_executed.add(act_to_execute);
+	// if (y > 0) {
+	// last = res.getResults().get(y - 1);
+	// }
+	// results.add(last);
+	//
+	// } else {
+	// actions.add(act_to_execute);
+	// actions_executed.add(act_to_execute);
+	// results.add(res.getResults().get(y));
+	// y++;
+	// }
+	// }
+	//
+	// GUITestCaseResult new_res = new GUITestCaseResult(new
+	// GUITestCase(res.getTc()
+	// .getAlloySolution(), actions, res.getTc().getRunCommand()),
+	// actions_executed,
+	// results, actions_actually_executed);
+	//
+	// if (!tc_changed) {
+	//
+	// return new_res;
+	// }
+	//
+	// final List<String> values = new ArrayList<>();
+	// for (final GUIAction act : new_res.getTc().getActions()) {
+	// if (act instanceof Fill) {
+	// final Fill f = (Fill) act;
+	// values.add(f.getInput());
+	// }
+	//
+	// }
+	//
+	// final Alloy_Model sem = AlloyUtil.getTCaseModel(this.getSemantics(),
+	// new_res.getTc()
+	// .getActions(), null);
+	// final Instance_GUI_pattern clone = this.clone();
+	// clone.setSpecificSemantics(SpecificSemantics.instantiate(sem));
+	// final AlloyTestCaseGenerator test_gen = new
+	// AlloyTestCaseGenerator(clone);
+	// final List<GUITestCase> tests = test_gen.generateTestCases(values);
+	// assert (tests.size() < 2);
+	// if (tests.size() == 1) {
+	// new_res = new GUITestCaseResult(tests.get(0), actions_executed, results,
+	// actions_actually_executed);
+	// return new_res;
+	// } else {
+	// return null;
+	// }
+	// }
 }

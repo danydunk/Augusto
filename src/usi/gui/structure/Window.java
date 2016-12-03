@@ -299,7 +299,6 @@ public class Window extends Widget {
 				return false;
 			}
 		}
-
 		return true;
 	}
 

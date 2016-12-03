@@ -319,7 +319,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 	 */
 	protected <C extends Widget> List<Map<? extends Pattern_widget<C>, List<C>>> distribute(
 			final List<? extends Pattern_widget<C>> keys,
-			final Map<? extends Pattern_widget<C>, List<C>> map) {
+					final Map<? extends Pattern_widget<C>, List<C>> map) {
 
 		final List<Map<? extends Pattern_widget<C>, List<C>>> out = new ArrayList<>();
 
