@@ -43,7 +43,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -88,7 +88,7 @@ public class PatternRecognitionTest {
 	@Test
 	public void test3() {
 
-		System.out.println("test3");
+		System.out.println("test4");
 		try {
 
 			// we load a gui pattern
@@ -104,6 +104,7 @@ public class PatternRecognitionTest {
 			final List<Instance_GUI_pattern> res = gfs.match(pattern);
 
 			assertEquals(2, res.size());
+			assertEquals("sw8", res.get(0).getSWS_for_PSW("psw1").get(0).getId());
 
 		} catch (final Exception e) {
 			e.printStackTrace();

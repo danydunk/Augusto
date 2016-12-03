@@ -3,6 +3,7 @@ package src.usi.pattern.structure;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -300,8 +301,16 @@ public class Pattern_window extends Pattern_widget<Window> {
 				}
 			}
 		}
-
-		return out;
+		final List<To_order> l = new ArrayList<>();
+		for (final Instance_window iw : out) {
+			l.add(new To_order(iw));
+		}
+		Collections.sort(l);
+		final List<Instance_window> output = new ArrayList<>();
+		for (final To_order o : l) {
+			output.add(o.iw);
+		}
+		return output;
 	}
 
 	/*
@@ -310,7 +319,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 	 */
 	protected <C extends Widget> List<Map<? extends Pattern_widget<C>, List<C>>> distribute(
 			final List<? extends Pattern_widget<C>> keys,
-					final Map<? extends Pattern_widget<C>, List<C>> map) {
+			final Map<? extends Pattern_widget<C>, List<C>> map) {
 
 		final List<Map<? extends Pattern_widget<C>, List<C>>> out = new ArrayList<>();
 
@@ -448,5 +457,64 @@ public class Pattern_window extends Pattern_widget<Window> {
 			}
 		}
 		return out;
+	}
+
+	public class To_order implements Comparable<To_order> {
+
+		protected int dist;
+		protected List<Widget> widgets;
+		protected Instance_window iw;
+
+		public To_order(final Instance_window iw) throws Exception {
+
+			this.dist = 0;
+			this.iw = iw;
+			this.widgets = new ArrayList<>();
+			for (final Pattern_action_widget k : iw.getPattern().getActionWidgets()) {
+				this.widgets.addAll(iw.getAWS_for_PAW(k.getId()));
+			}
+			for (final Pattern_input_widget k : iw.getPattern().getInputWidgets()) {
+				this.widgets.addAll(iw.getIWS_for_PIW(k.getId()));
+			}
+			for (final Pattern_selectable_widget k : iw.getPattern().getSelectableWidgets()) {
+				this.widgets.addAll(iw.getSWS_for_PSW(k.getId()));
+			}
+
+			for (int x = 0; x < this.widgets.size(); x++) {
+				final Widget w1 = this.widgets.get(x);
+				for (int y = x + 1; y < this.widgets.size(); y++) {
+					final Widget w2 = this.widgets.get(y);
+					final int d = this.getDistance(w1.getX(), w1.getY(), w2.getX(), w2.getY());
+					if (d > this.dist) {
+						this.dist = d;
+					}
+				}
+			}
+		}
+
+		private int getDistance(final int x1, final int y1, final int x2, final int y2) {
+
+			final int distance;
+
+			distance = (int) (Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+
+			return distance;
+		}
+
+		@Override
+		public int compareTo(final To_order o) {
+
+			if (o.widgets.size() != this.widgets.size()) {
+				if (o.widgets.size() > this.widgets.size()) {
+					return Integer.MAX_VALUE;
+				} else {
+					return Integer.MIN_VALUE;
+				}
+
+			}
+
+			return this.dist - o.dist;
+		}
+
 	}
 }
