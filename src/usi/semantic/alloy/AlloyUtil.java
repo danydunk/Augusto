@@ -834,10 +834,11 @@ public class AlloyUtil {
 					if ((dm.getInvalidItemizedData(metadata).size() + dm.getValidItemizedData(
 							metadata).size()) > 0) {
 
-						n_valid = dm.getValidItemizedData(metadata).size();
-						n_invalid = dm.getInvalidItemizedData(metadata).size();
+						n_valid = Math.max(0, dm.getValidItemizedData(metadata).size());
+						n_invalid = Math.max(0, dm.getInvalidItemizedData(metadata).size());
 					} else {
-						n_valid = (oiw.getSelected() == -1) ? oiw.getSize() - 1 : oiw.getSize();
+						n_valid = Math.max(0,
+								(oiw.getSelected() == -1) ? oiw.getSize() - 1 : oiw.getSize());
 						n_invalid = 0;
 					}
 
@@ -893,7 +894,8 @@ public class AlloyUtil {
 					final int size = (oiw.getSelected() == -1) ? oiw.getSize() - 1 : oiw.getSize();
 					content += System.getProperty("line.separator");
 					content += "#((filled." + iws.get(iw).getIdentifier() + ").with + "
-							+ iws.get(iw).getIdentifier() + ".content.(T/first)) <= " + size;
+							+ iws.get(iw).getIdentifier() + ".content.(T/first)) <= "
+							+ Math.max(0, size);
 
 					content += System.getProperty("line.separator");
 					if (oiw.getSelected() == -1) {
@@ -934,7 +936,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
