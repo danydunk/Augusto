@@ -185,7 +185,7 @@ public class ActionManager {
 			}
 
 			final Widget wid = currWind.getSelectableWidgets().get(index);
-			if (!w.isSame(wid)) {
+			if (!ww.isSame(wid)) {
 				return null;
 			}
 			return wid;
@@ -214,7 +214,7 @@ public class ActionManager {
 			}
 
 			final Widget wid = widgets2.get(index);
-			if (!w.isSame(wid)) {
+			if (!ww.isSame(wid)) {
 				return null;
 			}
 
