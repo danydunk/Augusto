@@ -7,8 +7,14 @@
   <void property="availableVersion">
    <string>3.4.1.14</string>
   </void>
+  <void property="clearedFilter">
+   <string>TRANSACTION_FILTER_ALL_CLEARED</string>
+  </void>
   <void property="currencySign">
    <string>$</string>
+  </void>
+  <void property="dateFilter">
+   <string>TRANSACTION_FILTER_ALL_DATES</string>
   </void>
   <void property="dateFormat">
    <string>yyyy/MM/dd</string>
@@ -32,6 +38,12 @@
   <void property="proxyServer">
    <string></string>
   </void>
+  <void property="reconciledFilter">
+   <string>TRANSACTION_FILTER_ALL_RECONCILED</string>
+  </void>
+  <void property="searchText">
+   <string></string>
+  </void>
   <void property="sendCrashReports">
    <boolean>true</boolean>
   </void>
@@ -47,15 +59,12 @@
   <void property="showFlatBudget">
    <boolean>true</boolean>
   </void>
-  <void property="showTooltips">
-   <boolean>true</boolean>
-  </void>
   <void property="transactionCellRenderer">
    <string>org.homeunix.thecave.buddi.plugin.builtin.cellrenderer.DefaultTransactionCellRenderer</string>
   </void>
   <void property="windowLocation">
    <void method="put">
-    <string>null</string>
+    <string>nullALL_TRANSACTIONS</string>
     <object class="java.awt.Point" id="Point0">
      <void class="java.awt.Point" method="getField">
       <string>x</string>
@@ -74,7 +83,7 @@
     </object>
    </void>
    <void method="put">
-    <string>PREFERENCES</string>
+    <string>null</string>
     <object class="java.awt.Point" id="Point1">
      <void class="java.awt.Point" method="getField">
       <string>x</string>
@@ -92,10 +101,29 @@
      </void>
     </object>
    </void>
+   <void method="put">
+    <string>PREFERENCES</string>
+    <object class="java.awt.Point" id="Point2">
+     <void class="java.awt.Point" method="getField">
+      <string>x</string>
+      <void method="set">
+       <object idref="Point2"/>
+       <int>100</int>
+      </void>
+     </void>
+     <void class="java.awt.Point" method="getField">
+      <string>y</string>
+      <void method="set">
+       <object idref="Point2"/>
+       <int>100</int>
+      </void>
+     </void>
+    </object>
+   </void>
   </void>
   <void property="windowSize">
    <void method="put">
-    <string>null</string>
+    <string>nullALL_TRANSACTIONS</string>
     <object class="java.awt.Dimension" id="Dimension0">
      <void class="java.awt.Dimension" method="getField">
       <string>width</string>
@@ -108,6 +136,25 @@
       <string>height</string>
       <void method="set">
        <object idref="Dimension0"/>
+       <int>480</int>
+      </void>
+     </void>
+    </object>
+   </void>
+   <void method="put">
+    <string>null</string>
+    <object class="java.awt.Dimension" id="Dimension1">
+     <void class="java.awt.Dimension" method="getField">
+      <string>width</string>
+      <void method="set">
+       <object idref="Dimension1"/>
+       <int>640</int>
+      </void>
+     </void>
+     <void class="java.awt.Dimension" method="getField">
+      <string>height</string>
+      <void method="set">
+       <object idref="Dimension1"/>
        <int>480</int>
       </void>
      </void>

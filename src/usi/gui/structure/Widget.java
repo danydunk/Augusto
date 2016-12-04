@@ -257,7 +257,10 @@ public abstract class Widget implements Comparable<Widget> {
 			}
 			final int x = p.x;
 			final int y = p.y;
-			final String title = to.getProperty("title").toString();
+			String title = "";
+			try {
+				title = to.getProperty("title").toString();
+			} catch (final Exception e) {}
 			final String classs = to.getProperty("class").toString();
 
 			boolean modale;

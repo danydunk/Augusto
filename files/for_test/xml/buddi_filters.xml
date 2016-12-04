@@ -60,4 +60,8 @@
 			<label>file - quit buddi</label>
 			<class>menuitemui</class>
 	</action_widget>
+	<action_widget id="aw18">
+			<label>^$</label>
+			<class>buttonui</class>
+	</action_widget>
 </filter>
