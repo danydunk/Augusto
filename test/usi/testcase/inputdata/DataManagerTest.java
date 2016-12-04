@@ -18,10 +18,8 @@ public class DataManagerTest {
 			assertEquals(19, dm.getGenericData().size());
 
 			assertEquals(5, dm.getValidData("starting on").size());
-			assertEquals(
-					1,
-					dm.getValidItemizedData(
-							"<html>The account or category to<br>transfer the money from.</html>")
+			assertEquals(1,
+					dm.getValidItemizedData("<html><font color='gray'>&lt;from&gt;</font></html>")
 							.size());
 		} catch (final Exception e) {
 			e.printStackTrace();

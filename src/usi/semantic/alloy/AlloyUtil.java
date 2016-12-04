@@ -888,9 +888,9 @@ public class AlloyUtil {
 				if (iw instanceof Option_input_widget) {
 					final Option_input_widget oiw = (Option_input_widget) iw;
 
-					int size = (oiw.getSelected() == -1) ? oiw.getSize() - 1 : oiw.getSize();
+					int size = Math.max(0,
+							(oiw.getSelected() == -1) ? oiw.getSize() - 1 : oiw.getSize());
 					size = Math.min(size, 10);
-
 					content += System.getProperty("line.separator");
 					content += "#((filled." + iws.get(iw).getIdentifier() + ").with + "
 							+ iws.get(iw).getIdentifier() + ".content.(T/first)) <= "

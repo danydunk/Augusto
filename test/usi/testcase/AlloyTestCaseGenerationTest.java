@@ -77,8 +77,8 @@ public class AlloyTestCaseGenerationTest {
 
 		r.generateSpecificSemantics();
 		r.getSemantics()
-				.addRun_command(
-						"run {System and (some t1,t2: Time| t2 = T/next[t1] and not(t1=t2) and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.(T/next[t2]) in Fill and not(Track.op.t2.with = Track.op.t1.with) and Track.op.t2.filled = Input_widget_iw17 and Track.op.t1.filled = Input_widget_iw17 and Track.op.(T/next[t2]).filled = Input_widget_iw20)}for 5 but 5 Time,4 Operation, 10 Value");
+		.addRun_command(
+				"run {System and (some t1,t2: Time| t2 = T/next[t1] and not(t1=t2) and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.(T/next[t2]) in Fill and not(Track.op.t2.with = Track.op.t1.with) and #Track.op.t1.with = 1 and #Track.op.t2.with = 1 and #Track.op.(T/next[t2]).with = 1 and Track.op.t2.filled = Input_widget_iw17 and Track.op.t1.filled = Input_widget_iw17 and Track.op.(T/next[t2]).filled = Input_widget_iw20)}for 5 but 5 Time,4 Operation, 10 Value");
 
 		final List<String> values = new ArrayList<>();
 		values.add("ciao");
@@ -143,8 +143,8 @@ public class AlloyTestCaseGenerationTest {
 
 		r.generateSpecificSemantics();
 		r.getSemantics()
-				.addRun_command(
-						"run {System and (one t1,t2: Time| t2 = T/next[t1] and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none))}for 5 but 4 Time,3 Operation, 10 Value");
+		.addRun_command(
+				"run {System and (one t1,t2: Time| t2 = T/next[t1] and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none))}for 5 but 4 Time,3 Operation, 10 Value");
 
 		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(r, 1, 40000);
 		final List<GUITestCase> tests = generator.generateTestCases();
@@ -203,8 +203,8 @@ public class AlloyTestCaseGenerationTest {
 
 		r.generateSpecificSemantics();
 		r.getSemantics()
-				.addRun_command(
-						"run {System and (#Fill = 2) and (some t1,t2: Time| t2 = T/next[t1] and Track.op.t1 = Track.op.t2 and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = Track.op.t1.with and Track.op.t1.filled = Input_widget_iw20)}for 5 but 4 Time,3 Operation, 10 Value");
+		.addRun_command(
+				"run {System and (#Fill = 2) and (some t1,t2: Time| t2 = T/next[t1] and Track.op.t1 = Track.op.t2 and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = Track.op.t1.with and Track.op.t1.filled = Input_widget_iw20)}for 5 but 4 Time,3 Operation, 10 Value");
 
 		final List<String> values = new ArrayList<>();
 		values.add("1");
