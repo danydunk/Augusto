@@ -61,27 +61,27 @@
         <action_widget id="aw77">
             <pos>933:226</pos>
             <class>ButtonUI</class>
-            <label>Up One Level</label>
+            <descriptor>Look In:</descriptor>
         </action_widget>
         <action_widget id="aw78">
             <pos>962:226</pos>
             <class>ButtonUI</class>
-            <label>Desktop</label>
+            <label/>
         </action_widget>
         <action_widget id="aw79">
             <pos>991:226</pos>
             <class>ButtonUI</class>
-            <label>Create New Folder</label>
+            <descriptor>Look In:</descriptor>
         </action_widget>
         <action_widget id="aw80">
             <pos>1020:226</pos>
             <class>ToggleButtonUI</class>
-            <label>List</label>
+            <label/>
         </action_widget>
         <action_widget id="aw81">
             <pos>1044:226</pos>
             <class>ToggleButtonUI</class>
-            <label>Details</label>
+            <label/>
         </action_widget>
         <action_widget id="aw82">
             <pos>917:502</pos>
@@ -115,7 +115,7 @@
             <pos>592:264</pos>
             <class>ListUI</class>
             <descriptor>Look In:</descriptor>
-            <size>10</size>
+            <size>0</size>
             <selected>-1</selected>
         </selectable_widget>
     </window>
@@ -128,27 +128,27 @@
         <action_widget id="aw84">
             <pos>933:226</pos>
             <class>ButtonUI</class>
-            <label>Up One Level</label>
+            <descriptor>Look In:</descriptor>
         </action_widget>
         <action_widget id="aw85">
             <pos>962:226</pos>
             <class>ButtonUI</class>
-            <label>Desktop</label>
+            <label/>
         </action_widget>
         <action_widget id="aw86">
             <pos>991:226</pos>
             <class>ButtonUI</class>
-            <label>Create New Folder</label>
+            <descriptor>Look In:</descriptor>
         </action_widget>
         <action_widget id="aw87">
             <pos>1020:226</pos>
             <class>ToggleButtonUI</class>
-            <label>List</label>
+            <label/>
         </action_widget>
         <action_widget id="aw88">
             <pos>1044:226</pos>
             <class>ToggleButtonUI</class>
-            <label>Details</label>
+            <label/>
         </action_widget>
         <action_widget id="aw89">
             <pos>917:502</pos>
@@ -182,8 +182,8 @@
             <pos>592:264</pos>
             <class>ListUI</class>
             <descriptor>Look In:</descriptor>
-            <size>11</size>
-            <selected>10</selected>
+            <size>1</size>
+            <selected>0</selected>
         </selectable_widget>
     </window>
     <window id="w11">
@@ -195,27 +195,27 @@
         <action_widget id="aw98">
             <pos>933:226</pos>
             <class>ButtonUI</class>
-            <label>Up One Level</label>
+            <descriptor>Look In:</descriptor>
         </action_widget>
         <action_widget id="aw99">
             <pos>962:226</pos>
             <class>ButtonUI</class>
-            <label>Desktop</label>
+            <label/>
         </action_widget>
         <action_widget id="aw100">
             <pos>991:226</pos>
             <class>ButtonUI</class>
-            <label>Create New Folder</label>
+            <descriptor>Look In:</descriptor>
         </action_widget>
         <action_widget id="aw101">
             <pos>1020:226</pos>
             <class>ToggleButtonUI</class>
-            <label>List</label>
+            <label/>
         </action_widget>
         <action_widget id="aw102">
             <pos>1044:226</pos>
             <class>ToggleButtonUI</class>
-            <label>Details</label>
+            <label/>
         </action_widget>
         <action_widget id="aw103">
             <pos>917:502</pos>
@@ -234,10 +234,10 @@
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw73">
-            <pos>592:405</pos>
+            <pos>592:318</pos>
             <class>TextFieldUI</class>
             <descriptor>Look In:</descriptor>
-            <value>New Folder (13)</value>
+            <value>New Folder (3)</value>
         </input_widget>
         <input_widget id="iw74">
             <pos>675:435</pos>
@@ -252,11 +252,11 @@
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw6">
-            <pos>592:201</pos>
+            <pos>592:284</pos>
             <class>TableUI</class>
             <descriptor>Look In:</descriptor>
-            <size>13</size>
-            <selected>10</selected>
+            <size>3</size>
+            <selected>0</selected>
         </selectable_widget>
     </window>
     <window id="w10">
@@ -268,27 +268,27 @@
         <action_widget id="aw91">
             <pos>933:226</pos>
             <class>ButtonUI</class>
-            <label>Up One Level</label>
+            <descriptor>Look In:</descriptor>
         </action_widget>
         <action_widget id="aw92">
             <pos>962:226</pos>
             <class>ButtonUI</class>
-            <label>Desktop</label>
+            <label/>
         </action_widget>
         <action_widget id="aw93">
             <pos>991:226</pos>
             <class>ButtonUI</class>
-            <label>Create New Folder</label>
+            <descriptor>Look In:</descriptor>
         </action_widget>
         <action_widget id="aw94">
             <pos>1020:226</pos>
             <class>ToggleButtonUI</class>
-            <label>List</label>
+            <label/>
         </action_widget>
         <action_widget id="aw95">
             <pos>1044:226</pos>
             <class>ToggleButtonUI</class>
-            <label>Details</label>
+            <label/>
         </action_widget>
         <action_widget id="aw96">
             <pos>917:502</pos>
@@ -322,8 +322,8 @@
             <pos>592:284</pos>
             <class>TableUI</class>
             <descriptor>Look In:</descriptor>
-            <size>12</size>
-            <selected>10</selected>
+            <size>2</size>
+            <selected>0</selected>
         </selectable_widget>
     </window>
     <window id="w13">
@@ -395,32 +395,32 @@
         <action_widget id="aw117">
             <pos>560:198</pos>
             <class>ButtonUI</class>
-            <label>Selects previous period.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw118">
             <pos>823:198</pos>
             <class>ButtonUI</class>
-            <label>Selects next period.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw115">
             <pos>539:201</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units prior selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw119">
             <pos>925:201</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units after selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw116">
             <pos>539:213</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units prior selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw120">
             <pos>925:213</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units after selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw121">
             <pos>488:243</pos>
@@ -450,25 +450,25 @@
         <input_widget id="iw79">
             <pos>537:156</pos>
             <class>ComboBoxUI</class>
-            <label>Time scale for data to be displayed.</label>
+            <descriptor>Period:</descriptor>
             <value>[options] 1 : 4</value>
         </input_widget>
         <input_widget id="iw81">
             <pos>618:201</pos>
             <class>TextFieldUI</class>
-            <label>Mouse click will select today.</label>
+            <descriptor>Period:</descriptor>
             <value>44. week, 2016</value>
         </input_widget>
         <input_widget id="iw80">
             <pos>497:203</pos>
             <class>FormattedTextFieldUI</class>
-            <label>Number of time scale units prior selected one to be included.</label>
+            <descriptor>Period:</descriptor>
             <value>-1</value>
         </input_widget>
         <input_widget id="iw82">
             <pos>883:203</pos>
             <class>FormattedTextFieldUI</class>
-            <label>Number of time scale units after selected one to be included.</label>
+            <descriptor>Period:</descriptor>
             <value>0</value>
         </input_widget>
         <input_widget id="iw83">
@@ -480,7 +480,7 @@
         <input_widget id="iw84">
             <pos>855:662</pos>
             <class>TextFieldUI</class>
-            <label>Total time spent on all visible filtered tasks.</label>
+            <descriptor>Total filtered time:</descriptor>
             <value>00:00:00</value>
         </input_widget>
         <selectable_widget id="sw8">
@@ -507,27 +507,27 @@
         <action_widget id="aw105">
             <pos>933:226</pos>
             <class>ButtonUI</class>
-            <label>Up One Level</label>
+            <descriptor>Look In:</descriptor>
         </action_widget>
         <action_widget id="aw106">
             <pos>962:226</pos>
             <class>ButtonUI</class>
-            <label>Desktop</label>
+            <label/>
         </action_widget>
         <action_widget id="aw107">
             <pos>991:226</pos>
             <class>ButtonUI</class>
-            <label>Create New Folder</label>
+            <descriptor>Look In:</descriptor>
         </action_widget>
         <action_widget id="aw108">
             <pos>1020:226</pos>
             <class>ToggleButtonUI</class>
-            <label>List</label>
+            <label/>
         </action_widget>
         <action_widget id="aw109">
             <pos>1044:226</pos>
             <class>ToggleButtonUI</class>
-            <label>Details</label>
+            <label/>
         </action_widget>
         <action_widget id="aw110">
             <pos>917:502</pos>
@@ -561,7 +561,7 @@
             <pos>592:284</pos>
             <class>TableUI</class>
             <descriptor>Look In:</descriptor>
-            <size>19</size>
+            <size>9</size>
             <selected>-1</selected>
         </selectable_widget>
     </window>
@@ -639,22 +639,22 @@
         <action_widget id="aw4">
             <pos>493:199</pos>
             <class>ButtonUI</class>
-            <label>Shows same day of previous week.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw5">
             <pos>523:199</pos>
             <class>ButtonUI</class>
-            <label>Shows same day of previous month.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw7">
             <pos>862:199</pos>
             <class>ButtonUI</class>
-            <label>Shows same day of next month.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw8">
             <pos>902:199</pos>
             <class>ButtonUI</class>
-            <label>Shows same day of next week.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw9">
             <pos>574:327</pos>
@@ -674,7 +674,7 @@
         <action_widget id="aw12">
             <pos>921:402</pos>
             <class>ButtonUI</class>
-            <label>Allows to select columns that will be displayed.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw13">
             <pos>507:650</pos>
@@ -699,7 +699,7 @@
         <input_widget id="iw1">
             <pos>652:162</pos>
             <class>TextFieldUI</class>
-            <label>Mouse click will switch view to today.</label>
+            <descriptor>Date:</descriptor>
             <value>Thursday - 27. October, 2016</value>
         </input_widget>
         <input_widget id="iw2">
@@ -759,25 +759,25 @@
         <input_widget id="iw95">
             <pos>678:352</pos>
             <class>ComboBoxUI</class>
-            <label>Required property of task.</label>
+            <descriptor>Filter:</descriptor>
             <value>[options] 0 : 6</value>
         </input_widget>
         <input_widget id="iw96">
             <pos>678:386</pos>
             <class>ComboBoxUI</class>
-            <label>Type of content rule that all desired tasks should satisfy.</label>
+            <descriptor>Content rule:</descriptor>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw98">
             <pos>678:420</pos>
             <class>TextFieldUI</class>
-            <label>Value of property that all desired tasks should have.</label>
+            <descriptor>Value:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw97">
             <pos>678:449</pos>
             <class>ComboBoxUI</class>
-            <label>Value of property that all desired tasks should have.</label>
+            <label/>
             <value>[options] -1 : 0</value>
         </input_widget>
     </window>
@@ -815,7 +815,7 @@
         <input_widget id="iw7">
             <pos>585:73</pos>
             <class>FormattedTextFieldUI</class>
-            <label>How many hours per day you have to work ?</label>
+            <descriptor>Working hours:</descriptor>
             <value>8.0</value>
         </input_widget>
         <input_widget id="iw8">
@@ -869,13 +869,13 @@
         <input_widget id="iw15">
             <pos>585:334</pos>
             <class>TextFieldUI</class>
-            <label>What is name of your proxy server ?</label>
+            <descriptor>Proxy server:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw16">
             <pos>799:334</pos>
             <class>FormattedTextFieldUI</class>
-            <label>What port does your proxy server use ?</label>
+            <descriptor>Port:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw17">
@@ -893,31 +893,31 @@
         <input_widget id="iw20">
             <pos>764:430</pos>
             <class>ComboBoxUI</class>
-            <label>Default action performed on inactivity detection.</label>
+            <descriptor>Inactivity action:</descriptor>
             <value>[options] 1 : 3</value>
         </input_widget>
         <input_widget id="iw19">
             <pos>585:432</pos>
             <class>FormattedTextFieldUI</class>
-            <label>Inactivity time in minutes to remind user.</label>
+            <descriptor>Inactivity time [m]:</descriptor>
             <value>10</value>
         </input_widget>
         <input_widget id="iw23">
             <pos>764:464</pos>
             <class>ComboBoxUI</class>
-            <label>Default action performed after waking up from hibernation.</label>
-            <value>[options] 0 : 3</value>
+            <descriptor>Post hibernation action:</descriptor>
+            <value>[options] 1 : 3</value>
         </input_widget>
         <input_widget id="iw21">
             <pos>585:466</pos>
             <class>FormattedTextFieldUI</class>
-            <label>Inactivity threshold in minutes to consider computer hibernated.</label>
+            <descriptor>Hibernation time [m]:</descriptor>
             <value>10</value>
         </input_widget>
         <input_widget id="iw24">
             <pos>585:498</pos>
             <class>ComboBoxUI</class>
-            <label>Default action performed on exit.</label>
+            <descriptor>Post hibernation action:</descriptor>
             <value>[options] 0 : 2</value>
         </input_widget>
         <selectable_widget id="sw2">
@@ -997,32 +997,32 @@
         <action_widget id="aw140">
             <pos>560:198</pos>
             <class>ButtonUI</class>
-            <label>Selects previous period.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw141">
             <pos>823:198</pos>
             <class>ButtonUI</class>
-            <label>Selects next period.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw138">
             <pos>539:201</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units prior selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw142">
             <pos>925:201</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units after selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw139">
             <pos>539:213</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units prior selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw143">
             <pos>925:213</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units after selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw144">
             <pos>488:243</pos>
@@ -1037,25 +1037,25 @@
         <input_widget id="iw85">
             <pos>537:156</pos>
             <class>ComboBoxUI</class>
-            <label>Time scale for data to be displayed.</label>
+            <descriptor>Period:</descriptor>
             <value>[options] 1 : 4</value>
         </input_widget>
         <input_widget id="iw87">
             <pos>618:201</pos>
             <class>TextFieldUI</class>
-            <label>Mouse click will select today.</label>
+            <descriptor>Period:</descriptor>
             <value>44. week, 2016</value>
         </input_widget>
         <input_widget id="iw86">
             <pos>497:203</pos>
             <class>FormattedTextFieldUI</class>
-            <label>Number of time scale units prior selected one to be included.</label>
+            <descriptor>Period:</descriptor>
             <value>0</value>
         </input_widget>
         <input_widget id="iw88">
             <pos>883:203</pos>
             <class>FormattedTextFieldUI</class>
-            <label>Number of time scale units after selected one to be included.</label>
+            <descriptor>Period:</descriptor>
             <value>0</value>
         </input_widget>
         <input_widget id="iw89">
@@ -1104,22 +1104,22 @@
         <action_widget id="aw31">
             <pos>773:393</pos>
             <class>ButtonUI</class>
-            <label>Hours</label>
+            <label/>
         </action_widget>
         <action_widget id="aw33">
             <pos>826:393</pos>
             <class>ButtonUI</class>
-            <label>Minutes</label>
+            <label/>
         </action_widget>
         <action_widget id="aw32">
             <pos>773:403</pos>
             <class>ButtonUI</class>
-            <label>Hours</label>
+            <label/>
         </action_widget>
         <action_widget id="aw34">
             <pos>826:403</pos>
             <class>ButtonUI</class>
-            <label>Minutes</label>
+            <label/>
         </action_widget>
         <action_widget id="aw35">
             <pos>654:563</pos>
@@ -1134,25 +1134,25 @@
         <input_widget id="iw25">
             <pos>598:213</pos>
             <class>TextFieldUI</class>
-            <label>Short description of this task.</label>
+            <descriptor>Description:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw26">
             <pos>598:242</pos>
             <class>TextFieldUI</class>
-            <label>Keywords associated with this task.</label>
+            <descriptor>Category:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw27">
             <pos>599:272</pos>
             <class>TextAreaUI</class>
-            <label>More detailed information about this task.</label>
+            <descriptor>Notes:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw28">
             <pos>598:358</pos>
             <class>ComboBoxUI</class>
-            <label>Priority of this task compared to other tasks.</label>
+            <descriptor>Priority:</descriptor>
             <value>[options] 1 : 3</value>
         </input_widget>
         <input_widget id="iw29">
@@ -1164,13 +1164,13 @@
         <input_widget id="iw30">
             <pos>751:395</pos>
             <class>FormattedTextFieldUI</class>
-            <label>Hours</label>
+            <descriptor>Priority:</descriptor>
             <value>0</value>
         </input_widget>
         <input_widget id="iw31">
             <pos>804:395</pos>
             <class>FormattedTextFieldUI</class>
-            <label>Minutes</label>
+            <descriptor>:</descriptor>
             <value>0</value>
         </input_widget>
         <input_widget id="iw32">
@@ -1188,7 +1188,7 @@
         <input_widget id="iw34">
             <pos>799:458</pos>
             <class>ComboBoxUI</class>
-            <label>How often does this task repeat ?</label>
+            <descriptor>:</descriptor>
             <value>[options] 0 : 10</value>
         </input_widget>
         <input_widget id="iw35">
@@ -1211,33 +1211,33 @@
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw37">
-            <pos>753:321</pos>
+            <pos>762:321</pos>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw38">
-            <pos>753:331</pos>
+            <pos>762:331</pos>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw39">
-            <pos>660:551</pos>
+            <pos>669:551</pos>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw40">
-            <pos>721:551</pos>
+            <pos>730:551</pos>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw37">
-            <pos>640:319</pos>
+            <pos>631:319</pos>
             <class>ComboBoxUI</class>
             <descriptor>Select date you wish to switch to:</descriptor>
-            <value>[options] 0 : 12</value>
+            <value>[options] 9 : 12</value>
         </input_widget>
         <input_widget id="iw38">
-            <pos>723:323</pos>
+            <pos>732:323</pos>
             <class>FormattedTextFieldUI</class>
             <descriptor>Select date you wish to switch to:</descriptor>
             <value>2016</value>
@@ -1245,7 +1245,7 @@
         <input_widget id="iw39">
             <pos>611:522</pos>
             <class>TextFieldUI</class>
-            <label>Mouse click will select today.</label>
+            <descriptor>29</descriptor>
             <value>Thursday - 27. October, 2016</value>
         </input_widget>
     </window>
@@ -1318,32 +1318,32 @@
         <action_widget id="aw46">
             <pos>560:198</pos>
             <class>ButtonUI</class>
-            <label>Selects previous period.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw47">
             <pos>823:198</pos>
             <class>ButtonUI</class>
-            <label>Selects next period.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw44">
             <pos>539:201</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units prior selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw48">
             <pos>925:201</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units after selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw45">
             <pos>539:213</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units prior selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw49">
             <pos>925:213</pos>
             <class>ButtonUI</class>
-            <label>Number of time scale units after selected one to be included.</label>
+            <label/>
         </action_widget>
         <action_widget id="aw50">
             <pos>488:243</pos>
@@ -1358,25 +1358,25 @@
         <input_widget id="iw40">
             <pos>537:156</pos>
             <class>ComboBoxUI</class>
-            <label>Time scale for data to be displayed.</label>
+            <descriptor>Period:</descriptor>
             <value>[options] 1 : 4</value>
         </input_widget>
         <input_widget id="iw42">
             <pos>618:201</pos>
             <class>TextFieldUI</class>
-            <label>Mouse click will select today.</label>
+            <descriptor>Period:</descriptor>
             <value>44. week, 2016</value>
         </input_widget>
         <input_widget id="iw41">
             <pos>497:203</pos>
             <class>FormattedTextFieldUI</class>
-            <label>Number of time scale units prior selected one to be included.</label>
+            <descriptor>Period:</descriptor>
             <value>0</value>
         </input_widget>
         <input_widget id="iw43">
             <pos>883:203</pos>
             <class>FormattedTextFieldUI</class>
-            <label>Number of time scale units after selected one to be included.</label>
+            <descriptor>Period:</descriptor>
             <value>0</value>
         </input_widget>
         <input_widget id="iw44">
@@ -1389,7 +1389,7 @@
         <input_widget id="iw52">
             <pos>888:274</pos>
             <class>TextFieldUI</class>
-            <label>Total time spent on all tasks during selected period.</label>
+            <descriptor>Total time:</descriptor>
             <value>00:00:00</value>
         </input_widget>
         <input_widget id="iw47">
@@ -1401,25 +1401,25 @@
         <input_widget id="iw48">
             <pos>495:394</pos>
             <class>ComboBoxUI</class>
-            <label>Required property of task.</label>
+            <descriptor>Chart type:</descriptor>
             <value>[options] 0 : 6</value>
         </input_widget>
         <input_widget id="iw50">
             <pos>706:394</pos>
             <class>ComboBoxUI</class>
-            <label>Value of property that all desired tasks should have.</label>
+            <label/>
             <value>[options] -1 : 0</value>
         </input_widget>
         <input_widget id="iw49">
             <pos>596:395</pos>
             <class>ComboBoxUI</class>
-            <label>Type of content rule that all desired tasks should satisfy.</label>
+            <label/>
             <value>[options] -1 : 0</value>
         </input_widget>
         <input_widget id="iw51">
             <pos>706:428</pos>
             <class>TextFieldUI</class>
-            <label>Value of property that all desired tasks should have.</label>
+            <descriptor>Total time:</descriptor>
             <value/>
         </input_widget>
     </window>
