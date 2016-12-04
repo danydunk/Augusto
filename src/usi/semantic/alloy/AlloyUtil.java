@@ -859,10 +859,7 @@ public class AlloyUtil {
 					if (oiw.getSelected() == -1) {
 						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
 					} else {
-						content += "#" + iws.get(iw).getIdentifier()
-								+ ".content.(T/first) = 1 and not(" + iws.get(iw).getIdentifier()
-								+ ".content.(T/first) in " + iws.get(iw).getIdentifier()
-								+ ".invalid)";
+						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 1";
 					}
 				} else {
 					if ((dm.getInvalidData(metadata).size() + dm.getValidData(metadata).size()) > 0) {
@@ -891,7 +888,9 @@ public class AlloyUtil {
 				if (iw instanceof Option_input_widget) {
 					final Option_input_widget oiw = (Option_input_widget) iw;
 
-					final int size = (oiw.getSelected() == -1) ? oiw.getSize() - 1 : oiw.getSize();
+					int size = (oiw.getSelected() == -1) ? oiw.getSize() - 1 : oiw.getSize();
+					size = Math.min(size, 10);
+
 					content += System.getProperty("line.separator");
 					content += "#((filled." + iws.get(iw).getIdentifier() + ").with + "
 							+ iws.get(iw).getIdentifier() + ".content.(T/first)) <= "

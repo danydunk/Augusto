@@ -67,7 +67,7 @@
     </values>
   </DATA>
   <DATA type="itemized">
-    <metadata>&lt;html&gt;The account or category to&lt;br&gt;transfer the money from.&lt;/html&gt;</metadata>
+    <metadata>&lt;html&gt;&lt;font color='gray'&gt;&amp;lt;From&amp;gt;&lt;/font&gt;&lt;/html&gt;</metadata>
     <values>
       <valid>1</valid>
       <invalid>0</invalid>
@@ -81,7 +81,7 @@
     </values>
   </DATA>
   <DATA type="itemized">
-    <metadata>&lt;html&gt;The account or category to&lt;br&gt;transfer the money to.&lt;/html&gt;</metadata>
+    <metadata>&lt;html&gt;&lt;font color='gray'&gt;&amp;lt;To&amp;gt;&lt;/font&gt;&lt;/html&gt;</metadata>
     <values>
       <valid>4</valid>
       <valid>5</valid>
