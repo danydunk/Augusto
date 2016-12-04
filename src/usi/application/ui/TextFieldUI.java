@@ -12,5 +12,6 @@ public class TextFieldUI extends MainHelper {
 		// new TextGuiSubitemTestObject(testObject).setProperty("text", text);
 		new TextGuiSubitemTestObject(testObject).click();
 		new TextGuiSubitemTestObject(testObject).setText(text);
+
 	}
 }

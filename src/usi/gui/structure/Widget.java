@@ -7,6 +7,7 @@ import java.util.List;
 import src.usi.util.IDManager;
 
 import com.rational.test.ft.object.interfaces.TestObject;
+import com.rational.test.ft.vp.impl.TestDataText;
 
 public abstract class Widget implements Comparable<Widget> {
 
@@ -276,11 +277,11 @@ public abstract class Widget implements Comparable<Widget> {
 		} catch (final Exception e) {
 			// label not found
 		}
-		if (label == null || label.length() == 0) {
-			if (to.getProperty("toolTipText") != null) {
-				label = to.getProperty("toolTipText").toString();
-			}
-		}
+		// if (label == null || label.length() == 0) {
+		// if (to.getProperty("toolTipText") != null) {
+		// label = to.getProperty("toolTipText").toString();
+		// }
+		// }
 
 		if (type.equals("ButtonUI")) {
 			if (p == null) {
@@ -299,6 +300,14 @@ public abstract class Widget implements Comparable<Widget> {
 			final int y = p.y;
 			final int size = 2;
 			final int selected = Integer.valueOf(to.getProperty("selected").toString());
+
+			if ((label == null || label.length() == 0) && selected == -1) {
+				final TestDataText element = (TestDataText) to.getTestData("selected");
+				if (element != null) {
+					label = element.getText();
+				}
+			}
+
 			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, selected));
 			return out;
 
@@ -334,6 +343,14 @@ public abstract class Widget implements Comparable<Widget> {
 
 			final int selected = Integer.valueOf(to.getProperty("selectedIndex").toString());
 			final int size = Integer.valueOf(to.getProperty("itemCount").toString());
+
+			if ((label == null || label.length() == 0) && selected == -1) {
+				final TestDataText element = (TestDataText) to.getTestData("selected");
+				if (element != null) {
+					label = element.getText();
+				}
+			}
+
 			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, selected));
 			return out;
 
