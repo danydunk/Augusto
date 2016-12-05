@@ -560,6 +560,7 @@ public class GUIFunctionality_refine {
 				}
 			} else {
 				System.out.println("GET ADAPTED CONSTRAINT: null end.");
+				// System.out.println(new_sem);
 				return null;
 			}
 		}
@@ -799,10 +800,11 @@ public class GUIFunctionality_refine {
 						+ ")");
 				final String new_prop = this.getAdaptedConstraint(this.instancePattern
 						.getSemantics());
+				this.discarded_semantic_properties.remove(this.current_semantic_property);
+
 				if (new_prop == null) {
 					System.out
 					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
-					this.discarded_semantic_properties.remove(this.current_semantic_property);
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
