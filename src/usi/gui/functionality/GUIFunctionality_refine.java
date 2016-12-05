@@ -880,7 +880,8 @@ public class GUIFunctionality_refine {
 				sem_with = addSemanticConstrain_to_Model(sem_with, true_constraints);
 			}
 		}
-		if (first_prop != null
+		if ((this.current_semantic_property == null || this.current_semantic_property.length() == 0)
+				&& first_prop != null
 				&& this.validateProperty(first_prop, this.instancePattern.getSemantics(),
 						this.observed_tcs)) {
 			this.current_semantic_property = first_prop;
