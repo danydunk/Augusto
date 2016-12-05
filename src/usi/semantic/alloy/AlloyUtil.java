@@ -859,7 +859,10 @@ public class AlloyUtil {
 					if (oiw.getSelected() == -1) {
 						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
 					} else {
-						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 1";
+						content += "#" + iws.get(iw).getIdentifier()
+								+ ".content.(T/first) = 1 and not(" + iws.get(iw).getIdentifier()
+								+ ".content.(T/first) in " + iws.get(iw).getIdentifier()
+								+ ".invalid)";
 					}
 				} else {
 					if ((dm.getInvalidData(metadata).size() + dm.getValidData(metadata).size()) > 0) {
