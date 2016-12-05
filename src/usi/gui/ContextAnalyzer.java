@@ -37,6 +37,7 @@ public class ContextAnalyzer {
 
 		this.descriptors_classes = new ArrayList<String>();
 		this.descriptors_classes.add("LabelUI");
+		this.descriptors_classes.add("CheckBoxUI");
 
 		this.descriptorInContainer = new HashMap<TestObject, List<Descriptor>>();
 		this.containedInContainer = new HashMap<TestObject, List<TestObject>>();
@@ -69,7 +70,10 @@ public class ContextAnalyzer {
 				if (!showing) {
 					continue;
 				}
-				final Object text = to.getProperty("text");
+				Object text = null;
+				try {
+					text = to.getProperty("text");
+				} catch (final Exception e) {}
 				final Point p = (Point) to.getProperty("locationOnScreen");
 				final int x = p.x;
 				final int y = p.y;

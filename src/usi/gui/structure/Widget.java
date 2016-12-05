@@ -280,11 +280,14 @@ public abstract class Widget implements Comparable<Widget> {
 		} catch (final Exception e) {
 			// label not found
 		}
-		// if (label == null || label.length() == 0) {
-		// if (to.getProperty("toolTipText") != null) {
-		// label = to.getProperty("toolTipText").toString();
-		// }
-		// }
+
+		try {
+			if (label == null || label.length() == 0) {
+				if (to.getProperty("hint") != null) {
+					label = to.getProperty("hint").toString();
+				}
+			}
+		} catch (final Exception e) {}
 
 		if (type.equals("ButtonUI")) {
 			if (p == null) {

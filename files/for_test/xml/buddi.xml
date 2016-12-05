@@ -291,7 +291,7 @@
             <value>[options] 2 : 17</value>
         </input_widget>
         <input_widget id="iw28">
-            <pos>290:215</pos>
+            <pos>281:215</pos>
             <class>ComboBoxUI</class>
             <descriptor>Date Format</descriptor>
             <value>[options] 0 : 8</value>
@@ -444,13 +444,13 @@
         <input_widget id="iw32">
             <pos>183:214</pos>
             <class>TextFieldUI</class>
-            <descriptor>Proxy Server</descriptor>
+            <label>&lt;Proxy Server Name&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw33">
             <pos>397:214</pos>
             <class>TextFieldUI</class>
-            <descriptor>:</descriptor>
+            <label>&lt;Proxy Server Port&gt;</label>
             <value>0</value>
         </input_widget>
     </window>
@@ -473,7 +473,7 @@
         <input_widget id="iw65">
             <pos>402:239</pos>
             <class>TextFieldUI</class>
-            <descriptor>Name</descriptor>
+            <label>&lt;Name&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw66">
@@ -498,7 +498,7 @@
         <input_widget id="iw70">
             <pos>309:355</pos>
             <class>TextAreaUI</class>
-            <descriptor>Type</descriptor>
+            <label>&lt;Notes&gt;</label>
             <value/>
         </input_widget>
     </window>
@@ -860,11 +860,13 @@
         <input_widget id="iw42">
             <pos>942:327</pos>
             <class>TextFieldUI</class>
+            <label>&lt;Search&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw44">
             <pos>654:356</pos>
             <class>TextAreaUI</class>
+            <label/>
             <value/>
         </input_widget>
         <selectable_widget id="sw5">
@@ -1102,7 +1104,7 @@
         <input_widget id="iw1">
             <pos>424:267</pos>
             <class>TextFieldUI</class>
-            <descriptor>Account Name</descriptor>
+            <label>&lt;Name&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw2">
@@ -1120,7 +1122,7 @@
         <input_widget id="iw4">
             <pos>313:328</pos>
             <class>TextAreaUI</class>
-            <descriptor>Starting Balance</descriptor>
+            <label>&lt;Notes&gt;</label>
             <value/>
         </input_widget>
     </window>
@@ -1397,7 +1399,7 @@
         <input_widget id="iw5">
             <pos>675:352</pos>
             <class>TextFieldUI</class>
-            <descriptor>Name</descriptor>
+            <label>&lt;Name&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw6">
@@ -1628,6 +1630,7 @@
         <input_widget id="iw8">
             <pos>572:151</pos>
             <class>TextFieldUI</class>
+            <label>&lt;Search&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw9">
@@ -1638,16 +1641,19 @@
         <input_widget id="iw10">
             <pos>231:493</pos>
             <class>ComboBoxUI</class>
+            <label>&lt;Description&gt;</label>
             <value>&lt;Description&gt;</value>
         </input_widget>
         <input_widget id="iw11">
             <pos>460:493</pos>
             <class>TextFieldUI</class>
+            <label>&lt;Number&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw15">
             <pos>603:494</pos>
             <class>TextAreaUI</class>
+            <label>&lt;Memo&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw12">
@@ -2096,13 +2102,13 @@
         <input_widget id="iw56">
             <pos>416:70</pos>
             <class>TextAreaUI</class>
-            <descriptor>Repeat this action</descriptor>
+            <label>&lt;Message&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw50">
             <pos>158:76</pos>
             <class>TextFieldUI</class>
-            <descriptor>Scheduled Transaction Name</descriptor>
+            <label>&lt;Scheduled Transaction Name&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw51">
@@ -2115,7 +2121,7 @@
             <pos>158:136</pos>
             <class>FormattedTextFieldUI</class>
             <descriptor>starting on</descriptor>
-            <value>2016/12/04</value>
+            <value>2016/12/05</value>
         </input_widget>
         <input_widget id="iw53">
             <pos>68:169</pos>
@@ -2126,8 +2132,8 @@
         <input_widget id="iw54">
             <pos>158:170</pos>
             <class>FormattedTextFieldUI</class>
-            <descriptor>Repeat this action</descriptor>
-            <value>2017/12/04</value>
+            <descriptor>ending after</descriptor>
+            <value>2017/12/05</value>
         </input_widget>
         <input_widget id="iw55">
             <pos>167:207</pos>
@@ -2138,19 +2144,19 @@
         <input_widget id="iw57">
             <pos>13:332</pos>
             <class>ComboBoxUI</class>
-            <descriptor>and repeating on the</descriptor>
+            <label>&lt;Description&gt;</label>
             <value>&lt;Description&gt;</value>
         </input_widget>
         <input_widget id="iw58">
             <pos>298:332</pos>
             <class>TextFieldUI</class>
-            <descriptor>of each month.</descriptor>
+            <label>&lt;Number&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw62">
             <pos>486:333</pos>
             <class>TextAreaUI</class>
-            <descriptor>of each month.</descriptor>
+            <label>&lt;Memo&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw59">

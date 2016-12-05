@@ -1164,7 +1164,7 @@
         <input_widget id="iw30">
             <pos>751:395</pos>
             <class>FormattedTextFieldUI</class>
-            <descriptor>Priority:</descriptor>
+            <descriptor>Notification of task at:</descriptor>
             <value>0</value>
         </input_widget>
         <input_widget id="iw31">
@@ -1401,7 +1401,7 @@
         <input_widget id="iw48">
             <pos>495:394</pos>
             <class>ComboBoxUI</class>
-            <descriptor>Chart type:</descriptor>
+            <descriptor>Highlighted tasks:</descriptor>
             <value>[options] 0 : 6</value>
         </input_widget>
         <input_widget id="iw50">
