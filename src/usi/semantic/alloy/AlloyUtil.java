@@ -939,7 +939,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1599,7 +1599,7 @@ public class AlloyUtil {
 			if (s != null && s.length() > 0) {
 				final List<String> fills = values_used.get(s);
 
-				fact += " and #" + fills.get(0) + "= 1";
+				fact += " and #" + fills.get(0) + " = 1";
 
 				if (fills.size() > 1) {
 					String prev = fills.get(0);
@@ -1672,7 +1672,7 @@ public class AlloyUtil {
 				} else {
 					assert (values_used_iw_itemized.get(iw).get(x) != -1);
 					// if here it, value cannot be -1
-					fact += "#" + values_used_itemized.get(iw).get(x) + "=1 and not("
+					fact += " and #" + values_used_itemized.get(iw).get(x) + "=1 and not("
 							+ values_used_itemized.get(iw).get(x) + " = Input_widget_" + iw.getId()
 							+ ".content.(T/first))";
 				}
