@@ -60,6 +60,9 @@ public class GUIFunctionality_validate {
 
 		this.edges = new ArrayList<>();
 		for (final Action_widget aw : instancePattern.getGui().getAction_widgets()) {
+			if (instancePattern.getPAW_for_AW(aw.getId()) == null) {
+				continue;
+			}
 			for (final Window w : instancePattern.getGui().getDynamicForwardLinks(aw.getId())) {
 				final String edge = aw.getId() + " -> " + w.getId();
 				this.edges.add(edge);
@@ -210,7 +213,7 @@ public class GUIFunctionality_validate {
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -218,7 +221,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 

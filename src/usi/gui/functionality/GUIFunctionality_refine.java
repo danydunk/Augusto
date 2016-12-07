@@ -708,6 +708,7 @@ public class GUIFunctionality_refine {
 
 	private void semanticPropertyRefine() throws Exception {
 
+		boolean oversemplified = false;
 		String first_prop = null;
 		int size = -1;
 		final long beginTime = System.currentTimeMillis();
@@ -795,14 +796,18 @@ public class GUIFunctionality_refine {
 
 			if (tests.size() == 0) {
 				size = -1;
-
 				System.out.println("PROPERTY MAYBE OVERSEMPLIFIED");
+				if (oversemplified) {
+					break mainloop;
+				}
+				oversemplified = true;
 
 				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
 						+ ")");
 				final String new_prop = this.getAdaptedConstraint(this.instancePattern
 						.getSemantics());
-				this.discarded_semantic_properties.remove(this.current_semantic_property);
+				this.discarded_semantic_properties.remove("not(" + this.current_semantic_property
+						+ ")");
 
 				if (new_prop == null) {
 					System.out
@@ -823,7 +828,7 @@ public class GUIFunctionality_refine {
 				break;
 
 			}
-
+			oversemplified = false;
 			GUITestCase tc = tests.get(0);
 
 			GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);

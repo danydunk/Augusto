@@ -3,6 +3,7 @@ package src.usi.semantic;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,6 +149,8 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		// additional constraints on the values
 		final List<Input_widget> iws_generic = new ArrayList<>();
 		final List<Input_widget> iws_not_generic = new ArrayList<>();
+		final Map<Option_input_widget, List<Integer>> oiws = new HashMap<>();
+
 		// we check whether we have invalid inputdata for this instance
 		final DataManager dm = DataManager.getInstance();
 		boolean unvalid_data = false;
@@ -158,6 +161,18 @@ public class SpecificSemantics extends FunctionalitySemantics {
 					metadata += " ";
 					metadata += iw.getDescriptor() != null ? iw.getDescriptor() : "";
 					if (iw instanceof Option_input_widget) {
+						final Option_input_widget oiw = (Option_input_widget) iw;
+						final List<Integer> ints = new ArrayList<>();
+						if (dm.getInvalidItemizedData(metadata).size()
+								+ dm.getValidItemizedData(metadata).size() > 0) {
+							ints.addAll(dm.getInvalidItemizedData(metadata));
+							ints.addAll(dm.getValidItemizedData(metadata));
+						} else {
+							for (int i = 0; i < oiw.getSize(); i++) {
+								ints.add(i);
+							}
+						}
+						oiws.put(oiw, ints);
 						if (dm.getInvalidItemizedData(metadata).size() > 0) {
 							unvalid_data = true;
 						}
@@ -330,6 +345,26 @@ public class SpecificSemantics extends FunctionalitySemantics {
 				values_fact_content += System.getProperty("line.separator");
 				values_fact_content += newline;
 
+			}
+		}
+
+		for (final Option_input_widget oiw : oiws.keySet()) {
+
+			int intersect = 0;
+			for (final Option_input_widget oiw2 : oiws.keySet()) {
+				if (oiw == oiw2) {
+					continue;
+				}
+				for (final Integer i : oiws.get(oiw)) {
+					if (oiws.get(oiw2).contains(i)) {
+						intersect++;
+					}
+				}
+				intersect = Math.min(intersect, 10);
+				values_fact_content += System.getProperty("line.separator");
+
+				values_fact_content = "#((Input_widget_" + oiw.getId() + "+Input_widget_"
+						+ oiw2.getId() + ").content.Time) <= " + intersect;
 			}
 		}
 
