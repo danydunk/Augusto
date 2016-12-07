@@ -118,12 +118,12 @@ compileJava.doLast {
 
 task createMain(type:Exec) {
 
-	commandLine 'cmd', '/c', "echo java -Xmx9g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback src.usi.Main "+projectDir+" > Main.bat"
+	commandLine 'cmd', '/c', "echo java -Xmx8g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback src.usi.Main "+projectDir+" > Main.bat"
 }
 
 task createMainRipper(type:Exec) {
 
-	commandLine 'cmd', '/c', "echo java -Xmx9g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback src.usi.RipperMain "+projectDir+" > Ripper.bat"
+	commandLine 'cmd', '/c', "echo java -Xmx8g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback src.usi.RipperMain "+projectDir+" > Ripper.bat"
 }
 
 build.dependsOn 'createMain'
@@ -142,7 +142,7 @@ commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\rachota\\bin > run.bat 
 }
 task testall(type:Exec) {
 
-commandLine 'cmd', '/c', "java -ea -Xmx9g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback test.rft.runAll "+projectDir+" 2>&1"
+commandLine 'cmd', '/c', "java -ea -Xmx8g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback test.rft.runAll "+projectDir+" 2>&1"
 }
 testall.dependsOn 'build'
 testall.dependsOn 'deployBuddi'
@@ -150,7 +150,7 @@ testall.dependsOn 'deployUPM'
 
 task runtest(type:Exec) {
 
-commandLine 'cmd', '/c', "java -ea -Xmx9g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback test.rft.$test "+projectDir+" 2>&1"
+commandLine 'cmd', '/c', "java -ea -Xmx8g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback test.rft.$test "+projectDir+" 2>&1"
 }
 runtest.dependsOn 'build'
 runtest.dependsOn 'deployBuddi'

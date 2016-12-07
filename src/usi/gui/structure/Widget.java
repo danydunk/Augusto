@@ -342,7 +342,10 @@ public abstract class Widget implements Comparable<Widget> {
 			final int y = p.y;
 			final boolean editable = Boolean.valueOf(to.getProperty("editable").toString());
 			if (editable) {
-				final String value = to.getProperty("text").toString();
+				String value = "";
+				try {
+					value = to.getProperty("text").toString();
+				} catch (final Exception e) {}
 				out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
 				return out;
 			}

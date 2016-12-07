@@ -60,7 +60,6 @@ public class ApplicationHelper {
 		RationalTestScript.unregisterAll();
 
 		RationalTestScript.shellExecute(PathsManager.getAUTPath());
-		System.gc();
 
 		final long delayTime = System.nanoTime();
 
@@ -101,12 +100,12 @@ public class ApplicationHelper {
 
 		System.out.println("CLOSING SUT");
 		try {
-			System.setProperty("java.rmi.server.hostname", "127.0.0.1");
 			final Registry registry = LocateRegistry.getRegistry(2007);
 			final RemoteCoberturaInterface rmo = (RemoteCoberturaInterface) registry
 					.lookup("RemoteCobertura");
 			rmo.saveCoverage();
 		} catch (final Exception e) {
+
 			e.printStackTrace();
 			System.out
 			.println("ApplicationHelper: RMI error while closing application. Moving on.");
@@ -147,7 +146,10 @@ public class ApplicationHelper {
 
 	public void restartApplication() throws Exception {
 
-		this.closeApplication();
+		if (this.running) {
+			this.closeApplication();
+		}
+
 		this.startApplication();
 	}
 

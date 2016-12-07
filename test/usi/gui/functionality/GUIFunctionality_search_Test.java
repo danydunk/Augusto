@@ -21,6 +21,10 @@ public class GUIFunctionality_search_Test {
 	@Test
 	public void test1() {
 
+		String a = "";
+		final Object b = null;
+		a += a + b;
+
 		try {
 			final GUI gui = GUIStructureMaker.instance1();
 

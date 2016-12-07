@@ -224,6 +224,7 @@ public class AlloyUtil {
 	 * @return a solution
 	 * @throws Exception
 	 */
+	@SuppressWarnings("deprecation")
 	static public A4Solution runCommand(final Module model, final Command run_command,
 			final long timeout) throws Exception {
 
@@ -1540,7 +1541,9 @@ public class AlloyUtil {
 				if (!(f.getWidget() instanceof Option_input_widget)) {
 
 					String new_value = "";
-					new_value += f.getInput();
+					if (f.getInput() != null) {
+						new_value += f.getInput();
+					}
 					if (!values_used_iw.containsKey(new_value)) {
 						values_used_iw.put(new_value, new ArrayList<Input_widget>());
 					}
@@ -1593,8 +1596,11 @@ public class AlloyUtil {
 		for (int c = 0; c < keys.size(); c++) {
 			final String s = keys.get(c);
 			// we deal with the equals
-			if (s != null) {
+			if (s != null && s.length() > 0) {
 				final List<String> fills = values_used.get(s);
+
+				fact += " and #" + fills.get(0) + "= 1";
+
 				if (fills.size() > 1) {
 					String prev = fills.get(0);
 					for (int cont = 1; cont < fills.size(); cont++) {
@@ -1659,15 +1665,18 @@ public class AlloyUtil {
 				}
 
 				final Option_input_widget oiw = (Option_input_widget) iw;
-				if (oiw.getSelected() != -1) {
-					if (oiw.getSelected() == values_used_iw_itemized.get(iw).get(x)) {
-						fact += " and " + values_used_itemized.get(iw).get(x) + " = Input_widget_"
-								+ iw.getId() + ".content.(T/first)";
-					} else {
-						fact += " and not(" + values_used_itemized.get(iw).get(x)
-								+ " = Input_widget_" + iw.getId() + ".content.(T/first))";
-					}
+				if (oiw.getSelected() == values_used_iw_itemized.get(iw).get(x)) {
+					fact += " and " + values_used_itemized.get(iw).get(x) + " = Input_widget_"
+							+ iw.getId() + ".content.(T/first)";
+
+				} else {
+					assert (values_used_iw_itemized.get(iw).get(x) != -1);
+					// if here it, value cannot be -1
+					fact += "#" + values_used_itemized.get(iw).get(x) + "=1 and not("
+							+ values_used_itemized.get(iw).get(x) + " = Input_widget_" + iw.getId()
+							+ ".content.(T/first))";
 				}
+
 				for (int y = x + 1; y < values_used_iw_itemized.get(iw).size(); y++) {
 					if (values_used_iw_itemized.get(iw).get(x) == values_used_iw_itemized.get(iw)
 							.get(y)) {

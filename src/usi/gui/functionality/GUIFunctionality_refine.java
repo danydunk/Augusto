@@ -195,7 +195,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -483,7 +483,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -547,10 +547,12 @@ public class GUIFunctionality_refine {
 			final SpecificSemantics new_sem = addSemanticConstrain_to_Model(sem, constraints);
 
 			final Module comp = AlloyUtil.compileAlloyModel(new_sem.toString());
-			final A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
+			A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
 
 			if (sol.satisfiable()) {
 				final String new_prop = AlloyUtil.extractProperty(sol, new_sem);
+				sol = null;
+
 				if (this.validateProperty(new_prop, in_sem, tcs)) {
 					System.out.println("GET ADAPTED CONSTRAINT: found new constraint: " + new_prop);
 					return new_prop;
@@ -804,7 +806,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -822,29 +824,23 @@ public class GUIFunctionality_refine {
 
 			}
 
-			final GUITestCase tc = tests.get(0);
+			GUITestCase tc = tests.get(0);
 
 			GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
 			if (res == null) {
 				final TestCaseRunner runner = new TestCaseRunner(this.gui);
+				tc = new GUITestCase(null, tc.getActions(), tc.getRunCommand());
 				res = runner.runTestCase(tc);
-
 				// we dont need the result (it wastes too much memory)
-				final GUITestCase new_tc = new GUITestCase(null, res.getTc().getActions(), res
-						.getTc().getRunCommand());
-				final GUITestCaseResult new_res = new GUITestCaseResult(new_tc,
+
+				final GUITestCaseResult new_res = new GUITestCaseResult(tc,
 						res.getActions_executed(), res.getResults(),
 						res.getActions_actually_executed());
 				res = new_res;
+				this.observed_tcs.add(res);
 
 			} else {
 
-				// we dont need the result (it wastes too much memory)
-				final GUITestCase new_tc = new GUITestCase(null, tc.getActions(),
-						tc.getRunCommand());
-
-				res = new GUITestCaseResult(new_tc, res.getActions_executed(), res.getResults(),
-						res.getActions_actually_executed());
 				System.out.println("TESTCASE ALREADY RUN!!!");
 
 			}
@@ -928,7 +924,6 @@ public class GUIFunctionality_refine {
 				final Alloy_Model sem = AlloyUtil.getTCaseModel(sem_filtered, batch.get(cont)
 						.getTc().getActions(),
 						batch.get(cont).getResults().get(batch.get(cont).getResults().size() - 1));
-
 				final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
 				final Run_command_thread run = new Run_command_thread(comp, comp.getAllCommands()
 						.get(0));
@@ -958,11 +953,8 @@ public class GUIFunctionality_refine {
 							}
 							System.out.println("VALIDATE PROPERTY: -false- end.");
 							return false;
-						} else {
-
 						}
 					}
-
 				}
 			}
 			batchn++;

@@ -25,5 +25,6 @@ public class ComboBoxUI extends MainHelper {
 
 		new TextSelectGuiSubitemTestObject(testObject).click();
 		new TextSelectGuiSubitemTestObject(testObject).setProperty("text", text);
+		new TextSelectGuiSubitemTestObject(testObject).click();
 	}
 }

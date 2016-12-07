@@ -33,7 +33,7 @@ fact {
 	#Read_trigger.goes < 2
 	#Update_trigger.goes < 2
 	#Delete_trigger.goes < 2
-	//all iw: (Input_widget-Form.iws) | not(iw in Property_unique.uniques) and not(iw in Property_required.requireds)
+	all iw: (Input_widget-Form.iws) | not(iw in Property_unique.uniques) and not(iw in Property_required.requireds)
 	all iw: Form.iws | #iw.content.(T/first) =1 => not(iw in Property_required.requireds)
 }
 ---------------Generic CRUD Semantics---------- 

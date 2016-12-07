@@ -8,6 +8,10 @@
                 <instance>aw20</instance>
             </mapping>
             <mapping>
+                <pattern>paw2</pattern>
+                <instance>aw23</instance>
+            </mapping>
+            <mapping>
                 <pattern>paw3</pattern>
                 <instance>aw21</instance>
             </mapping>
@@ -52,6 +56,36 @@
             <mapping>
                 <pattern>piw1</pattern>
                 <instance>iw22</instance>
+            </mapping>
+        </instance_window>
+        <instance_window instance_id="w11" pattern_id="view">
+            <mapping>
+                <pattern>paw7</pattern>
+                <instance>aw69</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw32</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw33</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw35</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw34</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw36</instance>
+            </mapping>
+            <mapping>
+                <pattern>piw3</pattern>
+                <instance>iw37</instance>
             </mapping>
         </instance_window>
     </windows>
@@ -124,14 +158,20 @@ one sig Property_required {&#13;
 sig Object_inlist extends Object {&#13;
 	vs: Value lone -&gt; Input_widget,&#13;
 }&#13;
-one sig List {&#13;
-	contains: Object_inlist -&gt; Time,&#13;
-}&#13;
+one sig Window_w11 extends View { }&#13;
 one sig Window_w2 extends Initial { }&#13;
 one sig Window_w8 extends Form { }&#13;
+one sig Input_widget_iw32 extends Input_widget { }&#13;
+one sig Input_widget_iw33 extends Input_widget { }&#13;
+one sig Input_widget_iw35 extends Input_widget { }&#13;
+one sig Input_widget_iw34 extends Input_widget { }&#13;
+one sig Input_widget_iw36 extends Input_widget { }&#13;
+one sig Input_widget_iw37 extends Input_widget { }&#13;
+one sig Action_widget_aw69 extends Ok { }&#13;
 one sig Action_widget_aw20 extends Create_trigger { }&#13;
 one sig Action_widget_aw21 extends Update_trigger { }&#13;
 one sig Action_widget_aw22 extends Delete_trigger { }&#13;
+one sig Action_widget_aw23 extends Read_trigger { }&#13;
 one sig Selectable_widget_sw1 extends Selectable_widget { }&#13;
 one sig Input_widget_iw17 extends Input_widget { }&#13;
 one sig Input_widget_iw18 extends Input_widget { }&#13;
@@ -162,19 +202,37 @@ fact fact2{&#13;
 	#Read_trigger.goes &lt; 2&#13;
 	#Update_trigger.goes &lt; 2&#13;
 	#Delete_trigger.goes &lt; 2&#13;
-	//all iw: (Input_widget-Form.iws) | not(iw in Property_unique.uniques) and not(iw in Property_required.requireds)&#13;
+	all iw: (Input_widget-Form.iws) | not(iw in Property_unique.uniques) and not(iw in Property_required.requireds)&#13;
 	all iw: Form.iws | #iw.content.(T/first) =1 =&gt; not(iw in Property_required.requireds)&#13;
 &#13;
 }&#13;
 fact windows_number{&#13;
-	#Window = 2&#13;
+	#Window = 3&#13;
+&#13;
+}&#13;
+fact Window_w11_iws{&#13;
+	Window_w11.iws = Input_widget_iw32 + Input_widget_iw33 + Input_widget_iw35 + Input_widget_iw34 + Input_widget_iw36 + Input_widget_iw37&#13;
+	#Input_widget_iw32.content.(T/first) = 0&#13;
+	#Input_widget_iw33.content.(T/first) = 0&#13;
+	#((filled.Input_widget_iw35).with + Input_widget_iw35.content.(T/first)) &lt;= 2&#13;
+	#Input_widget_iw35.content.(T/first) = 1&#13;
+	#Input_widget_iw34.content.(T/first) = 0&#13;
+	#Input_widget_iw36.content.(T/first) = 0&#13;
+	#Input_widget_iw37.content.(T/first) = 0&#13;
+	IW/next[Input_widget_iw32]=Input_widget_iw33 and IW/next[Input_widget_iw33]=Input_widget_iw35 and IW/next[Input_widget_iw35]=Input_widget_iw34 and IW/next[Input_widget_iw34]=Input_widget_iw36 and IW/next[Input_widget_iw36]=Input_widget_iw37&#13;
+&#13;
+}&#13;
+fact Window_w11_aws{&#13;
+	Window_w11.aws = Action_widget_aw69&#13;
+	Action_widget_aw69.goes = Window_w2&#13;
 &#13;
 }&#13;
 fact Window_w2_aws{&#13;
-	Window_w2.aws = Action_widget_aw20 + Action_widget_aw21 + Action_widget_aw22&#13;
+	Window_w2.aws = Action_widget_aw20 + Action_widget_aw21 + Action_widget_aw22 + Action_widget_aw23&#13;
 	Action_widget_aw20.goes = Window_w8&#13;
 	Action_widget_aw21.goes = Window_w8&#13;
 	Action_widget_aw22.goes = Window_w2&#13;
+	Action_widget_aw23.goes = Window_w11&#13;
 &#13;
 }&#13;
 fact Window_w2_sws{&#13;
@@ -195,7 +253,7 @@ fact Window_w8_iws{&#13;
 }&#13;
 fact Window_w8_aws{&#13;
 	Window_w8.aws = Action_widget_aw62 + Action_widget_aw63&#13;
-	Action_widget_aw62.goes = Window_w2&#13;
+	Action_widget_aw62.goes = Window_w2 + Window_w2&#13;
 	Action_widget_aw63.goes = Window_w2&#13;
 &#13;
 }&#13;
@@ -402,6 +460,59 @@ pred delete [t, t': Time] {&#13;
                 <value/>
             </input_widget>
         </window>
+        <window id="w11">
+            <pos>517:166</pos>
+            <class>com._17od.upm.gui.AccountDialog</class>
+            <title>View Account</title>
+            <modal>true</modal>
+            <root>false</root>
+            <action_widget id="aw68">
+                <pos>772:286</pos>
+                <class>ButtonUI</class>
+                <label>Generate</label>
+            </action_widget>
+            <action_widget id="aw69">
+                <pos>694:577</pos>
+                <class>ButtonUI</class>
+                <label>OK</label>
+            </action_widget>
+            <input_widget id="iw32">
+                <pos>601:206</pos>
+                <class>TextFieldUI</class>
+                <descriptor>Account</descriptor>
+                <value/>
+            </input_widget>
+            <input_widget id="iw33">
+                <pos>601:246</pos>
+                <class>TextFieldUI</class>
+                <descriptor>User Id</descriptor>
+                <value/>
+            </input_widget>
+            <input_widget id="iw35">
+                <pos>854:286</pos>
+                <class>CheckBoxUI</class>
+                <label>Hide</label>
+                <value>[options] 1 : 2</value>
+            </input_widget>
+            <input_widget id="iw34">
+                <pos>601:287</pos>
+                <class>PasswordFieldUI</class>
+                <descriptor>Password</descriptor>
+                <value>H0WF74ab</value>
+            </input_widget>
+            <input_widget id="iw36">
+                <pos>601:329</pos>
+                <class>TextFieldUI</class>
+                <descriptor>URL</descriptor>
+                <value/>
+            </input_widget>
+            <input_widget id="iw37">
+                <pos>602:370</pos>
+                <class>TextAreaUI</class>
+                <descriptor>Notes</descriptor>
+                <value/>
+            </input_widget>
+        </window>
         <window id="w2">
             <pos>580:241</pos>
             <class>com._17od.upm.gui.MainWindow</class>
@@ -540,12 +651,20 @@ pred delete [t, t': Time] {&#13;
                 <selected>-1</selected>
             </selectable_widget>
         </window>
+        <edge type="static">
+            <from>aw62</from>
+            <to>w2</to>
+        </edge>
         <edge type="dynamic">
             <from>aw62</from>
             <to>w2</to>
         </edge>
         <edge type="static">
             <from>aw63</from>
+            <to>w2</to>
+        </edge>
+        <edge type="static">
+            <from>aw69</from>
             <to>w2</to>
         </edge>
         <edge type="static">
@@ -559,6 +678,14 @@ pred delete [t, t': Time] {&#13;
         <edge type="dynamic">
             <from>aw22</from>
             <to>w2</to>
+        </edge>
+        <edge type="dynamic">
+            <from>aw23</from>
+            <to>w11</to>
+        </edge>
+        <edge type="static">
+            <from>aw3</from>
+            <to>w8</to>
         </edge>
     </GUI>
 </instance_GUI_pattern>
