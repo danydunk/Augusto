@@ -350,8 +350,9 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 		for (final Option_input_widget oiw : oiws.keySet()) {
 
-			int intersect = 0;
 			for (final Option_input_widget oiw2 : oiws.keySet()) {
+				int intersect = 0;
+
 				if (oiw == oiw2) {
 					continue;
 				}
@@ -363,7 +364,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 				intersect = Math.min(intersect, 10);
 				values_fact_content += System.getProperty("line.separator");
 
-				values_fact_content = "#((Input_widget_" + oiw.getId() + "+Input_widget_"
+				values_fact_content += "#((Input_widget_" + oiw.getId() + "+Input_widget_"
 						+ oiw2.getId() + ").content.Time) <= " + intersect;
 			}
 		}

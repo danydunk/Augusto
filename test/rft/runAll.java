@@ -54,6 +54,8 @@ public class runAll extends runAllHelper {
 			new Save_window_xml().testMain(args);
 			System.out.println("TEST CASE GENERATION UPM TEST");
 			new TestCaseGeneration_upm_full().testMain(args);
+			System.out.println("RACHOTA REFINEMENT TEST");
+			new Refinement_rachota_test().testMain(args);
 		} catch (final UserStoppedScriptError a) {
 			error = true;
 			System.out.println("RFT STOPPED");
