@@ -348,14 +348,19 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			}
 		}
 
+		final Option_input_widget[] list = new Option_input_widget[oiws.keySet().size()];
+		int x = 0;
 		for (final Option_input_widget oiw : oiws.keySet()) {
+			list[x] = oiw;
+			x++;
+		}
+		for (x = 0; x < list.length; x++) {
+			final Option_input_widget oiw = list[x];
+			for (int y = x + 1; y < list.length; y++) {
+				final Option_input_widget oiw2 = list[y];
 
-			for (final Option_input_widget oiw2 : oiws.keySet()) {
 				int intersect = 0;
 
-				if (oiw == oiw2) {
-					continue;
-				}
 				for (final Integer i : oiws.get(oiw)) {
 					if (oiws.get(oiw2).contains(i)) {
 						intersect++;
@@ -369,7 +374,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			}
 		}
 
-		for (int x = 0; x < iws_not_generic.size(); x++) {
+		for (x = 0; x < iws_not_generic.size(); x++) {
 			final Input_widget iw = iws_not_generic.get(x);
 			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
 			metadata += " ";
