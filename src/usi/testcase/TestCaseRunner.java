@@ -58,12 +58,13 @@ public class TestCaseRunner {
 
 		curr = gmanager.getCurrentActiveWindows();
 		if (curr == null) {
+			System.out.println("Testcase Runner: no windows found.");
 			if (app.isRunning()) {
 				app.restartApplication();
 			} else {
 				app.startApplication();
 			}
-			Thread.sleep(2000);
+			Thread.sleep(10000);
 			gmanager.readGUI();
 			curr = gmanager.getCurrentActiveWindows();
 		}
