@@ -54,11 +54,8 @@ public class Refinement_rachota_test extends Refinement_rachota_testHelper {
 
 		match.generateSpecificSemantics();
 		final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
-		try {
-			match = refiner.refine();
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
+		match = refiner.refine();
+
 		ExperimentManager.cleanUP();
 
 		if (match == null) {
@@ -72,10 +69,9 @@ public class Refinement_rachota_test extends Refinement_rachota_testHelper {
 			}
 		}
 
-		// if
-		// (!sem_prop.contains("Property_required_0.requireds = (Input_widget_iw1)"))
-		// {
-		// throw new Exception("");
-		// }
+		if (sem_prop.length() == 0
+				|| !sem_prop.contains("Property_required_0.requireds = (Input_widget_iw25)")) {
+			throw new Exception("");
+		}
 	}
 }

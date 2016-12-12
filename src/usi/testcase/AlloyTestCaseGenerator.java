@@ -207,8 +207,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-		ts[0].interrupt();
-		ts[1].interrupt();
+			ts[0].interrupt();
+			ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -685,18 +685,15 @@ public class AlloyTestCaseGenerator {
 			assert (inpw != null);
 			if (v != null) {
 				if (inpw instanceof Option_input_widget) {
-					System.out.println("oiwid " + inpw.getId());
-					System.out.println("value " + v);
+
 					final Option_input_widget oiw = (Option_input_widget) inpw;
 					String metadata = inpw.getLabel() != null ? inpw.getLabel() : "";
 					metadata += " ";
 					metadata = inpw.getDescriptor() != null ? inpw.getDescriptor() : "";
-					System.out.println("metadata " + metadata);
 
 					List<Integer> data = null;
 					if (invalid_values.contains(v)) {
 						data = dm.getInvalidItemizedData(metadata);
-						System.out.println("invalid " + data.size());
 
 						assert (data.size() > 0);
 					} else {
@@ -707,13 +704,11 @@ public class AlloyTestCaseGenerator {
 								data.add(x);
 							}
 						}
-						System.out.println("valid " + data.size());
 
 					}
 					assert (data != null);
 
 					if (options_for_value.containsKey(v)) {
-						System.out.println("contains");
 						List<Integer> new_list = new ArrayList<>();
 						// we calculate the intersection between the values
 						// already
@@ -728,7 +723,6 @@ public class AlloyTestCaseGenerator {
 								}
 							}
 						}
-						System.out.println("new list size " + new_list.size());
 						if (invalid_values.contains(v) && new_list.size() == 0) {
 							throw new Exception(
 									"AlloyTestCaseGeneration - not enough invalid input data.");
@@ -819,7 +813,6 @@ public class AlloyTestCaseGenerator {
 		final List<Integer> used_options = new ArrayList<>();
 		for (final String key : out.keySet()) {
 			if (key.endsWith("_option")) {
-				System.out.println("already used " + key + " " + out.get(key));
 				used_options.add(Integer.valueOf(out.get(key)));
 			}
 		}
@@ -828,19 +821,14 @@ public class AlloyTestCaseGenerator {
 				// it means it was a firts value
 				continue;
 			}
-			System.out.println("start " + key);
 			final List<Integer> possible_options = new ArrayList<>();
 			for (final Integer s : options_for_value.get(key)) {
-				System.out.println(s);
 				if (!used_options.contains(s)) {
-					System.out.println("not used");
 					possible_options.add(s);
 				}
 			}
 			assert (!possible_options.isEmpty());
-			if (possible_options.size() < 1) {
-				System.out.println();
-			}
+
 			final Random r = new Random();
 			final int index = r.nextInt(possible_options.size());
 			final Integer val = possible_options.get(index);
