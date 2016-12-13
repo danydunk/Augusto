@@ -207,8 +207,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-			ts[0].interrupt();
-			ts[1].interrupt();
+		ts[0].interrupt();
+		ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -895,7 +895,7 @@ public class AlloyTestCaseGenerator {
 					overall = this.run_command.overall;
 				} else if (this.win_scope == -1 || this.aw_scope == -1 || this.iw_scope == -1
 						|| this.sw_scope == -1) {
-					overall = overall * 2;
+					overall = overall * 3;
 				}
 
 				Sig win = null;
