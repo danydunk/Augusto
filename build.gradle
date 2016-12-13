@@ -147,6 +147,7 @@ commandLine 'cmd', '/c', "java -ea -Xmx8g -Xss512m -cp \"C:\\Program Files\\IBM\
 testall.dependsOn 'build'
 testall.dependsOn 'deployBuddi'
 testall.dependsOn 'deployUPM'
+testall.dependsOn 'deployRACHOTA'
 
 task runtest(type:Exec) {
 
@@ -155,3 +156,4 @@ commandLine 'cmd', '/c', "java -ea -Xmx8g -Xss512m -cp \"C:\\Program Files\\IBM\
 runtest.dependsOn 'build'
 runtest.dependsOn 'deployBuddi'
 runtest.dependsOn 'deployUPM'
+runtest.dependsOn 'deployRACHOTA'
