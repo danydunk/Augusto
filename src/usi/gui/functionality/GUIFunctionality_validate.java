@@ -336,6 +336,7 @@ public class GUIFunctionality_validate {
 			out.addAll(results);
 			batch_num++;
 		}
+
 		return out;
 	}
 

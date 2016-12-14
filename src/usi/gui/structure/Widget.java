@@ -353,13 +353,6 @@ public abstract class Widget implements Comparable<Widget> {
 			final int selected = Integer.valueOf(to.getProperty("selectedIndex").toString());
 			final int size = Integer.valueOf(to.getProperty("itemCount").toString());
 
-			if ((label == null || label.length() == 0) && selected == -1) {
-				final TestDataText element = (TestDataText) to.getTestData("selected");
-				if (element != null) {
-					label = element.getText();
-				}
-			}
-
 			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, selected));
 			return out;
 

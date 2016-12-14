@@ -172,6 +172,7 @@ public class GuiStateManager {
 					if (widget.getLabel() == null) {
 						widget.setDescriptor(context.getDescriptor(widget.getTo()));
 					}
+
 					widgets_to_add.add(widget);
 				}
 			}
