@@ -26,8 +26,8 @@ public class runAll extends runAllHelper {
 
 		boolean error = false;
 		try {
-			System.out.println("RACHOTA REFINEMENT TEST");
-			new Refinement_rachota_test().testMain(args);
+			// System.out.println("RACHOTA REFINEMENT TEST");
+			// new Refinement_rachota_test().testMain(args);
 			System.out.println("OPTION WIDGET TEST");
 			new Option_widget_test().testMain(args);
 			System.out.println("EMPTY FILL TEST");

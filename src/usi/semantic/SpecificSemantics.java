@@ -371,6 +371,35 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 				values_fact_content += "#((Input_widget_" + oiw.getId() + "+Input_widget_"
 						+ oiw2.getId() + ").content.Time) <= " + intersect;
+				if (oiw.getSelected() != -1 && oiw2.getSelected() != -1) {
+					if (oiw.getSelected() != oiw2.getSelected()) {
+						values_fact_content += System.getProperty("line.separator");
+
+						values_fact_content += "not(Input_widget_" + oiw.getId()
+								+ ".content.(T/first) = Input_widget_" + oiw2.getId()
+								+ ".content.(T/first))";
+						if (oiw.getSelected() >= oiw2.getSize()) {
+							values_fact_content += System.getProperty("line.separator");
+
+							values_fact_content += "not(Input_widget_" + oiw.getId()
+									+ ".content.(T/first) in (filled.Input_widget_" + oiw2.getId()
+									+ ").with)";
+						}
+						if (oiw2.getSelected() >= oiw.getSize()) {
+							values_fact_content += System.getProperty("line.separator");
+
+							values_fact_content += "not(Input_widget_" + oiw2.getId()
+									+ ".content.(T/first) in (filled.Input_widget_" + oiw.getId()
+									+ ").with)";
+						}
+					} else {
+						values_fact_content += System.getProperty("line.separator");
+
+						values_fact_content += "Input_widget_" + oiw.getId()
+								+ ".content.(T/first) = Input_widget_" + oiw2.getId()
+								+ ".content.(T/first)";
+					}
+				}
 			}
 		}
 

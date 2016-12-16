@@ -18,9 +18,9 @@ public class DataManagerTest {
 			assertEquals(19, dm.getGenericData().size());
 
 			assertEquals(5, dm.getValidData("starting on").size());
-			assertEquals(1,
+			assertEquals(0,
 					dm.getValidItemizedData("<html><font color='gray'>&lt;from&gt;</font></html>")
-							.size());
+					.size());
 		} catch (final Exception e) {
 			e.printStackTrace();
 			fail();

@@ -207,8 +207,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-		ts[0].interrupt();
-		ts[1].interrupt();
+			ts[0].interrupt();
+			ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -301,7 +301,6 @@ public class AlloyTestCaseGenerator {
 								if (value.arity() == 3 && value.atom(2).equals(tuple.atom(2))) {
 
 									if (iw instanceof Option_input_widget) {
-
 										inputdata = input_data_map.get(value.atom(1) + "_option");
 
 									} else {
@@ -643,6 +642,7 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 				if (first != null) {
+
 					out.put(first + "_option", String.valueOf(oiw.getSelected()));
 					continue;
 				}
@@ -687,24 +687,24 @@ public class AlloyTestCaseGenerator {
 				if (inpw instanceof Option_input_widget) {
 
 					final Option_input_widget oiw = (Option_input_widget) inpw;
+
 					String metadata = inpw.getLabel() != null ? inpw.getLabel() : "";
 					metadata += " ";
-					metadata = inpw.getDescriptor() != null ? inpw.getDescriptor() : "";
+					metadata += inpw.getDescriptor() != null ? inpw.getDescriptor() : "";
 
 					List<Integer> data = null;
 					if (invalid_values.contains(v)) {
 						data = dm.getInvalidItemizedData(metadata);
-
 						assert (data.size() > 0);
 					} else {
 						data = dm.getValidItemizedData(metadata);
+
 						if (data.size() == 0) {
 							data = new ArrayList<>();
 							for (int x = 0; x < oiw.getSize(); x++) {
 								data.add(x);
 							}
 						}
-
 					}
 					assert (data != null);
 
@@ -727,7 +727,6 @@ public class AlloyTestCaseGenerator {
 							throw new Exception(
 									"AlloyTestCaseGeneration - not enough invalid input data.");
 						}
-
 						options_for_value.put(v, new_list);
 					} else {
 						options_for_value.put(v, data);
@@ -735,7 +734,7 @@ public class AlloyTestCaseGenerator {
 				} else {
 					String metadata = inpw.getLabel() != null ? inpw.getLabel() : "";
 					metadata += " ";
-					metadata = inpw.getDescriptor() != null ? inpw.getDescriptor() : "";
+					metadata += inpw.getDescriptor() != null ? inpw.getDescriptor() : "";
 
 					List<String> data = null;
 					if (invalid_values.contains(v)) {
@@ -834,7 +833,6 @@ public class AlloyTestCaseGenerator {
 			final Integer val = possible_options.get(index);
 			used_options.add(val);
 			assert (!out.containsKey(key + "_option"));
-
 			out.put(key + "_option", val.toString());
 		}
 
@@ -895,7 +893,7 @@ public class AlloyTestCaseGenerator {
 					overall = this.run_command.overall;
 				} else if (this.win_scope == -1 || this.aw_scope == -1 || this.iw_scope == -1
 						|| this.sw_scope == -1) {
-					overall = overall * 3;
+					overall = overall * 4;
 				}
 
 				Sig win = null;
