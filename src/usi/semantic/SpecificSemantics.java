@@ -356,9 +356,14 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		}
 		for (x = 0; x < list.length; x++) {
 			final Option_input_widget oiw = list[x];
+			if (oiw.getSize() == 0) {
+				continue;
+			}
 			for (int y = x + 1; y < list.length; y++) {
 				final Option_input_widget oiw2 = list[y];
-
+				if (oiw2.getSize() == 0) {
+					continue;
+				}
 				int intersect = 0;
 
 				for (final Integer i : oiws.get(oiw)) {
@@ -369,8 +374,9 @@ public class SpecificSemantics extends FunctionalitySemantics {
 				intersect = Math.min(intersect, 10);
 				values_fact_content += System.getProperty("line.separator");
 
-				values_fact_content += "#((Input_widget_" + oiw.getId() + "+Input_widget_"
-						+ oiw2.getId() + ").content.Time) <= " + intersect;
+				values_fact_content += "#((Input_widget_" + oiw.getId()
+						+ ".content.Time) & (Input_widget_" + oiw2.getId() + ".content.Time)) <= "
+						+ intersect;
 				if (oiw.getSelected() != -1 && oiw2.getSelected() != -1) {
 					if (oiw.getSelected() != oiw2.getSelected()) {
 						values_fact_content += System.getProperty("line.separator");

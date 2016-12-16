@@ -685,7 +685,6 @@ public class AlloyTestCaseGenerator {
 			assert (inpw != null);
 			if (v != null) {
 				if (inpw instanceof Option_input_widget) {
-
 					final Option_input_widget oiw = (Option_input_widget) inpw;
 
 					String metadata = inpw.getLabel() != null ? inpw.getLabel() : "";
@@ -705,6 +704,7 @@ public class AlloyTestCaseGenerator {
 								data.add(x);
 							}
 						}
+
 					}
 					assert (data != null);
 
@@ -812,22 +812,24 @@ public class AlloyTestCaseGenerator {
 		final List<Integer> used_options = new ArrayList<>();
 		for (final String key : out.keySet()) {
 			if (key.endsWith("_option")) {
+
 				used_options.add(Integer.valueOf(out.get(key)));
 			}
 		}
 		for (final String key : options_for_value.keySet()) {
 			if (out.containsKey(key + "_option")) {
 				// it means it was a firts value
+
 				continue;
 			}
 			final List<Integer> possible_options = new ArrayList<>();
+
 			for (final Integer s : options_for_value.get(key)) {
 				if (!used_options.contains(s)) {
 					possible_options.add(s);
 				}
 			}
 			assert (!possible_options.isEmpty());
-
 			final Random r = new Random();
 			final int index = r.nextInt(possible_options.size());
 			final Integer val = possible_options.get(index);
