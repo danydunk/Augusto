@@ -40,6 +40,16 @@ abstract sig Action_widget {
 	goes: set Window
 }
 sig Value { }
+one sig Option_value_0 extends Value{ }
+one sig Option_value_1 extends Value{ }
+one sig Option_value_2 extends Value{ }
+one sig Option_value_3 extends Value{ }
+one sig Option_value_4 extends Value{ }
+one sig Option_value_5 extends Value{ }
+one sig Option_value_6 extends Value{ }
+one sig Option_value_7 extends Value{ }
+one sig Option_value_8 extends Value{ }
+one sig Option_value_9 extends Value{ }
 abstract sig Input_widget {
 	content: Value lone -> Time,
 	invalid: set Value

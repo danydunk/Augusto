@@ -828,42 +828,56 @@ public class AlloyUtil {
 			if (invalid) {
 
 				if (iw instanceof Option_input_widget) {
-					int n_valid = -1;
-					int n_invalid = -1;
+
 					final Option_input_widget oiw = (Option_input_widget) iw;
 
+					final List<Integer> options = new ArrayList<>();
+					String unvalid = iws.get(iw).getIdentifier() + ".invalid = (";
+					String vs = "filled." + iws.get(iw).getIdentifier() + ".with in (";
 					if ((dm.getInvalidItemizedData(metadata).size() + dm.getValidItemizedData(
 							metadata).size()) > 0) {
-
-						n_valid = Math.max(0, dm.getValidItemizedData(metadata).size());
-						n_invalid = Math.max(0, dm.getInvalidItemizedData(metadata).size());
+						options.addAll(dm.getInvalidItemizedData(metadata));
+						options.addAll(dm.getValidItemizedData(metadata));
+						for (final Integer i : dm.getInvalidItemizedData(metadata)) {
+							// we limit to only 10 values
+							if (i > 9) {
+								continue;
+							}
+							unvalid += "Option_value_" + i + "+";
+						}
+						if (unvalid.equals(iws.get(iw).getIdentifier() + ".invalid = (")) {
+							unvalid = "#(" + iws.get(iw).getIdentifier() + ".invalid) = 0";
+						} else {
+							unvalid = unvalid.substring(0, unvalid.length() - 1) + ")";
+						}
 					} else {
-						n_valid = Math.max(0,
-								(oiw.getSelected() == -1) ? oiw.getSize() - 1 : oiw.getSize());
-						n_invalid = 0;
+						for (int x = 0; x < oiw.getSize(); x++) {
+							options.add(x);
+						}
 					}
 
-					// if the relations is higher than 10 it becomes unsat
-					n_valid = Math.min(n_valid, 10);
-					n_invalid = Math.min(n_invalid, 10);
-
-					assert (n_valid != -1 && n_invalid != -1);
-					content += System.getProperty("line.separator");
-					content += "#((filled." + iws.get(iw).getIdentifier() + ").with & "
-							+ iws.get(iw).getIdentifier() + ".invalid) <= " + n_invalid;
-					content += System.getProperty("line.separator");
-					content += "#(((filled." + iws.get(iw).getIdentifier() + ").with + "
-							+ iws.get(iw).getIdentifier() + ".content.(T/first)) - "
-							+ iws.get(iw).getIdentifier() + ".invalid) <= " + n_valid;
-
-					content += System.getProperty("line.separator");
-					if (oiw.getSelected() == -1) {
-						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
+					for (final Integer i : options) {
+						// we limit to only 10 values
+						if (i > 9) {
+							continue;
+						}
+						vs += "Option_value_" + i + "+";
+					}
+					if (vs.equals("filled." + iws.get(iw).getIdentifier() + ".with in (")) {
+						vs = "#(filled." + iws.get(iw).getIdentifier() + ".with) = 0";
 					} else {
-						content += "#" + iws.get(iw).getIdentifier()
-								+ ".content.(T/first) = 1 and not(" + iws.get(iw).getIdentifier()
-								+ ".content.(T/first) in " + iws.get(iw).getIdentifier()
-								+ ".invalid)";
+						vs = vs.substring(0, vs.length() - 1) + ")";
+					}
+
+					content += System.getProperty("line.separator");
+					content += vs;
+					content += System.getProperty("line.separator");
+					content += unvalid;
+					if (oiw.getSelected() == -1 || oiw.getSelected() > 9) {
+						content += "#(" + iws.get(iw).getIdentifier() + ".content.(T/first)) = 0";
+					} else {
+						content += iws.get(iw).getIdentifier()
+								+ ".content.(T/first) = Option_value_" + oiw.getSelected();
 					}
 				} else {
 					if ((dm.getInvalidData(metadata).size() + dm.getValidData(metadata).size()) > 0) {
@@ -890,21 +904,37 @@ public class AlloyUtil {
 			} else {
 				// if there are not invalid values
 				if (iw instanceof Option_input_widget) {
+
 					final Option_input_widget oiw = (Option_input_widget) iw;
 
-					int size = Math.max(0,
-							(oiw.getSelected() == -1) ? oiw.getSize() - 1 : oiw.getSize());
-					size = Math.min(size, 10);
-					content += System.getProperty("line.separator");
-					content += "#((filled." + iws.get(iw).getIdentifier() + ").with + "
-							+ iws.get(iw).getIdentifier() + ".content.(T/first)) <= "
-							+ Math.max(0, size);
+					final List<Integer> options = new ArrayList<>();
+					String vs = "filled." + iws.get(iw).getIdentifier() + ".with in (";
+
+					for (int x = 0; x < oiw.getSize(); x++) {
+						options.add(x);
+					}
+
+					for (final Integer i : options) {
+						// we limit to only 10 values
+						if (i > 9) {
+							continue;
+						}
+						vs += "Option_value_" + i + "+";
+					}
+					if (vs.equals("filled." + iws.get(iw).getIdentifier() + ".with in (")) {
+						vs = "#(filled." + iws.get(iw).getIdentifier() + ".with) = 0";
+					} else {
+						vs = vs.substring(0, vs.length() - 1) + ")";
+					}
 
 					content += System.getProperty("line.separator");
-					if (oiw.getSelected() == -1) {
-						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
+					content += vs;
+
+					if (oiw.getSelected() == -1 || oiw.getSelected() > 9) {
+						content += "#(" + iws.get(iw).getIdentifier() + ".content.(T/first)) = 0";
 					} else {
-						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 1";
+						content += iws.get(iw).getIdentifier()
+								+ ".content.(T/first) = Option_value_" + oiw.getSelected();
 					}
 
 				} else {
@@ -939,7 +969,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1338,15 +1368,7 @@ public class AlloyUtil {
 
 	static public int getValueScope(final SpecificSemantics in) {
 
-		int cont = 0;
-		for (final Fact f : in.getFacts()) {
-			String s = f.getContent();
-			while (s.indexOf(".content.(T/first) = 1") != -1) {
-				cont++;
-				s = s.substring(s.indexOf(".content.(T/first) = 1") + 22);
-			}
-		}
-		return cont;
+		return 10;
 	}
 
 	static public int getAWScope(final SpecificSemantics in) {

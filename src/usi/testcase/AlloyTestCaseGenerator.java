@@ -207,8 +207,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-			ts[0].interrupt();
-			ts[1].interrupt();
+		ts[0].interrupt();
+		ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -301,7 +301,10 @@ public class AlloyTestCaseGenerator {
 								if (value.arity() == 3 && value.atom(2).equals(tuple.atom(2))) {
 
 									if (iw instanceof Option_input_widget) {
-										inputdata = input_data_map.get(value.atom(1) + "_option");
+										assert (value.atom(1).toString()
+												.startsWith("Option_value_"));
+										inputdata = value.atom(1).replace("Option_value_", "")
+												.replace("$0", "");
 
 									} else {
 										// the input data is retrieved
@@ -458,7 +461,9 @@ public class AlloyTestCaseGenerator {
 				String inputdata = null;
 				if (value != null) {
 					if (target_iw instanceof Option_input_widget) {
-						inputdata = input_data_map.get(value + "_option");
+						assert (value.startsWith("Option_value_"));
+						inputdata = value.replace("Option_value_", "").replace("$0", "");
+						;
 					} else {
 						inputdata = input_data_map.get(value);
 
@@ -626,7 +631,6 @@ public class AlloyTestCaseGenerator {
 						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
 
 		final Map<String, List<String>> data_for_value = new HashMap<>();
-		final Map<String, List<Integer>> options_for_value = new HashMap<>();
 
 		// we deal with the initial values
 		for (final Input_widget iw : this.instance.getGui().getInput_widgets()) {
@@ -682,94 +686,52 @@ public class AlloyTestCaseGenerator {
 					break;
 				}
 			}
+			// options values are handled differently
+			if (v != null && v.startsWith("Option_value_")) {
+				continue;
+			}
 			assert (inpw != null);
 			if (v != null) {
-				if (inpw instanceof Option_input_widget) {
-					final Option_input_widget oiw = (Option_input_widget) inpw;
+				assert (!(inpw instanceof Option_input_widget));
 
-					String metadata = inpw.getLabel() != null ? inpw.getLabel() : "";
-					metadata += " ";
-					metadata += inpw.getDescriptor() != null ? inpw.getDescriptor() : "";
+				String metadata = inpw.getLabel() != null ? inpw.getLabel() : "";
+				metadata += " ";
+				metadata += inpw.getDescriptor() != null ? inpw.getDescriptor() : "";
 
-					List<Integer> data = null;
-					if (invalid_values.contains(v)) {
-						data = dm.getInvalidItemizedData(metadata);
-						assert (data.size() > 0);
-					} else {
-						data = dm.getValidItemizedData(metadata);
-
-						if (data.size() == 0) {
-							data = new ArrayList<>();
-							for (int x = 0; x < oiw.getSize(); x++) {
-								data.add(x);
-							}
-						}
-
-					}
-					assert (data != null);
-
-					if (options_for_value.containsKey(v)) {
-						List<Integer> new_list = new ArrayList<>();
-						// we calculate the intersection between the values
-						// already
-						// available for this value and the new ones
-
-						if (data.size() == 0) {
-							new_list = options_for_value.get(v);
-						} else {
-							for (final Integer s : options_for_value.get(v)) {
-								if (data.contains(s)) {
-									new_list.add(s);
-								}
-							}
-						}
-						if (invalid_values.contains(v) && new_list.size() == 0) {
-							throw new Exception(
-									"AlloyTestCaseGeneration - not enough invalid input data.");
-						}
-						options_for_value.put(v, new_list);
-					} else {
-						options_for_value.put(v, data);
-					}
+				List<String> data = null;
+				if (invalid_values.contains(v)) {
+					data = dm.getInvalidData(metadata);
+					assert (data.size() > 0);
 				} else {
-					String metadata = inpw.getLabel() != null ? inpw.getLabel() : "";
-					metadata += " ";
-					metadata += inpw.getDescriptor() != null ? inpw.getDescriptor() : "";
+					data = dm.getValidData(metadata);
+				}
+				assert (data != null);
 
-					List<String> data = null;
-					if (invalid_values.contains(v)) {
-						data = dm.getInvalidData(metadata);
-						assert (data.size() > 0);
+				if (data_for_value.containsKey(v)) {
+					List<String> new_list = new ArrayList<>();
+					// we calculate the intersection between the values
+					// already
+					// available for this value and the new ones
+
+					if (data.size() == 0) {
+						new_list = data_for_value.get(v);
 					} else {
-						data = dm.getValidData(metadata);
-					}
-					assert (data != null);
-
-					if (data_for_value.containsKey(v)) {
-						List<String> new_list = new ArrayList<>();
-						// we calculate the intersection between the values
-						// already
-						// available for this value and the new ones
-
-						if (data.size() == 0) {
-							new_list = data_for_value.get(v);
-						} else {
-							for (final String s : data_for_value.get(v)) {
-								if (data.contains(s)) {
-									new_list.add(s);
-								}
+						for (final String s : data_for_value.get(v)) {
+							if (data.contains(s)) {
+								new_list.add(s);
 							}
 						}
-						if (invalid_values.contains(v) && new_list.size() == 0) {
-							throw new Exception(
-									"AlloyTestCaseGeneration - not enough invalid input data.");
-						}
-
-						data_for_value.put(v, new_list);
-					} else {
-						data_for_value.put(v, data);
 					}
+					if (invalid_values.contains(v) && new_list.size() == 0) {
+						throw new Exception(
+								"AlloyTestCaseGeneration - not enough invalid input data.");
+					}
+
+					data_for_value.put(v, new_list);
+				} else {
+					data_for_value.put(v, data);
 				}
+
 			}
 		}
 
@@ -804,38 +766,6 @@ public class AlloyTestCaseGenerator {
 			assert (!out.containsKey(key));
 
 			out.put(key, val);
-		}
-
-		// we keep track of the options so that we do not use twice the
-		// same
-		// input data for different values
-		final List<Integer> used_options = new ArrayList<>();
-		for (final String key : out.keySet()) {
-			if (key.endsWith("_option")) {
-
-				used_options.add(Integer.valueOf(out.get(key)));
-			}
-		}
-		for (final String key : options_for_value.keySet()) {
-			if (out.containsKey(key + "_option")) {
-				// it means it was a firts value
-
-				continue;
-			}
-			final List<Integer> possible_options = new ArrayList<>();
-
-			for (final Integer s : options_for_value.get(key)) {
-				if (!used_options.contains(s)) {
-					possible_options.add(s);
-				}
-			}
-			assert (!possible_options.isEmpty());
-			final Random r = new Random();
-			final int index = r.nextInt(possible_options.size());
-			final Integer val = possible_options.get(index);
-			used_options.add(val);
-			assert (!out.containsKey(key + "_option"));
-			out.put(key + "_option", val.toString());
 		}
 
 		return out;
