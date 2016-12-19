@@ -244,6 +244,12 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			final Map<Input_widget, Signature> input_widgets = new LinkedHashMap<>();
 			for (final Input_widget iw : win.getInputWidgets()) {
 
+				if (iw instanceof Option_input_widget) {
+					final Option_input_widget oiw = (Option_input_widget) iw;
+					if (oiw.getSize() == 0) {
+						continue;
+					}
+				}
 				final Pattern_input_widget piw = in.getPIW_for_IW(iw.getId());
 
 				if (piw == null) {
