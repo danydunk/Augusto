@@ -207,8 +207,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-		ts[0].interrupt();
-		ts[1].interrupt();
+			ts[0].interrupt();
+			ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -235,6 +235,7 @@ public class AlloyTestCaseGenerator {
 
 		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track$0");
 		final List<A4Tuple> curr_wind = AlloyUtil.getTuples(solution, "Current_window$0");
+
 		assert (tracks.size() == curr_wind.size() - 1);
 
 		final List<GUIAction> actions = new ArrayList<>(tracks.size());
@@ -243,6 +244,7 @@ public class AlloyTestCaseGenerator {
 		}
 
 		for (final A4Tuple tuple : tracks) {
+
 			assert (tuple.arity() == 3);
 
 			final int time_index = this.extractTimeIndex(tuple.atom(2));
@@ -296,11 +298,13 @@ public class AlloyTestCaseGenerator {
 									"Input_widget_" + iw.getId() + "$0");
 							String inputdata = "";
 							for (final A4Tuple value : values) {
+
 								assert (value.arity() <= 3);
 
 								if (value.arity() == 3 && value.atom(2).equals(tuple.atom(2))) {
 
 									if (iw instanceof Option_input_widget) {
+
 										assert (value.atom(1).toString()
 												.startsWith("Option_value_"));
 										inputdata = value.atom(1).replace("Option_value_", "")
@@ -359,12 +363,14 @@ public class AlloyTestCaseGenerator {
 									String selected = "";
 
 									for (final A4Tuple obj : objs) {
+
 										assert (obj.arity() == 3);
 
 										if (obj.atom(2).equals(tuple.atom(2))) {
 											if (!map.containsKey(obj.atom(1))) {
 												final List<A4Tuple> appeared = AlloyUtil.getTuples(
 														solution, obj.atom(1));
+
 												assert (appeared.size() > 1);
 
 												int ind = -1;
@@ -376,6 +382,7 @@ public class AlloyTestCaseGenerator {
 														break;
 													}
 												}
+
 												assert (ind != -1);
 												map.put(obj.atom(1), ind);
 												to_order.add(ind);
@@ -383,6 +390,7 @@ public class AlloyTestCaseGenerator {
 												// if it appears two time it
 												// means it is
 												// the selected one
+
 												assert (selected.length() == 0);
 
 												selected = obj.atom(1);
@@ -412,11 +420,13 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
+
 			assert (source_window != null);
 
 			final List<A4Tuple> params = AlloyUtil.getTuples(solution, tuple.atom(1));
 
 			if (tuple.atom(1).startsWith("Fill")) {
+
 				assert (params.size() <= 2);
 
 				String iw_id = null;
@@ -461,6 +471,7 @@ public class AlloyTestCaseGenerator {
 				String inputdata = null;
 				if (value != null) {
 					if (target_iw instanceof Option_input_widget) {
+
 						assert (value.startsWith("Option_value_"));
 						inputdata = value.replace("Option_value_", "").replace("$0", "");
 						;
@@ -468,6 +479,7 @@ public class AlloyTestCaseGenerator {
 						inputdata = input_data_map.get(value);
 
 					}
+
 					assert (inputdata != null);
 				}
 				final Fill action = new Fill(source_window, oracle, target_iw, inputdata);
@@ -476,6 +488,7 @@ public class AlloyTestCaseGenerator {
 			}
 
 			if (tuple.atom(1).startsWith("Click")) {
+
 				assert (params.size() == 1);
 				final A4Tuple wid_tuple = params.get(0);
 
@@ -502,6 +515,7 @@ public class AlloyTestCaseGenerator {
 				continue;
 			}
 			if (tuple.atom(1).startsWith("Select")) {
+
 				assert (params.size() == 2);
 
 				String sw_id = null;
@@ -549,6 +563,7 @@ public class AlloyTestCaseGenerator {
 							break;
 						}
 					}
+
 					assert (appeared != -1);
 					if (!map.containsKey(obj)) {
 						to_order.add(appeared);
@@ -614,6 +629,7 @@ public class AlloyTestCaseGenerator {
 				fill = sig;
 			}
 		}
+
 		assert (value != null && fill != null);
 
 		List<String> fill_atoms = AlloyUtil.getElementsInSet(solution, fill);
@@ -674,6 +690,7 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
+
 			assert (iw != null && invalid_values != null);
 
 			String iw_id = iw.substring(13);
@@ -690,8 +707,10 @@ public class AlloyTestCaseGenerator {
 			if (v != null && v.startsWith("Option_value_")) {
 				continue;
 			}
+
 			assert (inpw != null);
 			if (v != null) {
+
 				assert (!(inpw instanceof Option_input_widget));
 
 				String metadata = inpw.getLabel() != null ? inpw.getLabel() : "";
@@ -701,10 +720,12 @@ public class AlloyTestCaseGenerator {
 				List<String> data = null;
 				if (invalid_values.contains(v)) {
 					data = dm.getInvalidData(metadata);
+
 					assert (data.size() > 0);
 				} else {
 					data = dm.getValidData(metadata);
 				}
+
 				assert (data != null);
 
 				if (data_for_value.containsKey(v)) {
@@ -763,6 +784,7 @@ public class AlloyTestCaseGenerator {
 			final int index = r.nextInt(possible_values.size());
 			final String val = possible_values.get(index);
 			used_values.add(val);
+
 			assert (!out.containsKey(key));
 
 			out.put(key, val);

@@ -899,6 +899,18 @@ public class AlloyUtil {
 					}
 					content += System.getProperty("line.separator");
 					content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
+					content += System.getProperty("line.separator");
+					content += "#(filled." + iws.get(iw).getIdentifier() + ".with & (";
+					for (int x = 0; x < 10; x++) {
+						content += "Option_value_" + x;
+						if (x != 9) {
+							content += "+";
+						} else {
+							content += ")) = 0";
+
+						}
+					}
+
 				}
 
 			} else {
@@ -941,6 +953,17 @@ public class AlloyUtil {
 
 					content += System.getProperty("line.separator");
 					content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
+					content += System.getProperty("line.separator");
+					content += "#(filled." + iws.get(iw).getIdentifier() + ".with & (";
+					for (int x = 0; x < 10; x++) {
+						content += "Option_value_" + x;
+						if (x != 9) {
+							content += "+";
+						} else {
+							content += ")) = 0";
+
+						}
+					}
 				}
 			}
 		}

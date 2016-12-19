@@ -3,6 +3,18 @@ open util/ordering [Input_widget] as IW
 open util/ternary
 open util/relation
 -----------------------Utils------------------------
+
+one sig Option_value_0 extends Value{ }
+one sig Option_value_1 extends Value{ }
+one sig Option_value_2 extends Value{ }
+one sig Option_value_3 extends Value{ }
+one sig Option_value_4 extends Value{ }
+one sig Option_value_5 extends Value{ }
+one sig Option_value_6 extends Value{ }
+one sig Option_value_7 extends Value{ }
+one sig Option_value_8 extends Value{ }
+one sig Option_value_9 extends Value{ }
+
 sig Time { }
 abstract sig Operation { }
 sig Click extends Operation {
