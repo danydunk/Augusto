@@ -118,6 +118,16 @@ abstract sig Action_widget {&#13;
 	goes: set Window,&#13;
 }&#13;
 sig Value { }&#13;
+one sig Option_value_0 extends Value { }&#13;
+one sig Option_value_1 extends Value { }&#13;
+one sig Option_value_2 extends Value { }&#13;
+one sig Option_value_3 extends Value { }&#13;
+one sig Option_value_4 extends Value { }&#13;
+one sig Option_value_5 extends Value { }&#13;
+one sig Option_value_6 extends Value { }&#13;
+one sig Option_value_7 extends Value { }&#13;
+one sig Option_value_8 extends Value { }&#13;
+one sig Option_value_9 extends Value { }&#13;
 abstract sig Input_widget {&#13;
 	content: Value lone -&gt; Time,&#13;
 }&#13;
@@ -213,12 +223,16 @@ fact windows_number{&#13;
 fact Window_w11_iws{&#13;
 	Window_w11.iws = Input_widget_iw32 + Input_widget_iw33 + Input_widget_iw35 + Input_widget_iw34 + Input_widget_iw36 + Input_widget_iw37&#13;
 	#Input_widget_iw32.content.(T/first) = 0&#13;
+	#(filled.Input_widget_iw32.with &amp; (Option_value_0+Option_value_1+Option_value_2+Option_value_3+Option_value_4+Option_value_5+Option_value_6+Option_value_7+Option_value_8+Option_value_9)) = 0&#13;
 	#Input_widget_iw33.content.(T/first) = 0&#13;
-	#((filled.Input_widget_iw35).with + Input_widget_iw35.content.(T/first)) &lt;= 2&#13;
-	#Input_widget_iw35.content.(T/first) = 1&#13;
+	#(filled.Input_widget_iw33.with &amp; (Option_value_0+Option_value_1+Option_value_2+Option_value_3+Option_value_4+Option_value_5+Option_value_6+Option_value_7+Option_value_8+Option_value_9)) = 0&#13;
+	filled.Input_widget_iw35.with in (Option_value_0+Option_value_1)Input_widget_iw35.content.(T/first) = Option_value_1&#13;
 	#Input_widget_iw34.content.(T/first) = 0&#13;
+	#(filled.Input_widget_iw34.with &amp; (Option_value_0+Option_value_1+Option_value_2+Option_value_3+Option_value_4+Option_value_5+Option_value_6+Option_value_7+Option_value_8+Option_value_9)) = 0&#13;
 	#Input_widget_iw36.content.(T/first) = 0&#13;
+	#(filled.Input_widget_iw36.with &amp; (Option_value_0+Option_value_1+Option_value_2+Option_value_3+Option_value_4+Option_value_5+Option_value_6+Option_value_7+Option_value_8+Option_value_9)) = 0&#13;
 	#Input_widget_iw37.content.(T/first) = 0&#13;
+	#(filled.Input_widget_iw37.with &amp; (Option_value_0+Option_value_1+Option_value_2+Option_value_3+Option_value_4+Option_value_5+Option_value_6+Option_value_7+Option_value_8+Option_value_9)) = 0&#13;
 	IW/next[Input_widget_iw32]=Input_widget_iw33 and IW/next[Input_widget_iw33]=Input_widget_iw35 and IW/next[Input_widget_iw35]=Input_widget_iw34 and IW/next[Input_widget_iw34]=Input_widget_iw36 and IW/next[Input_widget_iw36]=Input_widget_iw37&#13;
 &#13;
 }&#13;
@@ -242,12 +256,16 @@ fact Window_w2_sws{&#13;
 fact Window_w8_iws{&#13;
 	Window_w8.iws = Input_widget_iw17 + Input_widget_iw18 + Input_widget_iw20 + Input_widget_iw19 + Input_widget_iw21 + Input_widget_iw22&#13;
 	#Input_widget_iw17.content.(T/first) = 0&#13;
+	#(filled.Input_widget_iw17.with &amp; (Option_value_0+Option_value_1+Option_value_2+Option_value_3+Option_value_4+Option_value_5+Option_value_6+Option_value_7+Option_value_8+Option_value_9)) = 0&#13;
 	#Input_widget_iw18.content.(T/first) = 0&#13;
-	#((filled.Input_widget_iw20).with + Input_widget_iw20.content.(T/first)) &lt;= 2&#13;
-	#Input_widget_iw20.content.(T/first) = 1&#13;
+	#(filled.Input_widget_iw18.with &amp; (Option_value_0+Option_value_1+Option_value_2+Option_value_3+Option_value_4+Option_value_5+Option_value_6+Option_value_7+Option_value_8+Option_value_9)) = 0&#13;
+	filled.Input_widget_iw20.with in (Option_value_0+Option_value_1)Input_widget_iw20.content.(T/first) = Option_value_1&#13;
 	#Input_widget_iw19.content.(T/first) = 0&#13;
+	#(filled.Input_widget_iw19.with &amp; (Option_value_0+Option_value_1+Option_value_2+Option_value_3+Option_value_4+Option_value_5+Option_value_6+Option_value_7+Option_value_8+Option_value_9)) = 0&#13;
 	#Input_widget_iw21.content.(T/first) = 0&#13;
+	#(filled.Input_widget_iw21.with &amp; (Option_value_0+Option_value_1+Option_value_2+Option_value_3+Option_value_4+Option_value_5+Option_value_6+Option_value_7+Option_value_8+Option_value_9)) = 0&#13;
 	#Input_widget_iw22.content.(T/first) = 0&#13;
+	#(filled.Input_widget_iw22.with &amp; (Option_value_0+Option_value_1+Option_value_2+Option_value_3+Option_value_4+Option_value_5+Option_value_6+Option_value_7+Option_value_8+Option_value_9)) = 0&#13;
 	IW/next[Input_widget_iw17]=Input_widget_iw18 and IW/next[Input_widget_iw18]=Input_widget_iw20 and IW/next[Input_widget_iw20]=Input_widget_iw19 and IW/next[Input_widget_iw19]=Input_widget_iw21 and IW/next[Input_widget_iw21]=Input_widget_iw22&#13;
 &#13;
 }&#13;
@@ -403,58 +421,58 @@ pred delete [t, t': Time] {&#13;
 </semantics>
     <GUI>
         <window id="w8">
-            <pos>517:166</pos>
+            <pos>519:125</pos>
             <class>com._17od.upm.gui.AccountDialog</class>
             <title>Add Account</title>
             <modal>true</modal>
             <root>false</root>
             <action_widget id="aw61">
-                <pos>772:286</pos>
+                <pos>774:245</pos>
                 <class>ButtonUI</class>
                 <label>Generate</label>
             </action_widget>
             <action_widget id="aw62">
-                <pos>659:577</pos>
+                <pos>661:536</pos>
                 <class>ButtonUI</class>
                 <label>OK</label>
             </action_widget>
             <action_widget id="aw63">
-                <pos>711:577</pos>
+                <pos>713:536</pos>
                 <class>ButtonUI</class>
                 <label>Cancel</label>
             </action_widget>
             <input_widget id="iw17">
-                <pos>601:206</pos>
+                <pos>603:165</pos>
                 <class>TextFieldUI</class>
                 <descriptor>Account</descriptor>
                 <value/>
             </input_widget>
             <input_widget id="iw18">
-                <pos>601:246</pos>
+                <pos>603:205</pos>
                 <class>TextFieldUI</class>
                 <descriptor>User Id</descriptor>
                 <value/>
             </input_widget>
             <input_widget id="iw20">
-                <pos>854:286</pos>
+                <pos>856:245</pos>
                 <class>CheckBoxUI</class>
                 <label>Hide</label>
                 <value>[options] 1 : 2</value>
             </input_widget>
             <input_widget id="iw19">
-                <pos>601:287</pos>
+                <pos>603:246</pos>
                 <class>PasswordFieldUI</class>
                 <descriptor>Password</descriptor>
-                <value>8zpxcNPl</value>
+                <value>eOaWHv8l</value>
             </input_widget>
             <input_widget id="iw21">
-                <pos>601:329</pos>
+                <pos>603:288</pos>
                 <class>TextFieldUI</class>
                 <descriptor>URL</descriptor>
                 <value/>
             </input_widget>
             <input_widget id="iw22">
-                <pos>602:370</pos>
+                <pos>604:329</pos>
                 <class>TextAreaUI</class>
                 <descriptor>Notes</descriptor>
                 <value/>
@@ -498,7 +516,7 @@ pred delete [t, t': Time] {&#13;
                 <pos>601:287</pos>
                 <class>PasswordFieldUI</class>
                 <descriptor>Password</descriptor>
-                <value>H0WF74ab</value>
+                <value>PhqqS6Lv</value>
             </input_widget>
             <input_widget id="iw36">
                 <pos>601:329</pos>
@@ -514,138 +532,138 @@ pred delete [t, t': Time] {&#13;
             </input_widget>
         </window>
         <window id="w2">
-            <pos>580:241</pos>
+            <pos>582:200</pos>
             <class>com._17od.upm.gui.MainWindow</class>
             <title>C:\Users\usi\abtMyDocuments\upm_db - Universal Password Manager</title>
             <modal>false</modal>
             <root>false</root>
             <action_widget id="aw11">
-                <pos>588:271</pos>
+                <pos>590:230</pos>
                 <class>MenuItemUI</class>
                 <label>Database - New Database</label>
             </action_widget>
             <action_widget id="aw12">
-                <pos>588:271</pos>
+                <pos>590:230</pos>
                 <class>MenuItemUI</class>
                 <label>Database - Open Database</label>
             </action_widget>
             <action_widget id="aw13">
-                <pos>588:271</pos>
+                <pos>590:230</pos>
                 <class>MenuItemUI</class>
                 <label>Database - Open Database From URL</label>
             </action_widget>
             <action_widget id="aw14">
-                <pos>588:271</pos>
+                <pos>590:230</pos>
                 <class>MenuItemUI</class>
                 <label>Database - Sync with Remote Database</label>
             </action_widget>
             <action_widget id="aw15">
-                <pos>588:271</pos>
+                <pos>590:230</pos>
                 <class>MenuItemUI</class>
                 <label>Database - Change Master Password</label>
             </action_widget>
             <action_widget id="aw16">
-                <pos>588:271</pos>
+                <pos>590:230</pos>
                 <class>MenuItemUI</class>
                 <label>Database - Database Properties</label>
             </action_widget>
             <action_widget id="aw17">
-                <pos>588:271</pos>
+                <pos>590:230</pos>
                 <class>MenuItemUI</class>
                 <label>Database - Export</label>
             </action_widget>
             <action_widget id="aw18">
-                <pos>588:271</pos>
+                <pos>590:230</pos>
                 <class>MenuItemUI</class>
                 <label>Database - Import</label>
             </action_widget>
             <action_widget id="aw19">
-                <pos>588:271</pos>
+                <pos>590:230</pos>
                 <class>MenuItemUI</class>
                 <label>Database - Exit</label>
             </action_widget>
             <action_widget id="aw20">
-                <pos>645:271</pos>
+                <pos>647:230</pos>
                 <class>MenuItemUI</class>
                 <label>Account - Add Account</label>
             </action_widget>
             <action_widget id="aw21">
-                <pos>645:271</pos>
+                <pos>647:230</pos>
                 <class>MenuItemUI</class>
                 <label>Account - Edit Account</label>
             </action_widget>
             <action_widget id="aw22">
-                <pos>645:271</pos>
+                <pos>647:230</pos>
                 <class>MenuItemUI</class>
                 <label>Account - Delete Account</label>
             </action_widget>
             <action_widget id="aw23">
-                <pos>645:271</pos>
+                <pos>647:230</pos>
                 <class>MenuItemUI</class>
                 <label>Account - View Account</label>
             </action_widget>
             <action_widget id="aw24">
-                <pos>645:271</pos>
+                <pos>647:230</pos>
                 <class>MenuItemUI</class>
                 <label>Account - Copy Username</label>
             </action_widget>
             <action_widget id="aw25">
-                <pos>645:271</pos>
+                <pos>647:230</pos>
                 <class>MenuItemUI</class>
                 <label>Account - Copy Password</label>
             </action_widget>
             <action_widget id="aw26">
-                <pos>698:271</pos>
+                <pos>700:230</pos>
                 <class>MenuItemUI</class>
                 <label>Help - About</label>
             </action_widget>
             <action_widget id="aw3">
-                <pos>589:293</pos>
+                <pos>591:252</pos>
                 <class>ButtonUI</class>
                 <label/>
             </action_widget>
             <action_widget id="aw4">
-                <pos>620:293</pos>
+                <pos>622:252</pos>
                 <class>ButtonUI</class>
                 <label/>
             </action_widget>
             <action_widget id="aw5">
-                <pos>651:293</pos>
+                <pos>653:252</pos>
                 <class>ButtonUI</class>
                 <label/>
             </action_widget>
             <action_widget id="aw6">
-                <pos>688:293</pos>
+                <pos>690:252</pos>
                 <class>ButtonUI</class>
                 <label/>
             </action_widget>
             <action_widget id="aw7">
-                <pos>719:293</pos>
+                <pos>721:252</pos>
                 <class>ButtonUI</class>
                 <label/>
             </action_widget>
             <action_widget id="aw8">
-                <pos>756:293</pos>
+                <pos>758:252</pos>
                 <class>ButtonUI</class>
                 <label/>
             </action_widget>
             <action_widget id="aw9">
-                <pos>793:293</pos>
+                <pos>795:252</pos>
                 <class>ButtonUI</class>
                 <label/>
             </action_widget>
             <action_widget id="aw10">
-                <pos>735:333</pos>
+                <pos>737:292</pos>
                 <class>ButtonUI</class>
                 <label/>
             </action_widget>
             <input_widget id="iw2">
-                <pos>607:332</pos>
+                <pos>609:291</pos>
                 <class>TextFieldUI</class>
                 <value/>
             </input_widget>
             <selectable_widget id="sw1">
-                <pos>590:358</pos>
+                <pos>592:317</pos>
                 <class>ListUI</class>
                 <size>0</size>
                 <selected>-1</selected>
