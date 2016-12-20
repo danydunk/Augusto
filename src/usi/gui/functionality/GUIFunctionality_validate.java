@@ -10,6 +10,7 @@ import src.usi.gui.functionality.instance.Instance_GUI_pattern;
 import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.GUI;
 import src.usi.gui.structure.Input_widget;
+import src.usi.gui.structure.Option_input_widget;
 import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Window;
 import src.usi.semantic.FunctionalitySemantics;
@@ -85,6 +86,12 @@ public class GUIFunctionality_validate {
 				}
 			}
 			for (final Input_widget iw : w.getInputWidgets()) {
+				if (iw instanceof Option_input_widget) {
+					final Option_input_widget oiw = (Option_input_widget) iw;
+					if (oiw.getSize() == 0) {
+						continue;
+					}
+				}
 				if (this.instancePattern.getPIW_for_IW(iw.getId()) != null) {
 					this.iw_to_fill.add(iw.getId());
 				}
@@ -213,7 +220,7 @@ public class GUIFunctionality_validate {
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -221,7 +228,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
