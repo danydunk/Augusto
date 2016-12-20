@@ -845,11 +845,7 @@ public class AlloyUtil {
 							}
 							unvalid += "Option_value_" + i + "+";
 						}
-						if (unvalid.equals(iws.get(iw).getIdentifier() + ".invalid = (")) {
-							unvalid = "#(" + iws.get(iw).getIdentifier() + ".invalid) = 0";
-						} else {
-							unvalid = unvalid.substring(0, unvalid.length() - 1) + ")";
-						}
+
 					} else {
 						for (int x = 0; x < oiw.getSize(); x++) {
 							options.add(x);
@@ -868,11 +864,18 @@ public class AlloyUtil {
 					} else {
 						vs = vs.substring(0, vs.length() - 1) + ")";
 					}
+					if (unvalid.equals(iws.get(iw).getIdentifier() + ".invalid = (")) {
+						unvalid = "#(" + iws.get(iw).getIdentifier() + ".invalid) = 0";
+					} else {
+						unvalid = unvalid.substring(0, unvalid.length() - 1) + ")";
+					}
 
 					content += System.getProperty("line.separator");
 					content += vs;
 					content += System.getProperty("line.separator");
 					content += unvalid;
+					content += System.getProperty("line.separator");
+
 					if (oiw.getSelected() == -1 || oiw.getSelected() > 9) {
 						content += "#(" + iws.get(iw).getIdentifier() + ".content.(T/first)) = 0";
 					} else {
@@ -941,6 +944,7 @@ public class AlloyUtil {
 
 					content += System.getProperty("line.separator");
 					content += vs;
+					content += System.getProperty("line.separator");
 
 					if (oiw.getSelected() == -1 || oiw.getSelected() > 9) {
 						content += "#(" + iws.get(iw).getIdentifier() + ".content.(T/first)) = 0";
@@ -992,7 +996,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
