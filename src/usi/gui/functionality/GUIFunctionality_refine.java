@@ -930,6 +930,7 @@ public class GUIFunctionality_refine {
 				final Alloy_Model sem = AlloyUtil.getTCaseModel(sem_filtered, batch.get(cont)
 						.getTc().getActions(),
 						batch.get(cont).getResults().get(batch.get(cont).getResults().size() - 1));
+
 				final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
 				final Run_command_thread run = new Run_command_thread(comp, comp.getAllCommands()
 						.get(0));

@@ -1558,8 +1558,6 @@ public class AlloyUtil {
 		String t = "";
 		final Map<String, List<String>> values_used = new HashMap<>();
 		final Map<String, List<Input_widget>> values_used_iw = new HashMap<>();
-		final Map<Input_widget, List<String>> values_used_itemized = new HashMap<>();
-		final Map<Input_widget, List<Integer>> values_used_iw_itemized = new HashMap<>();
 
 		for (int cont = 0; cont < acts.size(); cont++) {
 			final GUIAction act = acts.get(cont);
@@ -1603,20 +1601,10 @@ public class AlloyUtil {
 					}
 					values_used.get(new_value).add("Track.op.(" + t + ").with");
 				} else {
-					if (!values_used_itemized.containsKey(f.getWidget())) {
-						values_used_itemized.put((Input_widget) f.getWidget(),
-								new ArrayList<String>());
-					}
-					if (!values_used_iw_itemized.containsKey(f.getWidget())) {
-						values_used_iw_itemized.put((Input_widget) f.getWidget(),
-								new ArrayList<Integer>());
-					}
-					values_used_itemized.get(f.getWidget()).add("Track.op.(" + t + ").with");
-					if (f.getInput() != null) {
-						values_used_iw_itemized.get(f.getWidget()).add(
-								Integer.valueOf(f.getInput()));
+					if (f.getInput() == null || f.getInput().length() == 0) {
+						fact += " and Track.op.(" + t + ").with=none";
 					} else {
-						values_used_iw_itemized.get(f.getWidget()).add(-1);
+						fact += " and Track.op.(" + t + ").with=Option_value_" + f.getInput();
 
 					}
 				}
@@ -1690,53 +1678,6 @@ public class AlloyUtil {
 
 			}
 
-		}
-
-		// we deal with itemized data
-		assert (values_used_itemized.keySet().size() == values_used_iw_itemized.keySet().size());
-		for (final Input_widget iw : values_used_itemized.keySet()) {
-			assert (values_used_iw_itemized.get(iw).size() == values_used_itemized.get(iw).size());
-			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
-			metadata += " ";
-			metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
-
-			for (int x = 0; x < values_used_iw_itemized.get(iw).size(); x++) {
-
-				if (invalid) {
-					if (dm.getInvalidItemizedData(metadata).contains(
-							values_used_iw_itemized.get(iw).get(x))) {
-						fact += " and " + values_used_itemized.get(iw).get(x) + " in Input_widget_"
-								+ iw.getId() + ".invalid";
-					} else {
-						fact += " and not(" + values_used_itemized.get(iw).get(x)
-								+ " in Input_widget_" + iw.getId() + ".invalid)";
-					}
-				}
-
-				final Option_input_widget oiw = (Option_input_widget) iw;
-				if (oiw.getSelected() == values_used_iw_itemized.get(iw).get(x)) {
-					fact += " and " + values_used_itemized.get(iw).get(x) + " = Input_widget_"
-							+ iw.getId() + ".content.(T/first)";
-
-				} else {
-					assert (values_used_iw_itemized.get(iw).get(x) != -1);
-					// if here it, value cannot be -1
-					fact += " and #" + values_used_itemized.get(iw).get(x) + "=1 and not("
-							+ values_used_itemized.get(iw).get(x) + " = Input_widget_" + iw.getId()
-							+ ".content.(T/first))";
-				}
-
-				for (int y = x + 1; y < values_used_iw_itemized.get(iw).size(); y++) {
-					if (values_used_iw_itemized.get(iw).get(x) == values_used_iw_itemized.get(iw)
-							.get(y)) {
-						fact += " and " + values_used_itemized.get(iw).get(x) + " = "
-								+ values_used_itemized.get(iw).get(y);
-					} else {
-						fact += " and not(" + values_used_itemized.get(iw).get(x) + " = "
-								+ values_used_itemized.get(iw).get(y) + ")";
-					}
-				}
-			}
 		}
 
 		fact = "one t: Time | " + fact;
