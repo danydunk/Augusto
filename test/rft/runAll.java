@@ -24,10 +24,14 @@ public class runAll extends runAllHelper {
 	 */
 	public void testMain(final Object[] args) {
 
+		System.out.println("Max Memory: " + Runtime.getRuntime().maxMemory() / (1024 * 1024)
+				+ " mb.");
 		boolean error = false;
 		try {
 			// System.out.println("RACHOTA REFINEMENT TEST");
 			// new Refinement_rachota_test().testMain(args);
+			System.out.println("REFINEMENT UPM TEST");
+			new Refinement_upmfull_crud().testMain(args);
 			System.out.println("OPTION WIDGET TEST");
 			new Option_widget_test().testMain(args);
 			System.out.println("EMPTY FILL TEST");
@@ -50,8 +54,6 @@ public class runAll extends runAllHelper {
 			// new Refinement_buddi_crud_invalid().testMain(args);
 			System.out.println("REFINEMENT BUDDI TEST");
 			new Refinement_buddi_crud().testMain(args);
-			System.out.println("REFINEMENT UPM TEST");
-			new Refinement_upmfull_crud().testMain(args);
 			System.out.println("SAVE WINDOW TEST");
 			new Save_window_xml().testMain(args);
 			System.out.println("TEST CASE GENERATION UPM TEST");
