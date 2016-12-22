@@ -59,6 +59,9 @@
   <void property="showFlatBudget">
    <boolean>true</boolean>
   </void>
+  <void property="showPromptAtStartup">
+   <boolean>true</boolean>
+  </void>
   <void property="transactionCellRenderer">
    <string>org.homeunix.thecave.buddi.plugin.builtin.cellrenderer.DefaultTransactionCellRenderer</string>
   </void>
