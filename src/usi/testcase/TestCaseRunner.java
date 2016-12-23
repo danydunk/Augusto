@@ -178,9 +178,9 @@ public class TestCaseRunner {
 
 				this.dealWithDialogsWindow(gmanager);
 
-				// if (cont == actions.size() - 1) {
-				// System.out.println();
-				// }
+				if (cont == actions.size() - 1) {
+					System.out.println();
+				}
 
 				actions_actually_executed.add(act_to_execute);
 
@@ -283,29 +283,43 @@ public class TestCaseRunner {
 				// we need to filter out the selectable widgets cause their
 				// position might change when they are scrolled
 
-				final List<Widget> widgets = in.getWidgets().stream().filter(e -> {
+				final List<Widget> widgets = in
+						.getWidgets()
+						.stream()
+						.filter(e -> {
+							if (e instanceof Action_widget
+									&& e.getClasss().toLowerCase().equals("menuitemui")
+									&& e.getLabel().toLowerCase().startsWith("window -")) {
+								return false;
+							}
+							// we deal with selectable widgets separately cause
+							// selecting an element can modify the position of
+							// the
+							// widget
+							if (e instanceof Selectable_widget) {
+								return false;
+							}
+							return true;
+						}).collect(Collectors.toList());
 
-					// we deal with selectable widgets separately cause
-					// selecting an element can modify the position of
-					// the
-					// widget
-						if (e instanceof Selectable_widget) {
-							return false;
-						}
-						return true;
-					}).collect(Collectors.toList());
-
-				final List<Widget> widgets2 = w.getWidgets().stream().filter(e -> {
-
-					// we deal with selectable widgets separately cause
-					// selecting an element can modify the position of
-					// the
-					// widget
-						if (e instanceof Selectable_widget) {
-							return false;
-						}
-						return true;
-					}).collect(Collectors.toList());
+				final List<Widget> widgets2 = w
+						.getWidgets()
+						.stream()
+						.filter(e -> {
+							if (e instanceof Action_widget
+									&& e.getClasss().toLowerCase().equals("menuitemui")
+									&& e.getLabel().toLowerCase().startsWith("window -")) {
+								return false;
+							}
+							// we deal with selectable widgets separately cause
+							// selecting an element can modify the position of
+							// the
+							// widget
+							if (e instanceof Selectable_widget) {
+								return false;
+							}
+							return true;
+						}).collect(Collectors.toList());
 
 				for (int x = 0; x < widgets.size(); x++) {
 					if (widgets2.get(x) instanceof Action_widget) {

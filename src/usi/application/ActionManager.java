@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import src.usi.configuration.ConfigurationManager;
 import src.usi.gui.GuiStateManager;
+import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.Option_input_widget;
 import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Widget;
@@ -20,7 +21,7 @@ import com.rational.test.ft.object.interfaces.TestObject;
 public class ActionManager {
 
 	/*
-	 *
+	 * 
 	 * GUI must be read before calling this method This function returns true if
 	 * the action was executed, false if it could not be executed because the
 	 * widget was disabled It throws an exception if there is no
@@ -70,7 +71,6 @@ public class ActionManager {
 			return false;
 		}
 		final Method[] ms = c.getDeclaredMethods();
-
 		final Widget wid = findWidgetInCurrWindow(act.getWidget(), act.getWindow(), currWind);
 		final TestObject to = wid.getTo();
 		assert (to != null);
@@ -193,19 +193,35 @@ public class ActionManager {
 		} else {
 			final Widget ww = wind.getWidget(w.getId());
 
-			final List<Widget> widgets = wind.getWidgets().stream().filter(e -> {
-				if (!(e instanceof Selectable_widget)) {
-					return true;
-				}
-				return false;
-			}).collect(Collectors.toList());
+			final List<Widget> widgets = wind
+					.getWidgets()
+					.stream()
+					.filter(e -> {
+						if (e instanceof Action_widget
+								&& e.getClasss().toLowerCase().equals("menuitemui")
+								&& e.getLabel().toLowerCase().startsWith("window -")) {
+							return false;
+						}
+						if (!(e instanceof Selectable_widget)) {
+							return true;
+						}
+						return false;
+					}).collect(Collectors.toList());
 
-			final List<Widget> widgets2 = currWind.getWidgets().stream().filter(e -> {
-				if (!(e instanceof Selectable_widget)) {
-					return true;
-				}
-				return false;
-			}).collect(Collectors.toList());
+			final List<Widget> widgets2 = currWind
+					.getWidgets()
+					.stream()
+					.filter(e -> {
+						if (e instanceof Action_widget
+								&& e.getClasss().toLowerCase().equals("menuitemui")
+								&& e.getLabel().toLowerCase().startsWith("window -")) {
+							return false;
+						}
+						if (!(e instanceof Selectable_widget)) {
+							return true;
+						}
+						return false;
+					}).collect(Collectors.toList());
 
 			final int index = widgets.indexOf(ww);
 
