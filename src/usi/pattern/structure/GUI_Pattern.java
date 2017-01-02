@@ -218,7 +218,7 @@ public class GUI_Pattern {
 		// this.input_widgets = new ArrayList<>();
 		// this.selectable_widgets = new ArrayList<>();
 		this.aw_window_mapping = new HashMap<>();
-		this.windows = new HashMap<>();
+		this.windows = new LinkedHashMap<>();
 
 		this.staticEdgesFrom = HashMultimap.create();
 		this.staticEdgesTo = HashMultimap.create();

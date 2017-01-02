@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	alloy="CRUD.als" alloy_without_unvalid_data="CRUD_without_unvalid.als" name="CRUD">
-	<window id="initial" card="one" alloy="Initial">
+	<window id="initial" dynamic="false" card="one" alloy="Initial">
 		<title>.*</title>
 		<class>.*</class>
 		<modal>any</modal>
-		<root>true</root>
-		<action_widget id="paw1" card="some" alloy="Create_trigger">
+		<action_widget id="paw1" card="set" alloy="Create_trigger">
 			<label>(.*( new | add | create ).*|^(new (?!-)|add |create ).*|^(new|add|create)$)</label>
 			<class>.*</class>
 		</action_widget>
@@ -14,7 +13,7 @@
 			<label>(.* view .*|^view (?!-).*|^view$)</label>
 			<class>.*</class>
 		</action_widget>
-		<action_widget id="paw3" card="some" alloy="Update_trigger">
+		<action_widget id="paw3" card="set" alloy="Update_trigger">
 			<label>(.*( edit | update | modify ).*|^(edit (?!-)|update |modify ).*|^(edit|update|modify)$)</label>
 			<class>.*</class>
 		</action_widget>
@@ -28,17 +27,16 @@
 			<size>.*</size>
 		</selectable_widget>
 	</window>
-	<window id="form" card="one" alloy="Form">
+	<window id="form" card="one" dynamic="false" alloy="Form">
 		<title>.*</title>
 		<class>.*</class>
 		<modal>any</modal>
-		<root>false</root>
 		<action_widget id="paw5" card="one" alloy="Ok">
-			<label>^(ok|save)</label>
+			<label>^(ok|save|record)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw6" card="one" alloy="Cancel">
-			<label>^(cancel)</label>
+			<label>^(cancel|clear)</label>
 			<class>.*</class>
 		</action_widget>
 		<input_widget id="piw1" card="some" alloy="">
@@ -47,11 +45,10 @@
 			<text>.*</text>
 		</input_widget>
 	</window>
-	<window id="view" card="lone" alloy="View">
+	<window id="view" card="lone" dynamic="true" alloy="View">
 		<title>.*</title>
 		<class>.*</class>
 		<modal>any</modal>
-		<root>false</root>
 		<action_widget id="paw7" card="one" alloy="Ok">
 			<label>^(ok|back)</label>
 			<class>.*</class>

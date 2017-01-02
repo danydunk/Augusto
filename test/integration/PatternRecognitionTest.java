@@ -43,7 +43,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -77,7 +77,17 @@ public class PatternRecognitionTest {
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
 			final List<Instance_GUI_pattern> res = gfs.match(pattern);
 
-			assertEquals(4, res.size());
+			assertEquals(5, res.size());
+			int cont = 0;
+			for (final Instance_GUI_pattern gg : res) {
+				System.out.println("found " + cont + " size=" + gg.getWindows().size());
+				for (final Instance_window www : gg.getWindows()) {
+					System.out
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+				}
+				// assertEquals(2, gg.getWindows().size());
+				cont++;
+			}
 
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -88,7 +98,7 @@ public class PatternRecognitionTest {
 	@Test
 	public void test3() {
 
-		System.out.println("test4");
+		System.out.println("test3");
 		try {
 
 			// we load a gui pattern
@@ -105,6 +115,16 @@ public class PatternRecognitionTest {
 
 			assertEquals(2, res.size());
 			assertEquals("sw8", res.get(0).getSWS_for_PSW("psw1").get(0).getId());
+			int cont = 0;
+			for (final Instance_GUI_pattern gg : res) {
+				System.out.println("found " + cont + " size=" + gg.getWindows().size());
+				for (final Instance_window www : gg.getWindows()) {
+					System.out
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+				}
+				// assertEquals(2, gg.getWindows().size());
+				cont++;
+			}
 
 		} catch (final Exception e) {
 			e.printStackTrace();

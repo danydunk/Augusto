@@ -11,7 +11,7 @@ public class Pattern_confirm_window extends Pattern_window {
 
 	public Pattern_confirm_window() {
 
-		super("error_w", ".*", Cardinality.ONE, "", Boolean_regexp.TRUE, false, ".*dialog.*");
+		super("error_w", ".*", Cardinality.ONE, "", Boolean_regexp.TRUE, ".*dialog.*", false);
 		final Pattern_action_widget pawok = new Pattern_action_widget("pawok", "^(confirm|ok|yes)",
 				Cardinality.ONE, "", null);
 		final Pattern_action_widget pawcancel = new Pattern_action_widget("paw",

@@ -213,7 +213,9 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		final Map<Window, Signature> added_windows = new LinkedHashMap<>();
 		for (final Window win : windows) {
 			// we find the associated pattern window
-			final Pattern_window pw = in.getPW_for_W(win.getId());
+			// CHEEEEK
+			// final Pattern_window pw = in.getPW_for_W(win.getId());
+			final Pattern_window pw = null;
 			final List<Signature> to_search = new ArrayList<>(
 					func_semantics.getWindows_extensions());
 			to_search.add(func_semantics.window_signature);
