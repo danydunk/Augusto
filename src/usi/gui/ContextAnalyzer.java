@@ -228,13 +228,15 @@ public class ContextAnalyzer {
 			final int distance;
 			if ((a.y + a.height) > this.y) {
 
-				distance = (int) (Math.pow(((a.x + a.width) - this.x), 2) + Math.pow(
+				distance = (int) (Math.pow(((a.x + a.width + 1) - this.x), 2) + Math.pow(
 						(a.y - this.y), 2));
-			} else if ((a.x + a.width) <= this.x) {
-				distance = (int) (Math.pow(((a.x + a.width) - this.x), 2) + Math.pow(
-						((a.y + a.height) - this.y), 2));
-			} else {
-				distance = (int) (Math.pow((a.x - this.x), 2) + Math.pow(
+			} else
+				/*
+				 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
+				 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
+				 * 2)); } else
+				 */{
+				distance = (int) (Math.pow(((a.x + 1) - this.x), 2) + Math.pow(
 						((a.y + a.height) - this.y), 2));
 			}
 
