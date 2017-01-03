@@ -109,7 +109,7 @@ public class ApplicationHelper {
 
 			e.printStackTrace();
 			System.out
-			.println("ApplicationHelper: RMI error while closing application. Moving on.");
+					.println("ApplicationHelper: RMI error while closing application. Moving on.");
 		}
 
 		if (this.root == null) {

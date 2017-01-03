@@ -178,9 +178,10 @@ public class TestCaseRunner {
 
 				this.dealWithDialogsWindow(gmanager);
 
-				if (cont == actions.size() - 1) {
-					System.out.println();
-				}
+				// if (cont == actions.size() - 1) {
+				//
+				// System.out.println();
+				// }
 
 				actions_actually_executed.add(act_to_execute);
 
