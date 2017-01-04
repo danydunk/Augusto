@@ -47,6 +47,7 @@ fact{
 abstract sig Window {
 	aws: set Action_widget,
 	iws: set Input_widget,
+	sws: set Selectable_widget
 }
 abstract sig Action_widget {
 	goes: lone Window

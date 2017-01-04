@@ -21,7 +21,7 @@
 			<label>(.*( delete | remove ).*|^(delete |remove ).*|^(delete|remove)$)</label>
 			<class>.*</class>
 		</action_widget>
-		<selectable_widget id="psw1" card="one" alloy="">
+		<selectable_widget id="psw1" card="one" alloy="For_selecting">
 			<label>.*</label>
 			<class>.*</class>
 			<size>.*</size>
@@ -39,7 +39,7 @@
 			<label>^(cancel|clear)</label>
 			<class>.*</class>
 		</action_widget>
-		<input_widget id="piw1" card="some" alloy="">
+		<input_widget id="piw1" card="some" alloy="For_inputing">
 			<label>.*</label>
 			<class>.*</class>
 			<text>.*</text>
@@ -49,11 +49,11 @@
 		<title>.*</title>
 		<class>.*</class>
 		<modal>any</modal>
-		<action_widget id="paw7" card="one" alloy="Ok">
+		<action_widget id="paw7" card="one" alloy="Continue">
 			<label>^(ok|back)</label>
 			<class>.*</class>
 		</action_widget>
-		<input_widget id="piw3" card="some" alloy="">
+		<input_widget id="piw3" card="some" alloy="For_viewing">
 			<label>.*</label>
 			<class>.*</class>
 			<text>.*</text>

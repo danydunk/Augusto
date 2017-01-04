@@ -213,21 +213,26 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		final Map<Window, Signature> added_windows = new LinkedHashMap<>();
 		for (final Window win : windows) {
 			// we find the associated pattern window
-			// CHEEEEK
-			// final Pattern_window pw = in.getPW_for_W(win.getId());
-			final Pattern_window pw = null;
+			final List<Pattern_window> pws = in.getPW_for_W(win.getId());
 			final List<Signature> to_search = new ArrayList<>(
 					func_semantics.getWindows_extensions());
-			to_search.add(func_semantics.window_signature);
 
-			final Signature w_sig = AlloyUtil.searchSignatureInList(to_search,
-					pw.getAlloyCorrespondence());
-
-			assert (w_sig != null);
-
-			final Signature concreteWinSig = new Signature("Window_" + win.getId(),
-					Cardinality.ONE, false, Lists.newArrayList(w_sig), false);
-
+			final List<Signature> w_sigs = new ArrayList<>();
+			for (final Pattern_window pw : pws) {
+				final Signature w_sig = AlloyUtil.searchSignatureInList(to_search,
+						pw.getAlloyCorrespondence());
+				if (w_sig != null) {
+					w_sigs.add(w_sig);
+				}
+			}
+			Signature concreteWinSig = null;
+			if (w_sigs.size() == 1) {
+				concreteWinSig = new Signature("Window_" + win.getId(), Cardinality.ONE, false,
+						Lists.newArrayList(w_sigs.get(0)), false);
+			} else {
+				concreteWinSig = new Signature("Window_" + win.getId(), Cardinality.ONE, false,
+						Lists.newArrayList(func_semantics.window_signature), false);
+			}
 			// We add the windows to the list of signatures
 			signatures.add(concreteWinSig);
 			added_windows.put(win, concreteWinSig);
