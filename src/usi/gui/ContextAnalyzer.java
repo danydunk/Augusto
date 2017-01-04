@@ -122,6 +122,7 @@ public class ContextAnalyzer {
 				continue;
 			}
 			final double dist = area.getDistance(desc.a);
+
 			if (dist < min_dist) {
 				min_dist = dist;
 				nearer = desc;
@@ -231,11 +232,11 @@ public class ContextAnalyzer {
 				distance = (int) (Math.pow(((a.x + a.width + 1) - this.x), 2) + Math.pow(
 						(a.y - this.y), 2));
 			} else
-				/*
-				 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
-				 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
-				 * 2)); } else
-				 */{
+			/*
+			 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
+			 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
+			 * 2)); } else
+			 */{
 				distance = (int) (Math.pow(((a.x + 1) - this.x), 2) + Math.pow(
 						((a.y + a.height) - this.y), 2));
 			}
@@ -254,7 +255,7 @@ public class ContextAnalyzer {
 
 			// controllo che il widget sia all'interno dell'area di interesse
 			// del to in esame
-			if (a.x <= this.centerX && a.y <= this.centerY) {
+			if (a.centerX - 2 <= this.centerX && a.centerY - 2 <= this.centerY) {
 				return true;
 			}
 			return false;
