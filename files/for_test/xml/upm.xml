@@ -72,7 +72,7 @@
             <pos>603:246</pos>
             <class>PasswordFieldUI</class>
             <descriptor>Password</descriptor>
-            <value>eOaWHv8l</value>
+            <value>Qsf2up3Q</value>
         </input_widget>
         <input_widget id="iw21">
             <pos>603:288</pos>
@@ -350,17 +350,14 @@ http://upm.sourceforge.net</value>
         <action_widget id="aw32">
             <pos>853:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Save in:</descriptor>
         </action_widget>
         <action_widget id="aw33">
             <pos>873:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Save in:</descriptor>
         </action_widget>
         <action_widget id="aw34">
             <pos>893:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Save in:</descriptor>
         </action_widget>
         <action_widget id="aw27">
             <pos>440:201</pos>
@@ -431,17 +428,14 @@ http://upm.sourceforge.net</value>
         <action_widget id="aw42">
             <pos>853:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Save in:</descriptor>
         </action_widget>
         <action_widget id="aw43">
             <pos>873:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Save in:</descriptor>
         </action_widget>
         <action_widget id="aw44">
             <pos>893:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Save in:</descriptor>
         </action_widget>
         <action_widget id="aw37">
             <pos>440:201</pos>
@@ -512,17 +506,14 @@ http://upm.sourceforge.net</value>
         <action_widget id="aw52">
             <pos>853:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Look in:</descriptor>
         </action_widget>
         <action_widget id="aw53">
             <pos>873:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Look in:</descriptor>
         </action_widget>
         <action_widget id="aw54">
             <pos>893:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Look in:</descriptor>
         </action_widget>
         <action_widget id="aw47">
             <pos>440:201</pos>
@@ -609,13 +600,11 @@ http://upm.sourceforge.net</value>
         <input_widget id="iw13">
             <pos>637:341</pos>
             <class>TextFieldUI</class>
-            <descriptor>User Name</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw14">
             <pos>637:385</pos>
             <class>PasswordFieldUI</class>
-            <descriptor>Password</descriptor>
             <value/>
         </input_widget>
     </window>

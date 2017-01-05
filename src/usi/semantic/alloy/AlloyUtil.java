@@ -820,9 +820,10 @@ public class AlloyUtil {
 		final List<Input_widget> to_order = new ArrayList<>();
 
 		for (final Input_widget iw : iws.keySet()) {
+
 			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
 			metadata += " ";
-			metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+			metadata += iw.getDescriptor() != null ? iw.getDescriptor() : "";
 
 			to_order.add(iw);
 			if (invalid) {
@@ -1656,7 +1657,7 @@ public class AlloyUtil {
 
 					String metadata = iw.getLabel() != null ? iw.getLabel() : "";
 					metadata += " ";
-					metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
+					metadata += iw.getDescriptor() != null ? iw.getDescriptor() : "";
 
 					if (dm.getInvalidData(metadata).contains(s)) {
 						assert (invalid);

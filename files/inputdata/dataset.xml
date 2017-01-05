@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <DATASET>
   <DATA>
     <metadata>starting on</metadata>
@@ -67,7 +67,7 @@
     </values>
   </DATA>
   <DATA type="itemized">
-    <metadata>and repeating on the</metadata>
+    <metadata></metadata>
     <values>
       <valid>1</valid>
       <invalid>0</invalid>
@@ -77,7 +77,6 @@
       <invalid>5</invalid>
       <invalid>6</invalid>
       <invalid>7</invalid>
-      <invalid>8</invalid>
     </values>
   </DATA>
   <DATA type="itemized">
@@ -94,7 +93,12 @@
       <invalid>2</invalid>
       <invalid>3</invalid>
       <invalid>11</invalid>
-      <invalid>12</invalid>
+    </values>
+  </DATA>
+  <DATA type="itemized">
+    <metadata>Repeat this action</metadata>
+    <values>
+      <valid>0</valid>
     </values>
   </DATA>
 </DATASET>

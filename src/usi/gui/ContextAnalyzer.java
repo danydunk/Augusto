@@ -128,7 +128,7 @@ public class ContextAnalyzer {
 				nearer = desc;
 			}
 		}
-		if (nearer != null) {
+		if (nearer != null && Math.sqrt(min_dist) < (height * 5)) {
 			return nearer.label;
 		}
 		// if no descriptor was found
@@ -189,7 +189,7 @@ public class ContextAnalyzer {
 				nearer = desc;
 			}
 		}
-		if (nearer != null) {
+		if (nearer != null && Math.sqrt(min_dist) < (height * 5)) {
 			return nearer.label;
 		}
 		// if no descriptor was found

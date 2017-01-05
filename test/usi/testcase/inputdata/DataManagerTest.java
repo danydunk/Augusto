@@ -16,7 +16,7 @@ public class DataManagerTest {
 			final DataManager dm = DataManager.getInstance();
 
 			assertEquals(19, dm.getGenericData().size());
-
+			assertEquals(1, dm.getValidItemizedData("").size());
 			assertEquals(5, dm.getValidData("starting on").size());
 			assertEquals(0,
 					dm.getValidItemizedData("<html><font color='gray'>&lt;from&gt;</font></html>")

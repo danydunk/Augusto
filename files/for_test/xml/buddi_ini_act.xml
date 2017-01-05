@@ -16,17 +16,14 @@
         <action_widget id="aw6">
             <pos>853:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Look in:</descriptor>
         </action_widget>
         <action_widget id="aw7">
             <pos>873:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Look in:</descriptor>
         </action_widget>
         <action_widget id="aw8">
             <pos>893:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Look in:</descriptor>
         </action_widget>
         <action_widget id="aw1">
             <pos>440:201</pos>
@@ -103,17 +100,14 @@
         <action_widget id="aw6">
             <pos>853:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Look in:</descriptor>
         </action_widget>
         <action_widget id="aw7">
             <pos>873:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Look in:</descriptor>
         </action_widget>
         <action_widget id="aw8">
             <pos>893:170</pos>
             <class>ButtonUI</class>
-            <descriptor>Look in:</descriptor>
         </action_widget>
         <action_widget id="aw1">
             <pos>440:201</pos>
