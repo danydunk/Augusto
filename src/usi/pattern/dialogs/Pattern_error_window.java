@@ -11,7 +11,7 @@ public class Pattern_error_window extends Pattern_window {
 
 	public Pattern_error_window() {
 
-		super("error_w", ".*", Cardinality.ONE, "", Boolean_regexp.TRUE, false, ".*dialog.*");
+		super("error_w", ".*", Cardinality.ONE, "", Boolean_regexp.TRUE, ".*dialog.*", false);
 		final Pattern_action_widget paw = new Pattern_action_widget("pawok", "^(ok|back)",
 				Cardinality.ONE, "", null);
 		final Pattern_action_widget other_paw = new Pattern_action_widget("paw_other",

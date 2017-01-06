@@ -113,6 +113,8 @@ public class GUIPatternParser {
 	private static Pattern_window createPatternWindows(final Node nodeWindow) throws Exception {
 
 		final String id = nodeWindow.getAttributes().getNamedItem("id").getNodeValue();
+		final boolean dynamic = Boolean.valueOf(nodeWindow.getAttributes().getNamedItem("dynamic")
+				.getNodeValue());
 
 		Cardinality card = null;
 		if (nodeWindow.getAttributes().getNamedItem("card") != null) {
@@ -122,8 +124,7 @@ public class GUIPatternParser {
 		final Node nodeModal = getElementNode(nodeWindow.getChildNodes(), "modal");
 		final Boolean_regexp modal = Boolean_regexp
 				.valueOf(getNodeContent(nodeModal).toUpperCase());
-		final Node nodeRoot = getElementNode(nodeWindow.getChildNodes(), "root");
-		final Boolean root = Boolean.valueOf(getNodeContent(nodeRoot).toUpperCase());
+
 		final Node nodeTitle = getElementNode(nodeWindow.getChildNodes(), "title");
 		final String title = getNodeContent(nodeTitle);
 		final Node nodeClass = getElementNode(nodeWindow.getChildNodes(), "class");
@@ -134,8 +135,8 @@ public class GUIPatternParser {
 		if (nAlloy != null) {
 			alloy = nAlloy.getNodeValue();
 		}
-		final Pattern_window window = new Pattern_window(id, title, card, alloy, modal, root,
-				classs);
+		final Pattern_window window = new Pattern_window(id, title, card, alloy, modal, classs,
+				dynamic);
 
 		final List<Pattern_action_widget> actionWidgets = createActionsWidgets(nodeWindow);
 		for (final Pattern_action_widget action_widget : actionWidgets) {

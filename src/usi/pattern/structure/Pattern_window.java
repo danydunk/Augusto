@@ -21,8 +21,8 @@ import com.google.common.collect.Collections2;
 
 public class Pattern_window extends Pattern_widget<Window> {
 
+	private final boolean dynamic;
 	private final Boolean_regexp modal;
-	private final boolean root;
 	private final Map<String, Pattern_widget> widgets_map;
 	private List<Pattern_action_widget> action_widgets;
 	private List<Pattern_input_widget> input_widgets;
@@ -31,16 +31,21 @@ public class Pattern_window extends Pattern_widget<Window> {
 	// private List<Pattern_container> containers;
 
 	public Pattern_window(final String id, final String label, final Cardinality card,
-			final String alloy_correspondence, final Boolean_regexp modal, final boolean root,
-			final String classs) {
+			final String alloy_correspondence, final Boolean_regexp modal, final String classs,
+			final boolean dynamic) {
 
 		super(id, label, card, alloy_correspondence, classs);
 		this.modal = modal;
-		this.root = root;
 		this.action_widgets = new ArrayList<>();
 		this.input_widgets = new ArrayList<>();
 		this.selectable_widgets = new ArrayList<>();
 		this.widgets_map = new HashMap<>();
+		this.dynamic = dynamic;
+	}
+
+	public boolean isDynamic() {
+
+		return this.dynamic;
 	}
 
 	public boolean containsWidget(final String id) {
@@ -51,11 +56,6 @@ public class Pattern_window extends Pattern_widget<Window> {
 	public Boolean_regexp getModal() {
 
 		return this.modal;
-	}
-
-	public boolean isRoot() {
-
-		return this.root;
 	}
 
 	public List<Pattern_action_widget> getActionWidgets() {

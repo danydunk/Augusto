@@ -36,7 +36,9 @@ public class Instance_GUI_pattern {
 
 	private final List<Instance_window> windows;
 	// from window to pattern window
-	private final Map<String, String> windows_mapping;
+	private final Map<String, List<String>> windows_mapping;
+	// from pattern window to window
+	private final Map<String, List<String>> pw_windows_mapping;
 	protected SpecificSemantics semantics;
 
 	public Instance_GUI_pattern(final GUI gui, final GUI_Pattern guipattern,
@@ -48,7 +50,19 @@ public class Instance_GUI_pattern {
 
 		this.windows_mapping = new HashMap<>();
 		for (final Instance_window iw : this.windows) {
-			this.windows_mapping.put(iw.getInstance().getId(), iw.getPattern().getId());
+			if (!this.windows_mapping.containsKey(iw.getInstance().getId())) {
+				this.windows_mapping.put(iw.getInstance().getId(), new ArrayList<>());
+
+			}
+			this.windows_mapping.get(iw.getInstance().getId()).add(iw.getPattern().getId());
+		}
+		this.pw_windows_mapping = new HashMap<>();
+		for (final Instance_window iw : this.windows) {
+			if (!this.pw_windows_mapping.containsKey(iw.getPattern().getId())) {
+				this.pw_windows_mapping.put(iw.getPattern().getId(), new ArrayList<>());
+
+			}
+			this.pw_windows_mapping.get(iw.getPattern().getId()).add(iw.getInstance().getId());
 		}
 	}
 
@@ -59,6 +73,7 @@ public class Instance_GUI_pattern {
 
 		this.windows = new ArrayList<>();
 		this.windows_mapping = new HashMap<>();
+		this.pw_windows_mapping = new HashMap<>();
 	}
 
 	public void addWindow(final Instance_window iw) {
@@ -66,7 +81,18 @@ public class Instance_GUI_pattern {
 		if (this.windows.contains(iw)) {
 			return;
 		}
-		this.windows_mapping.put(iw.getInstance().getId(), iw.getPattern().getId());
+
+		if (!this.windows_mapping.containsKey(iw.getInstance().getId())) {
+			this.windows_mapping.put(iw.getInstance().getId(), new ArrayList<>());
+		}
+		this.windows_mapping.get(iw.getInstance().getId()).add(iw.getPattern().getId());
+
+		if (!this.pw_windows_mapping.containsKey(iw.getPattern().getId())) {
+			this.pw_windows_mapping.put(iw.getPattern().getId(), new ArrayList<>());
+
+		}
+		this.pw_windows_mapping.get(iw.getPattern().getId()).add(iw.getInstance().getId());
+
 		this.windows.add(iw);
 	}
 
@@ -75,8 +101,11 @@ public class Instance_GUI_pattern {
 		if (!this.windows.contains(iw)) {
 			return;
 		}
+
+		this.windows_mapping.get(iw.getInstance().getId()).remove(iw.getPattern().getId());
+		this.pw_windows_mapping.get(iw.getPattern().getId()).remove(iw.getInstance().getId());
+
 		this.windows.remove(iw);
-		this.windows_mapping.remove(iw.getInstance());
 	}
 
 	public GUI getGui() {
@@ -94,19 +123,23 @@ public class Instance_GUI_pattern {
 		return new ArrayList<>(this.windows);
 	}
 
-	public Pattern_window getPW_for_W(final String w) {
+	public List<Pattern_window> getPW_for_W(final String w) {
 
-		return this.guipattern.getWindow(this.windows_mapping.get(w));
+		final List<Pattern_window> out = new ArrayList<>();
+		if (!this.windows_mapping.containsKey(w)) {
+			return out;
+		}
+		for (final String x : this.windows_mapping.get(w)) {
+			out.add(this.guipattern.getWindow(x));
+		}
+		return out;
 	}
 
 	public List<Window> getWS_for_PW(final String pw) {
 
 		final List<Window> out = new ArrayList<>();
-
-		for (final String w : this.windows_mapping.keySet()) {
-			if (this.windows_mapping.get(w).equals(pw)) {
-				out.add(this.gui.getWindow(w));
-			}
+		for (final String x : this.pw_windows_mapping.get(pw)) {
+			out.add(this.gui.getWindow(x));
 		}
 		return out;
 	}
@@ -184,7 +217,9 @@ public class Instance_GUI_pattern {
 		for (final Instance_window iw : this.windows) {
 			out.addWindow(iw);
 			try {
-				out.getGui().addWindow(iw.getInstance());
+				if (!out.getGui().containsWindow(iw.getInstance().getId())) {
+					out.getGui().addWindow(iw.getInstance());
+				}
 			} catch (final Exception e) {
 				// if window already added
 			}
@@ -265,120 +300,4 @@ public class Instance_GUI_pattern {
 
 		return AlloyUtil.runCommand(mod, mod.getAllCommands().get(0)).satisfiable();
 	}
-
-	/**
-	 * Function that updates a testcase results by removing all the actions not
-	 * executed in the TC for which the semantics was unknonwn
-	 *
-	 * @param res
-	 * @return
-	 * @throws Exception
-	 */
-	// public GUITestCaseResult updateTCResult(final GUITestCaseResult res)
-	// throws Exception {
-	//
-	// if (res.getTc().getActions().size() == res.getActions_executed().size())
-	// {
-	// return res;
-	// }
-	// final List<GUIAction> actions = new ArrayList<>();
-	// final List<GUIAction> actions_executed = new ArrayList<>();
-	// final List<GUIAction> actions_actually_executed =
-	// res.getActions_actually_executed();
-	// final List<Window> results = new ArrayList<>();
-	// Window last = null;
-	// boolean tc_changed = false;
-	// int y = 0;
-	// for (int x = 0; x < res.getTc().getActions().size(); x++) {
-	// final GUIAction act_to_execute = res.getTc().getActions().get(x);
-	// if (y >= res.getActions_executed().size()
-	// || !act_to_execute.isSame(res.getActions_executed().get(y))) {
-	//
-	// if (last != null &&
-	// !act_to_execute.getWindow().getId().equals(last.getId())) {
-	// tc_changed = true;
-	// break;
-	// }
-	//
-	// if (act_to_execute instanceof Click) {
-	// if (this.getSemantics().getClickSemantics().getContent().trim().length()
-	// == 0) {
-	// // semantics is empty, therefore this action can be
-	// // skipped
-	// tc_changed = true;
-	// continue;
-	// }
-	// }
-	// if (act_to_execute instanceof Fill) {
-	// if (this.getSemantics().getFillSemantics().getContent().trim().length()
-	// == 0) {
-	// // semantics is empty, therefore this action can be
-	// // skipped
-	// tc_changed = true;
-	// continue;
-	// }
-	//
-	// }
-	// if (act_to_execute instanceof Select) {
-	// if (this.getSemantics().getSelectSemantics().getContent().trim().length()
-	// == 0) {
-	// // semantics is empty, therefore this action can be
-	// // skipped
-	// tc_changed = true;
-	// continue;
-	// }
-	// }
-	//
-	// actions.add(act_to_execute);
-	// actions_executed.add(act_to_execute);
-	// if (y > 0) {
-	// last = res.getResults().get(y - 1);
-	// }
-	// results.add(last);
-	//
-	// } else {
-	// actions.add(act_to_execute);
-	// actions_executed.add(act_to_execute);
-	// results.add(res.getResults().get(y));
-	// y++;
-	// }
-	// }
-	//
-	// GUITestCaseResult new_res = new GUITestCaseResult(new
-	// GUITestCase(res.getTc()
-	// .getAlloySolution(), actions, res.getTc().getRunCommand()),
-	// actions_executed,
-	// results, actions_actually_executed);
-	//
-	// if (!tc_changed) {
-	//
-	// return new_res;
-	// }
-	//
-	// final List<String> values = new ArrayList<>();
-	// for (final GUIAction act : new_res.getTc().getActions()) {
-	// if (act instanceof Fill) {
-	// final Fill f = (Fill) act;
-	// values.add(f.getInput());
-	// }
-	//
-	// }
-	//
-	// final Alloy_Model sem = AlloyUtil.getTCaseModel(this.getSemantics(),
-	// new_res.getTc()
-	// .getActions(), null);
-	// final Instance_GUI_pattern clone = this.clone();
-	// clone.setSpecificSemantics(SpecificSemantics.instantiate(sem));
-	// final AlloyTestCaseGenerator test_gen = new
-	// AlloyTestCaseGenerator(clone);
-	// final List<GUITestCase> tests = test_gen.generateTestCases(values);
-	// assert (tests.size() < 2);
-	// if (tests.size() == 1) {
-	// new_res = new GUITestCaseResult(tests.get(0), actions_executed, results,
-	// actions_actually_executed);
-	// return new_res;
-	// } else {
-	// return null;
-	// }
-	// }
 }

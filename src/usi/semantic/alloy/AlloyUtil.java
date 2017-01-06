@@ -1052,7 +1052,8 @@ public class AlloyUtil {
 			final Signature window, final String fieldToRelated) {
 
 		if (widgets.isEmpty()) {
-			return new Fact(window.getIdentifier() + "_" + fieldToRelated, "");
+			return new Fact(window.getIdentifier() + "_" + fieldToRelated, window.getIdentifier()
+					+ "." + fieldToRelated + " = none");
 		}
 
 		String content = window.getIdentifier() + "." + fieldToRelated + " = ";

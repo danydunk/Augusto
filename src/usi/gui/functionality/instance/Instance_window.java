@@ -198,7 +198,7 @@ public class Instance_window {
 
 	public boolean isOverlap(final Instance_window iw) {
 
-		if (iw.instance != this.instance) {
+		if (!iw.instance.getId().equals(this.instance.getId())) {
 			return false;
 		}
 

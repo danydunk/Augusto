@@ -3,7 +3,6 @@ package test.usi.semantic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -82,7 +81,7 @@ public class SpecificSemanticTest {
 
 		// Win 1 has not inputs
 		final AlloyEntity fcw1 = AlloyUtil.searchElementInList(specsem.getFacts(), "Window_w1_iws");
-		assertNull(fcw1);
+		assertNotNull(fcw1);
 
 		final AlloyEntity fcw1action = AlloyUtil.searchElementInList(specsem.getFacts(),
 				"Window_w1_aws");
