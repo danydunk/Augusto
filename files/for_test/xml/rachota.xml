@@ -1,116 +1,116 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <GUI>
     <window id="w7">
-        <pos>370:86</pos>
+        <pos>370:106</pos>
         <class>org.cesilko.rachota.gui.ReportWizard</class>
         <title>Report generation wizard</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw72">
-            <pos>981:394</pos>
+            <pos>981:414</pos>
             <class>ButtonUI</class>
             <label>Browse</label>
         </action_widget>
         <action_widget id="aw73">
-            <pos>665:573</pos>
+            <pos>665:593</pos>
             <class>ButtonUI</class>
             <label>&lt; Previous</label>
         </action_widget>
         <action_widget id="aw74">
-            <pos>767:573</pos>
+            <pos>767:593</pos>
             <class>ButtonUI</class>
             <label>Next &gt;</label>
         </action_widget>
         <action_widget id="aw75">
-            <pos>845:573</pos>
+            <pos>845:593</pos>
             <class>ButtonUI</class>
             <label>Finish</label>
         </action_widget>
         <action_widget id="aw76">
-            <pos>923:573</pos>
+            <pos>923:593</pos>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw57">
-            <pos>690:232</pos>
+            <pos>690:252</pos>
             <class>RadioButtonUI</class>
             <label/>
             <descriptor>Output:</descriptor>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw59">
-            <pos>690:298</pos>
+            <pos>690:318</pos>
             <class>RadioButtonUI</class>
             <label/>
             <descriptor>Format:</descriptor>
             <value>[options] 0 : 3</value>
         </input_widget>
         <input_widget id="iw62">
-            <pos>675:397</pos>
+            <pos>675:417</pos>
             <class>TextFieldUI</class>
             <descriptor>Filename:</descriptor>
             <value/>
         </input_widget>
     </window>
     <window id="w8">
-        <pos>573:142</pos>
+        <pos>573:162</pos>
         <class>javax.swing.JDialog</class>
         <title>Open</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw77">
-            <pos>935:185</pos>
+            <pos>935:205</pos>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw78">
-            <pos>964:185</pos>
+            <pos>964:205</pos>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw79">
-            <pos>993:185</pos>
+            <pos>993:205</pos>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw80">
-            <pos>1022:185</pos>
+            <pos>1022:205</pos>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw81">
-            <pos>1046:185</pos>
+            <pos>1046:205</pos>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw82">
-            <pos>919:461</pos>
+            <pos>919:481</pos>
             <class>ButtonUI</class>
             <label>Select</label>
         </action_widget>
         <action_widget id="aw83">
-            <pos>997:461</pos>
+            <pos>997:481</pos>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw63">
-            <pos>648:184</pos>
+            <pos>648:204</pos>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw64">
-            <pos>677:394</pos>
+            <pos>677:414</pos>
             <class>TextFieldUI</class>
             <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw65">
-            <pos>677:419</pos>
+            <pos>677:439</pos>
             <class>ComboBoxUI</class>
             <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw3">
-            <pos>594:223</pos>
+            <pos>594:243</pos>
             <class>ListUI</class>
             <descriptor>Look In:</descriptor>
             <size>0</size>
@@ -118,64 +118,64 @@
         </selectable_widget>
     </window>
     <window id="w9">
-        <pos>573:142</pos>
+        <pos>573:162</pos>
         <class>javax.swing.JDialog</class>
         <title>Open</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw84">
-            <pos>935:185</pos>
+            <pos>935:205</pos>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw85">
-            <pos>964:185</pos>
+            <pos>964:205</pos>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw86">
-            <pos>993:185</pos>
+            <pos>993:205</pos>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw87">
-            <pos>1022:185</pos>
+            <pos>1022:205</pos>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw88">
-            <pos>1046:185</pos>
+            <pos>1046:205</pos>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw89">
-            <pos>919:461</pos>
+            <pos>919:481</pos>
             <class>ButtonUI</class>
             <label>Open</label>
         </action_widget>
         <action_widget id="aw90">
-            <pos>997:461</pos>
+            <pos>997:481</pos>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw66">
-            <pos>648:184</pos>
+            <pos>648:204</pos>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw67">
-            <pos>677:394</pos>
+            <pos>677:414</pos>
             <class>TextFieldUI</class>
             <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw68">
-            <pos>677:419</pos>
+            <pos>677:439</pos>
             <class>ComboBoxUI</class>
             <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw4">
-            <pos>594:223</pos>
+            <pos>594:243</pos>
             <class>ListUI</class>
             <descriptor>Look In:</descriptor>
             <size>1</size>
@@ -183,70 +183,70 @@
         </selectable_widget>
     </window>
     <window id="w11">
-        <pos>573:142</pos>
+        <pos>573:162</pos>
         <class>javax.swing.JDialog</class>
         <title>Open</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw98">
-            <pos>935:185</pos>
+            <pos>935:205</pos>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw99">
-            <pos>964:185</pos>
+            <pos>964:205</pos>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw100">
-            <pos>993:185</pos>
+            <pos>993:205</pos>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw101">
-            <pos>1022:185</pos>
+            <pos>1022:205</pos>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw102">
-            <pos>1046:185</pos>
+            <pos>1046:205</pos>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw103">
-            <pos>919:461</pos>
+            <pos>919:481</pos>
             <class>ButtonUI</class>
             <label>Open</label>
         </action_widget>
         <action_widget id="aw104">
-            <pos>997:461</pos>
+            <pos>997:481</pos>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw72">
-            <pos>648:184</pos>
+            <pos>648:204</pos>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw73">
-            <pos>594:277</pos>
+            <pos>594:297</pos>
             <class>TextFieldUI</class>
             <descriptor>Look In:</descriptor>
             <value>New Folder (3)</value>
         </input_widget>
         <input_widget id="iw74">
-            <pos>677:394</pos>
+            <pos>677:414</pos>
             <class>TextFieldUI</class>
             <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw75">
-            <pos>677:419</pos>
+            <pos>677:439</pos>
             <class>ComboBoxUI</class>
             <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw6">
-            <pos>594:243</pos>
+            <pos>594:263</pos>
             <class>TableUI</class>
             <descriptor>Look In:</descriptor>
             <size>3</size>
@@ -254,64 +254,64 @@
         </selectable_widget>
     </window>
     <window id="w10">
-        <pos>573:142</pos>
+        <pos>573:162</pos>
         <class>javax.swing.JDialog</class>
         <title>Open</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw91">
-            <pos>935:185</pos>
+            <pos>935:205</pos>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw92">
-            <pos>964:185</pos>
+            <pos>964:205</pos>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw93">
-            <pos>993:185</pos>
+            <pos>993:205</pos>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw94">
-            <pos>1022:185</pos>
+            <pos>1022:205</pos>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw95">
-            <pos>1046:185</pos>
+            <pos>1046:205</pos>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw96">
-            <pos>919:461</pos>
+            <pos>919:481</pos>
             <class>ButtonUI</class>
             <label>Open</label>
         </action_widget>
         <action_widget id="aw97">
-            <pos>997:461</pos>
+            <pos>997:481</pos>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw69">
-            <pos>648:184</pos>
+            <pos>648:204</pos>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw70">
-            <pos>677:394</pos>
+            <pos>677:414</pos>
             <class>TextFieldUI</class>
             <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw71">
-            <pos>677:419</pos>
+            <pos>677:439</pos>
             <class>ComboBoxUI</class>
             <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw5">
-            <pos>594:243</pos>
+            <pos>594:263</pos>
             <class>TableUI</class>
             <descriptor>Look In:</descriptor>
             <size>2</size>
@@ -476,77 +476,77 @@
         <selectable_widget id="sw8">
             <pos>496:317</pos>
             <class>TableUI</class>
-            <descriptor>Period:</descriptor>
+            <descriptor>Filters:</descriptor>
             <size>0</size>
             <selected>-1</selected>
         </selectable_widget>
         <selectable_widget id="sw9">
             <pos>496:481</pos>
             <class>TableUI</class>
-            <descriptor>Period:</descriptor>
+            <descriptor>Tasks:</descriptor>
             <size>0</size>
             <selected>-1</selected>
         </selectable_widget>
     </window>
     <window id="w12">
-        <pos>573:142</pos>
+        <pos>573:162</pos>
         <class>javax.swing.JDialog</class>
         <title>Open</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw105">
-            <pos>935:185</pos>
+            <pos>935:205</pos>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw106">
-            <pos>964:185</pos>
+            <pos>964:205</pos>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw107">
-            <pos>993:185</pos>
+            <pos>993:205</pos>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw108">
-            <pos>1022:185</pos>
+            <pos>1022:205</pos>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw109">
-            <pos>1046:185</pos>
+            <pos>1046:205</pos>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw110">
-            <pos>919:461</pos>
+            <pos>919:481</pos>
             <class>ButtonUI</class>
             <label>Select</label>
         </action_widget>
         <action_widget id="aw111">
-            <pos>997:461</pos>
+            <pos>997:481</pos>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw76">
-            <pos>648:184</pos>
+            <pos>648:204</pos>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw77">
-            <pos>677:394</pos>
+            <pos>677:414</pos>
             <class>TextFieldUI</class>
             <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw78">
-            <pos>677:419</pos>
+            <pos>677:439</pos>
             <class>ComboBoxUI</class>
             <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw7">
-            <pos>594:243</pos>
+            <pos>594:263</pos>
             <class>TableUI</class>
             <descriptor>Look In:</descriptor>
             <size>9</size>
@@ -911,6 +911,7 @@
         <selectable_widget id="sw2">
             <pos>901:569</pos>
             <class>TableUI</class>
+            <descriptor>On exit:</descriptor>
             <size>0</size>
             <selected>-1</selected>
         </selectable_widget>
@@ -1231,176 +1232,6 @@
             <descriptor>29</descriptor>
             <value>Thursday - 27. October, 2016</value>
         </input_widget>
-    </window>
-    <window id="w16">
-        <pos>463:69</pos>
-        <class>org.cesilko.rachota.gui.MainWindow</class>
-        <title>[00:00] - Rachota 2.3</title>
-        <modal>false</modal>
-        <root>false</root>
-        <action_widget id="aw171">
-            <pos>471:99</pos>
-            <class>MenuItemUI</class>
-            <label>System - About ...</label>
-        </action_widget>
-        <action_widget id="aw172">
-            <pos>471:99</pos>
-            <class>MenuItemUI</class>
-            <label>System - Settings ...</label>
-        </action_widget>
-        <action_widget id="aw173">
-            <pos>471:99</pos>
-            <class>MenuItemUI</class>
-            <label>System - Exit</label>
-        </action_widget>
-        <action_widget id="aw174">
-            <pos>524:99</pos>
-            <class>MenuItemUI</class>
-            <label>Task - Copy task</label>
-        </action_widget>
-        <action_widget id="aw175">
-            <pos>524:99</pos>
-            <class>MenuItemUI</class>
-            <label>Task - Move time</label>
-        </action_widget>
-        <action_widget id="aw176">
-            <pos>524:99</pos>
-            <class>MenuItemUI</class>
-            <label>Task - Correct duration</label>
-        </action_widget>
-        <action_widget id="aw177">
-            <pos>524:99</pos>
-            <class>MenuItemUI</class>
-            <label>Task - Add note</label>
-        </action_widget>
-        <action_widget id="aw178">
-            <pos>563:99</pos>
-            <class>MenuItemUI</class>
-            <label>Tools - Switch date ...</label>
-        </action_widget>
-        <action_widget id="aw179">
-            <pos>563:99</pos>
-            <class>MenuItemUI</class>
-            <label>Tools - Adjust start time ...</label>
-        </action_widget>
-        <action_widget id="aw157">
-            <pos>481:125</pos>
-            <class>TabbedPaneUI</class>
-            <label>Day</label>
-        </action_widget>
-        <action_widget id="aw158">
-            <pos>481:125</pos>
-            <class>TabbedPaneUI</class>
-            <label>Analytics</label>
-        </action_widget>
-        <action_widget id="aw159">
-            <pos>789:154</pos>
-            <class>ButtonUI</class>
-            <label>Generate report ...</label>
-        </action_widget>
-        <action_widget id="aw162">
-            <pos>560:198</pos>
-            <class>ButtonUI</class>
-            <label/>
-        </action_widget>
-        <action_widget id="aw163">
-            <pos>823:198</pos>
-            <class>ButtonUI</class>
-            <label/>
-        </action_widget>
-        <action_widget id="aw160">
-            <pos>539:201</pos>
-            <class>ButtonUI</class>
-            <label/>
-        </action_widget>
-        <action_widget id="aw164">
-            <pos>925:201</pos>
-            <class>ButtonUI</class>
-            <label/>
-        </action_widget>
-        <action_widget id="aw161">
-            <pos>539:213</pos>
-            <class>ButtonUI</class>
-            <label/>
-        </action_widget>
-        <action_widget id="aw165">
-            <pos>925:213</pos>
-            <class>ButtonUI</class>
-            <label/>
-        </action_widget>
-        <action_widget id="aw166">
-            <pos>488:243</pos>
-            <class>TabbedPaneUI</class>
-            <label>Times</label>
-        </action_widget>
-        <action_widget id="aw167">
-            <pos>488:243</pos>
-            <class>TabbedPaneUI</class>
-            <label>Projects</label>
-        </action_widget>
-        <action_widget id="aw168">
-            <pos>547:392</pos>
-            <class>ButtonUI</class>
-            <label>Add filter</label>
-        </action_widget>
-        <action_widget id="aw169">
-            <pos>652:392</pos>
-            <class>ButtonUI</class>
-            <label>Edit filter</label>
-        </action_widget>
-        <action_widget id="aw170">
-            <pos>767:392</pos>
-            <class>ButtonUI</class>
-            <label>Remove filter</label>
-        </action_widget>
-        <input_widget id="iw99">
-            <pos>537:156</pos>
-            <class>ComboBoxUI</class>
-            <descriptor>Period:</descriptor>
-            <value>[options] 1 : 4</value>
-        </input_widget>
-        <input_widget id="iw101">
-            <pos>618:201</pos>
-            <class>TextFieldUI</class>
-            <value>44. week, 2016</value>
-        </input_widget>
-        <input_widget id="iw100">
-            <pos>497:203</pos>
-            <class>FormattedTextFieldUI</class>
-            <descriptor>Period:</descriptor>
-            <value>0</value>
-        </input_widget>
-        <input_widget id="iw102">
-            <pos>883:203</pos>
-            <class>FormattedTextFieldUI</class>
-            <value>0</value>
-        </input_widget>
-        <input_widget id="iw103">
-            <pos>495:624</pos>
-            <class>CheckBoxUI</class>
-            <label>Group tasks with same description</label>
-            <value>[options] 1 : 2</value>
-        </input_widget>
-        <input_widget id="iw104">
-            <pos>855:662</pos>
-            <class>TextFieldUI</class>
-            <descriptor>Total filtered time:</descriptor>
-            <value>00:00:00</value>
-        </input_widget>
-        <selectable_widget id="sw10">
-            <pos>496:317</pos>
-            <class>TableUI</class>
-            <descriptor>Filters:</descriptor>
-            <size>1</size>
-            <selected>-1</selected>
-        </selectable_widget>
-        <selectable_widget id="sw11">
-            <pos>496:481</pos>
-            <class>TableUI</class>
-            <descriptor>Period:</descriptor>
-            <size>0</size>
-            <selected>-1</selected>
-        </selectable_widget>
     </window>
     <window id="w5">
         <pos>463:69</pos>
@@ -1762,7 +1593,7 @@
     </edge>
     <edge type="static">
         <from>aw155</from>
-        <to>w16</to>
+        <to>w13</to>
     </edge>
     <edge type="static">
         <from>aw156</from>
@@ -1819,38 +1650,6 @@
     <edge type="static">
         <from>aw40</from>
         <to>w1</to>
-    </edge>
-    <edge type="static">
-        <from>aw172</from>
-        <to>w2</to>
-    </edge>
-    <edge type="static">
-        <from>aw178</from>
-        <to>w4</to>
-    </edge>
-    <edge type="static">
-        <from>aw157</from>
-        <to>w1</to>
-    </edge>
-    <edge type="static">
-        <from>aw158</from>
-        <to>w6</to>
-    </edge>
-    <edge type="static">
-        <from>aw159</from>
-        <to>w7</to>
-    </edge>
-    <edge type="static">
-        <from>aw166</from>
-        <to>w5</to>
-    </edge>
-    <edge type="static">
-        <from>aw167</from>
-        <to>w14</to>
-    </edge>
-    <edge type="static">
-        <from>aw168</from>
-        <to>w15</to>
     </edge>
     <edge type="static">
         <from>aw53</from>
