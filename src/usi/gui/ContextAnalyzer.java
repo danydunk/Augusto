@@ -105,7 +105,7 @@ public class ContextAnalyzer {
 		final int x = p.x;
 		final int y = p.y;
 		final int width = Integer.valueOf(to.getProperty("width").toString());
-		final int height = Integer.valueOf(to.getProperty("height").toString());
+		int height = Integer.valueOf(to.getProperty("height").toString());
 		final Area area = new Area(x, y, height, width);
 
 		if (!this.fatherMap.containsKey(to)) {
@@ -113,6 +113,9 @@ public class ContextAnalyzer {
 		}
 
 		final TestObject father = this.fatherMap.get(to);
+		if (height == 0) {
+			height = Integer.valueOf(father.getProperty("height").toString());
+		}
 		final List<Descriptor> descriptors = this.descriptorInContainer.get(father);
 
 		double min_dist = Double.MAX_VALUE;
@@ -232,11 +235,11 @@ public class ContextAnalyzer {
 				distance = (int) (Math.pow(((a.x + a.width + 1) - this.x), 2) + Math.pow(
 						(a.y - this.y), 2));
 			} else
-			/*
-			 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
-			 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
-			 * 2)); } else
-			 */{
+				/*
+				 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
+				 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
+				 * 2)); } else
+				 */{
 				distance = (int) (Math.pow(((a.x + 1) - this.x), 2) + Math.pow(
 						((a.y + a.height) - this.y), 2));
 			}
