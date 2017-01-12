@@ -20,6 +20,8 @@ public class ContextAnalyzer {
 	// Map that for each container keeps its children
 	private final Map<TestObject, List<TestObject>> containedInContainer;
 	private final Map<TestObject, List<Descriptor>> descriptorInContainer;
+	// used to detect the hights of tables in a stable way
+	private final List<TestObject> tableheaders;
 
 	// inverse map
 	private final Map<TestObject, TestObject> fatherMap;
@@ -34,6 +36,8 @@ public class ContextAnalyzer {
 	 * @throws Exception
 	 */
 	public ContextAnalyzer(final List<TestObject> tos) throws Exception {
+
+		this.tableheaders = new ArrayList<>();
 
 		this.descriptors_classes = new ArrayList<String>();
 		this.descriptors_classes.add("LabelUI");
@@ -63,6 +67,10 @@ public class ContextAnalyzer {
 			if (!this.containedInContainer.containsKey(father)) {
 				final List<TestObject> list = new ArrayList<>();
 				this.containedInContainer.put(father, list);
+			}
+
+			if (classs.equals("TableHeaderUI")) {
+				this.tableheaders.add(to);
 			}
 
 			// if it is a descriptor
@@ -101,6 +109,7 @@ public class ContextAnalyzer {
 
 	public String getDescriptor(final TestObject to) throws Exception {
 
+		final String classs = to.getProperty("uIClassID").toString();
 		final Point p = (Point) to.getProperty("locationOnScreen");
 		final int x = p.x;
 		final int y = p.y;
@@ -108,14 +117,36 @@ public class ContextAnalyzer {
 		int height = Integer.valueOf(to.getProperty("height").toString());
 		final Area area = new Area(x, y, height, width);
 
+		// we deal with the height of tables
+		Area oo = null;
+		double mind = Double.MAX_VALUE;
+		if (classs.equals("TableUI")) {
+			for (final TestObject head : this.tableheaders) {
+				final Point pp = (Point) head.getProperty("locationOnScreen");
+
+				final int xx = pp.x;
+				final int yy = pp.y;
+				final int ww = Integer.valueOf(head.getProperty("width").toString());
+				final int hh = Integer.valueOf(head.getProperty("height").toString());
+				final Area aa = new Area(xx, yy, hh, ww);
+				final double dist = area.getDistance(aa);
+
+				if (dist < mind) {
+					mind = dist;
+					oo = aa;
+				}
+			}
+			height = oo.height;
+		}
+
 		if (!this.fatherMap.containsKey(to)) {
 			throw new Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
 		}
 
 		final TestObject father = this.fatherMap.get(to);
-		if (height == 0) {
-			height = Integer.valueOf(father.getProperty("height").toString());
-		}
+		// if (height == 0) {
+		// height = 15;
+		// }
 		final List<Descriptor> descriptors = this.descriptorInContainer.get(father);
 
 		double min_dist = Double.MAX_VALUE;
@@ -132,7 +163,12 @@ public class ContextAnalyzer {
 			}
 		}
 		if (nearer != null && Math.sqrt(min_dist) < (height * 5)) {
+			// we can do it cause the descriptors are calculated in order
+			if (!classs.equals("RadioButtonUI")) {
+				this.descriptorInContainer.get(father).remove(nearer);
+			}
 			return nearer.label;
+
 		}
 		// if no descriptor was found
 		return this.getContainerDescriptor(father);
@@ -193,6 +229,7 @@ public class ContextAnalyzer {
 			}
 		}
 		if (nearer != null && Math.sqrt(min_dist) < (height * 5)) {
+			this.descriptorInContainer.get(father).remove(nearer);
 			return nearer.label;
 		}
 		// if no descriptor was found
