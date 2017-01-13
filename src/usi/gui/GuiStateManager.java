@@ -112,7 +112,6 @@ public class GuiStateManager {
 		int cont = 0;
 		while (window == null && cont < 10) {
 			for (final TestObject to : windows) {
-
 				final boolean focused = Boolean.valueOf(to.getProperty("focused").toString());
 
 				if (focused) {
@@ -170,6 +169,7 @@ public class GuiStateManager {
 					// if the widget does not have a label we look for
 					// descriptors
 					if (widget.getLabel() == null) {
+
 						widget.setDescriptor(context.getDescriptor(widget.getTo()));
 					}
 

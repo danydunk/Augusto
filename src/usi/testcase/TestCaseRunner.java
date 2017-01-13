@@ -82,7 +82,7 @@ public class TestCaseRunner {
 		this.updatedStructuresForSelect(curr);
 
 		final Window initial = tc.getActions().get(0).getWindow();
-		if (!curr.isSame(initial)) {
+		if (!curr.isSimilar(initial)) {
 			// if we are not in the right window
 			if (this.gui == null) {
 				throw new Exception(
@@ -91,7 +91,7 @@ public class TestCaseRunner {
 
 			Window curr_mapped_w = null;
 			for (final Window ww : this.gui.getWindows()) {
-				if (ww.isSame(curr)) {
+				if (ww.isSimilar(curr)) {
 					curr_mapped_w = ww;
 					break;
 				}
@@ -118,7 +118,7 @@ public class TestCaseRunner {
 				this.updatedStructuresForSelect(gmanager.getCurrentActiveWindows());
 			}
 		}
-		if (!gmanager.getCurrentActiveWindows().isSame(initial)) {
+		if (!gmanager.getCurrentActiveWindows().isSimilar(initial)) {
 			throw new Exception("TestCaseRunner - runTestCase: impossible to reach initial window.");
 		}
 
@@ -274,7 +274,7 @@ public class TestCaseRunner {
 	private Window getKnownWindowIfAny(final Window in) throws Exception {
 
 		for (final Window w : this.gui.getWindows()) {
-			if (w.isSame(in)) {
+			if (w.isSimilar(in)) {
 				final Window out = new Window(in.getTo(), w.getId(), in.getLabel(), in.getClasss(),
 						in.getX(), in.getY(), in.isModal());
 				out.setRoot(w.isRoot());
@@ -408,7 +408,7 @@ public class TestCaseRunner {
 
 		public boolean isSame(final Pair p) {
 
-			return this.w.isSame(p.w) && this.sw.isSame(p.sw);
+			return this.w.isSimilar(p.w) && this.sw.isSimilar(p.sw);
 		}
 	}
 

@@ -302,6 +302,129 @@ public class Window extends Widget {
 		return true;
 	}
 
+	@Override
+	public boolean isSimilar(final Widget w) {
+
+		// System.out.println("CHECKING " + this.id + " " + this.label +
+		// " WITH " + w.id + " "
+		// + w.label);
+		if (!(w instanceof Window)) {
+			return false;
+		}
+
+		// for window we cannot relay on sameProperties_weak beacuse labels can
+		// change
+		// position and label can vary
+
+		if (w.label == null && this.label != null) {
+			return false;
+		}
+		if (w.label != null && this.label == null) {
+			return false;
+		}
+
+		if (w.descriptor == null && this.descriptor != null) {
+			return false;
+		}
+		if (w.descriptor != null && this.descriptor == null) {
+			return false;
+		}
+		if (w.descriptor != null && w.descriptor.length() > 0 && this.descriptor.length() == 0) {
+			return false;
+		}
+		if (w.descriptor != null && w.descriptor.length() == 0 && this.descriptor.length() > 0) {
+			return false;
+		}
+
+		// same class
+		if (!w.classs.equals(this.classs)) {
+			return false;
+		}
+
+		// we consider a window to be the same if it has the same widgets
+		final Window win = (Window) w;
+
+		List<Widget> widgets = this.getWidgets();
+		List<Widget> widgets_bis = win.getWidgets();
+		// TODO: is there a better way to do it?
+		// when checking whether 2 windows are the same we skip the elements
+		// under the menu window (it changes according to the windows open)
+		widgets = widgets
+				.stream()
+				.filter(e -> {
+					if (e instanceof Action_widget
+							&& e.getClasss().toLowerCase().equals("menuitemui")
+							&& e.getLabel().toLowerCase().startsWith("window -")) {
+						return false;
+					}
+					// we deal with selectable widgets separately cause
+					// selecting an element can modify the position of the
+					// widget
+					if (e instanceof Selectable_widget) {
+						return false;
+					}
+					return true;
+				}).collect(Collectors.toList());
+
+		widgets_bis = widgets_bis
+				.stream()
+				.filter(e -> {
+					if (e instanceof Action_widget
+							&& e.getClasss().toLowerCase().equals("menuitemui")
+							&& e.getLabel().toLowerCase().startsWith("window -")) {
+						return false;
+					}
+					// we deal with selectable widgets separately cause
+					// selecting an element can modify the position of the
+					// widget
+					if (e instanceof Selectable_widget) {
+						return false;
+					}
+					return true;
+				}).collect(Collectors.toList());
+
+		if (widgets.size() != widgets_bis.size()) {
+			return false;
+		}
+		if (this.getSelectableWidgets().size() != win.getSelectableWidgets().size()) {
+			return false;
+		}
+		// we iterate trough the widgets which are ordered by position
+		for (int x = 0; x < widgets.size(); x++) {
+			if (widgets.get(x) instanceof Action_widget) {
+				final Action_widget aw = (Action_widget) widgets.get(x);
+				if (!aw.isSimilar(widgets_bis.get(x))) {
+					return false;
+				}
+			} else if (widgets.get(x) instanceof Input_widget) {
+				if (widgets.get(x) instanceof Option_input_widget) {
+					final Option_input_widget oiw = (Option_input_widget) widgets.get(x);
+					if (!oiw.isSimilar(widgets_bis.get(x))) {
+						return false;
+					}
+				} else {
+					final Input_widget iw = (Input_widget) widgets.get(x);
+					if (!iw.isSimilar(widgets_bis.get(x))) {
+						return false;
+					}
+				}
+			} else if (widgets.get(x) instanceof Selectable_widget) {
+				final Selectable_widget sw = (Selectable_widget) widgets.get(x);
+				if (!sw.isSimilar(widgets_bis.get(x))) {
+					return false;
+				}
+			}
+		}
+
+		for (int x = 0; x < this.getSelectableWidgets().size(); x++) {
+			final Selectable_widget sw = this.getSelectableWidgets().get(x);
+			if (!sw.isSimilar(win.getSelectableWidgets().get(x))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public List<Widget> getWidgets() {
 
 		final List<Widget> widgs = new ArrayList<>();

@@ -135,7 +135,7 @@ public abstract class Widget implements Comparable<Widget> {
 	}
 
 	// function that checks if the input widget has exactly the same properties
-	protected boolean sameProperties_strong(final Widget w) {
+	public boolean isSame(final Widget w) {
 
 		// // we use the position +- delta to match
 		// final int delta = 1;
@@ -164,6 +164,15 @@ public abstract class Widget implements Comparable<Widget> {
 		if (w.descriptor != null && !w.descriptor.equals(this.descriptor)) {
 			return false;
 		}
+		if (!w.classs.equals(this.classs)) {
+			return false;
+		}
+		return true;
+	}
+
+	// function that checks if the input widget has exactly the same properties
+	public boolean isSimilar(final Widget w) {
+
 		if (!w.classs.equals(this.classs)) {
 			return false;
 		}
@@ -218,7 +227,7 @@ public abstract class Widget implements Comparable<Widget> {
 	 * @param w
 	 * @return
 	 */
-	abstract public boolean isSame(Widget w);
+	// abstract public boolean isSame(Widget w);
 
 	// abstract public boolean isSimilar(Widget w);
 

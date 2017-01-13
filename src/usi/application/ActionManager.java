@@ -50,12 +50,12 @@ public class ActionManager {
 
 		}
 
-		if (act.getWindow() == null || !currWind.isSame(act.getWindow())) {
+		if (act.getWindow() == null || !currWind.isSimilar(act.getWindow())) {
 			// we read again the gui in case it was a problem of sleeptime
 			Thread.sleep(ConfigurationManager.getSleepTime());
 			guimanager.readGUI();
 			currWind = guimanager.getCurrentActiveWindows();
-			if (act.getWindow() == null || !currWind.isSame(act.getWindow())) {
+			if (act.getWindow() == null || !currWind.isSimilar(act.getWindow())) {
 				return false;
 			}
 		}
@@ -72,6 +72,7 @@ public class ActionManager {
 		}
 		final Method[] ms = c.getDeclaredMethods();
 		final Widget wid = findWidgetInCurrWindow(act.getWidget(), act.getWindow(), currWind);
+
 		final TestObject to = wid.getTo();
 		assert (to != null);
 
@@ -185,7 +186,7 @@ public class ActionManager {
 			}
 
 			final Widget wid = currWind.getSelectableWidgets().get(index);
-			if (!ww.isSame(wid)) {
+			if (!ww.isSimilar(wid)) {
 				return null;
 			}
 			return wid;
@@ -230,7 +231,7 @@ public class ActionManager {
 			}
 
 			final Widget wid = widgets2.get(index);
-			if (!ww.isSame(wid)) {
+			if (!ww.isSimilar(wid)) {
 				return null;
 			}
 

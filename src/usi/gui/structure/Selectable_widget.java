@@ -55,12 +55,15 @@ public class Selectable_widget extends Widget {
 	@Override
 	public boolean isSame(final Widget w) {
 
+		if (!super.isSame(w)) {
+			return false;
+		}
 		if (!(w instanceof Selectable_widget)) {
 			return false;
 		}
 
 		// size and selected is not checked cause it can change
-		return this.sameProperties_strong(w);
+		return true;
 	}
 
 	// @Override

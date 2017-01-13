@@ -104,6 +104,7 @@ public class Ripper {
 				continue;
 			}
 			final Click act = new Click(w, null, aw);
+
 			ActionManager.executeAction(act);
 
 			this.guimanager.readGUI();
@@ -151,6 +152,7 @@ public class Ripper {
 		for (final GUIAction act : actions) {
 			this.guimanager.readGUI();
 			this.dealWithDialogsWindow(this.guimanager);
+
 			ActionManager.executeAction(act);
 		}
 		this.guimanager.readGUI();

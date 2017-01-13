@@ -36,11 +36,14 @@ public class Input_widget extends Widget {
 	@Override
 	public boolean isSame(final Widget w) {
 
+		if (!super.isSame(w)) {
+			return false;
+		}
 		if (!(w instanceof Input_widget)) {
 			return false;
 		}
 
-		return this.sameProperties_strong(w);
+		return true;
 	}
 
 	// @Override

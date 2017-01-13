@@ -20,11 +20,11 @@ import com.rational.test.ft.vp.IFtVerificationPoint;
 import com.ibm.rational.test.ft.object.interfaces.sapwebportal.*;
 /**
  * Script Name   : <b>Refinement_rachota_test</b><br>
- * Generated     : <b>2016/12/08 11:30:08 AM</b><br>
+ * Generated     : <b>2017/01/10 7:07:42 AM</b><br>
  * Description   : Helper class for script<br>
  * Original Host : Windows 7 amd64 6.1 <br>
  * 
- * @since  December 08, 2016
+ * @since  January 10, 2017
  * @author usi
  */
 public abstract class Refinement_rachota_testHelper extends RationalTestScript
