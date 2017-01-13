@@ -6,19 +6,19 @@
 		<class>.*</class>
 		<modal>any</modal>
 		<action_widget id="paw1" card="set" alloy="Create_trigger">
-			<label>(.*( new | add | create ).*|^(new (?!-)|add |create ).*|^(new|add|create)$)</label>
+			<label>^(?!window - )(.*( new | add | create ).*|^(new (?!-)|add |create ).*|^(new|add|create)$)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw2" card="set" alloy="Read_trigger">
-			<label>(.* view .*|^view (?!-).*|^view$)</label>
+			<label>^(?!window - )(.* view .*|^view (?!-).*|^view$)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw3" card="set" alloy="Update_trigger">
-			<label>(.*( edit | update | modify ).*|^(edit (?!-)|update |modify ).*|^(edit|update|modify)$)</label>
+			<label>^(?!window - )(.*( edit | update | modify ).*|^(edit (?!-)|update |modify ).*|^(edit|update|modify)$)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw4" card="some" alloy="Delete_trigger">
-			<label>(.*( delete | remove ).*|^(delete |remove ).*|^(delete|remove)$)</label>
+			<label>^(?!window - )(.*( delete | remove ).*|^(delete |remove ).*|^(delete|remove)$)</label>
 			<class>.*</class>
 		</action_widget>
 		<selectable_widget id="psw1" card="one" alloy="For_selecting">

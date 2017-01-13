@@ -76,7 +76,7 @@ public class GUIPatternParserTest {
 		}
 		assertEquals(
 				"Label actions",
-				"(.*( edit | update | modify ).*|^(edit (?!-)|update |modify ).*|^(edit|update|modify)$)",
+				"^(?!window - )(.*( edit | update | modify ).*|^(edit (?!-)|update |modify ).*|^(edit|update|modify)$)",
 				paw.getLabel());
 		assertEquals("Label actions", ".*", piw.getLabel());
 

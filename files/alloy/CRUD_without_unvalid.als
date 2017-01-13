@@ -4,7 +4,7 @@ pred init [t: Time] {
 	no Track.op.t
 	no Selectable_widget.selected.t
  	Current_window.is_in.t = sws.For_selecting
-	no Current_crud_op.operation.t
+	#Create_trigger = 0 =>Current_crud_op.operation.t = CREATE else #Current_crud_op.operation.t = 0
 }
 ---------------Generic CRUD Structure ----------
 abstract sig Ok, Cancel, Continue extends Action_widget { }
@@ -66,7 +66,7 @@ pred fill_pre[iw: Input_widget, t: Time, v: Value] {
 pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }
 pred select_success_post [sw: Selectable_widget, t, t': Time, o: Object] { 
 	For_selecting.list.t' = For_selecting.list.t
-	Current_crud_op.operation.t' = Current_crud_op.operation.t
+	#Create_trigger = 0 => Current_crud_op.operation.t = CREATE else #Current_crud_op.operation.t = 0
 }
 pred select_fail_post [sw: Selectable_widget, t, t': Time, o: Object] { 
 	For_selecting.list.t' = For_selecting.list.t
@@ -88,11 +88,16 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Update_trigger) => (Current_crud_op.operation.t' = UPDATE and For_selecting.list.t' = For_selecting.list.t and load_form[For_selecting.selected.t, t']  and For_selecting.selected.t' = For_selecting.selected.t)
 	(aw in Delete_trigger) => (#For_selecting.selected.t' = 0 and delete [t, t'] and #Current_crud_op.operation.t' = 0)
 	
-	(aw in Cancel) => (#Current_crud_op.operation.t' =0 and For_selecting.list.t' = For_selecting.list.t and #For_selecting.selected.t' = 0)
-	
-	(aw in Ok and Current_crud_op.operation.t in CREATE) => (#For_selecting.selected.t' = 0 and add [t, t'] and #Current_crud_op.operation.t' = 0)
-	(aw in Ok and Current_crud_op.operation.t in UPDATE) => (#For_selecting.selected.t' = 0 and update [t, t'] and #Current_crud_op.operation.t' = 0)
-	(aw in Continue) => (#For_selecting.selected.t' = 0  and #Current_crud_op.operation.t' = 0 and For_selecting.list.t' = For_selecting.list.t)
+	(aw in Cancel and #Create_trigger > 0) => (#Current_crud_op.operation.t' = 0 and For_selecting.list.t' = For_selecting.list.t and #For_selecting.selected.t' = 0)
+	(aw in Cancel and #Create_trigger = 0) => (Current_crud_op.operation.t' = CREATE and For_selecting.list.t' = For_selecting.list.t and #For_selecting.selected.t' = 0)
+
+	(aw in Ok and Current_crud_op.operation.t in CREATE) => (#For_selecting.selected.t' = 0 and add [t, t'])
+	(aw in Ok and Current_crud_op.operation.t in UPDATE) => (#For_selecting.selected.t' = 0 and update [t, t'])
+	(aw in Ok and #Create_trigger > 0) => (#Current_crud_op.operation.t' =0)
+	(aw in Ok and #Create_trigger = 0) => (Current_crud_op.operation.t' =CREATE)
+
+	(aw in Continue and #Create_trigger > 0) => (#For_selecting.selected.t' = 0  and #Current_crud_op.operation.t' = 0 and For_selecting.list.t' = For_selecting.list.t)
+	(aw in Continue and #Create_trigger = 0) => (#For_selecting.selected.t' = 0  and Current_crud_op.operation.t' = CREATE and For_selecting.list.t' = For_selecting.list.t)	
 }
 pred click_fail_post [aw: Action_widget, t, t': Time]	{
 	For_selecting.list.t' = For_selecting.list.t
