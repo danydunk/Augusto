@@ -15,10 +15,10 @@ public class Selectable_widget extends Widget {
 	private final int selected;
 
 	public Selectable_widget(final TestObject to, final String id, final String label,
-			final String classs, final int x, final int y, final int size, final int selected)
-			throws Exception {
+			final String classs, final int x, final int y, final int width, final int height,
+			final int size, final int selected) throws Exception {
 
-		super(to, id, label, classs, x, y);
+		super(to, id, label, classs, x, y, width, height);
 		if (size < 0 || selected < -1) {
 			throw new Exception("Selectable_widget: wrong size or selected.");
 		}
@@ -32,9 +32,10 @@ public class Selectable_widget extends Widget {
 	}
 
 	public Selectable_widget(final String id, final String label, final String classs, final int x,
-			final int y, final int size, final int selected) throws Exception {
+			final int y, final int width, final int height, final int size, final int selected)
+			throws Exception {
 
-		super(id, label, classs, x, y);
+		super(id, label, classs, x, y, width, height);
 		if (size < 0 || selected < -1 || selected > size - 1) {
 			throw new Exception("Selectable_widget: wrong size or selected.");
 		}

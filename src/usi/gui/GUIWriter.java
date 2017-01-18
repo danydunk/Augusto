@@ -88,6 +88,11 @@ public class GUIWriter {
 		Element node = doc.createElement("pos");
 		node.setTextContent(pos);
 		out.appendChild(node);
+		// rectangle
+		String rect = String.valueOf(in.getWidth()) + ":" + String.valueOf(in.getHeight());
+		final Element rr = doc.createElement("rectangle");
+		rr.setTextContent(rect);
+		out.appendChild(rr);
 		// class
 		node = doc.createElement("class");
 		node.setTextContent(in.getClasss());
@@ -115,6 +120,11 @@ public class GUIWriter {
 			Element subnode = doc.createElement("pos");
 			subnode.setTextContent(pos);
 			node.appendChild(subnode);
+			// rectangle
+			rect = String.valueOf(aw.getWidth()) + ":" + String.valueOf(aw.getHeight());
+			final Element subrr = doc.createElement("rectangle");
+			subrr.setTextContent(rect);
+			node.appendChild(subrr);
 			// class
 			subnode = doc.createElement("class");
 			subnode.setTextContent(aw.getClasss());
@@ -143,6 +153,11 @@ public class GUIWriter {
 			Element subnode = doc.createElement("pos");
 			subnode.setTextContent(pos);
 			node.appendChild(subnode);
+			// rectangle
+			rect = String.valueOf(iw.getWidth()) + ":" + String.valueOf(iw.getHeight());
+			final Element subrr = doc.createElement("rectangle");
+			subrr.setTextContent(rect);
+			node.appendChild(subrr);
 			// class
 			subnode = doc.createElement("class");
 			subnode.setTextContent(iw.getClasss());
@@ -183,6 +198,11 @@ public class GUIWriter {
 			Element subnode = doc.createElement("pos");
 			subnode.setTextContent(pos);
 			node.appendChild(subnode);
+			// rectangle
+			rect = String.valueOf(sw.getWidth()) + ":" + String.valueOf(sw.getHeight());
+			final Element subrr = doc.createElement("rectangle");
+			subrr.setTextContent(rect);
+			node.appendChild(subrr);
 			// class
 			subnode = doc.createElement("class");
 			subnode.setTextContent(sw.getClasss());

@@ -461,13 +461,14 @@ public class Pattern_window extends Pattern_widget<Window> {
 
 	public class To_order implements Comparable<To_order> {
 
-		protected int dist;
+		protected float density;
 		protected List<Widget> widgets;
 		protected Instance_window iw;
+		protected int dist;
 
 		public To_order(final Instance_window iw) throws Exception {
 
-			this.dist = 0;
+			this.density = 0;
 			this.iw = iw;
 			this.widgets = new ArrayList<>();
 			for (final Pattern_action_widget k : iw.getPattern().getActionWidgets()) {
@@ -479,9 +480,25 @@ public class Pattern_window extends Pattern_widget<Window> {
 			for (final Pattern_selectable_widget k : iw.getPattern().getSelectableWidgets()) {
 				this.widgets.addAll(iw.getSWS_for_PSW(k.getId()));
 			}
-
+			int maxx = 0;
+			int minx = Integer.MAX_VALUE;
+			int maxy = 0;
+			int miny = Integer.MAX_VALUE;
 			for (int x = 0; x < this.widgets.size(); x++) {
 				final Widget w1 = this.widgets.get(x);
+				if (w1.getX() < minx) {
+					minx = w1.getX();
+				}
+				if (w1.getY() < miny) {
+					miny = w1.getY();
+				}
+				if (w1.getX() + w1.getWidth() > maxx) {
+					maxx = w1.getX() + w1.getWidth();
+				}
+				if (w1.getY() + w1.getHeight() > maxy) {
+					maxy = w1.getY() + w1.getHeight();
+				}
+				this.density += w1.getHeight() * w1.getWidth();
 				for (int y = x + 1; y < this.widgets.size(); y++) {
 					final Widget w2 = this.widgets.get(y);
 					final int d = this.getDistance(w1.getX(), w1.getY(), w2.getX(), w2.getY());
@@ -490,6 +507,8 @@ public class Pattern_window extends Pattern_widget<Window> {
 					}
 				}
 			}
+
+			this.density = this.density / ((maxx - minx) * (maxy - miny));
 		}
 
 		private int getDistance(final int x1, final int y1, final int x2, final int y2) {
@@ -504,15 +523,24 @@ public class Pattern_window extends Pattern_widget<Window> {
 		@Override
 		public int compareTo(final To_order o) {
 
-			if (o.widgets.size() != this.widgets.size()) {
-				if (o.widgets.size() > this.widgets.size()) {
-					return Integer.MAX_VALUE;
-				} else {
-					return Integer.MIN_VALUE;
-				}
-
+			if (o.density > 0.2 && !(this.density > 0.2)) {
+				return Integer.MAX_VALUE;
 			}
 
+			if (this.density > 0.2 && !(o.density > 0.2)) {
+				return Integer.MIN_VALUE;
+			}
+
+			if (o.widgets.size() != this.widgets.size()) {
+				if (o.widgets.size() > this.widgets.size()) {
+
+					return Integer.MAX_VALUE;
+
+				} else {
+
+					return Integer.MIN_VALUE;
+				}
+			}
 			return this.dist - o.dist;
 		}
 

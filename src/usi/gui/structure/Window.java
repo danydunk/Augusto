@@ -20,9 +20,10 @@ public class Window extends Widget {
 	private List<Selectable_widget> selectable_widgets;
 
 	public Window(final TestObject to, final String id, final String label, final String classs,
-			final int x, final int y, final boolean modal) throws Exception {
+			final int x, final int y, final int width, final int height, final boolean modal)
+					throws Exception {
 
-		super(to, id, label, classs, x, y);
+		super(to, id, label, classs, x, y, width, height);
 		if (id == null || id.length() == 0) {
 			throw new Exception("Window: missing id");
 		}
@@ -36,9 +37,9 @@ public class Window extends Widget {
 	}
 
 	public Window(final String id, final String label, final String classs, final int x,
-			final int y, final boolean modal) throws Exception {
+			final int y, final int width, final int height, final boolean modal) throws Exception {
 
-		super(id, label, classs, x, y);
+		super(id, label, classs, x, y, width, height);
 		if (id == null || id.length() == 0) {
 			throw new Exception("Window: missing id");
 		}

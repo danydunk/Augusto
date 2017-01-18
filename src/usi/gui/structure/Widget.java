@@ -17,10 +17,12 @@ public abstract class Widget implements Comparable<Widget> {
 	protected final String classs;
 	protected final int x;
 	protected final int y;
+	protected final int width;
+	protected final int height;
 	protected TestObject to;
 
 	public Widget(final TestObject to, final String id, final String label, final String classs,
-			final int x, final int y) throws Exception {
+			final int x, final int y, final int width, final int height) throws Exception {
 
 		if (to == null) {
 			throw new Exception("Widget: null to.");
@@ -44,11 +46,18 @@ public abstract class Widget implements Comparable<Widget> {
 		this.x = x;
 		this.y = y;
 
+		if (width < 0 || height < 0) {
+
+			throw new Exception("Widget:wrong rectangle.");
+		}
+		this.width = width;
+		this.height = height;
+
 		this.label = label;
 	}
 
-	public Widget(final String id, final String label, final String classs, final int x, final int y)
-			throws Exception {
+	public Widget(final String id, final String label, final String classs, final int x,
+			final int y, final int width, final int height) throws Exception {
 
 		this.to = null;
 
@@ -68,7 +77,24 @@ public abstract class Widget implements Comparable<Widget> {
 		this.x = x;
 		this.y = y;
 
+		if (width < 0 || height < 0) {
+
+			throw new Exception("Widget:wrong rectangle.");
+		}
+		this.width = width;
+		this.height = height;
+
 		this.label = label;
+	}
+
+	public int getWidth() {
+
+		return this.width;
+	}
+
+	public int getHeight() {
+
+		return this.height;
 	}
 
 	public String getId() {
@@ -259,6 +285,10 @@ public abstract class Widget implements Comparable<Widget> {
 		} catch (final Exception e) {
 			// it is a window
 		}
+
+		final int width = Integer.valueOf(to.getProperty("width").toString());
+		final int height = Integer.valueOf(to.getProperty("height").toString());
+
 		if (type == null) {
 			// if it is a window
 			if (p == null) {
@@ -279,7 +309,7 @@ public abstract class Widget implements Comparable<Widget> {
 				// modal property not found
 				modale = false;
 			}
-			out.add(new Window(to, idm.nextWindowId(), title, classs, x, y, modale));
+			out.add(new Window(to, idm.nextWindowId(), title, classs, x, y, width, height, modale));
 			return out;
 		}
 
@@ -304,7 +334,7 @@ public abstract class Widget implements Comparable<Widget> {
 			}
 			final int x = p.x;
 			final int y = p.y;
-			out.add(new Action_widget(to, idm.nextAWId(), label, type, x, y));
+			out.add(new Action_widget(to, idm.nextAWId(), label, type, x, y, width, height));
 			return out;
 
 		} else if (type.equals("CheckBoxMenuItemUI")) {
@@ -323,7 +353,8 @@ public abstract class Widget implements Comparable<Widget> {
 				}
 			}
 
-			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, selected));
+			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, width, height,
+					size, selected));
 			return out;
 
 		} else if (type.equals("CheckBoxUI")) {
@@ -340,7 +371,8 @@ public abstract class Widget implements Comparable<Widget> {
 			} else {
 				index = 0;
 			}
-			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, index));
+			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, width, height,
+					size, index));
 			return out;
 
 		} else if (type.equals("ComboBoxUI")) {
@@ -355,14 +387,16 @@ public abstract class Widget implements Comparable<Widget> {
 				try {
 					value = to.getProperty("text").toString();
 				} catch (final Exception e) {}
-				out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+				out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, width, height,
+						value));
 				return out;
 			}
 
 			final int selected = Integer.valueOf(to.getProperty("selectedIndex").toString());
 			final int size = Integer.valueOf(to.getProperty("itemCount").toString());
 
-			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, selected));
+			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, width, height,
+					size, selected));
 			return out;
 
 		} else if (type.equals("EditorPaneUI")) {
@@ -372,7 +406,7 @@ public abstract class Widget implements Comparable<Widget> {
 			final int x = p.x;
 			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, width, height, value));
 			return out;
 
 		} else if (type.equals("FormattedTextFieldUI")) {
@@ -382,7 +416,7 @@ public abstract class Widget implements Comparable<Widget> {
 			final int x = p.x;
 			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, width, height, value));
 			return out;
 
 		} else if (type.equals("HyperlinkUI")) {
@@ -399,7 +433,8 @@ public abstract class Widget implements Comparable<Widget> {
 			final int y = p.y;
 			final int size = Integer.valueOf(to.getProperty(".itemCount").toString());
 			final int selected = Integer.valueOf(to.getProperty("selectedIndex").toString());
-			out.add(new Selectable_widget(to, idm.nextSWId(), label, type, x, y, size, selected));
+			out.add(new Selectable_widget(to, idm.nextSWId(), label, type, x, y, width, height,
+					size, selected));
 			return out;
 
 		} else if (type.equals("MenuItemUI")) {
@@ -426,7 +461,8 @@ public abstract class Widget implements Comparable<Widget> {
 					father = father.getMappableParent();
 				}
 			}
-			out.add(new Action_widget(to, idm.nextAWId(), fatherlabel + " - " + label, type, x, y));
+			out.add(new Action_widget(to, idm.nextAWId(), fatherlabel + " - " + label, type, x, y,
+					width, height));
 			return out;
 
 		} else if (type.equals("PasswordFieldUI")) {
@@ -436,7 +472,7 @@ public abstract class Widget implements Comparable<Widget> {
 			final int x = p.x;
 			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, width, height, value));
 			return out;
 
 		} else if (type.equals("RadioButtonUI")) {
@@ -453,7 +489,8 @@ public abstract class Widget implements Comparable<Widget> {
 				index = 0;
 			}
 			final int size = 2;
-			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, size, index));
+			out.add(new Option_input_widget(to, idm.nextIWId(), label, type, x, y, width, height,
+					size, index));
 			return out;
 
 		} else if (type.equals("TabbedPaneUI")) {
@@ -472,7 +509,8 @@ public abstract class Widget implements Comparable<Widget> {
 					// the selected is skipped
 					continue;
 				}
-				out.add(new Action_widget(to, idm.nextAWId(), titles[cont].toString(), type, x, y));
+				out.add(new Action_widget(to, idm.nextAWId(), titles[cont].toString(), type, x, y,
+						width, height));
 			}
 
 		} else if (type.equals("TableUI")) {
@@ -495,7 +533,8 @@ public abstract class Widget implements Comparable<Widget> {
 			// selected += columnc;
 			// }
 			// selected += columns;
-			out.add(new Selectable_widget(to, idm.nextSWId(), label, type, x, y, rowc, rows));
+			out.add(new Selectable_widget(to, idm.nextSWId(), label, type, x, y, width, height,
+					rowc, rows));
 			return out;
 
 		} else if (type.equals("TextAreaUI")) {
@@ -505,7 +544,7 @@ public abstract class Widget implements Comparable<Widget> {
 			final int x = p.x;
 			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, width, height, value));
 			return out;
 
 		} else if (type.equals("TextFieldUI")) {
@@ -515,7 +554,7 @@ public abstract class Widget implements Comparable<Widget> {
 			final int x = p.x;
 			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, width, height, value));
 			return out;
 
 		} else if (type.equals("TextPaneUI")) {
@@ -525,7 +564,7 @@ public abstract class Widget implements Comparable<Widget> {
 			final int x = p.x;
 			final int y = p.y;
 			final String value = to.getProperty("text").toString();
-			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, value));
+			out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, width, height, value));
 			return out;
 
 		} else if (type.equals("ToggleButtonUI")) {
@@ -534,7 +573,7 @@ public abstract class Widget implements Comparable<Widget> {
 			}
 			final int x = p.x;
 			final int y = p.y;
-			out.add(new Action_widget(to, idm.nextAWId(), label, type, x, y));
+			out.add(new Action_widget(to, idm.nextAWId(), label, type, x, y, width, height));
 			return out;
 
 		}

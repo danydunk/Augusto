@@ -5,15 +5,16 @@ import com.rational.test.ft.object.interfaces.TestObject;
 public class Action_widget extends Widget {
 
 	public Action_widget(final TestObject to, final String id, final String label,
-			final String classs, final int x, final int y) throws Exception {
+			final String classs, final int x, final int y, final int width, final int height)
+					throws Exception {
 
-		super(to, id, label, classs, x, y);
+		super(to, id, label, classs, x, y, width, height);
 	}
 
 	public Action_widget(final String id, final String label, final String classs, final int x,
-			final int y) throws Exception {
+			final int y, final int width, final int height) throws Exception {
 
-		super(id, label, classs, x, y);
+		super(id, label, classs, x, y, width, height);
 	}
 
 	@Override

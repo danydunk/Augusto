@@ -59,20 +59,21 @@ public class Emptyfill_test extends Emptyfill_testHelper {
 		final List<Instance_GUI_pattern> res = gfs.match(pattern);
 		final Instance_GUI_pattern r = res.get(0);
 		// manual refinement
-		final Window view = new Window("w999", "view", "class", 1, 1, false);
+		final Window view = new Window("w999", "view", "class", 1, 1, 1, 1, false);
 
 		for (final Input_widget iww : gui.getWindow("w8").getInputWidgets()) {
 			if (iww instanceof Option_input_widget) {
 				final Option_input_widget oiw = (Option_input_widget) iww;
 				view.addWidget(new Option_input_widget(iww.getId() + "9", iww.getLabel(), iww
-						.getClasss(), iww.getX(), iww.getY(), oiw.getSize(), oiw.getSelected()));
+						.getClasss(), iww.getX(), iww.getY(), 1, 1, oiw.getSize(), oiw
+						.getSelected()));
 			} else {
 				view.addWidget(new Input_widget(iww.getId() + "9", iww.getLabel(), iww.getClasss(),
-						iww.getX(), iww.getY(), iww.getValue()));
+						iww.getX(), iww.getY(), 1, 1, iww.getValue()));
 			}
 		}
 
-		final Action_widget ok = new Action_widget("aw999", "ok", "class", 1, 1);
+		final Action_widget ok = new Action_widget("aw999", "ok", "class", 1, 1, 1, 1);
 		view.addWidget(ok);
 
 		gui.addWindow(view);
@@ -91,8 +92,8 @@ public class Emptyfill_test extends Emptyfill_testHelper {
 
 		r.generateSpecificSemantics();
 		r.getSemantics()
-		.addRun_command(
-				"run {System and (one t1,t2: Time| t2 = T/next[t1] and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none) and Track.op.t1.filled = Input_widget_iw17 and Track.op.t2.filled = Input_widget_iw17)}for 5 but 4 Time,3 Operation, 10 Value");
+				.addRun_command(
+						"run {System and (one t1,t2: Time| t2 = T/next[t1] and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none) and Track.op.t1.filled = Input_widget_iw17 and Track.op.t2.filled = Input_widget_iw17)}for 5 but 4 Time,3 Operation, 10 Value");
 
 		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(r, 1, 40000);
 		final List<GUITestCase> tests = generator.generateTestCases();

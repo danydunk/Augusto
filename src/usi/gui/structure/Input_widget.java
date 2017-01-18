@@ -7,9 +7,10 @@ public class Input_widget extends Widget {
 	private final String value;
 
 	public Input_widget(final TestObject to, final String id, final String label,
-			final String classs, final int x, final int y, final String value) throws Exception {
+			final String classs, final int x, final int y, final int width, final int height,
+			final String value) throws Exception {
 
-		super(to, id, label, classs, x, y);
+		super(to, id, label, classs, x, y, width, height);
 		if (value == null) {
 			this.value = "";
 		} else {
@@ -18,9 +19,9 @@ public class Input_widget extends Widget {
 	}
 
 	public Input_widget(final String id, final String label, final String classs, final int x,
-			final int y, final String value) throws Exception {
+			final int y, final int width, final int height, final String value) throws Exception {
 
-		super(id, label, classs, x, y);
+		super(id, label, classs, x, y, width, height);
 		if (value == null) {
 			this.value = "";
 		} else {

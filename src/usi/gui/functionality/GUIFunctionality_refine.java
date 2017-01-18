@@ -60,6 +60,8 @@ public class GUIFunctionality_refine {
 		this.pattern = this.instancePattern.getGuipattern();
 		this.observed_tcs = new ArrayList<>();
 		this.covered_dyn_edges = new ArrayList<>();
+		// this.current_semantic_property =
+		// "one Property_unique_0:Property_unique|one Property_required_0:Property_required|Property_required = (Property_required_0) and Property_unique = (Property_unique_0) and Property_required_0.requireds = (Input_widget_iw65) and #Property_unique_0.uniques = 0";
 		this.current_semantic_property = "";
 		this.discarded_semantic_properties = new ArrayList<>();
 		this.unsat_commands = new ArrayList<>();
@@ -882,13 +884,12 @@ public class GUIFunctionality_refine {
 				sem_with = addSemanticConstrain_to_Model(sem_with, true_constraints);
 			}
 		}
-		if ((this.current_semantic_property == null || this.current_semantic_property.length() == 0)
-				&& first_prop != null
+		if (first_prop != null
 				&& this.validateProperty(first_prop, this.instancePattern.getSemantics(),
 						this.observed_tcs)) {
 			this.current_semantic_property = first_prop;
 		}
-		if (this.current_semantic_property.length() > 0) {
+		if (this.current_semantic_property == null && this.current_semantic_property.length() > 0) {
 			System.out.println("SEMANTIC PROPERTY FOUND.");
 		}
 
@@ -1079,11 +1080,11 @@ public class GUIFunctionality_refine {
 	private Instance_GUI_pattern createConcreteWindowFromPattern(final Pattern_window pw,
 			final String aw_id) throws Exception {
 
-		final Window new_wind = new Window(pw.getId(), "", "", 1, 1, false);
+		final Window new_wind = new Window(pw.getId(), "", "", 1, 1, 1, 1, false);
 		final Instance_window inst = new Instance_window(pw, new_wind);
 		final List<Widget> widgets = new ArrayList<>();
 		for (final Pattern_action_widget paw : pw.getActionWidgets()) {
-			final Action_widget aw = new Action_widget(paw.getId(), "", "", 1, 1);
+			final Action_widget aw = new Action_widget(paw.getId(), "", "", 1, 1, 1, 1);
 			widgets.add(aw);
 			new_wind.addWidget(aw);
 			final List<Action_widget> aws = new ArrayList<>();
@@ -1091,7 +1092,7 @@ public class GUIFunctionality_refine {
 			inst.addAW_mapping(paw, aws);
 		}
 		for (final Pattern_input_widget piw : pw.getInputWidgets()) {
-			final Input_widget iw = new Input_widget(piw.getId(), "", "", 1, 1, "");
+			final Input_widget iw = new Input_widget(piw.getId(), "", "", 1, 1, 1, 1, "");
 			widgets.add(iw);
 			new_wind.addWidget(iw);
 			final List<Input_widget> iws = new ArrayList<>();
@@ -1100,7 +1101,8 @@ public class GUIFunctionality_refine {
 
 		}
 		for (final Pattern_selectable_widget psw : pw.getSelectableWidgets()) {
-			final Selectable_widget sw = new Selectable_widget(psw.getId(), "", "", 1, 1, 0, -1);
+			final Selectable_widget sw = new Selectable_widget(psw.getId(), "", "", 1, 1, 1, 1, 0,
+					-1);
 			widgets.add(sw);
 			new_wind.addWidget(sw);
 			final List<Selectable_widget> sws = new ArrayList<>();

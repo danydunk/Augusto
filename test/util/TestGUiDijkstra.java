@@ -23,7 +23,7 @@ public class TestGUiDijkstra {
 
 		public Action_widget_test(final String id, final String label) throws Exception {
 
-			super(id, label, "class", 1, 1);
+			super(id, label, "class", 1, 1, 1, 1);
 		}
 	}
 
@@ -32,7 +32,7 @@ public class TestGUiDijkstra {
 		public Input_widget_test(final String id, final String label, final String value)
 				throws Exception {
 
-			super(id, label, "class", 1, 1, value);
+			super(id, label, "class", 1, 1, 1, 1, value);
 		}
 	}
 
@@ -40,12 +40,12 @@ public class TestGUiDijkstra {
 
 		public Window_test(final String id, final String label) throws Exception {
 
-			super(id, label, "class", 1, 1, false);
+			super(id, label, "class", 1, 1, 1, 1, false);
 		}
 
 		public Window_test(final String id, final boolean b, final String label) throws Exception {
 
-			super(id, label, "class", 1, 1, b);
+			super(id, label, "class", 1, 1, 1, 1, b);
 		}
 	}
 

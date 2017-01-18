@@ -2,192 +2,228 @@
 <GUI>
     <window id="w7">
         <pos>100:100</pos>
+        <rectangle>421:483</rectangle>
         <class>org.homeunix.thecave.buddi.view.PreferencesFrame</class>
         <title>Preferences</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw89">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw90">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw91">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw92">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw93">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw94">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw95">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw96">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw97">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw98">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw99">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - All Transactions - C:\Users\usi\abtMyDocuments\buddidata.buddi3 - Buddi</label>
         </action_widget>
         <action_widget id="aw100">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw101">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Preferences</label>
         </action_widget>
         <action_widget id="aw102">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw103">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw104">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw105">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw106">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw83">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Plugins</label>
         </action_widget>
         <action_widget id="aw84">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Locale</label>
         </action_widget>
         <action_widget id="aw85">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Network</label>
         </action_widget>
         <action_widget id="aw86">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Advanced</label>
         </action_widget>
         <action_widget id="aw87">
             <pos>303:547</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw88">
             <pos>408:547</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw16">
             <pos>115:181</pos>
+            <rectangle>215:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Auto Complete Transaction Information</label>
             <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw17">
             <pos>115:214</pos>
+            <rectangle>227:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show 'Cleared' Checkbox for Transactions</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw18">
             <pos>115:247</pos>
+            <rectangle>241:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show 'Reconciled' Checkbox for Transactions</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw19">
             <pos>115:280</pos>
+            <rectangle>251:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show Deleted Accounts and Budget Categories</label>
             <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw20">
             <pos>115:313</pos>
+            <rectangle>265:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show Accounts in Flat Format (no Account Types)</label>
             <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw21">
             <pos>115:346</pos>
+            <rectangle>325:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show Budget Categories in Flat Format (no Parent Categories)</label>
             <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw22">
             <pos>115:379</pos>
+            <rectangle>339:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show Budget Categories in Transaction Combo Box in Flat Format</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw23">
             <pos>115:412</pos>
+            <rectangle>185:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show Overdraft Limit Information</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw24">
             <pos>115:445</pos>
+            <rectangle>167:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show Credit Limit Information</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw25">
             <pos>115:478</pos>
+            <rectangle>119:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show Interest Rate</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw26">
             <pos>115:511</pos>
+            <rectangle>91:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show Tooltips</label>
             <value>[options] 0 : 2</value>
@@ -195,142 +231,170 @@
     </window>
     <window id="w8">
         <pos>100:100</pos>
+        <rectangle>421:483</rectangle>
         <class>org.homeunix.thecave.buddi.view.PreferencesFrame</class>
         <title>Preferences</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw115">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw116">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw117">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw118">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw119">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw120">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw121">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw122">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw123">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw124">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw125">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - All Transactions - C:\Users\usi\abtMyDocuments\buddidata.buddi3 - Buddi</label>
         </action_widget>
         <action_widget id="aw126">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw127">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Preferences</label>
         </action_widget>
         <action_widget id="aw128">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw129">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw130">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw131">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw132">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw107">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>View</label>
         </action_widget>
         <action_widget id="aw108">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Locale</label>
         </action_widget>
         <action_widget id="aw109">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Network</label>
         </action_widget>
         <action_widget id="aw110">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Advanced</label>
         </action_widget>
         <action_widget id="aw111">
             <pos>300:511</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Add</label>
         </action_widget>
         <action_widget id="aw112">
             <pos>405:511</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Remove</label>
         </action_widget>
         <action_widget id="aw113">
             <pos>303:547</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw114">
             <pos>408:547</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <selectable_widget id="sw5">
             <pos>111:177</pos>
+            <rectangle>398:328</rectangle>
             <class>ListUI</class>
             <size>0</size>
             <selected>-1</selected>
@@ -338,165 +402,197 @@
     </window>
     <window id="w9">
         <pos>100:100</pos>
+        <rectangle>421:483</rectangle>
         <class>org.homeunix.thecave.buddi.view.PreferencesFrame</class>
         <title>Preferences</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw142">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw143">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw144">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw145">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw146">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw147">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw148">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw149">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw150">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw151">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw152">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - All Transactions - C:\Users\usi\abtMyDocuments\buddidata.buddi3 - Buddi</label>
         </action_widget>
         <action_widget id="aw153">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw154">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Preferences</label>
         </action_widget>
         <action_widget id="aw155">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw156">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw157">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw158">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw159">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw133">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>View</label>
         </action_widget>
         <action_widget id="aw134">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Plugins</label>
         </action_widget>
         <action_widget id="aw135">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Network</label>
         </action_widget>
         <action_widget id="aw136">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Advanced</label>
         </action_widget>
         <action_widget id="aw137">
             <pos>400:181</pos>
+            <rectangle>105:23</rectangle>
             <class>ButtonUI</class>
             <label>Edit Languages</label>
         </action_widget>
         <action_widget id="aw138">
             <pos>405:214</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Other</label>
         </action_widget>
         <action_widget id="aw139">
             <pos>405:247</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Other</label>
         </action_widget>
         <action_widget id="aw140">
             <pos>303:547</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw141">
             <pos>408:547</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw27">
             <pos>297:182</pos>
+            <rectangle>98:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Language</descriptor>
             <value>[options] 2 : 17</value>
         </input_widget>
         <input_widget id="iw28">
             <pos>290:215</pos>
+            <rectangle>110:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Date Format</descriptor>
             <value>[options] 0 : 8</value>
         </input_widget>
         <input_widget id="iw29">
             <pos>349:248</pos>
+            <rectangle>51:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Currency Format</descriptor>
             <value>[options] 0 : 19</value>
         </input_widget>
         <input_widget id="iw30">
             <pos>269:275</pos>
+            <rectangle>203:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show Currency Symbol After Amount</label>
             <value>[options] 0 : 2</value>
@@ -504,199 +600,238 @@
     </window>
     <window id="w20">
         <pos>100:100</pos>
+        <rectangle>640:480</rectangle>
         <class>org.homeunix.thecave.buddi.view.MainFrame</class>
         <title>Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw257">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw258">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw259">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw260">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw261">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw262">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw263">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw264">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw265">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw266">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Create Budget Category</label>
         </action_widget>
         <action_widget id="aw267">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Modify Budget Categories</label>
         </action_widget>
         <action_widget id="aw268">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Delete Budget Categories</label>
         </action_widget>
         <action_widget id="aw269">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Undelete Budget Categories</label>
         </action_widget>
         <action_widget id="aw270">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Copy Values to Previous Period (Oct 2016  →  Sep 2016)</label>
         </action_widget>
         <action_widget id="aw271">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Copy Values to Next Period (Oct 2016  →  Nov 2016)</label>
         </action_widget>
         <action_widget id="aw272">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Edit Transactions</label>
         </action_widget>
         <action_widget id="aw273">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Edit All Transactions</label>
         </action_widget>
         <action_widget id="aw274">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Edit Scheduled Transactions</label>
         </action_widget>
         <action_widget id="aw275">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Preferences...</label>
         </action_widget>
         <action_widget id="aw276">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>View - Unroll all Budget Categories</label>
         </action_widget>
         <action_widget id="aw277">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>View - Roll up all Budget Categories</label>
         </action_widget>
         <action_widget id="aw278">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>View - Next Budget Period</label>
         </action_widget>
         <action_widget id="aw279">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>View - Previous Budget Period</label>
         </action_widget>
         <action_widget id="aw280">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>View - View Data File Stats</label>
         </action_widget>
         <action_widget id="aw281">
             <pos>197:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw282">
             <pos>197:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw283">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw284">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw285">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw286">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw287">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw253">
             <pos>108:151</pos>
+            <rectangle>624:421</rectangle>
             <class>TabbedPaneUI</class>
             <label>My Accounts</label>
         </action_widget>
         <action_widget id="aw254">
             <pos>108:151</pos>
+            <rectangle>624:421</rectangle>
             <class>TabbedPaneUI</class>
             <label>My Reports</label>
         </action_widget>
         <action_widget id="aw255">
             <pos>706:182</pos>
+            <rectangle>17:9</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw256">
             <pos>706:191</pos>
+            <rectangle>17:9</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <input_widget id="iw63">
             <pos>607:184</pos>
+            <rectangle>99:14</rectangle>
             <class>FormattedTextFieldUI</class>
             <descriptor>Current Budget Period</descriptor>
             <value>Oct 2016</value>
         </input_widget>
         <input_widget id="iw64">
             <pos>611:544</pos>
+            <rectangle>80:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Budgeted Net Income /</descriptor>
             <value>[options] 2 : 6</value>
         </input_widget>
         <selectable_widget id="sw9">
             <pos>111:232</pos>
+            <rectangle>617:306</rectangle>
             <class>TableUI</class>
             <size>10</size>
             <selected>-1</selected>
@@ -704,162 +839,193 @@
     </window>
     <window id="w11">
         <pos>100:100</pos>
+        <rectangle>421:483</rectangle>
         <class>org.homeunix.thecave.buddi.view.PreferencesFrame</class>
         <title>Preferences</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw190">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw191">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw192">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw193">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw194">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw195">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw196">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw197">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw198">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw199">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw200">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - All Transactions - C:\Users\usi\abtMyDocuments\buddidata.buddi3 - Buddi</label>
         </action_widget>
         <action_widget id="aw201">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw202">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Preferences</label>
         </action_widget>
         <action_widget id="aw203">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw204">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw205">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw206">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw207">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw184">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>View</label>
         </action_widget>
         <action_widget id="aw185">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Plugins</label>
         </action_widget>
         <action_widget id="aw186">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Locale</label>
         </action_widget>
         <action_widget id="aw187">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Network</label>
         </action_widget>
         <action_widget id="aw188">
             <pos>303:547</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw189">
             <pos>408:547</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw34">
             <pos>425:181</pos>
+            <rectangle>80:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Auto Save Period</descriptor>
             <value>[options] 4 : 5</value>
         </input_widget>
         <input_widget id="iw35">
             <pos>468:211</pos>
+            <rectangle>37:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Number of Backups</descriptor>
             <value>[options] 0 : 5</value>
         </input_widget>
         <input_widget id="iw36">
             <pos>296:241</pos>
+            <rectangle>209:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Transaction Cell Renderer</descriptor>
             <value>[options] 0 : 4</value>
         </input_widget>
         <input_widget id="iw37">
             <pos>332:301</pos>
+            <rectangle>173:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Prompt for Data File at Startup</label>
             <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw38">
             <pos>292:334</pos>
+            <rectangle>213:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Hide Negative Signs in Currency Values</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw39">
             <pos>296:367</pos>
+            <rectangle>209:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Enable Update Notifications at Startup</label>
             <value>[options] 0 : 2</value>
@@ -867,141 +1033,168 @@
     </window>
     <window id="w22">
         <pos>100:100</pos>
+        <rectangle>640:480</rectangle>
         <class>org.homeunix.thecave.buddi.view.MainFrame</class>
         <title>Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw292">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw293">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw294">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw295">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw296">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw297">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw298">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw299">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw300">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw301">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Edit Scheduled Transactions</label>
         </action_widget>
         <action_widget id="aw302">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Preferences...</label>
         </action_widget>
         <action_widget id="aw303">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>View - View Data File Stats</label>
         </action_widget>
         <action_widget id="aw304">
             <pos>197:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw305">
             <pos>197:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw306">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw307">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw308">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw309">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw310">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw290">
             <pos>108:151</pos>
+            <rectangle>624:421</rectangle>
             <class>TabbedPaneUI</class>
             <label>My Accounts</label>
         </action_widget>
         <action_widget id="aw291">
             <pos>108:151</pos>
+            <rectangle>624:421</rectangle>
             <class>TabbedPaneUI</class>
             <label>My Budget</label>
         </action_widget>
         <input_widget id="iw71">
             <pos>574:181</pos>
+            <rectangle>150:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Show me my income and expenses by Category for</descriptor>
             <value>[options] -1 : 14</value>
         </input_widget>
         <input_widget id="iw72">
             <pos>574:211</pos>
+            <rectangle>150:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Show me my average income and expenses by Category for</descriptor>
             <value>[options] -1 : 14</value>
         </input_widget>
         <input_widget id="iw73">
             <pos>574:241</pos>
+            <rectangle>150:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Show me a pie graph of my income for</descriptor>
             <value>[options] -1 : 14</value>
         </input_widget>
         <input_widget id="iw74">
             <pos>574:271</pos>
+            <rectangle>150:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Show me a pie graph of my expenses for</descriptor>
             <value>[options] -1 : 14</value>
         </input_widget>
         <input_widget id="iw75">
             <pos>574:301</pos>
+            <rectangle>150:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Show me a chart of my net worth over the past</descriptor>
             <value>[options] -1 : 6</value>
@@ -1009,144 +1202,172 @@
     </window>
     <window id="w10">
         <pos>100:100</pos>
+        <rectangle>421:483</rectangle>
         <class>org.homeunix.thecave.buddi.view.PreferencesFrame</class>
         <title>Preferences</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw166">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw167">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw168">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw169">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw170">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw171">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw172">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw173">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw174">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw175">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw176">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - All Transactions - C:\Users\usi\abtMyDocuments\buddidata.buddi3 - Buddi</label>
         </action_widget>
         <action_widget id="aw177">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw178">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Preferences</label>
         </action_widget>
         <action_widget id="aw179">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw180">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw181">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw182">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw183">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw160">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>View</label>
         </action_widget>
         <action_widget id="aw161">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Plugins</label>
         </action_widget>
         <action_widget id="aw162">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Locale</label>
         </action_widget>
         <action_widget id="aw163">
             <pos>108:151</pos>
+            <rectangle>405:391</rectangle>
             <class>TabbedPaneUI</class>
             <label>Advanced</label>
         </action_widget>
         <action_widget id="aw164">
             <pos>303:547</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw165">
             <pos>408:547</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw31">
             <pos>396:181</pos>
+            <rectangle>109:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Use Proxy Server</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw32">
             <pos>183:214</pos>
+            <rectangle>200:20</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Proxy Server Name&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw33">
             <pos>397:214</pos>
+            <rectangle>108:20</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Proxy Server Port&gt;</label>
             <value>0</value>
@@ -1154,40 +1375,47 @@
     </window>
     <window id="w21">
         <pos>300:209</pos>
+        <rectangle>239:261</rectangle>
         <class>org.homeunix.thecave.buddi.view.dialogs.BudgetCategoryEditorDialog</class>
         <title/>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw288">
             <pos>321:434</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw289">
             <pos>426:434</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw65">
             <pos>402:239</pos>
+            <rectangle>129:23</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Name&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw66">
             <pos>402:262</pos>
+            <rectangle>129:23</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Parent</descriptor>
             <value>[options] -1 : 11</value>
         </input_widget>
         <input_widget id="iw67">
             <pos>402:285</pos>
+            <rectangle>129:23</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Budget Period Type</descriptor>
             <value>[options] 2 : 6</value>
         </input_widget>
         <input_widget id="iw68">
             <pos>402:308</pos>
+            <rectangle>129:46</rectangle>
             <class>RadioButtonUI</class>
             <label/>
             <descriptor>Type</descriptor>
@@ -1195,6 +1423,7 @@
         </input_widget>
         <input_widget id="iw70">
             <pos>309:355</pos>
+            <rectangle>221:73</rectangle>
             <class>TextAreaUI</class>
             <label>&lt;Notes&gt;</label>
             <value/>
@@ -1202,22 +1431,26 @@
     </window>
     <window id="w13">
         <pos>555:273</pos>
+        <rectangle>268:196</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Input</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw210">
             <pos>611:429</pos>
+            <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw211">
             <pos>692:429</pos>
+            <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw41">
             <pos>615:400</pos>
+            <rectangle>195:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>You can leave this field blank.</descriptor>
             <value/>
@@ -1225,22 +1458,26 @@
     </window>
     <window id="w12">
         <pos>555:300</pos>
+        <rectangle>268:142</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Input</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw208">
             <pos>611:402</pos>
+            <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw209">
             <pos>692:402</pos>
+            <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw40">
             <pos>615:373</pos>
+            <rectangle>195:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>of language you wish to edit:</descriptor>
             <value>English</value>
@@ -1248,162 +1485,194 @@
     </window>
     <window id="w1">
         <pos>100:100</pos>
+        <rectangle>640:480</rectangle>
         <class>org.homeunix.thecave.buddi.view.MainFrame</class>
         <title>Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</title>
         <modal>false</modal>
         <root>true</root>
         <action_widget id="aw3">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw4">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw5">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw6">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw7">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw8">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw9">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw10">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw11">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw12">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Create Account</label>
         </action_widget>
         <action_widget id="aw13">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Modify Accounts</label>
         </action_widget>
         <action_widget id="aw14">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Delete Selected Accounts</label>
         </action_widget>
         <action_widget id="aw15">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Undelete Accounts</label>
         </action_widget>
         <action_widget id="aw16">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Edit Account Types</label>
         </action_widget>
         <action_widget id="aw17">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Edit Transactions</label>
         </action_widget>
         <action_widget id="aw18">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Edit All Transactions</label>
         </action_widget>
         <action_widget id="aw19">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Edit Scheduled Transactions</label>
         </action_widget>
         <action_widget id="aw20">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Preferences...</label>
         </action_widget>
         <action_widget id="aw21">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>View - Unroll all Accounts</label>
         </action_widget>
         <action_widget id="aw22">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>View - Roll up all Accounts</label>
         </action_widget>
         <action_widget id="aw23">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>View - View Data File Stats</label>
         </action_widget>
         <action_widget id="aw24">
             <pos>197:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw25">
             <pos>197:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw26">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw27">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw28">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw29">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw30">
             <pos>250:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw1">
             <pos>108:151</pos>
+            <rectangle>624:421</rectangle>
             <class>TabbedPaneUI</class>
             <label>My Budget</label>
         </action_widget>
         <action_widget id="aw2">
             <pos>108:151</pos>
+            <rectangle>624:421</rectangle>
             <class>TabbedPaneUI</class>
             <label>My Reports</label>
         </action_widget>
         <selectable_widget id="sw1">
             <pos>111:202</pos>
+            <rectangle>617:342</rectangle>
             <class>TableUI</class>
             <size>1</size>
             <selected>-1</selected>
@@ -1411,22 +1680,26 @@
     </window>
     <window id="w15">
         <pos>487:181</pos>
+        <rectangle>405:380</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Enter Date Format</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw215">
             <pos>611:521</pos>
+            <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw216">
             <pos>692:521</pos>
+            <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw45">
             <pos>500:492</pos>
+            <rectangle>379:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>An example of a format string is "MMMM d, yyyy" (without the quotes).</descriptor>
             <value/>
@@ -1434,22 +1707,26 @@
     </window>
     <window id="w2">
         <pos>237:179</pos>
+        <rectangle>366:321</rectangle>
         <class>org.homeunix.thecave.buddi.view.dialogs.BackupManagerDialog</class>
         <title>Backup Manager</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw31">
             <pos>385:464</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <action_widget id="aw32">
             <pos>490:464</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Load</label>
         </action_widget>
         <selectable_widget id="sw2">
             <pos>246:210</pos>
+            <rectangle>348:248</rectangle>
             <class>ListUI</class>
             <size>0</size>
             <selected>-1</selected>
@@ -1457,45 +1734,53 @@
     </window>
     <window id="w14">
         <pos>210:249</pos>
+        <rectangle>958:244</rectangle>
         <class>org.homeunix.thecave.buddi.i18n.BuddiLanguageEditor</class>
         <title>Language Editor</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw213">
             <pos>218:279</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save Translation</label>
         </action_widget>
         <action_widget id="aw214">
             <pos>218:279</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw212">
             <pos>223:305</pos>
+            <rectangle>53:23</rectangle>
             <class>ButtonUI</class>
             <label>Help</label>
         </action_widget>
         <input_widget id="iw43">
             <pos>1118:305</pos>
+            <rectangle>41:179</rectangle>
             <class>RadioButtonUI</class>
             <label/>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw42">
             <pos>913:306</pos>
+            <rectangle>200:20</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Search&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw44">
             <pos>625:335</pos>
+            <rectangle>498:148</rectangle>
             <class>TextAreaUI</class>
             <label/>
             <value/>
         </input_widget>
         <selectable_widget id="sw6">
             <pos>219:334</pos>
+            <rectangle>386:11648</rectangle>
             <class>ListUI</class>
             <size>728</size>
             <selected>-1</selected>
@@ -1503,40 +1788,47 @@
     </window>
     <window id="w3">
         <pos>304:237</pos>
+        <rectangle>231:206</rectangle>
         <class>org.homeunix.thecave.buddi.view.dialogs.AccountEditorDialog</class>
         <title/>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw33">
             <pos>317:407</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw34">
             <pos>422:407</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw1">
             <pos>424:267</pos>
+            <rectangle>103:20</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Name&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw2">
             <pos>424:287</pos>
+            <rectangle>103:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Account Type</descriptor>
             <value>[options] 0 : 9</value>
         </input_widget>
         <input_widget id="iw3">
             <pos>424:307</pos>
+            <rectangle>103:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Starting Balance</descriptor>
             <value>0.00</value>
         </input_widget>
         <input_widget id="iw4">
             <pos>313:328</pos>
+            <rectangle>213:73</rectangle>
             <class>TextAreaUI</class>
             <label>&lt;Notes&gt;</label>
             <value/>
@@ -1544,77 +1836,92 @@
     </window>
     <window id="w17">
         <pos>390:154</pos>
+        <rectangle>598:435</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Choose Plugin Jar File...</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw224">
             <pos>822:190</pos>
+            <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw225">
             <pos>842:190</pos>
+            <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw226">
             <pos>862:190</pos>
+            <rectangle>27:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw219">
             <pos>409:221</pos>
+            <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Recent Items</label>
         </action_widget>
         <action_widget id="aw220">
             <pos>409:291</pos>
+            <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Desktop</label>
         </action_widget>
         <action_widget id="aw221">
             <pos>409:361</pos>
+            <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>My Documents</label>
         </action_widget>
         <action_widget id="aw222">
             <pos>409:431</pos>
+            <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Computer</label>
         </action_widget>
         <action_widget id="aw223">
             <pos>409:501</pos>
+            <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Network</label>
         </action_widget>
         <action_widget id="aw227">
             <pos>895:521</pos>
+            <rectangle>75:23</rectangle>
             <class>ButtonUI</class>
             <label>Open</label>
         </action_widget>
         <action_widget id="aw228">
             <pos>895:548</pos>
+            <rectangle>75:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw47">
             <pos>502:189</pos>
+            <rectangle>310:22</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look in:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw48">
             <pos>579:523</pos>
+            <rectangle>286:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>File name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw49">
             <pos>579:551</pos>
+            <rectangle>286:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Files of type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw7">
             <pos>502:221</pos>
+            <rectangle>467:293</rectangle>
             <class>ListUI</class>
             <size>0</size>
             <selected>-1</selected>
@@ -1622,117 +1929,140 @@
     </window>
     <window id="w4">
         <pos>521:244</pos>
+        <rectangle>336:255</rectangle>
         <class>org.homeunix.thecave.buddi.view.AccountTypeListFrame</class>
         <title>Edit Account Types</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw39">
             <pos>529:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw40">
             <pos>529:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw41">
             <pos>529:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw42">
             <pos>529:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw43">
             <pos>529:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw44">
             <pos>529:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw45">
             <pos>529:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw46">
             <pos>529:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw47">
             <pos>529:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw48">
             <pos>556:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw49">
             <pos>556:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw50">
             <pos>556:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Edit Account Types</label>
         </action_widget>
         <action_widget id="aw51">
             <pos>609:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw52">
             <pos>609:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw53">
             <pos>609:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw54">
             <pos>609:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw55">
             <pos>609:274</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw35">
             <pos>534:430</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>New</label>
         </action_widget>
         <action_widget id="aw36">
             <pos>639:430</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Edit</label>
         </action_widget>
         <action_widget id="aw37">
             <pos>744:430</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Delete</label>
         </action_widget>
         <action_widget id="aw38">
             <pos>744:463</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Done</label>
         </action_widget>
         <selectable_widget id="sw3">
             <pos>530:296</pos>
+            <rectangle>301:144</rectangle>
             <class>ListUI</class>
             <size>9</size>
             <selected>-1</selected>
@@ -1740,22 +2070,26 @@
     </window>
     <window id="w16">
         <pos>555:310</pos>
+        <rectangle>268:123</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Enter Currency Format</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw217">
             <pos>611:393</pos>
+            <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw218">
             <pos>692:393</pos>
+            <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw46">
             <pos>568:364</pos>
+            <rectangle>242:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Please enter your desired currency format:</descriptor>
             <value/>
@@ -1763,28 +2097,33 @@
     </window>
     <window id="w5">
         <pos>573:301</pos>
+        <rectangle>231:140</rectangle>
         <class>org.homeunix.thecave.buddi.view.dialogs.AccountTypeEditorDialog</class>
         <title/>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw56">
             <pos>586:405</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw57">
             <pos>691:405</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw5">
             <pos>646:331</pos>
+            <rectangle>150:23</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Name&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw6">
             <pos>646:354</pos>
+            <rectangle>150:46</rectangle>
             <class>RadioButtonUI</class>
             <label/>
             <descriptor>Type</descriptor>
@@ -1793,102 +2132,120 @@
     </window>
     <window id="w19">
         <pos>0:39</pos>
+        <rectangle>623:377</rectangle>
         <class>org.homeunix.thecave.buddi.view.dialogs.ScheduledTransactionEditorDialog</class>
         <title>Scheduled Transaction</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw249">
             <pos>391:136</pos>
+            <rectangle>17:20</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw250">
             <pos>391:170</pos>
+            <rectangle>17:20</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw251">
             <pos>405:380</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <action_widget id="aw252">
             <pos>510:380</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <input_widget id="iw56">
             <pos>416:70</pos>
+            <rectangle>198:261</rectangle>
             <class>TextAreaUI</class>
             <label>&lt;Message&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw50">
             <pos>158:76</pos>
+            <rectangle>250:20</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Scheduled Transaction Name&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw51">
             <pos>248:106</pos>
+            <rectangle>160:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Repeat this action</descriptor>
             <value>[options] 0 : 9</value>
         </input_widget>
         <input_widget id="iw52">
             <pos>158:136</pos>
+            <rectangle>233:20</rectangle>
             <class>FormattedTextFieldUI</class>
             <descriptor>starting on</descriptor>
             <value>2016/10/27</value>
         </input_widget>
         <input_widget id="iw53">
             <pos>68:169</pos>
+            <rectangle>85:23</rectangle>
             <class>CheckBoxUI</class>
             <label>ending after</label>
             <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw54">
             <pos>158:170</pos>
+            <rectangle>233:20</rectangle>
             <class>FormattedTextFieldUI</class>
             <descriptor>ending after</descriptor>
             <value>2017/10/27</value>
         </input_widget>
         <input_widget id="iw55">
             <pos>167:207</pos>
+            <rectangle>67:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>and repeating on the</descriptor>
             <value>[options] 0 : 32</value>
         </input_widget>
         <input_widget id="iw57">
             <pos>13:332</pos>
+            <rectangle>280:20</rectangle>
             <class>ComboBoxUI</class>
             <label>&lt;Description&gt;</label>
             <value>&lt;Description&gt;</value>
         </input_widget>
         <input_widget id="iw58">
             <pos>298:332</pos>
+            <rectangle>186:20</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Number&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw62">
             <pos>486:333</pos>
+            <rectangle>128:41</rectangle>
             <class>TextAreaUI</class>
             <label>&lt;Memo&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw59">
             <pos>8:355</pos>
+            <rectangle>141:20</rectangle>
             <class>TextFieldUI</class>
             <value>0.00</value>
         </input_widget>
         <input_widget id="iw60">
             <pos>154:355</pos>
+            <rectangle>151:20</rectangle>
             <class>ComboBoxUI</class>
             <value>[options] -1 : 9</value>
         </input_widget>
         <input_widget id="iw61">
             <pos>322:355</pos>
+            <rectangle>162:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor> → </descriptor>
             <value>[options] -1 : 13</value>
@@ -1896,187 +2253,223 @@
     </window>
     <window id="w6">
         <pos>100:100</pos>
+        <rectangle>640:480</rectangle>
         <class>org.homeunix.thecave.buddi.view.TransactionFrame</class>
         <title>All Transactions - C:\Users\usi\abtMyDocuments\buddidata.buddi3 - Buddi</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw62">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw63">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw64">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw65">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw66">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw67">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw68">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw69">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw70">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw71">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Record / Update</label>
         </action_widget>
         <action_widget id="aw72">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Clear / New</label>
         </action_widget>
         <action_widget id="aw73">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Delete Transaction</label>
         </action_widget>
         <action_widget id="aw74">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Edit - Preferences...</label>
         </action_widget>
         <action_widget id="aw75">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw76">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - All Transactions - C:\Users\usi\abtMyDocuments\buddidata.buddi3 - Buddi</label>
         </action_widget>
         <action_widget id="aw77">
             <pos>164:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw78">
             <pos>217:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw79">
             <pos>217:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw80">
             <pos>217:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw81">
             <pos>217:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw82">
             <pos>217:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw58">
             <pos>209:493</pos>
+            <rectangle>17:20</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw61">
             <pos>113:544</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Delete</label>
         </action_widget>
         <action_widget id="aw59">
             <pos>522:544</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Clear</label>
         </action_widget>
         <action_widget id="aw60">
             <pos>627:544</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Record</label>
         </action_widget>
         <input_widget id="iw7">
             <pos>422:151</pos>
+            <rectangle>150:20</rectangle>
             <class>ComboBoxUI</class>
             <value>[options] 0 : 12</value>
         </input_widget>
         <input_widget id="iw8">
             <pos>572:151</pos>
+            <rectangle>160:20</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Search&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw9">
             <pos>109:493</pos>
+            <rectangle>100:20</rectangle>
             <class>FormattedTextFieldUI</class>
             <value>2016/10/27</value>
         </input_widget>
         <input_widget id="iw10">
             <pos>231:493</pos>
+            <rectangle>224:20</rectangle>
             <class>ComboBoxUI</class>
             <label>&lt;Description&gt;</label>
             <value>&lt;Description&gt;</value>
         </input_widget>
         <input_widget id="iw11">
             <pos>460:493</pos>
+            <rectangle>141:20</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Number&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw15">
             <pos>603:494</pos>
+            <rectangle>128:41</rectangle>
             <class>TextAreaUI</class>
             <label>&lt;Memo&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw12">
             <pos>108:516</pos>
+            <rectangle>163:20</rectangle>
             <class>TextFieldUI</class>
             <value>0.00</value>
         </input_widget>
         <input_widget id="iw13">
             <pos>276:516</pos>
+            <rectangle>153:20</rectangle>
             <class>ComboBoxUI</class>
             <value>[options] -1 : 9</value>
         </input_widget>
         <input_widget id="iw14">
             <pos>446:516</pos>
+            <rectangle>155:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor> → </descriptor>
             <value>[options] -1 : 13</value>
         </input_widget>
         <selectable_widget id="sw4">
             <pos>109:161</pos>
+            <rectangle>622:328</rectangle>
             <class>ListUI</class>
             <size>0</size>
             <selected>-1</selected>
@@ -2084,112 +2477,134 @@
     </window>
     <window id="w18">
         <pos>100:100</pos>
+        <rectangle>336:255</rectangle>
         <class>org.homeunix.thecave.buddi.view.ScheduledTransactionListFrame</class>
         <title>Edit Scheduled Transactions</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw233">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw234">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw235">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw236">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw237">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw238">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw239">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw240">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw241">
             <pos>108:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw242">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw243">
             <pos>135:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw244">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw245">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw246">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw247">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw248">
             <pos>188:130</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw229">
             <pos>113:286</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>New</label>
         </action_widget>
         <action_widget id="aw230">
             <pos>218:286</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Edit</label>
         </action_widget>
         <action_widget id="aw231">
             <pos>323:286</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Delete</label>
         </action_widget>
         <action_widget id="aw232">
             <pos>323:319</pos>
+            <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Done</label>
         </action_widget>
         <selectable_widget id="sw8">
             <pos>109:152</pos>
+            <rectangle>318:128</rectangle>
             <class>ListUI</class>
             <size>0</size>
             <selected>-1</selected>

@@ -158,7 +158,8 @@ public class TestCaseRunner {
 							// selected
 							// index
 							final Selectable_widget new_sw = new Selectable_widget(sw.getId(),
-									sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), size, 0);
+									sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(),
+									sw.getWidth(), sw.getHeight(), size, 0);
 							final GUIAction select = new Select(act.getWindow(), act.getOracle(),
 									new_sw, index, false);
 							act_to_execute = select;
@@ -276,7 +277,7 @@ public class TestCaseRunner {
 		for (final Window w : this.gui.getWindows()) {
 			if (w.isSimilar(in)) {
 				final Window out = new Window(in.getTo(), w.getId(), in.getLabel(), in.getClasss(),
-						in.getX(), in.getY(), in.isModal());
+						in.getX(), in.getY(), in.getWidth(), in.getHeight(), in.isModal());
 				out.setRoot(w.isRoot());
 
 				// we can loop only once since if they are the same they must
@@ -327,7 +328,7 @@ public class TestCaseRunner {
 						final Action_widget aw = (Action_widget) widgets.get(x);
 						final Action_widget aw2 = (Action_widget) widgets2.get(x);
 						final Action_widget new_aw = new Action_widget(aw2.getId(), aw.getLabel(),
-								aw.getClasss(), aw.getX(), aw.getY());
+								aw.getClasss(), aw.getX(), aw.getY(), aw.getWidth(), aw.getHeight());
 						new_aw.setDescriptor(aw.getDescriptor());
 						out.addWidget(new_aw);
 
@@ -338,14 +339,15 @@ public class TestCaseRunner {
 							final Option_input_widget oiw = (Option_input_widget) iw;
 							final Option_input_widget new_oiw = new Option_input_widget(
 									iw2.getId(), iw.getLabel(), iw.getClasss(), iw.getX(),
-									iw.getY(), oiw.getSize(), oiw.getSelected());
+									iw.getY(), oiw.getWidth(), oiw.getHeight(), oiw.getSize(),
+									oiw.getSelected());
 							new_oiw.setDescriptor(iw.getDescriptor());
 							out.addWidget(new_oiw);
 						} else {
 							final Input_widget iw2 = (Input_widget) widgets2.get(x);
 							final Input_widget new_iw = new Input_widget(iw2.getId(),
 									iw.getLabel(), iw.getClasss(), iw.getX(), iw.getY(),
-									iw.getValue());
+									iw.getWidth(), iw.getHeight(), iw.getValue());
 							new_iw.setDescriptor(iw.getDescriptor());
 							out.addWidget(new_iw);
 
@@ -359,8 +361,8 @@ public class TestCaseRunner {
 						final Selectable_widget sw2 = w.getSelectableWidgets().get(x);
 
 						final Selectable_widget new_sw = new Selectable_widget(sw2.getId(),
-								sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), sw.getSize(),
-								sw.getSelected());
+								sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), sw.getWidth(),
+								sw.getHeight(), sw.getSize(), sw.getSelected());
 						new_sw.setDescriptor(sw.getDescriptor());
 						out.addWidget(new_sw);
 

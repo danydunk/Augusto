@@ -44,20 +44,21 @@ public class AlloyTestCaseGenerationTest {
 		final List<Instance_GUI_pattern> res = gfs.match(pattern);
 		final Instance_GUI_pattern r = res.get(0);
 		// manual refinement
-		final Window view = new Window("w999", "view", "class", 1, 1, false);
+		final Window view = new Window("w999", "view", "class", 1, 1, 1, 1, false);
 
 		for (final Input_widget iww : gui.getWindow("w8").getInputWidgets()) {
 			if (iww instanceof Option_input_widget) {
 				final Option_input_widget oiw = (Option_input_widget) iww;
 				view.addWidget(new Option_input_widget(iww.getId() + "9", iww.getLabel(), iww
-						.getClasss(), iww.getX(), iww.getY(), oiw.getSize(), oiw.getSelected()));
+						.getClasss(), iww.getX(), iww.getY(), 1, 1, oiw.getSize(), oiw
+						.getSelected()));
 			} else {
 				view.addWidget(new Input_widget(iww.getId() + "9", iww.getLabel(), iww.getClasss(),
-						iww.getX(), iww.getY(), iww.getValue()));
+						iww.getX(), iww.getY(), 1, 1, iww.getValue()));
 			}
 		}
 
-		final Action_widget ok = new Action_widget("aw999", "ok", "class", 1, 1);
+		final Action_widget ok = new Action_widget("aw999", "ok", "class", 1, 1, 1, 1);
 		view.addWidget(ok);
 
 		gui.addWindow(view);
@@ -103,20 +104,21 @@ public class AlloyTestCaseGenerationTest {
 		final List<Instance_GUI_pattern> res = gfs.match(pattern);
 		final Instance_GUI_pattern r = res.get(0);
 		// manual refinement
-		final Window view = new Window("w999", "view", "class", 1, 1, false);
+		final Window view = new Window("w999", "view", "class", 1, 1, 1, 1, false);
 
 		for (final Input_widget iww : gui.getWindow("w8").getInputWidgets()) {
 			if (iww instanceof Option_input_widget) {
 				final Option_input_widget oiw = (Option_input_widget) iww;
 				view.addWidget(new Option_input_widget(iww.getId() + "9", iww.getLabel(), iww
-						.getClasss(), iww.getX(), iww.getY(), oiw.getSize(), oiw.getSelected()));
+						.getClasss(), iww.getX(), iww.getY(), 1, 1, oiw.getSize(), oiw
+						.getSelected()));
 			} else {
 				view.addWidget(new Input_widget(iww.getId() + "9", iww.getLabel(), iww.getClasss(),
-						iww.getX(), iww.getY(), iww.getValue()));
+						iww.getX(), iww.getY(), 1, 1, iww.getValue()));
 			}
 		}
 
-		final Action_widget ok = new Action_widget("aw999", "ok", "class", 1, 1);
+		final Action_widget ok = new Action_widget("aw999", "ok", "class", 1, 1, 1, 1);
 		view.addWidget(ok);
 
 		gui.addWindow(view);

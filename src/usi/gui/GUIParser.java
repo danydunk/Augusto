@@ -94,6 +94,11 @@ public class GUIParser {
 		final String pos = nodePos.getTextContent();
 		final int x = Integer.valueOf(pos.split(":")[0]);
 		final int y = Integer.valueOf(pos.split(":")[1]);
+		// rectangle
+		final Node nodeRect = XMLUtil.getElementNode(nodeWindow.getChildNodes(), "rectangle");
+		final String rect = nodeRect.getTextContent();
+		final int width = Integer.valueOf(rect.split(":")[0]);
+		final int height = Integer.valueOf(rect.split(":")[1]);
 		// class
 		final Node nodeClass = XMLUtil.getElementNode(nodeWindow.getChildNodes(), "class");
 		final String classs = nodeClass.getTextContent();
@@ -107,7 +112,7 @@ public class GUIParser {
 		final Node nodeRoot = XMLUtil.getElementNode(nodeWindow.getChildNodes(), "root");
 		final Boolean root = new Boolean(nodeRoot.getTextContent());
 
-		final Window window = new Window(id, title, classs, x, y, modal);
+		final Window window = new Window(id, title, classs, x, y, width, height, modal);
 		if (root) {
 			window.setRoot(true);
 		}
@@ -150,6 +155,11 @@ public class GUIParser {
 			final String pos = nodePos.getTextContent();
 			final int x = Integer.valueOf(pos.split(":")[0]);
 			final int y = Integer.valueOf(pos.split(":")[1]);
+			// rectangle
+			final Node nodeRect = XMLUtil.getElementNode(node.getChildNodes(), "rectangle");
+			final String rect = nodeRect.getTextContent();
+			final int width = Integer.valueOf(rect.split(":")[0]);
+			final int height = Integer.valueOf(rect.split(":")[1]);
 			// class
 			final Node nodeClass = XMLUtil.getElementNode(node.getChildNodes(), "class");
 			final String classs = nodeClass.getTextContent();
@@ -174,11 +184,12 @@ public class GUIParser {
 				final int selected = Integer.valueOf(value.split(":")[0].trim());
 				final int size = Integer.valueOf(value.split(":")[1].trim());
 				final Option_input_widget oiw = new Option_input_widget(id, label, classs, x, y,
-						size, selected);
+						width, height, size, selected);
 				oiw.setDescriptor(descriptor);
 				input.add(oiw);
 			} else {
-				final Input_widget iw = new Input_widget(id, label, classs, x, y, value);
+				final Input_widget iw = new Input_widget(id, label, classs, x, y, width, height,
+						value);
 				iw.setDescriptor(descriptor);
 				input.add(iw);
 			}
@@ -208,6 +219,11 @@ public class GUIParser {
 			final String pos = nodePos.getTextContent();
 			final int x = Integer.valueOf(pos.split(":")[0]);
 			final int y = Integer.valueOf(pos.split(":")[1]);
+			// rectangle
+			final Node nodeRect = XMLUtil.getElementNode(node.getChildNodes(), "rectangle");
+			final String rect = nodeRect.getTextContent();
+			final int width = Integer.valueOf(rect.split(":")[0]);
+			final int height = Integer.valueOf(rect.split(":")[1]);
 			// class
 			final Node nodeClass = XMLUtil.getElementNode(node.getChildNodes(), "class");
 			final String classs = nodeClass.getTextContent();
@@ -223,7 +239,7 @@ public class GUIParser {
 			if (nodeDescriptor != null) {
 				descriptor = nodeDescriptor.getTextContent();
 			}
-			final Action_widget aw = new Action_widget(id, label, classs, x, y);
+			final Action_widget aw = new Action_widget(id, label, classs, x, y, width, height);
 			aw.setDescriptor(descriptor);
 			actions.add(aw);
 		}
@@ -252,6 +268,11 @@ public class GUIParser {
 			final String pos = nodePos.getTextContent();
 			final int x = Integer.valueOf(pos.split(":")[0]);
 			final int y = Integer.valueOf(pos.split(":")[1]);
+			// rectangle
+			final Node nodeRect = XMLUtil.getElementNode(node.getChildNodes(), "rectangle");
+			final String rect = nodeRect.getTextContent();
+			final int width = Integer.valueOf(rect.split(":")[0]);
+			final int height = Integer.valueOf(rect.split(":")[1]);
 			// class
 			final Node nodeClass = XMLUtil.getElementNode(node.getChildNodes(), "class");
 			final String classs = nodeClass.getTextContent();
@@ -273,8 +294,8 @@ public class GUIParser {
 			// selected
 			final Node nodeSelected = XMLUtil.getElementNode(node.getChildNodes(), "selected");
 			final int selected = Integer.valueOf(nodeSelected.getTextContent());
-			final Selectable_widget sw = new Selectable_widget(id, label, classs, x, y, size,
-					selected);
+			final Selectable_widget sw = new Selectable_widget(id, label, classs, x, y, width,
+					height, size, selected);
 			sw.setDescriptor(descriptor);
 			selectbles.add(sw);
 		}

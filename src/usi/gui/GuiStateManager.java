@@ -243,9 +243,15 @@ public class GuiStateManager {
 				throw new Exception(
 						"GUIStateManager - postProcessWidgetList: error finding selected radio button.");
 			}
+
+			final int width = (list.get(list.size() - 1).getX() + list.get(list.size() - 1)
+					.getWidth()) - list.get(0).getX();
+			final int height = (list.get(list.size() - 1).getY() + list.get(list.size() - 1)
+					.getHeight()) - list.get(0).getY();
+
 			final Option_input_widget new_oiw = new Option_input_widget(tos, list.get(0).getId(),
-					"", "RadioButtonUI", list.get(0).getX(), list.get(0).getY(), list.size(),
-					selected);
+					"", "RadioButtonUI", list.get(0).getX(), list.get(0).getY(), width, height,
+					list.size(), selected);
 			new_oiw.setDescriptor(desc);
 			out.add(new_oiw);
 		}

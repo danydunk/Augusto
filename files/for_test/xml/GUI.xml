@@ -2,54 +2,54 @@
 <GUI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="GUI_schema.xsd">
 	<window id="w1">
-		<pos>1:1</pos>
+		<pos>1:1</pos><rectangle>1:1</rectangle>
 		<class>class</class>	
 		<title>Init</title>
 		<modal>false</modal>
 		<root>true</root>
 		<action_widget id="aw1">
-			<pos>1:1</pos>
+			<pos>1:1</pos><rectangle>1:1</rectangle>
 			<class>class</class>			
 			<label>add</label>
 		</action_widget>
 		<action_widget id="aw2">
-			<pos>1:1</pos>
+			<pos>1:1</pos><rectangle>1:1</rectangle>
 			<class>class</class>			
 			<label>test</label>
 		</action_widget>
 	</window>
 	<window id="w2">
-		<pos>1:1</pos>
+		<pos>1:1</pos><rectangle>1:1</rectangle>
 		<class>class</class>
 		<title>Form</title>
 		<modal>false</modal>
 		<root>false</root>
 		<label></label>
 		<action_widget id="aw3">
-			<pos>1:1</pos>
+			<pos>1:1</pos><rectangle>1:1</rectangle>
 			<class>class</class>			
 			<label>save</label>
 		</action_widget>
 		<action_widget id="aw4">
-			<pos>1:1</pos>
+			<pos>1:1</pos><rectangle>1:1</rectangle>
 			<class>class</class>			
 			<label>back</label>
 		</action_widget>
 		<input_widget id="iw1">
-			<pos>1:1</pos>
+			<pos>1:1</pos><rectangle>1:1</rectangle>
 			<class>class</class>			
 			<label>field1</label>
 			<value></value>
 			<class></class>
 		</input_widget>
 		<input_widget id="iw2">
-			<pos>1:1</pos>
+			<pos>1:1</pos><rectangle>1:1</rectangle>
 			<class>class</class>			
 			<label>field2</label>
 			<value></value>
 		</input_widget>
 		<selectable_widget id="sw1">
-			<pos>1:1</pos>
+			<pos>1:1</pos><rectangle>1:1</rectangle>
 			<class>class</class>			
 			<label>field2</label>
 			<size>0</size>
@@ -57,19 +57,19 @@
 		</selectable_widget>
 	</window>
 	<window id="w3">
-		<pos>1:1</pos>
+		<pos>1:1</pos><rectangle>1:1</rectangle>
 		<class>class</class>
 		<title>Other</title>
 		<modal>false</modal>
 		<root>false</root>
 		<label></label>
 		<action_widget id="aw5">
-			<pos>1:1</pos>
+			<pos>1:1</pos><rectangle>1:1</rectangle>
 			<class>class</class>			
 			<label>add</label>
 		</action_widget>
 		<input_widget id="iw3">
-			<pos>1:1</pos>
+			<pos>1:1</pos><rectangle>1:1</rectangle>
 			<class>class</class>			
 			<label>field3</label>
 			<value></value>

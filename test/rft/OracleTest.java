@@ -70,12 +70,12 @@ public class OracleTest extends OracleTestHelper {
 		}
 
 		final Window target2 = new Window(target.getId(), target.getLabel(), target.getClasss(),
-				target.getX(), target.getY(), target.isModal());
+				target.getX(), target.getY(), 1, 1, target.isModal());
 		for (final Widget w : target.getWidgets()) {
 			if (w instanceof Selectable_widget) {
 				final Selectable_widget s = (Selectable_widget) w;
 				final Selectable_widget sw = new Selectable_widget(s.getId(), s.getLabel(),
-						s.getClasss(), s.getX(), s.getY(), 1, 0);
+						s.getClasss(), s.getX(), s.getY(), 1, 1, 1, 0);
 				target2.addWidget(sw);
 			} else {
 				target2.addWidget(w);

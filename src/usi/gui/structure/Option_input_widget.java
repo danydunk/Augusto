@@ -13,10 +13,10 @@ public class Option_input_widget extends Input_widget {
 	private final List<TestObject> tos;
 
 	public Option_input_widget(final TestObject to, final String id, final String label,
-			final String classs, final int x, final int y, final int size, final int selected)
-			throws Exception {
+			final String classs, final int x, final int y, final int width, final int height,
+			final int size, final int selected) throws Exception {
 
-		super(to, id, label, classs, x, y, String.valueOf(selected));
+		super(to, id, label, classs, x, y, width, height, String.valueOf(selected));
 		this.tos = new ArrayList<>();
 		this.tos.add(to);
 		if (size < 0 || selected < -1 || selected > size - 1) {
@@ -27,10 +27,10 @@ public class Option_input_widget extends Input_widget {
 	}
 
 	public Option_input_widget(final List<TestObject> tos, final String id, final String label,
-			final String classs, final int x, final int y, final int size, final int selected)
-			throws Exception {
+			final String classs, final int x, final int y, final int width, final int height,
+			final int size, final int selected) throws Exception {
 
-		super(tos.get(0), id, label, classs, x, y, String.valueOf(selected));
+		super(tos.get(0), id, label, classs, x, y, width, height, String.valueOf(selected));
 		this.tos = tos;
 		if (size < 0 || selected < -1 || selected > size - 1) {
 			throw new Exception("Option_input_widget: wrong size or selected.");
@@ -40,9 +40,10 @@ public class Option_input_widget extends Input_widget {
 	}
 
 	public Option_input_widget(final String id, final String label, final String classs,
-			final int x, final int y, final int size, final int selected) throws Exception {
+			final int x, final int y, final int width, final int height, final int size,
+			final int selected) throws Exception {
 
-		super(id, label, classs, x, y, String.valueOf(selected));
+		super(id, label, classs, x, y, width, height, String.valueOf(selected));
 		if (size < 0 || selected < -1 || selected > size - 1) {
 			throw new Exception("Option_input_widget: wrong size or selected.");
 		}

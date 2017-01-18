@@ -2,37 +2,44 @@
 <GUI>
     <window id="w7">
         <pos>339:106</pos>
+        <rectangle>700:530</rectangle>
         <class>org.cesilko.rachota.gui.ReportWizard</class>
         <title>Report generation wizard</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw72">
             <pos>950:414</pos>
+            <rectangle>76:25</rectangle>
             <class>ButtonUI</class>
             <label>Browse</label>
         </action_widget>
         <action_widget id="aw73">
             <pos>634:593</pos>
+            <rectangle>92:25</rectangle>
             <class>ButtonUI</class>
             <label>&lt; Previous</label>
         </action_widget>
         <action_widget id="aw74">
             <pos>736:593</pos>
+            <rectangle>68:25</rectangle>
             <class>ButtonUI</class>
             <label>Next &gt;</label>
         </action_widget>
         <action_widget id="aw75">
             <pos>814:593</pos>
+            <rectangle>68:25</rectangle>
             <class>ButtonUI</class>
             <label>Finish</label>
         </action_widget>
         <action_widget id="aw76">
             <pos>892:593</pos>
+            <rectangle>73:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw57">
             <pos>659:252</pos>
+            <rectangle>63:56</rectangle>
             <class>RadioButtonUI</class>
             <label/>
             <descriptor>Output:</descriptor>
@@ -40,6 +47,7 @@
         </input_widget>
         <input_widget id="iw59">
             <pos>659:318</pos>
+            <rectangle>49:89</rectangle>
             <class>RadioButtonUI</class>
             <label/>
             <descriptor>Format:</descriptor>
@@ -47,6 +55,7 @@
         </input_widget>
         <input_widget id="iw62">
             <pos>644:417</pos>
+            <rectangle>301:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Filename:</descriptor>
             <value/>
@@ -54,63 +63,75 @@
     </window>
     <window id="w8">
         <pos>542:162</pos>
+        <rectangle>516:364</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Open</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw77">
             <pos>904:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw78">
             <pos>933:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw79">
             <pos>962:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw80">
             <pos>991:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw81">
             <pos>1015:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw82">
             <pos>888:481</pos>
+            <rectangle>73:26</rectangle>
             <class>ButtonUI</class>
             <label>Select</label>
         </action_widget>
         <action_widget id="aw83">
             <pos>966:481</pos>
+            <rectangle>73:26</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw63">
             <pos>617:204</pos>
+            <rectangle>276:27</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw64">
             <pos>646:414</pos>
+            <rectangle>393:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw65">
             <pos>646:439</pos>
+            <rectangle>393:25</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw3">
             <pos>563:243</pos>
+            <rectangle>474:158</rectangle>
             <class>ListUI</class>
             <size>0</size>
             <selected>-1</selected>
@@ -118,63 +139,75 @@
     </window>
     <window id="w9">
         <pos>542:162</pos>
+        <rectangle>516:364</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Open</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw84">
             <pos>904:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw85">
             <pos>933:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw86">
             <pos>962:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw87">
             <pos>991:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw88">
             <pos>1015:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw89">
             <pos>888:481</pos>
+            <rectangle>73:26</rectangle>
             <class>ButtonUI</class>
             <label>Open</label>
         </action_widget>
         <action_widget id="aw90">
             <pos>966:481</pos>
+            <rectangle>73:26</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw66">
             <pos>617:204</pos>
+            <rectangle>276:27</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw67">
             <pos>646:414</pos>
+            <rectangle>393:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw68">
             <pos>646:439</pos>
+            <rectangle>393:25</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw4">
             <pos>563:243</pos>
+            <rectangle>474:158</rectangle>
             <class>ListUI</class>
             <size>1</size>
             <selected>0</selected>
@@ -182,68 +215,81 @@
     </window>
     <window id="w11">
         <pos>542:162</pos>
+        <rectangle>516:364</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Open</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw98">
             <pos>904:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw99">
             <pos>933:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw100">
             <pos>962:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw101">
             <pos>991:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw102">
             <pos>1015:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw103">
             <pos>888:481</pos>
+            <rectangle>73:26</rectangle>
             <class>ButtonUI</class>
             <label>Open</label>
         </action_widget>
         <action_widget id="aw104">
             <pos>966:481</pos>
+            <rectangle>73:26</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw72">
             <pos>617:204</pos>
+            <rectangle>276:27</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw73">
             <pos>563:297</pos>
+            <rectangle>233:17</rectangle>
             <class>TextFieldUI</class>
             <value>New Folder (3)</value>
         </input_widget>
         <input_widget id="iw74">
             <pos>646:414</pos>
+            <rectangle>393:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw75">
             <pos>646:439</pos>
+            <rectangle>393:25</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw6">
             <pos>563:263</pos>
+            <rectangle>474:51</rectangle>
             <class>TableUI</class>
             <size>3</size>
             <selected>0</selected>
@@ -251,63 +297,75 @@
     </window>
     <window id="w10">
         <pos>542:162</pos>
+        <rectangle>516:364</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Open</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw91">
             <pos>904:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw92">
             <pos>933:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw93">
             <pos>962:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw94">
             <pos>991:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw95">
             <pos>1015:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw96">
             <pos>888:481</pos>
+            <rectangle>73:26</rectangle>
             <class>ButtonUI</class>
             <label>Open</label>
         </action_widget>
         <action_widget id="aw97">
             <pos>966:481</pos>
+            <rectangle>73:26</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw69">
             <pos>617:204</pos>
+            <rectangle>276:27</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw70">
             <pos>646:414</pos>
+            <rectangle>393:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw71">
             <pos>646:439</pos>
+            <rectangle>393:25</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw5">
             <pos>563:263</pos>
+            <rectangle>474:34</rectangle>
             <class>TableUI</class>
             <size>2</size>
             <selected>0</selected>
@@ -315,160 +373,191 @@
     </window>
     <window id="w13">
         <pos>463:69</pos>
+        <rectangle>511:646</rectangle>
         <class>org.cesilko.rachota.gui.MainWindow</class>
         <title>[00:00] - Rachota 2.3</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw126">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - About ...</label>
         </action_widget>
         <action_widget id="aw127">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - Settings ...</label>
         </action_widget>
         <action_widget id="aw128">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - Exit</label>
         </action_widget>
         <action_widget id="aw129">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Copy task</label>
         </action_widget>
         <action_widget id="aw130">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Move time</label>
         </action_widget>
         <action_widget id="aw131">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Correct duration</label>
         </action_widget>
         <action_widget id="aw132">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Add note</label>
         </action_widget>
         <action_widget id="aw133">
             <pos>563:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Tools - Switch date ...</label>
         </action_widget>
         <action_widget id="aw134">
             <pos>563:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Tools - Adjust start time ...</label>
         </action_widget>
         <action_widget id="aw112">
             <pos>481:125</pos>
+            <rectangle>475:577</rectangle>
             <class>TabbedPaneUI</class>
             <label>Day</label>
         </action_widget>
         <action_widget id="aw113">
             <pos>481:125</pos>
+            <rectangle>475:577</rectangle>
             <class>TabbedPaneUI</class>
             <label>Analytics</label>
         </action_widget>
         <action_widget id="aw114">
             <pos>789:154</pos>
+            <rectangle>159:29</rectangle>
             <class>ButtonUI</class>
             <label>Generate report ...</label>
         </action_widget>
         <action_widget id="aw117">
             <pos>560:198</pos>
+            <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw118">
             <pos>823:198</pos>
+            <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw115">
             <pos>539:201</pos>
+            <rectangle>16:12</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw119">
             <pos>925:201</pos>
+            <rectangle>16:12</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw116">
             <pos>539:213</pos>
+            <rectangle>16:11</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw120">
             <pos>925:213</pos>
+            <rectangle>16:11</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw121">
             <pos>488:243</pos>
+            <rectangle>460:451</rectangle>
             <class>TabbedPaneUI</class>
             <label>Times</label>
         </action_widget>
         <action_widget id="aw122">
             <pos>488:243</pos>
+            <rectangle>460:451</rectangle>
             <class>TabbedPaneUI</class>
             <label>Projects</label>
         </action_widget>
         <action_widget id="aw123">
             <pos>547:392</pos>
+            <rectangle>95:29</rectangle>
             <class>ButtonUI</class>
             <label>Add filter</label>
         </action_widget>
         <action_widget id="aw124">
             <pos>652:392</pos>
+            <rectangle>105:29</rectangle>
             <class>ButtonUI</class>
             <label>Edit filter</label>
         </action_widget>
         <action_widget id="aw125">
             <pos>767:392</pos>
+            <rectangle>120:29</rectangle>
             <class>ButtonUI</class>
             <label>Remove filter</label>
         </action_widget>
         <input_widget id="iw79">
             <pos>537:156</pos>
+            <rectangle>63:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Period:</descriptor>
             <value>[options] 1 : 4</value>
         </input_widget>
         <input_widget id="iw81">
             <pos>618:201</pos>
+            <rectangle>200:23</rectangle>
             <class>TextFieldUI</class>
             <value>44. week, 2016</value>
         </input_widget>
         <input_widget id="iw80">
             <pos>497:203</pos>
+            <rectangle>42:19</rectangle>
             <class>FormattedTextFieldUI</class>
             <value>-1</value>
         </input_widget>
         <input_widget id="iw82">
             <pos>883:203</pos>
+            <rectangle>42:19</rectangle>
             <class>FormattedTextFieldUI</class>
             <value>0</value>
         </input_widget>
         <input_widget id="iw83">
             <pos>495:624</pos>
+            <rectangle>216:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Group tasks with same description</label>
             <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw84">
             <pos>855:662</pos>
+            <rectangle>80:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Total filtered time:</descriptor>
             <value>00:00:00</value>
         </input_widget>
         <selectable_widget id="sw8">
             <pos>496:317</pos>
+            <rectangle>442:0</rectangle>
             <class>TableUI</class>
             <descriptor>Filters:</descriptor>
             <size>0</size>
@@ -476,6 +565,7 @@
         </selectable_widget>
         <selectable_widget id="sw9">
             <pos>496:481</pos>
+            <rectangle>442:0</rectangle>
             <class>TableUI</class>
             <descriptor>Tasks:</descriptor>
             <size>0</size>
@@ -484,63 +574,75 @@
     </window>
     <window id="w12">
         <pos>542:162</pos>
+        <rectangle>516:364</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Open</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw105">
             <pos>904:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw106">
             <pos>933:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw107">
             <pos>962:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw108">
             <pos>991:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw109">
             <pos>1015:205</pos>
+            <rectangle>24:24</rectangle>
             <class>ToggleButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw110">
             <pos>888:481</pos>
+            <rectangle>73:26</rectangle>
             <class>ButtonUI</class>
             <label>Select</label>
         </action_widget>
         <action_widget id="aw111">
             <pos>966:481</pos>
+            <rectangle>73:26</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw76">
             <pos>617:204</pos>
+            <rectangle>276:27</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
             <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw77">
             <pos>646:414</pos>
+            <rectangle>393:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw78">
             <pos>646:439</pos>
+            <rectangle>393:25</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw7">
             <pos>563:263</pos>
+            <rectangle>459:153</rectangle>
             <class>TableUI</class>
             <size>9</size>
             <selected>-1</selected>
@@ -548,173 +650,206 @@
     </window>
     <window id="w1">
         <pos>463:69</pos>
+        <rectangle>511:646</rectangle>
         <class>org.cesilko.rachota.gui.MainWindow</class>
         <title>[00:00] - Rachota 2.3</title>
         <modal>false</modal>
         <root>true</root>
         <action_widget id="aw17">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - About ...</label>
         </action_widget>
         <action_widget id="aw18">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - Settings ...</label>
         </action_widget>
         <action_widget id="aw19">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - Exit</label>
         </action_widget>
         <action_widget id="aw20">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Copy task</label>
         </action_widget>
         <action_widget id="aw21">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Move time</label>
         </action_widget>
         <action_widget id="aw22">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Correct duration</label>
         </action_widget>
         <action_widget id="aw23">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Add note</label>
         </action_widget>
         <action_widget id="aw24">
             <pos>563:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Tools - Switch date ...</label>
         </action_widget>
         <action_widget id="aw25">
             <pos>563:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Tools - Adjust start time ...</label>
         </action_widget>
         <action_widget id="aw1">
             <pos>481:125</pos>
+            <rectangle>475:577</rectangle>
             <class>TabbedPaneUI</class>
             <label>History</label>
         </action_widget>
         <action_widget id="aw2">
             <pos>481:125</pos>
+            <rectangle>475:577</rectangle>
             <class>TabbedPaneUI</class>
             <label>Analytics</label>
         </action_widget>
         <action_widget id="aw3">
             <pos>493:159</pos>
+            <rectangle>105:30</rectangle>
             <class>ButtonUI</class>
             <label>Previous</label>
         </action_widget>
         <action_widget id="aw6">
             <pos>862:159</pos>
+            <rectangle>81:30</rectangle>
             <class>ButtonUI</class>
             <label>Next</label>
         </action_widget>
         <action_widget id="aw4">
             <pos>493:199</pos>
+            <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw5">
             <pos>523:199</pos>
+            <rectangle>30:20</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw7">
             <pos>862:199</pos>
+            <rectangle>30:20</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw8">
             <pos>902:199</pos>
+            <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw9">
             <pos>574:327</pos>
+            <rectangle>93:34</rectangle>
             <class>ButtonUI</class>
             <label>Work</label>
         </action_widget>
         <action_widget id="aw10">
             <pos>672:327</pos>
+            <rectangle>93:34</rectangle>
             <class>ButtonUI</class>
             <label>Relax</label>
         </action_widget>
         <action_widget id="aw11">
             <pos>770:327</pos>
+            <rectangle>92:34</rectangle>
             <class>ButtonUI</class>
             <label>Done</label>
         </action_widget>
         <action_widget id="aw12">
             <pos>921:402</pos>
+            <rectangle>15:19</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw13">
             <pos>507:650</pos>
+            <rectangle>96:34</rectangle>
             <class>ButtonUI</class>
             <label>Select</label>
         </action_widget>
         <action_widget id="aw14">
             <pos>608:650</pos>
+            <rectangle>95:34</rectangle>
             <class>ButtonUI</class>
             <label>Add ...</label>
         </action_widget>
         <action_widget id="aw15">
             <pos>708:650</pos>
+            <rectangle>100:34</rectangle>
             <class>ButtonUI</class>
             <label>View ...</label>
         </action_widget>
         <action_widget id="aw16">
             <pos>813:650</pos>
+            <rectangle>116:34</rectangle>
             <class>ButtonUI</class>
             <label>Remove</label>
         </action_widget>
         <input_widget id="iw1">
             <pos>652:162</pos>
+            <rectangle>200:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Date:</descriptor>
             <value>Thursday - 27. October, 2016</value>
         </input_widget>
         <input_widget id="iw2">
             <pos>652:199</pos>
+            <rectangle>40:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Week:</descriptor>
             <value>44.</value>
         </input_widget>
         <input_widget id="iw3">
             <pos>563:234</pos>
+            <rectangle>145:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Started at:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw4">
             <pos>792:234</pos>
+            <rectangle>146:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Finished at:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw5">
             <pos>563:293</pos>
+            <rectangle>375:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Task:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw6">
             <pos>493:612</pos>
+            <rectangle>136:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Show finished tasks</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <selectable_widget id="sw1">
             <pos>499:421</pos>
+            <rectangle>422:14</rectangle>
             <class>TableUI</class>
             <descriptor>Plan:</descriptor>
             <size>1</size>
@@ -723,39 +858,46 @@
     </window>
     <window id="w15">
         <pos>585:304</pos>
+        <rectangle>265:240</rectangle>
         <class>org.cesilko.rachota.gui.FilterDialog</class>
         <title>Task filter settings</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw155">
             <pos>650:488</pos>
+            <rectangle>51:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw156">
             <pos>711:488</pos>
+            <rectangle>73:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw95">
             <pos>678:352</pos>
+            <rectangle>159:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Filter:</descriptor>
             <value>[options] 0 : 6</value>
         </input_widget>
         <input_widget id="iw96">
             <pos>678:386</pos>
+            <rectangle>159:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Content rule:</descriptor>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw98">
             <pos>678:420</pos>
+            <rectangle>159:19</rectangle>
             <class>TextFieldUI</class>
             <value/>
         </input_widget>
         <input_widget id="iw97">
             <pos>678:449</pos>
+            <rectangle>159:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Value:</descriptor>
             <value>[options] -1 : 0</value>
@@ -763,145 +905,170 @@
     </window>
     <window id="w2">
         <pos>876:0</pos>
+        <rectangle>564:753</rectangle>
         <class>org.cesilko.rachota.gui.SettingsDialog</class>
         <title>System settings</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw26">
             <pos>1046:664</pos>
+            <rectangle>67:25</rectangle>
             <class>ButtonUI</class>
             <label>Add ...</label>
         </action_widget>
         <action_widget id="aw27">
             <pos>1118:664</pos>
+            <rectangle>67:25</rectangle>
             <class>ButtonUI</class>
             <label>Edit ...</label>
         </action_widget>
         <action_widget id="aw28">
             <pos>1190:664</pos>
+            <rectangle>80:25</rectangle>
             <class>ButtonUI</class>
             <label>Remove</label>
         </action_widget>
         <action_widget id="aw29">
             <pos>1091:715</pos>
+            <rectangle>51:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw30">
             <pos>1152:715</pos>
+            <rectangle>73:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw7">
             <pos>1024:57</pos>
+            <rectangle>30:20</rectangle>
             <class>FormattedTextFieldUI</class>
             <descriptor>Working hours:</descriptor>
             <value>8.0</value>
         </input_widget>
         <input_widget id="iw8">
             <pos>1024:87</pos>
+            <rectangle>201:23</rectangle>
             <class>CheckBoxUI</class>
             <label>working hours were not reached</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw9">
             <pos>1024:120</pos>
+            <rectangle>189:23</rectangle>
             <class>CheckBoxUI</class>
             <label>working hours were exceeded</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw10">
             <pos>900:153</pos>
+            <rectangle>185:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Move unfinished tasks further</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw22">
             <pos>1203:153</pos>
+            <rectangle>213:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Group tasks by keyword in tasktray</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw11">
             <pos>900:186</pos>
+            <rectangle>158:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Archive not started tasks</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw12">
             <pos>900:219</pos>
+            <rectangle>220:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Check priority when switching tasks</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw13">
             <pos>900:252</pos>
+            <rectangle>130:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Count private tasks</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw14">
             <pos>900:285</pos>
+            <rectangle>140:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Report weekly activity</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw15">
             <pos>1024:318</pos>
+            <rectangle>169:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Proxy server:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw16">
             <pos>1238:318</pos>
+            <rectangle>40:20</rectangle>
             <class>FormattedTextFieldUI</class>
             <descriptor>Port:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw17">
             <pos>900:348</pos>
+            <rectangle>111:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Log task events</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw18">
             <pos>900:381</pos>
+            <rectangle>123:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Inactivity detection</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw20">
             <pos>1203:414</pos>
+            <rectangle>213:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Inactivity action:</descriptor>
             <value>[options] 1 : 3</value>
         </input_widget>
         <input_widget id="iw19">
             <pos>1024:416</pos>
+            <rectangle>30:19</rectangle>
             <class>FormattedTextFieldUI</class>
             <descriptor>Inactivity time [m]:</descriptor>
             <value>10</value>
         </input_widget>
         <input_widget id="iw23">
             <pos>1203:448</pos>
+            <rectangle>213:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Post hibernation action:</descriptor>
             <value>[options] 1 : 3</value>
         </input_widget>
         <input_widget id="iw21">
             <pos>1024:450</pos>
+            <rectangle>30:19</rectangle>
             <class>FormattedTextFieldUI</class>
             <descriptor>Hibernation time [m]:</descriptor>
             <value>10</value>
         </input_widget>
         <input_widget id="iw24">
             <pos>1024:482</pos>
+            <rectangle>392:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>On exit:</descriptor>
             <value>[options] 0 : 2</value>
         </input_widget>
         <selectable_widget id="sw2">
             <pos>901:569</pos>
+            <rectangle>513:0</rectangle>
             <class>TableUI</class>
             <size>0</size>
             <selected>-1</selected>
@@ -909,163 +1076,194 @@
     </window>
     <window id="w14">
         <pos>463:69</pos>
+        <rectangle>511:646</rectangle>
         <class>org.cesilko.rachota.gui.MainWindow</class>
         <title>[00:00] - Rachota 2.3</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw146">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - About ...</label>
         </action_widget>
         <action_widget id="aw147">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - Settings ...</label>
         </action_widget>
         <action_widget id="aw148">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - Exit</label>
         </action_widget>
         <action_widget id="aw149">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Copy task</label>
         </action_widget>
         <action_widget id="aw150">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Move time</label>
         </action_widget>
         <action_widget id="aw151">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Correct duration</label>
         </action_widget>
         <action_widget id="aw152">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Add note</label>
         </action_widget>
         <action_widget id="aw153">
             <pos>563:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Tools - Switch date ...</label>
         </action_widget>
         <action_widget id="aw154">
             <pos>563:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Tools - Adjust start time ...</label>
         </action_widget>
         <action_widget id="aw135">
             <pos>481:125</pos>
+            <rectangle>475:577</rectangle>
             <class>TabbedPaneUI</class>
             <label>Day</label>
         </action_widget>
         <action_widget id="aw136">
             <pos>481:125</pos>
+            <rectangle>475:577</rectangle>
             <class>TabbedPaneUI</class>
             <label>Analytics</label>
         </action_widget>
         <action_widget id="aw137">
             <pos>789:154</pos>
+            <rectangle>159:29</rectangle>
             <class>ButtonUI</class>
             <label>Generate report ...</label>
         </action_widget>
         <action_widget id="aw140">
             <pos>560:198</pos>
+            <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw141">
             <pos>823:198</pos>
+            <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw138">
             <pos>539:201</pos>
+            <rectangle>16:12</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw142">
             <pos>925:201</pos>
+            <rectangle>16:12</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw139">
             <pos>539:213</pos>
+            <rectangle>16:11</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw143">
             <pos>925:213</pos>
+            <rectangle>16:11</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw144">
             <pos>488:243</pos>
+            <rectangle>460:451</rectangle>
             <class>TabbedPaneUI</class>
             <label>Times</label>
         </action_widget>
         <action_widget id="aw145">
             <pos>488:243</pos>
+            <rectangle>460:451</rectangle>
             <class>TabbedPaneUI</class>
             <label>Tasks</label>
         </action_widget>
         <input_widget id="iw85">
             <pos>537:156</pos>
+            <rectangle>63:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Period:</descriptor>
             <value>[options] 1 : 4</value>
         </input_widget>
         <input_widget id="iw87">
             <pos>618:201</pos>
+            <rectangle>200:23</rectangle>
             <class>TextFieldUI</class>
             <value>44. week, 2016</value>
         </input_widget>
         <input_widget id="iw86">
             <pos>497:203</pos>
+            <rectangle>42:19</rectangle>
             <class>FormattedTextFieldUI</class>
             <value>0</value>
         </input_widget>
         <input_widget id="iw88">
             <pos>883:203</pos>
+            <rectangle>42:19</rectangle>
             <class>FormattedTextFieldUI</class>
             <value>0</value>
         </input_widget>
         <input_widget id="iw89">
             <pos>552:528</pos>
+            <rectangle>249:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Name:</descriptor>
             <value>All projects</value>
         </input_widget>
         <input_widget id="iw90">
             <pos>552:557</pos>
+            <rectangle>70:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Time:</descriptor>
             <value>00:00:00</value>
         </input_widget>
         <input_widget id="iw91">
             <pos>678:557</pos>
+            <rectangle>123:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Share:</descriptor>
             <value>100%</value>
         </input_widget>
         <input_widget id="iw92">
             <pos>552:587</pos>
+            <rectangle>70:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Tasks:</descriptor>
             <value>0</value>
         </input_widget>
         <input_widget id="iw93">
             <pos>678:616</pos>
+            <rectangle>123:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Average priority:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw94">
             <pos>678:645</pos>
+            <rectangle>123:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Average state:</descriptor>
             <value/>
@@ -1073,108 +1271,127 @@
     </window>
     <window id="w3">
         <pos>948:162</pos>
+        <rectangle>419:428</rectangle>
         <class>org.cesilko.rachota.gui.TaskDialog</class>
         <title>Task settings</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw31">
             <pos>1212:377</pos>
+            <rectangle>16:10</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw33">
             <pos>1265:377</pos>
+            <rectangle>16:10</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw32">
             <pos>1212:387</pos>
+            <rectangle>16:10</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw34">
             <pos>1265:387</pos>
+            <rectangle>16:10</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw35">
             <pos>1093:547</pos>
+            <rectangle>51:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw36">
             <pos>1149:547</pos>
+            <rectangle>73:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw25">
             <pos>1037:197</pos>
+            <rectangle>317:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Description:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw26">
             <pos>1037:226</pos>
+            <rectangle>317:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Category:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw27">
             <pos>1038:256</pos>
+            <rectangle>314:74</rectangle>
             <class>TextAreaUI</class>
             <descriptor>Notes:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw28">
             <pos>1037:342</pos>
+            <rectangle>72:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Priority:</descriptor>
             <value>[options] 1 : 3</value>
         </input_widget>
         <input_widget id="iw29">
             <pos>1037:376</pos>
+            <rectangle>141:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Notification of task at:</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw30">
             <pos>1190:379</pos>
+            <rectangle>22:16</rectangle>
             <class>FormattedTextFieldUI</class>
             <descriptor>Notification of task at:</descriptor>
             <value>0</value>
         </input_widget>
         <input_widget id="iw31">
             <pos>1243:379</pos>
+            <rectangle>22:16</rectangle>
             <class>FormattedTextFieldUI</class>
             <descriptor>:</descriptor>
             <value>0</value>
         </input_widget>
         <input_widget id="iw32">
             <pos>1106:409</pos>
+            <rectangle>125:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Start automatically</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw33">
             <pos>1037:442</pos>
+            <rectangle>150:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Regular task repeated:</label>
             <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw34">
             <pos>1238:442</pos>
+            <rectangle>93:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Regular task repeated:</descriptor>
             <value>[options] 0 : 10</value>
         </input_widget>
         <input_widget id="iw35">
             <pos>1037:476</pos>
+            <rectangle>88:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Private task</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw36">
             <pos>1037:509</pos>
+            <rectangle>169:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Start this task immediately</label>
             <value>[options] 0 : 2</value>
@@ -1182,42 +1399,50 @@
     </window>
     <window id="w4">
         <pos>598:259</pos>
+        <rectangle>240:330</rectangle>
         <class>org.cesilko.rachota.gui.DateDialog</class>
         <title>Select date</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw37">
             <pos>762:321</pos>
+            <rectangle>16:10</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw38">
             <pos>762:331</pos>
+            <rectangle>16:10</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw39">
             <pos>669:551</pos>
+            <rectangle>51:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw40">
             <pos>730:551</pos>
+            <rectangle>73:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw37">
             <pos>631:319</pos>
+            <rectangle>89:24</rectangle>
             <class>ComboBoxUI</class>
             <value>[options] 9 : 12</value>
         </input_widget>
         <input_widget id="iw38">
             <pos>732:323</pos>
+            <rectangle>30:16</rectangle>
             <class>FormattedTextFieldUI</class>
             <value>2016</value>
         </input_widget>
         <input_widget id="iw39">
             <pos>611:522</pos>
+            <rectangle>214:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>29</descriptor>
             <value>Thursday - 27. October, 2016</value>
@@ -1225,241 +1450,287 @@
     </window>
     <window id="w5">
         <pos>463:69</pos>
+        <rectangle>511:646</rectangle>
         <class>org.cesilko.rachota.gui.MainWindow</class>
         <title>[00:00] - Rachota 2.3</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw52">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - About ...</label>
         </action_widget>
         <action_widget id="aw53">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - Settings ...</label>
         </action_widget>
         <action_widget id="aw54">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - Exit</label>
         </action_widget>
         <action_widget id="aw55">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Copy task</label>
         </action_widget>
         <action_widget id="aw56">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Move time</label>
         </action_widget>
         <action_widget id="aw57">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Correct duration</label>
         </action_widget>
         <action_widget id="aw58">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Add note</label>
         </action_widget>
         <action_widget id="aw59">
             <pos>563:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Tools - Switch date ...</label>
         </action_widget>
         <action_widget id="aw60">
             <pos>563:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Tools - Adjust start time ...</label>
         </action_widget>
         <action_widget id="aw41">
             <pos>481:125</pos>
+            <rectangle>475:577</rectangle>
             <class>TabbedPaneUI</class>
             <label>Day</label>
         </action_widget>
         <action_widget id="aw42">
             <pos>481:125</pos>
+            <rectangle>475:577</rectangle>
             <class>TabbedPaneUI</class>
             <label>Analytics</label>
         </action_widget>
         <action_widget id="aw43">
             <pos>789:154</pos>
+            <rectangle>159:29</rectangle>
             <class>ButtonUI</class>
             <label>Generate report ...</label>
         </action_widget>
         <action_widget id="aw46">
             <pos>560:198</pos>
+            <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw47">
             <pos>823:198</pos>
+            <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw44">
             <pos>539:201</pos>
+            <rectangle>16:12</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw48">
             <pos>925:201</pos>
+            <rectangle>16:12</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw45">
             <pos>539:213</pos>
+            <rectangle>16:11</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw49">
             <pos>925:213</pos>
+            <rectangle>16:11</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw50">
             <pos>488:243</pos>
+            <rectangle>460:451</rectangle>
             <class>TabbedPaneUI</class>
             <label>Tasks</label>
         </action_widget>
         <action_widget id="aw51">
             <pos>488:243</pos>
+            <rectangle>460:451</rectangle>
             <class>TabbedPaneUI</class>
             <label>Projects</label>
         </action_widget>
         <input_widget id="iw40">
             <pos>537:156</pos>
+            <rectangle>63:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Period:</descriptor>
             <value>[options] 1 : 4</value>
         </input_widget>
         <input_widget id="iw42">
             <pos>618:201</pos>
+            <rectangle>200:23</rectangle>
             <class>TextFieldUI</class>
             <value>44. week, 2016</value>
         </input_widget>
         <input_widget id="iw41">
             <pos>497:203</pos>
+            <rectangle>42:19</rectangle>
             <class>FormattedTextFieldUI</class>
             <value>0</value>
         </input_widget>
         <input_widget id="iw43">
             <pos>883:203</pos>
+            <rectangle>42:19</rectangle>
             <class>FormattedTextFieldUI</class>
             <value>0</value>
         </input_widget>
         <input_widget id="iw44">
             <pos>596:272</pos>
+            <rectangle>87:79</rectangle>
             <class>RadioButtonUI</class>
             <label/>
             <value>[options] 0 : 3</value>
         </input_widget>
         <input_widget id="iw52">
             <pos>888:274</pos>
+            <rectangle>52:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Total time:</descriptor>
             <value>00:00:00</value>
         </input_widget>
         <input_widget id="iw47">
             <pos>495:361</pos>
+            <rectangle>124:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Highlighted tasks:</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw48">
             <pos>495:394</pos>
+            <rectangle>91:24</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Chart type:</descriptor>
             <value>[options] 0 : 6</value>
         </input_widget>
         <input_widget id="iw50">
             <pos>706:394</pos>
+            <rectangle>234:24</rectangle>
             <class>ComboBoxUI</class>
             <value>[options] -1 : 0</value>
         </input_widget>
         <input_widget id="iw49">
             <pos>596:395</pos>
+            <rectangle>100:22</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Highlighted tasks:</descriptor>
             <value>[options] -1 : 0</value>
         </input_widget>
         <input_widget id="iw51">
             <pos>706:428</pos>
+            <rectangle>234:19</rectangle>
             <class>TextFieldUI</class>
             <value/>
         </input_widget>
     </window>
     <window id="w6">
         <pos>463:69</pos>
+        <rectangle>511:646</rectangle>
         <class>org.cesilko.rachota.gui.MainWindow</class>
         <title>[00:00] - Rachota 2.3</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw63">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - About ...</label>
         </action_widget>
         <action_widget id="aw64">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - Settings ...</label>
         </action_widget>
         <action_widget id="aw65">
             <pos>471:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>System - Exit</label>
         </action_widget>
         <action_widget id="aw66">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Copy task</label>
         </action_widget>
         <action_widget id="aw67">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Move time</label>
         </action_widget>
         <action_widget id="aw68">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Correct duration</label>
         </action_widget>
         <action_widget id="aw69">
             <pos>524:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Task - Add note</label>
         </action_widget>
         <action_widget id="aw70">
             <pos>563:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Tools - Switch date ...</label>
         </action_widget>
         <action_widget id="aw71">
             <pos>563:99</pos>
+            <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Tools - Adjust start time ...</label>
         </action_widget>
         <action_widget id="aw61">
             <pos>481:125</pos>
+            <rectangle>475:577</rectangle>
             <class>TabbedPaneUI</class>
             <label>Day</label>
         </action_widget>
         <action_widget id="aw62">
             <pos>481:125</pos>
+            <rectangle>475:577</rectangle>
             <class>TabbedPaneUI</class>
             <label>History</label>
         </action_widget>
         <input_widget id="iw53">
             <pos>498:348</pos>
+            <rectangle>301:23</rectangle>
             <class>RadioButtonUI</class>
             <label/>
             <value>[options] 0 : 3</value>
         </input_widget>
         <input_widget id="iw56">
             <pos>499:521</pos>
+            <rectangle>437:161</rectangle>
             <class>TextPaneUI</class>
             <descriptor>Statusing:</descriptor>
             <value>There are no measured data in the selected period thus no suggestions can be provided.</value>

@@ -332,13 +332,14 @@ public class AlloyTestCaseGenerator {
 										final Option_input_widget new_oiw = new Option_input_widget(
 												oiw.getId(), oiw.getLabel(), oiw.getClasss(),
 												oiw.getX(), oiw.getY(), oiw.getSize(),
+												oiw.getWidth(), oiw.getHeight(),
 												Integer.valueOf(inputdata));
 										new_oiw.setDescriptor(oiw.getDescriptor());
 										iws.add(new_oiw);
 									} else {
 										final Input_widget new_iw = new Input_widget(iw.getId(),
 												iw.getLabel(), iw.getClasss(), iw.getX(),
-												iw.getY(), inputdata);
+												iw.getY(), iw.getWidth(), iw.getHeight(), inputdata);
 										new_iw.setDescriptor(iw.getDescriptor());
 										iws.add(new_iw);
 										continue iwloop;
@@ -404,7 +405,8 @@ public class AlloyTestCaseGenerator {
 									}
 									final Selectable_widget new_sw = new Selectable_widget(
 											sw.getId(), sw.getLabel(), sw.getClasss(), sw.getX(),
-											sw.getY(), sw.getSize() + (map.keySet().size()), sel);
+											sw.getY(), sw.getWidth(), sw.getHeight(), sw.getSize()
+													+ (map.keySet().size()), sel);
 									new_sw.setDescriptor(sw.getDescriptor());
 									sws.add(new_sw);
 									continue swloop;
@@ -413,7 +415,8 @@ public class AlloyTestCaseGenerator {
 						}
 
 						oracle = new Window(target.getId(), target.getLabel(), target.getClasss(),
-								target.getX(), target.getY(), target.isModal());
+								target.getX(), target.getY(), target.getWidth(),
+								target.getHeight(), target.isModal());
 						oracle.setAction_widgets(aws);
 						oracle.setInput_widgets(iws);
 						oracle.setSelectable_widgets(sws);
@@ -453,11 +456,12 @@ public class AlloyTestCaseGenerator {
 						if (iw instanceof Option_input_widget) {
 							final Option_input_widget oiw = (Option_input_widget) iw;
 							target_iw = new Option_input_widget(oiw.getId(), oiw.getLabel(),
-									oiw.getClasss(), oiw.getX(), oiw.getY(), oiw.getSize(),
-									oiw.getSelected());
+									oiw.getClasss(), oiw.getX(), oiw.getY(), oiw.getWidth(),
+									oiw.getHeight(), oiw.getSize(), oiw.getSelected());
 						} else {
 							target_iw = new Input_widget(iw.getId(), iw.getLabel(), iw.getClasss(),
-									iw.getX(), iw.getY(), iw.getValue());
+									iw.getX(), iw.getY(), iw.getWidth(), iw.getHeight(),
+									iw.getValue());
 						}
 
 						target_iw.setDescriptor(iw.getDescriptor());
@@ -502,7 +506,7 @@ public class AlloyTestCaseGenerator {
 					if (aw.getId().equals(aw_id)) {
 						// target_aw = aw;
 						target_aw = new Action_widget(aw.getId(), aw.getLabel(), aw.getClasss(),
-								aw.getX(), aw.getY());
+								aw.getX(), aw.getY(), aw.getWidth(), aw.getHeight());
 						target_aw.setDescriptor(aw.getDescriptor());
 						break;
 					}
@@ -585,7 +589,8 @@ public class AlloyTestCaseGenerator {
 						// target_sw = sw;
 						// TODO: add the correct selected
 						target_sw = new Selectable_widget(sw.getId(), sw.getLabel(),
-								sw.getClasss(), sw.getX(), sw.getY(), objects_in_sw_at_t.size(), 0);
+								sw.getClasss(), sw.getX(), sw.getY(), sw.getWidth(),
+								sw.getHeight(), objects_in_sw_at_t.size(), 0);
 						target_sw.setDescriptor(sw.getDescriptor());
 						break;
 					}
