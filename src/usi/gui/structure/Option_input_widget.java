@@ -20,6 +20,7 @@ public class Option_input_widget extends Input_widget {
 		this.tos = new ArrayList<>();
 		this.tos.add(to);
 		if (size < 0 || selected < -1 || selected > size - 1) {
+
 			throw new Exception("Option_input_widget: wrong size or selected.");
 		}
 		this.size = size;
@@ -33,6 +34,7 @@ public class Option_input_widget extends Input_widget {
 		super(tos.get(0), id, label, classs, x, y, width, height, String.valueOf(selected));
 		this.tos = tos;
 		if (size < 0 || selected < -1 || selected > size - 1) {
+
 			throw new Exception("Option_input_widget: wrong size or selected.");
 		}
 		this.size = size;
@@ -45,6 +47,7 @@ public class Option_input_widget extends Input_widget {
 
 		super(id, label, classs, x, y, width, height, String.valueOf(selected));
 		if (size < 0 || selected < -1 || selected > size - 1) {
+
 			throw new Exception("Option_input_widget: wrong size or selected.");
 		}
 		this.tos = null;
