@@ -207,8 +207,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-			ts[0].interrupt();
-			ts[1].interrupt();
+		ts[0].interrupt();
+		ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -372,7 +372,7 @@ public class AlloyTestCaseGenerator {
 												final List<A4Tuple> appeared = AlloyUtil.getTuples(
 														solution, obj.atom(1));
 
-												assert (appeared.size() > 1);
+												assert (appeared.size() > 0);
 
 												int ind = -1;
 												for (final A4Tuple tt : appeared) {
@@ -406,7 +406,7 @@ public class AlloyTestCaseGenerator {
 									final Selectable_widget new_sw = new Selectable_widget(
 											sw.getId(), sw.getLabel(), sw.getClasss(), sw.getX(),
 											sw.getY(), sw.getWidth(), sw.getHeight(), sw.getSize()
-													+ (map.keySet().size()), sel);
+											+ (map.keySet().size()), sel);
 									new_sw.setDescriptor(sw.getDescriptor());
 									sws.add(new_sw);
 									continue swloop;

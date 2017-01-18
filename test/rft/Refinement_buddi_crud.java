@@ -51,7 +51,7 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 		final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
 		final List<Instance_GUI_pattern> res = gfs.match(pattern);
 
-		Instance_GUI_pattern match = res.get(3);
+		Instance_GUI_pattern match = res.get(1);
 
 		match.generateSpecificSemantics();
 		final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
