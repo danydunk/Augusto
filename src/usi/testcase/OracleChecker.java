@@ -187,6 +187,7 @@ public class OracleChecker {
 			return false;
 
 		}
+
 		if (actual.getSelectableWidgets().size() < oracle.getSelectableWidgets().size()) {
 
 			return false;
