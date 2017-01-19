@@ -197,7 +197,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -495,7 +495,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -823,7 +823,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -871,28 +871,22 @@ public class GUIFunctionality_refine {
 
 			boolean correct = false;
 			// if source and target window are the same
-			if (res.getTc()
-					.getActions()
-					.get(res.getTc().getActions().size() - 1)
-					.getWindow()
-					.getId()
-					.equals(res.getTc().getActions().get(res.getTc().getActions().size() - 1)
-							.getOracle().getId())) {
-				correct = oracle.checkWindow(res.getResults().get(res.getResults().size() - 1), res
-						.getTc().getActions().get(res.getTc().getActions().size() - 1).getOracle());
+			if (tc.getActions().get(tc.getActions().size() - 1).getWindow().getId()
+					.equals(tc.getActions().get(tc.getActions().size() - 1).getOracle().getId())) {
+				correct = oracle.checkWindow(res.getResults().get(res.getResults().size() - 1), tc
+						.getActions().get(tc.getActions().size() - 1).getOracle());
 			} else {
 				correct = res
 						.getResults()
 						.get(res.getResults().size() - 1)
 						.getId()
-						.equals(res.getTc().getActions().get(res.getTc().getActions().size() - 1)
-								.getOracle().getId());
+						.equals(tc.getActions().get(tc.getActions().size() - 1).getOracle().getId());
 			}
 
 			if (correct) {
 				// the beahviour was the same
 				System.out.println("SAME BEAHVIOUR");
-				size = res.getTc().getActions().size() + 2;
+				size = tc.getActions().size() + 2;
 			} else {
 				System.out.println("DIFFERENT BEAHVIOUR");
 				size = -1;
@@ -902,6 +896,7 @@ public class GUIFunctionality_refine {
 				final String new_prop = this.getAdaptedConstraint(this.instancePattern
 						.getSemantics());
 				if (new_prop == null) {
+
 					System.out.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY.");
 					this.current_semantic_property = "";
 					break;
