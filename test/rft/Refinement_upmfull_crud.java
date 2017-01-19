@@ -55,7 +55,11 @@ public class Refinement_upmfull_crud extends Refinement_upmfull_crudHelper {
 
 		match.generateSpecificSemantics();
 		final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
-		match = refiner.refine();
+		try {
+			match = refiner.refine();
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
 		ExperimentManager.cleanUP();
 
 		if (match == null) {
