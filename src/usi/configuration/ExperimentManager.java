@@ -108,7 +108,7 @@ public class ExperimentManager {
 			XMLUtil.save(directory + File.separator + "testcase_" + cont + ".xml",
 					GUITestCaseWriter.writeGUITestCase(result.getTc()));
 			final OracleChecker checker = new OracleChecker(gui);
-			checker.check(result, false);
+			checker.check(result);
 			final PrintWriter writer = new PrintWriter(directory + File.separator + "testcase_"
 					+ cont + "_result.txt", "UTF-8");
 			writer.print(result.getTc().toString() + System.getProperty("line.separator")
@@ -172,6 +172,6 @@ public class ExperimentManager {
 		new File(SER_RESET_FILE_PATH).delete();
 		new File(System.getProperty("user.dir") + File.separator + "aut.log").delete();
 		new File(System.getProperty("user.dir") + File.separator + "cobertura_warnings.out")
-		.delete();
+				.delete();
 	}
 }

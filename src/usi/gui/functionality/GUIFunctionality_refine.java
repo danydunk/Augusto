@@ -244,9 +244,19 @@ public class GUIFunctionality_refine {
 
 				final Pattern_action_widget paw = this.instancePattern.getPAW_for_AW(aw);
 
-				covered_edge = covered_edge
-						| this.pattern.isDyanamicEdge(paw.getId(), found.getPattern().getId());
+				if (!covered_edge
+						&& this.pattern.isDyanamicEdge(paw.getId(), found.getPattern().getId())) {
 
+					final OracleChecker oracle = new OracleChecker(this.gui);
+					if (oracle.checkWindow(found.getInstance(),
+							tc.getActions().get(tc.getActions().size() - 1).getOracle())) {
+						covered_edge = true;
+					}
+				}
+				// if(covered_edge){
+				// final OracleChecker oracle = new OracleChecker(this.gui);
+				// oracle.check(result, true)
+				// }
 			}
 
 			final Instance_GUI_pattern old = this.instancePattern.clone();
@@ -710,16 +720,19 @@ public class GUIFunctionality_refine {
 
 	private void semanticPropertyRefine() throws Exception {
 
+		boolean negative = true;
 		boolean oversemplified = false;
-		String first_prop = null;
 		int size = -1;
 		final long beginTime = System.currentTimeMillis();
 
 		final OracleChecker oracle = new OracleChecker(this.gui);
 
-		final String runCmd = "run {"
+		String runCmd = "run {"
 				+ "System and "
-				+ "(all t: Time| (t = T/last) <=> ((Track.op.t in Click and not click_semantics[Track.op.t.clicked, T/prev[t]]) or (Track.op.t in Fill and not fill_semantics[Track.op.t.filled, T/prev[t], Track.op.t.with]) or (Track.op.t in Select and not select_semantics[Track.op.t.wid, T/prev[t], Track.op.t.which])))}";
+				+ "(all t: Time| (t = T/last) <=> (Track.op.t in Click and not click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+		final String runCmd2 = "run {"
+				+ "System and "
+				+ "(all t: Time| (t = T/last) => (Track.op.t in Click and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 
 		List<String> true_constraints = new ArrayList<>();
 		true_constraints.add(this.current_semantic_property);
@@ -746,27 +759,15 @@ public class GUIFunctionality_refine {
 			if (size == ConfigurationManager.getRefinementAlloyTimeScope()) {
 				// if we reached the end we try again to find a property (in
 				// case the one we found was overly simple)
-				System.out.println("REACHED THE END OF THE LOOP. FOUNDING ALTERNATIVE.");
-				if (first_prop != null) {
-					break;
-				}
-				size = -1;
-				first_prop = this.current_semantic_property;
-				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
-						+ ")");
+				if (negative) {
+					System.out.println("REACHED THE END OF THE NEGATIVE LOOP.");
+					runCmd = runCmd2;
+					size = -1;
+					negative = false;
 
-				final String new_prop = this.getAdaptedConstraint(this.instancePattern
-						.getSemantics());
-				if (new_prop == null) {
-					System.out.println("ALTERNATIVE NOT FOUND.");
-					this.current_semantic_property = "";
-					break;
+				} else {
+					break mainloop;
 				}
-				System.out.println("ALTERNATIVE FOUND: " + new_prop);
-				this.current_semantic_property = new_prop;
-				true_constraints = new ArrayList<>();
-				true_constraints.add(this.current_semantic_property);
-				sem_with = addSemanticConstrain_to_Model(sem_with, true_constraints);
 			}
 
 			if ((System.currentTimeMillis() - beginTime) >= ConfigurationManager
@@ -801,7 +802,15 @@ public class GUIFunctionality_refine {
 				size = -1;
 				System.out.println("PROPERTY MAYBE OVERSEMPLIFIED");
 				if (oversemplified) {
-					break mainloop;
+					if (negative) {
+						System.out.println("REACHED THE END OF THE NEGATIVE LOOP.");
+						runCmd = runCmd2;
+						size = -1;
+						negative = false;
+						continue mainloop;
+					} else {
+						break mainloop;
+					}
 				}
 				oversemplified = true;
 
@@ -850,7 +859,6 @@ public class GUIFunctionality_refine {
 			} else {
 
 				System.out.println("TESTCASE ALREADY RUN!!!");
-
 			}
 			sem_with = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(sem_with, res
 					.getTc().getActions()));
@@ -861,10 +869,24 @@ public class GUIFunctionality_refine {
 			// }
 			this.observed_tcs.add(res);
 
-			if (oracle.check(res, true)) {
+			boolean correct = false;
+			// if source and target window are the same
+			if (tc.getActions().get(tc.getActions().size() - 1).getWindow().getId()
+					.equals(tc.getActions().get(tc.getActions().size() - 1).getOracle().getId())) {
+				correct = oracle.checkWindow(res.getResults().get(res.getResults().size() - 1), tc
+						.getActions().get(tc.getActions().size() - 1).getOracle());
+			} else {
+				correct = res
+						.getResults()
+						.get(res.getResults().size() - 1)
+						.getId()
+						.equals(tc.getActions().get(tc.getActions().size() - 1).getOracle().getId());
+			}
+
+			if (correct) {
 				// the beahviour was the same
 				System.out.println("SAME BEAHVIOUR");
-				size = res.getTc().getActions().size() + 2;
+				size = tc.getActions().size() + 2;
 			} else {
 				System.out.println("DIFFERENT BEAHVIOUR");
 				size = -1;
@@ -874,6 +896,7 @@ public class GUIFunctionality_refine {
 				final String new_prop = this.getAdaptedConstraint(this.instancePattern
 						.getSemantics());
 				if (new_prop == null) {
+
 					System.out.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY.");
 					this.current_semantic_property = "";
 					break;
@@ -884,13 +907,12 @@ public class GUIFunctionality_refine {
 				sem_with = addSemanticConstrain_to_Model(sem_with, true_constraints);
 			}
 		}
-		if (first_prop != null
-				&& this.validateProperty(first_prop, this.instancePattern.getSemantics(),
-						this.observed_tcs)) {
-			this.current_semantic_property = first_prop;
-		}
-		if (this.current_semantic_property == null && this.current_semantic_property.length() > 0) {
+
+		if (this.current_semantic_property != null && this.current_semantic_property.length() > 0) {
 			System.out.println("SEMANTIC PROPERTY FOUND.");
+		} else {
+			System.out.println("SEMANTIC PROPERTY NOT FOUND.");
+
 		}
 
 		System.out.println("SEMANTIC PROPERTY REFINE: end.");
