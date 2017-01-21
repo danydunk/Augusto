@@ -210,17 +210,17 @@ public class GUIFunctionality_validate {
 		final List<Fact> facts = this.instancePattern.getSemantics().getFacts();
 		final Fact new_fact = new Fact(
 				"filter_redundant_actions",
-				"no t: Time | #Track.op.t = 1 and Track.op.t in Select and Track.op.t.wid.selected.(T/prev[t]) = Track.op.t.which"
+				"no t: Time | #Track.op.t = 1 and Track.op.t in Select and Track.op.(T/prev[t]) in Select and Track.op.(T/prev[t]).wid = Track.op.t.wid"
 						+ System.lineSeparator()
-						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.t.filled.content.(T/prev[t]) = Track.op.t.with"
+						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.(T/prev[t]) in Fill and Track.op.(T/prev[t]).filled = Track.op.t.filled"
 						+ System.lineSeparator()
-						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click  and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
+						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
 
 		facts.add(new_fact);
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -228,7 +228,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
