@@ -18,6 +18,9 @@ abstract sig For_viewing extends Input_widget {
 }
 abstract sig For_selecting extends Selectable_widget{ }
 
+fact{
+	no t: Time |  #Track.op.t = 1 and Track.op.t in Fill and Track.op.t.with = Track.op.t.filled.content.(T/prev[t])
+}
 
 fact {
 	#For_viewing > 0 => #For_viewing = #For_inputing
