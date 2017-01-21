@@ -199,7 +199,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -497,7 +497,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -732,9 +732,7 @@ public class GUIFunctionality_refine {
 		String runCmd = "run {"
 				+ "System and "
 				+ "(all t: Time| (t = T/last) <=> (Track.op.t in Click and not click_semantics[Track.op.t.clicked, T/prev[t]]))}";
-		final String runCmd2 = "run {"
-				+ "System and "
-				+ "(all t: Time| (t = T/last) => (Track.op.t in Click and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+		final String runCmd2 = this.getPositiveRunCommand();
 
 		List<String> true_constraints = new ArrayList<>();
 		true_constraints.add(this.current_semantic_property);
@@ -825,7 +823,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -1214,6 +1212,29 @@ public class GUIFunctionality_refine {
 		}
 	}
 
+	private String getPositiveRunCommand() throws Exception {
+
+		final List<Action_widget> aws = new ArrayList<>();
+		for (final Window w : this.instancePattern.getGui().getWindows()) {
+			aws.addAll(this.instancePattern.getGui().getDynamicBackwardLinks(w.getId()));
+		}
+		String set = "(";
+		for (final Action_widget aw : aws) {
+			set += "Action_widget_" + aw.getId() + "+";
+		}
+		if (set.equals("(")) {
+			return "run {"
+					+ "System and "
+					+ "(all t: Time| (t = T/last) => (Track.op.t in Click and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+		} else {
+			set = set.substring(0, set.length() - 1) + ")";
+			return "run {"
+					+ "System and "
+					+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked = "
+			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+		}
+	}
+
 	final class Run_command_thread extends Thread {
 
 		private A4Solution solution;
@@ -1250,5 +1271,4 @@ public class GUIFunctionality_refine {
 			}
 		}
 	}
-
 }
