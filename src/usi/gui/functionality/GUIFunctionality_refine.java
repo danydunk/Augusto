@@ -32,10 +32,8 @@ import src.usi.testcase.GUITestCaseResult;
 import src.usi.testcase.OracleChecker;
 import src.usi.testcase.TestCaseRunner;
 import src.usi.testcase.structure.Click;
-import src.usi.testcase.structure.Fill;
 import src.usi.testcase.structure.GUIAction;
 import src.usi.testcase.structure.GUITestCase;
-import src.usi.testcase.structure.Select;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
@@ -63,7 +61,7 @@ public class GUIFunctionality_refine {
 		this.observed_tcs = new ArrayList<>();
 		this.covered_dyn_edges = new ArrayList<>();
 		// this.current_semantic_property =
-		// "one Property_unique_0:Property_unique|one Property_required_0:Property_required|Property_required = (Property_required_0) and Property_unique = (Property_unique_0) and Property_required_0.requireds = (Input_widget_iw65) and #Property_unique_0.uniques = 0";
+		// "one Property_unique_0:Property_unique|one Property_required_0:Property_required|Property_unique = (Property_unique_0) and Property_required = (Property_required_0) and #Property_unique_0.uniques = 0 and Property_required_0.requireds = (Input_widget_iw1)";
 		this.current_semantic_property = "";
 		this.discarded_semantic_properties = new ArrayList<>();
 		this.unsat_commands = new ArrayList<>();
@@ -842,24 +840,24 @@ public class GUIFunctionality_refine {
 			}
 			oversemplified = false;
 			GUITestCase tc = tests.get(0);
-			for (final GUIAction act : tc.getActions()) {
-				if (act instanceof Click) {
-					System.out.println("click");
-					System.out.println(act.getWidget().getId());
-				}
-				if (act instanceof Fill) {
-					final Fill f = (Fill) act;
-					System.out.println("fill");
-					System.out.println(act.getWidget().getId());
-					System.out.println(f.getInput());
-				}
-				if (act instanceof Select) {
-					System.out.println("select");
-					final Select s = (Select) act;
-					System.out.println(act.getWidget().getId());
-					System.out.println(s.getIndex());
-				}
-			}
+			// for (final GUIAction act : tc.getActions()) {
+			// if (act instanceof Click) {
+			// System.out.println("click");
+			// System.out.println(act.getWidget().getId());
+			// }
+			// if (act instanceof Fill) {
+			// final Fill f = (Fill) act;
+			// System.out.println("fill");
+			// System.out.println(act.getWidget().getId());
+			// System.out.println(f.getInput());
+			// }
+			// if (act instanceof Select) {
+			// System.out.println("select");
+			// final Select s = (Select) act;
+			// System.out.println(act.getWidget().getId());
+			// System.out.println(s.getIndex());
+			// }
+			// }
 			GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
 			if (res == null) {
 				final TestCaseRunner runner = new TestCaseRunner(this.gui);
@@ -892,14 +890,14 @@ public class GUIFunctionality_refine {
 					.equals(tc.getActions().get(tc.getActions().size() - 1).getOracle().getId())) {
 				correct = oracle.checkWindow(res.getResults().get(res.getResults().size() - 1), tc
 						.getActions().get(tc.getActions().size() - 1).getOracle());
-				System.out.println("samew");
+				// System.out.println("samew");
 			} else {
 				correct = res
 						.getResults()
 						.get(res.getResults().size() - 1)
 						.getId()
 						.equals(tc.getActions().get(tc.getActions().size() - 1).getOracle().getId());
-				System.out.println("not samew");
+				// System.out.println("not samew");
 
 			}
 
@@ -911,7 +909,7 @@ public class GUIFunctionality_refine {
 				System.out.println("DIFFERENT BEAHVIOUR");
 				size = -1;
 
-				System.out.println(oracle.getDescriptionOfLastOracleCheck());
+				// System.out.println(oracle.getDescriptionOfLastOracleCheck());
 				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
 						+ ")");
 

@@ -97,10 +97,10 @@ public class Main extends MainHelper {
 				final List<Instance_GUI_pattern> refined_instances = new ArrayList<>();
 				true_instances.put(pattern, refined_instances);
 				for (int y = 0; y < candidate_instances.get(pattern).size(); y++) {
-					// if (y != 2) {
-					// refined_instances.add(null);
-					// continue;
-					// }
+					if (y != 1) {
+						refined_instances.add(null);
+						continue;
+					}
 					final String match_folder = out_folder + File.separator + patterns_name[x]
 							+ "_match_" + (y + 1) + File.separator;
 					ExperimentManager.createFolder(match_folder);
@@ -145,9 +145,9 @@ public class Main extends MainHelper {
 			for (int x = 0; x < patterns.length; x++) {
 				final GUI_Pattern pattern = patterns[x];
 				for (int y = 0; y < true_instances.get(pattern).size(); y++) {
-					// if (y != 2) {
-					// continue;
-					// }
+					if (y != 1) {
+						continue;
+					}
 					if (true_instances.get(pattern).get(y) != null) {
 						final String match_folder = out_folder + File.separator + patterns_name[x]
 								+ "_match_" + (y + 1) + File.separator + "testcases"
