@@ -9,7 +9,7 @@
 			<label>^(login|enter|go).*$</label>
 			<class>.*</class>
 		</action_widget>
-		<action_widget id="paw2" card="one" alloy="Read_trigger">
+		<action_widget id="paw2" card="one" alloy="Signup">
 			<label>^(register|signup|sign up).*$</label>
 			<class>.*</class>
 		</action_widget>
@@ -36,22 +36,22 @@
 			<label>^(cancel|clear|back)</label>
 			<class>.*</class>
 		</action_widget>
-		<input_widget id="piw3" card="one" alloy="User">
+		<input_widget id="piw3" card="one" alloy="User_save">
 			<label>^(user|username|email).*</label>
 			<class>.*</class>
 			<text>.*</text>
 		</input_widget>
-		<input_widget id="piw4" card="one" alloy="Password">
-			<label>^(pass|password).*</label>
+		<input_widget id="piw4" card="one" alloy="Password_save">
+			<label>^(?!re-enter|repeat)(pass|password).*</label>
 			<class>.*</class>
 			<text>.*</text>
 		</input_widget>
-		<input_widget id="piw5" card="one" alloy="Password">
+		<input_widget id="piw5" card="one" alloy="Re_password">
 			<label>^(repeat|re-enter).*</label>
 			<class>.*</class>
 			<text>.*</text>
 		</input_widget>
-		<input_widget id="piw5" card="set" alloy="Field">
+		<input_widget id="piw6" card="set" alloy="Field">
 			<label>.*</label>
 			<class>.*</class>
 			<text>.*</text>

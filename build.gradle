@@ -142,7 +142,7 @@ commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\rachota\\bin > run.bat 
 }
 task deployOnlineShopping(type:Exec) {
 
-commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\onlineshopping\\bin > run.bat && echo cd "+projectDir+"\\..\\onlineshopping\\bin >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\OnlineShopping.jar >> run.bat && echo cd "+projectDir+"  >> run.bat >> .\\run.bat && .\\run.bat && del /Q /F run.bat"
+commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\onlineshoppingsut\\bin > run.bat && echo cd "+projectDir+"\\..\\onlineshoppingsut\\bin >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\OnlineShopping.jar >> run.bat && echo cd "+projectDir+"  >> run.bat >> .\\run.bat && .\\run.bat && del /Q /F run.bat"
 }
 task testall(type:Exec) {
 

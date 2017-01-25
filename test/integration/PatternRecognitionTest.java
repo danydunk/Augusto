@@ -140,6 +140,111 @@ public class PatternRecognitionTest {
 
 			// we load a gui pattern
 			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/crud.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/for_test/xml/onlineshopping.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
+			assertEquals(0, res.size());
+
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void test5() {
+
+		System.out.println("test5");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/auth.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/upm.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
+			assertEquals(0, res.size());
+
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void test6() {
+
+		System.out.println("test6");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/auth.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/buddi.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
+			assertEquals(0, res.size());
+
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void test7() {
+
+		System.out.println("test7");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/auth.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/rachota.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
+			assertEquals(0, res.size());
+
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void test8() {
+
+		System.out.println("test8");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
 					+ "/files/guipatterns/auth.xml");
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
@@ -158,5 +263,4 @@ public class PatternRecognitionTest {
 			fail();
 		}
 	}
-
 }

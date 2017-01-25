@@ -66,6 +66,17 @@
 	  <valid>60.00</valid>
     </values>
   </DATA>
+   <DATA>
+    <metadata>mobile</metadata>
+    <values>
+      <valid>0000000000</valid>
+      <valid>0000000001</valid>
+	  <valid>0000000002</valid>
+	  <invalid>aaa</invalid>
+	  <invalid>bbb</invalid>
+	  <invalid>ccc</invalid>
+    </values>
+  </DATA>
   <DATA type="itemized">
     <metadata></metadata>
     <values>
