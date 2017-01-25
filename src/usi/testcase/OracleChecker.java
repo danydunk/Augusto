@@ -174,60 +174,110 @@ public class OracleChecker {
 
 	public boolean checkWindow(final Window actual, final Window oracle) {
 
+		this.description_last_check = "";
 		if (!actual.getId().equals(oracle.getId())) {
+			// System.out.println("diff winid " + actual.getId() + " " +
+			// oracle.getId());
+			this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+			this.description_last_check += System.lineSeparator();
+			this.description_last_check += System.lineSeparator();
+			this.description_last_check += "EXPECTED WINDOW " + oracle.getId() + " "
+					+ oracle.getLabel() + " BUT IT WAS " + actual.getId() + " " + actual.getLabel();
+			this.description_last_check += System.lineSeparator();
+
 			return false;
 		}
 		if (actual.getActionWidgets().size() < oracle.getActionWidgets().size()) {
+			this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+			this.description_last_check += System.lineSeparator();
+			this.description_last_check += System.lineSeparator();
+			this.description_last_check += "EXPECTED ACTION WIDGET SIZE "
+					+ oracle.getActionWidgets().size() + " BUT IT WAS "
+					+ actual.getActionWidgets().size();
+			this.description_last_check += System.lineSeparator();
 
 			return false;
-
 		}
 		if (actual.getInputWidgets().size() < oracle.getInputWidgets().size()) {
+			this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+			this.description_last_check += System.lineSeparator();
+			this.description_last_check += System.lineSeparator();
+			this.description_last_check += "EXPECTED INPUT WIDGET SIZE "
+					+ oracle.getInputWidgets().size() + " BUT IT WAS "
+					+ actual.getInputWidgets().size();
+			this.description_last_check += System.lineSeparator();
 
 			return false;
 
 		}
-
 		if (actual.getSelectableWidgets().size() < oracle.getSelectableWidgets().size()) {
+			this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+			this.description_last_check += System.lineSeparator();
+			this.description_last_check += System.lineSeparator();
+			this.description_last_check += "EXPECTED SELECTABLE WIDGET SIZE "
+					+ oracle.getSelectableWidgets().size() + " BUT IT WAS "
+					+ actual.getSelectableWidgets().size();
+			this.description_last_check += System.lineSeparator();
 
 			return false;
-
 		}
+
 		for (final Input_widget iw : oracle.getInputWidgets()) {
 			final Input_widget actual_iw = (Input_widget) actual.getWidget(iw.getId());
 			if (actual_iw == null) {
-
-				return false;
-
-			}
-			if (!actual_iw.getValue().equals(iw.getValue())) {
-				// TODO: change it
-				// we manage iw that have a standard value
-				final Window ww = this.gui.getWindow(oracle.getId());
-				final Input_widget iw_gui = (Input_widget) ww.getWidget(actual_iw.getId());
-				// if the iw has a standard value and the oracle expects
-				// nothing it is ok
-				if (iw_gui.getValue() != null && iw_gui.getValue().length() > 0
-						&& iw.getValue().length() == 0) {
-
-					continue;
-				}
+				this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += "INPUT WIDGET " + iw.getId() + " NOT FOUND";
+				this.description_last_check += System.lineSeparator();
 
 				return false;
 			}
+			// if (!actual_iw.getValue().equals(iw.getValue())) {
+			// // TODO: change it
+			// // we manage iw that have a standard value
+			// final Window ww = this.gui.getWindow(oracle.getId());
+			// final Input_widget iw_gui = (Input_widget)
+			// ww.getWidget(actual_iw.getId());
+			// // if the iw has a standard value and the oracle expects
+			// // nothing it is ok
+			// if (iw_gui.getValue() != null && iw_gui.getValue().length() > 0
+			// && iw.getValue().length() == 0) {
+			// continue;
+			// }
+			//
+			// this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+			// this.description_last_check += System.lineSeparator();
+			// this.description_last_check += System.lineSeparator();
+			// this.description_last_check += "EXPECTED INPUT WIDGET " +
+			// iw.getId() + " VALUE "
+			// + iw.getValue() + " BUT IT WAS " + actual_iw.getValue();
+			// this.description_last_check += System.lineSeparator();
+			//
+			// return false;
+			// }
 		}
 
 		for (final Selectable_widget sw : oracle.getSelectableWidgets()) {
 			final Selectable_widget actual_sw = (Selectable_widget) actual.getWidget(sw.getId());
 			if (actual_sw == null) {
+				this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += "SELECTABLE WIDGET " + sw.getId() + " NOT FOUND";
+				this.description_last_check += System.lineSeparator();
 
 				return false;
-
 			}
 			if (actual_sw.getSize() != sw.getSize()) {
+				this.description_last_check += "FUNCTIONAL ORACLE ERROR";
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += System.lineSeparator();
+				this.description_last_check += "EXPECTED SELECTABLE WIDGET SIZE " + sw.getSize()
+						+ " BUT IT WAS " + actual_sw.getSize();
+				this.description_last_check += System.lineSeparator();
 
 				return false;
-
 			}
 		}
 		return true;

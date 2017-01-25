@@ -73,7 +73,7 @@ public class Refinement_upmfull_crud extends Refinement_upmfull_crudHelper {
 			}
 		}
 
-		if (!sem_prop.contains("#Property_required_0.requireds = 0")
+		if (sem_prop.startsWith("not") || !sem_prop.contains("#Property_required_0.requireds = 0")
 				|| !sem_prop.contains("Property_unique_0.uniques = (Input_widget_iw17)")) {
 			throw new Exception("");
 		}

@@ -97,7 +97,7 @@ public class Main extends MainHelper {
 				final List<Instance_GUI_pattern> refined_instances = new ArrayList<>();
 				true_instances.put(pattern, refined_instances);
 				for (int y = 0; y < candidate_instances.get(pattern).size(); y++) {
-					// if (y != 2) {
+					// if (y != 1) {
 					// refined_instances.add(null);
 					// continue;
 					// }
@@ -145,7 +145,7 @@ public class Main extends MainHelper {
 			for (int x = 0; x < patterns.length; x++) {
 				final GUI_Pattern pattern = patterns[x];
 				for (int y = 0; y < true_instances.get(pattern).size(); y++) {
-					// if (y != 2) {
+					// if (y != 1) {
 					// continue;
 					// }
 					if (true_instances.get(pattern).get(y) != null) {

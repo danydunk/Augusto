@@ -18,6 +18,9 @@ abstract sig For_viewing extends Input_widget {
 }
 abstract sig For_selecting extends Selectable_widget{ }
 
+fact{
+	no t: Time |  #Track.op.t = 1 and Track.op.t in Fill and Track.op.t.with = Track.op.t.filled.content.(T/prev[t])
+}
 
 fact {
 	#For_viewing > 0 => #For_viewing = #For_inputing
@@ -89,15 +92,15 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Delete_trigger) => (#For_selecting.selected.t' = 0 and delete [t, t'] and #Current_crud_op.operation.t' = 0)
 	
 	(aw in Cancel and #Create_trigger > 0) => (#Current_crud_op.operation.t' = 0 and For_selecting.list.t' = For_selecting.list.t and #For_selecting.selected.t' = 0)
-	(aw in Cancel and #Create_trigger = 0) => (Current_crud_op.operation.t' = CREATE and For_selecting.list.t' = For_selecting.list.t and #For_selecting.selected.t' = 0)
-
+	(aw in Cancel and #Create_trigger = 0) => (Current_crud_op.operation.t' = CREATE and For_selecting.list.t' = For_selecting.list.t and #For_selecting.selected.t' = 0  and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #For_selecting.selected.t' = 0)
+	
 	(aw in Ok and Current_crud_op.operation.t in CREATE) => (#For_selecting.selected.t' = 0 and add [t, t'])
 	(aw in Ok and Current_crud_op.operation.t in UPDATE) => (#For_selecting.selected.t' = 0 and update [t, t'])
 	(aw in Ok and #Create_trigger > 0) => (#Current_crud_op.operation.t' =0)
-	(aw in Ok and #Create_trigger = 0) => (Current_crud_op.operation.t' =CREATE)
-
+	(aw in Ok and #Create_trigger = 0) => (Current_crud_op.operation.t' =CREATE  and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #For_selecting.selected.t' = 0)
+	
 	(aw in Continue and #Create_trigger > 0) => (#For_selecting.selected.t' = 0  and #Current_crud_op.operation.t' = 0 and For_selecting.list.t' = For_selecting.list.t)
-	(aw in Continue and #Create_trigger = 0) => (#For_selecting.selected.t' = 0  and Current_crud_op.operation.t' = CREATE and For_selecting.list.t' = For_selecting.list.t)	
+	(aw in Continue and #Create_trigger = 0) => (#For_selecting.selected.t' = 0  and Current_crud_op.operation.t' = CREATE and For_selecting.list.t' = For_selecting.list.t  and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #For_selecting.selected.t' = 0)
 }
 pred click_fail_post [aw: Action_widget, t, t': Time]	{
 	For_selecting.list.t' = For_selecting.list.t

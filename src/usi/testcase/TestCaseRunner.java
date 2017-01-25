@@ -195,6 +195,15 @@ public class TestCaseRunner {
 				} else {
 					results.add(null);
 				}
+			} else {
+				if (cont < actions.size() - 1) {
+					// if the action was not executed and the next action is in
+					// a different window
+					if (!actions.get(cont + 1).getWindow().getId()
+							.equals(act_to_execute.getWindow().getId())) {
+						break mainloop;
+					}
+				}
 			}
 
 		}

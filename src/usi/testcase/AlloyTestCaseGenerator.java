@@ -207,8 +207,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-			ts[0].interrupt();
-			ts[1].interrupt();
+		ts[0].interrupt();
+		ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -328,7 +328,6 @@ public class AlloyTestCaseGenerator {
 										if (inputdata.length() == 0) {
 											inputdata = String.valueOf(oiw.getSelected());
 										}
-
 										final Option_input_widget new_oiw = new Option_input_widget(
 												oiw.getId(), oiw.getLabel(), oiw.getClasss(),
 												oiw.getX(), oiw.getY(), oiw.getWidth(),
@@ -406,7 +405,7 @@ public class AlloyTestCaseGenerator {
 									final Selectable_widget new_sw = new Selectable_widget(
 											sw.getId(), sw.getLabel(), sw.getClasss(), sw.getX(),
 											sw.getY(), sw.getWidth(), sw.getHeight(), sw.getSize()
-													+ (map.keySet().size()), sel);
+											+ (map.keySet().size()), sel);
 									new_sw.setDescriptor(sw.getDescriptor());
 									sws.add(new_sw);
 									continue swloop;
@@ -478,7 +477,6 @@ public class AlloyTestCaseGenerator {
 
 						assert (value.startsWith("Option_value_"));
 						inputdata = value.replace("Option_value_", "").replace("$0", "");
-						;
 					} else {
 						inputdata = input_data_map.get(value);
 

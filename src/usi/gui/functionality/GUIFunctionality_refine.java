@@ -61,7 +61,7 @@ public class GUIFunctionality_refine {
 		this.observed_tcs = new ArrayList<>();
 		this.covered_dyn_edges = new ArrayList<>();
 		// this.current_semantic_property =
-		// "one Property_unique_0:Property_unique|one Property_required_0:Property_required|Property_required = (Property_required_0) and Property_unique = (Property_unique_0) and Property_required_0.requireds = (Input_widget_iw65) and #Property_unique_0.uniques = 0";
+		// "one Property_unique_0:Property_unique|one Property_required_0:Property_required|Property_unique = (Property_unique_0) and Property_required = (Property_required_0) and #Property_unique_0.uniques = 0 and Property_required_0.requireds = (Input_widget_iw1)";
 		this.current_semantic_property = "";
 		this.discarded_semantic_properties = new ArrayList<>();
 		this.unsat_commands = new ArrayList<>();
@@ -730,9 +730,7 @@ public class GUIFunctionality_refine {
 		String runCmd = "run {"
 				+ "System and "
 				+ "(all t: Time| (t = T/last) <=> (Track.op.t in Click and not click_semantics[Track.op.t.clicked, T/prev[t]]))}";
-		final String runCmd2 = "run {"
-				+ "System and "
-				+ "(all t: Time| (t = T/last) => (Track.op.t in Click and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+		final String runCmd2 = this.getPositiveRunCommand();
 
 		List<String> true_constraints = new ArrayList<>();
 		true_constraints.add(this.current_semantic_property);
@@ -745,11 +743,11 @@ public class GUIFunctionality_refine {
 		final List<Fact> facts = sem_with.getFacts();
 		final Fact new_fact = new Fact(
 				"filter_redundant_actions",
-				"no t: Time | #Track.op.t = 1 and Track.op.t in Select and Track.op.t.wid.selected.(T/prev[t]) = Track.op.t.which"
+				"no t: Time | #Track.op.t = 1 and Track.op.t in Select and Track.op.(T/prev[t]) in Select and Track.op.(T/prev[t]).wid = Track.op.t.wid"
 						+ System.lineSeparator()
-						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.t.filled.content.(T/prev[t]) = Track.op.t.with"
+						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.(T/prev[t]) in Fill and Track.op.(T/prev[t]).filled = Track.op.t.filled"
 						+ System.lineSeparator()
-						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click  and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
+						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
 		facts.add(new_fact);
 		sem_with = new SpecificSemantics(sem_with.getSignatures(), facts, sem_with.getPredicates(),
 				sem_with.getFunctions(), sem_with.getOpenStatements());
@@ -842,7 +840,24 @@ public class GUIFunctionality_refine {
 			}
 			oversemplified = false;
 			GUITestCase tc = tests.get(0);
-
+			// for (final GUIAction act : tc.getActions()) {
+			// if (act instanceof Click) {
+			// System.out.println("click");
+			// System.out.println(act.getWidget().getId());
+			// }
+			// if (act instanceof Fill) {
+			// final Fill f = (Fill) act;
+			// System.out.println("fill");
+			// System.out.println(act.getWidget().getId());
+			// System.out.println(f.getInput());
+			// }
+			// if (act instanceof Select) {
+			// System.out.println("select");
+			// final Select s = (Select) act;
+			// System.out.println(act.getWidget().getId());
+			// System.out.println(s.getIndex());
+			// }
+			// }
 			GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
 			if (res == null) {
 				final TestCaseRunner runner = new TestCaseRunner(this.gui);
@@ -875,12 +890,15 @@ public class GUIFunctionality_refine {
 					.equals(tc.getActions().get(tc.getActions().size() - 1).getOracle().getId())) {
 				correct = oracle.checkWindow(res.getResults().get(res.getResults().size() - 1), tc
 						.getActions().get(tc.getActions().size() - 1).getOracle());
+				// System.out.println("samew");
 			} else {
 				correct = res
 						.getResults()
 						.get(res.getResults().size() - 1)
 						.getId()
 						.equals(tc.getActions().get(tc.getActions().size() - 1).getOracle().getId());
+				// System.out.println("not samew");
+
 			}
 
 			if (correct) {
@@ -890,6 +908,8 @@ public class GUIFunctionality_refine {
 			} else {
 				System.out.println("DIFFERENT BEAHVIOUR");
 				size = -1;
+
+				// System.out.println(oracle.getDescriptionOfLastOracleCheck());
 				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
 						+ ")");
 
@@ -1190,6 +1210,29 @@ public class GUIFunctionality_refine {
 		}
 	}
 
+	private String getPositiveRunCommand() throws Exception {
+
+		final List<Action_widget> aws = new ArrayList<>();
+		for (final Window w : this.instancePattern.getGui().getWindows()) {
+			aws.addAll(this.instancePattern.getGui().getDynamicBackwardLinks(w.getId()));
+		}
+		String set = "(";
+		for (final Action_widget aw : aws) {
+			set += "Action_widget_" + aw.getId() + "+";
+		}
+		if (set.equals("(")) {
+			return "run {"
+					+ "System and "
+					+ "(all t: Time| (t = T/last) => (Track.op.t in Click and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+		} else {
+			set = set.substring(0, set.length() - 1) + ")";
+			return "run {"
+			+ "System and "
+			+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
+					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+		}
+	}
+
 	final class Run_command_thread extends Thread {
 
 		private A4Solution solution;
@@ -1226,5 +1269,4 @@ public class GUIFunctionality_refine {
 			}
 		}
 	}
-
 }
