@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	alloy="AUTH.als" alloy_without_unvalid_data="AUTH_without_unvalid.als" name="AUTH">
+	<window id="initial" dynamic="false" card="one" alloy="Initial">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>any</modal>
+		<action_widget id="paw1" card="one" alloy="Login">
+			<label>^(login|enter|go).*$</label>
+			<class>.*</class>
+		</action_widget>
+		<action_widget id="paw2" card="one" alloy="Read_trigger">
+			<label>^(register|signup|sign up).*$</label>
+			<class>.*</class>
+		</action_widget>
+		<input_widget id="piw1" card="one" alloy="User">
+			<label>^(user|username|email).*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+		<input_widget id="piw2" card="one" alloy="Password">
+			<label>^(pass|password).*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+	</window>
+	<window id="signup" card="one" dynamic="false" alloy="Signup">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>any</modal>
+		<action_widget id="paw3" card="one" alloy="Ok">
+			<label>^(ok|save|record|signup|sign up)</label>
+			<class>.*</class>
+		</action_widget>
+		<action_widget id="paw4" card="one" alloy="Cancel">
+			<label>^(cancel|clear|back)</label>
+			<class>.*</class>
+		</action_widget>
+		<input_widget id="piw3" card="one" alloy="User">
+			<label>^(user|username|email).*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+		<input_widget id="piw4" card="one" alloy="Password">
+			<label>^(pass|password).*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+		<input_widget id="piw5" card="one" alloy="Password">
+			<label>^(repeat|re-enter).*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+		<input_widget id="piw5" card="set" alloy="Field">
+			<label>.*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+	</window>
+	<window id="logged" card="one" dynamic="true" alloy="Logged">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>any</modal>
+		<action_widget id="paw5" card="one" alloy="Logout">
+			<label>^(logout|exit).*$</label>
+			<class>.*</class>
+		</action_widget>
+	</window>
+	<edge type="dynamic">
+		<from>paw1</from>
+		<to>logged</to>
+	</edge>
+	<edge type="static">
+		<from>paw2</from>
+		<to>signup</to>
+	</edge>
+	<edge type="static">
+		<from>paw4</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw3</from>
+		<to>signup</to>
+		<to>initial</to>		
+	</edge>
+	<edge type="static">
+		<from>paw5</from>
+		<to>initial</to>		
+	</edge>
+</pattern>

@@ -197,7 +197,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -495,7 +495,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -546,7 +546,7 @@ public class GUIFunctionality_refine {
 
 				try {
 					sem = AlloyUtil.getTCaseModel(in_sem, res.getTc().getActions(), res
-							.getResults().get(res.getResults().size() - 1));
+							.getResults().get(res.getResults().size() - 1), this.instancePattern);
 				} catch (final Exception e) {
 					e.printStackTrace();
 				}
@@ -557,7 +557,7 @@ public class GUIFunctionality_refine {
 			}
 
 			final SpecificSemantics new_sem = addSemanticConstrain_to_Model(sem, constraints);
-
+			// System.out.println(new_sem);
 			final Module comp = AlloyUtil.compileAlloyModel(new_sem.toString());
 			A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
 
@@ -573,6 +573,7 @@ public class GUIFunctionality_refine {
 					continue;
 				}
 			} else {
+				// System.out.println(new_sem);
 				System.out.println("GET ADAPTED CONSTRAINT: null end.");
 				// System.out.println(new_sem);
 				return null;
@@ -821,7 +822,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -972,7 +973,8 @@ public class GUIFunctionality_refine {
 
 				final Alloy_Model sem = AlloyUtil.getTCaseModel(sem_filtered, batch.get(cont)
 						.getTc().getActions(),
-						batch.get(cont).getResults().get(batch.get(cont).getResults().size() - 1));
+						batch.get(cont).getResults().get(batch.get(cont).getResults().size() - 1),
+						this.instancePattern);
 
 				final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
 				final Run_command_thread run = new Run_command_thread(comp, comp.getAllCommands()
@@ -1227,9 +1229,9 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-			+ "System and "
-			+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
-					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+					+ "System and "
+					+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
+			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
 

@@ -20,11 +20,11 @@ import com.rational.test.ft.vp.IFtVerificationPoint;
 import com.ibm.rational.test.ft.object.interfaces.sapwebportal.*;
 /**
  * Script Name   : <b>Refinement_buddi_crud</b><br>
- * Generated     : <b>2016/12/14 2:18:26 AM</b><br>
+ * Generated     : <b>2017/01/24 6:39:22 AM</b><br>
  * Description   : Helper class for script<br>
  * Original Host : Windows 7 amd64 6.1 <br>
  * 
- * @since  December 14, 2016
+ * @since  January 24, 2017
  * @author usi
  */
 public abstract class Refinement_buddi_crudHelper extends RationalTestScript

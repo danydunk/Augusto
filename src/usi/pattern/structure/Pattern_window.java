@@ -242,10 +242,10 @@ public class Pattern_window extends Pattern_widget<Window> {
 					matches.add(iw);
 					matched_iw.add(iw);
 				}
-				if (matches.size() < iwp.getCardinality().getMin()
-						|| (iwp.getCardinality().getMax() == 0 && matches.size() > 0)) {
-					return out;
-				}
+			}
+			if (matches.size() < iwp.getCardinality().getMin()
+					|| (iwp.getCardinality().getMax() == 0 && matches.size() > 0)) {
+				return out;
 			}
 		}
 		if (matched_iw.size() < needed_el) {
@@ -266,10 +266,10 @@ public class Pattern_window extends Pattern_widget<Window> {
 					matches.add(sw);
 					matched_sw.add(sw);
 				}
-				if (matches.size() < swp.getCardinality().getMin()
-						|| (swp.getCardinality().getMax() == 0 && matches.size() > 0)) {
-					return out;
-				}
+			}
+			if (matches.size() < swp.getCardinality().getMin()
+					|| (swp.getCardinality().getMax() == 0 && matches.size() > 0)) {
+				return out;
 			}
 		}
 		if (matched_sw.size() < needed_el) {

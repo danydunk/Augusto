@@ -140,6 +140,10 @@ task deployRACHOTA(type:Exec) {
 
 commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\rachota\\bin > run.bat && echo cd "+projectDir+"\\..\\rachota\\bin >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\rachota.jar >> run.bat && echo cd "+projectDir+"  >> run.bat >> .\\run.bat && .\\run.bat && del /Q /F run.bat"
 }
+task deployOnlineShopping(type:Exec) {
+
+commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\onlineshopping\\bin > run.bat && echo cd "+projectDir+"\\..\\onlineshopping\\bin >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\OnlineShopping.jar >> run.bat && echo cd "+projectDir+"  >> run.bat >> .\\run.bat && .\\run.bat && del /Q /F run.bat"
+}
 task testall(type:Exec) {
 
 commandLine 'cmd', '/c', "java -ea -Xmx8g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback test.rft.runAll "+projectDir+" 2>&1"
@@ -148,6 +152,7 @@ testall.dependsOn 'build'
 testall.dependsOn 'deployBuddi'
 testall.dependsOn 'deployUPM'
 testall.dependsOn 'deployRACHOTA'
+testall.dependsOn 'deployOnlineShopping'
 
 task runtest(type:Exec) {
 

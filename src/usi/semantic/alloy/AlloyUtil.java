@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import src.usi.configuration.ConfigurationManager;
 import src.usi.configuration.PathsManager;
+import src.usi.gui.functionality.instance.Instance_GUI_pattern;
 import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.GUI;
 import src.usi.gui.structure.Input_widget;
@@ -1479,7 +1480,8 @@ public class AlloyUtil {
 	 * @throws Exception
 	 */
 	static public Alloy_Model getTCaseModel(final SpecificSemantics mod,
-			final List<GUIAction> acts, final Window reached) throws Exception {
+			final List<GUIAction> acts, final Window reached, final Instance_GUI_pattern in)
+					throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1498,6 +1500,55 @@ public class AlloyUtil {
 
 		if (reached != null) {
 			fact += " and Current_window.is_in.(T/last)=Window_" + reached.getId();
+
+			if (acts.get(acts.size() - 1) instanceof Click) {
+				final Click c = (Click) acts.get(acts.size() - 1);
+
+				final List<Window> winds = in.getGui()
+						.getDynamicForwardLinks(c.getWidget().getId());
+				boolean selflink = true;
+				for (final Window www : winds) {
+					if (!www.getId().equals(c.getWindow().getId())) {
+						selflink = false;
+					}
+				}
+
+				if (selflink) {
+
+					for (final Input_widget iw : reached.getInputWidgets()) {
+						if (in.getPIW_for_IW(iw.getId()) != null) {
+							final Input_widget iiw = (Input_widget) in.getGui()
+									.getWindow(reached.getId()).getWidget(iw.getId());
+							if (iiw.getValue() == null || iiw.getValue().length() == 0) {
+								if (iw.getValue() == null || iw.getValue().length() == 0) {
+									fact += " and #Input_widget_" + iw.getId()
+											+ ".content.(T/last) = 0";
+								} else {
+									fact += " and #Input_widget_" + iw.getId()
+											+ ".content.(T/last) = 1";
+								}
+							}
+						}
+					}
+					for (final Selectable_widget sw : reached.getSelectableWidgets()) {
+						if (in.getPSW_for_SW(sw.getId()) != null) {
+							final Selectable_widget ssw = (Selectable_widget) in.getGui()
+									.getWindow(reached.getId()).getWidget(sw.getId());
+							final int size = sw.getSize() - ssw.getSize();
+
+							fact += " and #Selectable_widget_" + sw.getId() + ".list.(T/last) = "
+									+ size;
+							// if (sw.getSelected() == -1) {
+							// fact += " and #Selectable_widget_" + sw.getId() +
+							// ".selected.(T/last) = 0";
+							// } else {
+							// fact += " and #Selectable_widget_" + sw.getId() +
+							// ".selected.(T/last) = 1";
+							// }
+						}
+					}
+				}
+			}
 		}
 
 		final Fact new_fact = new Fact("testcase", fact);
