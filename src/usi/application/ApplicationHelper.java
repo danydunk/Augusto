@@ -109,7 +109,7 @@ public class ApplicationHelper {
 
 			e.printStackTrace();
 			System.out
-					.println("ApplicationHelper: RMI error while closing application. Moving on.");
+			.println("ApplicationHelper: RMI error while closing application. Moving on.");
 		}
 
 		if (this.root == null) {
@@ -163,6 +163,19 @@ public class ApplicationHelper {
 	// TODO: this code is duplicated
 	private void dealWithDialogsWindow(final GuiStateManager gmanager) throws Exception {
 
+		if (gmanager.getCurrentActiveWindows() != null) {
+			final Window current = gmanager.getCurrentActiveWindows();
+			for (final Pattern_dialogs dialog : Pattern_dialogs.values()) {
+
+				if (dialog.isMatch(current)) {
+					final List<GUIAction> acts = dialog.getActionsToGoPast(current);
+					for (final GUIAction act : acts) {
+						ActionManager.executeAction(act);
+						gmanager.readGUI();
+					}
+				}
+			}
+		}
 		if (gmanager.getCurrentActiveWindows() != null) {
 			final Window current = gmanager.getCurrentActiveWindows();
 			for (final Pattern_dialogs dialog : Pattern_dialogs.values()) {

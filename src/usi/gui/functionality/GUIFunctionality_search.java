@@ -106,7 +106,7 @@ public class GUIFunctionality_search {
 						}
 
 						if (!reached && required) {
-							break outloop;
+							continue outloop;
 						}
 					}
 					instances.add(iw);
@@ -169,9 +169,6 @@ public class GUIFunctionality_search {
 
 			loop: for (final Entry<Window, Pattern_window> entry : tuples) {
 
-				if (entry.getKey().getId().equals("w5")) {
-					System.out.println();
-				}
 				Instance_GUI_pattern match = this.traverse(entry.getKey(), entry.getValue(),
 						new Instance_GUI_pattern(new GUI(), this.gui_pattern));
 
@@ -265,16 +262,26 @@ public class GUIFunctionality_search {
 		// the cardinality of each pattern window is verified
 		boolean check = true;
 		for (final Pattern_window pw : this.gui_pattern.getWindows()) {
+			if (pw.isDynamic()) {
+				continue;
+			}
 			final List<Instance_window> instances = match.getWindows().stream()
 					.filter(e -> e.getPattern() == pw).collect(Collectors.toList());
 
 			if (instances.size() == 0 && pw.getCardinality().getMin() > 0) {
+
 				// if the window is not reached by any static
 				// edge
 				// it can be missing
-				if (match.getGuipattern().getStaticBackwardLinks(pw.getId()).size() > 0) {
-					check = false;
-				}
+				check = false;
+				// System.out.println("used");
+				//
+				// if
+				// (match.getGuipattern().getStaticBackwardLinks(pw.getId()).size()
+				// > 0) {
+				// check = false;
+				// System.out.println("used2");
+				// }
 			} else {
 				if (instances.size() > pw.getCardinality().getMax()
 						|| instances.size() < pw.getCardinality().getMin()) {

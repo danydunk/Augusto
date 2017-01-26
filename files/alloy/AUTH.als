@@ -5,7 +5,7 @@ pred init [t: Time] {
 	#List.elements.t = 0
 }
 ---------------Generic AUTH Structure ----------
-abstract sig Login, Signup, Ok, Cancel, Logout extends Action_widget { }
+abstract sig Go, Login, Signup, Ok, Cancel, Logout extends Action_widget { }
 abstract sig User, Password, User_save, Password_save, Re_password, Field extends Input_widget { }
 
 fact{
@@ -13,6 +13,7 @@ fact{
 }
 
 fact {
+	#Go.goes < 2
 	#Login.goes < 2
 	#Signup.goes < 2
 	#Ok.goes < 2
@@ -29,7 +30,7 @@ one sig Property_required{
 	requireds: set Input_widget
 }
 sig Object_inlist extends Object{
-	vs: Value lone ->Input_widget
+	vs: Value lone -> Input_widget
 }
 one sig List {
 	elements: Object_inlist set -> Time
@@ -42,7 +43,7 @@ pred fill_fail_post [iw: Input_widget, t, t': Time, v: Value] {
 		List.elements.t' =  List.elements.t
 }
 pred fill_pre[iw: Input_widget, t: Time, v: Value] { 
-	#iw.content.(T/first) = 1 => not(v = none)
+	//#iw.content.(T/first) = 1 => not(v = none)
 }
 
 pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }
@@ -70,13 +71,13 @@ pred click_fail_post [aw: Action_widget, t, t': Time]	{
 pred click_pre[aw: Action_widget, t: Time] { }
 
 pred add [t, t': Time] {
-	one o: Object_inlist |all iw: (User_save + Password_save + Field) | not(o in List.elements.t) and o.appeared = t' and o.vs.iw = iw.content.t and  List.elements.t' =  List.elements.t+o
+	one o: Object_inlist |all iw: (User_save + Password_save + Field) | not(o in List.elements.t) and o.appeared = t' and o.vs.iw = iw.content.t and List.elements.t' =  List.elements.t+o
 }
 pred filled_login_test [t: Time] { 
 	all iw: (User+Password)| #iw.content.t = 1
 }
 pred  existing_test [t: Time] { 
-	one o: List.elements.t | Password.content.t =o.vs.Password and User.content.t =o.vs.User
+	one o: List.elements.t | Password.content.t =o.vs.Password_save and User.content.t =o.vs.User_save
 }
 pred same_pass_test [t: Time] {
 	Password_save.content.t = Re_password.content.t
@@ -85,7 +86,7 @@ pred filled_required_test [t: Time] {
 	all iw: (User_save + Password_save + Re_password + Field)| (iw in Property_required.requireds) => #iw.content.t = 1
 }
 pred  unique_fields_test [t: Time] { 
-	all iw: (User_save + Password_save + Re_password + Field) | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
+	all iw: (User_save + Password_save + Field) | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
 }
 pred valid_data_test [w: Window, t: Time] {
 	all iw: w.iws | (#iw.invalid > 0 and #iw.content.t > 0) => not(iw.content.t in iw.invalid)

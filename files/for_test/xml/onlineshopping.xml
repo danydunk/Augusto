@@ -85,7 +85,7 @@
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
-        <input_widget id="iw11">
+        <input_widget id="iw10">
             <pos>443:234</pos>
             <rectangle>214:32</rectangle>
             <class>TextFieldUI</class>
@@ -129,21 +129,15 @@
         </input_widget>
         <input_widget id="iw4">
             <pos>446:453</pos>
-            <rectangle>213:35</rectangle>
+            <rectangle>213:72</rectangle>
             <class>TextFieldUI</class>
+            <descriptor>Mobile  </descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw9">
-            <pos>446:496</pos>
+            <pos>446:533</pos>
             <rectangle>213:27</rectangle>
             <class>TextFieldUI</class>
-            <value/>
-        </input_widget>
-        <input_widget id="iw10">
-            <pos>446:532</pos>
-            <rectangle>213:31</rectangle>
-            <class>TextFieldUI</class>
-            <descriptor>6 + 9 =  </descriptor>
             <value/>
         </input_widget>
     </window>
@@ -166,35 +160,35 @@
             <class>ButtonUI</class>
             <label>Go Back</label>
         </action_widget>
-        <input_widget id="iw15">
+        <input_widget id="iw14">
             <pos>499:249</pos>
             <rectangle>227:32</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Email ID  </descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw16">
+        <input_widget id="iw15">
             <pos>499:287</pos>
             <rectangle>272:29</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Your Security Question  </descriptor>
             <value>[options] 0 : 11</value>
         </input_widget>
-        <input_widget id="iw12">
+        <input_widget id="iw11">
             <pos>499:324</pos>
             <rectangle>227:28</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Answer  </descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw13">
+        <input_widget id="iw12">
             <pos>499:360</pos>
             <rectangle>227:28</rectangle>
             <class>PasswordFieldUI</class>
             <descriptor>New Password  </descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw14">
+        <input_widget id="iw13">
             <pos>499:396</pos>
             <rectangle>227:28</rectangle>
             <class>PasswordFieldUI</class>
@@ -227,14 +221,14 @@
             <class>ButtonUI</class>
             <label>Back</label>
         </action_widget>
-        <input_widget id="iw17">
+        <input_widget id="iw16">
             <pos>403:275</pos>
             <rectangle>250:30</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Email ID </descriptor>
             <value/>
         </input_widget>
-        <input_widget id="iw18">
+        <input_widget id="iw17">
             <pos>403:315</pos>
             <rectangle>250:30</rectangle>
             <class>PasswordFieldUI</class>

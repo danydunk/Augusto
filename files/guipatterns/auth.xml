@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	alloy="AUTH.als" alloy_without_unvalid_data="AUTH_without_unvalid.als" name="AUTH">
+	<window id="pre" dynamic="false" card="one" alloy="Pre">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>any</modal>
+		<action_widget id="paw10" card="one" alloy="Go">
+			<label>.*(login|sign in).*$</label>
+			<class>.*</class>
+		</action_widget>
+	</window>
 	<window id="initial" dynamic="false" card="one" alloy="Initial">
 		<title>.*</title>
 		<class>.*</class>
@@ -66,6 +75,10 @@
 			<class>.*</class>
 		</action_widget>
 	</window>
+	<edge type="static">
+		<from>paw10</from>
+		<to>initial</to>
+	</edge>
 	<edge type="dynamic">
 		<from>paw1</from>
 		<to>logged</to>
@@ -80,7 +93,7 @@
 	</edge>
 	<edge type="dynamic">
 		<from>paw3</from>
-		<to>signup</to>
+		<to>pre</to>
 		<to>initial</to>		
 	</edge>
 	<edge type="static">

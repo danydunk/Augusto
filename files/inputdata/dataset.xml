@@ -91,6 +91,17 @@
     </values>
   </DATA>
   <DATA type="itemized">
+    <metadata>Security Question  </metadata>
+    <values>
+      <invalid>0</invalid>
+      <valid>1</valid>
+      <valid>2</valid>
+      <valid>3</valid>
+      <valid>4</valid>
+      <valid>5</valid>
+    </values>
+  </DATA>
+  <DATA type="itemized">
     <metadata> → </metadata>
     <values>
       <valid>4</valid>

@@ -404,6 +404,19 @@ public class TestCaseRunner {
 				}
 			}
 		}
+		if (gmanager.getCurrentActiveWindows() != null) {
+			final Window current = gmanager.getCurrentActiveWindows();
+			for (final Pattern_dialogs dialog : Pattern_dialogs.values()) {
+
+				if (dialog.isMatch(current)) {
+					final List<GUIAction> acts = dialog.getActionsToGoPast(current);
+					for (final GUIAction act : acts) {
+						ActionManager.executeAction(act);
+						gmanager.readGUI();
+					}
+				}
+			}
+		}
 	}
 
 	private class Pair {
