@@ -1,0 +1,1 @@
+java -cp ..\onlineshoppingsut\bin;..\onlineshoppingsut\bin\* ResetDB
