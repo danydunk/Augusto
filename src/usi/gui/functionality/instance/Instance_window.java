@@ -17,7 +17,7 @@ import src.usi.pattern.structure.Pattern_window;
 public class Instance_window {
 
 	private final Pattern_window pattern;
-	private Window instance;
+	private final Window instance;
 
 	private final Map<String, List<String>> aw_map;
 	private final Map<String, List<String>> iw_map;
@@ -52,10 +52,10 @@ public class Instance_window {
 		return this.instance;
 	}
 
-	public void setInstance(final Window newin) {
-
-		this.instance = newin;
-	}
+	// public void setInstance(final Window newin) {
+	//
+	// this.instance = newin;
+	// }
 
 	public void addAW_mapping(final Pattern_action_widget paw, final List<Action_widget> aws)
 			throws Exception {
@@ -103,8 +103,8 @@ public class Instance_window {
 	}
 
 	public void
-			addSW_mapping(final Pattern_selectable_widget psw, final List<Selectable_widget> sws)
-					throws Exception {
+	addSW_mapping(final Pattern_selectable_widget psw, final List<Selectable_widget> sws)
+			throws Exception {
 
 		if (!this.pattern.containsWidget(psw.getId())) {
 			throw new Exception("Error in Instance_window: setSW_mapping");

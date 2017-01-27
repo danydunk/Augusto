@@ -185,7 +185,7 @@ public class GUIFunctionality_refine {
 						for (final String ed : this.covered_dyn_edges) {
 							if (ed.startsWith(aw.getId() + " - ")) {
 								System.out
-								.println("DISCOVER DYNAMIC EDGE: already found edge starting from this aw.");
+										.println("DISCOVER DYNAMIC EDGE: already found edge starting from this aw.");
 								continue loop;
 							}
 						}
@@ -202,7 +202,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -230,9 +230,9 @@ public class GUIFunctionality_refine {
 		if (tc.getActions().get(tc.getActions().size() - 1) instanceof Click) {
 			aw = tc.getActions().get(tc.getActions().size() - 1).getWidget().getId();
 		}
-
-		final Instance_window found = this.getFoundWindow(tc, target);
-
+		final Object[] out = this.getFoundWindow(tc, target);
+		final Instance_window found = (Instance_window) out[0];
+		final Window reached_win = (Window) out[1];
 		boolean new_window = false;
 		boolean new_edge = false;
 
@@ -253,7 +253,7 @@ public class GUIFunctionality_refine {
 						&& this.pattern.isDyanamicEdge(paw.getId(), found.getPattern().getId())) {
 
 					final OracleChecker oracle = new OracleChecker(this.gui);
-					if (oracle.checkWindow(found.getInstance(),
+					if (oracle.checkWindow(reached_win,
 							tc.getActions().get(tc.getActions().size() - 1).getOracle())) {
 						covered_edge = true;
 					}
@@ -500,7 +500,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -607,9 +607,9 @@ public class GUIFunctionality_refine {
 		return out;
 	}
 
-	private Instance_window getFoundWindow(GUITestCase tc, final Pattern_window target)
-			throws Exception {
+	private Object[] getFoundWindow(GUITestCase tc, final Pattern_window target) throws Exception {
 
+		final Object[] out = new Object[2];
 		System.out.println("GET FOUND WINDOW: start.");
 		// the last action widget exercised
 		final Widget wid = tc.getActions().get(tc.getActions().size() - 1).getWidget();
@@ -657,14 +657,15 @@ public class GUIFunctionality_refine {
 			this.observed_tcs.add(new_res);
 			tc = new_tc;
 		}
-
+		out[1] = reached_w;
 		// we check whether a match with the target was found already
 		for (final Instance_window iw : this.instancePattern.getWindows()) {
 			if (iw.getPattern().getId().equals(target.getId())
 					&& iw.getInstance().getId().equals(reached_w.getId())) {
 				System.out.println("GET FOUND WINDOW: end.");
-				iw.setInstance(reached_w);
-				return iw;
+				// iw.setInstance(reached_w);
+				out[0] = iw;
+				return out;
 			}
 		}
 
@@ -676,8 +677,9 @@ public class GUIFunctionality_refine {
 				if (pws.contains(iw.getPattern().getId())
 						&& iw.getInstance().getId().equals(reached_w.getId())) {
 					System.out.println("GET FOUND WINDOW: end.");
-					iw.setInstance(reached_w);
-					return iw;
+					// iw.setInstance(reached_w);
+					out[0] = iw;
+					return out;
 				}
 			}
 		}
@@ -689,8 +691,9 @@ public class GUIFunctionality_refine {
 				if (iw.getPattern().getId().equals(pw.getId())
 						&& iw.getInstance().getId().equals(previus.getId())) {
 					System.out.println("GET FOUND WINDOW: end.");
-					iw.setInstance(reached_w);
-					return iw;
+					// iw.setInstance(reached_w);
+					out[0] = iw;
+					return out;
 				}
 			}
 		}
@@ -701,7 +704,8 @@ public class GUIFunctionality_refine {
 			// the first is returned because it the one that maps more
 			// elements
 			System.out.println("GET FOUND WINDOW: end.");
-			return instances.get(0);
+			out[0] = instances.get(0);
+			return out;
 		}
 		if (wid instanceof Action_widget) {
 			// we compute new matches with the other valid edges
@@ -709,7 +713,8 @@ public class GUIFunctionality_refine {
 				instances = ppw.getMatches(reached_w);
 				if (instances.size() != 0) {
 					System.out.println("GET FOUND WINDOW: end.");
-					return instances.get(0);
+					out[0] = instances.get(0);
+					return out;
 				}
 			}
 		}
@@ -831,7 +836,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -1237,9 +1242,9 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-					+ "System and "
-					+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
-			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+			+ "System and "
+			+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
+					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
 
