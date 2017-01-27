@@ -86,7 +86,6 @@ public class Ripper {
 		if (this.guimanager == null) {
 			this.restart_and_go_to_window(actions, w);
 		}
-
 		final List<Action_widget> aws = this.filterAWS(w.getActionWidgets());
 
 		mainloop: for (int cont = 0; cont < aws.size(); cont++) {
@@ -104,7 +103,6 @@ public class Ripper {
 				continue;
 			}
 			final Click act = new Click(w, null, aw);
-
 			ActionManager.executeAction(act);
 
 			this.guimanager.readGUI();

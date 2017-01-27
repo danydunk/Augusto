@@ -38,8 +38,9 @@ public class RipperMain extends RipperMainHelper {
 				break;
 
 			default:
-				System.out.println("Error: wrong number of input parameters.");
-				return;
+				PathsManager.setProjectRoot(".");
+				// System.out.println("Error: wrong number of input parameters.");
+				// return;
 			}
 
 			ConfigurationManager.load();

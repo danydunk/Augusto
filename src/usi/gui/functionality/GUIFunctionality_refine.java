@@ -61,7 +61,7 @@ public class GUIFunctionality_refine {
 		this.observed_tcs = new ArrayList<>();
 		this.covered_dyn_edges = new ArrayList<>();
 		// this.current_semantic_property =
-		// "one Property_unique_0:Property_unique|one Property_required_0:Property_required|Property_unique = (Property_unique_0) and Property_required = (Property_required_0) and #Property_unique_0.uniques = 0 and Property_required_0.requireds = (Input_widget_iw1)";
+		// "one Property_unique_0:Property_unique|one Property_required_0:Property_required|Property_required = (Property_required_0) and Property_unique = (Property_unique_0) and Property_required_0.requireds = (Input_widget_iw8+Input_widget_iw6+Input_widget_iw7+Input_widget_iw10+Input_widget_iw5+Input_widget_iw4+Input_widget_iw9) and Property_unique_0.uniques = (Input_widget_iw8+Input_widget_iw6+Input_widget_iw3+Input_widget_iw4+Input_widget_iw9)";
 		this.current_semantic_property = "";
 		this.discarded_semantic_properties = new ArrayList<>();
 		this.unsat_commands = new ArrayList<>();
@@ -165,7 +165,7 @@ public class GUIFunctionality_refine {
 					continue;
 				}
 
-				for (final Action_widget aw : matched_aws) {
+				loop: for (final Action_widget aw : matched_aws) {
 
 					for (final Window target_window : target_w_matched) {
 
@@ -184,6 +184,13 @@ public class GUIFunctionality_refine {
 							System.out.println("DISCOVER DYNAMIC EDGE: edge already found before.");
 							continue;
 						}
+						for (final String ed : this.covered_dyn_edges) {
+							if (ed.startsWith(aw.getId() + " - ")) {
+								System.out
+										.println("DISCOVER DYNAMIC EDGE: already found edge starting from this aw.");
+								continue loop;
+							}
+						}
 
 						// the semantics is updated
 						final Instance_GUI_pattern clone = this.instancePattern.clone();
@@ -197,7 +204,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -495,7 +502,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -822,7 +829,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -1229,9 +1236,9 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-					+ "System and "
-					+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
-			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+			+ "System and "
+			+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
+					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
 

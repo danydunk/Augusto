@@ -121,9 +121,13 @@ public class ContextAnalyzer {
 		Area oo = null;
 		double mind = Double.MAX_VALUE;
 		if (classs.equals("TableUI")) {
-			for (final TestObject head : this.tableheaders) {
-				final Point pp = (Point) head.getProperty("locationOnScreen");
-
+			loop: for (final TestObject head : this.tableheaders) {
+				Point pp = null;
+				try {
+					pp = (Point) head.getProperty("locationOnScreen");
+				} catch (final Exception e) {
+					continue loop;
+				}
 				final int xx = pp.x;
 				final int yy = pp.y;
 				final int ww = Integer.valueOf(head.getProperty("width").toString());
@@ -136,7 +140,7 @@ public class ContextAnalyzer {
 					oo = aa;
 				}
 			}
-			height = oo.height;
+		height = oo.height;
 		}
 
 		if (!this.fatherMap.containsKey(to)) {

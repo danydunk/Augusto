@@ -195,27 +195,34 @@ public class Window extends Widget {
 		// position and label can vary
 
 		if (w.label == null && this.label != null) {
+
 			return false;
 		}
 		if (w.label != null && this.label == null) {
+
 			return false;
 		}
 
 		if (w.descriptor == null && this.descriptor != null) {
+
 			return false;
 		}
 		if (w.descriptor != null && this.descriptor == null) {
+
 			return false;
 		}
 		if (w.descriptor != null && w.descriptor.length() > 0 && this.descriptor.length() == 0) {
+
 			return false;
 		}
 		if (w.descriptor != null && w.descriptor.length() == 0 && this.descriptor.length() > 0) {
+
 			return false;
 		}
 
 		// same class
 		if (!w.classs.equals(this.classs)) {
+
 			return false;
 		}
 
@@ -265,6 +272,7 @@ public class Window extends Widget {
 			return false;
 		}
 		if (this.getSelectableWidgets().size() != win.getSelectableWidgets().size()) {
+
 			return false;
 		}
 		// we iterate trough the widgets which are ordered by position
@@ -272,23 +280,27 @@ public class Window extends Widget {
 			if (widgets.get(x) instanceof Action_widget) {
 				final Action_widget aw = (Action_widget) widgets.get(x);
 				if (!aw.isSame(widgets_bis.get(x))) {
+
 					return false;
 				}
 			} else if (widgets.get(x) instanceof Input_widget) {
 				if (widgets.get(x) instanceof Option_input_widget) {
 					final Option_input_widget oiw = (Option_input_widget) widgets.get(x);
 					if (!oiw.isSame(widgets_bis.get(x))) {
+
 						return false;
 					}
 				} else {
 					final Input_widget iw = (Input_widget) widgets.get(x);
 					if (!iw.isSame(widgets_bis.get(x))) {
+
 						return false;
 					}
 				}
 			} else if (widgets.get(x) instanceof Selectable_widget) {
 				final Selectable_widget sw = (Selectable_widget) widgets.get(x);
 				if (!sw.isSame(widgets_bis.get(x))) {
+
 					return false;
 				}
 			}
@@ -297,9 +309,11 @@ public class Window extends Widget {
 		for (int x = 0; x < this.getSelectableWidgets().size(); x++) {
 			final Selectable_widget sw = this.getSelectableWidgets().get(x);
 			if (!sw.isSame(win.getSelectableWidgets().get(x))) {
+
 				return false;
 			}
 		}
+
 		return true;
 	}
 

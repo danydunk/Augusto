@@ -405,14 +405,13 @@ public class GUI_Pattern {
 		if (in.getGuipattern() != this) {
 			return false;
 		}
-
+		final Map<String, Boolean> backedges = new HashMap<>();
 		final GUI match_gui = in.getGui();
 
 		for (final Pattern_window pw : this.getWindows()) {
 			final List<Window> matches = in.getPatternWindowMatches(pw.getId());
 			if (matches.size() < pw.getCardinality().getMin()
 					|| matches.size() > pw.getCardinality().getMax()) {
-
 				return false;
 			}
 		}
@@ -448,7 +447,6 @@ public class GUI_Pattern {
 			final List<Window> matches = in.getPatternWindowMatches(pw.getId());
 			for (final Window match : matches) {
 				// static
-				boolean found_aw_match = false;
 				loop: for (final Pattern_action_widget paw : this
 						.getStaticBackwardLinks(pw.getId())) {
 					final Pattern_window source_pw = this.getActionWidget_Window(paw.getId());
@@ -467,22 +465,27 @@ public class GUI_Pattern {
 						if (aw_matches.size() == 0) {
 							continue;
 						}
-						found_aw_match = true;
+						if (!backedges.containsKey(match.getId())) {
+							backedges.put(match.getId(), false);
+						}
 						for (final Action_widget aw : aw_matches) {
 							if (match_gui.isStaticEdge(aw.getId(), match.getId())) {
-								found_aw_match = false;
+								backedges.remove(match.getId());
+								backedges.put(match.getId(), true);
 								break loop;
 							}
 						}
 					}
 
 				}
-				if (found_aw_match) {
-					System.out.println(pw.getId() + " " + match.getId());
-					return false;
-				}
+				// if (found_aw_match) {
+				// System.out.println(pw.getId() + " " + match.getId());
+				// System.out.println(5);
+				//
+				// return false;
+				// }
 				// dynamic
-				found_aw_match = false;
+				// found_aw_match = false;
 				loop: for (final Pattern_action_widget paw : this.getDynamicBackwardLinks(pw
 						.getId())) {
 
@@ -504,20 +507,24 @@ public class GUI_Pattern {
 						if (aw_matches.size() == 0) {
 							continue;
 						}
-						found_aw_match = true;
+						if (!backedges.containsKey(match.getId())) {
+							backedges.put(match.getId(), false);
+						}
 						for (final Action_widget aw : aw_matches) {
 
 							if (match_gui.isDynamicEdge(aw.getId(), match.getId())) {
-								found_aw_match = false;
+								backedges.remove(match.getId());
+								backedges.put(match.getId(), true);
 								break loop;
 							}
 						}
 					}
 				}
-				if (found_aw_match) {
-
-					return false;
-				}
+				// if (found_aw_match) {
+				// System.out.println(6);
+				//
+				// return false;
+				// }
 
 				for (final Pattern_action_widget paw : pw.getActionWidgets()) {
 					// static
@@ -526,6 +533,7 @@ public class GUI_Pattern {
 							.collect(Collectors.toList());
 
 					loop: for (final Action_widget aw : aw_matches) {
+
 						boolean target_found = false;
 						for (final Pattern_window target_pw : this.getStaticForwardLinks(paw
 								.getId())) {
@@ -550,6 +558,7 @@ public class GUI_Pattern {
 							.collect(Collectors.toList());
 
 					loop: for (final Action_widget aw : aw_matches) {
+
 						boolean target_found = false;
 						for (final Pattern_window target_pw : this.getDynamicForwardLinks(paw
 								.getId())) {
@@ -572,6 +581,12 @@ public class GUI_Pattern {
 
 			}
 
+		}
+
+		for (final String id : backedges.keySet()) {
+			if (!backedges.get(id)) {
+				return false;
+			}
 		}
 
 		return true;
