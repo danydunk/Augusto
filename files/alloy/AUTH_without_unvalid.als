@@ -48,17 +48,17 @@ pred fill_pre[iw: Input_widget, t: Time, v: Value] {
 
 pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }
 pred select_success_post [sw: Selectable_widget, t, t': Time, o: Object] { 
-		List.elements.t' =  List.elements.t
+		//List.elements.t' =  List.elements.t
 }
 pred select_fail_post [sw: Selectable_widget, t, t': Time, o: Object] { 
-		List.elements.t' =  List.elements.t
+		//List.elements.t' =  List.elements.t
 }
 pred select_pre[sw: Selectable_widget, t: Time, o: Object] { }
 
 pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Login) => filled_login_test [t] and existing_test [t] 
-	(aw in Logout) => (2=(1+1))
-	(aw in Ok) => filled_required_test[t] and unique_fields_test [t] and same_pass_test [t]
+	//(aw in Logout) => (2=(1+1))
+	(aw in Ok) => filled_required_test[t] and unique_fields_test [t] and same_pass_test [t] 
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Ok) => add [t, t'] else List.elements.t' =  List.elements.t
