@@ -8,7 +8,7 @@ env:
     - CMD=second    
     - CMD=third
     
-script: travis_wait 300 python CI-client.py $TRAVIS_COMMIT $CMD
+script: travis_wait 300 python ./CI/CI-client.py $TRAVIS_COMMIT $CMD
 
 jdk:
   - oraclejdk8
