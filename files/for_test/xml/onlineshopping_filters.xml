@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filter>
+	<action_widget id="aw1">
+			<label>account</label>
+			<class>buttonui</class>
+	</action_widget>
+	<action_widget id="aw1">
+			<label>cart</label>
+			<class>buttonui</class>
+	</action_widget>
+	<action_widget id="aw1">
+			<label>help</label>
+			<class>buttonui</class>
+	</action_widget>
+	<action_widget id="aw1">
+			<label>check out</label>
+			<class>buttonui</class>
+	</action_widget>
+	<action_widget id="aw1">
+			<label>ok</label>
+			<class>buttonui</class>
+	</action_widget>
+</filter>
