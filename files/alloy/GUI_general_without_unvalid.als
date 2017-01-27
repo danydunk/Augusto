@@ -105,7 +105,6 @@ pred select [sw: Selectable_widget, t, t': Time, o: Object, s: Select] {
 	(not select_semantics  [sw, t, o] and sw.selected.t' = sw.selected.t and select_fail_post [sw, t, t', o])
 	--- general postcondition ---
 	Current_window.is_in.t' = Current_window.is_in.t
-	all iw: Input_widget | iw.content.t' = iw.content.t
 	(Selectable_widget - sw).selected.t' = (Selectable_widget - sw).selected.t
 	--- operation is tracked ---
 	s.wid = sw and s.which = o and Track.op.t' = s

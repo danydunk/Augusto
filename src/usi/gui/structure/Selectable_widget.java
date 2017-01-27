@@ -33,7 +33,7 @@ public class Selectable_widget extends Widget {
 
 	public Selectable_widget(final String id, final String label, final String classs, final int x,
 			final int y, final int width, final int height, final int size, final int selected)
-			throws Exception {
+					throws Exception {
 
 		super(id, label, classs, x, y, width, height);
 		if (size < 0 || selected < -1 || selected > size - 1) {
@@ -100,7 +100,11 @@ public class Selectable_widget extends Widget {
 			final ITestDataElementList el_list = list2.getElements();
 			for (int c = 0; c < el_list.getLength(); c++) {
 				final ITestDataElement element = el_list.getElement(c);
-				out.add(element.getElement().toString());
+				if (element == null || element.getElement() == null) {
+					out.add("null");
+				} else {
+					out.add(element.getElement().toString());
+				}
 			}
 			break;
 		default:

@@ -61,7 +61,7 @@ public class GUIFunctionality_refine {
 		this.observed_tcs = new ArrayList<>();
 		this.covered_dyn_edges = new ArrayList<>();
 		// this.current_semantic_property =
-		// "one Property_unique_0:Property_unique|one Property_required_0:Property_required|Property_unique = (Property_unique_0) and Property_required = (Property_required_0) and #Property_unique_0.uniques = 0 and Property_required_0.requireds = (Input_widget_iw1)";
+		// "one Property_unique_0:Property_unique|one Property_required_0:Property_required|Property_unique = (Property_unique_0) and Property_required = (Property_required_0) and #Property_unique_0.uniques = 0 and Property_required_0.requireds = (Input_widget_iw10+Input_widget_iw13+Input_widget_iw14)";
 		this.current_semantic_property = "";
 		this.discarded_semantic_properties = new ArrayList<>();
 		this.unsat_commands = new ArrayList<>();
@@ -197,7 +197,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -314,7 +314,7 @@ public class GUIFunctionality_refine {
 				}
 			}
 
-			if (found.getPattern().getId().equals(target.getId())) {
+			if (covered_edge && found.getPattern().getId().equals(target.getId())) {
 				// we found the correct window
 				final List<String> sem = this.canididate_semantic_properties.stream()
 						.filter(e -> !e.startsWith("not(")).collect(Collectors.toList());
@@ -495,7 +495,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -653,23 +653,12 @@ public class GUIFunctionality_refine {
 			tc = new_tc;
 		}
 
-		final Window previus = tc.getActions().get(tc.getActions().size() - 1).getWindow();
-		if (previus.getId().equals(reached_w.getId())) {
-			// we stayed in the same window
-			for (final Instance_window iw : this.instancePattern.getWindows()) {
-				if (iw.getPattern().getId().equals(pw.getId())
-						&& iw.getInstance().getId().equals(previus.getId())) {
-					System.out.println("GET FOUND WINDOW: end.");
-					return iw;
-				}
-			}
-		}
-
 		// we check whether a match with the target was found already
 		for (final Instance_window iw : this.instancePattern.getWindows()) {
 			if (iw.getPattern().getId().equals(target.getId())
 					&& iw.getInstance().getId().equals(reached_w.getId())) {
 				System.out.println("GET FOUND WINDOW: end.");
+				iw.setInstance(reached_w);
 				return iw;
 			}
 		}
@@ -682,10 +671,25 @@ public class GUIFunctionality_refine {
 				if (pws.contains(iw.getPattern().getId())
 						&& iw.getInstance().getId().equals(reached_w.getId())) {
 					System.out.println("GET FOUND WINDOW: end.");
+					iw.setInstance(reached_w);
 					return iw;
 				}
 			}
 		}
+
+		final Window previus = tc.getActions().get(tc.getActions().size() - 1).getWindow();
+		if (previus.getId().equals(reached_w.getId())) {
+			// we stayed in the same window
+			for (final Instance_window iw : this.instancePattern.getWindows()) {
+				if (iw.getPattern().getId().equals(pw.getId())
+						&& iw.getInstance().getId().equals(previus.getId())) {
+					System.out.println("GET FOUND WINDOW: end.");
+					iw.setInstance(reached_w);
+					return iw;
+				}
+			}
+		}
+
 		// we compute new matches with the pattern
 		List<Instance_window> instances = target.getMatches(reached_w);
 		if (instances.size() != 0) {
@@ -822,7 +826,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -975,7 +979,6 @@ public class GUIFunctionality_refine {
 						.getTc().getActions(),
 						batch.get(cont).getResults().get(batch.get(cont).getResults().size() - 1),
 						this.instancePattern);
-
 				final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
 				final Run_command_thread run = new Run_command_thread(comp, comp.getAllCommands()
 						.get(0));
@@ -1229,9 +1232,9 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-					+ "System and "
-					+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
-			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+			+ "System and "
+			+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
+					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
 

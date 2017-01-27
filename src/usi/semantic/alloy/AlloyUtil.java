@@ -1658,7 +1658,8 @@ public class AlloyUtil {
 						fact += " and Track.op.(" + t + ").with=none";
 					} else {
 						fact += " and Track.op.(" + t + ").with=Option_value_" + f.getInput();
-
+						final String metadata = f.getWidget().getLabel() != null ? f.getWidget()
+								.getLabel() : "";
 					}
 				}
 			}
