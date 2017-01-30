@@ -33,7 +33,7 @@ public class Selectable_widget extends Widget {
 
 	public Selectable_widget(final String id, final String label, final String classs, final int x,
 			final int y, final int width, final int height, final int size, final int selected)
-					throws Exception {
+			throws Exception {
 
 		super(id, label, classs, x, y, width, height);
 		if (size < 0 || selected < -1 || selected > size - 1) {
@@ -86,13 +86,17 @@ public class Selectable_widget extends Widget {
 			// we consider only the rows
 			final TestDataTable list = (TestDataTable) to.getTestData("visible contents");
 			final int rows = list.getRowCount();
-			// final int columns = list.getColumnCount();
+
+			final int columns = list.getColumnCount();
 
 			for (int c = 0; c < rows; c++) {
-				// for (int cc = 0; cc < columns; cc++) {
-				final String element = list.getCell(c, 0).toString();
+				String element = "";
+
+				for (int cc = 0; cc < columns; cc++) {
+					element += list.getCell(c, cc).toString();
+				}
 				out.add(element);
-				// }
+
 			}
 			break;
 		case "ListUI":

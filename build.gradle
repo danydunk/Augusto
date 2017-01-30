@@ -126,8 +126,14 @@ task createMainRipper(type:Exec) {
 	commandLine 'cmd', '/c', "echo java -Xmx8g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback src.usi.RipperMain "+projectDir+" > Ripper.bat"
 }
 
+task createMainRuntestsuite(type:Exec) {
+
+	commandLine 'cmd', '/c', "echo java -Xmx8g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback src.usi.RunTestsuite %1 %2 > Runtestsuite.bat"
+}
+
 build.dependsOn 'createMain'
 build.dependsOn 'createMainRipper'
+build.dependsOn 'createMainRuntestsuite'
 task deployBuddi(type:Exec) {
 	
 	commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\buddi\\bin > run.bat && echo cd "+projectDir+"\\..\\buddi\\bin >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\Buddi.jar >> run.bat && echo cd "+projectDir+"  >> run.bat >> .\\run.bat && .\\run.bat && del /Q /F run.bat"

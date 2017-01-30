@@ -138,7 +138,7 @@ public class TestCaseRunner {
 					final Selectable_widget sw = (Selectable_widget) act.getWidget();
 
 					int ind = sel.getIndex();
-					final Pair new_p = new Pair(curr, sw);
+					final Pair new_p = new Pair(act.getWindow(), sw);
 					boolean found = false;
 					for (final Pair p : this.select_support_initial.keySet()) {
 						if (p.isSame(new_p)) {
@@ -196,6 +196,11 @@ public class TestCaseRunner {
 					results.add(null);
 				}
 			} else {
+				if (gmanager.getCurrentActiveWindows() != null) {
+					results.add(this.getKnownWindowIfAny(gmanager.getCurrentActiveWindows()));
+				} else {
+					results.add(null);
+				}
 				if (cont < actions.size() - 1) {
 					// if the action was not executed and the next action is in
 					// a different window
@@ -432,7 +437,24 @@ public class TestCaseRunner {
 
 		public boolean isSame(final Pair p) {
 
-			return this.w.isSimilar(p.w) && this.sw.isSimilar(p.sw);
+			if (this.w.isSimilar(p.w)) {
+				final Widget ww = p.w.getWidget(p.sw.getId());
+				final int index = p.w.getSelectableWidgets().indexOf(ww);
+				assert (index != -1);
+
+				final Widget ww2 = this.w.getWidget(this.sw.getId());
+				final int index2 = this.w.getSelectableWidgets().indexOf(ww2);
+				assert (index2 != -1);
+
+				if (index != index2
+						|| !this.w.getSelectableWidgets().get(index2)
+								.isSimilar(p.w.getSelectableWidgets().get(index))) {
+					return false;
+				}
+
+				return true;
+			}
+			return false;
 		}
 	}
 
@@ -440,7 +462,7 @@ public class TestCaseRunner {
 			throws Exception {
 
 		final List<GUIAction> out = new ArrayList<>();
-		final Graph g = Graph.convertGUI(this.gui);
+		final Graph g = Graph.convertGUI(TestCaseRunner.this.gui);
 
 		Vertex source = g.getVertex(current.getId());
 		Vertex target = g.getVertex(targetw.getId());
@@ -458,9 +480,9 @@ public class TestCaseRunner {
 		while (!path.isEmpty()) {
 			target = path.pop();
 			Click click = null;
-			final Window s = this.gui.getWindow(source.getId());
-			final Window t = this.gui.getWindow(target.getId());
-			for (final Action_widget aw : this.gui.getStaticBackwardLinks(t.getId())) {
+			final Window s = TestCaseRunner.this.gui.getWindow(source.getId());
+			final Window t = TestCaseRunner.this.gui.getWindow(target.getId());
+			for (final Action_widget aw : TestCaseRunner.this.gui.getStaticBackwardLinks(t.getId())) {
 				if (s.getWidget(aw.getId()) != null) {
 					click = new Click(s, null, aw);
 					break;
@@ -476,4 +498,5 @@ public class TestCaseRunner {
 
 		return out;
 	}
+
 }
