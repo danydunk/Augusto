@@ -403,6 +403,7 @@ public class GUI_Pattern {
 	public boolean isInstance(final Instance_GUI_pattern in) throws Exception {
 
 		if (in.getGuipattern() != this) {
+
 			return false;
 		}
 		final Map<String, Boolean> backedges = new HashMap<>();
@@ -545,7 +546,24 @@ public class GUI_Pattern {
 								if (match_gui.isStaticEdge(aw.getId(), ww.getId())) {
 									continue loop;
 								}
+
+								Window www = null;
+								for (final Window w : in.getGui().getWindows()) {
+									if (w.containsWidget(aw.getId())) {
+										www = w;
+										break;
+									}
+								}
+								assert (www != null);
+								for (final Instance_window iiww : in.getWindows()) {
+
+									if (iiww.getPattern().getId().equals(target_pw.getId())
+											&& iiww.getInstance().getId().equals(www.getId())) {
+										continue loop;
+									}
+								}
 							}
+
 						}
 						if (target_found) {
 
@@ -571,6 +589,21 @@ public class GUI_Pattern {
 									continue loop;
 								}
 							}
+							Window www = null;
+							for (final Window w : in.getGui().getWindows()) {
+								if (w.containsWidget(aw.getId())) {
+									www = w;
+									break;
+								}
+							}
+							assert (www != null);
+							for (final Instance_window iiww : in.getWindows()) {
+
+								if (iiww.getPattern().getId().equals(target_pw.getId())
+										&& iiww.getInstance().getId().equals(www.getId())) {
+									continue loop;
+								}
+							}
 						}
 						if (target_found) {
 
@@ -585,6 +618,7 @@ public class GUI_Pattern {
 
 		for (final String id : backedges.keySet()) {
 			if (!backedges.get(id)) {
+
 				return false;
 			}
 		}

@@ -17,7 +17,7 @@
 			<label>^(?!window - )(.*( edit | update | modify ).*|^(edit (?!-)|update |modify ).*|^(edit|update|modify)$)</label>
 			<class>.*</class>
 		</action_widget>
-		<action_widget id="paw4" card="some" alloy="Delete_trigger">
+		<action_widget id="paw4" card="set" alloy="Delete_trigger">
 			<label>^(?!window - )(.*( delete | remove ).*|^(delete |remove ).*|^(delete|remove)$)</label>
 			<class>.*</class>
 		</action_widget>
