@@ -65,7 +65,7 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
 }
 pred click_fail_post [aw: Action_widget, t, t': Time]	{
-	(all iw:Input_widget | iw.content.t' = iw.content.t)
+	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
 	List.elements.t' =  List.elements.t
 }
 pred click_pre[aw: Action_widget, t: Time] { }
