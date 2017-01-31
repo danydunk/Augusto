@@ -28,8 +28,8 @@ public class runAll extends runAllHelper {
 				+ " mb.");
 		boolean error = false;
 		try {
-			// System.out.println("RACHOTA REFINEMENT TEST");
-			// new Refinement_rachota_test().testMain(args);
+			System.out.println("RACHOTA REFINEMENT TEST");
+			new Refinement_rachota_test().testMain(args);
 			System.out.println("REFINEMENT UPM TEST");
 			new Refinement_upmfull_crud().testMain(args);
 			System.out.println("OPTION WIDGET TEST");

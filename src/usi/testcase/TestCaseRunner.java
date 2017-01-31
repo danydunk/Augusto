@@ -168,6 +168,13 @@ public class TestCaseRunner {
 						}
 					}
 					if (!found) {
+						actions_executed.add(act);
+
+						if (gmanager.getCurrentActiveWindows() != null) {
+							results.add(this.getKnownWindowIfAny(gmanager.getCurrentActiveWindows()));
+						} else {
+							results.add(null);
+						}
 						continue mainloop;
 					}
 				}
@@ -196,6 +203,8 @@ public class TestCaseRunner {
 					results.add(null);
 				}
 			} else {
+				actions_executed.add(act);
+
 				if (gmanager.getCurrentActiveWindows() != null) {
 					results.add(this.getKnownWindowIfAny(gmanager.getCurrentActiveWindows()));
 				} else {
@@ -448,7 +457,7 @@ public class TestCaseRunner {
 
 				if (index != index2
 						|| !this.w.getSelectableWidgets().get(index2)
-								.isSimilar(p.w.getSelectableWidgets().get(index))) {
+						.isSimilar(p.w.getSelectableWidgets().get(index))) {
 					return false;
 				}
 
