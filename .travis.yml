@@ -7,6 +7,7 @@ env:
     - CMD=first 
     - CMD=second    
     - CMD=third
+    - CMD=fourth
     
 script: travis_wait 300 python ./CI/CI-client.py $TRAVIS_COMMIT $CMD
 
