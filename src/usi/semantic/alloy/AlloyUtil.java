@@ -1138,6 +1138,9 @@ public class AlloyUtil {
 	public static String extractProperty(final A4Solution sol, final SpecificSemantics sem)
 			throws Exception {
 
+		if (!sem.hasSemanticProperty()) {
+			throw new Exception("AlloyUtil - extractProperty: no semantic property in this model.");
+		}
 		// we retrieve the signature that start with property
 		final Map<Sig, List<String>> properties = new HashMap<>();
 		for (final Sig sig : sol.getAllReachableSigs()) {

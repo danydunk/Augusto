@@ -43,7 +43,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -83,7 +83,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -120,7 +120,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -258,6 +258,107 @@ public class PatternRecognitionTest {
 
 			assertEquals(1, res.size());
 			assertEquals(3, res.get(0).getWindows().size());
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void test9() {
+
+		System.out.println("test9");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/save.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/upm.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
+			assertEquals(1, res.size());
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void test10() {
+
+		System.out.println("test10");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/save.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/buddi.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
+			assertEquals(1, res.size());
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void test11() {
+
+		System.out.println("test11");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/save.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/rachota.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
+			assertEquals(0, res.size());
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void test12() {
+
+		System.out.println("test12");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/save.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/for_test/xml/onlineshopping.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
+			assertEquals(0, res.size());
 		} catch (final Exception e) {
 			e.printStackTrace();
 			fail();

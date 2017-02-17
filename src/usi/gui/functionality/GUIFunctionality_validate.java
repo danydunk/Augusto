@@ -43,7 +43,7 @@ public class GUIFunctionality_validate {
 	List<String> edges;
 
 	// number of times a run command can be executed
-	final int MAX_RUN = 2;
+	final int MAX_RUN = 1;
 	final int batch_size = ConfigurationManager.getMultithreadingBatchSize();
 
 	public GUIFunctionality_validate(final Instance_GUI_pattern instancePattern, final GUI gui)
@@ -220,7 +220,7 @@ public class GUIFunctionality_validate {
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -228,7 +228,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 

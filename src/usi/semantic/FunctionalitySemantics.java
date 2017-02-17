@@ -12,6 +12,7 @@ import src.usi.semantic.alloy.structure.Signature;
 
 public class FunctionalitySemantics extends Alloy_Model {
 
+	protected boolean semanticproperty;
 	protected Predicate click;
 	protected Predicate fill;
 	protected Predicate select;
@@ -48,6 +49,9 @@ public class FunctionalitySemantics extends Alloy_Model {
 			}
 			if ("Selectable_widget".equals(sig.getIdentifier()) && sig.isAbstract_()) {
 				this.selectable_w_signature = sig;
+			}
+			if (sig.getIdentifier().startsWith("Property_") && !sig.isAbstract_()) {
+				this.semanticproperty = true;
 			}
 		}
 		for (final Predicate pred : predicates) {
@@ -181,5 +185,10 @@ public class FunctionalitySemantics extends Alloy_Model {
 	public Signature getSelectable_w_signature() {
 
 		return this.selectable_w_signature;
+	}
+
+	public boolean hasSemanticProperty() {
+
+		return this.semanticproperty;
 	}
 }

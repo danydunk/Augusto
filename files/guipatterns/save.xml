@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	alloy="SAVE.als" alloy_without_unvalid_data="SAVE_without_unvalid.als" name="SAVE">
+	<window id="initial" dynamic="false" card="one" alloy="Initial">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>any</modal>
+		<action_widget id="paw1" card="one" alloy="New">
+			<label>^.*- new.*</label>
+			<class>menuitemui</class>
+		</action_widget>
+		<action_widget id="paw2" card="one" alloy="Open">
+			<label>^.*- open.*</label>
+			<class>menuitemui</class>
+		</action_widget>
+		<action_widget id="paw3" card="lone" alloy="Save">
+			<label>^.*- save.*</label>
+			<class>menuitemui</class>
+		</action_widget>
+		<action_widget id="paw4" card="lone" alloy="Saveas">
+			<label>^.*- save as.*</label>
+			<class>menuitemui</class>
+		</action_widget>
+		<action_widget id="paw5" card="lone" alloy="Saveall">
+			<label>^.*- save all.*</label>
+			<class>menuitemui</class>
+		</action_widget>
+	</window>
+	<window id="saving" card="one" dynamic="false" alloy="Saving">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>any</modal>
+		<action_widget id="paw6" card="one" alloy="Save">
+			<label>save</label>
+			<class>buttonui</class>
+		</action_widget>
+		<action_widget id="paw7" card="one" alloy="Cancelsave">
+			<label>(cancel|back)</label>
+			<class>buttonui</class>
+		</action_widget>
+		<input_widget id="piw1" card="one" alloy="Filename">
+			<label>.*name.*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+		<selectable_widget id="psw1" card="one" alloy="Saving_list">
+			<label>.*</label>
+			<class>.*</class>
+			<size>.*</size>
+		</selectable_widget>
+	</window>
+	<window id="opening" card="one" dynamic="false" alloy="Opening">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>any</modal>
+		<action_widget id="paw8" card="one" alloy="Open">
+			<label>open</label>
+			<class>buttonui</class>
+		</action_widget>
+		<action_widget id="paw9" card="one" alloy="Cancelopen">
+			<label>(cancel|back)</label>
+			<class>buttonui</class>
+		</action_widget>
+		<selectable_widget id="psw2" card="one" alloy="Opening_list">
+			<label>.*</label>
+			<class>.*</class>
+			<size>.*</size>
+		</selectable_widget>
+	</window>
+	<window id="encrypt" card="lone" dynamic="true" alloy="Encrypt">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>true</modal>
+		<action_widget id="paw10" card="one" alloy="Encrypt">
+			<label>^(ok|encrypt)</label>
+			<class>buttonui</class>
+		</action_widget>
+		<action_widget id="paw11" card="one" alloy="No">
+			<label>^(no|cancel)</label>
+			<class>buttonui</class>
+		</action_widget>
+		<input_widget id="piw2" card="one" alloy="Password">
+			<label>password.*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+		<input_widget id="piw3" card="one" alloy="Password_repeat">
+			<label>repeat password.*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+	</window>
+	<window id="decrypt" card="lone" dynamic="true" alloy="Decrypt">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>true</modal>
+		<action_widget id="paw12" card="one" alloy="Decrypt_button">
+			<label>^(ok|encrypt)</label>
+			<class>buttonui</class>
+		</action_widget>
+		<action_widget id="paw13" card="one" alloy="Back">
+			<label>^(no|cancel)</label>
+			<class>buttonui</class>
+		</action_widget>
+		<input_widget id="piw4" card="one" alloy="Password_decypt">
+			<label>password.*</label>
+			<class>.*</class>
+			<text>.*</text>
+		</input_widget>
+	</window>
+	<edge type="static">
+		<from>paw1</from>
+		<to>initial</to>
+		<to>saving</to>
+	</edge>
+	<edge type="static">
+		<from>paw2</from>
+		<to>initial</to>
+		<to>opening</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw3</from>
+		<to>initial</to>
+	</edge>
+	<edge type="static">
+		<from>paw4</from>
+		<to>saving</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw5</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw6</from>
+		<to>initial</to>
+		<to>encrypt</to>
+	</edge>
+	<edge type="static">
+		<from>paw7</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw8</from>
+		<to>initial</to>
+		<to>decrypt</to>
+	</edge>
+	<edge type="static">
+		<from>paw9</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw10</from>
+		<to>initial</to>
+	</edge>
+	<edge type="static">
+		<from>paw11</from>
+		<to>saving</to>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw12</from>
+		<to>initial</to>
+	</edge>
+	<edge type="static">
+		<from>paw13</from>
+		<to>opening</to>
+		<to>initial</to>
+	</edge>
+</pattern>

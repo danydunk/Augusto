@@ -481,10 +481,10 @@ public class GUIFunctionality_search {
 							}
 						}
 						if (source_pw.getCardinality().getMin() != 0 /*
-						 * &&
-						 * source_pw
-						 * != pw
-						 */) {
+																	 * &&
+																	 * source_pw
+																	 * != pw
+																	 */) {
 							check_optional = true;
 						}
 					}

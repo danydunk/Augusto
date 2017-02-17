@@ -61,6 +61,8 @@ public class GUIFunctionality_refine {
 		this.observed_tcs = new ArrayList<>();
 		this.covered_dyn_edges = new ArrayList<>();
 		this.current_semantic_property = "";
+		// this.current_semantic_property =
+		// "one Property_unique_0:Property_unique|one Property_required_0:Property_required|Property_required = (Property_required_0) and Property_unique = (Property_unique_0) and Property_required_0.requireds = (Input_widget_iw7+Input_widget_iw6+Input_widget_iw10+Input_widget_iw5+Input_widget_iw3+Input_widget_iw8) and Property_unique_0.uniques = (Input_widget_iw1+Input_widget_iw8+Input_widget_iw6)";
 		this.discarded_semantic_properties = new ArrayList<>();
 		this.unsat_commands = new ArrayList<>();
 	}
@@ -92,24 +94,27 @@ public class GUIFunctionality_refine {
 
 		if (this.pattern.isInstance(this.instancePattern)) {
 			System.out.println("INSTANCE FOUND!");
-			System.out.println("INITIAL CONSTRAINT FOUND: " + this.current_semantic_property);
-
 			this.instancePattern.generateSpecificSemantics();
 
-			this.semanticPropertyRefine();
+			if (this.instancePattern.getSemantics().hasSemanticProperty()) {
 
-			System.out.println("FINAL CONSTRAINT FOUND: " + this.current_semantic_property);
+				System.out.println("INITIAL CONSTRAINT FOUND: " + this.current_semantic_property);
 
-			final List<String> constraints = new ArrayList<>();
-			if (this.current_semantic_property == null
-					|| this.current_semantic_property.length() == 0) {
-				constraints.addAll(this.discarded_semantic_properties);
-			} else {
-				constraints.add(this.current_semantic_property);
+				this.semanticPropertyRefine();
+
+				System.out.println("FINAL CONSTRAINT FOUND: " + this.current_semantic_property);
+
+				final List<String> constraints = new ArrayList<>();
+				if (this.current_semantic_property == null
+						|| this.current_semantic_property.length() == 0) {
+					constraints.addAll(this.discarded_semantic_properties);
+				} else {
+					constraints.add(this.current_semantic_property);
+				}
+				final SpecificSemantics new_sem = addSemanticConstrain_to_Model(
+						this.instancePattern.getSemantics(), constraints);
+				this.instancePattern.setSpecificSemantics(new_sem);
 			}
-			final SpecificSemantics new_sem = addSemanticConstrain_to_Model(
-					this.instancePattern.getSemantics(), constraints);
-			this.instancePattern.setSpecificSemantics(new_sem);
 			return this.instancePattern;
 		} else {
 			System.out.println("INSTANCE NOT FOUND!");
@@ -185,7 +190,7 @@ public class GUIFunctionality_refine {
 						for (final String ed : this.covered_dyn_edges) {
 							if (ed.startsWith(aw.getId() + " - ")) {
 								System.out
-								.println("DISCOVER DYNAMIC EDGE: already found edge starting from this aw.");
+										.println("DISCOVER DYNAMIC EDGE: already found edge starting from this aw.");
 								continue loop;
 							}
 						}
@@ -202,7 +207,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -321,19 +326,22 @@ public class GUIFunctionality_refine {
 
 			if (covered_edge && found.getPattern().getId().equals(target.getId())) {
 				// we found the correct window
-				final List<String> sem = this.canididate_semantic_properties.stream()
-						.filter(e -> !e.startsWith("not(")).collect(Collectors.toList());
-				assert sem.size() <= 1;
 
-				if (sem.size() == 1) {
-					if (this.current_semantic_property.length() > 0) {
-						this.discarded_semantic_properties.add("not("
-								+ this.current_semantic_property + ")");
+				if (this.instancePattern.getSemantics().hasSemanticProperty()) {
+					final List<String> sem = this.canididate_semantic_properties.stream()
+							.filter(e -> !e.startsWith("not(")).collect(Collectors.toList());
+					assert sem.size() <= 1;
+
+					if (sem.size() == 1) {
+						if (this.current_semantic_property.length() > 0) {
+							this.discarded_semantic_properties.add("not("
+									+ this.current_semantic_property + ")");
+						}
+						this.current_semantic_property = sem.get(0);
+						this.canididate_semantic_properties.remove(this.current_semantic_property);
 					}
-					this.current_semantic_property = sem.get(0);
-					this.canididate_semantic_properties.remove(this.current_semantic_property);
+					this.discarded_semantic_properties.addAll(this.canididate_semantic_properties);
 				}
-				this.discarded_semantic_properties.addAll(this.canididate_semantic_properties);
 
 				if (new_edge) {
 					this.covered_dyn_edges.add(edge);
@@ -346,51 +354,55 @@ public class GUIFunctionality_refine {
 			} else {
 				System.out.println("MATCHING WINDOW IS NOT THE EXPECTED ONE.");
 
-				final List<String> vsem = this.canididate_semantic_properties.stream()
-						.filter(e -> {
-							if (!e.startsWith("not(")) {
-								return true;
-							}
+				if (this.instancePattern.getSemantics().hasSemanticProperty()) {
+					final List<String> vsem = this.canididate_semantic_properties.stream()
+							.filter(e -> {
+								if (!e.startsWith("not(")) {
+									return true;
+								}
+								return false;
+							}).collect(Collectors.toList());
+					assert vsem.size() < 2;
+
+					String prop = (vsem.size() == 1) ? vsem.get(0) : this.current_semantic_property;
+					if (!this.validateProperty(prop, this.instancePattern.getSemantics(),
+							this.observed_tcs)) {
+						System.out.println("ADAPTING SEMANTIC PROPERTY");
+						// System.out.println(this.instancePattern.getSemantics());
+
+						final String new_prop = this.getAdaptedConstraint(this.instancePattern
+								.getSemantics());
+						if (new_prop == null) {
+							this.instancePattern = old;
+							this.cleanInstance(aw);
+							System.out.println("ADAPTATION IMPOSSIBLE.");
 							return false;
-						}).collect(Collectors.toList());
-				assert vsem.size() < 2;
+						} else {
 
-				String prop = (vsem.size() == 1) ? vsem.get(0) : this.current_semantic_property;
-				if (!this.validateProperty(prop, this.instancePattern.getSemantics(),
-						this.observed_tcs)) {
-					System.out.println("ADAPTING SEMANTIC PROPERTY");
-					// System.out.println(this.instancePattern.getSemantics());
-
-					final String new_prop = this.getAdaptedConstraint(this.instancePattern
-							.getSemantics());
-					if (new_prop == null) {
-						this.instancePattern = old;
-						this.cleanInstance(aw);
-						System.out.println("ADAPTATION IMPOSSIBLE.");
-						return false;
-					} else {
-
-						prop = new_prop;
+							prop = new_prop;
+						}
 					}
+
+					this.canididate_semantic_properties.remove(prop);
+
+					final List<String> sem = this.canididate_semantic_properties.stream()
+							.map(e -> {
+								if (e.startsWith("not(")) {
+									return e;
+								} else {
+									return "not(" + e + ")";
+								}
+							}).collect(Collectors.toList());
+
+					this.discarded_semantic_properties.addAll(sem);
+					if (this.current_semantic_property.length() > 0
+							&& !this.current_semantic_property.equals(prop)) {
+						this.discarded_semantic_properties.add("not("
+								+ this.current_semantic_property + ")");
+					}
+					this.current_semantic_property = prop;
 				}
 
-				this.canididate_semantic_properties.remove(prop);
-
-				final List<String> sem = this.canididate_semantic_properties.stream().map(e -> {
-					if (e.startsWith("not(")) {
-						return e;
-					} else {
-						return "not(" + e + ")";
-					}
-				}).collect(Collectors.toList());
-
-				this.discarded_semantic_properties.addAll(sem);
-				if (this.current_semantic_property.length() > 0
-						&& !this.current_semantic_property.equals(prop)) {
-					this.discarded_semantic_properties.add("not(" + this.current_semantic_property
-							+ ")");
-				}
-				this.current_semantic_property = prop;
 				if (new_edge) {
 					this.covered_dyn_edges.add(edge);
 				}
@@ -500,7 +512,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -836,7 +848,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -1051,7 +1063,6 @@ public class GUIFunctionality_refine {
 			}
 
 			final List<String> constraints = new ArrayList<>();
-
 			if (current.length() == 0) {
 				constraints.addAll(this.discarded_semantic_properties);
 				constraints.addAll(new_invalid_properties);
@@ -1084,6 +1095,11 @@ public class GUIFunctionality_refine {
 			assert tests.size() < 2;
 
 			if (tests.size() == 0) {
+
+				if (!sem.hasSemanticProperty()) {
+					return null;
+				}
+
 				if (current.length() > 0) {
 					new_invalid_properties.add("not(" + current + ")");
 					current = "";
@@ -1101,33 +1117,38 @@ public class GUIFunctionality_refine {
 				return null;
 			}
 
-			// if valid_constraint is not null it means we are using the
-			// previous constraint that it is still valid
-			if (current.length() > 0) {
+			if (!sem.hasSemanticProperty()) {
 				tc = tests.get(0);
-				if (!current.equals(this.current_semantic_property)) {
-					this.canididate_semantic_properties.add(current);
-				}
 			} else {
-				// if not we need to validate the new constraint
-				property = AlloyUtil.extractProperty(tests.get(0).getAlloySolution(), sem);
-
-				final boolean valid = this.validateProperty(property, sem, this.observed_tcs);
-
-				if (valid) {
+				// if valid_constraint is not null it means we are using the
+				// previous constraint that it is still valid
+				if (current.length() > 0) {
 					tc = tests.get(0);
-					System.out.println("GET TESTCASE: new valid property - " + property);
-					current = property;
-					this.canididate_semantic_properties.add(current);
-
+					if (!current.equals(this.current_semantic_property)) {
+						this.canididate_semantic_properties.add(current);
+					}
 				} else {
-					// since it not valid according to previous testcases we add
-					// it to the list of discarded properties
-					this.discarded_semantic_properties.add("not(" + property + ")");
-					current = "";
-					// add constraint
-					System.out.println("GET TESTCASE: new invalid property added - not(" + property
-							+ ")");
+					// if not we need to validate the new constraint
+					property = AlloyUtil.extractProperty(tests.get(0).getAlloySolution(), sem);
+
+					final boolean valid = this.validateProperty(property, sem, this.observed_tcs);
+
+					if (valid) {
+						tc = tests.get(0);
+						System.out.println("GET TESTCASE: new valid property - " + property);
+						current = property;
+						this.canididate_semantic_properties.add(current);
+
+					} else {
+						// since it not valid according to previous testcases we
+						// add
+						// it to the list of discarded properties
+						this.discarded_semantic_properties.add("not(" + property + ")");
+						current = "";
+						// add constraint
+						System.out.println("GET TESTCASE: new invalid property added - not("
+								+ property + ")");
+					}
 				}
 			}
 		}
@@ -1218,7 +1239,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-											.equals(inw.getInstance().getId())) {
+													.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1235,7 +1256,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-											.equals(inw.getInstance().getId())) {
+													.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1266,9 +1287,9 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-					+ "System and "
-					+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
-			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+			+ "System and "
+			+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
+					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
 

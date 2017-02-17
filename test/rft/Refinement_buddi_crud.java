@@ -51,7 +51,7 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 		final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
 		final List<Instance_GUI_pattern> res = gfs.match(pattern);
 
-		Instance_GUI_pattern match = res.get(1);
+		Instance_GUI_pattern match = res.get(2);
 
 		match.generateSpecificSemantics();
 		final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
@@ -72,7 +72,7 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 		}
 
 		if (sem_prop.startsWith("not")
-				|| !sem_prop.contains("Property_required_0.requireds = (Input_widget_iw1")) {
+				|| !sem_prop.contains("Property_required_0.requireds = (Input_widget_iw7")) {
 			throw new Exception("");
 		}
 	}
