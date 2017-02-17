@@ -39,10 +39,11 @@ public class RunTestsuite extends RunTestsuiteHelper {
 		case 2:
 			// settings =
 			settings = (String) args[1];
-			// "C:\\workspace\\Augusto\\results_rachota_final\\aut.properties";
+			// settings =
+			// "C:\\workspace\\Augusto\\results_buddi_final\\aut.properties";
 			dir = (String) args[0];
 			// dir =
-			// "C:\\workspace\\Augusto\\results_rachota_final\\CRUD_match_1\\testcases";
+			// "C:\\workspace\\Augusto\\results_buddi_final\\CRUD_match_1\\testcases";
 			break;
 
 		default:
@@ -72,7 +73,7 @@ public class RunTestsuite extends RunTestsuiteHelper {
 						+ checker.getDescriptionOfLastOracleCheck());
 				writer.close();
 				System.out.println("FINISHED RUNNING " + f.getName());
-
+				Thread.sleep(1000);
 			}
 		}
 	}
