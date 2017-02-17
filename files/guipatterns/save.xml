@@ -30,7 +30,7 @@
 		<title>.*</title>
 		<class>.*</class>
 		<modal>any</modal>
-		<action_widget id="paw6" card="one" alloy="Save">
+		<action_widget id="paw6" card="one" alloy="Saves">
 			<label>save</label>
 			<class>buttonui</class>
 		</action_widget>
@@ -53,7 +53,7 @@
 		<title>.*</title>
 		<class>.*</class>
 		<modal>any</modal>
-		<action_widget id="paw8" card="one" alloy="Open">
+		<action_widget id="paw8" card="one" alloy="Openo">
 			<label>open</label>
 			<class>buttonui</class>
 		</action_widget>
@@ -75,7 +75,7 @@
 			<label>^(ok|encrypt)</label>
 			<class>buttonui</class>
 		</action_widget>
-		<action_widget id="paw11" card="one" alloy="No">
+		<action_widget id="paw11" card="one" alloy="Backe">
 			<label>^(no|cancel)</label>
 			<class>buttonui</class>
 		</action_widget>
@@ -84,7 +84,7 @@
 			<class>.*</class>
 			<text>.*</text>
 		</input_widget>
-		<input_widget id="piw3" card="one" alloy="Password_repeat">
+		<input_widget id="piw3" card="one" alloy="Repassword">
 			<label>repeat password.*</label>
 			<class>.*</class>
 			<text>.*</text>
@@ -94,19 +94,32 @@
 		<title>.*</title>
 		<class>.*</class>
 		<modal>true</modal>
-		<action_widget id="paw12" card="one" alloy="Decrypt_button">
-			<label>^(ok|encrypt)</label>
+		<action_widget id="paw12" card="one" alloy="Decryptb">
+			<label>^(ok|decrypt)</label>
 			<class>buttonui</class>
 		</action_widget>
-		<action_widget id="paw13" card="one" alloy="Back">
+		<action_widget id="paw13" card="one" alloy="Backd">
 			<label>^(no|cancel)</label>
 			<class>buttonui</class>
 		</action_widget>
-		<input_widget id="piw4" card="one" alloy="Password_decypt">
+		<input_widget id="piw4" card="one" alloy="Depassword">
 			<label>password.*</label>
 			<class>.*</class>
 			<text>.*</text>
 		</input_widget>
+	</window>
+	<window id="choice" card="lone" dynamic="true" alloy="Choice">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>true</modal>
+		<action_widget id="paw14" card="one" alloy="Yes">
+			<label>^(ok|encrypt)</label>
+			<class>buttonui</class>
+		</action_widget>
+		<action_widget id="paw15" card="one" alloy="No">
+			<label>^(no|cancel)</label>
+			<class>buttonui</class>
+		</action_widget>
 	</window>
 	<edge type="static">
 		<from>paw1</from>
@@ -133,6 +146,7 @@
 	<edge type="dynamic">
 		<from>paw6</from>
 		<to>initial</to>
+		<to>choice</to>
 		<to>encrypt</to>
 	</edge>
 	<edge type="static">
@@ -164,6 +178,14 @@
 	<edge type="static">
 		<from>paw13</from>
 		<to>opening</to>
+		<to>initial</to>
+	</edge>
+	<edge type="static">
+		<from>paw14</from>
+		<to>encrypt</to>
+	</edge>
+	<edge type="static">
+		<from>paw15</from>
 		<to>initial</to>
 	</edge>
 </pattern>

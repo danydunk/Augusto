@@ -26,12 +26,6 @@ fact {
 	#For_viewing > 0 => #For_viewing = #For_inputing
 	no iw, iw2: For_viewing |  not (iw = iw2) and iw.mapping = iw2.mapping
 	#For_viewing > 0 => no iww, iww2: For_inputing | one iw, iw2: For_viewing | IW/lt[iww,iww2] and IW/lt[iw2,iw] and iw.mapping = iww and iw2.mapping = iww2
-	#Ok.goes < 2
-	#Continue.goes < 2
-	#Create_trigger.goes < 2
-	#Read_trigger.goes < 2
-	#Update_trigger.goes < 2
-	#Delete_trigger.goes < 2
 	#For_selecting = 1 and #Selectable_widget = 1
 	all iw: For_inputing | #iw.content.(T/first) =1 => not(iw in Property_required.requireds)
 	all iw: For_viewing | not(iw in Property_required.requireds) and not(iw in Property_unique.uniques)
@@ -83,8 +77,6 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] {
 pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Ok and Current_crud_op.operation.t in CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
 	(aw in Ok and Current_crud_op.operation.t in UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
-	(aw in Ok and Current_crud_op.operation.t in READ) => (2=(1+1))
-	(aw in Delete_trigger) => (2=(1+1))
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Create_trigger) => (Current_crud_op.operation.t' = CREATE and For_selecting.list.t' = For_selecting.list.t and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #For_selecting.selected.t' = 0)

@@ -37,7 +37,7 @@ abstract sig Window {
 	sws: set Selectable_widget
 }
 abstract sig Action_widget {
-	goes: set Window
+	goes: lone Window
 }
 sig Value { }
 one sig Option_value_0 extends Value{ }
@@ -76,8 +76,7 @@ pred click [aw: Action_widget, t, t': Time, c: Click] {
 	aw in Current_window.is_in.t.aws
 	click_pre [aw, t]
 	--- effect ---
-	(click_semantics [aw, t] and #aw.goes < 2 and Current_window.is_in.t' = aw.goes and click_success_post [aw, t, t']) or
-	(click_semantics [aw, t]  and not(#aw.goes < 2) and click_success_post [aw, t, t']) or
+	(click_semantics [aw, t] and Current_window.is_in.t' = aw.goes and click_success_post [aw, t, t']) or
 	(not click_semantics  [aw, t] and Current_window.is_in.t' = Current_window.is_in.t and click_fail_post [aw, t, t'])
 	--- operation is tracked ---
 	c.clicked = aw and Track.op.t' = c

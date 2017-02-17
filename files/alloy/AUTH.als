@@ -8,17 +8,7 @@ pred init [t: Time] {
 abstract sig Go, Login, Signup, Ok, Cancel, Logout extends Action_widget { }
 abstract sig User, Password, User_save, Password_save, Re_password, Field extends Input_widget { }
 
-fact{
-	no t: Time |  #Track.op.t = 1 and Track.op.t in Fill and Track.op.t.with = Track.op.t.filled.content.(T/prev[t])
-}
-
 fact {
-	#Go.goes < 2
-	#Login.goes < 2
-	#Signup.goes < 2
-	#Ok.goes < 2
-	#Cancel.goes < 2
-	#Logout.goes < 2
 	(User_save+Password_save+Re_password) in Property_required.requireds
 	(User_save+Password_save) in Property_unique.uniques
 }
