@@ -85,9 +85,6 @@
       <invalid>2</invalid>
       <invalid>3</invalid>
       <invalid>4</invalid>
-      <invalid>5</invalid>
-      <invalid>6</invalid>
-      <invalid>7</invalid>
     </values>
   </DATA>
   <DATA type="itemized">
@@ -98,23 +95,15 @@
       <valid>2</valid>
       <valid>3</valid>
       <valid>4</valid>
-      <valid>5</valid>
     </values>
   </DATA>
   <DATA type="itemized">
     <metadata> → </metadata>
     <values>
       <valid>4</valid>
-      <valid>5</valid>
-      <valid>6</valid>
-      <valid>7</valid>
-      <valid>8</valid>
-      <valid>9</valid>
-      <valid>10</valid>
       <invalid>0</invalid>
       <invalid>2</invalid>
       <invalid>3</invalid>
-      <invalid>11</invalid>
     </values>
   </DATA>
   <DATA type="itemized">

@@ -842,7 +842,7 @@ public class AlloyUtil {
 						options.addAll(dm.getValidItemizedData(metadata));
 						for (final Integer i : dm.getInvalidItemizedData(metadata)) {
 							// we limit to only 10 values
-							if (i > 9) {
+							if (i > 4) {
 								continue;
 							}
 							unvalid += "Option_value_" + i + "+";
@@ -856,7 +856,7 @@ public class AlloyUtil {
 
 					for (final Integer i : options) {
 						// we limit to only 10 values
-						if (i > 9) {
+						if (i > 4) {
 							continue;
 						}
 						vs += "Option_value_" + i + "+";
@@ -906,9 +906,9 @@ public class AlloyUtil {
 					content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
 					content += System.getProperty("line.separator");
 					content += "#(filled." + iws.get(iw).getIdentifier() + ".with & (";
-					for (int x = 0; x < 10; x++) {
+					for (int x = 0; x < 5; x++) {
 						content += "Option_value_" + x;
-						if (x != 9) {
+						if (x != 4) {
 							content += "+";
 						} else {
 							content += ")) = 0";
@@ -933,7 +933,7 @@ public class AlloyUtil {
 
 					for (final Integer i : options) {
 						// we limit to only 10 values
-						if (i > 9) {
+						if (i > 4) {
 							continue;
 						}
 						vs += "Option_value_" + i + "+";
@@ -961,9 +961,9 @@ public class AlloyUtil {
 					content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
 					content += System.getProperty("line.separator");
 					content += "#(filled." + iws.get(iw).getIdentifier() + ".with & (";
-					for (int x = 0; x < 10; x++) {
+					for (int x = 0; x < 5; x++) {
 						content += "Option_value_" + x;
-						if (x != 9) {
+						if (x != 4) {
 							content += "+";
 						} else {
 							content += ")) = 0";
