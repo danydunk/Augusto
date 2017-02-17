@@ -457,7 +457,7 @@ public class TestCaseRunner {
 
 				if (index != index2
 						|| !this.w.getSelectableWidgets().get(index2)
-						.isSimilar(p.w.getSelectableWidgets().get(index))) {
+								.isSimilar(p.w.getSelectableWidgets().get(index))) {
 					return false;
 				}
 
