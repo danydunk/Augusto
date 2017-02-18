@@ -23,6 +23,8 @@ fact{
 }
 
 fact {
+ 	#Ok < 2
+	#Continue < 2
 	#For_viewing > 0 => #For_viewing = #For_inputing
 	no iw, iw2: For_viewing |  not (iw = iw2) and iw.mapping = iw2.mapping
 	#For_viewing > 0 => no iww, iww2: For_inputing | one iw, iw2: For_viewing | IW/lt[iww,iww2] and IW/lt[iw2,iw] and iw.mapping = iww and iw2.mapping = iww2

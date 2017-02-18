@@ -21,10 +21,6 @@
 			<label>^.*- save as.*</label>
 			<class>menuitemui</class>
 		</action_widget>
-		<action_widget id="paw5" card="lone" alloy="Saveall">
-			<label>^.*- save all.*</label>
-			<class>menuitemui</class>
-		</action_widget>
 	</window>
 	<window id="saving" card="one" dynamic="false" alloy="Saving">
 		<title>.*</title>
@@ -121,6 +117,19 @@
 			<class>buttonui</class>
 		</action_widget>
 	</window>
+	<window id="replace" card="lone" dynamic="true" alloy="Replacedialog">
+		<title>.*</title>
+		<class>.*</class>
+		<modal>true</modal>
+		<action_widget id="paw16" card="one" alloy="Replace">
+			<label>.*replace.*</label>
+			<class>buttonui</class>
+		</action_widget>
+		<action_widget id="paw17" card="one" alloy="Noreplace">
+			<label>^(no|cancel)</label>
+			<class>buttonui</class>
+		</action_widget>
+	</window>
 	<edge type="static">
 		<from>paw1</from>
 		<to>initial</to>
@@ -133,15 +142,11 @@
 	</edge>
 	<edge type="dynamic">
 		<from>paw3</from>
-		<to>initial</to>
+		<to>saving</to>
 	</edge>
 	<edge type="static">
 		<from>paw4</from>
 		<to>saving</to>
-	</edge>
-	<edge type="dynamic">
-		<from>paw5</from>
-		<to>initial</to>
 	</edge>
 	<edge type="dynamic">
 		<from>paw6</from>
