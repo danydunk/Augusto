@@ -50,6 +50,7 @@ pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Ok) => filled_required_test[t] and unique_fields_test [t] and same_pass_test [t] and valid_data_test [Current_window.is_in.t, t]
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
+	Current_window.is_in.t' = aw.goes
 	(aw in Ok) => add [t, t'] else List.elements.t' =  List.elements.t
 	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
 }

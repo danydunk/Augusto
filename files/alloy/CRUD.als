@@ -50,11 +50,9 @@ sig Object_inlist extends Object{
 
 pred fill_semantics [iw: Input_widget, t: Time, v: Value] { }
 pred fill_success_post [iw: Input_widget, t, t': Time, v: Value] { 
-	For_selecting.list.t' = For_selecting.list.t
 	Current_crud_op.operation.t' = Current_crud_op.operation.t
 }
 pred fill_fail_post [iw: Input_widget, t, t': Time, v: Value] { 
-	For_selecting.list.t' = For_selecting.list.t
 	Current_crud_op.operation.t' = Current_crud_op.operation.t
 }
 pred fill_pre[iw: Input_widget, t: Time, v: Value] { 
@@ -64,12 +62,10 @@ pred fill_pre[iw: Input_widget, t: Time, v: Value] {
 
 pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }
 pred select_fail_post [sw: Selectable_widget, t, t': Time, o: Object] {
-	For_selecting.list.t' = For_selecting.list.t
 	Current_crud_op.operation.t' = Current_crud_op.operation.t
 	all iw: Input_widget | iw.content.t' = iw.content.t
 }
 pred select_success_post [sw: Selectable_widget, t, t': Time, o: Object] {
-	For_selecting.list.t' = For_selecting.list.t
 	#Create_trigger = 0 => (Current_crud_op.operation.t' = UPDATE and load_form[o, t'])  else (#Current_crud_op.operation.t' = 0 and all iw: Input_widget | iw.content.t' = iw.content.t)
 }
 pred select_pre[sw: Selectable_widget, t: Time, o: Object] { 
@@ -81,6 +77,7 @@ pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Ok and Current_crud_op.operation.t in UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
+	Current_window.is_in.t' = aw.goes
 	(aw in Create_trigger) => (Current_crud_op.operation.t' = CREATE and For_selecting.list.t' = For_selecting.list.t and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #For_selecting.selected.t' = 0)
 	(aw in Read_trigger) => (Current_crud_op.operation.t' = READ and For_selecting.list.t' = For_selecting.list.t and load_form[For_selecting.selected.t, t'] and For_selecting.selected.t' = For_selecting.selected.t)
 	(aw in Update_trigger) => (Current_crud_op.operation.t' = UPDATE and For_selecting.list.t' = For_selecting.list.t and load_form[For_selecting.selected.t, t']  and For_selecting.selected.t' = For_selecting.selected.t)

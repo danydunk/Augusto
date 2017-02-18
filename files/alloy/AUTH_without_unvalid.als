@@ -46,6 +46,7 @@ pred select_fail_post [sw: Selectable_widget, t, t': Time, o: Object] {
 pred select_pre[sw: Selectable_widget, t: Time, o: Object] { }
 
 pred click_semantics [aw: Action_widget, t: Time] {
+	Current_window.is_in.t' = aw.goes
 	(aw in Login) => filled_login_test [t] and existing_test [t] 
 	(aw in Ok) => filled_required_test[t] and unique_fields_test [t] and same_pass_test [t] 
 }

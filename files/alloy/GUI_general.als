@@ -37,7 +37,7 @@ abstract sig Window {
 	sws: set Selectable_widget
 }
 abstract sig Action_widget {
-	goes: lone Window
+	goes: set Window
 }
 sig Value { }
 one sig Option_value_0 extends Value{ }
@@ -72,7 +72,7 @@ pred click [aw: Action_widget, t, t': Time, c: Click] {
 	aw in Current_window.is_in.t.aws
 	click_pre [aw, t]
 	--- effect ---
-	(click_semantics [aw, t] and Current_window.is_in.t' = aw.goes and click_success_post [aw, t, t']) or
+	(click_semantics [aw, t] and click_success_post [aw, t, t']) or
 	(not click_semantics  [aw, t] and Current_window.is_in.t' = Current_window.is_in.t and click_fail_post [aw, t, t'])
 	--- operation is tracked ---
 	c.clicked = aw and Track.op.t' = c
@@ -87,7 +87,7 @@ pred fill [iw: Input_widget, t, t': Time, v: Value, f: Fill] {
 	--- general postcondition ---
 	Current_window.is_in.t' = Current_window.is_in.t
 	all iww: (Input_widget - iw) | iww.content.t' = iww.content.t
-	all sw:Selectable_widget | sw.selected.t' = sw.selected.t
+	all sw:Selectable_widget | sw.selected.t' = sw.selected.t and sw.list.t' = sw.list.t
 	--- operation is tracked ---
 	f.filled = iw and f.with = v and Track.op.t' = f
 }
@@ -101,7 +101,8 @@ pred select [sw: Selectable_widget, t, t': Time, o: Object, s: Select] {
 	(not select_semantics  [sw, t, o] and sw.selected.t' = sw.selected.t and select_fail_post [sw, t, t', o])
 	--- general postcondition ---
 	Current_window.is_in.t' = Current_window.is_in.t
-	(Selectable_widget - sw).selected.t' = (Selectable_widget - sw).selected.t
+	all sww: (Selectable_widget - sw) | sww.selected.t' = sww.selected.t and sww.list.t' = sww.list.t
+	sw.list.t' = sw.list.t
 	--- operation is tracked ---
 	s.wid = sw and s.which = o and Track.op.t' = s
 }
