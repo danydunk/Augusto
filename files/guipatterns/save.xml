@@ -67,7 +67,7 @@
 		<title>.*</title>
 		<class>.*</class>
 		<modal>true</modal>
-		<action_widget id="paw10" card="one" alloy="Encrypt">
+		<action_widget id="paw10" card="one" alloy="Encryptb">
 			<label>^(ok|encrypt)</label>
 			<class>buttonui</class>
 		</action_widget>
@@ -137,7 +137,6 @@
 	</edge>
 	<edge type="static">
 		<from>paw2</from>
-		<to>initial</to>
 		<to>opening</to>
 	</edge>
 	<edge type="dynamic">
@@ -192,5 +191,15 @@
 	<edge type="static">
 		<from>paw15</from>
 		<to>initial</to>
+		<to>saving</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw16</from>
+		<to>initial</to>
+	</edge>
+	<edge type="dynamic">
+		<from>paw17</from>
+		<to>initial</to>
+		<to>saving</to>
 	</edge>
 </pattern>

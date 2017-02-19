@@ -1,89 +1,88 @@
 --------------------Initial State---------------
 pred init [t: Time] {
 	no Track.op.t
- 	Current_window.is_in.t = aws.Login
-	#List.elements.t = 0
+ 	Current_window.is_in.t = aws.New
+	#Saving_list.list.t = 0
 }
----------------Generic AUTH Structure ----------
-abstract sig Go, Login, Signup, Ok, Cancel, Logout extends Action_widget { }
-abstract sig User, Password, User_save, Password_save, Re_password, Field extends Input_widget { }
-
-fact{
-	no t: Time |  #Track.op.t = 1 and Track.op.t in Fill and Track.op.t.with = Track.op.t.filled.content.(T/prev[t])
-}
+---------------Generic SAVE Structure ----------
+abstract sig New, Open, Save, Saveas, Saves, Cancelsave, Openo, Cancelopen, Encryptb, Backe, Decryptb, Backb, Yes, No, Replace, Noreplace extends Action_widget { }
+abstract sig Filename, Password, Repassword, Depassword extends Input_widget { }
+abstract sig Saving_list, Opening_list extends Selectable_widget { }
 
 fact {
-	#Go.goes < 2
-	#Login.goes < 2
-	#Signup.goes < 2
-	#Ok.goes < 2
-	#Cancel.goes < 2
-	#Logout.goes < 2
-	(User_save+Password_save+Re_password) in Property_required.requireds
-	(User_save+Password_save) in Property_unique.uniques
+	Saving_list.list = Opening_list.list
 }
----------------Generic AUTH Semantics---------- 
-one sig Property_unique{
-	uniques: set Input_widget
-} 
-one sig Property_required{
-	requireds: set Input_widget
+---------------Generic SAVE Semantics---------- 
+one sig Auxiliary{
+	pwd: Object lone -> Value,
+	names: Object one -> Value,
+	saved: Time lone -> Value
 }
-sig Object_inlist extends Object{
-	vs: Value lone -> Input_widget
-}
-one sig List {
-	elements: Object_inlist set -> Time
-}
+
 pred fill_semantics [iw: Input_widget, t: Time, v: Value] { }
 pred fill_success_post [iw: Input_widget, t, t': Time, v: Value] {  
-		List.elements.t' =  List.elements.t
+		Saving_list.list.t' =  Saving_list.list.t
+		t'.(Auxiliary.saved) = 	t.(Auxiliary.saved)
 }
 pred fill_fail_post [iw: Input_widget, t, t': Time, v: Value] {
-		List.elements.t' =  List.elements.t
+		Saving_list.list.t' =  Saving_list.list.t
+		t'.(Auxiliary.saved) = 	t.(Auxiliary.saved)
 }
-pred fill_pre[iw: Input_widget, t: Time, v: Value] { 
-	//#iw.content.(T/first) = 1 => not(v = none)
-}
+pred fill_pre[iw: Input_widget, t: Time, v: Value] { }
 
 pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }
 pred select_success_post [sw: Selectable_widget, t, t': Time, o: Object] { 
-		//List.elements.t' =  List.elements.t
+		Saving_list.list.t' =  Saving_list.list.t
+		t'.(Auxiliary.saved) = 	t.(Auxiliary.saved)
 }
 pred select_fail_post [sw: Selectable_widget, t, t': Time, o: Object] { 
-		//List.elements.t' =  List.elements.t
+		Saving_list.list.t' =  Saving_list.list.t
+		t'.(Auxiliary.saved) = 	t.(Auxiliary.saved)
 }
 pred select_pre[sw: Selectable_widget, t: Time, o: Object] { }
 
 pred click_semantics [aw: Action_widget, t: Time] {
-	(aw in Login) => filled_login_test [t] and existing_test [t] 
-	(aw in Ok) => filled_required_test[t] and unique_fields_test [t] and same_pass_test [t] 
+	(aw in Save)        => #t.(Auxiliary.saved) = 0
+	(aw in Openo)     => #Opening_list.selected.t = 1
+	(aw in Saves)      => #Filename.content.t = 1
+	(aw in Encryptb)   => #Repassword.content.t = 1 and Password.content.t = Repassword.content.t
+	(aw in Decryptb) => #Depassword.content.t = 1 and Depassword.content.t = (Opening_list.selected.t).(Auxiliary.pwd)
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
-	(aw in Ok) => add [t, t'] else List.elements.t' =  List.elements.t
-	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
+	Current_window.is_in.t' = aws.New => #Input_widget.content.t' = 0 and #Selectable_widget.selected.t' = 0 else all iw:  Input_widget | iw.content.t' = iw.content.t and all sw: Selectable_widget | sw.selected.t' = sw.selected.t
+	not(aw in Saves or aw in Openo) => Current_window.is_in.t' = aw.goes
+	(aw in New) => new[t,t']
+	(aw in Saves and exisit[t, Filename.content.t]) => (Current_window.is_in.t' = aws.Yes and same[t, t'])
+	(aw in Saves and not(exisit[t, Filename.content.t])) => (#Encryptb = 1 => Current_window.is_in.t' = aws.Encryptb and same[t,t'] else  save[t,t', none,Filename.content.t])
+	(aw in Yes) => (#Encryptb = 1 => Current_window.is_in.t' = aws.Encryptb and same[t,t'] else save[t,t', none,Filename.content.t])
+	(aw in Encryptb) => save[t,t', Password.content.t, Filename.content.t]
+	(aw in Decryptb) => openo[t, t']
+	(aw in Openo) => (#(Opening_list.selected.t).(Auxiliary.pwd) = 1) => Current_window.is_in.t' = aws.Decryptb and same[t,t'] else Current_window.is_in.t' = aws.New and 	openo[t,t'] 
 }
 pred click_fail_post [aw: Action_widget, t, t': Time]	{
 	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
-	List.elements.t' =  List.elements.t
+	Saving_list.list.t' =  Saving_list.list.t
+	t'.(Auxiliary.saved) = 	t.(Auxiliary.saved)
 }
-pred click_pre[aw: Action_widget, t: Time] { }
+pred click_pre[aw: Action_widget, t': Time] { }
 
-pred add [t, t': Time] {
-	one o: Object_inlist |all iw: (User_save + Password_save + Field) | not(o in List.elements.t) and o.appeared = t' and o.vs.iw = iw.content.t and List.elements.t' =  List.elements.t+o
+pred save [t,t': Time, password: Value, filename: Value] {
+	(filename in (Saving_list.list.t).(Auxiliary.names)) => (one o: Object | not(o in Saving_list.list.t) and o.appeared = Auxiliary.names.filename.appeared and o.(Auxiliary.pwd) = password and 	o.(Auxiliary.names) = filename and Saving_list.list.t' = (Saving_list.list.t - (Auxiliary.names).filename)+o) else (one o: Object | not(o in Saving_list.list.t) and o.(Auxiliary.pwd) = password and	o.(Auxiliary.names) = filename and o.appeared = t' and	Saving_list.list.t' = Saving_list.list.t + o)
+	#t'.(Auxiliary.saved) = 1
+	Current_window.is_in.t' = aws.New
 }
-pred filled_login_test [t: Time] { 
-	all iw: (User+Password)| #iw.content.t = 1
+pred new [t,t': Time] {
+	#t'.(Auxiliary.saved) = 0
+	Saving_list.list.t' =  Saving_list.list.t
 }
-pred  existing_test [t: Time] { 
-	one o: List.elements.t | Password.content.t =o.vs.Password_save and User.content.t =o.vs.User_save
+pred openo [t,t': Time] {
+	#t'.(Auxiliary.saved) = 0
+	Saving_list.list.t' =  Saving_list.list.t
 }
-pred same_pass_test [t: Time] {
-	Password_save.content.t = Re_password.content.t
+pred exisit[t: Time, name: Value]{
+	name in (Saving_list.list.t).(Auxiliary.names)
 }
-pred filled_required_test [t: Time] { 
-	all iw: (User_save + Password_save + Re_password + Field)| (iw in Property_required.requireds) => #iw.content.t = 1
-}
-pred  unique_fields_test [t: Time] { 
-	all iw: (User_save + Password_save + Field) | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
+pred same[t,t': Time]{
+		Saving_list.list.t' =  Saving_list.list.t
+		t'.(Auxiliary.saved) = 	t.(Auxiliary.saved)
 }
