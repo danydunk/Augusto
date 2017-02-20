@@ -275,44 +275,63 @@ public class GUIFunctionality_refine {
 				// if we did not stay in the same window
 				if (!this.instancePattern.getGui().containsWindow(found.getInstance().getId())) {
 					// new window was found
+
 					this.instancePattern.getGui().addWindow(found.getInstance());
 
+					// we traverse the GUI to see ripping found new
+					// windows connected by static edges that are part of the
+					// pattern
+					final GUIFunctionality_search search = new GUIFunctionality_search(this.gui);
+					search.init_match(this.instancePattern.getGuipattern());
+					this.instancePattern = search.traverse(found.getInstance(), found.getPattern(),
+							this.instancePattern);
 					// we add the found static edges to the instance gui
 					// TODO: deal with the fact that the ripping might find new
 					// windows connected by static edges that are part of the
 					// pattern
-					for (final Window w : this.gui.getWindows()) {
-						for (final Action_widget aww : w.getActionWidgets()) {
-							for (final Window targetw : this.gui.getStaticForwardLinks(aww.getId())) {
-								if (this.instancePattern.getGui().containsWindow(w.getId())
-										&& this.instancePattern.getGui().containsWindow(
-												targetw.getId())) {
-									this.instancePattern.getGui().addStaticEdge(aww.getId(),
-											targetw.getId());
-								}
-							}
-						}
+					// for (final Window w : this.gui.getWindows()) {
+					// for (final Action_widget aww : w.getActionWidgets()) {
+					// for (final Window targetw :
+					// this.gui.getStaticForwardLinks(aww.getId())) {
+					// if
+					// (this.instancePattern.getGui().containsWindow(w.getId())
+					// && this.instancePattern.getGui().containsWindow(
+					// targetw.getId())) {
+					// this.instancePattern.getGui().addStaticEdge(aww.getId(),
+					// targetw.getId());
+					// }
+					// }
+					// }
+					// }
+
+				}
+
+				if (this.instancePattern != null) {
+					if (!this.instancePattern.getWindows().contains(found)) {
+						this.instancePattern.addWindow(found);
+						new_window = true;
 					}
+					if (aw != null) {
+						this.instancePattern.getGui().addDynamicEdge(aw,
+								found.getInstance().getId());
+						edge = aw + " - " + found.getInstance().getId();
+						new_edge = true;
+					}
+					this.instancePattern.generateSpecificSemantics();
 
-				}
+					if (!this.instancePattern.isSemanticsValid()) {
+						// System.out.println(this.instancePattern.getSemantics());
+						System.out.println("SEMANTICS NOT VALID");
+						this.instancePattern = old;
+						this.cleanInstance(aw);
 
-				if (!this.instancePattern.getWindows().contains(found)) {
-					this.instancePattern.addWindow(found);
-					new_window = true;
-				}
-				if (aw != null) {
-					this.instancePattern.getGui().addDynamicEdge(aw, found.getInstance().getId());
-					edge = aw + " - " + found.getInstance().getId();
-					new_edge = true;
-				}
-				this.instancePattern.generateSpecificSemantics();
-
-				if (!this.instancePattern.isSemanticsValid()) {
-					// System.out.println(this.instancePattern.getSemantics());
-					System.out.println("SEMANTICS NOT VALID");
-					this.instancePattern = old;
+						return false;
+					}
+				} else {
+					// if the traverse did not work
+					System.out.println("MATCHING WINDOW NOT FOUND.");
+					// we remove the edge
 					this.cleanInstance(aw);
-
 					return false;
 				}
 			} else {

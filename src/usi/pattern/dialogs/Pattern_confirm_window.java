@@ -40,16 +40,27 @@ public class Pattern_confirm_window extends Pattern_window {
 		}
 
 		final java.util.regex.Pattern r = java.util.regex.Pattern.compile(".*continue.*");
+		final java.util.regex.Pattern r2 = java.util.regex.Pattern.compile(".*are you sure.*");
 
 		if (w.getActionWidgets().get(0).getDescriptor() != null) {
 			final Matcher m = r.matcher(w.getActionWidgets().get(0).getDescriptor().toLowerCase());
 			if (m.find()) {
 				return true;
 			}
+			final Matcher m2 = r2
+					.matcher(w.getActionWidgets().get(0).getDescriptor().toLowerCase());
+			if (m2.find()) {
+				return true;
+			}
 		}
 		if (w.getActionWidgets().get(1).getDescriptor() != null) {
 			final Matcher m = r.matcher(w.getActionWidgets().get(1).getDescriptor().toLowerCase());
 			if (m.find()) {
+				return true;
+			}
+			final Matcher m2 = r2
+					.matcher(w.getActionWidgets().get(1).getDescriptor().toLowerCase());
+			if (m2.find()) {
 				return true;
 			}
 		}

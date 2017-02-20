@@ -33,10 +33,9 @@ public class GUIFunctionality_search {
 		this.gui = gui;
 	}
 
-	public List<Instance_GUI_pattern> match(final GUI_Pattern pattern) throws Exception {
+	public void init_match(final GUI_Pattern pattern) throws Exception {
 
 		this.gui_pattern = pattern;
-		final List<Instance_GUI_pattern> out = new ArrayList<>();
 
 		// the windows in the GUI are reduced to only the windows that can match
 		// the windows in the pattern
@@ -64,8 +63,8 @@ public class GUIFunctionality_search {
 			}
 		}
 
-		Map<Pattern_window, List<Window>> new_possible_matches = new LinkedHashMap<>();
-		Table<Pattern_window, Window, List<Instance_window>> new_matches_table = HashBasedTable
+		final Map<Pattern_window, List<Window>> new_possible_matches = new LinkedHashMap<>();
+		final Table<Pattern_window, Window, List<Instance_window>> new_matches_table = HashBasedTable
 				.create();
 
 		// first we filter those without the right edges
@@ -124,6 +123,12 @@ public class GUIFunctionality_search {
 		// by recursively following the edges
 		this.possible_matches_wm = possible_matches;
 		this.matches_table_wm = matches_table;
+	}
+
+	public final List<Instance_GUI_pattern> match(final GUI_Pattern pattern) throws Exception {
+
+		this.init_match(pattern);
+		final List<Instance_GUI_pattern> out = new ArrayList<>();
 
 		while (true) {
 			this.not_overlapping = new ArrayList<>();
@@ -151,6 +156,7 @@ public class GUIFunctionality_search {
 					this.not_overlapping.add(iw);
 				}
 			}
+
 			final List<Entry<Window, Pattern_window>> tuples = new ArrayList<>();
 			// we create a tuple for each match
 			for (final Pattern_window pw : this.gui_pattern.getWindows()) {
@@ -188,8 +194,9 @@ public class GUIFunctionality_search {
 						if (this.correctMatch(match)) {
 							out.add(match);
 							// we filter out all the overlaps
-							new_possible_matches = new LinkedHashMap<>();
-							new_matches_table = HashBasedTable.create();
+							final Map<Pattern_window, List<Window>> new_possible_matches = new LinkedHashMap<>();
+							final Table<Pattern_window, Window, List<Instance_window>> new_matches_table = HashBasedTable
+									.create();
 
 							// first we filter those without the right edges
 							for (final Pattern_window pw : this.gui_pattern.getWindows()) {
@@ -299,7 +306,7 @@ public class GUIFunctionality_search {
 	 * required. A window to match the pattern must have at least one correct
 	 * backward edge (if the pattern window has some).
 	 */
-	private Instance_GUI_pattern traverse(final Window w, final Pattern_window pw,
+	public Instance_GUI_pattern traverse(final Window w, final Pattern_window pw,
 			Instance_GUI_pattern igp) throws Exception {
 
 		// if the window is already part of the instance_gui_pattern

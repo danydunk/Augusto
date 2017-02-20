@@ -39,11 +39,6 @@
 			<class>.*</class>
 			<text>.*</text>
 		</input_widget>
-		<selectable_widget id="psw1" card="one" alloy="Saving_list">
-			<label>.*</label>
-			<class>.*</class>
-			<size>.*</size>
-		</selectable_widget>
 	</window>
 	<window id="opening" card="one" dynamic="false" alloy="Opening">
 		<title>.*</title>
@@ -57,7 +52,7 @@
 			<label>(cancel|back)</label>
 			<class>buttonui</class>
 		</action_widget>
-		<selectable_widget id="psw2" card="one" alloy="Opening_list">
+		<selectable_widget id="psw1" card="one" alloy="Opening_list">
 			<label>.*</label>
 			<class>.*</class>
 			<size>.*</size>
@@ -109,7 +104,7 @@
 		<class>.*</class>
 		<modal>true</modal>
 		<action_widget id="paw14" card="one" alloy="Yes">
-			<label>^(ok|encrypt)</label>
+			<label>^(ok|yes|encrypt)</label>
 			<class>buttonui</class>
 		</action_widget>
 		<action_widget id="paw15" card="one" alloy="No">
@@ -117,7 +112,7 @@
 			<class>buttonui</class>
 		</action_widget>
 	</window>
-	<window id="replace" card="lone" dynamic="true" alloy="Replacedialog">
+	<window id="replace" card="one" dynamic="true" alloy="Replacedialog">
 		<title>.*</title>
 		<class>.*</class>
 		<modal>true</modal>
