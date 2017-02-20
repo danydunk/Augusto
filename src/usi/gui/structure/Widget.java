@@ -184,17 +184,19 @@ public abstract class Widget implements Comparable<Widget> {
 
 			return false;
 		}
-		if (w.descriptor == null && this.descriptor != null) {
+		if (w.label == null || w.label.length() == 0) {
+			if (w.descriptor == null && this.descriptor != null) {
 
-			return false;
-		}
-		if (w.descriptor != null && this.descriptor == null) {
+				return false;
+			}
+			if (w.descriptor != null && this.descriptor == null) {
 
-			return false;
-		}
-		if (w.descriptor != null && !w.descriptor.equals(this.descriptor)) {
+				return false;
+			}
+			if (w.descriptor != null && !w.descriptor.equals(this.descriptor)) {
 
-			return false;
+				return false;
+			}
 		}
 		if (!w.classs.equals(this.classs)) {
 			return false;
