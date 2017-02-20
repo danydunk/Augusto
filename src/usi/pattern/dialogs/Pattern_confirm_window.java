@@ -1,5 +1,8 @@
 package src.usi.pattern.dialogs;
 
+import java.util.regex.Matcher;
+
+import src.usi.gui.structure.Window;
 import src.usi.pattern.structure.Boolean_regexp;
 import src.usi.pattern.structure.Cardinality;
 import src.usi.pattern.structure.Pattern_action_widget;
@@ -27,5 +30,29 @@ public class Pattern_confirm_window extends Pattern_window {
 		this.addWidget(other_paw);
 		this.addWidget(piw);
 		this.addWidget(psw);
+	}
+
+	@Override
+	public boolean isMatch(final Window w) throws Exception {
+
+		if (!super.isMatch(w)) {
+			return false;
+		}
+
+		final java.util.regex.Pattern r = java.util.regex.Pattern.compile(".*continue.*");
+
+		if (w.getActionWidgets().get(0).getDescriptor() != null) {
+			final Matcher m = r.matcher(w.getActionWidgets().get(0).getDescriptor().toLowerCase());
+			if (m.find()) {
+				return true;
+			}
+		}
+		if (w.getActionWidgets().get(1).getDescriptor() != null) {
+			final Matcher m = r.matcher(w.getActionWidgets().get(1).getDescriptor().toLowerCase());
+			if (m.find()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

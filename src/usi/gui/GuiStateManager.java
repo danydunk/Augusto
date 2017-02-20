@@ -168,7 +168,7 @@ public class GuiStateManager {
 				if (widget != null) {
 					// if the widget does not have a label we look for
 					// descriptors
-					if (widget.getLabel() == null) {
+					if (widget.getLabel() == null || widget.getClasss().equals("ButtonUI")) {
 
 						widget.setDescriptor(context.getDescriptor(widget.getTo()));
 					}

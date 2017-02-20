@@ -823,8 +823,8 @@ public class AlloyUtil {
 		for (final Input_widget iw : iws.keySet()) {
 
 			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
-			metadata += " ";
-			metadata += iw.getDescriptor() != null ? iw.getDescriptor() : "";
+			metadata += iw.getDescriptor() != null && metadata.length() == 0 ? iw.getDescriptor()
+					: "";
 
 			to_order.add(iw);
 			if (invalid) {
@@ -1661,8 +1661,6 @@ public class AlloyUtil {
 						fact += " and Track.op.(" + t + ").with=none";
 					} else {
 						fact += " and Track.op.(" + t + ").with=Option_value_" + f.getInput();
-						final String metadata = f.getWidget().getLabel() != null ? f.getWidget()
-								.getLabel() : "";
 					}
 				}
 			}
@@ -1712,8 +1710,8 @@ public class AlloyUtil {
 				for (final Input_widget iw : values_used_iw.get(s)) {
 
 					String metadata = iw.getLabel() != null ? iw.getLabel() : "";
-					metadata += " ";
-					metadata += iw.getDescriptor() != null ? iw.getDescriptor() : "";
+					metadata += iw.getDescriptor() != null && metadata.length() == 0 ? iw
+							.getDescriptor() : "";
 
 					if (dm.getInvalidData(metadata).contains(s)) {
 						assert (invalid);
