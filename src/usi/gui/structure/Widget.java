@@ -198,6 +198,7 @@ public abstract class Widget implements Comparable<Widget> {
 
 				return false;
 			}
+
 		}
 		if (!w.classs.equals(this.classs)) {
 			return false;

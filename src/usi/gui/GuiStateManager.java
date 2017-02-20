@@ -168,7 +168,10 @@ public class GuiStateManager {
 				if (widget != null) {
 					// if the widget does not have a label we look for
 					// descriptors
-					if (widget.getLabel() == null || widget.getClasss().equals("ButtonUI")) {
+					if (widget.getClasss().equals("RadioButtonUI")) {
+						widget.setDescriptor(context.getDescriptorRB(widget.getTo()));
+
+					} else if (widget.getLabel() == null || widget.getClasss().equals("ButtonUI")) {
 
 						widget.setDescriptor(context.getDescriptor(widget.getTo()));
 					}
@@ -177,7 +180,7 @@ public class GuiStateManager {
 				}
 			}
 		}
-		widgets_to_add = this.postProcessWidgetList(widgets_to_add, context);
+		widgets_to_add = this.postProcessWidgetList(widgets_to_add);
 		for (final Widget wid : widgets_to_add) {
 			w.addWidget(wid);
 		}
@@ -195,8 +198,7 @@ public class GuiStateManager {
 	 * @return
 	 * @throws Exception
 	 */
-	private List<Widget> postProcessWidgetList(final List<Widget> widgets,
-			final ContextAnalyzer context) throws Exception {
+	private List<Widget> postProcessWidgetList(final List<Widget> widgets) throws Exception {
 
 		final List<Widget> out = new ArrayList<>(widgets);
 		final List<Widget> radio_b = new ArrayList<>();
@@ -207,7 +209,7 @@ public class GuiStateManager {
 		}
 		final List<String> radio_b_descriptors = new ArrayList<>();
 		for (final Widget wid : radio_b) {
-			radio_b_descriptors.add(context.getDescriptor(wid.getTo()));
+			radio_b_descriptors.add(wid.getDescriptor());
 		}
 
 		final Map<String, List<Widget>> map = new HashMap<>();

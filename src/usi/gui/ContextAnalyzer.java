@@ -20,6 +20,8 @@ public class ContextAnalyzer {
 	// Map that for each container keeps its children
 	private final Map<TestObject, List<TestObject>> containedInContainer;
 	private final Map<TestObject, List<Descriptor>> descriptorInContainer;
+	private final Map<TestObject, List<Descriptor>> descriptorInContainerRB;
+
 	// used to detect the hights of tables in a stable way
 	private final List<TestObject> tableheaders;
 
@@ -44,6 +46,8 @@ public class ContextAnalyzer {
 		this.descriptors_classes.add("CheckBoxUI");
 
 		this.descriptorInContainer = new HashMap<TestObject, List<Descriptor>>();
+		this.descriptorInContainerRB = new HashMap<TestObject, List<Descriptor>>();
+
 		this.containedInContainer = new HashMap<TestObject, List<TestObject>>();
 		this.fatherMap = new HashMap<TestObject, TestObject>();
 		this.containerDescription = new HashMap<TestObject, String>();
@@ -140,7 +144,7 @@ public class ContextAnalyzer {
 					oo = aa;
 				}
 			}
-		height = oo.height;
+			height = oo.height;
 		}
 
 		if (!this.fatherMap.containsKey(to)) {
@@ -168,14 +172,89 @@ public class ContextAnalyzer {
 		}
 		if (nearer != null && Math.sqrt(min_dist) < (height * 5)) {
 			// we can do it cause the descriptors are calculated in order
-			if (!classs.equals("RadioButtonUI")) {
-				this.descriptorInContainer.get(father).remove(nearer);
-			}
+			this.descriptorInContainer.get(father).remove(nearer);
+
 			return nearer.label;
 
 		}
 		// if no descriptor was found
 		return this.getContainerDescriptor(father);
+	}
+
+	public String getDescriptorRB(final TestObject to) throws Exception {
+
+		final String classs = to.getProperty("uIClassID").toString();
+		final Point p = (Point) to.getProperty("locationOnScreen");
+		final int x = p.x;
+		final int y = p.y;
+		final int width = Integer.valueOf(to.getProperty("width").toString());
+		int height = Integer.valueOf(to.getProperty("height").toString());
+		final Area area = new Area(x, y, height, width);
+
+		// we deal with the height of tables
+		Area oo = null;
+		double mind = Double.MAX_VALUE;
+		if (classs.equals("TableUI")) {
+			loop: for (final TestObject head : this.tableheaders) {
+				Point pp = null;
+				try {
+					pp = (Point) head.getProperty("locationOnScreen");
+				} catch (final Exception e) {
+					continue loop;
+				}
+				final int xx = pp.x;
+				final int yy = pp.y;
+				final int ww = Integer.valueOf(head.getProperty("width").toString());
+				final int hh = Integer.valueOf(head.getProperty("height").toString());
+				final Area aa = new Area(xx, yy, hh, ww);
+				final double dist = area.getDistance(aa);
+
+				if (dist < mind) {
+					mind = dist;
+					oo = aa;
+				}
+			}
+			height = oo.height;
+		}
+
+		if (!this.fatherMap.containsKey(to)) {
+			throw new Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
+		}
+
+		final TestObject father = this.fatherMap.get(to);
+		// if (height == 0) {
+		// height = 15;
+		// }
+		final List<Descriptor> descriptors = this.descriptorInContainer.get(father);
+		if (this.descriptorInContainerRB.containsKey(father)) {
+			descriptors.addAll(this.descriptorInContainerRB.get(father));
+		}
+		double min_dist = Double.MAX_VALUE;
+		Descriptor nearer = null;
+		for (final Descriptor desc : descriptors) {
+			if (!area.isRelated(desc.a)) {
+				continue;
+			}
+			final double dist = area.getDistance(desc.a);
+
+			if (dist < min_dist) {
+				min_dist = dist;
+				nearer = desc;
+			}
+		}
+		if (nearer != null && Math.sqrt(min_dist) < (height * 5)) {
+			// we can do it cause the descriptors are calculated in order
+			if (this.descriptorInContainer.get(father).contains(nearer)) {
+				this.descriptorInContainer.get(father).remove(nearer);
+				if (!this.descriptorInContainerRB.containsKey(father)) {
+					this.descriptorInContainerRB.put(father, new ArrayList<Descriptor>());
+				}
+				this.descriptorInContainerRB.get(father).add(nearer);
+			}
+			return nearer.label;
+
+		}
+		return null;
 	}
 
 	public String getContainerDescriptor(final TestObject to) throws Exception {
@@ -276,11 +355,11 @@ public class ContextAnalyzer {
 				distance = (int) (Math.pow(((a.x + a.width + 1) - this.x), 2) + Math.pow(
 						(a.y - this.y), 2));
 			} else
-			/*
-			 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
-			 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
-			 * 2)); } else
-			 */{
+				/*
+				 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
+				 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
+				 * 2)); } else
+				 */{
 				distance = (int) (Math.pow(((a.x + 1) - this.x), 2) + Math.pow(
 						((a.y + a.height) - this.y), 2));
 			}
