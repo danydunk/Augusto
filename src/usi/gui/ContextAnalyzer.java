@@ -299,7 +299,7 @@ public class ContextAnalyzer {
 
 			// controllo che il widget sia all'interno dell'area di interesse
 			// del to in esame
-			if (a.centerX - 2 <= this.centerX && a.y + a.height - 2 <= this.y + this.height) {
+			if (a.y - 2 <= this.centerX && a.y + a.height - 2 <= this.y + this.height) {
 				return true;
 			}
 			return false;

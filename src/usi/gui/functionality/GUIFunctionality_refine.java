@@ -331,6 +331,7 @@ public class GUIFunctionality_refine {
 					// if the traverse did not work
 					System.out.println("MATCHING WINDOW NOT FOUND.");
 					// we remove the edge
+					this.instancePattern = old;
 					this.cleanInstance(aw);
 					return false;
 				}

@@ -294,6 +294,7 @@ public class Instance_GUI_pattern {
 			scopes += "," + (vs + (ConfigurationManager.getAlloyRunScope() * 2 / 3)) + " Value";
 		}
 		run = run + scopes;
+		// System.out.println("validating");
 		sem.addRun_command(run);
 		// System.out.println(sem);
 		// System.out.println(sem.toString());

@@ -103,8 +103,8 @@ public class Ripper {
 				continue;
 			}
 			final Click act = new Click(w, null, aw);
-			System.out.println(w.getLabel());
-			System.out.println(aw.getLabel());
+			// System.out.println(w.getLabel());
+			// System.out.println(aw.getLabel());
 
 			ActionManager.executeAction(act);
 
