@@ -185,6 +185,7 @@ public abstract class Widget implements Comparable<Widget> {
 			return false;
 		}
 		if (w.label == null || w.label.length() == 0) {
+
 			if (w.descriptor == null && this.descriptor != null) {
 
 				return false;
@@ -197,6 +198,7 @@ public abstract class Widget implements Comparable<Widget> {
 
 				return false;
 			}
+
 		}
 		if (!w.classs.equals(this.classs)) {
 			return false;
