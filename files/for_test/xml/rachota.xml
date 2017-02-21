@@ -727,7 +727,6 @@
             <rectangle>105:30</rectangle>
             <class>ButtonUI</class>
             <label>Previous</label>
-            <descriptor>Date:</descriptor>
         </action_widget>
         <action_widget id="aw6">
             <pos>862:159</pos>
@@ -789,13 +788,13 @@
             <rectangle>96:34</rectangle>
             <class>ButtonUI</class>
             <label>Select</label>
+            <descriptor>Show finished tasks</descriptor>
         </action_widget>
         <action_widget id="aw14">
             <pos>608:650</pos>
             <rectangle>95:34</rectangle>
             <class>ButtonUI</class>
             <label>Add ...</label>
-            <descriptor>Show finished tasks</descriptor>
         </action_widget>
         <action_widget id="aw15">
             <pos>708:650</pos>
@@ -813,6 +812,7 @@
             <pos>652:162</pos>
             <rectangle>200:19</rectangle>
             <class>TextFieldUI</class>
+            <descriptor>Date:</descriptor>
             <value>Thursday - 27. October, 2016</value>
         </input_widget>
         <input_widget id="iw2">
@@ -1291,13 +1291,13 @@
             <rectangle>16:10</rectangle>
             <class>ButtonUI</class>
             <label/>
+            <descriptor>:</descriptor>
         </action_widget>
         <action_widget id="aw32">
             <pos>773:403</pos>
             <rectangle>16:10</rectangle>
             <class>ButtonUI</class>
             <label/>
-            <descriptor>:</descriptor>
         </action_widget>
         <action_widget id="aw34">
             <pos>826:403</pos>

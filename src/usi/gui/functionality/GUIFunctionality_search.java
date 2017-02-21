@@ -33,7 +33,7 @@ public class GUIFunctionality_search {
 		this.gui = gui;
 	}
 
-	public void init_match(final GUI_Pattern pattern) throws Exception {
+	public void init_match(final GUI_Pattern pattern, final boolean filter_dyn) throws Exception {
 
 		this.gui_pattern = pattern;
 
@@ -48,7 +48,7 @@ public class GUIFunctionality_search {
 				.create();
 
 		for (final Pattern_window pw : this.gui_pattern.getWindows()) {
-			if (pw.isDynamic()) {
+			if (filter_dyn && pw.isDynamic()) {
 				continue;
 			}
 			final List<Window> windows = new ArrayList<>();
@@ -70,7 +70,7 @@ public class GUIFunctionality_search {
 
 		// first we filter those without the right edges
 		for (final Pattern_window pw : this.gui_pattern.getWindows()) {
-			if (pw.isDynamic()) {
+			if (filter_dyn && pw.isDynamic()) {
 				continue;
 			}
 			final List<Window> windows = new ArrayList<>();
@@ -129,7 +129,7 @@ public class GUIFunctionality_search {
 
 	public final List<Instance_GUI_pattern> match(final GUI_Pattern pattern) throws Exception {
 
-		this.init_match(pattern);
+		this.init_match(pattern, true);
 		final List<Instance_GUI_pattern> out = new ArrayList<>();
 
 		while (true) {
@@ -491,10 +491,10 @@ public class GUIFunctionality_search {
 							}
 						}
 						if (source_pw.getCardinality().getMin() != 0 /*
-																	 * &&
-																	 * source_pw
-																	 * != pw
-																	 */) {
+						 * &&
+						 * source_pw
+						 * != pw
+						 */) {
 							check_optional = true;
 						}
 					}

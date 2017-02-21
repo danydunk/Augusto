@@ -85,7 +85,7 @@
             <rectangle>166:20</rectangle>
             <class>PasswordFieldUI</class>
             <descriptor>Password</descriptor>
-            <value>hcxmTY0I</value>
+            <value>yUZeJ7mS</value>
         </input_widget>
         <input_widget id="iw21">
             <pos>570:349</pos>
@@ -152,7 +152,6 @@ http://upm.sourceforge.net</value>
             <rectangle>65:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
-            <descriptor>Hide</descriptor>
         </action_widget>
         <input_widget id="iw24">
             <pos>559:294</pos>

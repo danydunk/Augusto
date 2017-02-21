@@ -276,13 +276,13 @@ public class GUIFunctionality_refine {
 				if (!this.instancePattern.getGui().containsWindow(found.getInstance().getId())) {
 					// new window was found
 
-					this.instancePattern.getGui().addWindow(found.getInstance());
+					// this.instancePattern.getGui().addWindow(found.getInstance());
 
 					// we traverse the GUI to see ripping found new
 					// windows connected by static edges that are part of the
 					// pattern
 					final GUIFunctionality_search search = new GUIFunctionality_search(this.gui);
-					search.init_match(this.instancePattern.getGuipattern());
+					search.init_match(this.instancePattern.getGuipattern(), false);
 					this.instancePattern = search.traverse(found.getInstance(), found.getPattern(),
 							this.instancePattern);
 					// we add the found static edges to the instance gui
