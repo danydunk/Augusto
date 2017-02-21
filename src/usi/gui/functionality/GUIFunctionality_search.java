@@ -55,6 +55,7 @@ public class GUIFunctionality_search {
 			possible_matches.put(pw, windows);
 
 			for (final Window w : this.gui.getWindows()) {
+
 				final List<Instance_window> instances = pw.getMatches(w);
 				if (instances.size() > 0) {
 					windows.add(w);
@@ -76,6 +77,7 @@ public class GUIFunctionality_search {
 			new_possible_matches.put(pw, windows);
 
 			for (final Window w : possible_matches.get(pw)) {
+
 				final List<Instance_window> instances = new ArrayList<>();
 				new_matches_table.put(pw, w, instances);
 				outloop: for (final Instance_window iw : matches_table.get(pw, w)) {
@@ -137,14 +139,15 @@ public class GUIFunctionality_search {
 				final List<Instance_window> instances = new ArrayList<>();
 
 				for (final Window ww : this.matches_table_wm.columnKeySet()) {
+
 					for (final Pattern_window pw : this.matches_table_wm.rowKeySet()) {
-						if (this.matches_table_wm.get(ww, pw) == null) {
+						if (this.matches_table_wm.get(pw, ww) == null) {
 							continue;
 						}
 						if (w == ww) {
-							instances.addAll(this.matches_table_wm.get(ww, pw));
+							instances.addAll(this.matches_table_wm.get(pw, ww));
 						}
-						instancesnot.addAll(this.matches_table_wm.get(ww, pw));
+						instancesnot.addAll(this.matches_table_wm.get(pw, ww));
 					}
 				}
 				loop: for (final Instance_window iw : instances) {
