@@ -36,4 +36,8 @@
 			<label>^$</label>
 			<class>buttonui</class>
 	</action_widget>
+	<action_widget id="aw19">
+			<label>current budget period</label>
+			<class>buttonui</class>
+	</action_widget>
 </filter>

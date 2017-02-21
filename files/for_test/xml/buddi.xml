@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <GUI>
     <window id="w7">
-        <pos>602:322</pos>
+        <pos>573:301</pos>
         <rectangle>231:140</rectangle>
         <class>org.homeunix.thecave.buddi.view.dialogs.AccountTypeEditorDialog</class>
         <title/>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw76">
-            <pos>615:426</pos>
+            <pos>586:405</pos>
             <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
+            <descriptor>Name</descriptor>
         </action_widget>
         <action_widget id="aw77">
-            <pos>720:426</pos>
+            <pos>691:405</pos>
             <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw11">
-            <pos>675:352</pos>
+            <pos>646:331</pos>
             <rectangle>150:23</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Name&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw12">
-            <pos>675:375</pos>
+            <pos>646:354</pos>
             <rectangle>150:46</rectangle>
             <class>RadioButtonUI</class>
             <label/>
@@ -500,12 +501,14 @@
             <rectangle>17:20</rectangle>
             <class>ButtonUI</class>
             <label/>
+            <descriptor>starting on</descriptor>
         </action_widget>
         <action_widget id="aw260">
             <pos>391:170</pos>
             <rectangle>17:20</rectangle>
             <class>ButtonUI</class>
             <label/>
+            <descriptor>ending after</descriptor>
         </action_widget>
         <action_widget id="aw261">
             <pos>405:380</pos>
@@ -544,7 +547,6 @@
             <pos>158:136</pos>
             <rectangle>233:20</rectangle>
             <class>FormattedTextFieldUI</class>
-            <descriptor>starting on</descriptor>
             <value>2016/10/27</value>
         </input_widget>
         <input_widget id="iw56">
@@ -558,7 +560,6 @@
             <pos>158:170</pos>
             <rectangle>233:20</rectangle>
             <class>FormattedTextFieldUI</class>
-            <descriptor>ending after</descriptor>
             <value>2017/10/27</value>
         </input_widget>
         <input_widget id="iw58">
@@ -1244,6 +1245,7 @@
             <rectangle>17:9</rectangle>
             <class>ButtonUI</class>
             <label/>
+            <descriptor>Current Budget Period</descriptor>
         </action_widget>
         <action_widget id="aw266">
             <pos>706:191</pos>
@@ -1255,7 +1257,6 @@
             <pos>607:184</pos>
             <rectangle>99:14</rectangle>
             <class>FormattedTextFieldUI</class>
-            <descriptor>Current Budget Period</descriptor>
             <value>Oct 2016</value>
         </input_widget>
         <input_widget id="iw67">
@@ -2005,26 +2006,28 @@
         </selectable_widget>
     </window>
     <window id="w15">
-        <pos>584:294</pos>
+        <pos>555:273</pos>
         <rectangle>268:196</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Input</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw230">
-            <pos>640:450</pos>
+            <pos>611:429</pos>
             <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
+            <descriptor>'MX' for Espanol (MX)</descriptor>
         </action_widget>
         <action_widget id="aw231">
-            <pos>721:450</pos>
+            <pos>692:429</pos>
             <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
+            <descriptor>'US' for English (US)</descriptor>
         </action_widget>
         <input_widget id="iw47">
-            <pos>644:421</pos>
+            <pos>615:400</pos>
             <rectangle>195:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>You can leave this field blank.</descriptor>
@@ -2100,7 +2103,7 @@
             <rectangle>310:22</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look in:</descriptor>
-            <value>[options] 6 : 13</value>
+            <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw2">
             <pos>310:491</pos>
@@ -2125,26 +2128,27 @@
         </selectable_widget>
     </window>
     <window id="w14">
-        <pos>584:321</pos>
+        <pos>555:300</pos>
         <rectangle>268:142</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Input</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw228">
-            <pos>640:423</pos>
+            <pos>611:402</pos>
             <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
+            <descriptor>Please enter the name</descriptor>
         </action_widget>
         <action_widget id="aw229">
-            <pos>721:423</pos>
+            <pos>692:402</pos>
             <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw46">
-            <pos>644:394</pos>
+            <pos>615:373</pos>
             <rectangle>195:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>of language you wish to edit:</descriptor>
@@ -2220,7 +2224,7 @@
             <rectangle>310:22</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Save in:</descriptor>
-            <value>[options] 6 : 13</value>
+            <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw5">
             <pos>310:491</pos>
@@ -2245,26 +2249,26 @@
         </selectable_widget>
     </window>
     <window id="w17">
-        <pos>516:202</pos>
+        <pos>487:181</pos>
         <rectangle>405:380</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Enter Date Format</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw235">
-            <pos>640:542</pos>
+            <pos>611:521</pos>
             <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw236">
-            <pos>721:542</pos>
+            <pos>692:521</pos>
             <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw51">
-            <pos>529:513</pos>
+            <pos>500:492</pos>
             <rectangle>379:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>An example of a format string is "MMMM d, yyyy" (without the quotes).</descriptor>
@@ -2299,53 +2303,53 @@
         </selectable_widget>
     </window>
     <window id="w16">
-        <pos>239:270</pos>
+        <pos>210:249</pos>
         <rectangle>958:244</rectangle>
         <class>org.homeunix.thecave.buddi.i18n.BuddiLanguageEditor</class>
         <title>Language Editor</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw233">
-            <pos>247:300</pos>
+            <pos>218:279</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save Translation</label>
         </action_widget>
         <action_widget id="aw234">
-            <pos>247:300</pos>
+            <pos>218:279</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw232">
-            <pos>252:326</pos>
+            <pos>223:305</pos>
             <rectangle>53:23</rectangle>
             <class>ButtonUI</class>
             <label>Help</label>
         </action_widget>
         <input_widget id="iw49">
-            <pos>1147:326</pos>
+            <pos>1118:305</pos>
             <rectangle>41:179</rectangle>
             <class>RadioButtonUI</class>
             <label/>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw48">
-            <pos>942:327</pos>
+            <pos>913:306</pos>
             <rectangle>200:20</rectangle>
             <class>TextFieldUI</class>
             <label>&lt;Search&gt;</label>
             <value/>
         </input_widget>
         <input_widget id="iw50">
-            <pos>654:356</pos>
+            <pos>625:335</pos>
             <rectangle>498:148</rectangle>
             <class>TextAreaUI</class>
             <label/>
             <value/>
         </input_widget>
         <selectable_widget id="sw8">
-            <pos>248:355</pos>
+            <pos>219:334</pos>
             <rectangle>386:11648</rectangle>
             <class>ListUI</class>
             <size>728</size>
@@ -2536,140 +2540,140 @@
         </selectable_widget>
     </window>
     <window id="w6">
-        <pos>550:265</pos>
+        <pos>521:244</pos>
         <rectangle>336:255</rectangle>
         <class>org.homeunix.thecave.buddi.view.AccountTypeListFrame</class>
         <title>Edit Account Types</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw59">
-            <pos>558:295</pos>
+            <pos>529:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - New</label>
         </action_widget>
         <action_widget id="aw60">
-            <pos>558:295</pos>
+            <pos>529:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Open...</label>
         </action_widget>
         <action_widget id="aw61">
-            <pos>558:295</pos>
+            <pos>529:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save</label>
         </action_widget>
         <action_widget id="aw62">
-            <pos>558:295</pos>
+            <pos>529:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save As...</label>
         </action_widget>
         <action_widget id="aw63">
-            <pos>558:295</pos>
+            <pos>529:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Save All</label>
         </action_widget>
         <action_widget id="aw64">
-            <pos>558:295</pos>
+            <pos>529:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Saved</label>
         </action_widget>
         <action_widget id="aw65">
-            <pos>558:295</pos>
+            <pos>529:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Revert to Backup...</label>
         </action_widget>
         <action_widget id="aw66">
-            <pos>558:295</pos>
+            <pos>529:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Close Window</label>
         </action_widget>
         <action_widget id="aw67">
-            <pos>558:295</pos>
+            <pos>529:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>File - Quit Buddi</label>
         </action_widget>
         <action_widget id="aw68">
-            <pos>585:295</pos>
+            <pos>556:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Minimize</label>
         </action_widget>
         <action_widget id="aw69">
-            <pos>585:295</pos>
+            <pos>556:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Buddi - C:\Users\usi\abtMyDocuments\buddidata.buddi3</label>
         </action_widget>
         <action_widget id="aw70">
-            <pos>585:295</pos>
+            <pos>556:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Window - Edit Account Types</label>
         </action_widget>
         <action_widget id="aw71">
-            <pos>638:295</pos>
+            <pos>609:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About Buddi</label>
         </action_widget>
         <action_widget id="aw72">
-            <pos>638:295</pos>
+            <pos>609:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Help</label>
         </action_widget>
         <action_widget id="aw73">
-            <pos>638:295</pos>
+            <pos>609:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Buddi Tutorial</label>
         </action_widget>
         <action_widget id="aw74">
-            <pos>638:295</pos>
+            <pos>609:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Download Plugins</label>
         </action_widget>
         <action_widget id="aw75">
-            <pos>638:295</pos>
+            <pos>609:274</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - Check for Updates</label>
         </action_widget>
         <action_widget id="aw55">
-            <pos>563:451</pos>
+            <pos>534:430</pos>
             <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>New</label>
         </action_widget>
         <action_widget id="aw56">
-            <pos>668:451</pos>
+            <pos>639:430</pos>
             <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Edit</label>
         </action_widget>
         <action_widget id="aw57">
-            <pos>773:451</pos>
+            <pos>744:430</pos>
             <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Delete</label>
         </action_widget>
         <action_widget id="aw58">
-            <pos>773:484</pos>
+            <pos>744:463</pos>
             <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Done</label>
         </action_widget>
         <selectable_widget id="sw5">
-            <pos>559:317</pos>
+            <pos>530:296</pos>
             <rectangle>301:144</rectangle>
             <class>ListUI</class>
             <size>9</size>
@@ -2677,26 +2681,26 @@
         </selectable_widget>
     </window>
     <window id="w18">
-        <pos>584:331</pos>
+        <pos>555:310</pos>
         <rectangle>268:123</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Enter Currency Format</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw237">
-            <pos>640:414</pos>
+            <pos>611:393</pos>
             <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw238">
-            <pos>721:414</pos>
+            <pos>692:393</pos>
             <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw52">
-            <pos>597:385</pos>
+            <pos>568:364</pos>
             <rectangle>242:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Please enter your desired currency format:</descriptor>
