@@ -163,6 +163,7 @@ public class GUIFunctionality_refine {
 					.getId())) {
 				final List<Action_widget> matched_aws = this.instancePattern.getAWS_for_PAW(paw
 						.getId());
+
 				// if the paw has no matches
 				if (matched_aws == null || matched_aws.size() == 0) {
 					continue;
@@ -187,13 +188,13 @@ public class GUIFunctionality_refine {
 							System.out.println("DISCOVER DYNAMIC EDGE: edge already found before.");
 							continue;
 						}
-						for (final String ed : this.covered_dyn_edges) {
-							if (ed.startsWith(aw.getId() + " - ")) {
-								System.out
-								.println("DISCOVER DYNAMIC EDGE: already found edge starting from this aw.");
-								continue loop;
-							}
-						}
+						// for (final String ed : this.covered_dyn_edges) {
+						// if (ed.startsWith(aw.getId() + " - ")) {
+						// System.out
+						// .println("DISCOVER DYNAMIC EDGE: already found edge starting from this aw.");
+						// continue loop;
+						// }
+						// }
 
 						// the semantics is updated
 						final Instance_GUI_pattern clone = this.instancePattern.clone();
@@ -499,6 +500,7 @@ public class GUIFunctionality_refine {
 					.getPatternWindowMatches(to_discover.getId());
 			// if target_w_matched is not empty it means the pattern_window was
 			// already found
+
 			if (target_w_matched.size() > 0) {
 				continue;
 			}

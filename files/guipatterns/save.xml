@@ -14,7 +14,7 @@
 			<class>menuitemui</class>
 		</action_widget>
 		<action_widget id="paw3" card="lone" alloy="Save">
-			<label>^.*- save.*</label>
+			<label>^.*- save(?! all).*</label>
 			<class>menuitemui</class>
 		</action_widget>
 		<action_widget id="paw4" card="lone" alloy="Saveas">
@@ -76,7 +76,7 @@
 			<text>.*</text>
 		</input_widget>
 		<input_widget id="piw3" card="one" alloy="Repassword">
-			<label>repeat password.*</label>
+			<label>.*(repeat password|confirm password).*</label>
 			<class>.*</class>
 			<text>.*</text>
 		</input_widget>
@@ -100,7 +100,7 @@
 		</input_widget>
 	</window>
 	<window id="choice" card="lone" dynamic="true" alloy="Choice">
-		<title>.*</title>
+		<title>.*(encrypt).*</title>
 		<class>.*</class>
 		<modal>true</modal>
 		<action_widget id="paw14" card="one" alloy="Yes">
@@ -112,12 +112,12 @@
 			<class>buttonui</class>
 		</action_widget>
 	</window>
-	<window id="replace" card="one" dynamic="true" alloy="Replacedialog">
-		<title>.*</title>
+	<window id="replace" card="lone" dynamic="true" alloy="Replacedialog">
+		<title>.*(replace|exists|overwrite).*</title>
 		<class>.*</class>
 		<modal>true</modal>
 		<action_widget id="paw16" card="one" alloy="Replace">
-			<label>.*replace.*</label>
+			<label>.*(replace|yes|ok).*</label>
 			<class>buttonui</class>
 		</action_widget>
 		<action_widget id="paw17" card="one" alloy="Noreplace">
@@ -145,6 +145,7 @@
 	<edge type="dynamic">
 		<from>paw6</from>
 		<to>initial</to>
+		<to>replace</to>
 		<to>choice</to>
 		<to>encrypt</to>
 	</edge>
@@ -191,10 +192,11 @@
 	<edge type="dynamic">
 		<from>paw16</from>
 		<to>initial</to>
+		<to>choice</to>
+		<to>encrypt</to>
 	</edge>
 	<edge type="dynamic">
 		<from>paw17</from>
 		<to>initial</to>
-		<to>saving</to>
 	</edge>
 </pattern>

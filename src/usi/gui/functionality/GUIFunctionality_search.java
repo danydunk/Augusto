@@ -366,9 +366,9 @@ public class GUIFunctionality_search {
 							boolean check = false;
 							for (final Pattern_window target_pw : this.gui_pattern
 									.getStaticForwardLinks(paw.getId())) {
-								if (target_pw.isDynamic()) {
-									continue;
-								}
+								// if (target_pw.isDynamic()) {
+								// continue;
+								// }
 
 								if (this.gui.getStaticForwardLinks(aw.getId()).size() == 0) {
 									// if there are not static links we try to
@@ -491,10 +491,10 @@ public class GUIFunctionality_search {
 							}
 						}
 						if (source_pw.getCardinality().getMin() != 0 /*
-						 * &&
-						 * source_pw
-						 * != pw
-						 */) {
+																	 * &&
+																	 * source_pw
+																	 * != pw
+																	 */) {
 							check_optional = true;
 						}
 					}

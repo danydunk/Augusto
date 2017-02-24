@@ -298,6 +298,106 @@ public class TestCaseRunner {
 	private Window getKnownWindowIfAny(final Window in) throws Exception {
 
 		for (final Window w : this.gui.getWindows()) {
+			if (w.isSame(in)) {
+				final Window out = new Window(in.getTo(), w.getId(), in.getLabel(), in.getClasss(),
+						in.getX(), in.getY(), in.getWidth(), in.getHeight(), in.isModal());
+				out.setRoot(w.isRoot());
+
+				// we can loop only once since if they are the same they must
+				// have the same widgets number
+				// we need to filter out the selectable widgets cause their
+				// position might change when they are scrolled
+
+				final List<Widget> widgets = in
+						.getWidgets()
+						.stream()
+						.filter(e -> {
+							if (e instanceof Action_widget
+									&& e.getClasss().toLowerCase().equals("menuitemui")
+									&& e.getLabel().toLowerCase().startsWith("window -")) {
+								return false;
+							}
+							// we deal with selectable widgets separately cause
+							// selecting an element can modify the position of
+							// the
+							// widget
+							if (e instanceof Selectable_widget) {
+								return false;
+							}
+							return true;
+						}).collect(Collectors.toList());
+
+				final List<Widget> widgets2 = w
+						.getWidgets()
+						.stream()
+						.filter(e -> {
+							if (e instanceof Action_widget
+									&& e.getClasss().toLowerCase().equals("menuitemui")
+									&& e.getLabel().toLowerCase().startsWith("window -")) {
+								return false;
+							}
+							// we deal with selectable widgets separately cause
+							// selecting an element can modify the position of
+							// the
+							// widget
+							if (e instanceof Selectable_widget) {
+								return false;
+							}
+							return true;
+						}).collect(Collectors.toList());
+
+				for (int x = 0; x < widgets.size(); x++) {
+					if (widgets2.get(x) instanceof Action_widget) {
+						final Action_widget aw = (Action_widget) widgets.get(x);
+						final Action_widget aw2 = (Action_widget) widgets2.get(x);
+						final Action_widget new_aw = new Action_widget(aw2.getId(), aw.getLabel(),
+								aw.getClasss(), aw.getX(), aw.getY(), aw.getWidth(), aw.getHeight());
+						new_aw.setDescriptor(aw.getDescriptor());
+						out.addWidget(new_aw);
+
+					} else if (widgets2.get(x) instanceof Input_widget) {
+						final Input_widget iw = (Input_widget) widgets.get(x);
+						if (widgets2.get(x) instanceof Option_input_widget) {
+							final Option_input_widget iw2 = (Option_input_widget) widgets2.get(x);
+							final Option_input_widget oiw = (Option_input_widget) iw;
+							final Option_input_widget new_oiw = new Option_input_widget(
+									iw2.getId(), iw.getLabel(), iw.getClasss(), iw.getX(),
+									iw.getY(), oiw.getWidth(), oiw.getHeight(), oiw.getSize(),
+									oiw.getSelected());
+							new_oiw.setDescriptor(iw.getDescriptor());
+							out.addWidget(new_oiw);
+						} else {
+							final Input_widget iw2 = (Input_widget) widgets2.get(x);
+							final Input_widget new_iw = new Input_widget(iw2.getId(),
+									iw.getLabel(), iw.getClasss(), iw.getX(), iw.getY(),
+									iw.getWidth(), iw.getHeight(), iw.getValue());
+							new_iw.setDescriptor(iw.getDescriptor());
+							out.addWidget(new_iw);
+
+						}
+					}
+				}
+
+				for (int x = 0; x < in.getSelectableWidgets().size(); x++) {
+					if (w.getSelectableWidgets().get(x) instanceof Selectable_widget) {
+						final Selectable_widget sw = in.getSelectableWidgets().get(x);
+						final Selectable_widget sw2 = w.getSelectableWidgets().get(x);
+
+						final Selectable_widget new_sw = new Selectable_widget(sw2.getId(),
+								sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), sw.getWidth(),
+								sw.getHeight(), sw.getSize(), sw.getSelected());
+						new_sw.setDescriptor(sw.getDescriptor());
+						out.addWidget(new_sw);
+
+					}
+
+				}
+
+				return out;
+			}
+		}
+
+		for (final Window w : this.gui.getWindows()) {
 			if (w.isSimilar(in)) {
 				final Window out = new Window(in.getTo(), w.getId(), in.getLabel(), in.getClasss(),
 						in.getX(), in.getY(), in.getWidth(), in.getHeight(), in.isModal());
@@ -457,7 +557,7 @@ public class TestCaseRunner {
 
 				if (index != index2
 						|| !this.w.getSelectableWidgets().get(index2)
-								.isSimilar(p.w.getSelectableWidgets().get(index))) {
+						.isSimilar(p.w.getSelectableWidgets().get(index))) {
 					return false;
 				}
 

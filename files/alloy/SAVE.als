@@ -38,10 +38,12 @@ pred select_semantics [sw: Selectable_widget, t: Time, o: Object] {
 pred select_success_post [sw: Selectable_widget, t, t': Time, o: Object] {
 	Opening_list.list.t' =  Opening_list.list.t
 	(Auxiliary.saved.t') = 	(Auxiliary.saved.t)
+	(all iw: Input_widget | iw.content.t' = iw.content.t)
 }
 pred select_fail_post [sw: Selectable_widget, t, t': Time, o: Object] {
 	Opening_list.list.t' =  Opening_list.list.t
 	(Auxiliary.saved.t') = 	(Auxiliary.saved.t)
+	(all iw: Input_widget | iw.content.t' = iw.content.t)
 }
 pred select_pre [sw: Selectable_widget, t: Time, o: Object] {
 	
@@ -54,17 +56,18 @@ pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Decryptb) => #Depassword.content.t = 1 and Depassword.content.t = (Opening_list.selected.t).(Auxiliary.pwd)
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
-	Current_window.is_in.t' = aws.New => (#Input_widget.content.t' = 0 and #Opening_list.selected.t' = 0) 
-	not(aw in Saves or aw in Openo) => Current_window.is_in.t' = aw.goes
-	(aw in New and aw.goes = aws.New) => new[t,t'] 
-	(aw in New and not(aw.goes = aws.New)) => same[t,t']
-	(aw in Saves and exisit[t, Filename.content.t]) => (Current_window.is_in.t' = aws.Yes) and same[t,t']
-	(aw in Saves and not(exisit[t, Filename.content.t])) => ((#Encryptb = 1) => (Current_window.is_in.t' = aws.Encryptb and same[t,t']) else (save[t,t', none,Filename.content.t]))
-	(aw in Yes) => (#Encryptb = 1 => Current_window.is_in.t' = aws.Encryptb and same[t,t'] else save[t,t', none,Filename.content.t])
+	Current_window.is_in.t' = aws.New => (#Input_widget.content.t' = 0 and #Opening_list.selected.t' = 0)
+	not(aw in Saves or aw in Openo or aw in New) => Current_window.is_in.t' = aw.goes
+	(aw in New and #aw.goes = 0) => new[t,t']
+	(aw in New and #aw.goes > 0) => same[t,t'] and Current_window.is_in.t' = aw.goes
+	(aw in Saves and exisit[t, Filename.content.t]) => ((#Replace = 1) => (Current_window.is_in.t' = aws.Replace and same[t,t']) else (save[t,t', none,Filename.content.t]))
+	(aw in Saves and not(exisit[t, Filename.content.t])) => ((#Encryptb = 1 or #Yes = 1) => (same[t,t'] and (#Yes = 1 => Current_window.is_in.t' = aws.Yes else Current_window.is_in.t' = aws.Encryptb)) else (save[t,t', none,Filename.content.t]))	
+	(aw in Yes) => Current_window.is_in.t' = aws.Encryptb and same[t,t']
+	(aw in No) => (save[t,t', none,Filename.content.t])
 	(aw in Encryptb) => save[t,t', Password.content.t, Filename.content.t]
 	(aw in Decryptb) => openo[t, t']
 	(aw in Openo) => (#(Opening_list.selected.t).(Auxiliary.pwd) = 1) => (Current_window.is_in.t' = aws.Decryptb and same[t,t']) else (Current_window.is_in.t' = aws.New and openo[t,t'])
-	not(aw in (New+Saves+Openo+Encryptb+Decryptb)) => same[t,t']
+	not(aw in (New+Saves+Openo+No+Encryptb+Decryptb)) => same[t,t']
 }
 pred click_fail_post [aw: Action_widget, t, t': Time] {
 	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))

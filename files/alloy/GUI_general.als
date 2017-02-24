@@ -72,7 +72,7 @@ pred click [aw: Action_widget, t, t': Time, c: Click] {
 	aw in Current_window.is_in.t.aws
 	click_pre [aw, t]
 	--- effect ---
-	(click_semantics [aw, t] and click_success_post [aw, t, t'] and Current_window.is_in.t' in aw.goes) or
+	(click_semantics [aw, t] and click_success_post [aw, t, t']) or
 	(not click_semantics  [aw, t] and Current_window.is_in.t' = Current_window.is_in.t and click_fail_post [aw, t, t'])
 	--- operation is tracked ---
 	c.clicked = aw and Track.op.t' = c

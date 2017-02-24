@@ -66,7 +66,7 @@
 	  <valid>60.00</valid>
     </values>
   </DATA>
-   <DATA>
+  <DATA>
     <metadata>mobile</metadata>
     <values>
       <valid>0000000000</valid>
@@ -75,6 +75,17 @@
 	  <invalid>aaa</invalid>
 	  <invalid>bbb</invalid>
 	  <invalid>ccc</invalid>
+    </values>
+  </DATA>
+   <DATA>
+    <metadata>filename</metadata>
+    <values>
+      <valid>file</valid>
+      <valid>file2</valid>
+	  <valid>file3</valid>
+	  <valid>file.buddi3</valid>
+      <valid>file2.buddi3</valid>
+	  <valid>file3.buddi3</valid>
     </values>
   </DATA>
   <DATA type="itemized">
