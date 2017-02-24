@@ -147,7 +147,7 @@ public class AlloyTestCaseGenerator {
 	 */
 	public List<GUITestCase> generateMinimalTestCases(final int max_time) throws Exception {
 
-		this.MAX_RUN = max_time - this.INITAL_TIME_SIZE + 1;
+		this.MAX_RUN = max_time - this.INITAL_TIME_SIZE;
 		final SpecificSemantics model = this.instance.getSemantics();
 
 		final String alloy_model = model.toString();
@@ -191,8 +191,18 @@ public class AlloyTestCaseGenerator {
 						solutions.add(ts[0].getSolution());
 						break loop;
 					} else {
-						solutions.add(ts[0].getSolution());
-						break loop;
+						if (!ts[1].isAlive()) {
+							if (!ts[1].hasExceptions() && ts[1].getSolution() != null
+									&& ts[1].getSolution().satisfiable()) {
+								solutions.add(ts[1].getSolution());
+								break loop;
+							} else {
+								solutions.add(ts[0].getSolution());
+								break loop;
+							}
+						} else {
+							continue loop;
+						}
 					}
 
 				} else {
@@ -207,8 +217,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-		ts[0].interrupt();
-		ts[1].interrupt();
+			ts[0].interrupt();
+			ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -405,7 +415,7 @@ public class AlloyTestCaseGenerator {
 									final Selectable_widget new_sw = new Selectable_widget(
 											sw.getId(), sw.getLabel(), sw.getClasss(), sw.getX(),
 											sw.getY(), sw.getWidth(), sw.getHeight(), sw.getSize()
-											+ (map.keySet().size()), sel);
+													+ (map.keySet().size()), sel);
 									new_sw.setDescriptor(sw.getDescriptor());
 									sws.add(new_sw);
 									continue swloop;
@@ -720,41 +730,41 @@ public class AlloyTestCaseGenerator {
 				metadata += inpw.getDescriptor() != null && metadata.length() == 0 ? inpw
 						.getDescriptor() : "";
 
-						List<String> data = null;
-						if (invalid_values.contains(v)) {
-							data = dm.getInvalidData(metadata);
+				List<String> data = null;
+				if (invalid_values.contains(v)) {
+					data = dm.getInvalidData(metadata);
 
-							assert (data.size() > 0);
-						} else {
-							data = dm.getValidData(metadata);
-						}
+					assert (data.size() > 0);
+				} else {
+					data = dm.getValidData(metadata);
+				}
 
-						assert (data != null);
+				assert (data != null);
 
-						if (data_for_value.containsKey(v)) {
-							List<String> new_list = new ArrayList<>();
-							// we calculate the intersection between the values
-							// already
-							// available for this value and the new ones
+				if (data_for_value.containsKey(v)) {
+					List<String> new_list = new ArrayList<>();
+					// we calculate the intersection between the values
+					// already
+					// available for this value and the new ones
 
-							if (data.size() == 0) {
-								new_list = data_for_value.get(v);
-							} else {
-								for (final String s : data_for_value.get(v)) {
-									if (data.contains(s)) {
-										new_list.add(s);
-									}
-								}
+					if (data.size() == 0) {
+						new_list = data_for_value.get(v);
+					} else {
+						for (final String s : data_for_value.get(v)) {
+							if (data.contains(s)) {
+								new_list.add(s);
 							}
-							if (invalid_values.contains(v) && new_list.size() == 0) {
-								throw new Exception(
-										"AlloyTestCaseGeneration - not enough invalid input data.");
-							}
-
-							data_for_value.put(v, new_list);
-						} else {
-							data_for_value.put(v, data);
 						}
+					}
+					if (invalid_values.contains(v) && new_list.size() == 0) {
+						throw new Exception(
+								"AlloyTestCaseGeneration - not enough invalid input data.");
+					}
+
+					data_for_value.put(v, new_list);
+				} else {
+					data_for_value.put(v, data);
+				}
 
 			}
 		}
@@ -948,7 +958,7 @@ public class AlloyTestCaseGenerator {
 				}
 				if (this.type == -1) {
 					time_scope = AlloyTestCaseGenerator.this.INITAL_TIME_SIZE
-							+ AlloyTestCaseGenerator.this.MAX_RUN - 1;
+							+ AlloyTestCaseGenerator.this.MAX_RUN;
 				} else {
 					if (time_scope == -1) {
 						time_scope = ConfigurationManager.getTestcaseLength();
