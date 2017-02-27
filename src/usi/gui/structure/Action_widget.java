@@ -6,7 +6,7 @@ public class Action_widget extends Widget {
 
 	public Action_widget(final TestObject to, final String id, final String label,
 			final String classs, final int x, final int y, final int width, final int height)
-					throws Exception {
+			throws Exception {
 
 		super(to, id, label, classs, x, y, width, height);
 	}
@@ -15,6 +15,16 @@ public class Action_widget extends Widget {
 			final int y, final int width, final int height) throws Exception {
 
 		super(id, label, classs, x, y, width, height);
+	}
+
+	@Override
+	public boolean equals(final Object o) {
+
+		if (!(o instanceof Action_widget)) {
+			return false;
+		}
+		final Action_widget w = (Action_widget) o;
+		return w.getId().equals(this.getId());
 	}
 
 	@Override

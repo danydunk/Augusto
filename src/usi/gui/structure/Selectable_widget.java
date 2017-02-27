@@ -33,7 +33,7 @@ public class Selectable_widget extends Widget {
 
 	public Selectable_widget(final String id, final String label, final String classs, final int x,
 			final int y, final int width, final int height, final int size, final int selected)
-			throws Exception {
+					throws Exception {
 
 		super(id, label, classs, x, y, width, height);
 		if (size < 0 || selected < -1 || selected > size - 1) {
@@ -41,6 +41,16 @@ public class Selectable_widget extends Widget {
 		}
 		this.size = size;
 		this.selected = selected;
+	}
+
+	@Override
+	public boolean equals(final Object o) {
+
+		if (!(o instanceof Selectable_widget)) {
+			return false;
+		}
+		final Selectable_widget w = (Selectable_widget) o;
+		return w.getId().equals(this.getId());
 	}
 
 	public int getSize() {

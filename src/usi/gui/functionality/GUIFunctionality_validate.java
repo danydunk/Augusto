@@ -206,6 +206,7 @@ public class GUIFunctionality_validate {
 
 	public List<GUITestCaseResult> validate() throws Exception {
 
+		final long beginTime = System.currentTimeMillis();
 		// we add a fact to filter redundant actions
 		final List<Fact> facts = this.instancePattern.getSemantics().getFacts();
 		final Fact new_fact = new Fact(
@@ -220,7 +221,7 @@ public class GUIFunctionality_validate {
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -228,7 +229,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
@@ -343,7 +344,8 @@ public class GUIFunctionality_validate {
 			out.addAll(results);
 			batch_num++;
 		}
-
+		final long tottime = (System.currentTimeMillis() - beginTime) / 1000;
+		System.out.println("VALIDATION ELAPSED TIME: " + tottime);
 		return out;
 	}
 

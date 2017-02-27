@@ -42,6 +42,22 @@ public abstract class Pattern_widget<T extends Widget> {
 		}
 	}
 
+	@Override
+	public boolean equals(final Object o) {
+
+		if (!(o instanceof Pattern_widget)) {
+			return false;
+		}
+		final Pattern_widget w = (Pattern_widget) o;
+		return w.getId().equals(this.getId());
+	}
+
+	@Override
+	public int hashCode() {
+
+		return this.id.hashCode();
+	}
+
 	public Cardinality getCardinality() {
 
 		return this.cardinality;

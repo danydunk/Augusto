@@ -21,7 +21,7 @@ public class Window extends Widget {
 
 	public Window(final TestObject to, final String id, final String label, final String classs,
 			final int x, final int y, final int width, final int height, final boolean modal)
-					throws Exception {
+			throws Exception {
 
 		super(to, id, label, classs, x, y, width, height);
 		if (id == null || id.length() == 0) {
@@ -50,6 +50,16 @@ public class Window extends Widget {
 		this.input_widgets = new ArrayList<>();
 		this.selectable_widgets = new ArrayList<>();
 		this.widgets_map = new HashMap<>();
+	}
+
+	@Override
+	public boolean equals(final Object o) {
+
+		if (!(o instanceof Window)) {
+			return false;
+		}
+		final Window w = (Window) o;
+		return w.getId().equals(this.getId());
 	}
 
 	public Widget getWidget(final String id) {

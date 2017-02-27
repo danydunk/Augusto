@@ -115,11 +115,13 @@ public class GUIFunctionality_refine {
 						this.instancePattern.getSemantics(), constraints);
 				this.instancePattern.setSpecificSemantics(new_sem);
 			}
-			return this.instancePattern;
 		} else {
 			System.out.println("INSTANCE NOT FOUND!");
-			return null;
+			this.instancePattern = null;
 		}
+		final long tottime = (System.currentTimeMillis() - this.beginTime) / 1000;
+		System.out.println("REFINEMENT ELAPSED TIME: " + tottime);
+		return this.instancePattern;
 	}
 
 	private boolean anyChanges(final Instance_GUI_pattern old_instance) throws Exception {

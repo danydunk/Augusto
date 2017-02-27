@@ -76,7 +76,7 @@
 			<text>.*</text>
 		</input_widget>
 		<input_widget id="piw3" card="one" alloy="Repassword">
-			<label>.*(repeat password|confirm password).*</label>
+			<label>.*(repeat password|confirm password|confirmation).*</label>
 			<class>.*</class>
 			<text>.*</text>
 		</input_widget>
@@ -187,16 +187,16 @@
 	<edge type="static">
 		<from>paw15</from>
 		<to>initial</to>
-		<to>saving</to>
 	</edge>
-	<edge type="dynamic">
+	<edge type="static">
 		<from>paw16</from>
 		<to>initial</to>
 		<to>choice</to>
 		<to>encrypt</to>
 	</edge>
-	<edge type="dynamic">
+	<edge type="static">
 		<from>paw17</from>
 		<to>initial</to>
+		<to>saving</to>
 	</edge>
 </pattern>

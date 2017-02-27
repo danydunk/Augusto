@@ -55,6 +55,16 @@ public class Option_input_widget extends Input_widget {
 		this.selected = selected;
 	}
 
+	@Override
+	public boolean equals(final Object o) {
+
+		if (!(o instanceof Option_input_widget)) {
+			return false;
+		}
+		final Option_input_widget w = (Option_input_widget) o;
+		return w.getId().equals(this.getId());
+	}
+
 	public List<TestObject> getTOS() {
 
 		return this.tos;

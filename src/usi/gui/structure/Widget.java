@@ -56,6 +56,12 @@ public abstract class Widget implements Comparable<Widget> {
 		this.label = label;
 	}
 
+	@Override
+	public int hashCode() {
+
+		return this.id.hashCode();
+	}
+
 	public Widget(final String id, final String label, final String classs, final int x,
 			final int y, final int width, final int height) throws Exception {
 

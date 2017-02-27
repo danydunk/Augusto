@@ -49,6 +49,7 @@ public class Main extends MainHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
+		final long beginTime = System.currentTimeMillis();
 		switch (args.length) {
 		case 1:
 			PathsManager.setProjectRoot(args[0].toString());
@@ -175,6 +176,8 @@ public class Main extends MainHelper {
 			ExperimentManager.moveFile(System.getProperty("user.dir") + File.separator + "aut.log",
 					out_folder);
 			ExperimentManager.cleanUP();
+			final long tottime = (System.currentTimeMillis() - beginTime) / 1000;
+			System.out.println("MAIN ELAPSED TIME: " + tottime);
 
 		} catch (final Exception e) {
 			System.setOut(generallog);

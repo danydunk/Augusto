@@ -129,6 +129,7 @@ public class GUIFunctionality_search {
 
 	public final List<Instance_GUI_pattern> match(final GUI_Pattern pattern) throws Exception {
 
+		final long beginTime = System.currentTimeMillis();
 		this.init_match(pattern, true);
 		final List<Instance_GUI_pattern> out = new ArrayList<>();
 
@@ -264,6 +265,8 @@ public class GUIFunctionality_search {
 		}
 
 		this.gui_pattern = null;
+		final long tottime = (System.currentTimeMillis() - beginTime) / 1000;
+		System.out.println("SEARCH ELAPSED TIME: " + tottime);
 		return out;
 	}
 
@@ -320,6 +323,16 @@ public class GUIFunctionality_search {
 		boolean correct = false;
 
 		final Instance_GUI_pattern igp_copy = igp.clone();
+		// for (final Pattern_window pppw : this.matches_table_wm.rowKeySet()) {
+		// for (final Window www : this.matches_table_wm.columnKeySet()) {
+		// System.out.println(pppw.getId() + " - " + www.getId() + " -> "
+		// + this.matches_table_wm.get(pppw, www));
+		// System.out.println(www.equals(w) + " - " + w.equals(www) + " - " +
+		// pppw.equals(pw)
+		// + " - " + pw.equals(pppw));
+		// }
+		// }
+
 		final List<Instance_window> inst_app = this.matches_table_wm.get(pw, w);
 		final List<Instance_window> inst = new ArrayList<>();
 		// we filter the instances already part of a match
@@ -491,10 +504,10 @@ public class GUIFunctionality_search {
 							}
 						}
 						if (source_pw.getCardinality().getMin() != 0 /*
-																	 * &&
-																	 * source_pw
-																	 * != pw
-																	 */) {
+						 * &&
+						 * source_pw
+						 * != pw
+						 */) {
 							check_optional = true;
 						}
 					}

@@ -31,6 +31,7 @@ public class RipperMain extends RipperMainHelper {
 
 	public void testMain(final Object[] args) {
 
+		final long beginTime = System.currentTimeMillis();
 		try {
 			switch (args.length) {
 			case 1:
@@ -49,7 +50,8 @@ public class RipperMain extends RipperMainHelper {
 			final GUI gui = ripper.ripApplication();
 			ExperimentManager.dumpGUI(gui);
 			ExperimentManager.cleanUP();
-
+			final long tottime = (System.currentTimeMillis() - beginTime) / 1000;
+			System.out.println("RIPPING ELAPSED TIME: " + tottime);
 		} catch (final Exception e) {
 			e.printStackTrace();
 			System.out.println("ERROR");

@@ -56,18 +56,24 @@ pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Decryptb) => #Depassword.content.t = 1 and Depassword.content.t = (Opening_list.selected.t).(Auxiliary.pwd)
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
-	Current_window.is_in.t' = aws.New => (#Input_widget.content.t' = 0 and #Opening_list.selected.t' = 0)
-	not(aw in Saves or aw in Openo or aw in New) => Current_window.is_in.t' = aw.goes
 	(aw in New and #aw.goes = 0) => new[t,t']
 	(aw in New and #aw.goes > 0) => same[t,t'] and Current_window.is_in.t' = aw.goes
+	(aw in Open) => same[t,t'] and Current_window.is_in.t' = aw.goes
+	(aw in Save) => same[t,t'] and Current_window.is_in.t' = aw.goes
+	(aw in Saveas) => same[t,t'] and Current_window.is_in.t' = aw.goes
 	(aw in Saves and exisit[t, Filename.content.t]) => ((#Replace = 1) => (Current_window.is_in.t' = aws.Replace and same[t,t']) else (save[t,t', none,Filename.content.t]))
-	(aw in Saves and not(exisit[t, Filename.content.t])) => ((#Encryptb = 1 or #Yes = 1) => (same[t,t'] and (#Yes = 1 => Current_window.is_in.t' = aws.Yes else Current_window.is_in.t' = aws.Encryptb)) else (save[t,t', none,Filename.content.t]))	
-	(aw in Yes) => Current_window.is_in.t' = aws.Encryptb and same[t,t']
-	(aw in No) => (save[t,t', none,Filename.content.t])
+	(aw in Saves and not(exisit[t, Filename.content.t])) => ((#Encryptb = 1 or #Yes = 1) => (same[t,t'] and (#Yes = 1 => Current_window.is_in.t' = aws.Yes else Current_window.is_in.t' = aws.Encryptb)) else (save[t,t', none,Filename.content.t]))
+	(aw in Cancelsave) => returned[t, t']
+	(aw in Openo) => (#(Opening_list.selected.t).(Auxiliary.pwd) = 1) => (Current_window.is_in.t' = aws.Decryptb and same[t,t']) else (openo[t,t'])
+	(aw in Cancelopen) => returned[t, t']
 	(aw in Encryptb) => save[t,t', Password.content.t, Filename.content.t]
+	(aw in Backe) => ((aw.goes in aws.New) => returned[t,t'] else (same[t,t'] and Current_window.is_in.t' = aw.goes))
 	(aw in Decryptb) => openo[t, t']
-	(aw in Openo) => (#(Opening_list.selected.t).(Auxiliary.pwd) = 1) => (Current_window.is_in.t' = aws.Decryptb and same[t,t']) else (Current_window.is_in.t' = aws.New and openo[t,t'])
-	not(aw in (New+Saves+Openo+No+Encryptb+Decryptb)) => same[t,t']
+	(aw in Backd) => ((aw.goes in aws.New) => returned[t,t'] else (same[t,t'] and Current_window.is_in.t' = aw.goes))
+	(aw in Yes) => same[t,t'] and Current_window.is_in.t' = aw.goes
+	(aw in No) => save[t,t', none,Filename.content.t]
+	(aw in Replace) => ((#Encryptb = 1 or #Yes = 1) => (same[t,t'] and (#Yes = 1 => Current_window.is_in.t' = aws.Yes else Current_window.is_in.t' = aws.Encryptb)) else (save[t,t', none,Filename.content.t]))
+	(aw in Noreplace) => ((aw.goes in aws.New) => returned[t,t'] else (same[t,t'] and Current_window.is_in.t' = aw.goes))
 }
 pred click_fail_post [aw: Action_widget, t, t': Time] {
 	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
@@ -82,21 +88,35 @@ pred save [t, t': Time, password, filename: Value] {
 	(filename in (Opening_list.list.t).(Auxiliary.names)) => (one o: Object | not(o in Opening_list.list.t) and o.appeared = Auxiliary.names.filename.appeared and o.(Auxiliary.pwd) = password and 	o.(Auxiliary.names) = filename and Opening_list.list.t' = (Opening_list.list.t - (Auxiliary.names).filename)+o) else (one o: Object | not(o in Opening_list.list.t) and o.(Auxiliary.pwd) = password and	o.(Auxiliary.names) = filename and o.appeared = t' and	Opening_list.list.t' = Opening_list.list.t + o)
 	#(Auxiliary.saved.t') = 1
 	Current_window.is_in.t' = aws.New
+	#Opening_list.selected.t' = 0
+	#Input_widget.content.t' = 0
 }
 pred new [t, t': Time] {
 	#(Auxiliary.saved.t') = 0
+	#Input_widget.content.t' = 0
 	Opening_list.list.t' =Opening_list.list.t
+	#Opening_list.selected.t' = 0
 	Current_window.is_in.t' = aws.New
 }
 pred openo [t, t': Time] {
 	#(Auxiliary.saved.t') = 1
+	#Input_widget.content.t' = 0
 	Opening_list.list.t' =  Opening_list.list.t
 	Current_window.is_in.t' = aws.New
+	#Opening_list.selected.t' = 0
 }
 pred exisit [t: Time, name: Value] {
 	name in (Opening_list.list.t).(Auxiliary.names)
 }
-pred same[t,t': Time]{
+pred returned [t, t': Time] {
+	(Auxiliary.saved.t') = 	(Auxiliary.saved.t)
+	#Input_widget.content.t' = 0
+	#Opening_list.selected.t' = 0
+	Opening_list.list.t' = Opening_list.list.t
+	Current_window.is_in.t' = aws.New
+}
+
+pred same [t, t': Time] {
 	(Auxiliary.saved.t') = 	(Auxiliary.saved.t)
 	(all iw:  Input_widget | iw.content.t' = iw.content.t)
 	Opening_list.selected.t' = Opening_list.selected.t

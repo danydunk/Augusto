@@ -29,6 +29,16 @@ public class Input_widget extends Widget {
 		}
 	}
 
+	@Override
+	public boolean equals(final Object o) {
+
+		if (!(o instanceof Input_widget)) {
+			return false;
+		}
+		final Input_widget w = (Input_widget) o;
+		return w.getId().equals(this.getId());
+	}
+
 	public String getValue() {
 
 		return this.value;
