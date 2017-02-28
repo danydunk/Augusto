@@ -128,7 +128,7 @@ public class Main extends MainHelper {
 					if (refined_instance != null) {
 						XMLUtil.save(match_folder + File.separator + "match.xml",
 								Instance_GUI_patternWriter
-								.writeInstanceGUIPattern(refined_instance));
+										.writeInstanceGUIPattern(refined_instance));
 					}
 					reflog.close();
 				}
@@ -172,12 +172,12 @@ public class Main extends MainHelper {
 			final double[] cov_after = ExperimentManager.getCoverage();
 			System.out.println("COVERAGE ACHIEVED DURING VALIDATION:" + System.lineSeparator()
 					+ "statement " + cov_after[0] + ", branch " + cov_after[1]);
+			final long tottime = (System.currentTimeMillis() - beginTime) / 1000;
+			System.out.println("MAIN ELAPSED TIME: " + tottime);
 			generallog.close();
 			ExperimentManager.moveFile(System.getProperty("user.dir") + File.separator + "aut.log",
 					out_folder);
 			ExperimentManager.cleanUP();
-			final long tottime = (System.currentTimeMillis() - beginTime) / 1000;
-			System.out.println("MAIN ELAPSED TIME: " + tottime);
 
 		} catch (final Exception e) {
 			System.setOut(generallog);
