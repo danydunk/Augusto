@@ -76,7 +76,7 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Noreplace) => ((aw.goes in aws.New) => returned[t,t'] else (same[t,t'] and Current_window.is_in.t' = aw.goes))
 }
 pred click_fail_post [aw: Action_widget, t, t': Time] {
-	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
+	(all iw: Input_widget | iw.content.t' = iw.content.t)
 	Opening_list.list.t' =  Opening_list.list.t
 	Opening_list.selected.t' =  Opening_list.selected.t
 	(Auxiliary.saved.t') = 	(Auxiliary.saved.t)

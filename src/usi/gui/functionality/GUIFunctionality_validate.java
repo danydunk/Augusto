@@ -26,6 +26,9 @@ import src.usi.testcase.structure.GUIAction;
 import src.usi.testcase.structure.GUITestCase;
 import src.usi.testcase.structure.Select;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
 public class GUIFunctionality_validate {
 
 	private final Instance_GUI_pattern instancePattern;
@@ -40,7 +43,7 @@ public class GUIFunctionality_validate {
 	// negatively and as values the run commands to cover all the possibles
 	// semantic cases
 	private Map<String, List<String>> edges_cases;
-	List<String> edges;
+	private final Table<String, String, String> pairwise;
 
 	// number of times a run command can be executed
 	final int MAX_RUN = 1;
@@ -56,24 +59,81 @@ public class GUIFunctionality_validate {
 		this.aw_to_click = new ArrayList<>();
 		this.iw_to_fill = new ArrayList<>();
 		this.sw_to_select = new ArrayList<>();
+
 		this.init();
 		this.generate_run_commands(instancePattern.getSemantics());
 
-		this.edges = new ArrayList<>();
+		final List<String> edges = new ArrayList<>();
 		for (final Action_widget aw : instancePattern.getGui().getAction_widgets()) {
 			if (instancePattern.getPAW_for_AW(aw.getId()) == null) {
 				continue;
 			}
 			for (final Window w : instancePattern.getGui().getDynamicForwardLinks(aw.getId())) {
 				final String edge = aw.getId() + " -> " + w.getId();
-				this.edges.add(edge);
+				edges.add(edge);
 			}
 			for (final Window w : instancePattern.getGui().getStaticForwardLinks(aw.getId())) {
 				final String edge = aw.getId() + " -> " + w.getId();
-				this.edges.add(edge);
+				edges.add(edge);
 			}
 		}
 
+		this.pairwise = HashBasedTable.create();
+
+		for (int x = 0; x < edges.size(); x++) {
+			for (int y = x + 1; y < edges.size(); y++) {
+				final String edge1 = edges.get(x);
+				final String edge2 = edges.get(y);
+
+				final String dest1 = edge1.split(" -> ")[1];
+				final String aw1 = edge1.split(" -> ")[0];
+
+				final String dest2 = edge2.split(" -> ")[1];
+				final String aw2 = edge2.split(" -> ")[0];
+
+				final boolean first = this.instancePattern.getGui().isDynamicEdge(aw1, dest1);
+				final boolean second = this.instancePattern.getGui().isDynamicEdge(aw2, dest2);
+
+				String run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+				run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+						+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+						+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
+						+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
+						+ " and click_semantics[Action_widget_" + aw1
+						+ ", t1] and click_semantics[Action_widget_" + aw2 + ", t2])}";
+				this.pairwise.put(edge1, edge2, run);
+
+				if (first) {
+					run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+							+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
+							+ " and not (click_semantics[Action_widget_" + aw1
+							+ ", t1]) and click_semantics[Action_widget_" + aw2 + ", t2])}";
+					this.pairwise.put("!" + aw1, edge2, run);
+				}
+
+				if (second) {
+					run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+							+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
+							+ " and click_semantics[Action_widget_" + aw1
+							+ ", t1] and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
+					this.pairwise.put(edge1, "!" + aw2, run);
+
+				}
+				if (first && second) {
+					run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+							+ " and not (click_semantics[Action_widget_" + aw1
+							+ ", t1]) and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
+					this.pairwise.put("!" + aw1, "!" + aw2, run);
+
+				}
+			}
+		}
 	}
 
 	protected void init() {
@@ -266,38 +326,26 @@ public class GUIFunctionality_validate {
 		if (ConfigurationManager.getPairwiseTestcase()) {
 			System.out.println("COVERING PAIRWISE.");
 
-			run_commands = new ArrayList<>();
-
-			for (int x = 0; x < this.edges.size(); x++) {
-				for (int y = x + 1; y < this.edges.size(); y++) {
-					final String edge1 = this.edges.get(x);
-					final String edge2 = this.edges.get(y);
-					final String[] first = edge1.split(" -> ");
-					final String[] second = edge2.split(" -> ");
-
-					run_commands.addAll(this.getEdgeCommand(first[1], first[0], second[1],
-							second[0]));
-				}
-			}
-			for (int x = 0; x < run_commands.size(); x++) {
-				System.out.println((x + 1) + " " + run_commands.get(x));
-			}
-			System.out.println(run_commands.size() + " TESTCASES. RUNNING THEM IN BATCHES OF "
-					+ this.batch_size + ".");
-			// we need to reduce the scope because one run goes in out of
-			// memeory
-			// final int old_tc_size = ConfigurationManager.getTestcaseLength();
-			// ConfigurationManager.setTestcaseLength(12);
+			this.filterPairwise(out);
 			batch_num = 0;
-			while (((batch_num * this.batch_size)) < run_commands.size()) {
+			System.out.println(this.pairwise.values().size()
+					+ " TESTCASES. RUNNING THEM IN BATCHES OF " + this.batch_size + ".");
+
+			while (true) {
+				run_commands = this.getNPairwiseTests(this.batch_size);
+				if (run_commands.size() == 0) {
+					break;
+				}
+				for (int x = 0; x < run_commands.size(); x++) {
+					System.out.println((x + 1) + " " + run_commands.get(x));
+				}
+
 				System.out.println("BATCH " + (batch_num + 1));
 				this.working_sem = new SpecificSemantics(this.working_sem.getSignatures(),
 						this.working_sem.getFacts(), this.working_sem.getPredicates(),
 						this.working_sem.getFunctions(), this.working_sem.getOpenStatements());
 
-				for (int cont = 0; ((batch_num * this.batch_size) + cont) < run_commands.size()
-						&& cont < this.batch_size; cont++) {
-					final String run = run_commands.get(((batch_num * this.batch_size) + cont));
+				for (final String run : run_commands) {
 					this.working_sem.addRun_command(run);
 				}
 
@@ -306,9 +354,10 @@ public class GUIFunctionality_validate {
 					this.working_sem = SpecificSemantics.instantiate(AlloyUtil
 							.getTCaseModelOpposite(this.working_sem, r.getActions_executed()));
 				}
-
+				this.filterPairwise(results);
 				out.addAll(results);
 				batch_num++;
+
 			}
 		}
 
@@ -610,58 +659,57 @@ public class GUIFunctionality_validate {
 		return null;
 	}
 
-	// private String getEdgeFromSemanticCase(final String sem_case) {
-	//
-	// for (final String key : this.edges_cases.keySet()) {
-	// if (this.edges_cases.get(key).contains(sem_case)) {
-	// return key;
-	// }
-	// }
-	// return null;
-	// }
+	private void filterPairwise(final List<GUITestCaseResult> ress) {
 
-	private List<String> getEdgeCommand(final String dest1, final String aw1, final String dest2,
-			final String aw2) throws Exception {
+		for (final GUITestCaseResult res : ress) {
+			final List<String> covered_edges = new ArrayList<>();
+			for (final GUIAction act : res.getActions_executed()) {
+				if (!(act instanceof Click)) {
+					continue;
+				}
+				final Click c = (Click) act;
+				final String aw = c.getWidget().getId();
+				final String sw = c.getWindow().getId();
+				final String dw = c.getOracle().getId();
+				covered_edges.add(aw + " -> " + dw);
+				if (sw.equals(dw)) {
+					covered_edges.add("!" + aw);
 
-		final boolean first = this.instancePattern.getGui().isDynamicEdge(aw1, dest1);
-		final boolean second = this.instancePattern.getGui().isDynamicEdge(aw2, dest2);
+				}
+			}
+			for (int x = 0; x < covered_edges.size(); x++) {
+				final String edge1 = covered_edges.get(x);
+				for (int y = x + 1; y < covered_edges.size(); y++) {
+					final String edge2 = covered_edges.get(y);
+					this.pairwise.remove(edge1, edge2);
+					this.pairwise.remove(edge2, edge1);
+				}
+			}
+		}
+	}
 
+	private List<String> getNPairwiseTests(final int n) throws Exception {
+
+		final List<String> to_remove = new ArrayList<>();
 		final List<String> out = new ArrayList<>();
-		String run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-		run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-				+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-				+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
-				+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
-				+ " and click_semantics[Action_widget_" + aw1
-				+ ", t1] and click_semantics[Action_widget_" + aw2 + ", t2])}";
-		out.add(run);
-
-		if (first) {
-			run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-			run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-					+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-					+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
-					+ " and not (click_semantics[Action_widget_" + aw1
-					+ ", t1]) and click_semantics[Action_widget_" + aw2 + ", t2])}";
-			out.add(run);
+		loop: for (final String c : this.pairwise.columnKeySet()) {
+			for (final String r : this.pairwise.columnKeySet()) {
+				if (this.pairwise.get(r, c) != null) {
+					out.add(this.pairwise.get(r, c));
+					to_remove.add(r + " #### " + c);
+					if (out.size() == n) {
+						break loop;
+					}
+				}
+			}
 		}
+		for (final String rem : to_remove) {
+			// System.out.println(rem.split(" ### ")[0]);
+			// System.out.println(rem.split(" ### ")[1]);
 
-		if (second) {
-			run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-			run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-					+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-					+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
-					+ " and click_semantics[Action_widget_" + aw1
-					+ ", t1] and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
-			out.add(run);
-		}
-		if (first && second) {
-			run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-			run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-					+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-					+ " and not (click_semantics[Action_widget_" + aw1
-					+ ", t1]) and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
-			out.add(run);
+			if (this.pairwise.remove(rem.split(" #### ")[0], rem.split(" #### ")[1]) == null) {
+				throw new Exception("GUIFuncitonality_validate: error in getNPairwiseTests.");
+			}
 		}
 		return out;
 	}
