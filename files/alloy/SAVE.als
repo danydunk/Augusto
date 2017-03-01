@@ -67,13 +67,13 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Openo) => (#(Opening_list.selected.t).(Auxiliary.pwd) = 1) => (Current_window.is_in.t' = aws.Decryptb and same[t,t']) else (openo[t,t'])
 	(aw in Cancelopen) => returned[t, t']
 	(aw in Encryptb) => save[t,t', Password.content.t, Filename.content.t]
-	(aw in Backe) => ((aw.goes in aws.New) => returned[t,t'] else (same[t,t'] and Current_window.is_in.t' = aw.goes))
+	(aw in Backe) => ((aw.goes in aws.New) => returned[t,t'] else (same2[t,t'] and Current_window.is_in.t' = aw.goes))
 	(aw in Decryptb) => openo[t, t']
-	(aw in Backd) => ((aw.goes in aws.New) => returned[t,t'] else (same[t,t'] and Current_window.is_in.t' = aw.goes))
+	(aw in Backd) => ((aw.goes in aws.New) => returned[t,t'] else (same2[t,t'] and Current_window.is_in.t' = aw.goes))
 	(aw in Yes) => same[t,t'] and Current_window.is_in.t' = aw.goes
 	(aw in No) => save[t,t', none,Filename.content.t]
 	(aw in Replace) => ((#Encryptb = 1 or #Yes = 1) => (same[t,t'] and (#Yes = 1 => Current_window.is_in.t' = aws.Yes else Current_window.is_in.t' = aws.Encryptb)) else (save[t,t', none,Filename.content.t]))
-	(aw in Noreplace) => ((aw.goes in aws.New) => returned[t,t'] else (same[t,t'] and Current_window.is_in.t' = aw.goes))
+	(aw in Noreplace) => ((aw.goes in aws.New) => returned[t,t'] else (same2[t,t'] and Current_window.is_in.t' = aw.goes))
 }
 pred click_fail_post [aw: Action_widget, t, t': Time] {
 	(all iw: Input_widget | iw.content.t' = iw.content.t)
@@ -119,6 +119,12 @@ pred returned [t, t': Time] {
 pred same [t, t': Time] {
 	(Auxiliary.saved.t') = 	(Auxiliary.saved.t)
 	(all iw:  Input_widget | iw.content.t' = iw.content.t)
+	Opening_list.selected.t' = Opening_list.selected.t
+	Opening_list.list.t' = Opening_list.list.t
+}
+pred same2 [t, t': Time] {
+	(Auxiliary.saved.t') = 	(Auxiliary.saved.t)
+	#Input_widget.content.t' = 0
 	Opening_list.selected.t' = Opening_list.selected.t
 	Opening_list.list.t' = Opening_list.list.t
 }
