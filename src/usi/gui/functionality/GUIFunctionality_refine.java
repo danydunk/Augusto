@@ -50,6 +50,7 @@ public class GUIFunctionality_refine {
 	private final List<String> covered_dyn_edges;
 	private List<String> unsat_commands;
 	private final long beginTime = System.currentTimeMillis();
+	public boolean testcasegen;
 
 	public GUIFunctionality_refine(final Instance_GUI_pattern instancePattern, final GUI gui)
 			throws Exception {
@@ -65,6 +66,8 @@ public class GUIFunctionality_refine {
 		// "one Property_unique_0:Property_unique|one Property_required_0:Property_required|Property_required = (Property_required_0) and Property_unique = (Property_unique_0) and Property_required_0.requireds = (Input_widget_iw7+Input_widget_iw6+Input_widget_iw10+Input_widget_iw5+Input_widget_iw3+Input_widget_iw8) and Property_unique_0.uniques = (Input_widget_iw1+Input_widget_iw8+Input_widget_iw6)";
 		this.discarded_semantic_properties = new ArrayList<>();
 		this.unsat_commands = new ArrayList<>();
+
+		this.testcasegen = false;
 	}
 
 	public Instance_GUI_pattern refine() throws Exception {
@@ -73,6 +76,7 @@ public class GUIFunctionality_refine {
 		Instance_GUI_pattern old_instancePattern;
 		this.instancePattern.generateSpecificSemantics();
 		do {
+			this.testcasegen = false;
 			// we save information to use to decide whether to terminate
 			old_current_semantic_property = this.current_semantic_property;
 			old_instancePattern = this.instancePattern.clone();
@@ -233,7 +237,7 @@ public class GUIFunctionality_refine {
 			System.out.println("TESTCASE NOT FOUND.");
 			return false;
 		}
-
+		this.testcasegen = true;
 		String aw = null;
 		if (tc.getActions().get(tc.getActions().size() - 1) instanceof Click) {
 			aw = tc.getActions().get(tc.getActions().size() - 1).getWidget().getId();
@@ -537,7 +541,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -873,7 +877,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -1071,113 +1075,98 @@ public class GUIFunctionality_refine {
 		// System.out.println(sem);
 		// System.out.println("END ALLOY MODEL");
 
-		String property = null;
-		GUITestCase tc = null;
-
-		final List<String> new_invalid_properties = new ArrayList<>();
-		String current = this.current_semantic_property;
 		this.canididate_semantic_properties = new ArrayList<>();
-		boolean first = true;
 
-		while (tc == null) {
-			// if we reached timeout
-			if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
-					.getRefinementTimeout()) {
-				System.out.println("TIMEOUT IN GENERATING TESTCASES");
+		List<String> constraints = new ArrayList<>();
+		if (this.current_semantic_property.length() == 0) {
+			constraints.addAll(this.discarded_semantic_properties);
+		} else {
+			constraints.add(this.current_semantic_property);
+		}
+
+		SpecificSemantics constrained = addSemanticConstrain_to_Model(sem, constraints);
+		Instance_GUI_pattern clone = this.instancePattern.clone();
+		SpecificSemantics newsem = new SpecificSemantics(constrained.getSignatures(),
+				constrained.getFacts(), constrained.getPredicates(), constrained.getFunctions(),
+				constrained.getOpenStatements());
+		newsem.addRun_command(constrained.getRun_commands().get(0));
+		clone.setSpecificSemantics(newsem);
+
+		AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
+		List<GUITestCase> tests = test_gen.generateMinimalTestCases(ConfigurationManager
+				.getRefinementAlloyTimeScope());
+
+		assert tests.size() < 2;
+
+		if (tests.size() == 0 || tests.get(0) == null) {
+			// if unsat or timeout
+			if (!sem.hasSemanticProperty()) {
 				return null;
 			}
 
-			final List<String> constraints = new ArrayList<>();
-			if (current.length() == 0) {
-				constraints.addAll(this.discarded_semantic_properties);
-				constraints.addAll(new_invalid_properties);
-			} else {
-				constraints.add(current);
-			}
-
-			final SpecificSemantics constrained = addSemanticConstrain_to_Model(sem, constraints);
-			final Instance_GUI_pattern clone = this.instancePattern.clone();
-			final SpecificSemantics newsem = new SpecificSemantics(constrained.getSignatures(),
-					constrained.getFacts(), constrained.getPredicates(),
-					constrained.getFunctions(), constrained.getOpenStatements());
-			if (first) {
-				newsem.addRun_command(constrained.getRun_commands().get(0));
-			} else {
-				newsem.addRun_command(constrained.getRun_commands().get(0) + " for "
-						+ ConfigurationManager.getAlloyRunScope() + " but "
-						+ ConfigurationManager.getRefinementAlloyTimeScope() + " Time");
-			}
-			clone.setSpecificSemantics(newsem);
-			final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
-			List<GUITestCase> tests = null;
-			if (first) {
-				tests = test_gen.generateMinimalTestCases(ConfigurationManager
-						.getRefinementAlloyTimeScope());
-				first = false;
-			} else {
-				tests = test_gen.generateTestCases();
-			}
-			assert tests.size() < 2;
-
-			if (tests.size() == 0) {
-
-				if (!sem.hasSemanticProperty()) {
+			if (!this.testcasegen) {
+				System.out
+						.println("GET TESTCASE: test case not found, trying adapting constraint.");
+				// if we reached timeout
+				if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
+						.getRefinementTimeout()) {
+					System.out.println("TIMEOUT IN GENERATING TESTCASES");
 					return null;
 				}
-
-				if (current.length() > 0) {
-					new_invalid_properties.add("not(" + current + ")");
-					current = "";
-					continue;
-				} else {
-					this.canididate_semantic_properties.addAll(new_invalid_properties);
-					// we save the fact that this run command was unsat
+				constraints = new ArrayList<>();
+				constraints.addAll(this.discarded_semantic_properties);
+				constraints.add("not(" + this.current_semantic_property + ")");
+				constrained = addSemanticConstrain_to_Model(sem, constraints);
+				final String new_constraint = this.getAdaptedConstraint(constrained);
+				if (new_constraint == null) {
+					System.out.println("GET TESTCASE: adapted constraint not found.");
 					this.unsat_commands.add(constrained.getRun_commands().get(0));
 					return null;
 				}
-			}
+				System.out.println("GET TESTCASE: adapted constraint found: " + new_constraint);
 
-			if (tests.get(0) == null) {
-				// it means we reached timeout
-				return null;
-			}
-
-			if (!sem.hasSemanticProperty()) {
-				tc = tests.get(0);
-			} else {
-				// if valid_constraint is not null it means we are using the
-				// previous constraint that it is still valid
-				if (current.length() > 0) {
-					tc = tests.get(0);
-					if (!current.equals(this.current_semantic_property)) {
-						this.canididate_semantic_properties.add(current);
-					}
-				} else {
-					// if not we need to validate the new constraint
-					property = AlloyUtil.extractProperty(tests.get(0).getAlloySolution(), sem);
-
-					final boolean valid = this.validateProperty(property, sem, this.observed_tcs);
-
-					if (valid) {
-						tc = tests.get(0);
-						System.out.println("GET TESTCASE: new valid property - " + property);
-						current = property;
-						this.canididate_semantic_properties.add(current);
-
-					} else {
-						// since it not valid according to previous testcases we
-						// add
-						// it to the list of discarded properties
-						this.discarded_semantic_properties.add("not(" + property + ")");
-						current = "";
-						// add constraint
-						System.out.println("GET TESTCASE: new invalid property added - not("
-								+ property + ")");
-					}
+				if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
+						.getRefinementTimeout()) {
+					System.out.println("TIMEOUT IN GENERATING TESTCASES");
+					return null;
 				}
+
+				constraints = new ArrayList<>();
+				constraints.add(new_constraint);
+
+				constrained = addSemanticConstrain_to_Model(sem, constraints);
+				clone = this.instancePattern.clone();
+				newsem = new SpecificSemantics(constrained.getSignatures(), constrained.getFacts(),
+						constrained.getPredicates(), constrained.getFunctions(),
+						constrained.getOpenStatements());
+				newsem.addRun_command(constrained.getRun_commands().get(0));
+				clone.setSpecificSemantics(newsem);
+
+				test_gen = new AlloyTestCaseGenerator(clone);
+				tests = test_gen.generateMinimalTestCases(ConfigurationManager
+						.getRefinementAlloyTimeScope());
+
+				assert tests.size() < 2;
+				if (tests.size() == 0) {
+					return null;
+				}
+				if (tests.get(0) == null) {
+					// it means we reached timeout
+					return null;
+				}
+				System.out.println("GET TESTCASE: test case found");
+				this.canididate_semantic_properties.add("not(" + this.current_semantic_property
+						+ ")");
+				this.canididate_semantic_properties.add(new_constraint);
+				return tests.get(0);
 			}
+			return null;
 		}
-		return tc;
+		if (this.current_semantic_property.length() == 0) {
+			this.canididate_semantic_properties.add(AlloyUtil.extractProperty(tests.get(0)
+					.getAlloySolution(), sem));
+		}
+		return tests.get(0);
 	}
 
 	private Instance_GUI_pattern createConcreteWindowFromPattern(final Pattern_window pw,
@@ -1312,8 +1301,8 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-					+ "System and "
-					+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
+			+ "System and "
+			+ "(all t: Time| (t = T/last) => (Track.op.t in Click and Track.op.t.clicked in "
 			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
