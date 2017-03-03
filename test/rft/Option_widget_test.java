@@ -11,12 +11,7 @@ import src.usi.configuration.PathsManager;
 import src.usi.gui.GUIParser;
 import src.usi.gui.functionality.GUIFunctionality_search;
 import src.usi.gui.functionality.instance.Instance_GUI_pattern;
-import src.usi.gui.functionality.instance.Instance_window;
-import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.GUI;
-import src.usi.gui.structure.Input_widget;
-import src.usi.gui.structure.Option_input_widget;
-import src.usi.gui.structure.Window;
 import src.usi.pattern.GUIPatternParser;
 import src.usi.pattern.structure.GUI_Pattern;
 import src.usi.testcase.AlloyTestCaseGenerator;
@@ -59,34 +54,41 @@ public class Option_widget_test extends Option_widget_testHelper {
 		final List<Instance_GUI_pattern> res = gfs.match(pattern);
 		final Instance_GUI_pattern r = res.get(0);
 		// manual refinement
-		final Window view = new Window("w999", "view", "class", 1, 1, 1, 1, false);
-
-		for (final Input_widget iww : gui.getWindow("w8").getInputWidgets()) {
-			if (iww instanceof Option_input_widget) {
-				final Option_input_widget oiw = (Option_input_widget) iww;
-				view.addWidget(new Option_input_widget(iww.getId() + "9", iww.getLabel(), iww
-						.getClasss(), iww.getX(), iww.getY(), 1, 1, oiw.getSize(), oiw
-						.getSelected()));
-			} else {
-				view.addWidget(new Input_widget(iww.getId() + "9", iww.getLabel(), iww.getClasss(),
-						iww.getX(), iww.getY(), 1, 1, iww.getValue()));
-			}
-		}
-
-		final Action_widget ok = new Action_widget("aw999", "ok", "class", 1, 1, 1, 1);
-		view.addWidget(ok);
-
-		gui.addWindow(view);
-		final Instance_window iw = new Instance_window(pattern.getWindow("view"), view);
-		r.addWindow(iw);
-		iw.addAW_mapping(pattern.getWindow("view").getActionWidgets().get(0),
-				view.getActionWidgets());
-		iw.addIW_mapping(pattern.getWindow("view").getInputWidgets().get(0), view.getInputWidgets());
-
-		r.getGui().addWindow(view);
+		// final Window view = new Window("w999", "view", "class", 1, 1, 1, 1,
+		// false);
+		//
+		// for (final Input_widget iww : gui.getWindow("w8").getInputWidgets())
+		// {
+		// if (iww instanceof Option_input_widget) {
+		// final Option_input_widget oiw = (Option_input_widget) iww;
+		// view.addWidget(new Option_input_widget(iww.getId() + "9",
+		// iww.getLabel(), iww
+		// .getClasss(), iww.getX(), iww.getY(), 1, 1, oiw.getSize(), oiw
+		// .getSelected()));
+		// } else {
+		// view.addWidget(new Input_widget(iww.getId() + "9", iww.getLabel(),
+		// iww.getClasss(),
+		// iww.getX(), iww.getY(), 1, 1, iww.getValue()));
+		// }
+		// }
+		//
+		// final Action_widget ok = new Action_widget("aw999", "ok", "class", 1,
+		// 1, 1, 1);
+		// view.addWidget(ok);
+		//
+		// gui.addWindow(view);
+		// final Instance_window iw = new
+		// Instance_window(pattern.getWindow("view"), view);
+		// r.addWindow(iw);
+		// iw.addAW_mapping(pattern.getWindow("view").getActionWidgets().get(0),
+		// view.getActionWidgets());
+		// iw.addIW_mapping(pattern.getWindow("view").getInputWidgets().get(0),
+		// view.getInputWidgets());
+		//
+		// r.getGui().addWindow(view);
 		r.getGui().addDynamicEdge("aw21", "w8");
-		r.getGui().addDynamicEdge("aw23", "w999");
-		r.getGui().addDynamicEdge("aw999", "w2");
+		// r.getGui().addDynamicEdge("aw23", "w999");
+		// r.getGui().addDynamicEdge("aw999", "w2");
 		r.getGui().addDynamicEdge("aw22", "w2");
 		r.getGui().addDynamicEdge("aw62", "w2");
 
