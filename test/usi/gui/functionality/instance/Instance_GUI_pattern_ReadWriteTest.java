@@ -38,7 +38,7 @@ public class Instance_GUI_pattern_ReadWriteTest {
 		gui.addWindow(loadedgui.getWindow("w2"));
 		gui.addWindow(loadedgui.getWindow("w3"));
 
-		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/guipatterns/CRUD.xml");
+		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/guipatterns/CRUD_NO_READ.xml");
 		Assert.assertNotNull(doc);
 
 		final GUI_Pattern pattern = GUIPatternParser.parse(doc);

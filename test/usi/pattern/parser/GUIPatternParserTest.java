@@ -23,14 +23,14 @@ public class GUIPatternParserTest {
 	public void testParserGUIPattern1() throws Exception {
 
 		final Document doc = XMLUtil.read(PathsManager.getProjectRoot()
-				+ "/files/guipatterns/CRUD.xml");
+				+ "/files/guipatterns/CRUD_NO_READ.xml");
 		Assert.assertNotNull(doc);
 
 		final GUI_Pattern gui = GUIPatternParser.parse(doc);
 
 		// TO DO: check semantics
 		// Assert.assertNotNull(gui.getAlloy_metamodel());
-		assertEquals("Number of Windows", 3, gui.getWindows().size());
+		assertEquals("Number of Windows", 2, gui.getWindows().size());
 
 		Pattern_window w1 = null;
 		Pattern_window w2 = null;
@@ -54,7 +54,7 @@ public class GUIPatternParserTest {
 
 		assertEquals("Alloy corresponding", "Initial", w1.getAlloyCorrespondence());
 
-		assertEquals("actions", 4, w1.getActionWidgets().size());
+		assertEquals("actions", 3, w1.getActionWidgets().size());
 		assertEquals("input", 0, w1.getInputWidgets().size());
 
 		// Test labels of Action and Input
@@ -86,6 +86,6 @@ public class GUIPatternParserTest {
 
 		// Test backwardLinks
 		final Collection<Pattern_action_widget> pawfrom1 = gui.getStaticBackwardLinks(w1.getId());
-		assertEquals(2, pawfrom1.size());
+		assertEquals(1, pawfrom1.size());
 	}
 }

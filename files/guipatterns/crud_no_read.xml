@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	alloy="CRUD_no_read.als" alloy_without_unvalid_data="CRUD_no_read_without_unvalid.als" name="CRUD">
+	alloy="CRUD_no_read.als" alloy_without_unvalid_data="CRUD_no_read_without_unvalid.als" name="CRUD_NO_READ">
 	<window id="initial" dynamic="false" card="one" alloy="Initial">
 		<title>.*</title>
 		<class>.*</class>
