@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -818,7 +817,7 @@ public class AlloyUtil {
 
 		// to fix the problem of the view window
 		// TODO: find another solution
-		final List<Input_widget> to_order = new ArrayList<>();
+		// final List<Input_widget> to_order = new ArrayList<>();
 
 		for (final Input_widget iw : iws.keySet()) {
 
@@ -826,7 +825,7 @@ public class AlloyUtil {
 			metadata += iw.getDescriptor() != null && metadata.length() == 0 ? iw.getDescriptor()
 					: "";
 
-			to_order.add(iw);
+			// to_order.add(iw);
 			if (invalid) {
 
 				if (iw instanceof Option_input_widget) {
@@ -974,14 +973,15 @@ public class AlloyUtil {
 			}
 		}
 		content += System.getProperty("line.separator");
-		Collections.sort(to_order);
-		for (int cont = 0; cont < (to_order.size() - 1); cont++) {
-			if (cont != 0) {
-				content += " and ";
-			}
-			content += "IW/next[" + iws.get(to_order.get(cont)).getIdentifier() + "]="
-					+ iws.get(to_order.get(cont + 1)).getIdentifier();
-		}
+		// Collections.sort(to_order);
+		// for (int cont = 0; cont < (to_order.size() - 1); cont++) {
+		// if (cont != 0) {
+		// content += " and ";
+		// }
+		// content += "IW/next[" + iws.get(to_order.get(cont)).getIdentifier() +
+		// "]="
+		// + iws.get(to_order.get(cont + 1)).getIdentifier();
+		// }
 
 		final Fact fact = new Fact(window.getIdentifier() + "_iws", content);
 		return fact;
@@ -998,7 +998,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1484,7 +1484,7 @@ public class AlloyUtil {
 	 */
 	static public Alloy_Model getTCaseModel(final SpecificSemantics mod,
 			final List<GUIAction> acts, final Window reached, final Instance_GUI_pattern in)
-					throws Exception {
+			throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1713,17 +1713,17 @@ public class AlloyUtil {
 					metadata += iw.getDescriptor() != null && metadata.length() == 0 ? iw
 							.getDescriptor() : "";
 
-					if (dm.getInvalidData(metadata).contains(s)) {
-						assert (invalid);
-						fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
-								+ iw.getId() + ".invalid";
+							if (dm.getInvalidData(metadata).contains(s)) {
+								assert (invalid);
+								fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
+										+ iw.getId() + ".invalid";
 
-					} else {
-						if (invalid) {
-							fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
-									+ iw.getId() + ".invalid)";
-						}
-					}
+							} else {
+								if (invalid) {
+									fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
+											+ iw.getId() + ".invalid)";
+								}
+							}
 				}
 			} else {
 				final List<String> fills = values_used.get(s);

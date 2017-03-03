@@ -47,7 +47,8 @@ public class GO_select_test extends GO_select_testHelper {
 		ExperimentManager.init();
 
 		// we load a gui pattern
-		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/guipatterns/crud.xml");
+		Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+				+ "/files/guipatterns/crud_no_read.xml");
 		final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 		// we load the GUI structure

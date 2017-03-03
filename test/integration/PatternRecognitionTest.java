@@ -28,7 +28,7 @@ public class PatternRecognitionTest {
 
 			// we load a gui pattern
 			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
-					+ "/files/guipatterns/crud.xml");
+					+ "/files/guipatterns/crud_no_read.xml");
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
@@ -43,7 +43,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -67,7 +67,7 @@ public class PatternRecognitionTest {
 
 			// we load a gui pattern
 			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
-					+ "/files/guipatterns/crud.xml");
+					+ "/files/guipatterns/crud_no_read.xml");
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
@@ -83,7 +83,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -103,7 +103,7 @@ public class PatternRecognitionTest {
 
 			// we load a gui pattern
 			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
-					+ "/files/guipatterns/crud.xml");
+					+ "/files/guipatterns/crud_no_read.xml");
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
@@ -120,7 +120,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -140,7 +140,7 @@ public class PatternRecognitionTest {
 
 			// we load a gui pattern
 			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
-					+ "/files/guipatterns/crud.xml");
+					+ "/files/guipatterns/crud_no_read.xml");
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
