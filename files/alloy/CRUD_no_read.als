@@ -22,7 +22,7 @@ fact{
 fact {
 	#Ok < 2
 	#For_selecting = 1 and #Selectable_widget = 1
-	all iw: For_inputing | (#iw.invalid > 0 => iw in Property_required.requireds)
+	all iw: For_inputing | #iw.content.(T/first) =1 => not(iw in Property_required.requireds) else (#iw.invalid > 0 => iw in Property_required.requireds)
 }
 ---------------Generic CRUD Semantics---------- 
 abstract sig Crud_op {}
