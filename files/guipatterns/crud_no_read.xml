@@ -17,7 +17,7 @@
 			<label>^(?!window - )(.*( delete | remove ).*|^(delete |remove ).*|^(delete|remove)$)</label>
 			<class>.*</class>
 		</action_widget>
-		<selectable_widget id="psw1" card="one" alloy="For_selecting">
+		<selectable_widget id="psw1" card="one" alloy="">
 			<label>.*</label>
 			<class>.*</class>
 			<size>.*</size>
@@ -35,7 +35,7 @@
 			<label>^(cancel|clear)</label>
 			<class>.*</class>
 		</action_widget>
-		<input_widget id="piw1" card="some" alloy="For_inputing">
+		<input_widget id="piw1" card="some" alloy="">
 			<label>.*</label>
 			<class>.*</class>
 			<text>.*</text>

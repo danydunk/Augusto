@@ -820,7 +820,9 @@ public class AlloyUtil {
 		// final List<Input_widget> to_order = new ArrayList<>();
 
 		for (final Input_widget iw : iws.keySet()) {
-
+			if (iw.getId().equals("iw54")) {
+				System.out.println();
+			}
 			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
 			metadata += iw.getDescriptor() != null && metadata.length() == 0 ? iw.getDescriptor()
 					: "";
@@ -998,7 +1000,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1484,7 +1486,7 @@ public class AlloyUtil {
 	 */
 	static public Alloy_Model getTCaseModel(final SpecificSemantics mod,
 			final List<GUIAction> acts, final Window reached, final Instance_GUI_pattern in)
-			throws Exception {
+					throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1713,17 +1715,17 @@ public class AlloyUtil {
 					metadata += iw.getDescriptor() != null && metadata.length() == 0 ? iw
 							.getDescriptor() : "";
 
-							if (dm.getInvalidData(metadata).contains(s)) {
-								assert (invalid);
-								fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
-										+ iw.getId() + ".invalid";
+					if (dm.getInvalidData(metadata).contains(s)) {
+						assert (invalid);
+						fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
+								+ iw.getId() + ".invalid";
 
-							} else {
-								if (invalid) {
-									fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
-											+ iw.getId() + ".invalid)";
-								}
-							}
+					} else {
+						if (invalid) {
+							fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
+									+ iw.getId() + ".invalid)";
+						}
+					}
 				}
 			} else {
 				final List<String> fills = values_used.get(s);
