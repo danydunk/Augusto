@@ -70,8 +70,7 @@ public class Refinement_rachota_test extends Refinement_rachota_testHelper {
 			}
 		}
 
-		if (sem_prop.length() == 0
-				|| !sem_prop.contains("Property_required_0.requireds = (Input_widget_iw25)")) {
+		if (sem_prop.length() == 0 || !sem_prop.contains(".requireds = (Input_widget_iw25)")) {
 			throw new Exception("");
 		}
 	}

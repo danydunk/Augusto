@@ -71,8 +71,7 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 			}
 		}
 
-		if (sem_prop.startsWith("not")
-				|| !sem_prop.contains("Property_required_0.requireds = (Input_widget_iw7")) {
+		if (sem_prop.startsWith("not") || !sem_prop.contains(".requireds = (Input_widget_iw7")) {
 			throw new Exception("");
 		}
 	}
