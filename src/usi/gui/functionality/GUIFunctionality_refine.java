@@ -665,44 +665,50 @@ public class GUIFunctionality_refine {
 		}
 
 		Window reached_w = null;
-		final GUITestCaseResult prev_res = this.wasTestCasePreviouslyExecuted(tc);
-		if (prev_res != null) {
-			reached_w = prev_res.getResults().get(prev_res.getActions_executed().size() - 1);
-		} else {
+		GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
+		if (res == null) {
+			// reached_w =
+			// prev_res.getResults().get(prev_res.getActions_executed().size() -
+			// 1);
+			// } else {
 			final TestCaseRunner runner = new TestCaseRunner(this.gui);
-			GUITestCaseResult res = null;
 
 			res = runner.runTestCase(tc);
-			// res = this.last_used_instance.updateTCResult(res);
-			// the window reached after the last action was executed
-			reached_w = res.getResults().get(res.getActions_executed().size() - 1);
-
-			if (this.gui.getWindow(reached_w.getId()) == null) {
-				// the window is new, we add it and rip it
-				this.gui.addWindow(reached_w);
-				final List<GUIAction> action_executed = res.getActions_actually_executed();
-
-				final Ripper ripper = new Ripper(this.gui);
-				ripper.ripWindow(action_executed, reached_w);
-				ApplicationHelper.getInstance().closeApplication();
-			}
-			if (wid instanceof Action_widget) {
-				this.gui.addDynamicEdge(wid.getId(), reached_w.getId());
-			}
-
-			// we dont need the result (it wastes too much memory)
-			final GUITestCase new_tc = new GUITestCase(null, res.getTc().getActions(), res.getTc()
-					.getRunCommand());
-			final GUITestCaseResult new_res = new GUITestCaseResult(new_tc,
-					res.getActions_executed(), res.getResults(), res.getActions_actually_executed());
-			this.observed_tcs.add(new_res);
-			tc = new_tc;
 		}
+		// res = this.last_used_instance.updateTCResult(res);
+		// the window reached after the last action was executed
+		reached_w = res.getResults().get(res.getActions_executed().size() - 1);
+		boolean neww = false;
+		if (this.gui.getWindow(reached_w.getId()) == null) {
+			// the window is new, we add it and rip it
+			this.gui.addWindow(reached_w);
+			neww = true;
+		}
+
+		if (wid instanceof Action_widget) {
+			this.gui.addDynamicEdge(wid.getId(), reached_w.getId());
+		}
+
+		// we dont need the result (it wastes too much memory)
+		final GUITestCase new_tc = new GUITestCase(null, res.getTc().getActions(), res.getTc()
+				.getRunCommand());
+		final GUITestCaseResult new_res = new GUITestCaseResult(new_tc, res.getActions_executed(),
+				res.getResults(), res.getActions_actually_executed());
+		this.observed_tcs.add(new_res);
+		tc = new_tc;
+
 		out[1] = reached_w;
 		// we check whether a match with the target was found already
 		for (final Instance_window iw : this.instancePattern.getWindows()) {
 			if (iw.getPattern().getId().equals(target.getId())
 					&& iw.getInstance().getId().equals(reached_w.getId())) {
+				if (neww) {
+					final List<GUIAction> action_executed = res.getActions_actually_executed();
+
+					final Ripper ripper = new Ripper(this.gui);
+					ripper.ripWindow(action_executed, reached_w);
+					ApplicationHelper.getInstance().closeApplication();
+				}
 				System.out.println("GET FOUND WINDOW: end.");
 				// iw.setInstance(reached_w);
 				out[0] = iw;
@@ -717,6 +723,13 @@ public class GUIFunctionality_refine {
 			for (final Instance_window iw : this.instancePattern.getWindows()) {
 				if (pws.contains(iw.getPattern().getId())
 						&& iw.getInstance().getId().equals(reached_w.getId())) {
+					if (neww) {
+						final List<GUIAction> action_executed = res.getActions_actually_executed();
+
+						final Ripper ripper = new Ripper(this.gui);
+						ripper.ripWindow(action_executed, reached_w);
+						ApplicationHelper.getInstance().closeApplication();
+					}
 					System.out.println("GET FOUND WINDOW: end.");
 					// iw.setInstance(reached_w);
 					out[0] = iw;
@@ -731,6 +744,13 @@ public class GUIFunctionality_refine {
 			for (final Instance_window iw : this.instancePattern.getWindows()) {
 				if (iw.getPattern().getId().equals(pw.getId())
 						&& iw.getInstance().getId().equals(previus.getId())) {
+					if (neww) {
+						final List<GUIAction> action_executed = res.getActions_actually_executed();
+
+						final Ripper ripper = new Ripper(this.gui);
+						ripper.ripWindow(action_executed, reached_w);
+						ApplicationHelper.getInstance().closeApplication();
+					}
 					System.out.println("GET FOUND WINDOW: end.");
 					// iw.setInstance(reached_w);
 					out[0] = iw;
@@ -744,6 +764,13 @@ public class GUIFunctionality_refine {
 		if (instances.size() != 0) {
 			// the first is returned because it the one that maps more
 			// elements
+			if (neww) {
+				final List<GUIAction> action_executed = res.getActions_actually_executed();
+
+				final Ripper ripper = new Ripper(this.gui);
+				ripper.ripWindow(action_executed, reached_w);
+				ApplicationHelper.getInstance().closeApplication();
+			}
 			System.out.println("GET FOUND WINDOW: end.");
 			out[0] = instances.get(0);
 			return out;
@@ -753,6 +780,13 @@ public class GUIFunctionality_refine {
 			for (final Pattern_window ppw : this.pattern.getDynamicForwardLinks(pwid.getId())) {
 				instances = ppw.getMatches(reached_w);
 				if (instances.size() != 0) {
+					if (neww) {
+						final List<GUIAction> action_executed = res.getActions_actually_executed();
+
+						final Ripper ripper = new Ripper(this.gui);
+						ripper.ripWindow(action_executed, reached_w);
+						ApplicationHelper.getInstance().closeApplication();
+					}
 					System.out.println("GET FOUND WINDOW: end.");
 					out[0] = instances.get(0);
 					return out;
@@ -1102,6 +1136,7 @@ public class GUIFunctionality_refine {
 		if (tests.size() == 0 || tests.get(0) == null) {
 			// if unsat or timeout
 			if (!sem.hasSemanticProperty()) {
+				this.unsat_commands.add(constrained.getRun_commands().get(0));
 				return null;
 			}
 
@@ -1161,6 +1196,7 @@ public class GUIFunctionality_refine {
 				this.canididate_semantic_properties.add(new_constraint);
 				return tests.get(0);
 			}
+			this.unsat_commands.add(constrained.getRun_commands().get(0));
 			return null;
 		}
 		if (this.current_semantic_property.length() == 0 && sem.hasSemanticProperty()) {
