@@ -52,8 +52,8 @@ pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Save)        => #(Auxiliary.saved.t) = 0
 	(aw in Openo)     => #Opening_list.selected.t = 1
 	(aw in Saves)      => #Filename.content.t = 1
-	(aw in Encryptb)   => #Repassword.content.t = 1 and Password.content.t = Repassword.content.t
-	(aw in Decryptb) => #Depassword.content.t = 1 and Depassword.content.t = (Opening_list.selected.t).(Auxiliary.pwd)
+	(aw in Encryptb)   => Password.content.t = Repassword.content.t
+	(aw in Decryptb) => Depassword.content.t = (Opening_list.selected.t).(Auxiliary.pwd)
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in New and #aw.goes = 0) => new[t,t']
@@ -76,7 +76,7 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Noreplace) => ((aw.goes in aws.New) => returned[t,t'] else (same2[t,t'] and Current_window.is_in.t' = aw.goes))
 }
 pred click_fail_post [aw: Action_widget, t, t': Time] {
-	(all iw: Input_widget | iw.content.t' = iw.content.t)
+	(aw in (Encriptb+Decriptb)) => Input_widget.content.t' = 0 else (all iw: Input_widget | iw.content.t' = iw.content.t)
 	Opening_list.list.t' =  Opening_list.list.t
 	Opening_list.selected.t' =  Opening_list.selected.t
 	(Auxiliary.saved.t') = 	(Auxiliary.saved.t)
