@@ -164,21 +164,40 @@ public class GuiStateManager {
 		for (final TestObject to : tos) {
 			// we keep only the widget of interest
 			final List<Widget> widgets = Widget.getWidgets(to, this.idm);
-			for (final Widget widget : widgets) {
-				if (widget != null) {
-					// if the widget does not have a label we look for
-					// descriptors
-					if (widget.getClasss().equals("RadioButtonUI")) {
-						widget.setDescriptor(context.getDescriptorRB(widget.getTo()));
+			widgets_to_add.addAll(widgets);
+			// for (final Widget widget : widgets) {
+			// if (widget.getId().equals("iw55")) {
+			// System.out.println();
+			// }
+			// if (widget != null) {
+			// // if the widget does not have a label we look for
+			// // descriptors
+			// if (widget.getClasss().equals("RadioButtonUI")) {
+			// widget.setDescriptor(context.getDescriptorRB(widget.getTo()));
+			//
+			// } else if (widget.getLabel() == null ||
+			// widget.getClasss().equals("ButtonUI")) {
+			//
+			// widget.setDescriptor(context.getDescriptor(widget.getTo()));
+			// }
+			//
+			// widgets_to_add.add(widget);
+			// }
+			// }
+		}
+		final Widget[] widadd = widgets_to_add.toArray(new Widget[widgets_to_add.size()]);
+		Arrays.sort(widadd);
+		widgets_to_add = new ArrayList<Widget>();
+		for (final Widget widget : widadd) {
 
-					} else if (widget.getLabel() == null || widget.getClasss().equals("ButtonUI")) {
+			if (widget.getClasss().equals("RadioButtonUI")) {
+				widget.setDescriptor(context.getDescriptorRB(widget.getTo()));
 
-						widget.setDescriptor(context.getDescriptor(widget.getTo()));
-					}
+			} else if (widget.getLabel() == null || widget.getClasss().equals("ButtonUI")) {
 
-					widgets_to_add.add(widget);
-				}
+				widget.setDescriptor(context.getDescriptor(widget.getTo()));
 			}
+			widgets_to_add.add(widget);
 		}
 		widgets_to_add = this.postProcessWidgetList(widgets_to_add);
 		for (final Widget wid : widgets_to_add) {
