@@ -100,6 +100,7 @@ pred select [sw: Selectable_widget, t, t': Time, o: Object, s: Select] {
 	--- general postcondition ---
 	Current_window.is_in.t' = Current_window.is_in.t
 	all sww: (Selectable_widget - sw) | sww.selected.t' = sww.selected.t and sww.list.t' = sww.list.t
-	sw.list.t' = sw.list.t	--- operation is tracked ---
+	sw.list.t' = sw.list.t	
+	--- operation is tracked ---
 	s.wid = sw and s.which = o and Track.op.t' = s
 }

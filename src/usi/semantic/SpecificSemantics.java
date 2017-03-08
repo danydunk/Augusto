@@ -335,26 +335,28 @@ public class SpecificSemantics extends FunctionalitySemantics {
 
 		// now we add additional constrains on the values
 		String values_fact_content = "";
-		for (final Input_widget iw : iws_generic) {
-			String newline = "#((filled.Input_widget_" + iw.getId() + ").with & (";
-			for (final Input_widget iw2 : iws_not_generic) {
-				newline += "(filled.Input_widget_" + iw2.getId() + ").with +";
-			}
-			if (!newline.equals("#((filled.Input_widget_" + iw.getId() + ").with & (")) {
-				newline = newline.substring(0, newline.length() - 2);
-				newline += ")) = 0";
-				values_fact_content += System.getProperty("line.separator");
-				values_fact_content += newline;
-
-			}
-		}
+		// for (final Input_widget iw : iws_generic) {
+		// String newline = "#((filled.Input_widget_" + iw.getId() +
+		// ").with & (";
+		// for (final Input_widget iw2 : iws_not_generic) {
+		// newline += "(filled.Input_widget_" + iw2.getId() + ").with +";
+		// }
+		// if (!newline.equals("#((filled.Input_widget_" + iw.getId() +
+		// ").with & (")) {
+		// newline = newline.substring(0, newline.length() - 2);
+		// newline += ")) = 0";
+		// values_fact_content += System.getProperty("line.separator");
+		// values_fact_content += newline;
+		//
+		// }
+		// }
 
 		for (int x = 0; x < iws_not_generic.size(); x++) {
 			final Input_widget iw = iws_not_generic.get(x);
 			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
 			metadata += " ";
 			metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
-			String newline = "#((filled.Input_widget_" + iw.getId() + ").with & (";
+			String newline = "#((Input_widget_" + iw.getId() + ".val.with) & ";
 
 			for (int y = x + 1; y < iws_not_generic.size(); y++) {
 				final Input_widget iw2 = iws_not_generic.get(y);
@@ -366,12 +368,12 @@ public class SpecificSemantics extends FunctionalitySemantics {
 				final List<String> l2 = dm.getValidData(metadata2);
 				l2.addAll(dm.getInvalidData(metadata2));
 				if (!intersection(l1, l2)) {
-					newline += "(filled.Input_widget_" + iw2.getId() + ").with +";
+					newline += "(Input_widget_" + iw2.getId() + ".val.with) +";
 				}
 			}
-			if (!newline.equals("#((filled.Input_widget_" + iw.getId() + ").with & (")) {
+			if (!newline.equals("#((Input_widget_" + iw.getId() + ".val.with) & ")) {
 				newline = newline.substring(0, newline.length() - 2);
-				newline += ")) = 0";
+				newline += ") = 0";
 				values_fact_content += System.getProperty("line.separator");
 				values_fact_content += newline;
 

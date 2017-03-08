@@ -47,7 +47,8 @@ one sig Option_value_4 extends Value{ }
 
 abstract sig Input_widget {
 	content: Value lone -> Time,
-	invalid: set Value
+	invalid: set Value,
+	val: set Value
 }
 sig Object {
 	appeared: one Time
@@ -79,6 +80,7 @@ pred click [aw: Action_widget, t, t': Time, c: Click] {
 pred fill [iw: Input_widget, t, t': Time, v: Value, f: Fill] { 
 	--- precondition ---
 	iw in Current_window.is_in.t.iws
+	v in iw.val
 	fill_pre [iw, t, v]
 	--- effect ---
 	(fill_semantics  [iw, t, v] and iw.content.t' = v and fill_success_post [iw, t, t', v]) or
