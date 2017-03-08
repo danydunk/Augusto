@@ -36,43 +36,47 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
-		ConfigurationManager.load(PathsManager.getProjectRoot()
-				+ "/files/for_test/config/buddi.properties");
-		ExperimentManager.init();
+		try {
+			ConfigurationManager.load(PathsManager.getProjectRoot()
+					+ "/files/for_test/config/buddi.properties");
+			ExperimentManager.init();
 
-		// we load a gui pattern
-		Document doc = XMLUtil.read(PathsManager.getProjectRoot()
-				+ "/files/guipatterns/crud_no_read.xml");
-		final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/crud_no_read.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
-		// we load the GUI structure
-		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/buddi.xml");
-		final GUI gui = GUIParser.parse(doc);
-		final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
-		final List<Instance_GUI_pattern> res = gfs.match(pattern);
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/buddi.xml");
+			final GUI gui = GUIParser.parse(doc);
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
 
-		Instance_GUI_pattern match = res.get(2);
+			Instance_GUI_pattern match = res.get(3);
 
-		match.generateSpecificSemantics();
-		final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
+			match.generateSpecificSemantics();
+			final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
 
-		match = refiner.refine();
+			match = refiner.refine();
 
-		ExperimentManager.cleanUP();
+			ExperimentManager.cleanUP();
 
-		if (match == null) {
-			throw new Exception("");
-		}
-
-		String sem_prop = null;
-		for (final Fact fact : match.getSemantics().getFacts()) {
-			if (fact.getIdentifier().equals("semantic_property")) {
-				sem_prop = fact.getContent();
+			if (match == null) {
+				throw new Exception("");
 			}
-		}
 
-		if (sem_prop.startsWith("not") || !sem_prop.contains(".requireds = (Input_widget_iw7")) {
-			throw new Exception("");
+			String sem_prop = null;
+			for (final Fact fact : match.getSemantics().getFacts()) {
+				if (fact.getIdentifier().equals("semantic_property")) {
+					sem_prop = fact.getContent();
+				}
+			}
+
+			if (sem_prop.startsWith("not") || !sem_prop.contains(".requireds = (Input_widget_iw7")) {
+				throw new Exception("");
+			}
+		} catch (final Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

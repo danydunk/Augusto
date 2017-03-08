@@ -828,51 +828,56 @@ public class AlloyUtil {
 			// to_order.add(iw);
 			if (invalid) {
 
+				String unvalid = iws.get(iw).getIdentifier() + ".invalid = (";
+				String vals = iws.get(iw).getIdentifier() + ".val = (";
+
 				if (iw instanceof Option_input_widget) {
 
 					final Option_input_widget oiw = (Option_input_widget) iw;
 
-					final List<Integer> options = new ArrayList<>();
-					String unvalid = iws.get(iw).getIdentifier() + ".invalid = (";
-					String vs = "filled." + iws.get(iw).getIdentifier() + ".with in (";
 					if ((dm.getInvalidItemizedData(metadata).size() + dm.getValidItemizedData(
 							metadata).size()) > 0) {
-						options.addAll(dm.getInvalidItemizedData(metadata));
-						options.addAll(dm.getValidItemizedData(metadata));
+						// options.addAll(dm.getInvalidItemizedData(metadata));
+						// options.addAll(dm.getValidItemizedData(metadata));
 						for (final Integer i : dm.getInvalidItemizedData(metadata)) {
 							// we limit to only 10 values
 							if (i > 4) {
 								continue;
 							}
 							unvalid += "Option_value_" + i + "+";
+							vals += "Option_value_" + i + "+";
+
+						}
+						for (final Integer i : dm.getValidItemizedData(metadata)) {
+							// we limit to only 10 values
+							if (i > 4) {
+								continue;
+							}
+							vals += "Option_value_" + i + "+";
 						}
 
 					} else {
 						for (int x = 0; x < oiw.getSize(); x++) {
-							options.add(x);
+							if (x > 4) {
+								continue;
+							}
+							vals += "Option_value_" + x + "+";
 						}
 					}
 
-					for (final Integer i : options) {
-						// we limit to only 10 values
-						if (i > 4) {
-							continue;
-						}
-						vs += "Option_value_" + i + "+";
-					}
-					if (vs.equals("filled." + iws.get(iw).getIdentifier() + ".with in (")) {
-						vs = "#(filled." + iws.get(iw).getIdentifier() + ".with) = 0";
-					} else {
-						vs = vs.substring(0, vs.length() - 1) + ")";
-					}
 					if (unvalid.equals(iws.get(iw).getIdentifier() + ".invalid = (")) {
 						unvalid = "#(" + iws.get(iw).getIdentifier() + ".invalid) = 0";
 					} else {
 						unvalid = unvalid.substring(0, unvalid.length() - 1) + ")";
 					}
+					if (vals.equals(iws.get(iw).getIdentifier() + ".valid = (")) {
+						vals = "#(" + iws.get(iw).getIdentifier() + ".valid) = 0";
+					} else {
+						vals = vals.substring(0, vals.length() - 1) + ")";
+					}
 
 					content += System.getProperty("line.separator");
-					content += vs;
+					content += vals;
 					content += System.getProperty("line.separator");
 					content += unvalid;
 					content += System.getProperty("line.separator");
@@ -885,36 +890,35 @@ public class AlloyUtil {
 					}
 				} else {
 					if ((dm.getInvalidData(metadata).size() + dm.getValidData(metadata).size()) > 0) {
-						if (dm.getInvalidData(metadata).size() == 0) {
-							content += System.getProperty("line.separator");
-							content += "#((filled." + iws.get(iw).getIdentifier() + ").with & "
-									+ iws.get(iw).getIdentifier() + ".invalid) = 0";
-						}
-						if (dm.getValidData(metadata).size() == 0) {
-							content += System.getProperty("line.separator");
-							content += "#((filled." + iws.get(iw).getIdentifier() + ").with "
-									+ " - " + iws.get(iw).getIdentifier() + ".invalid) = 0";
-						}
+
+						content += System.getProperty("line.separator");
+						content += "#" + iws.get(iw).getIdentifier() + ".invalid < "
+								+ (dm.getInvalidData(metadata).size() + 1);
+						content += System.getProperty("line.separator");
+						content += "#"
+								+ iws.get(iw).getIdentifier()
+								+ ".val < "
+								+ (dm.getInvalidData(metadata).size()
+										+ dm.getValidData(metadata).size() + 1);
 
 					} else {
 						content += System.getProperty("line.separator");
-						content += "#((filled." + iws.get(iw).getIdentifier() + ").with & "
-								+ iws.get(iw).getIdentifier() + ".invalid) = 0";
+						content += "#" + iws.get(iw).getIdentifier() + ".invalid = 0";
+
 					}
 					content += System.getProperty("line.separator");
 					content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
 					content += System.getProperty("line.separator");
-					content += "#(filled." + iws.get(iw).getIdentifier() + ".with & (";
+					content += "not((";
 					for (int x = 0; x < 5; x++) {
 						content += "Option_value_" + x;
 						if (x != 4) {
 							content += "+";
 						} else {
-							content += ")) = 0";
-
+							content += ")";
 						}
 					}
-
+					content += " in " + iws.get(iw).getIdentifier() + ".val)";
 				}
 
 			} else {
@@ -998,7 +1002,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1484,7 +1488,7 @@ public class AlloyUtil {
 	 */
 	static public Alloy_Model getTCaseModel(final SpecificSemantics mod,
 			final List<GUIAction> acts, final Window reached, final Instance_GUI_pattern in)
-					throws Exception {
+			throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1713,17 +1717,17 @@ public class AlloyUtil {
 					metadata += iw.getDescriptor() != null && metadata.length() == 0 ? iw
 							.getDescriptor() : "";
 
-					if (dm.getInvalidData(metadata).contains(s)) {
-						assert (invalid);
-						fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
-								+ iw.getId() + ".invalid";
+							if (dm.getInvalidData(metadata).contains(s)) {
+								assert (invalid);
+								fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
+										+ iw.getId() + ".invalid";
 
-					} else {
-						if (invalid) {
-							fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
-									+ iw.getId() + ".invalid)";
-						}
-					}
+							} else {
+								if (invalid) {
+									fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
+											+ iw.getId() + ".invalid)";
+								}
+							}
 				}
 			} else {
 				final List<String> fills = values_used.get(s);

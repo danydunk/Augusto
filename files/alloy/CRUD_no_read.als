@@ -19,7 +19,7 @@ fact{
 fact {
 	#Ok < 2
 	#Selectable_widget = 1
-	all iw: Input_widget | #iw.content.(T/first) = 1 => not(iw in Property_semantic.requireds) else (#iw.invalid > 0 => iw in Property_semantic.requireds)
+	all iw: Input_widget | #iw.content.(T/first) = 1 => not(iw in Property_semantic.requireds)
 }
 ---------------Generic CRUD Semantics---------- 
 abstract sig Crud_op {}
@@ -100,7 +100,7 @@ pred  unique_test [t: Time] {
 	all iw: Property_semantic.uniques | all o: Selectable_widget.list.t | (#o.vs.iw= 1) => iw.content.t !=o.vs.iw
 }
 pred valid_data_test [t: Time] {
-	all iw: Property_semantic.uniques | (#iw.invalid > 0 and #iw.content.t = 1) => (not(iw.content.t in iw.invalid))
+	all iw: Input_widget | (#iw.invalid > 0) => (#iw.content.t = 1 and not(iw.content.t in iw.invalid))
 }
 pred  unique_for_update_test [t: Time] {
 	all iw: Property_semantic.uniques | all o: (Selectable_widget.list.t-Selectable_widget.selected.t) | (#o.vs.iw= 1) => iw.content.t !=o.vs.iw
