@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <GUI>
     <window id="w7">
-        <pos>582:322</pos>
+        <pos>584:281</pos>
         <rectangle>210:180</rectangle>
         <class>com._17od.upm.gui.DatabasePropertiesDialog</class>
         <title>Database Properties</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw59">
-            <pos>628:461</pos>
+            <pos>630:420</pos>
             <rectangle>47:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw60">
-            <pos>680:461</pos>
+            <pos>682:420</pos>
             <rectangle>65:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw15">
-            <pos>604:384</pos>
+            <pos>606:343</pos>
             <rectangle>166:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>URL</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw16">
-            <pos>604:424</pos>
+            <pos>606:383</pos>
             <rectangle>166:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Authentication Credentials</descriptor>
@@ -35,67 +35,67 @@
         </input_widget>
     </window>
     <window id="w8">
-        <pos>486:186</pos>
+        <pos>488:145</pos>
         <rectangle>402:452</rectangle>
         <class>com._17od.upm.gui.AccountDialog</class>
         <title>Add Account</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw61">
-            <pos>741:306</pos>
+            <pos>743:265</pos>
             <rectangle>77:23</rectangle>
             <class>ButtonUI</class>
             <label>Generate</label>
         </action_widget>
         <action_widget id="aw62">
-            <pos>628:597</pos>
+            <pos>630:556</pos>
             <rectangle>47:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw63">
-            <pos>680:597</pos>
+            <pos>682:556</pos>
             <rectangle>65:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw17">
-            <pos>570:226</pos>
+            <pos>572:185</pos>
             <rectangle>300:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Account</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw18">
-            <pos>570:266</pos>
+            <pos>572:225</pos>
             <rectangle>300:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>User Id</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw20">
-            <pos>823:306</pos>
+            <pos>825:265</pos>
             <rectangle>47:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Hide</label>
             <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw19">
-            <pos>570:307</pos>
+            <pos>572:266</pos>
             <rectangle>166:20</rectangle>
             <class>PasswordFieldUI</class>
             <descriptor>Password</descriptor>
-            <value>yUZeJ7mS</value>
+            <value>Si6j3CoQ</value>
         </input_widget>
         <input_widget id="iw21">
-            <pos>570:349</pos>
+            <pos>572:308</pos>
             <rectangle>300:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>URL</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw22">
-            <pos>571:390</pos>
+            <pos>573:349</pos>
             <rectangle>298:184</rectangle>
             <class>TextAreaUI</class>
             <descriptor>Notes</descriptor>
@@ -103,20 +103,20 @@
         </input_widget>
     </window>
     <window id="w9">
-        <pos>533:315</pos>
+        <pos>535:274</pos>
         <rectangle>309:194</rectangle>
         <class>com._17od.upm.gui.AboutDialog</class>
         <title>About UPM</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw64">
-            <pos>664:473</pos>
+            <pos>666:432</pos>
             <rectangle>47:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <input_widget id="iw23">
-            <pos>536:340</pos>
+            <pos>538:299</pos>
             <rectangle>303:121</rectangle>
             <class>TextAreaUI</class>
             <value>Universal Password Manager
@@ -129,81 +129,81 @@ http://upm.sourceforge.net</value>
         </input_widget>
     </window>
     <window id="w10">
-        <pos>535:228</pos>
+        <pos>537:187</pos>
         <rectangle>304:369</rectangle>
         <class>com._17od.upm.gui.OptionsDialog</class>
         <title>Options</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw65">
-            <pos>770:293</pos>
+            <pos>772:252</pos>
             <rectangle>45:23</rectangle>
             <class>ButtonUI</class>
             <label>...</label>
         </action_widget>
         <action_widget id="aw66">
-            <pos>628:556</pos>
+            <pos>630:515</pos>
             <rectangle>47:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw67">
-            <pos>680:556</pos>
+            <pos>682:515</pos>
             <rectangle>65:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw24">
-            <pos>559:294</pos>
+            <pos>561:253</pos>
             <rectangle>206:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Database To Load On Startup</descriptor>
             <value>C:\Users\usi\abtMyDocuments\upm_db</value>
         </input_widget>
         <input_widget id="iw25">
-            <pos>559:338</pos>
+            <pos>561:297</pos>
             <rectangle>256:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Language</descriptor>
             <value>[options] 1 : 5</value>
         </input_widget>
         <input_widget id="iw26">
-            <pos>556:388</pos>
+            <pos>558:347</pos>
             <rectangle>89:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Enable Proxy</label>
             <value>[options] 0 : 2</value>
         </input_widget>
         <input_widget id="iw27">
-            <pos>559:433</pos>
+            <pos>561:392</pos>
             <rectangle>184:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>HTTP Proxy</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw28">
-            <pos>748:433</pos>
+            <pos>750:392</pos>
             <rectangle>67:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>Port</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw29">
-            <pos>559:475</pos>
+            <pos>561:434</pos>
             <rectangle>256:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>HTTP Proxy Username</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw31">
-            <pos>748:517</pos>
+            <pos>750:476</pos>
             <rectangle>47:23</rectangle>
             <class>CheckBoxUI</class>
             <label>Hide</label>
             <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw30">
-            <pos>559:518</pos>
+            <pos>561:477</pos>
             <rectangle>179:20</rectangle>
             <class>PasswordFieldUI</class>
             <descriptor>HTTP Proxy Password</descriptor>
@@ -211,26 +211,26 @@ http://upm.sourceforge.net</value>
         </input_widget>
     </window>
     <window id="w1">
-        <pos>518:350</pos>
+        <pos>520:309</pos>
         <rectangle>338:123</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Master Password...</title>
         <modal>true</modal>
         <root>true</root>
         <action_widget id="aw1">
-            <pos>609:433</pos>
+            <pos>611:392</pos>
             <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw2">
-            <pos>690:433</pos>
+            <pos>692:392</pos>
             <rectangle>75:25</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw1">
-            <pos>578:404</pos>
+            <pos>580:363</pos>
             <rectangle>265:20</rectangle>
             <class>PasswordFieldUI</class>
             <descriptor>Please enter the master password for this database</descriptor>
@@ -238,164 +238,164 @@ http://upm.sourceforge.net</value>
         </input_widget>
     </window>
     <window id="w2">
-        <pos>549:261</pos>
+        <pos>551:220</pos>
         <rectangle>276:302</rectangle>
         <class>com._17od.upm.gui.MainWindow</class>
         <title>C:\Users\usi\abtMyDocuments\upm_db - Universal Password Manager</title>
         <modal>false</modal>
         <root>false</root>
         <action_widget id="aw11">
-            <pos>557:291</pos>
+            <pos>559:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Database - New Database</label>
         </action_widget>
         <action_widget id="aw12">
-            <pos>557:291</pos>
+            <pos>559:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Database - Open Database</label>
         </action_widget>
         <action_widget id="aw13">
-            <pos>557:291</pos>
+            <pos>559:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Database - Open Database From URL</label>
         </action_widget>
         <action_widget id="aw14">
-            <pos>557:291</pos>
+            <pos>559:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Database - Sync with Remote Database</label>
         </action_widget>
         <action_widget id="aw15">
-            <pos>557:291</pos>
+            <pos>559:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Database - Change Master Password</label>
         </action_widget>
         <action_widget id="aw16">
-            <pos>557:291</pos>
+            <pos>559:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Database - Database Properties</label>
         </action_widget>
         <action_widget id="aw17">
-            <pos>557:291</pos>
+            <pos>559:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Database - Export</label>
         </action_widget>
         <action_widget id="aw18">
-            <pos>557:291</pos>
+            <pos>559:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Database - Import</label>
         </action_widget>
         <action_widget id="aw19">
-            <pos>557:291</pos>
+            <pos>559:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Database - Exit</label>
         </action_widget>
         <action_widget id="aw20">
-            <pos>614:291</pos>
+            <pos>616:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Account - Add Account</label>
         </action_widget>
         <action_widget id="aw21">
-            <pos>614:291</pos>
+            <pos>616:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Account - Edit Account</label>
         </action_widget>
         <action_widget id="aw22">
-            <pos>614:291</pos>
+            <pos>616:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Account - Delete Account</label>
         </action_widget>
         <action_widget id="aw23">
-            <pos>614:291</pos>
+            <pos>616:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Account - View Account</label>
         </action_widget>
         <action_widget id="aw24">
-            <pos>614:291</pos>
+            <pos>616:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Account - Copy Username</label>
         </action_widget>
         <action_widget id="aw25">
-            <pos>614:291</pos>
+            <pos>616:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Account - Copy Password</label>
         </action_widget>
         <action_widget id="aw26">
-            <pos>667:291</pos>
+            <pos>669:250</pos>
             <rectangle>0:0</rectangle>
             <class>MenuItemUI</class>
             <label>Help - About</label>
         </action_widget>
         <action_widget id="aw3">
-            <pos>558:313</pos>
+            <pos>560:272</pos>
             <rectangle>31:31</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw4">
-            <pos>589:313</pos>
+            <pos>591:272</pos>
             <rectangle>31:31</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw5">
-            <pos>620:313</pos>
+            <pos>622:272</pos>
             <rectangle>31:31</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw6">
-            <pos>657:313</pos>
+            <pos>659:272</pos>
             <rectangle>31:31</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw7">
-            <pos>688:313</pos>
+            <pos>690:272</pos>
             <rectangle>31:31</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw8">
-            <pos>725:313</pos>
+            <pos>727:272</pos>
             <rectangle>31:31</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw9">
-            <pos>762:313</pos>
+            <pos>764:272</pos>
             <rectangle>31:31</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <action_widget id="aw10">
-            <pos>704:353</pos>
+            <pos>706:312</pos>
             <rectangle>17:17</rectangle>
             <class>ButtonUI</class>
             <label/>
         </action_widget>
         <input_widget id="iw2">
-            <pos>576:352</pos>
+            <pos>578:311</pos>
             <rectangle>126:20</rectangle>
             <class>TextFieldUI</class>
             <value/>
         </input_widget>
         <selectable_widget id="sw1">
-            <pos>559:378</pos>
+            <pos>561:337</pos>
             <rectangle>256:160</rectangle>
             <class>ListUI</class>
             <size>0</size>
@@ -403,92 +403,92 @@ http://upm.sourceforge.net</value>
         </selectable_widget>
     </window>
     <window id="w3">
-        <pos>388:195</pos>
+        <pos>390:154</pos>
         <rectangle>598:435</rectangle>
         <class>javax.swing.JDialog</class>
         <title>New Password Database...</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw32">
-            <pos>820:231</pos>
+            <pos>822:190</pos>
             <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw33">
-            <pos>840:231</pos>
+            <pos>842:190</pos>
             <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw34">
-            <pos>860:231</pos>
+            <pos>862:190</pos>
             <rectangle>27:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw27">
-            <pos>407:262</pos>
+            <pos>409:221</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Recent Items</label>
         </action_widget>
         <action_widget id="aw28">
-            <pos>407:332</pos>
+            <pos>409:291</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Desktop</label>
         </action_widget>
         <action_widget id="aw29">
-            <pos>407:402</pos>
+            <pos>409:361</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>My Documents</label>
         </action_widget>
         <action_widget id="aw30">
-            <pos>407:472</pos>
+            <pos>409:431</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Computer</label>
         </action_widget>
         <action_widget id="aw31">
-            <pos>407:542</pos>
+            <pos>409:501</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Network</label>
         </action_widget>
         <action_widget id="aw35">
-            <pos>893:562</pos>
+            <pos>895:521</pos>
             <rectangle>75:23</rectangle>
             <class>ButtonUI</class>
             <label>Save</label>
         </action_widget>
         <action_widget id="aw36">
-            <pos>893:589</pos>
+            <pos>895:548</pos>
             <rectangle>75:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw3">
-            <pos>500:230</pos>
+            <pos>502:189</pos>
             <rectangle>310:22</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Save in:</descriptor>
-            <value>[options] 6 : 13</value>
+            <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw4">
-            <pos>577:564</pos>
+            <pos>579:523</pos>
             <rectangle>286:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>File name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw5">
-            <pos>577:592</pos>
+            <pos>579:551</pos>
             <rectangle>286:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Files of type:</descriptor>
             <value>[options] 0 : 1</value>
         </input_widget>
         <selectable_widget id="sw2">
-            <pos>500:262</pos>
+            <pos>502:221</pos>
             <rectangle>467:293</rectangle>
             <class>ListUI</class>
             <size>1</size>
@@ -496,92 +496,92 @@ http://upm.sourceforge.net</value>
         </selectable_widget>
     </window>
     <window id="w4">
-        <pos>388:195</pos>
+        <pos>390:154</pos>
         <rectangle>598:435</rectangle>
         <class>javax.swing.JDialog</class>
         <title>New Password Database...</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw42">
-            <pos>820:231</pos>
+            <pos>822:190</pos>
             <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw43">
-            <pos>840:231</pos>
+            <pos>842:190</pos>
             <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw44">
-            <pos>860:231</pos>
+            <pos>862:190</pos>
             <rectangle>27:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw37">
-            <pos>407:262</pos>
+            <pos>409:221</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Recent Items</label>
         </action_widget>
         <action_widget id="aw38">
-            <pos>407:332</pos>
+            <pos>409:291</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Desktop</label>
         </action_widget>
         <action_widget id="aw39">
-            <pos>407:402</pos>
+            <pos>409:361</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>My Documents</label>
         </action_widget>
         <action_widget id="aw40">
-            <pos>407:472</pos>
+            <pos>409:431</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Computer</label>
         </action_widget>
         <action_widget id="aw41">
-            <pos>407:542</pos>
+            <pos>409:501</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Network</label>
         </action_widget>
         <action_widget id="aw45">
-            <pos>893:562</pos>
+            <pos>895:521</pos>
             <rectangle>75:23</rectangle>
             <class>ButtonUI</class>
             <label>Open</label>
         </action_widget>
         <action_widget id="aw46">
-            <pos>893:589</pos>
+            <pos>895:548</pos>
             <rectangle>75:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw6">
-            <pos>500:230</pos>
+            <pos>502:189</pos>
             <rectangle>310:22</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Save in:</descriptor>
-            <value>[options] 6 : 13</value>
+            <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw7">
-            <pos>577:564</pos>
+            <pos>579:523</pos>
             <rectangle>286:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>File name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw8">
-            <pos>577:592</pos>
+            <pos>579:551</pos>
             <rectangle>286:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Files of type:</descriptor>
             <value>[options] 0 : 1</value>
         </input_widget>
         <selectable_widget id="sw3">
-            <pos>500:262</pos>
+            <pos>502:221</pos>
             <rectangle>467:293</rectangle>
             <class>ListUI</class>
             <size>2</size>
@@ -589,92 +589,92 @@ http://upm.sourceforge.net</value>
         </selectable_widget>
     </window>
     <window id="w5">
-        <pos>388:195</pos>
+        <pos>390:154</pos>
         <rectangle>598:435</rectangle>
         <class>javax.swing.JDialog</class>
         <title>Open Password Database...</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw52">
-            <pos>820:231</pos>
+            <pos>822:190</pos>
             <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw53">
-            <pos>840:231</pos>
+            <pos>842:190</pos>
             <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw54">
-            <pos>860:231</pos>
+            <pos>862:190</pos>
             <rectangle>27:20</rectangle>
             <class>ButtonUI</class>
         </action_widget>
         <action_widget id="aw47">
-            <pos>407:262</pos>
+            <pos>409:221</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Recent Items</label>
         </action_widget>
         <action_widget id="aw48">
-            <pos>407:332</pos>
+            <pos>409:291</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Desktop</label>
         </action_widget>
         <action_widget id="aw49">
-            <pos>407:402</pos>
+            <pos>409:361</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>My Documents</label>
         </action_widget>
         <action_widget id="aw50">
-            <pos>407:472</pos>
+            <pos>409:431</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Computer</label>
         </action_widget>
         <action_widget id="aw51">
-            <pos>407:542</pos>
+            <pos>409:501</pos>
             <rectangle>83:69</rectangle>
             <class>ToggleButtonUI</class>
             <label>Network</label>
         </action_widget>
         <action_widget id="aw55">
-            <pos>893:562</pos>
+            <pos>895:521</pos>
             <rectangle>75:23</rectangle>
             <class>ButtonUI</class>
             <label>Open</label>
         </action_widget>
         <action_widget id="aw56">
-            <pos>893:589</pos>
+            <pos>895:548</pos>
             <rectangle>75:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw9">
-            <pos>500:230</pos>
+            <pos>502:189</pos>
             <rectangle>310:22</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look in:</descriptor>
-            <value>[options] 6 : 13</value>
+            <value>[options] 6 : 12</value>
         </input_widget>
         <input_widget id="iw10">
-            <pos>577:564</pos>
+            <pos>579:523</pos>
             <rectangle>286:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>File name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw11">
-            <pos>577:592</pos>
+            <pos>579:551</pos>
             <rectangle>286:20</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Files of type:</descriptor>
             <value>[options] 0 : 1</value>
         </input_widget>
         <selectable_widget id="sw4">
-            <pos>500:262</pos>
+            <pos>502:221</pos>
             <rectangle>467:293</rectangle>
             <class>ListUI</class>
             <size>1</size>
@@ -682,40 +682,40 @@ http://upm.sourceforge.net</value>
         </selectable_widget>
     </window>
     <window id="w6">
-        <pos>580:296</pos>
+        <pos>582:255</pos>
         <rectangle>214:232</rectangle>
         <class>com._17od.upm.gui.OpenDatabaseFromURLDialog</class>
         <title>Open Database From URL</title>
         <modal>true</modal>
         <root>false</root>
         <action_widget id="aw57">
-            <pos>628:487</pos>
+            <pos>630:446</pos>
             <rectangle>47:23</rectangle>
             <class>ButtonUI</class>
             <label>OK</label>
         </action_widget>
         <action_widget id="aw58">
-            <pos>680:487</pos>
+            <pos>682:446</pos>
             <rectangle>65:23</rectangle>
             <class>ButtonUI</class>
             <label>Cancel</label>
         </action_widget>
         <input_widget id="iw12">
-            <pos>604:358</pos>
+            <pos>606:317</pos>
             <rectangle>166:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>URL</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw13">
-            <pos>604:402</pos>
+            <pos>606:361</pos>
             <rectangle>86:20</rectangle>
             <class>TextFieldUI</class>
             <descriptor>User Name</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw14">
-            <pos>604:446</pos>
+            <pos>606:405</pos>
             <rectangle>86:20</rectangle>
             <class>PasswordFieldUI</class>
             <descriptor>Password</descriptor>

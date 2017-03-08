@@ -15,7 +15,7 @@
     <values>
       <valid>2017/11/14</valid>
       <valid>2017/8/14</valid>
-	  <valid>2017/8/15</valid>
+	<valid>2017/8/15</valid>
 	  <valid>2017/8/16</valid>
 	  <valid>2017/8/17</valid>					
     </values>
@@ -45,7 +45,7 @@
     </values>
   </DATA>
   <DATA>
-    <metadata>amount</metadata>
+    <metadata></metadata>
     <values>
       <valid>1.00</valid>
       <valid>10.00</valid>

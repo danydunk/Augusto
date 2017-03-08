@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <GUI>
     <window id="w7">
         <pos>573:301</pos>
@@ -501,14 +501,12 @@
             <rectangle>17:20</rectangle>
             <class>ButtonUI</class>
             <label/>
-            <descriptor>starting on</descriptor>
         </action_widget>
         <action_widget id="aw260">
             <pos>391:170</pos>
             <rectangle>17:20</rectangle>
             <class>ButtonUI</class>
             <label/>
-            <descriptor>ending after</descriptor>
         </action_widget>
         <action_widget id="aw261">
             <pos>405:380</pos>
@@ -547,6 +545,7 @@
             <pos>158:136</pos>
             <rectangle>233:20</rectangle>
             <class>FormattedTextFieldUI</class>
+            <descriptor>starting on</descriptor>
             <value>2016/10/27</value>
         </input_widget>
         <input_widget id="iw56">
@@ -560,6 +559,7 @@
             <pos>158:170</pos>
             <rectangle>233:20</rectangle>
             <class>FormattedTextFieldUI</class>
+            <descriptor>ending after</descriptor>
             <value>2017/10/27</value>
         </input_widget>
         <input_widget id="iw58">
@@ -754,6 +754,7 @@
             <rectangle>105:23</rectangle>
             <class>ButtonUI</class>
             <label>Edit Languages</label>
+            <descriptor>Language</descriptor>
         </action_widget>
         <action_widget id="aw158">
             <pos>405:214</pos>
@@ -766,6 +767,7 @@
             <rectangle>100:23</rectangle>
             <class>ButtonUI</class>
             <label>Other</label>
+            <descriptor>Currency Format</descriptor>
         </action_widget>
         <action_widget id="aw160">
             <pos>303:547</pos>
@@ -783,7 +785,6 @@
             <pos>297:182</pos>
             <rectangle>98:20</rectangle>
             <class>ComboBoxUI</class>
-            <descriptor>Language</descriptor>
             <value>[options] 2 : 17</value>
         </input_widget>
         <input_widget id="iw34">
@@ -797,7 +798,6 @@
             <pos>349:248</pos>
             <rectangle>51:20</rectangle>
             <class>ComboBoxUI</class>
-            <descriptor>Currency Format</descriptor>
             <value>[options] 0 : 19</value>
         </input_widget>
         <input_widget id="iw36">
