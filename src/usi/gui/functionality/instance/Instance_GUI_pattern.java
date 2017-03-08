@@ -291,7 +291,7 @@ public class Instance_GUI_pattern {
 			scopes += "," + sws + " Selectable_widget";
 		}
 		if (vs > -1) {
-			scopes += "," + (vs + (ConfigurationManager.getAlloyRunScope() * 2 / 3)) + " Value";
+			scopes += "," + (vs + (ConfigurationManager.getAlloyRunScope() * 2 / 5)) + " Value";
 		}
 		run = run + scopes;
 		// System.out.println("validating");

@@ -1583,7 +1583,7 @@ public class AlloyUtil {
 			runCom += "," + awscope + " Action_widget ";
 		}
 		if (vscope > -1) {
-			runCom += "," + (vscope + (op_size * 2 / 3)) + " Value ";
+			runCom += "," + (vscope + (op_size * 2 / 5)) + " Value ";
 		}
 		if (iwscope > -1) {
 			runCom += "," + iwscope + " Input_widget ";
