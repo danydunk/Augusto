@@ -356,7 +356,7 @@ public class SpecificSemantics extends FunctionalitySemantics {
 			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
 			metadata += " ";
 			metadata = iw.getDescriptor() != null ? iw.getDescriptor() : "";
-			String newline = "#((Input_widget_" + iw.getId() + ".val.with) & ";
+			String newline = "#((Input_widget_" + iw.getId() + ".val) & ";
 
 			for (int y = x + 1; y < iws_not_generic.size(); y++) {
 				final Input_widget iw2 = iws_not_generic.get(y);
@@ -368,10 +368,10 @@ public class SpecificSemantics extends FunctionalitySemantics {
 				final List<String> l2 = dm.getValidData(metadata2);
 				l2.addAll(dm.getInvalidData(metadata2));
 				if (!intersection(l1, l2)) {
-					newline += "(Input_widget_" + iw2.getId() + ".val.with) +";
+					newline += "(Input_widget_" + iw2.getId() + ".val) +";
 				}
 			}
-			if (!newline.equals("#((Input_widget_" + iw.getId() + ".val.with) & ")) {
+			if (!newline.equals("#((Input_widget_" + iw.getId() + ".val) & ")) {
 				newline = newline.substring(0, newline.length() - 2);
 				newline += ") = 0";
 				values_fact_content += System.getProperty("line.separator");
