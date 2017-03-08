@@ -746,9 +746,26 @@ public class AlloyUtil {
 		return temp;
 	}
 
-	static public List<A4Tuple> getTuples(final A4Solution solution, final String labelToMatch) {
+	// static public List<A4Tuple> getTuples(final A4Solution solution, final
+	// String labelToMatch) {
+	//
+	// final List<A4Tuple> tuples = getAllTuples(solution);
+	// final List<A4Tuple> result = new ArrayList<>();
+	//
+	// final Iterator<A4Tuple> tupi = tuples.iterator();
+	// while (tupi.hasNext()) {
+	// final A4Tuple tup = tupi.next();
+	// if (tup.atom(0).equals(labelToMatch)) {
+	// result.add(tup);
+	// }
+	// }
+	// return result;
+	// }
 
-		final List<A4Tuple> tuples = getAllTuples(solution);
+	static public List<A4Tuple> getTuplesRel(final A4Solution solution, final String labelToMatch,
+			final String sig, final String rel) {
+
+		final List<A4Tuple> tuples = getAllTuplesSigRel(solution, sig, rel);
 		final List<A4Tuple> result = new ArrayList<>();
 
 		final Iterator<A4Tuple> tupi = tuples.iterator();
@@ -789,6 +806,30 @@ public class AlloyUtil {
 		// We collect all tuples
 		for (final Sig s : solution.getAllReachableSigs()) {
 			for (final Field f : s.getFields()) {
+				final A4TupleSet ts = solution.eval(f);
+				final Iterator<A4Tuple> tupi = ts.iterator();
+				while (tupi.hasNext()) {
+					final A4Tuple tup = tupi.next();
+					allTuples.add(tup);
+				}
+			}
+		}
+		return allTuples;
+	}
+
+	static public List<A4Tuple> getAllTuplesSigRel(final A4Solution solution, final String sig,
+			final String rel) {
+
+		final List<A4Tuple> allTuples = new ArrayList<>();
+		// We collect all tuples
+		for (final Sig s : solution.getAllReachableSigs()) {
+			if (!s.label.equals(sig)) {
+				continue;
+			}
+			for (final Field f : s.getFields()) {
+				if (!f.label.equals(rel)) {
+					continue;
+				}
 				final A4TupleSet ts = solution.eval(f);
 				final Iterator<A4Tuple> tupi = ts.iterator();
 				while (tupi.hasNext()) {
@@ -1002,7 +1043,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1488,7 +1529,7 @@ public class AlloyUtil {
 	 */
 	static public Alloy_Model getTCaseModel(final SpecificSemantics mod,
 			final List<GUIAction> acts, final Window reached, final Instance_GUI_pattern in)
-			throws Exception {
+					throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1717,17 +1758,17 @@ public class AlloyUtil {
 					metadata += iw.getDescriptor() != null && metadata.length() == 0 ? iw
 							.getDescriptor() : "";
 
-							if (dm.getInvalidData(metadata).contains(s)) {
-								assert (invalid);
-								fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
-										+ iw.getId() + ".invalid";
+					if (dm.getInvalidData(metadata).contains(s)) {
+						assert (invalid);
+						fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
+								+ iw.getId() + ".invalid";
 
-							} else {
-								if (invalid) {
-									fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
-											+ iw.getId() + ".invalid)";
-								}
-							}
+					} else {
+						if (invalid) {
+							fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
+									+ iw.getId() + ".invalid)";
+						}
+					}
 				}
 			} else {
 				final List<String> fills = values_used.get(s);
