@@ -289,8 +289,8 @@ public class AlloyTestCaseGenerator {
 						final List<Input_widget> iws = new ArrayList<>();
 						final List<Selectable_widget> sws = new ArrayList<>();
 
-						final List<A4Tuple> association = AlloyUtil.getTuplesRel(solution,
-								curr.atom(1), "this/Window", "aws");
+						List<A4Tuple> association = AlloyUtil.getTuplesRel(solution, curr.atom(1),
+								"this/Window", "aws");
 
 						awloop: for (final Action_widget aw : target.getActionWidgets()) {
 
@@ -304,7 +304,8 @@ public class AlloyTestCaseGenerator {
 								}
 							}
 						}
-
+						association = AlloyUtil.getTuplesRel(solution, curr.atom(1), "this/Window",
+								"iws");
 						iwloop: for (final Input_widget iw : target.getInputWidgets()) {
 							final List<A4Tuple> values = AlloyUtil.getTuplesRel(solution,
 									"Input_widget_" + iw.getId() + "$0", "this/Input_widget",
@@ -360,7 +361,8 @@ public class AlloyTestCaseGenerator {
 								}
 							}
 						}
-
+						association = AlloyUtil.getTuplesRel(solution, curr.atom(1), "this/Window",
+								"sws");
 						swloop: for (final Selectable_widget sw : target.getSelectableWidgets()) {
 							for (final A4Tuple t : association) {
 								// if the aw is associated to the current window
