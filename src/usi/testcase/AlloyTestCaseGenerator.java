@@ -33,7 +33,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 
 public class AlloyTestCaseGenerator {
 
-	private long RUN_INITIAL_TIMEOUT = 1800000; // 15 minutes
+	private long RUN_INITIAL_TIMEOUT = 2700000; // 45 minutes
 	private int MAX_RUN;
 	private final int INITAL_TIME_SIZE = 3;
 
@@ -217,8 +217,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-			ts[0].interrupt();
-			ts[1].interrupt();
+		ts[0].interrupt();
+		ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -243,8 +243,10 @@ public class AlloyTestCaseGenerator {
 		Map<String, String> input_data_map = null;
 		input_data_map = this.elaborateInputData(solution);
 
-		final List<A4Tuple> tracks = AlloyUtil.getTuples(solution, "Track$0");
-		final List<A4Tuple> curr_wind = AlloyUtil.getTuples(solution, "Current_window$0");
+		final List<A4Tuple> tracks = AlloyUtil
+				.getTuplesRel(solution, "Track$0", "this/Track", "op");
+		final List<A4Tuple> curr_wind = AlloyUtil.getTuplesRel(solution, "Current_window$0",
+				"this/Current_window", "is_in");
 
 		assert (tracks.size() == curr_wind.size() - 1);
 
@@ -287,8 +289,8 @@ public class AlloyTestCaseGenerator {
 						final List<Input_widget> iws = new ArrayList<>();
 						final List<Selectable_widget> sws = new ArrayList<>();
 
-						final List<A4Tuple> association = AlloyUtil.getTuples(solution,
-								curr.atom(1));
+						final List<A4Tuple> association = AlloyUtil.getTuplesRel(solution,
+								curr.atom(1), "this/Window", "aws");
 
 						awloop: for (final Action_widget aw : target.getActionWidgets()) {
 
@@ -304,8 +306,9 @@ public class AlloyTestCaseGenerator {
 						}
 
 						iwloop: for (final Input_widget iw : target.getInputWidgets()) {
-							final List<A4Tuple> values = AlloyUtil.getTuples(solution,
-									"Input_widget_" + iw.getId() + "$0");
+							final List<A4Tuple> values = AlloyUtil.getTuplesRel(solution,
+									"Input_widget_" + iw.getId() + "$0", "this/Input_widget",
+									"content");
 							String inputdata = "";
 							for (final A4Tuple value : values) {
 
@@ -366,8 +369,9 @@ public class AlloyTestCaseGenerator {
 										&& t.atom(1).equals(
 												"Selectable_widget_" + sw.getId() + "$0")) {
 
-									final List<A4Tuple> objs = AlloyUtil.getTuples(solution,
-											"Selectable_widget_" + sw.getId() + "$0");
+									final List<A4Tuple> objs = AlloyUtil.getTuplesRel(solution,
+											"Selectable_widget_" + sw.getId() + "$0",
+											"this/Selectable_widget", "list");
 									final Map<String, Integer> map = new HashMap<>();
 									final List<Integer> to_order = new ArrayList<>();
 									String selected = "";
@@ -378,8 +382,9 @@ public class AlloyTestCaseGenerator {
 
 										if (obj.atom(2).equals(tuple.atom(2))) {
 											if (!map.containsKey(obj.atom(1))) {
-												final List<A4Tuple> appeared = AlloyUtil.getTuples(
-														solution, obj.atom(1));
+												final List<A4Tuple> appeared = AlloyUtil
+														.getTuplesRel(solution, obj.atom(1),
+																"this/Object", "appeared");
 
 												assert (appeared.size() > 0);
 
@@ -415,7 +420,7 @@ public class AlloyTestCaseGenerator {
 									final Selectable_widget new_sw = new Selectable_widget(
 											sw.getId(), sw.getLabel(), sw.getClasss(), sw.getX(),
 											sw.getY(), sw.getWidth(), sw.getHeight(), sw.getSize()
-													+ (map.keySet().size()), sel);
+											+ (map.keySet().size()), sel);
 									new_sw.setDescriptor(sw.getDescriptor());
 									sws.add(new_sw);
 									continue swloop;
@@ -435,26 +440,28 @@ public class AlloyTestCaseGenerator {
 
 			assert (source_window != null);
 
-			final List<A4Tuple> params = AlloyUtil.getTuples(solution, tuple.atom(1));
+			// final List<A4Tuple> params = AlloyUtil.getTuples(solution,
+			// tuple.atom(1));
 
 			if (tuple.atom(1).startsWith("Fill")) {
 
-				assert (params.size() <= 2);
+				final List<A4Tuple> values = AlloyUtil.getTuplesRel(solution, tuple.atom(1),
+						"this/Fill", "with");
+				final List<A4Tuple> targetiw = AlloyUtil.getTuplesRel(solution, tuple.atom(1),
+						"this/Fill", "filled");
 
-				String iw_id = null;
+				assert (values.size() <= 1);
+				assert (targetiw.size() == 1);
+
 				String value = null;
 
-				for (final A4Tuple t : params) {
-					if (t.atom(1).toLowerCase().contains("value")) {
-						value = t.atom(1);
-						continue;
-					} else if (t.atom(1).startsWith("Input_widget_")) {
-						iw_id = t.atom(1).substring(13);
-						iw_id = iw_id.split("\\$")[0];
-						continue;
-					}
-				}
+				String iw_id = targetiw.get(0).atom(1).substring(13);
+				iw_id = iw_id.split("\\$")[0];
 
+				if (values.size() == 1) {
+					value = values.get(0).atom(1);
+
+				}
 				assert (iw_id != null);
 
 				Input_widget target_iw = null;
@@ -501,8 +508,11 @@ public class AlloyTestCaseGenerator {
 
 			if (tuple.atom(1).startsWith("Click")) {
 
-				assert (params.size() == 1);
-				final A4Tuple wid_tuple = params.get(0);
+				final List<A4Tuple> targetaw = AlloyUtil.getTuplesRel(solution, tuple.atom(1),
+						"this/Click", "clicked");
+				assert (targetaw.size() == 1);
+
+				final A4Tuple wid_tuple = targetaw.get(0);
 
 				assert (wid_tuple.atom(1).startsWith("Action_widget_"));
 
@@ -528,31 +538,27 @@ public class AlloyTestCaseGenerator {
 			}
 			if (tuple.atom(1).startsWith("Select")) {
 
-				assert (params.size() == 2);
+				final List<A4Tuple> targetsw = AlloyUtil.getTuplesRel(solution, tuple.atom(1),
+						"this/Select", "wid");
+				final List<A4Tuple> which = AlloyUtil.getTuplesRel(solution, tuple.atom(1),
+						"this/Select", "which");
+				assert (targetsw.size() == 1);
+				assert (which.size() == 1);
 
-				String sw_id = null;
-				String sw_name = null;
-				String object = null;
+				final String sw_name = targetsw.get(0).atom(1);
+				String sw_id = targetsw.get(0).atom(1).substring(18);
+				sw_id = sw_id.split("\\$")[0];
 
-				for (final A4Tuple t : params) {
-					if (t.atom(1).startsWith("Selectable_widget")) {
-						sw_name = t.atom(1);
-						sw_id = t.atom(1).substring(18);
-						sw_id = sw_id.split("\\$")[0];
-						continue;
-					}
-					if (t.atom(1).startsWith("Object")) {
-						object = t.atom(1);
-						continue;
-					}
-				}
+				final String object = which.get(0).atom(1);
+				;
 
 				assert (object != null && sw_id != null);
 
 				// all the tuples connected with the sw
-				final List<A4Tuple> sw_tuples = AlloyUtil.getTuples(solution, sw_name);
+				final List<A4Tuple> sw_list = AlloyUtil.getTuplesRel(solution, sw_name,
+						"this/Selectable_widget", "list");
 				final List<String> objects_in_sw_at_t = new ArrayList<>();
-				for (final A4Tuple sw_tuple : sw_tuples) {
+				for (final A4Tuple sw_tuple : sw_list) {
 					if (this.extractTimeIndex(sw_tuple.atom(2)) == (time_index - 1)) {
 						if (!objects_in_sw_at_t.contains(sw_tuple.atom(1))
 								&& sw_tuple.atom(1).startsWith("Object")) {
@@ -565,16 +571,11 @@ public class AlloyTestCaseGenerator {
 				final List<Integer> to_order = new ArrayList<>();
 				final Map<String, Integer> map = new HashMap<>();
 				for (final String obj : objects_in_sw_at_t) {
-					final List<A4Tuple> obj_tuples = AlloyUtil.getTuples(solution, obj);
+					final List<A4Tuple> obj_tuples = AlloyUtil.getTuplesRel(solution, obj,
+							"this/Object", "appeared");
 
-					assert (obj_tuples.size() > 1);
-					int appeared = -1;
-					for (final A4Tuple tt : obj_tuples) {
-						if (tt.arity() == 2 && tt.atom(1).startsWith("Time")) {
-							appeared = this.extractTimeIndex(tt.atom(1));
-							break;
-						}
-					}
+					assert (obj_tuples.size() == 1);
+					final int appeared = this.extractTimeIndex(obj_tuples.get(0).atom(1));
 
 					assert (appeared != -1);
 					if (!map.containsKey(obj)) {
@@ -665,8 +666,8 @@ public class AlloyTestCaseGenerator {
 		for (final Input_widget iw : this.instance.getGui().getInput_widgets()) {
 			if (iw instanceof Option_input_widget) {
 				final Option_input_widget oiw = (Option_input_widget) iw;
-				final List<A4Tuple> tups = AlloyUtil.getTuples(solution,
-						"Input_widget_" + iw.getId() + "$0");
+				final List<A4Tuple> tups = AlloyUtil.getTuplesRel(solution,
+						"Input_widget_" + iw.getId() + "$0", "this/Input_widget", "content");
 				String first = null;
 				for (final A4Tuple tup : tups) {
 					if (tup.arity() == 3 && tup.atom(2).startsWith("Time$0")) {
@@ -684,24 +685,24 @@ public class AlloyTestCaseGenerator {
 
 		for (final String fill_atom : fill_atoms) {
 
-			final List<A4Tuple> tuples = AlloyUtil.getTuples(solution, fill_atom);
+			final List<A4Tuple> vals = AlloyUtil.getTuplesRel(solution, fill_atom, "this/Fill",
+					"with");
+			final List<A4Tuple> targetiw = AlloyUtil.getTuplesRel(solution, fill_atom, "this/Fill",
+					"filled");
 
-			String iw = null;
+			final String iw = targetiw.get(0).atom(1);
 			String v = null;
-			List<String> invalid_values = null;
-			for (final A4Tuple tuple : tuples) {
-				if (tuple.arity() == 2 && tuple.atom(1).toLowerCase().contains("value")) {
-					v = tuple.atom(1);
-				} else if (tuple.arity() == 2 && tuple.atom(1).startsWith("Input_widget")) {
-					iw = tuple.atom(1);
-					invalid_values = new ArrayList<String>();
-					final List<A4Tuple> inv_tuples = AlloyUtil.getTuples(solution, iw);
-					for (final A4Tuple tup : inv_tuples) {
-						if (tup.arity() == 2 && tup.atom(1).startsWith("Value")) {
-							invalid_values.add(tup.atom(1));
-						}
-					}
-				}
+
+			if (vals.size() == 1) {
+				v = vals.get(0).atom(1);
+			}
+
+			final List<String> invalid_values = new ArrayList<String>();
+			final List<A4Tuple> inv_tuples = AlloyUtil.getTuplesRel(solution, iw,
+					"this/Input_widget", "invalid");
+			for (final A4Tuple tup : inv_tuples) {
+				assert (tup.arity() == 2 && tup.atom(1).startsWith("Value"));
+				invalid_values.add(tup.atom(1));
 			}
 
 			assert (iw != null && invalid_values != null);
@@ -730,41 +731,41 @@ public class AlloyTestCaseGenerator {
 				metadata += inpw.getDescriptor() != null && metadata.length() == 0 ? inpw
 						.getDescriptor() : "";
 
-				List<String> data = null;
-				if (invalid_values.contains(v)) {
-					data = dm.getInvalidData(metadata);
+						List<String> data = null;
+						if (invalid_values.contains(v)) {
+							data = dm.getInvalidData(metadata);
 
-					assert (data.size() > 0);
-				} else {
-					data = dm.getValidData(metadata);
-				}
-
-				assert (data != null);
-
-				if (data_for_value.containsKey(v)) {
-					List<String> new_list = new ArrayList<>();
-					// we calculate the intersection between the values
-					// already
-					// available for this value and the new ones
-
-					if (data.size() == 0) {
-						new_list = data_for_value.get(v);
-					} else {
-						for (final String s : data_for_value.get(v)) {
-							if (data.contains(s)) {
-								new_list.add(s);
-							}
+							assert (data.size() > 0);
+						} else {
+							data = dm.getValidData(metadata);
 						}
-					}
-					if (invalid_values.contains(v) && new_list.size() == 0) {
-						throw new Exception(
-								"AlloyTestCaseGeneration - not enough invalid input data.");
-					}
 
-					data_for_value.put(v, new_list);
-				} else {
-					data_for_value.put(v, data);
-				}
+						assert (data != null);
+
+						if (data_for_value.containsKey(v)) {
+							List<String> new_list = new ArrayList<>();
+							// we calculate the intersection between the values
+							// already
+							// available for this value and the new ones
+
+							if (data.size() == 0) {
+								new_list = data_for_value.get(v);
+							} else {
+								for (final String s : data_for_value.get(v)) {
+									if (data.contains(s)) {
+										new_list.add(s);
+									}
+								}
+							}
+							if (invalid_values.contains(v) && new_list.size() == 0) {
+								throw new Exception(
+										"AlloyTestCaseGeneration - not enough invalid input data.");
+							}
+
+							data_for_value.put(v, new_list);
+						} else {
+							data_for_value.put(v, data);
+						}
 
 			}
 		}
