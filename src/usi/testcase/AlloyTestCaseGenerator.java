@@ -217,8 +217,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-		ts[0].interrupt();
-		ts[1].interrupt();
+			ts[0].interrupt();
+			ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -289,8 +289,8 @@ public class AlloyTestCaseGenerator {
 						final List<Input_widget> iws = new ArrayList<>();
 						final List<Selectable_widget> sws = new ArrayList<>();
 
-						final List<A4Tuple> association = AlloyUtil.getTuplesRel(solution,
-								curr.atom(1), "this/Window", "aws");
+						List<A4Tuple> association = AlloyUtil.getTuplesRel(solution, curr.atom(1),
+								"this/Window", "aws");
 
 						awloop: for (final Action_widget aw : target.getActionWidgets()) {
 
@@ -304,7 +304,8 @@ public class AlloyTestCaseGenerator {
 								}
 							}
 						}
-
+						association = AlloyUtil.getTuplesRel(solution, curr.atom(1), "this/Window",
+								"iws");
 						iwloop: for (final Input_widget iw : target.getInputWidgets()) {
 							final List<A4Tuple> values = AlloyUtil.getTuplesRel(solution,
 									"Input_widget_" + iw.getId() + "$0", "this/Input_widget",
@@ -360,7 +361,8 @@ public class AlloyTestCaseGenerator {
 								}
 							}
 						}
-
+						association = AlloyUtil.getTuplesRel(solution, curr.atom(1), "this/Window",
+								"sws");
 						swloop: for (final Selectable_widget sw : target.getSelectableWidgets()) {
 							for (final A4Tuple t : association) {
 								// if the aw is associated to the current window
@@ -420,7 +422,7 @@ public class AlloyTestCaseGenerator {
 									final Selectable_widget new_sw = new Selectable_widget(
 											sw.getId(), sw.getLabel(), sw.getClasss(), sw.getX(),
 											sw.getY(), sw.getWidth(), sw.getHeight(), sw.getSize()
-											+ (map.keySet().size()), sel);
+													+ (map.keySet().size()), sel);
 									new_sw.setDescriptor(sw.getDescriptor());
 									sws.add(new_sw);
 									continue swloop;
@@ -731,41 +733,41 @@ public class AlloyTestCaseGenerator {
 				metadata += inpw.getDescriptor() != null && metadata.length() == 0 ? inpw
 						.getDescriptor() : "";
 
-						List<String> data = null;
-						if (invalid_values.contains(v)) {
-							data = dm.getInvalidData(metadata);
+				List<String> data = null;
+				if (invalid_values.contains(v)) {
+					data = dm.getInvalidData(metadata);
 
-							assert (data.size() > 0);
-						} else {
-							data = dm.getValidData(metadata);
-						}
+					assert (data.size() > 0);
+				} else {
+					data = dm.getValidData(metadata);
+				}
 
-						assert (data != null);
+				assert (data != null);
 
-						if (data_for_value.containsKey(v)) {
-							List<String> new_list = new ArrayList<>();
-							// we calculate the intersection between the values
-							// already
-							// available for this value and the new ones
+				if (data_for_value.containsKey(v)) {
+					List<String> new_list = new ArrayList<>();
+					// we calculate the intersection between the values
+					// already
+					// available for this value and the new ones
 
-							if (data.size() == 0) {
-								new_list = data_for_value.get(v);
-							} else {
-								for (final String s : data_for_value.get(v)) {
-									if (data.contains(s)) {
-										new_list.add(s);
-									}
-								}
+					if (data.size() == 0) {
+						new_list = data_for_value.get(v);
+					} else {
+						for (final String s : data_for_value.get(v)) {
+							if (data.contains(s)) {
+								new_list.add(s);
 							}
-							if (invalid_values.contains(v) && new_list.size() == 0) {
-								throw new Exception(
-										"AlloyTestCaseGeneration - not enough invalid input data.");
-							}
-
-							data_for_value.put(v, new_list);
-						} else {
-							data_for_value.put(v, data);
 						}
+					}
+					if (invalid_values.contains(v) && new_list.size() == 0) {
+						throw new Exception(
+								"AlloyTestCaseGeneration - not enough invalid input data.");
+					}
+
+					data_for_value.put(v, new_list);
+				} else {
+					data_for_value.put(v, data);
+				}
 
 			}
 		}
