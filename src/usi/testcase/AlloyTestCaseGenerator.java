@@ -458,6 +458,7 @@ public class AlloyTestCaseGenerator {
 				String value = null;
 
 				String iw_id = targetiw.get(0).atom(1).substring(13);
+
 				iw_id = iw_id.split("\\$")[0];
 
 				if (values.size() == 1) {
@@ -987,7 +988,7 @@ public class AlloyTestCaseGenerator {
 					}
 					if (this.value_scope > -1) {
 						final CommandScope vscope = new CommandScope(v, false,
-								(this.value_scope + ((time_scope - 1) * 2 / 5)));
+								(this.value_scope + ((time_scope - 1) * 1 / 2)));
 						scopes.add(vscope);
 					}
 					if (this.iw_scope > -1) {
