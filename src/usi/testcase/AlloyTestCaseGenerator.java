@@ -33,7 +33,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 
 public class AlloyTestCaseGenerator {
 
-	private long RUN_INITIAL_TIMEOUT = 2700000; // 45 minutes
+	private long RUN_INITIAL_TIMEOUT = 1200000; // 20 minutes
 	private int MAX_RUN;
 	private final int INITAL_TIME_SIZE = 3;
 
