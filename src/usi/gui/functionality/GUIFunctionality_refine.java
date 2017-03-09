@@ -214,7 +214,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -541,7 +541,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -912,7 +912,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -1142,19 +1142,20 @@ public class GUIFunctionality_refine {
 
 			if (!this.testcasegen) {
 				System.out
-						.println("GET TESTCASE: test case not found, trying adapting constraint.");
+				.println("GET TESTCASE: test case not found, trying adapting constraint.");
 				// if we reached timeout
 				if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
 						.getRefinementTimeout()) {
 					System.out.println("TIMEOUT IN GENERATING TESTCASES");
 					return null;
 				}
-				constraints = new ArrayList<>();
-				constraints.addAll(this.discarded_semantic_properties);
-				constraints.add("not(" + this.current_semantic_property + ")");
-				constrained = addSemanticConstrain_to_Model(sem, constraints);
-				final String new_constraint = this.getAdaptedConstraint(constrained);
+				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
+						+ ")");
+
+				final String new_constraint = this.getAdaptedConstraint(sem);
 				if (new_constraint == null) {
+					this.discarded_semantic_properties.remove(this.discarded_semantic_properties
+							.size() - 1);
 					System.out.println("GET TESTCASE: adapted constraint not found.");
 					this.unsat_commands.add(constrained.getRun_commands().get(0));
 					return null;
@@ -1290,7 +1291,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-											.equals(inw.getInstance().getId())) {
+													.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1307,7 +1308,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-											.equals(inw.getInstance().getId())) {
+													.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1338,9 +1339,9 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-			+ "System and "
-			+ "(all t: Time| (t = T/last) => (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
-			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+					+ "System and "
+					+ "(all t: Time| (t = T/last) => (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
+					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
 
