@@ -217,7 +217,7 @@
             <rectangle>224:20</rectangle>
             <class>ComboBoxUI</class>
             <label>&lt;Description&gt;</label>
-            <value>&lt;Description&gt;</value>
+            <value/>
         </input_widget>
         <input_widget id="iw17">
             <pos>460:493</pos>
@@ -574,7 +574,7 @@
             <rectangle>280:20</rectangle>
             <class>ComboBoxUI</class>
             <label>&lt;Description&gt;</label>
-            <value>&lt;Description&gt;</value>
+            <value/>
         </input_widget>
         <input_widget id="iw61">
             <pos>298:332</pos>

@@ -402,6 +402,9 @@ public abstract class Widget implements Comparable<Widget> {
 				String value = "";
 				try {
 					value = to.getProperty("text").toString();
+					if (value.equals(label)) {
+						value = "";
+					}
 				} catch (final Exception e) {}
 				out.add(new Input_widget(to, idm.nextIWId(), label, type, x, y, width, height,
 						value));

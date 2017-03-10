@@ -212,8 +212,8 @@ public class AlloyTestCaseGenerator {
 					}
 				}
 			}
-			ts[0].interrupt();
-			ts[1].interrupt();
+		ts[0].interrupt();
+		ts[1].interrupt();
 		}
 
 		final List<GUITestCase> out = new ArrayList<>();
@@ -417,7 +417,7 @@ public class AlloyTestCaseGenerator {
 									final Selectable_widget new_sw = new Selectable_widget(
 											sw.getId(), sw.getLabel(), sw.getClasss(), sw.getX(),
 											sw.getY(), sw.getWidth(), sw.getHeight(), sw.getSize()
-											+ (map.keySet().size()), sel);
+													+ (map.keySet().size()), sel);
 									new_sw.setDescriptor(sw.getDescriptor());
 									sws.add(new_sw);
 									continue swloop;
@@ -678,6 +678,22 @@ public class AlloyTestCaseGenerator {
 					out.put(first + "_option", String.valueOf(oiw.getSelected()));
 					continue;
 				}
+			} else {
+
+				final List<A4Tuple> tups = AlloyUtil.getTuplesRel(solution,
+						"Input_widget_" + iw.getId() + "$0", "this/Input_widget", "content");
+				String first = null;
+				for (final A4Tuple tup : tups) {
+					if (tup.arity() == 3 && tup.atom(2).startsWith("Time$0")) {
+						first = tup.atom(1);
+						break;
+					}
+				}
+				if (first != null) {
+					out.put(first, String.valueOf(iw.getValue()));
+					continue;
+				}
+
 			}
 		}
 
@@ -729,41 +745,41 @@ public class AlloyTestCaseGenerator {
 				metadata += inpw.getDescriptor() != null && metadata.length() == 0 ? inpw
 						.getDescriptor() : "";
 
-						List<String> data = null;
-						if (invalid_values.contains(v)) {
-							data = dm.getInvalidData(metadata);
+				List<String> data = null;
+				if (invalid_values.contains(v)) {
+					data = dm.getInvalidData(metadata);
 
-							assert (data.size() > 0);
-						} else {
-							data = dm.getValidData(metadata);
-						}
+					assert (data.size() > 0);
+				} else {
+					data = dm.getValidData(metadata);
+				}
 
-						assert (data != null);
+				assert (data != null);
 
-						if (data_for_value.containsKey(v)) {
-							List<String> new_list = new ArrayList<>();
-							// we calculate the intersection between the values
-							// already
-							// available for this value and the new ones
+				if (data_for_value.containsKey(v)) {
+					List<String> new_list = new ArrayList<>();
+					// we calculate the intersection between the values
+					// already
+					// available for this value and the new ones
 
-							if (data.size() == 0) {
-								new_list = data_for_value.get(v);
-							} else {
-								for (final String s : data_for_value.get(v)) {
-									if (data.contains(s)) {
-										new_list.add(s);
-									}
-								}
+					if (data.size() == 0) {
+						new_list = data_for_value.get(v);
+					} else {
+						for (final String s : data_for_value.get(v)) {
+							if (data.contains(s)) {
+								new_list.add(s);
 							}
-							if (invalid_values.contains(v) && new_list.size() == 0) {
-								throw new Exception(
-										"AlloyTestCaseGeneration - not enough invalid input data.");
-							}
-
-							data_for_value.put(v, new_list);
-						} else {
-							data_for_value.put(v, data);
 						}
+					}
+					if (invalid_values.contains(v) && new_list.size() == 0) {
+						throw new Exception(
+								"AlloyTestCaseGeneration - not enough invalid input data.");
+					}
+
+					data_for_value.put(v, new_list);
+				} else {
+					data_for_value.put(v, data);
+				}
 
 			}
 		}

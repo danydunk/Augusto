@@ -351,6 +351,30 @@ public class SpecificSemantics extends FunctionalitySemantics {
 		// }
 		// }
 
+		final List<Input_widget> iwss = new ArrayList<>();
+		iwss.addAll(iws_not_generic);
+		iwss.addAll(iws_generic);
+		for (int x = 0; x < iwss.size(); x++) {
+			if (iwss.get(x).getValue().length() == 0) {
+				continue;
+			}
+			for (int y = x + 1; y < iwss.size(); y++) {
+				if (iwss.get(y).getValue().length() == 0) {
+					continue;
+				}
+				values_fact_content += System.getProperty("line.separator");
+				if (iwss.get(x).getValue().equals(iwss.get(y).getValue())) {
+					values_fact_content += "Input_widget_" + iwss.get(x).getId()
+							+ ".content.(T/first) = Input_widget_" + iwss.get(y).getId()
+							+ ".content.(T/first)";
+				} else {
+					values_fact_content += "not(Input_widget_" + iwss.get(x).getId()
+							+ ".content.(T/first) = Input_widget_" + iwss.get(y).getId()
+							+ ".content.(T/first))";
+				}
+			}
+		}
+
 		for (int x = 0; x < iws_not_generic.size(); x++) {
 			final Input_widget iw = iws_not_generic.get(x);
 			String metadata = iw.getLabel() != null ? iw.getLabel() : "";
