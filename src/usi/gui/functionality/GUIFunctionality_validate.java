@@ -281,7 +281,7 @@ public class GUIFunctionality_validate {
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -289,7 +289,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
@@ -693,7 +693,7 @@ public class GUIFunctionality_validate {
 		final List<String> to_remove = new ArrayList<>();
 		final List<String> out = new ArrayList<>();
 		loop: for (final String c : this.pairwise.columnKeySet()) {
-			for (final String r : this.pairwise.columnKeySet()) {
+			for (final String r : this.pairwise.rowKeySet()) {
 				if (this.pairwise.get(r, c) != null) {
 					out.add(this.pairwise.get(r, c));
 					to_remove.add(r + " #### " + c);
