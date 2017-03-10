@@ -33,7 +33,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 
 public class AlloyTestCaseGenerator {
 
-	private long RUN_INITIAL_TIMEOUT = 1200000; // 20 minutes
+	private long RUN_INITIAL_TIMEOUT = 1800000; // 30 minutes
 	private int MAX_RUN;
 	private final int INITAL_TIME_SIZE = 3;
 
@@ -788,6 +788,12 @@ public class AlloyTestCaseGenerator {
 		// input data for different values
 		final List<String> used_values = new ArrayList<>();
 		for (final String key : data_for_value.keySet()) {
+			if (out.containsKey(key)) {
+				if (!used_values.contains(out.get(key))) {
+					used_values.add(out.get(key));
+				}
+				continue;
+			}
 			final List<String> possible_values = new ArrayList<>();
 			for (final String s : data_for_value.get(key)) {
 				if (!used_values.contains(s)) {
