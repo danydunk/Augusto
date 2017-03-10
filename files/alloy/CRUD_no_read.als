@@ -19,7 +19,7 @@ fact{
 fact {
 	#Ok < 2
 	#Selectable_widget = 1
-	all iw: Input_widget | #iw.content.(T/first) = 1 => not(iw in Property_semantic.requireds)
+	all iw: Input_widget | (#iw.content.(T/first) = 1 or #iw.invalid > 0) => not(iw in Property_semantic.requireds)
 }
 ---------------Generic CRUD Semantics---------- 
 abstract sig Crud_op {}
