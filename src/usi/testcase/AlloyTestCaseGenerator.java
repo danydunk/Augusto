@@ -715,7 +715,7 @@ public class AlloyTestCaseGenerator {
 			final List<A4Tuple> inv_tuples = AlloyUtil.getTuplesRel(solution, iw,
 					"this/Input_widget", "invalid");
 			for (final A4Tuple tup : inv_tuples) {
-				assert (tup.arity() == 2 && tup.atom(1).startsWith("Value"));
+				assert (tup.arity() == 2 && tup.atom(1).toLowerCase().contains("value"));
 				invalid_values.add(tup.atom(1));
 			}
 
