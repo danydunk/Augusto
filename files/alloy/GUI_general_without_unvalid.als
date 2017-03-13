@@ -61,6 +61,9 @@ fact {
 	all sw: Selectable_widget | sw in Window.sws
 	//all o: Object | some t: Time | o in Selectable_widget.list.t
 }
+fact{
+	no t: Time |  #Track.op.t = 1 and Track.op.t in Fill and Track.op.t.with = Track.op.t.filled.content.(T/prev[t])
+}
 ----------------Generic GUI Semantics ---------------
 one sig Current_window {
 	is_in: Window one -> Time

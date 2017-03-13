@@ -12,10 +12,6 @@ abstract sig Create_trigger extends Action_widget { }
 abstract sig Update_trigger extends Action_widget { }
 abstract sig Delete_trigger extends Action_widget { }
 
-fact{
-	no t: Time |  #Track.op.t = 1 and Track.op.t in Fill and Track.op.t.with = Track.op.t.filled.content.(T/prev[t])
-}
-
 fact {
 	#Ok < 2
 	#Selectable_widget = 1
