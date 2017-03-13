@@ -81,20 +81,40 @@ public class GUIFunctionality_validate {
 		this.pairwise = HashBasedTable.create();
 
 		for (int x = 0; x < edges.size(); x++) {
-			for (int y = x + 1; y < edges.size(); y++) {
-				final String edge1 = edges.get(x);
-				final String edge2 = edges.get(y);
 
-				final String dest1 = edge1.split(" -> ")[1];
-				final String aw1 = edge1.split(" -> ")[0];
+			final String edge1 = edges.get(x);
+
+			final String dest1 = edge1.split(" -> ")[1];
+			final String aw1 = edge1.split(" -> ")[0];
+			final boolean first = this.instancePattern.getGui().isDynamicEdge(aw1, dest1);
+			if (first) {
+				String run = "run {System and (some t1,t2: Time | t2 in T/nexts[t1] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+				run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+						+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw1
+						+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
+						+ " and click_semantics[Action_widget_" + aw1
+						+ ", t1] and not(click_semantics[Action_widget_" + aw1 + ", t2]))}";
+				this.pairwise.put(edge1, "!" + aw1, run);
+
+				run = "run {System and (some t1,t2: Time | t1 in T/nexts[t2] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+				run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+						+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw1
+						+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
+						+ " and click_semantics[Action_widget_" + aw1
+						+ ", t1] and not(click_semantics[Action_widget_" + aw1 + ", t2]))}";
+				this.pairwise.put("!" + aw1, edge1, run);
+			}
+
+			for (int y = x + 1; y < edges.size(); y++) {
+
+				final String edge2 = edges.get(y);
 
 				final String dest2 = edge2.split(" -> ")[1];
 				final String aw2 = edge2.split(" -> ")[0];
 
-				final boolean first = this.instancePattern.getGui().isDynamicEdge(aw1, dest1);
 				final boolean second = this.instancePattern.getGui().isDynamicEdge(aw2, dest2);
 
-				String run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+				String run = "run {System and (some t1,t2: Time | t2 in T/nexts[t1] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
 				run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
 						+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
 						+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
@@ -103,18 +123,35 @@ public class GUIFunctionality_validate {
 						+ ", t1] and click_semantics[Action_widget_" + aw2 + ", t2])}";
 				this.pairwise.put(edge1, edge2, run);
 
+				run = "run {System and (some t1,t2: Time | t1 in T/nexts[t2] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+				run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+						+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+						+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
+						+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
+						+ " and click_semantics[Action_widget_" + aw1
+						+ ", t1] and click_semantics[Action_widget_" + aw2 + ", t2])}";
+				this.pairwise.put(edge2, edge1, run);
+
 				if (first) {
-					run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+					run = "run {System and (some t1,t2: Time | t2 in T/nexts[t1] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
 					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
 							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
 							+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
 							+ " and not (click_semantics[Action_widget_" + aw1
 							+ ", t1]) and click_semantics[Action_widget_" + aw2 + ", t2])}";
 					this.pairwise.put("!" + aw1, edge2, run);
+
+					run = "run {System and (some t1,t2: Time | t1 in T/nexts[t2] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+							+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
+							+ " and not (click_semantics[Action_widget_" + aw1
+							+ ", t1]) and click_semantics[Action_widget_" + aw2 + ", t2])}";
+					this.pairwise.put(edge2, "!" + aw1, run);
 				}
 
 				if (second) {
-					run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+					run = "run {System and (some t1,t2: Time | t2 in T/nexts[t1] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
 					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
 							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
 							+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
@@ -122,15 +159,29 @@ public class GUIFunctionality_validate {
 							+ ", t1] and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
 					this.pairwise.put(edge1, "!" + aw2, run);
 
+					run = "run {System and (some t1,t2: Time | t1 in T/nexts[t2] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+							+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
+							+ " and click_semantics[Action_widget_" + aw1
+							+ ", t1] and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
+					this.pairwise.put("!" + aw2, edge1, run);
+
 				}
 				if (first && second) {
-					run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+					run = "run {System and (some t1,t2: Time | t2 in T/nexts[t1] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
 					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
 							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
 							+ " and not (click_semantics[Action_widget_" + aw1
 							+ ", t1]) and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
 					this.pairwise.put("!" + aw1, "!" + aw2, run);
 
+					run = "run {System and (some t1,t2: Time | t1 in T/nexts[t2] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+							+ " and not (click_semantics[Action_widget_" + aw1
+							+ ", t1]) and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
+					this.pairwise.put("!" + aw2, "!" + aw1, run);
 				}
 			}
 		}
@@ -272,16 +323,17 @@ public class GUIFunctionality_validate {
 		final Fact new_fact = new Fact(
 				"filter_redundant_actions",
 				"no t: Time | #Track.op.t = 1 and Track.op.t in Select and Track.op.(T/prev[t]) in Select and Track.op.(T/prev[t]).wid = Track.op.t.wid"
-						+ System.lineSeparator()
-						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.(T/prev[t]) in Fill and Track.op.(T/prev[t]).filled = Track.op.t.filled"
-						+ System.lineSeparator()
-						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
+				// + System.lineSeparator()
+				// +
+						// "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.(T/prev[t]) in Fill and Track.op.(T/prev[t]).filled = Track.op.t.filled"
+				+ System.lineSeparator()
+				+ "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
 
 		facts.add(new_fact);
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -289,7 +341,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
@@ -682,7 +734,7 @@ public class GUIFunctionality_validate {
 				for (int y = x + 1; y < covered_edges.size(); y++) {
 					final String edge2 = covered_edges.get(y);
 					this.pairwise.remove(edge1, edge2);
-					this.pairwise.remove(edge2, edge1);
+					// this.pairwise.remove(edge2, edge1);
 				}
 			}
 		}

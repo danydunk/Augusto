@@ -88,6 +88,28 @@
 	  <valid>file3.buddi3</valid>
     </values>
   </DATA>
+  <DATA>
+    <metadata>file name:</metadata>
+    <values>
+      <valid>file</valid>
+      <valid>file2</valid>
+	  <valid>file3</valid>
+	  <valid>file.buddi3</valid>
+      <valid>file2.buddi3</valid>
+	  <valid>file3.buddi3</valid>
+    </values>
+  </DATA>
+  <DATA>
+    <metadata>file name</metadata>
+    <values>
+      <valid>file</valid>
+      <valid>file2</valid>
+	  <valid>file3</valid>
+	  <valid>file.buddi3</valid>
+      <valid>file2.buddi3</valid>
+	  <valid>file3.buddi3</valid>
+    </values>
+  </DATA>
   <DATA type="itemized">
     <metadata></metadata>
     <values>

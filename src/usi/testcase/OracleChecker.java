@@ -121,10 +121,10 @@ public class OracleChecker {
 					// we manage iw that have a standard value
 					final Window ww = this.gui.getWindow(oracle.getId());
 					final Input_widget iw_gui = (Input_widget) ww.getWidget(actual_iw.getId());
-					// if the iw has a standard value and the oracle expects
-					// nothing it is ok
+					// if the iw has a standard value and the oracle expects it
+					// it is ok
 					if (iw_gui.getValue() != null && iw_gui.getValue().length() > 0
-							&& iw.getValue().length() == 0) {
+							&& iw_gui.getValue().equals(iw.getValue())) {
 						continue;
 					}
 

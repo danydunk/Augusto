@@ -77,6 +77,7 @@ pred click [aw: Action_widget, t, t': Time, c: Click] {
 }
 pred fill [iw: Input_widget, t, t': Time, v: Value, f: Fill] { 
 	--- precondition ---
+	not(v = iw.content.t)
 	iw in Current_window.is_in.t.iws
 	fill_pre [iw, t, v]
 	--- effect ---

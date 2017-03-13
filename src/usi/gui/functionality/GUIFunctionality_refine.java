@@ -214,7 +214,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -541,7 +541,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -833,10 +833,11 @@ public class GUIFunctionality_refine {
 		final Fact new_fact = new Fact(
 				"filter_redundant_actions",
 				"no t: Time | #Track.op.t = 1 and Track.op.t in Select and Track.op.(T/prev[t]) in Select and Track.op.(T/prev[t]).wid = Track.op.t.wid"
-						+ System.lineSeparator()
-						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.(T/prev[t]) in Fill and Track.op.(T/prev[t]).filled = Track.op.t.filled"
-						+ System.lineSeparator()
-						+ "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
+				// + System.lineSeparator()
+				// +
+						// "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.(T/prev[t]) in Fill and Track.op.(T/prev[t]).filled = Track.op.t.filled"
+				+ System.lineSeparator()
+				+ "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
 		facts.add(new_fact);
 		sem_with = new SpecificSemantics(sem_with.getSignatures(), facts, sem_with.getPredicates(),
 				sem_with.getFunctions(), sem_with.getOpenStatements());
@@ -912,7 +913,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -1142,7 +1143,7 @@ public class GUIFunctionality_refine {
 
 			if (!this.testcasegen) {
 				System.out
-						.println("GET TESTCASE: test case not found, trying adapting constraint.");
+				.println("GET TESTCASE: test case not found, trying adapting constraint.");
 				// if we reached timeout
 				if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
 						.getRefinementTimeout()) {
@@ -1291,7 +1292,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-											.equals(inw.getInstance().getId())) {
+													.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1308,7 +1309,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-											.equals(inw.getInstance().getId())) {
+													.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1339,9 +1340,9 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-			+ "System and "
-			+ "(all t: Time| (t = T/last) => (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
-			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+					+ "System and "
+					+ "(all t: Time| (t = T/last) => (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
+					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
 
