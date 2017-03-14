@@ -1,9 +1,7 @@
 package src.usi.gui.functionality;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import src.usi.configuration.ConfigurationManager;
 import src.usi.gui.functionality.instance.Instance_GUI_pattern;
@@ -39,10 +37,10 @@ public class GUIFunctionality_validate {
 	private final List<String> sw_to_select;
 	private final List<GUITestCaseResult> completely_executed_tcs;
 	private SpecificSemantics working_sem;
-	// map that constains as key the run command to cover a edge positively or
-	// negatively and as values the run commands to cover all the possibles
-	// semantic cases
-	private Map<String, List<String>> edges_cases;
+
+	private final List<String> edges;
+	protected List<String> semantic_cases;
+	private List<String> negative_cases;
 	private final Table<String, String, String> pairwise;
 
 	// number of times a run command can be executed
@@ -59,60 +57,41 @@ public class GUIFunctionality_validate {
 		this.aw_to_click = new ArrayList<>();
 		this.iw_to_fill = new ArrayList<>();
 		this.sw_to_select = new ArrayList<>();
+		this.negative_cases = new ArrayList<>();
 
 		this.init();
-		this.generate_run_commands(instancePattern.getSemantics());
 
-		final List<String> edges = new ArrayList<>();
+		this.edges = new ArrayList<>();
 		for (final Action_widget aw : instancePattern.getGui().getAction_widgets()) {
 			if (instancePattern.getPAW_for_AW(aw.getId()) == null) {
 				continue;
 			}
 			for (final Window w : instancePattern.getGui().getDynamicForwardLinks(aw.getId())) {
 				final String edge = aw.getId() + " -> " + w.getId();
-				edges.add(edge);
+				this.edges.add(edge);
 			}
 			for (final Window w : instancePattern.getGui().getStaticForwardLinks(aw.getId())) {
 				final String edge = aw.getId() + " -> " + w.getId();
-				edges.add(edge);
+				this.edges.add(edge);
 			}
 		}
+		this.generate_run_commands(instancePattern.getSemantics());
 
 		this.pairwise = HashBasedTable.create();
 
-		for (int x = 0; x < edges.size(); x++) {
+		for (int x = 0; x < this.edges.size(); x++) {
 
-			final String edge1 = edges.get(x);
+			final String edge1 = this.edges.get(x);
 
 			final String dest1 = edge1.split(" -> ")[1];
 			final String aw1 = edge1.split(" -> ")[0];
-			final boolean first = this.instancePattern.getGui().isDynamicEdge(aw1, dest1);
-			if (first) {
-				String run = "run {System and (some t1,t2: Time | t2 in T/nexts[t1] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-				run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-						+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw1
-						+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
-						+ " and click_semantics[Action_widget_" + aw1
-						+ ", t1] and not(click_semantics[Action_widget_" + aw1 + ", t2]))}";
-				this.pairwise.put(edge1, "!" + aw1, run);
 
-				run = "run {System and (some t1,t2: Time | t1 in T/nexts[t2] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-				run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-						+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw1
-						+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
-						+ " and click_semantics[Action_widget_" + aw1
-						+ ", t1] and not(click_semantics[Action_widget_" + aw1 + ", t2]))}";
-				this.pairwise.put("!" + aw1, edge1, run);
-			}
+			for (int y = x + 1; y < this.edges.size(); y++) {
 
-			for (int y = x + 1; y < edges.size(); y++) {
-
-				final String edge2 = edges.get(y);
+				final String edge2 = this.edges.get(y);
 
 				final String dest2 = edge2.split(" -> ")[1];
 				final String aw2 = edge2.split(" -> ")[0];
-
-				final boolean second = this.instancePattern.getGui().isDynamicEdge(aw2, dest2);
 
 				String run = "run {System and (some t1,t2: Time | t2 in T/nexts[t1] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
 				run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
@@ -132,57 +111,6 @@ public class GUIFunctionality_validate {
 						+ ", t1] and click_semantics[Action_widget_" + aw2 + ", t2])}";
 				this.pairwise.put(edge2, edge1, run);
 
-				if (first) {
-					run = "run {System and (some t1,t2: Time | t2 in T/nexts[t1] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-							+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
-							+ " and not (click_semantics[Action_widget_" + aw1
-							+ ", t1]) and click_semantics[Action_widget_" + aw2 + ", t2])}";
-					this.pairwise.put("!" + aw1, edge2, run);
-
-					run = "run {System and (some t1,t2: Time | t1 in T/nexts[t2] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-							+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
-							+ " and not (click_semantics[Action_widget_" + aw1
-							+ ", t1]) and click_semantics[Action_widget_" + aw2 + ", t2])}";
-					this.pairwise.put(edge2, "!" + aw1, run);
-				}
-
-				if (second) {
-					run = "run {System and (some t1,t2: Time | t2 in T/nexts[t1] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-							+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
-							+ " and click_semantics[Action_widget_" + aw1
-							+ ", t1] and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
-					this.pairwise.put(edge1, "!" + aw2, run);
-
-					run = "run {System and (some t1,t2: Time | t1 in T/nexts[t2] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-							+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
-							+ " and click_semantics[Action_widget_" + aw1
-							+ ", t1] and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
-					this.pairwise.put("!" + aw2, edge1, run);
-
-				}
-				if (first && second) {
-					run = "run {System and (some t1,t2: Time | t2 in T/nexts[t1] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-							+ " and not (click_semantics[Action_widget_" + aw1
-							+ ", t1]) and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
-					this.pairwise.put("!" + aw1, "!" + aw2, run);
-
-					run = "run {System and (some t1,t2: Time | t1 in T/nexts[t2] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-					run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-							+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-							+ " and not (click_semantics[Action_widget_" + aw1
-							+ ", t1]) and not(click_semantics[Action_widget_" + aw2 + ", t2]))}";
-					this.pairwise.put("!" + aw2, "!" + aw1, run);
-				}
 			}
 		}
 	}
@@ -320,16 +248,18 @@ public class GUIFunctionality_validate {
 		final long beginTime = System.currentTimeMillis();
 		// we add a fact to filter redundant actions
 		final List<Fact> facts = this.instancePattern.getSemantics().getFacts();
-		final Fact new_fact = new Fact(
-				"filter_redundant_actions",
-				"no t: Time | #Track.op.t = 1 and Track.op.t in Select and Track.op.(T/prev[t]) in Select and Track.op.(T/prev[t]).wid = Track.op.t.wid"
-				// + System.lineSeparator()
-				// +
-						// "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.(T/prev[t]) in Fill and Track.op.(T/prev[t]).filled = Track.op.t.filled"
-				+ System.lineSeparator()
-				+ "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
-
-		facts.add(new_fact);
+		// final Fact new_fact = new Fact(
+		// "filter_redundant_actions",
+		// "no t: Time | #Track.op.t = 1 and Track.op.t in Select and Track.op.(T/prev[t]) in Select and Track.op.(T/prev[t]).wid = Track.op.t.wid"
+		// // + System.lineSeparator()
+		// // +
+		// //
+		// "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.(T/prev[t]) in Fill and Track.op.(T/prev[t]).filled = Track.op.t.filled"
+		// + System.lineSeparator()
+		// +
+		// "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
+		//
+		// facts.add(new_fact);
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
@@ -345,7 +275,7 @@ public class GUIFunctionality_validate {
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
-		List<String> run_commands = this.getAllSemanticCases();
+		List<String> run_commands = this.semantic_cases;
 		for (int x = 0; x < run_commands.size(); x++) {
 			System.out.println((x + 1) + " " + run_commands.get(x));
 		}
@@ -375,15 +305,48 @@ public class GUIFunctionality_validate {
 			batch_num++;
 		}
 
+		System.out.println("COVERING NEGATIVE CASES.");
+
+		run_commands = this.negative_cases;
+		for (int x = 0; x < run_commands.size(); x++) {
+			System.out.println((x + 1) + " " + run_commands.get(x));
+		}
+
+		System.out.println(run_commands.size() + " TESTCASES. RUNNING THEM IN BATCHES OF "
+				+ this.batch_size + ".");
+
+		batch_num = 0;
+		while (((batch_num * this.batch_size)) < run_commands.size()) {
+			System.out.println("BATCH " + (batch_num + 1));
+			this.working_sem = new SpecificSemantics(this.working_sem.getSignatures(),
+					this.working_sem.getFacts(), this.working_sem.getPredicates(),
+					this.working_sem.getFunctions(), this.working_sem.getOpenStatements());
+
+			for (int cont = 0; ((batch_num * this.batch_size) + cont) < run_commands.size()
+					&& cont < this.batch_size; cont++) {
+				final String run = run_commands.get(((batch_num * this.batch_size) + cont));
+				this.working_sem.addRun_command(run);
+			}
+			final List<GUITestCaseResult> results = this.execute();
+			for (final GUITestCaseResult r : results) {
+				this.working_sem = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(
+						this.working_sem, r.getActions_executed()));
+			}
+
+			out.addAll(results);
+			batch_num++;
+		}
+
 		if (ConfigurationManager.getPairwiseTestcase()) {
 			System.out.println("COVERING PAIRWISE.");
 
-			this.filterPairwise(out);
 			batch_num = 0;
 			System.out.println(this.pairwise.values().size()
 					+ " TESTCASES. RUNNING THEM IN BATCHES OF " + this.batch_size + ".");
 
 			while (true) {
+				this.filterPairwise(out);
+
 				run_commands = this.getNPairwiseTests(this.batch_size);
 				if (run_commands.size() == 0) {
 					break;
@@ -406,7 +369,6 @@ public class GUIFunctionality_validate {
 					this.working_sem = SpecificSemantics.instantiate(AlloyUtil
 							.getTCaseModelOpposite(this.working_sem, r.getActions_executed()));
 				}
-				this.filterPairwise(results);
 				out.addAll(results);
 				batch_num++;
 
@@ -516,38 +478,25 @@ public class GUIFunctionality_validate {
 		return new_run_commands;
 	}
 
-	// private String combineRunCommands(final String run1, final String run2) {
-	//
-	// String run1_mod = run1.replace("run {System and {", "");
-	// String run2_mod = run2.replace("run {System and {", "");
-	// run1_mod = run1_mod.replace("} }", "");
-	// run2_mod = run2_mod.replace("} }", "");
-	// return "run {System and {(" + run1_mod + ") and (" + run2_mod + ")} }";
-	// }
-
 	protected void generate_run_commands(final FunctionalitySemantics sem) throws Exception {
 
-		this.edges_cases = new HashMap<>();
+		final List<String> negative_commands = new ArrayList<>();
+		this.negative_cases = new ArrayList<>();
+		this.semantic_cases = new ArrayList<>();
 
 		final String click = "some t: Time | #Track.op.(T/next[t]) = 1 and Track.op.(T/next[t]) in Click and";
-		final String click_edge = "some t: Time | click [Track.op.(T/next[t]).clicked, t, T/next[t], Track.op.(T/next[t])] and";
+		final String click_edge = "some t, t2: Time | click [Track.op.(T/next[t]).clicked, t, T/next[t], Track.op.(T/next[t])] and";
 		for (final String prec : sem.getClickSemantics().getCases().keySet()) {
 
-			final String positive_edge = "run {System and {" + click_edge + " (" + prec
-					+ ") and click_semantics[Track.op.(T/next[t]).clicked, t]} }";
-			final List<String> positive_semantic_cases = new ArrayList<>();
 			final String negative_edge = "run {System and {" + click_edge + " (" + prec
-					+ ") and not(click_semantics[Track.op.(T/next[t]).clicked, t])} }";
-			final List<String> negative_semantic_cases = new ArrayList<>();
-			this.edges_cases.put(positive_edge, positive_semantic_cases);
-			this.edges_cases.put(negative_edge, negative_semantic_cases);
-
+					+ ") and not(click_semantics[Track.op.(T/next[t]).clicked, t])";
+			negative_commands.add(negative_edge);
 			final String pred = click + " (" + prec + ") and (";
 			// the number of possible combinations
 			final List<String> cases = sem.getClickSemantics().getCases().get(prec);
 			if (cases.size() == 1 && cases.get(0).trim().equals("2=(1+1)")) {
 				final String run_command = "run {System and {" + click + " (" + prec + ")} }";
-				positive_semantic_cases.add(run_command);
+				this.semantic_cases.add(run_command);
 				continue;
 			}
 			final double n = Math.pow(2, cases.size());
@@ -569,41 +518,30 @@ public class GUIFunctionality_validate {
 					}
 				}
 				final String run_command = "run {System and {" + pred + sem_pred + ")} }";
-				if (cont == (n - 1)) {
-					// the last one is the positive case
-					positive_semantic_cases.add(run_command);
-				} else {
-					negative_semantic_cases.add(run_command);
-				}
+				this.semantic_cases.add(run_command);
+
 			}
+
 		}
 
 		final String fill = "some t: Time | #Track.op.(T/next[t]) = 1 and Track.op.(T/next[t]) in Fill and";
-		final String fill_edge = "some t: Time | fill [Track.op.(T/next[t]).filled, t, T/next[t], Track.op.(T/next[t]).with, Track.op.(T/next[t])] and";
+		final String fill_edge = "some t, t2: Time | fill [Track.op.(T/next[t]).filled, t, T/next[t], Track.op.(T/next[t]).with, Track.op.(T/next[t])] and";
 
 		for (final String prec : sem.getFillSemantics().getCases().keySet()) {
 
-			final String positive_edge = "run {System and {"
-					+ fill_edge
-					+ " ("
-					+ prec
-					+ ") and fill_semantics[Track.op.(T/next[t]).filled, t, Track.op.(T/next[t]).with]} }";
-			final List<String> positive_semantic_cases = new ArrayList<>();
 			final String negative_edge = "run {System and {"
 					+ fill_edge
 					+ " ("
 					+ prec
-					+ ") and not(fill_semantics[Track.op.(T/next[t]).filled, t, Track.op.(T/next[t]).with])} }";
-			final List<String> negative_semantic_cases = new ArrayList<>();
-			this.edges_cases.put(positive_edge, positive_semantic_cases);
-			this.edges_cases.put(negative_edge, negative_semantic_cases);
+					+ ") and not(fill_semantics[Track.op.(T/next[t]).filled, t, Track.op.(T/next[t]).with])";
+			negative_commands.add(negative_edge);
 
 			final String pred = fill + " (" + prec + ") and (";
 			// the number of possible combinations
 			final List<String> cases = sem.getFillSemantics().getCases().get(prec);
 			if (cases.size() == 1 && cases.get(0).trim().equals("2=(1+1)")) {
 				final String run_command = "run {System and {" + click + " (" + prec + ")} }";
-				positive_semantic_cases.add(run_command);
+				this.semantic_cases.add(run_command);
 				continue;
 			}
 			final double n = Math.pow(2, cases.size());
@@ -625,41 +563,30 @@ public class GUIFunctionality_validate {
 					}
 				}
 				final String run_command = "run {System and {" + pred + sem_pred + ")} }";
-				if (cont == (n - 1)) {
-					// the last one is the positive case
-					positive_semantic_cases.add(run_command);
-				} else {
-					negative_semantic_cases.add(run_command);
-				}
+
+				this.semantic_cases.add(run_command);
+
 			}
 		}
 
 		final String select = "some t: Time | #Track.op.(T/next[t]) = 1 and Track.op.(T/next[t]) in Select and";
-		final String select_edge = "some t: Time | select [Track.op.(T/next[t]).wid, t, T/next[t], Track.op.(T/next[t]).selected_o, Track.op.(T/next[t])] and";
+		final String select_edge = "some t, t2: Time | select [Track.op.(T/next[t]).wid, t, T/next[t], Track.op.(T/next[t]).selected_o, Track.op.(T/next[t])] and";
 
 		for (final String prec : sem.getSelectSemantics().getCases().keySet()) {
 
-			final String positive_edge = "run {System and {"
-					+ select_edge
-					+ " ("
-					+ prec
-					+ ") and select_semantics[Track.op.(T/next[t]).wid, t, Track.op.(T/next[t]).selected_o]} }";
-			final List<String> positive_semantic_cases = new ArrayList<>();
 			final String negative_edge = "run {System and {"
 					+ select_edge
 					+ " ("
 					+ prec
-					+ ") and not(select_semantics[Track.op.(T/next[t]).wid, t, Track.op.(T/next[t]).selected_o])} }";
-			final List<String> negative_semantic_cases = new ArrayList<>();
-			this.edges_cases.put(positive_edge, positive_semantic_cases);
-			this.edges_cases.put(negative_edge, negative_semantic_cases);
+					+ ") and not(select_semantics[Track.op.(T/next[t]).wid, t, Track.op.(T/next[t]).selected_o])";
+			negative_commands.add(negative_edge);
 
 			final String pred = select + " (" + prec + ") and (";
 			// the number of possible combinations
 			final List<String> cases = sem.getSelectSemantics().getCases().get(prec);
 			if (cases.size() == 1 && cases.get(0).trim().equals("2=(1+1)")) {
 				final String run_command = "run {System and {" + click + " (" + prec + ")} }";
-				positive_semantic_cases.add(run_command);
+				this.semantic_cases.add(run_command);
 				continue;
 			}
 			final double n = Math.pow(2, cases.size());
@@ -681,23 +608,25 @@ public class GUIFunctionality_validate {
 					}
 				}
 				final String run_command = "run {System and {" + pred + sem_pred + ")} }";
-				if (cont == (n - 1)) {
-					// the last one is the positive case
-					positive_semantic_cases.add(run_command);
-				} else {
-					negative_semantic_cases.add(run_command);
-				}
+
+				this.semantic_cases.add(run_command);
 			}
 		}
-	}
 
-	protected List<String> getAllSemanticCases() {
+		for (final String s : negative_commands) {
+			for (int x = 0; x < this.edges.size(); x++) {
 
-		final List<String> out = new ArrayList<>();
-		for (final String key : this.edges_cases.keySet()) {
-			out.addAll(this.edges_cases.get(key));
+				final String edge1 = this.edges.get(x);
+
+				final String dest1 = edge1.split(" -> ")[1];
+				final String aw1 = edge1.split(" -> ")[0];
+				String run = "#Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+				run += "Track.op.(T/next[t2]).clicked = Action_widget_" + aw1
+						+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest1;
+				this.negative_cases.add(s + " and t2 in T/nexts[t] and " + run + "}}");
+				this.negative_cases.add(s + " and t2 in T/prevs[t] and " + run + "}}");
+			}
 		}
-		return out;
 	}
 
 	private GUITestCaseResult wasTestCasePreviouslyExecuted(final GUITestCase tc) {

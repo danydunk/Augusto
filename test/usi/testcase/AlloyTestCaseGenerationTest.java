@@ -80,15 +80,15 @@ public class AlloyTestCaseGenerationTest {
 
 		r.generateSpecificSemantics();
 		r.getSemantics()
-				.addRun_command(
-						"run {System and (one t1,t2: Time| t2 = T/next[t1] and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none))}for 5 but 4 Time,3 Operation, 10 Value");
+		.addRun_command(
+				"run {System and (one t1,t2: Time| t2 in T/nexts[t1] and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none))}for 5 but 5 Time,4 Operation, 10 Value");
 
 		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(r, 1, 40000);
 		final List<GUITestCase> tests = generator.generateTestCases();
 		assertEquals(1, tests.size());
 		Fill f = (Fill) tests.get(0).getActions().get(1);
 		assertTrue(f.getInput() != null);
-		f = (Fill) tests.get(0).getActions().get(2);
+		f = (Fill) tests.get(0).getActions().get(3);
 		assertTrue(f.getInput() == null);
 	}
 
@@ -209,7 +209,7 @@ public class AlloyTestCaseGenerationTest {
 		public List<String> generate(final FunctionalitySemantics sem) throws Exception {
 
 			super.generate_run_commands(sem);
-			return super.getAllSemanticCases();
+			return super.semantic_cases;
 		}
 	}
 

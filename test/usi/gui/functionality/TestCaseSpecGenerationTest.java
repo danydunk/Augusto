@@ -79,7 +79,7 @@ public class TestCaseSpecGenerationTest {
 				"(aw in Ok and Current_window.is_in.t  in Form and (#aw.goes = 1 and aw.goes in Form)) => filled_required_in_w_test [Current_window.is_in.t, t]"
 						+ System.getProperty("line.separator")
 						+ "(aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0) => (filled_required_test [t] and unique_test [t])",
-				in3);
+						in3);
 
 		// System.out.println(click_s.getContent());
 		final Predicate fill_s = new Predicate("fill_semantics", "", in2);
@@ -142,7 +142,7 @@ public class TestCaseSpecGenerationTest {
 		public List<String> generate(final FunctionalitySemantics sem) throws Exception {
 
 			super.generate_run_commands(sem);
-			return super.getAllSemanticCases();
+			return super.semantic_cases;
 		}
 	}
 }

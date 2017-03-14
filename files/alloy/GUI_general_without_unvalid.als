@@ -61,8 +61,10 @@ fact {
 	all sw: Selectable_widget | sw in Window.sws
 	//all o: Object | some t: Time | o in Selectable_widget.list.t
 }
-fact{
-	no t: Time |  #Track.op.t = 1 and Track.op.t in Fill and Track.op.t.with = Track.op.t.filled.content.(T/prev[t])
+fact no_redundant{
+	no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click and Track.op.t.clicked = Track.op.(T/prev[t]).clicked	
+	no t: Time | #Track.op.t = 1 and Track.op.t in Select and Track.op.(T/prev[t]) in Select and Track.op.(T/prev[t]).wid = Track.op.t.wid
+	no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.(T/prev[t]) in Fill and Track.op.t.filled = Track.op.(T/prev[t]).filled
 }
 ----------------Generic GUI Semantics ---------------
 one sig Current_window {
