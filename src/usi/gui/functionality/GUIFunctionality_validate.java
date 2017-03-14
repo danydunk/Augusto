@@ -38,7 +38,6 @@ public class GUIFunctionality_validate {
 	private final List<GUITestCaseResult> completely_executed_tcs;
 	private SpecificSemantics working_sem;
 
-	private final List<String> edges;
 	protected List<String> semantic_cases;
 	private List<String> negative_cases;
 	private final Table<String, String, String> pairwise;
@@ -61,34 +60,34 @@ public class GUIFunctionality_validate {
 
 		this.init();
 
-		this.edges = new ArrayList<>();
+		final List<String> edges = new ArrayList<>();
 		for (final Action_widget aw : instancePattern.getGui().getAction_widgets()) {
 			if (instancePattern.getPAW_for_AW(aw.getId()) == null) {
 				continue;
 			}
 			for (final Window w : instancePattern.getGui().getDynamicForwardLinks(aw.getId())) {
 				final String edge = aw.getId() + " -> " + w.getId();
-				this.edges.add(edge);
+				edges.add(edge);
 			}
 			for (final Window w : instancePattern.getGui().getStaticForwardLinks(aw.getId())) {
 				final String edge = aw.getId() + " -> " + w.getId();
-				this.edges.add(edge);
+				edges.add(edge);
 			}
 		}
 		this.generate_run_commands(instancePattern.getSemantics());
 
 		this.pairwise = HashBasedTable.create();
 
-		for (int x = 0; x < this.edges.size(); x++) {
+		for (int x = 0; x < edges.size(); x++) {
 
-			final String edge1 = this.edges.get(x);
+			final String edge1 = edges.get(x);
 
 			final String dest1 = edge1.split(" -> ")[1];
 			final String aw1 = edge1.split(" -> ")[0];
 
-			for (int y = x + 1; y < this.edges.size(); y++) {
+			for (int y = x + 1; y < edges.size(); y++) {
 
-				final String edge2 = this.edges.get(y);
+				final String edge2 = edges.get(y);
 
 				final String dest2 = edge2.split(" -> ")[1];
 				final String aw2 = edge2.split(" -> ")[0];
@@ -263,7 +262,7 @@ public class GUIFunctionality_validate {
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -271,7 +270,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
@@ -613,10 +612,21 @@ public class GUIFunctionality_validate {
 			}
 		}
 
-		for (final String s : negative_commands) {
-			for (int x = 0; x < this.edges.size(); x++) {
+		final List<String> edges = new ArrayList<>();
+		for (final Action_widget aw : this.instancePattern.getGui().getAction_widgets()) {
+			if (this.instancePattern.getPAW_for_AW(aw.getId()) == null) {
+				continue;
+			}
+			for (final Window w : this.instancePattern.getGui().getDynamicForwardLinks(aw.getId())) {
+				final String edge = aw.getId() + " -> " + w.getId();
+				edges.add(edge);
+			}
+		}
 
-				final String edge1 = this.edges.get(x);
+		for (final String s : negative_commands) {
+			for (int x = 0; x < edges.size(); x++) {
+
+				final String edge1 = edges.get(x);
 
 				final String dest1 = edge1.split(" -> ")[1];
 				final String aw1 = edge1.split(" -> ")[0];
