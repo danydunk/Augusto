@@ -96,14 +96,14 @@ public class Emptyfill_test extends Emptyfill_testHelper {
 
 		r.generateSpecificSemantics();
 		r.getSemantics()
-				.addRun_command(
-						"run {System and (one t1,t2: Time| t2 = T/next[t1] and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none) and Track.op.t1.filled = Input_widget_iw17 and Track.op.t2.filled = Input_widget_iw17)}for 5 but 4 Time,3 Operation, 10 Value");
+		.addRun_command(
+				"run {System and (one t1,t2: Time| t2 in T/nexts[t1] and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none) and Track.op.t1.filled = Input_widget_iw17 and Track.op.t2.filled = Input_widget_iw17)}for 5 but 5 Time,4 Operation, 10 Value");
 
 		final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(r, 1, 40000);
 		final List<GUITestCase> tests = generator.generateTestCases();
 		final TestCaseRunner runner = new TestCaseRunner(gui);
 		final GUITestCaseResult ress = runner.runTestCase(tests.get(0));
-		final Input_widget iww = (Input_widget) ress.getResults().get(2).getWidget("iw17");
+		final Input_widget iww = (Input_widget) ress.getResults().get(3).getWidget("iw17");
 		if (!iww.getValue().equals("")) {
 			throw new Exception();
 		}
