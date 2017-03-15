@@ -214,7 +214,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -541,7 +541,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -816,10 +816,10 @@ public class GUIFunctionality_refine {
 
 		final OracleChecker oracle = new OracleChecker(this.gui);
 
-		String runCmd = "run {"
+		final String runCmd = "run {"
 				+ "System and "
 				+ "(all t: Time| (t = T/last) <=> (#Track.op.t = 1 and Track.op.t in Click and not click_semantics[Track.op.t.clicked, T/prev[t]]))}";
-		final String runCmd2 = this.getPositiveRunCommand();
+		// final String runCmd2 = this.getPositiveRunCommand();
 
 		List<String> true_constraints = new ArrayList<>();
 		true_constraints.add(this.current_semantic_property);
@@ -850,8 +850,8 @@ public class GUIFunctionality_refine {
 				// if we reached the end we try again to find a property (in
 				// case the one we found was overly simple)
 				if (negative) {
-					System.out.println("REACHED THE END OF THE NEGATIVE LOOP.");
-					runCmd = runCmd2;
+					System.out.println("REACHED THE END OF THE FIRST LOOP.");
+					// runCmd = runCmd2;
 					size = -1;
 					negative = false;
 
@@ -894,15 +894,15 @@ public class GUIFunctionality_refine {
 				System.out.println("PROPERTY MAYBE OVERSEMPLIFIED");
 				// System.out.println(sem_with);
 				if (oversemplified) {
-					if (negative) {
-						System.out.println("REACHED THE END OF THE NEGATIVE LOOP.");
-						runCmd = runCmd2;
-						size = -1;
-						negative = false;
-						continue mainloop;
-					} else {
-						break mainloop;
-					}
+					// if (negative) {
+					// System.out.println("REACHED THE END OF THE NEGATIVE LOOP.");
+					// runCmd = runCmd2;
+					// size = -1;
+					// negative = false;
+					// continue mainloop;
+					// } else {
+					break mainloop;
+					// }
 				}
 				oversemplified = true;
 
@@ -915,7 +915,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -930,7 +930,6 @@ public class GUIFunctionality_refine {
 				// it means we reached timeout
 				System.out.println("TESTCASE GENERATION TIMEOUT");
 				break;
-
 			}
 			oversemplified = false;
 			GUITestCase tc = tests.get(0);
@@ -1145,7 +1144,7 @@ public class GUIFunctionality_refine {
 
 			if (!this.testcasegen) {
 				System.out
-				.println("GET TESTCASE: test case not found, trying adapting constraint.");
+						.println("GET TESTCASE: test case not found, trying adapting constraint.");
 				// if we reached timeout
 				if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
 						.getRefinementTimeout()) {
@@ -1294,7 +1293,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-													.equals(inw.getInstance().getId())) {
+											.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1311,7 +1310,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-													.equals(inw.getInstance().getId())) {
+											.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1342,9 +1341,9 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-					+ "System and "
-					+ "(all t: Time| (t = T/last) <=> (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
-					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+			+ "System and "
+			+ "(all t: Time| (t = T/last) <=> (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
+			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
 
