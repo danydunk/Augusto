@@ -92,7 +92,7 @@ public class GUIFunctionality_validate {
 				final String dest2 = edge2.split(" -> ")[1];
 				final String aw2 = edge2.split(" -> ")[0];
 
-				String run = "run {System and (some t1,t2: Time | #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+				String run = "run {System and (some t1,t2: Time | not(t1=t2) and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
 				run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
 						+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
 						+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
@@ -264,7 +264,7 @@ public class GUIFunctionality_validate {
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -272,7 +272,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-						.getSemantics().getOpenStatements());
+				.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
