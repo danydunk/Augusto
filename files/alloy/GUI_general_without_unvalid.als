@@ -46,7 +46,8 @@ one sig Option_value_3 extends Value{ }
 one sig Option_value_4 extends Value{ }
 
 abstract sig Input_widget {
-	content: Value lone -> Time
+	content: Value lone -> Time,
+	val: set Value
 }
 sig Object {
 	appeared: one Time
