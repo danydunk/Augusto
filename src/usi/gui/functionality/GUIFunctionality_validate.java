@@ -177,12 +177,21 @@ public class GUIFunctionality_validate {
 		work_instance.setSpecificSemantics(working_sem_bis);
 
 		for (int cont = 0; cont < this.MAX_RUN; cont++) {
-			AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(work_instance);
 			List<GUITestCase> testcases = null;
 			if (minimal) {
-				testcases = generator.generateMinimalTestCases(ConfigurationManager
-						.getTestcaseLength());
+				final List<String> runs = working_sem_bis.getRun_commands();
+				testcases = new ArrayList<>();
+				for (final String run : runs) {
+					working_sem_bis.clearRunCommands();
+					working_sem_bis.addRun_command(run);
+					final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(
+							work_instance);
+					testcases.addAll(generator.generateMinimalTestCases(ConfigurationManager
+							.getTestcaseLength()));
+				}
+
 			} else {
+				final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(work_instance);
 				testcases = generator.generateTestCases();
 			}
 
@@ -217,14 +226,18 @@ public class GUIFunctionality_validate {
 					final Instance_GUI_pattern work_instance2 = this.instancePattern.clone();
 					final Alloy_Model working_sem_tris = AlloyUtil.getTCaseModelOpposite(
 							working_sem_bis, tc.getActions());
+
+					working_sem_tris.clearRunCommands();
+					working_sem_tris.addRun_command(tc.getRunCommand());
+					final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(
+							work_instance2);
 					work_instance2.setSpecificSemantics(SpecificSemantics
 							.instantiate(working_sem_tris));
-					generator = new AlloyTestCaseGenerator(work_instance2);
-
 					List<GUITestCase> testcases2 = null;
 					if (minimal) {
 						testcases2 = generator.generateMinimalTestCases(ConfigurationManager
 								.getTestcaseLength());
+
 					} else {
 						testcases2 = generator.generateTestCases();
 					}
@@ -300,7 +313,7 @@ public class GUIFunctionality_validate {
 		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 		this.instancePattern.setSpecificSemantics(sem);
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
@@ -308,7 +321,7 @@ public class GUIFunctionality_validate {
 		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
 				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
 				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
+						.getSemantics().getOpenStatements());
 
 		System.out.println("COVERING SEMANTIC CASES.");
 
