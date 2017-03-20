@@ -162,7 +162,7 @@ public class GUIFunctionality_validate {
 		return results;
 	}
 
-	private List<GUITestCaseResult> execute() throws Exception {
+	private List<GUITestCaseResult> execute(final boolean minimal) throws Exception {
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
 
@@ -178,7 +178,13 @@ public class GUIFunctionality_validate {
 
 		for (int cont = 0; cont < this.MAX_RUN; cont++) {
 			AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(work_instance);
-			List<GUITestCase> testcases = generator.generateTestCases();
+			List<GUITestCase> testcases = null;
+			if (minimal) {
+				testcases = generator.generateMinimalTestCases(ConfigurationManager
+						.getTestcaseLength());
+			} else {
+				testcases = generator.generateTestCases();
+			}
 
 			final List<GUITestCase> testcases_filtered = new ArrayList<>();
 			final List<GUITestCaseResult> results = new ArrayList<>();
@@ -205,26 +211,34 @@ public class GUIFunctionality_validate {
 					testcases_filtered.add(tc);
 				}
 			}
+			if (already.size() > 0) {
+				System.out.println("RE-EXECUTING ALREADY RUN TEST CASES:");
+				for (final GUITestCase tc : already) {
+					final Instance_GUI_pattern work_instance2 = this.instancePattern.clone();
+					final Alloy_Model working_sem_tris = AlloyUtil.getTCaseModelOpposite(
+							working_sem_bis, tc.getActions());
+					work_instance2.setSpecificSemantics(SpecificSemantics
+							.instantiate(working_sem_tris));
+					generator = new AlloyTestCaseGenerator(work_instance2);
 
-			System.out.println("RE-EXECUTING ALREADY RUN TEST CASES:");
-			for (final GUITestCase tc : already) {
-				final Instance_GUI_pattern work_instance2 = this.instancePattern.clone();
-				final Alloy_Model working_sem_tris = AlloyUtil.getTCaseModelOpposite(
-						working_sem_bis, tc.getActions());
-				work_instance2
-						.setSpecificSemantics(SpecificSemantics.instantiate(working_sem_tris));
-				generator = new AlloyTestCaseGenerator(work_instance2);
-				final List<GUITestCase> testcases2 = generator.generateTestCases();
-				for (final GUITestCase tcc : testcases2) {
-					if (tc != null) {
-						final GUITestCase tc2 = new GUITestCase(null, tcc.getActions(),
-								tcc.getRunCommand());
-						testcases_filtered.add(tc2);
+					List<GUITestCase> testcases2 = null;
+					if (minimal) {
+						testcases2 = generator.generateMinimalTestCases(ConfigurationManager
+								.getTestcaseLength());
+					} else {
+						testcases2 = generator.generateTestCases();
 					}
 
+					for (final GUITestCase tcc : testcases2) {
+						if (tc != null) {
+							final GUITestCase tc2 = new GUITestCase(null, tcc.getActions(),
+									tcc.getRunCommand());
+							testcases_filtered.add(tc2);
+						}
+
+					}
 				}
 			}
-
 			final List<GUITestCaseResult> r = this.runTestCases(testcases_filtered);
 			results.addAll(r);
 			out.addAll(r);
@@ -318,7 +332,7 @@ public class GUIFunctionality_validate {
 				final String run = run_commands.get(((batch_num * this.batch_size) + cont));
 				this.working_sem.addRun_command(run);
 			}
-			final List<GUITestCaseResult> results = this.execute();
+			final List<GUITestCaseResult> results = this.execute(true);
 			for (final GUITestCaseResult r : results) {
 				this.working_sem = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(
 						this.working_sem, r.getActions_executed()));
@@ -350,7 +364,7 @@ public class GUIFunctionality_validate {
 				final String run = run_commands.get(((batch_num * this.batch_size) + cont));
 				this.working_sem.addRun_command(run);
 			}
-			final List<GUITestCaseResult> results = this.execute();
+			final List<GUITestCaseResult> results = this.execute(true);
 			for (final GUITestCaseResult r : results) {
 				this.working_sem = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(
 						this.working_sem, r.getActions_executed()));
@@ -387,7 +401,7 @@ public class GUIFunctionality_validate {
 					this.working_sem.addRun_command(run);
 				}
 
-				final List<GUITestCaseResult> results = this.execute();
+				final List<GUITestCaseResult> results = this.execute(false);
 				for (final GUITestCaseResult r : results) {
 					this.working_sem = SpecificSemantics.instantiate(AlloyUtil
 							.getTCaseModelOpposite(this.working_sem, r.getActions_executed()));
@@ -421,7 +435,7 @@ public class GUIFunctionality_validate {
 				this.working_sem.addRun_command(run);
 			}
 
-			final List<GUITestCaseResult> results = this.execute();
+			final List<GUITestCaseResult> results = this.execute(false);
 			for (final GUITestCaseResult r : results) {
 				this.working_sem = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(
 						this.working_sem, r.getActions_executed()));

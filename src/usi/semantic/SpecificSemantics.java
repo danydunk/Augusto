@@ -160,7 +160,10 @@ public class SpecificSemantics extends FunctionalitySemantics {
 					metadata += " ";
 					metadata += iw.getDescriptor() != null ? iw.getDescriptor() : "";
 					if (iw instanceof Option_input_widget) {
-
+						final Option_input_widget oiw = (Option_input_widget) iw;
+						if (oiw.getSize() == 0) {
+							continue;
+						}
 						if (dm.getInvalidItemizedData(metadata).size() > 0) {
 							unvalid_data = true;
 						}
