@@ -14,6 +14,7 @@ import src.usi.gui.structure.Window;
 import src.usi.semantic.FunctionalitySemantics;
 import src.usi.semantic.SpecificSemantics;
 import src.usi.semantic.alloy.AlloyUtil;
+import src.usi.semantic.alloy.Alloy_Model;
 import src.usi.semantic.alloy.structure.Fact;
 import src.usi.testcase.AlloyTestCaseGenerator;
 import src.usi.testcase.GUITestCaseResult;
@@ -176,7 +177,7 @@ public class GUIFunctionality_validate {
 		work_instance.setSpecificSemantics(working_sem_bis);
 
 		for (int cont = 0; cont < this.MAX_RUN; cont++) {
-			final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(work_instance);
+			AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(work_instance);
 			List<GUITestCase> testcases = generator.generateTestCases();
 
 			final List<GUITestCase> testcases_filtered = new ArrayList<>();
@@ -194,15 +195,36 @@ public class GUIFunctionality_validate {
 			}
 			testcases = tests;
 
+			final List<GUITestCase> already = new ArrayList<>();
 			// we filter out the already run test cases
 			for (final GUITestCase tc : testcases) {
 				final GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
 				if (res != null) {
-					results.add(res);
+					already.add(tc);
 				} else {
 					testcases_filtered.add(tc);
 				}
 			}
+
+			System.out.println("RE-EXECUTING ALREADY RUN TEST CASES:");
+			for (final GUITestCase tc : already) {
+				final Instance_GUI_pattern work_instance2 = this.instancePattern.clone();
+				final Alloy_Model working_sem_tris = AlloyUtil.getTCaseModelOpposite(
+						working_sem_bis, tc.getActions());
+				work_instance2
+						.setSpecificSemantics(SpecificSemantics.instantiate(working_sem_tris));
+				generator = new AlloyTestCaseGenerator(work_instance2);
+				final List<GUITestCase> testcases2 = generator.generateTestCases();
+				for (final GUITestCase tcc : testcases2) {
+					if (tc != null) {
+						final GUITestCase tc2 = new GUITestCase(null, tcc.getActions(),
+								tcc.getRunCommand());
+						testcases_filtered.add(tc2);
+					}
+
+				}
+			}
+
 			final List<GUITestCaseResult> r = this.runTestCases(testcases_filtered);
 			results.addAll(r);
 			out.addAll(r);
