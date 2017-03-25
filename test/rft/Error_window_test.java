@@ -69,7 +69,7 @@ public class Error_window_test extends Error_window_testHelper {
 		final Click c3 = new Click(form, null, aw3);
 		acts.add(c3);
 
-		final GUITestCase tc = new GUITestCase(null, acts, "run");
+		final GUITestCase tc = new GUITestCase(acts, "run");
 
 		final TestCaseRunner runner = new TestCaseRunner(gui);
 		final GUITestCaseResult res = runner.runTestCase(tc);

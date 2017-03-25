@@ -34,9 +34,6 @@ import src.usi.testcase.TestCaseRunner;
 import src.usi.testcase.structure.Click;
 import src.usi.testcase.structure.GUIAction;
 import src.usi.testcase.structure.GUITestCase;
-import edu.mit.csail.sdg.alloy4compiler.ast.Command;
-import edu.mit.csail.sdg.alloy4compiler.ast.Module;
-import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 public class GUIFunctionality_refine {
 
@@ -604,18 +601,15 @@ public class GUIFunctionality_refine {
 
 			final SpecificSemantics new_sem = addSemanticConstrain_to_Model(sem, constraints);
 			// System.out.println(new_sem);
-			final Module comp = AlloyUtil.compileAlloyModel(new_sem.toString());
-			A4Solution sol = AlloyUtil.runCommand(comp, comp.getAllCommands().get(0));
+			final String semp = AlloyUtil.getSemProp(new_sem, 0);
 
-			if (sol.satisfiable()) {
-				final String new_prop = AlloyUtil.extractProperty(sol, new_sem);
-				sol = null;
+			if (semp != null) {
 
-				if (this.validateProperty(new_prop, in_sem, tcs)) {
-					System.out.println("GET ADAPTED CONSTRAINT: found new constraint: " + new_prop);
-					return new_prop;
+				if (this.validateProperty(semp, in_sem, tcs)) {
+					System.out.println("GET ADAPTED CONSTRAINT: found new constraint: " + semp);
+					return semp;
 				} else {
-					this.discarded_semantic_properties.add("not(" + new_prop + ")");
+					this.discarded_semantic_properties.add("not(" + semp + ")");
 					continue;
 				}
 			} else {
@@ -648,7 +642,8 @@ public class GUIFunctionality_refine {
 		return out;
 	}
 
-	private Object[] getFoundWindow(GUITestCase tc, final Pattern_window target) throws Exception {
+	private Object[] getFoundWindow(final GUITestCase tc, final Pattern_window target)
+			throws Exception {
 
 		final Object[] out = new Object[2];
 		System.out.println("GET FOUND WINDOW: start.");
@@ -689,13 +684,7 @@ public class GUIFunctionality_refine {
 			this.gui.addDynamicEdge(wid.getId(), reached_w.getId());
 		}
 
-		// we dont need the result (it wastes too much memory)
-		final GUITestCase new_tc = new GUITestCase(null, res.getTc().getActions(), res.getTc()
-				.getRunCommand());
-		final GUITestCaseResult new_res = new GUITestCaseResult(new_tc, res.getActions_executed(),
-				res.getResults(), res.getActions_actually_executed());
-		this.observed_tcs.add(new_res);
-		tc = new_tc;
+		this.observed_tcs.add(res);
 
 		out[1] = reached_w;
 		// we check whether a match with the target was found already
@@ -874,16 +863,14 @@ public class GUIFunctionality_refine {
 				sem_with.addRun_command(runCmd);
 				clone_with.setSpecificSemantics(sem_with);
 
-				final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
-				tests = test_gen.generateMinimalTestCases(ConfigurationManager
-						.getRefinementAlloyTimeScope());
+				tests = AlloyTestCaseGenerator.generateTestCasesMinimal(clone_with,
+						ConfigurationManager.getRefinementAlloyTimeScope());
 			} else {
 				sem_with.addRun_command(runCmd + " for " + ConfigurationManager.getAlloyRunScope()
 						+ " but " + size + " Time");
 
 				clone_with.setSpecificSemantics(sem_with);
-				final AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone_with);
-				tests = test_gen.generateTestCases();
+				tests = AlloyTestCaseGenerator.generateTestCases(clone_with);
 			}
 			sem_with.clearRunCommands();
 
@@ -932,7 +919,7 @@ public class GUIFunctionality_refine {
 				break;
 			}
 			oversemplified = false;
-			GUITestCase tc = tests.get(0);
+			final GUITestCase tc = tests.get(0);
 			// for (final GUIAction act : tc.getActions()) {
 			// if (act instanceof Click) {
 			// System.out.println("click");
@@ -954,7 +941,6 @@ public class GUIFunctionality_refine {
 			GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
 			if (res == null) {
 				final TestCaseRunner runner = new TestCaseRunner(this.gui);
-				tc = new GUITestCase(null, tc.getActions(), tc.getRunCommand());
 				res = runner.runTestCase(tc);
 				// we dont need the result (it wastes too much memory)
 
@@ -1063,13 +1049,11 @@ public class GUIFunctionality_refine {
 			final List<Run_command_thread> threads = new ArrayList<>();
 			for (int cont = 0; cont < batch.size(); cont++) {
 
-				final Alloy_Model sem = AlloyUtil.getTCaseModel(sem_filtered, batch.get(cont)
+				final SpecificSemantics sem = AlloyUtil.getTCaseModel(sem_filtered, batch.get(cont)
 						.getTc().getActions(),
 						batch.get(cont).getResults().get(batch.get(cont).getResults().size() - 1),
 						this.instancePattern);
-				final Module comp = AlloyUtil.compileAlloyModel(sem.toString());
-				final Run_command_thread run = new Run_command_thread(comp, comp.getAllCommands()
-						.get(0));
+				final Run_command_thread run = new Run_command_thread(sem, 0);
 				run.start();
 				threads.add(run);
 			}
@@ -1089,8 +1073,8 @@ public class GUIFunctionality_refine {
 							throw new Exception(
 									"GUIFunctionality_refine - validateProperty: error.");
 						}
-						final A4Solution sol = run.solution;
-						if (!sol.satisfiable()) {
+						final String sol = run.solution;
+						if (sol == null) {
 							for (final Run_command_thread run2 : threads) {
 								run2.interrupt();
 							}
@@ -1129,9 +1113,8 @@ public class GUIFunctionality_refine {
 		newsem.addRun_command(constrained.getRun_commands().get(0));
 		clone.setSpecificSemantics(newsem);
 
-		AlloyTestCaseGenerator test_gen = new AlloyTestCaseGenerator(clone);
-		List<GUITestCase> tests = test_gen.generateMinimalTestCases(ConfigurationManager
-				.getRefinementAlloyTimeScope());
+		List<GUITestCase> tests = AlloyTestCaseGenerator.generateTestCasesMinimal(clone,
+				ConfigurationManager.getRefinementAlloyTimeScope());
 
 		assert tests.size() < 2;
 
@@ -1181,9 +1164,8 @@ public class GUIFunctionality_refine {
 				newsem.addRun_command(constrained.getRun_commands().get(0));
 				clone.setSpecificSemantics(newsem);
 
-				test_gen = new AlloyTestCaseGenerator(clone);
-				tests = test_gen.generateMinimalTestCases(ConfigurationManager
-						.getRefinementAlloyTimeScope());
+				tests = AlloyTestCaseGenerator.generateTestCasesMinimal(clone,
+						ConfigurationManager.getRefinementAlloyTimeScope());
 
 				assert tests.size() < 2;
 				if (tests.size() == 0) {
@@ -1203,8 +1185,7 @@ public class GUIFunctionality_refine {
 			return null;
 		}
 		if (this.current_semantic_property.length() == 0 && sem.hasSemanticProperty()) {
-			this.canididate_semantic_properties.add(AlloyUtil.extractProperty(tests.get(0)
-					.getAlloySolution(), sem));
+			this.canididate_semantic_properties.add(tests.get(0).getSemanticProperty());
 		}
 		return tests.get(0);
 	}
@@ -1349,12 +1330,12 @@ public class GUIFunctionality_refine {
 
 	final class Run_command_thread extends Thread {
 
-		private A4Solution solution;
+		private String solution;
 		private boolean exception = false;
-		private final Module model;
-		private final Command run_command;
+		private final SpecificSemantics model;
+		private final int run_command;
 
-		public Run_command_thread(final Module model, final Command run_command) {
+		public Run_command_thread(final SpecificSemantics model, final int run_command) {
 
 			this.model = model;
 			this.run_command = run_command;
@@ -1365,7 +1346,7 @@ public class GUIFunctionality_refine {
 			return this.exception;
 		}
 
-		public A4Solution getSolution() {
+		public String getSolution() {
 
 			return this.solution;
 		}
@@ -1374,7 +1355,7 @@ public class GUIFunctionality_refine {
 		public void run() {
 
 			try {
-				this.solution = AlloyUtil.runCommand(this.model, this.run_command);
+				this.solution = AlloyUtil.getSemProp(this.model, this.run_command);
 			} catch (final InterruptedException e) {
 
 			} catch (final Exception e) {

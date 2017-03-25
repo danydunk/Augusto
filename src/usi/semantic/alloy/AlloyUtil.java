@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,11 +13,14 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import src.usi.configuration.ConfigurationManager;
 import src.usi.configuration.PathsManager;
 import src.usi.gui.functionality.instance.Instance_GUI_pattern;
+import src.usi.gui.functionality.instance.Instance_GUI_patternWriter;
 import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.GUI;
 import src.usi.gui.structure.Input_widget;
@@ -34,21 +38,22 @@ import src.usi.semantic.alloy.structure.Fact;
 import src.usi.semantic.alloy.structure.Function;
 import src.usi.semantic.alloy.structure.Predicate;
 import src.usi.semantic.alloy.structure.Signature;
+import src.usi.testcase.GUITestCaseParser;
 import src.usi.testcase.inputdata.DataManager;
 import src.usi.testcase.structure.Click;
 import src.usi.testcase.structure.Fill;
 import src.usi.testcase.structure.GUIAction;
+import src.usi.testcase.structure.GUITestCase;
 import src.usi.testcase.structure.Select;
+import src.usi.xml.XMLUtil;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
-import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
 import edu.mit.csail.sdg.alloy4.Pair;
 import edu.mit.csail.sdg.alloy4.SafeList;
-import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Decl;
 import edu.mit.csail.sdg.alloy4compiler.ast.Expr;
 import edu.mit.csail.sdg.alloy4compiler.ast.ExprBinary;
@@ -61,11 +66,9 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.PrimSig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.SubsetSig;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
-import edu.mit.csail.sdg.alloy4compiler.translator.A4Options;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4TupleSet;
-import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 
 /**
  *
@@ -74,15 +77,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
  */
 public class AlloyUtil {
 
-	static A4Reporter rep = new A4Reporter() {
-
-		@Override
-		public void warning(final ErrorWarning msg) {
-
-			System.out.print("Relevance Warning:\n" + (msg.toString().trim()) + "\n\n");
-			System.out.flush();
-		}
-	};
+	private static long TIMEOUT = 30; // 30 minutes
 
 	/**
 	 * returns the signature from the list passed as argument which label is the
@@ -141,6 +136,16 @@ public class AlloyUtil {
 	 */
 	static public Module compileAlloyModel(final String model) throws Exception {
 
+		final A4Reporter rep = new A4Reporter() {
+
+			@Override
+			public void warning(final ErrorWarning msg) {
+
+				System.out.print("Relevance Warning:\n" + (msg.toString().trim()) + "\n\n");
+				System.out.flush();
+			}
+		};
+
 		final Map<String, String> modules = new HashMap<>();
 		try {
 			final File folder = new File(PathsManager.getAlloyModulesFolder());
@@ -175,6 +180,16 @@ public class AlloyUtil {
 	 */
 	static public Module compileAlloyModel(final File model) throws Exception {
 
+		final A4Reporter rep = new A4Reporter() {
+
+			@Override
+			public void warning(final ErrorWarning msg) {
+
+				System.out.print("Relevance Warning:\n" + (msg.toString().trim()) + "\n\n");
+				System.out.flush();
+			}
+		};
+
 		final Map<String, String> modules = new HashMap<>();
 		try {
 			final File folder = new File(PathsManager.getAlloyModulesFolder());
@@ -198,98 +213,135 @@ public class AlloyUtil {
 		}
 	}
 
-	/**
-	 *
-	 * @param model
-	 *            : compiled alloy model
-	 * @param run_command
-	 *            : command to run
-	 * @return a solution
-	 * @throws Exception
-	 */
-	static public A4Solution runCommand(final Module model, final Command run_command)
+	static public String getSemProp(final SpecificSemantics model, final int command_index)
 			throws Exception {
 
-		return AlloyUtil.runCommand(model, run_command, -1);
-	}
+		final File f = File.createTempFile("alloymodel", ".als");
+		final BufferedWriter output = new BufferedWriter(new FileWriter(f));
+		output.write(model.toString());
+		output.close();
 
-	/**
-	 *
-	 * @param model
-	 *            : compiled alloy model
-	 * @param run_command
-	 *            : command to run
-	 * @param timeout
-	 *            : the maximum time in ms for the command, if < 1 no timeout
-	 * @return a solution
-	 * @throws Exception
-	 */
-	@SuppressWarnings("deprecation")
-	static public A4Solution runCommand(final Module model, final Command run_command,
-			final long timeout) throws Exception {
-
-		final class Run_command_thread extends Thread {
-
-			private A4Solution solution;
-			private boolean exception = false;
-
-			public boolean hasException() {
-
-				return this.exception;
-			}
-
-			public A4Solution getSolution() {
-
-				return this.solution;
-			}
-
-			@Override
-			public void run() {
-
-				final A4Options options = new A4Options();
-
-				try {
-					final A4Solution app = TranslateAlloyToKodkod.execute_command(rep,
-							model.getAllReachableSigs(), run_command, options);
-					this.solution = app;
-
-				} catch (final Err e) {
-					if (!(e.getCause() instanceof ThreadDeath)) {
-						e.printStackTrace();
-						this.exception = true;
-					}
-					System.out.println("STOPPED THREAD");
-				}
-			}
-		}
-
-		Run_command_thread thread = null;
+		final List<String> cmds = new ArrayList<>();
+		cmds.add("java");
+		cmds.add("-Xmx2g");
+		cmds.add("-Xss512m");
+		cmds.add("-cp");
+		cmds.add(PathsManager.getBINSPath() + ";" + System.getProperty("java.class.path"));
+		cmds.add("src.usi.semantic.alloy.AlloyRunner");
+		cmds.add(f.getAbsolutePath());
+		cmds.add("1");
+		cmds.add(String.valueOf(command_index));
+		final ProcessBuilder pb = new ProcessBuilder(cmds);
+		final Process process = pb.start();
+		int code = -1;
 		try {
-
-			thread = new Run_command_thread();
-			thread.start();
-			if (timeout < 1) {
-				thread.join();
-			} else {
-				thread.join(timeout);
-			}
-			if (thread.isAlive()) {
-				thread.stop();
-			}
-			if (!thread.hasException()) {
-				return thread.getSolution();
-			} else {
-				throw new Exception("AlloyUtil - runCommand: error in thread.");
-			}
-		} catch (final InterruptedException ee) {
-			thread.stop();
-			// we push down the inturrupt request
+			code = process.waitFor();
+		} catch (final InterruptedException iec) {
+			process.destroyForcibly();
 			Thread.currentThread().interrupt();
 			return null;
+		}
+		if (code != 0) {
+			final BufferedReader br = new BufferedReader(new InputStreamReader(
+					process.getErrorStream()));
+			String err = "";
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				err = line + System.getProperty("line.separator");
 
+			}
+			throw new Exception(err);
+		} else {
+			final BufferedReader br = new BufferedReader(new InputStreamReader(
+					process.getInputStream()));
+			String out = "";
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				out = line + System.getProperty("line.separator");
+
+			}
+			out = out.trim();
+			if (out.startsWith("sat: ")) {
+				return out.replace("sat: ", "").trim();
+			}
+			if (out.equals("unsat")) {
+				return null;
+			}
+			throw new Exception("unrecongised output");
+		}
+	}
+
+	static public GUITestCase getTestcase(final Instance_GUI_pattern model,
+			final int command_index, final int type, final int scope, final int t1, final int t2)
+					throws Exception {
+
+		final String path = XMLUtil.saveTMP(Instance_GUI_patternWriter
+				.writeInstanceGUIPattern(model));
+		final List<String> cmds = new ArrayList<>();
+		cmds.add("java");
+		cmds.add("-Xmx2g");
+		cmds.add("-Xss512m");
+		cmds.add("-cp");
+		cmds.add(PathsManager.getBINSPath() + ";" + System.getProperty("java.class.path"));
+		cmds.add("src.usi.semantic.alloy.AlloyRunner");
+		cmds.add(path);
+		cmds.add(String.valueOf(type));
+		cmds.add(String.valueOf(command_index));
+		cmds.add(String.valueOf(scope));
+		if (t1 != -1) {
+			cmds.add(String.valueOf(t1));
+		}
+		if (t2 != -1) {
+			cmds.add(String.valueOf(t2));
+		}
+
+		final ProcessBuilder pb = new ProcessBuilder(cmds);
+		pb.directory(new File(PathsManager.getProjectRoot()));
+		Process process = null;
+		try {
+			process = pb.start();
 		} catch (final Exception e) {
 			e.printStackTrace();
-			throw new Exception("AlloyUtil - runCommand: error.");
+		}
+		boolean terminated = false;
+		try {
+			terminated = process.waitFor(TIMEOUT, TimeUnit.MINUTES);
+		} catch (final InterruptedException iec) {
+			process.destroyForcibly();
+			Thread.currentThread().interrupt();
+			return null;
+		}
+		if (!terminated) {
+			process.destroyForcibly();
+			throw new TimeoutException();
+		} else {
+			if (process.exitValue() != 0) {
+				final BufferedReader br = new BufferedReader(new InputStreamReader(
+						process.getErrorStream()));
+				String err = "";
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					err += line + System.getProperty("line.separator");
+
+				}
+				throw new Exception(err);
+			} else {
+				final BufferedReader br = new BufferedReader(new InputStreamReader(
+						process.getInputStream()));
+				String out = "";
+				String line = null;
+				while ((line = br.readLine()) != null) {
+					out += line + System.getProperty("line.separator");
+				}
+				out = out.trim();
+				if (out.equals("unsat")) {
+					return null;
+				} else {
+
+					final GUITestCase tc = GUITestCaseParser.parse(XMLUtil.read(out));
+					return tc;
+				}
+			}
 		}
 	}
 
@@ -309,11 +361,12 @@ public class AlloyUtil {
 		final List<Predicate> predicates = new ArrayList<>();
 		final List<Function> functions = new ArrayList<>();
 
+		String source = "";
 		for (final File file : files) {
 
 			// the source file is read
 			final BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-			String source = "";
+
 			String line = "";
 			while ((line = bufferedReader.readLine()) != null) {
 				source += line + System.getProperty("line.separator");
@@ -331,6 +384,9 @@ public class AlloyUtil {
 		}
 		final Alloy_Model model = new Alloy_Model(signatures, facts, predicates, functions,
 				open_statements);
+		for (final String run : retrieveRunCommands(source)) {
+			model.addRun_command(run);
+		}
 		return model;
 	}
 
@@ -354,6 +410,25 @@ public class AlloyUtil {
 
 		final Alloy_Model out = new Alloy_Model(signatures, facts, predicates, functions,
 				open_statements);
+
+		for (final String run : retrieveRunCommands(model)) {
+			out.addRun_command(run);
+		}
+		return out;
+	}
+
+	private static List<String> retrieveRunCommands(final String source) throws Exception {
+
+		final String separator = System.getProperty("line.separator");
+		final String[] lines = source.split(separator);
+		final List<String> out = new ArrayList<>();
+		for (final String line : lines) {
+			if (line.trim().startsWith("run {") || line.trim().startsWith("run{")
+					|| line.trim().startsWith("run(") || line.trim().startsWith("run (")) {
+				out.add(line);
+			}
+		}
+
 		return out;
 	}
 
@@ -1195,7 +1270,7 @@ public class AlloyUtil {
 			throws Exception {
 
 		if (!sem.hasSemanticProperty()) {
-			throw new Exception("AlloyUtil - extractProperty: no semantic property in this model.");
+			return "";
 		}
 		// we retrieve the signature that start with property
 		final Map<Sig, List<String>> properties = new HashMap<>();
@@ -1538,7 +1613,7 @@ public class AlloyUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	static public Alloy_Model getTCaseModel(final SpecificSemantics mod,
+	static public SpecificSemantics getTCaseModel(final SpecificSemantics mod,
 			final List<GUIAction> acts, final Window reached, final Instance_GUI_pattern in)
 					throws Exception {
 
@@ -1653,7 +1728,8 @@ public class AlloyUtil {
 
 		final Alloy_Model out = new Alloy_Model(sigs, facts, preds, funcs, opens);
 		out.addRun_command(runCom);
-		return out;
+
+		return SpecificSemantics.instantiate(out);
 
 	}
 
@@ -1733,13 +1809,15 @@ public class AlloyUtil {
 				final String obj = "Track.op.(" + t + ")" + ".which";
 
 				fact += " and Track.op.(" + t + ").wid=Selectable_widget_" + s.getWidget().getId();
-				fact += " and #Selectable_widget_" + s.getWidget().getId() + ".list.(" + t + ")="
-						+ sw.getSize();
+				// fact += " and #Selectable_widget_" + s.getWidget().getId() +
+				// ".list.(" + t + ")="
+				// + sw.getSize();
 				fact += " and #(T/prevs[(" + obj + ".appeared)] & Selectable_widget_"
 						+ s.getWidget().getId() + ".list.(" + t + ").appeared) = " + s.getIndex();
-				fact += " and #(T/nexts[(" + obj + ".appeared)] & Selectable_widget_"
-						+ s.getWidget().getId() + ".list.(" + t + ").appeared) = "
-						+ ((sw.getSize() - 1) - s.getIndex());
+				// fact += " and #(T/nexts[(" + obj +
+				// ".appeared)] & Selectable_widget_"
+				// + s.getWidget().getId() + ".list.(" + t + ").appeared) = "
+				// + ((sw.getSize() - 1) - s.getIndex());
 			}
 		}
 		// we deal with the values

@@ -18,7 +18,6 @@ import src.usi.pattern.structure.Pattern_selectable_widget;
 import src.usi.pattern.structure.Pattern_window;
 import src.usi.semantic.SpecificSemantics;
 import src.usi.semantic.alloy.AlloyUtil;
-import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 
 /**
  * This class represents one instance of a pattern inside a GUI. It reference to
@@ -237,7 +236,14 @@ public class Instance_GUI_pattern {
 		} catch (final Exception e) {
 			return null;
 		}
-		out.setSpecificSemantics(this.semantics);
+		try {
+			if (this.semantics != null) {
+				out.setSpecificSemantics(SpecificSemantics.instantiate(this.semantics));
+			}
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return out;
 	}
 
@@ -299,8 +305,10 @@ public class Instance_GUI_pattern {
 		sem.addRun_command(run);
 		// System.out.println(sem);
 		// System.out.println(sem.toString());
-		final Module mod = AlloyUtil.compileAlloyModel(sem.toString());
-
-		return AlloyUtil.runCommand(mod, mod.getAllCommands().get(0)).satisfiable();
+		final String sm = AlloyUtil.getSemProp(sem, 0);
+		if (sm == null) {
+			return false;
+		}
+		return true;
 	}
 }

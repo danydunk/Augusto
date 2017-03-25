@@ -3,39 +3,30 @@ package src.usi.testcase.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
-
 public class GUITestCase {
 
 	final private List<GUIAction> actions;
-	final private A4Solution solution;
-	final private String run_command;
+	final private String semantic_properties;
 
-	public GUITestCase(final A4Solution solution, final List<GUIAction> actions,
-			final String run_command) throws Exception {
+	public GUITestCase(final List<GUIAction> actions, final String semantic_properties)
+			throws Exception {
 
 		if (actions == null || actions.size() == 0) {
 			throw new Exception("GUITestCase: empty actions or null initial window.");
 		}
 
-		this.run_command = run_command;
-		this.solution = solution;
 		this.actions = actions;
+		this.semantic_properties = semantic_properties;
+	}
+
+	public String getSemanticProperty() {
+
+		return this.semantic_properties;
 	}
 
 	public List<GUIAction> getActions() {
 
 		return new ArrayList<GUIAction>(this.actions);
-	}
-
-	public A4Solution getAlloySolution() {
-
-		return this.solution;
-	}
-
-	public String getRunCommand() {
-
-		return this.run_command;
 	}
 
 	public boolean containsAction(final GUIAction act) {

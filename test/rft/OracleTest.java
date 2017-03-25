@@ -59,7 +59,7 @@ public class OracleTest extends OracleTestHelper {
 		Click click = new Click(source, target, aw);
 		List<GUIAction> acts = new ArrayList<>();
 		acts.add(click);
-		GUITestCase tc = new GUITestCase(null, acts, "run");
+		GUITestCase tc = new GUITestCase(acts, "run");
 
 		final TestCaseRunner runner = new TestCaseRunner(g);
 		GUITestCaseResult res = runner.runTestCase(tc);
@@ -85,7 +85,7 @@ public class OracleTest extends OracleTestHelper {
 		click = new Click(source, target2, aw);
 		acts = new ArrayList<>();
 		acts.add(click);
-		tc = new GUITestCase(null, acts, "run");
+		tc = new GUITestCase(acts, "run");
 
 		res = runner.runTestCase(tc);
 

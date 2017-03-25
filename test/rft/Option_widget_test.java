@@ -100,8 +100,7 @@ public class Option_widget_test extends Option_widget_testHelper {
 		// r.getSemantics().addRun_command(run);
 		r.getSemantics().addRun_command(run2);
 
-		final AlloyTestCaseGenerator tcgen = new AlloyTestCaseGenerator(r);
-		final List<GUITestCase> tests = tcgen.generateMinimalTestCases(8);
+		final List<GUITestCase> tests = AlloyTestCaseGenerator.generateTestCasesMinimal(r, 8);
 		if (tests.size() > 1) {
 			throw new Exception("");
 		}

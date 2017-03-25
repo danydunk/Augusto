@@ -11,13 +11,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import src.usi.gui.functionality.GUIFunctionality_search;
-import src.usi.gui.functionality.instance.Instance_GUI_pattern;
-import src.usi.gui.structure.GUI;
 import src.usi.pattern.structure.Cardinality;
-import src.usi.pattern.structure.GUI_Pattern;
-import src.usi.semantic.FunctionalitySemantics;
-import src.usi.semantic.SpecificSemantics;
 import src.usi.semantic.alloy.AlloyUtil;
 import src.usi.semantic.alloy.Alloy_Model;
 import src.usi.semantic.alloy.structure.AlloyEntity;
@@ -26,11 +20,6 @@ import src.usi.semantic.alloy.structure.Function;
 import src.usi.semantic.alloy.structure.Predicate;
 import src.usi.semantic.alloy.structure.Signature;
 import src.usi.semantic.alloy.structure.TernaryRelation;
-import test.usi.gui.GUIStructureMaker;
-import test.usi.pattern.GUIPatternMaker;
-import edu.mit.csail.sdg.alloy4compiler.ast.Command;
-import edu.mit.csail.sdg.alloy4compiler.ast.Module;
-import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 public class AlloyUtilsTest {
 
@@ -157,47 +146,51 @@ public class AlloyUtilsTest {
 
 	}
 
-	@Test
-	public void testExtractProperty() throws Exception {
-
-		final GUI gui = GUIStructureMaker.instance1();
-
-		final GUI_Pattern pattern = GUIPatternMaker.instance1();
-
-		final Alloy_Model model = AlloyUtil.loadAlloyModelFromFile(new File(
-				"./files/for_test/alloy/GUI_ADD.als"));
-		pattern.setSemantics(FunctionalitySemantics.instantiate(model));
-
-		final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
-		final List<Instance_GUI_pattern> res = gfs.match(pattern);
-		assertEquals(1, res.size());
-		assertEquals(2, res.get(0).getWindows().size());
-
-		final Instance_GUI_pattern in = res.get(0);
-
-		final SpecificSemantics specsem = SpecificSemantics.generate(in);
-		specsem.addRun_command("run {System and {one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and ((aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0)) and (not (unique_test [Current_window.is_in.t,t]) and not (filled_required_test [Current_window.is_in.t,t]))} } for 11");
-
-		// Save it, and verify if it can be reloaded
-		final String plainConcreteModel = specsem.toString();
-
-		final File fileConcreteModel = AlloyUtil.saveModelInFile(plainConcreteModel,
-				"./files/for_test/alloy/generated_model.als");
-
-		final Module moduleAlloyMit = AlloyUtil.compileAlloyModel(fileConcreteModel);
-		System.out.println(specsem);
-
-		// Now, let's see if there is a solution
-		final Command command = moduleAlloyMit.getAllCommands().get(0);
-		final A4Solution asol = AlloyUtil.runCommand(moduleAlloyMit, command);
-		assertTrue(asol.satisfiable());
-		final String out = AlloyUtil.extractProperty(asol, specsem);
-		System.out.println(out);
-		// assertTrue(out
-		// .equals("one Field_0,Field_1:Property_unique|Property_unique = (Field_0+Field_1) and Property_required = (Field_1) and Field_0.associated_to = (Input_widget_iw2) and Field_1.associated_to = (Input_widget_iw1)")
-		// ||
-		// out.equals("one Field_1:Property_required,Field_0:Property_unique|Property_required = (Field_1) and Property_unique = (Field_0+Field_1) and Field_1.associated_to = (Input_widget_iw1) and Field_0.associated_to = (Input_widget_iw2)"));
-	}
+	// @Test
+	// public void testExtractProperty() throws Exception {
+	//
+	// final GUI gui = GUIStructureMaker.instance1();
+	//
+	// final GUI_Pattern pattern = GUIPatternMaker.instance1();
+	//
+	// final Alloy_Model model = AlloyUtil.loadAlloyModelFromFile(new File(
+	// "./files/for_test/alloy/GUI_ADD.als"));
+	// pattern.setSemantics(FunctionalitySemantics.instantiate(model));
+	//
+	// final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+	// final List<Instance_GUI_pattern> res = gfs.match(pattern);
+	// assertEquals(1, res.size());
+	// assertEquals(2, res.get(0).getWindows().size());
+	//
+	// final Instance_GUI_pattern in = res.get(0);
+	//
+	// final SpecificSemantics specsem = SpecificSemantics.generate(in);
+	// specsem.addRun_command("run {System and {one t: Time, aw: Action_widget, c: Click | click [aw, t, T/next[t], c] and ((aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0)) and (not (unique_test [Current_window.is_in.t,t]) and not (filled_required_test [Current_window.is_in.t,t]))} } for 11");
+	//
+	// // Save it, and verify if it can be reloaded
+	// final String plainConcreteModel = specsem.toString();
+	//
+	// final File fileConcreteModel =
+	// AlloyUtil.saveModelInFile(plainConcreteModel,
+	// "./files/for_test/alloy/generated_model.als");
+	//
+	// final Module moduleAlloyMit =
+	// AlloyUtil.compileAlloyModel(fileConcreteModel);
+	// System.out.println(specsem);
+	//
+	// // Now, let's see if there is a solution
+	// final Command command = moduleAlloyMit.getAllCommands().get(0);
+	// final A4Solution asol = AlloyUtil.runCommand(moduleAlloyMit, command);
+	// assertTrue(asol.satisfiable());
+	// final String out = AlloyUtil.extractProperty(asol, specsem);
+	// System.out.println(out);
+	// // assertTrue(out
+	// //
+	// .equals("one Field_0,Field_1:Property_unique|Property_unique = (Field_0+Field_1) and Property_required = (Field_1) and Field_0.associated_to = (Input_widget_iw2) and Field_1.associated_to = (Input_widget_iw1)")
+	// // ||
+	// //
+	// out.equals("one Field_1:Property_required,Field_0:Property_unique|Property_required = (Field_1) and Property_unique = (Field_0+Field_1) and Field_1.associated_to = (Input_widget_iw1) and Field_0.associated_to = (Input_widget_iw2)"));
+	// }
 
 	private static Signature searchSignatureInList(final List<Signature> signatures,
 			final String label) {

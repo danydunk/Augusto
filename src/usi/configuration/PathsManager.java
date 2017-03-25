@@ -5,6 +5,7 @@ import java.io.File;
 public class PathsManager {
 
 	private static String PROJECT_ROOT = System.getProperty("user.dir") + File.separator;
+	private static String BINS_PATH = System.getProperty("user.dir") + File.separator;
 	private static final String GUIPATTERNS_FOLDER = "files" + File.separator + "guipatterns"
 			+ File.separator + "";
 	private static final String ALLOY_MODULES_PATH = "files" + File.separator + "alloy"
@@ -26,11 +27,17 @@ public class PathsManager {
 			throw new Exception("PathsManager - wrong project root.");
 		}
 		PROJECT_ROOT = root + File.separator;
+		BINS_PATH = PROJECT_ROOT + "build" + File.separator + "classes" + File.separator + "main";
 	}
 
 	public static String getProjectRoot() {
 
 		return PROJECT_ROOT;
+	}
+
+	public static String getBINSPath() {
+
+		return BINS_PATH;
 	}
 
 	public static String getAUTPath() {

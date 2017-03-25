@@ -44,7 +44,6 @@ public class GUIFunctionality_validate {
 	private final Table<String, String, String> pairwise;
 
 	// number of times a run command can be executed
-	final int MAX_RUN = 1;
 	final int batch_size = ConfigurationManager.getMultithreadingBatchSize();
 
 	public GUIFunctionality_validate(final Instance_GUI_pattern instancePattern, final GUI gui)
@@ -166,9 +165,10 @@ public class GUIFunctionality_validate {
 
 		final List<GUITestCaseResult> out = new ArrayList<>();
 
-		SpecificSemantics working_sem_bis = new SpecificSemantics(this.working_sem.getSignatures(),
-				this.working_sem.getFacts(), this.working_sem.getPredicates(),
-				this.working_sem.getFunctions(), this.working_sem.getOpenStatements());
+		final SpecificSemantics working_sem_bis = new SpecificSemantics(
+				this.working_sem.getSignatures(), this.working_sem.getFacts(),
+				this.working_sem.getPredicates(), this.working_sem.getFunctions(),
+				this.working_sem.getOpenStatements());
 
 		for (final String run : this.working_sem.getRun_commands()) {
 			working_sem_bis.addRun_command(run);
@@ -176,120 +176,88 @@ public class GUIFunctionality_validate {
 		final Instance_GUI_pattern work_instance = this.instancePattern.clone();
 		work_instance.setSpecificSemantics(working_sem_bis);
 
-		for (int cont = 0; cont < this.MAX_RUN; cont++) {
-			List<GUITestCase> testcases = null;
-			if (minimal) {
-				final List<String> runs = working_sem_bis.getRun_commands();
-				testcases = new ArrayList<>();
-				for (final String run : runs) {
-					working_sem_bis.clearRunCommands();
-					working_sem_bis.addRun_command(run);
-					final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(
-							work_instance);
-					testcases.addAll(generator.generateMinimalTestCases(ConfigurationManager
-							.getTestcaseLength()));
+		List<GUITestCase> testcases = null;
+		if (minimal) {
+			testcases = AlloyTestCaseGenerator.generateTestCasesMinimal(work_instance,
+					ConfigurationManager.getTestcaseLength());
+		} else {
+			testcases = AlloyTestCaseGenerator.generateTestCases(work_instance);
+		}
+
+		final List<GUITestCase> testcases_filtered = new ArrayList<>();
+		final List<GUITestCaseResult> results = new ArrayList<>();
+
+		// we dont need the alloy result
+		final List<GUITestCase> tests = new ArrayList<>();
+		for (final GUITestCase tc : testcases) {
+			if (tc != null) {
+
+				tests.add(tc);
+			}
+
+		}
+		testcases = tests;
+
+		final List<GUITestCase> already = new ArrayList<>();
+		// we filter out the already run test cases
+		for (final GUITestCase tc : testcases) {
+			final GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
+			if (res != null) {
+				already.add(tc);
+			} else {
+				testcases_filtered.add(tc);
+			}
+		}
+		if (already.size() > 0) {
+			System.out.println("RE-EXECUTING ALREADY RUN TEST CASES:");
+			for (final GUITestCase tc : already) {
+				final Instance_GUI_pattern work_instance2 = this.instancePattern.clone();
+				final Alloy_Model working_sem_tris = AlloyUtil.getTCaseModelOpposite(
+						working_sem_bis, tc.getActions());
+				work_instance2
+						.setSpecificSemantics(SpecificSemantics.instantiate(working_sem_tris));
+
+				List<GUITestCase> testcases2 = null;
+				if (minimal) {
+					testcases2 = AlloyTestCaseGenerator.generateTestCasesMinimal(work_instance2,
+							ConfigurationManager.getTestcaseLength());
+				} else {
+					testcases2 = AlloyTestCaseGenerator.generateTestCases(work_instance2);
 				}
+
+				for (final GUITestCase tcc : testcases2) {
+					if (tcc != null) {
+
+						testcases_filtered.add(tcc);
+					}
+
+				}
+			}
+		}
+		final List<GUITestCaseResult> r = this.runTestCases(testcases_filtered);
+		results.addAll(r);
+		out.addAll(r);
+
+		for (final GUITestCaseResult res : results) {
+			if (res.getActions_executed().size() < res.getTc().getActions().size()) {
+				// if the testcase is not run completely
+				// we don't need the result
+				final GUITestCase tc = new GUITestCase(res.getActions_executed(), res.getTc()
+						.getSemanticProperty());
+				final GUITestCaseResult new_res = new GUITestCaseResult(tc,
+						res.getActions_executed(), res.getResults(),
+						res.getActions_actually_executed());
+				// working_sem_bis = SpecificSemantics.instantiate(AlloyUtil
+				// .getTCaseModelOpposite(working_sem_bis,
+				// res.getTc().getActions()));
+				this.completely_executed_tcs.add(new_res);
 
 			} else {
-				final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(work_instance);
-				testcases = generator.generateTestCases();
+				this.completely_executed_tcs.add(res);
 			}
 
-			final List<GUITestCase> testcases_filtered = new ArrayList<>();
-			final List<GUITestCaseResult> results = new ArrayList<>();
-
-			// we dont need the alloy result
-			final List<GUITestCase> tests = new ArrayList<>();
-			for (final GUITestCase tc : testcases) {
-				if (tc != null) {
-					final GUITestCase tc2 = new GUITestCase(null, tc.getActions(),
-							tc.getRunCommand());
-					tests.add(tc2);
-				}
-
-			}
-			testcases = tests;
-
-			final List<GUITestCase> already = new ArrayList<>();
-			// we filter out the already run test cases
-			for (final GUITestCase tc : testcases) {
-				final GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
-				if (res != null) {
-					already.add(tc);
-				} else {
-					testcases_filtered.add(tc);
-				}
-			}
-			if (already.size() > 0) {
-				System.out.println("RE-EXECUTING ALREADY RUN TEST CASES:");
-				for (final GUITestCase tc : already) {
-					final Instance_GUI_pattern work_instance2 = this.instancePattern.clone();
-					final Alloy_Model working_sem_tris = AlloyUtil.getTCaseModelOpposite(
-							working_sem_bis, tc.getActions());
-
-					working_sem_tris.clearRunCommands();
-					working_sem_tris.addRun_command(tc.getRunCommand());
-					final AlloyTestCaseGenerator generator = new AlloyTestCaseGenerator(
-							work_instance2);
-					work_instance2.setSpecificSemantics(SpecificSemantics
-							.instantiate(working_sem_tris));
-					List<GUITestCase> testcases2 = null;
-					if (minimal) {
-						testcases2 = generator.generateMinimalTestCases(ConfigurationManager
-								.getTestcaseLength());
-
-					} else {
-						testcases2 = generator.generateTestCases();
-					}
-
-					for (final GUITestCase tcc : testcases2) {
-						if (tc != null) {
-							final GUITestCase tc2 = new GUITestCase(null, tcc.getActions(),
-									tcc.getRunCommand());
-							testcases_filtered.add(tc2);
-						}
-
-					}
-				}
-			}
-			final List<GUITestCaseResult> r = this.runTestCases(testcases_filtered);
-			results.addAll(r);
-			out.addAll(r);
-			final List<GUITestCaseResult> to_rerun = new ArrayList<>();
-
-			for (final GUITestCaseResult res : results) {
-				if (res.getActions_executed().size() < res.getTc().getActions().size()) {
-					// if the testcase is not run completely
-					to_rerun.add(res);
-					// we don't need the result
-					final GUITestCase tc = new GUITestCase(null, res.getActions_executed(), res
-							.getTc().getRunCommand());
-					final GUITestCaseResult new_res = new GUITestCaseResult(tc,
-							res.getActions_executed(), res.getResults(),
-							res.getActions_actually_executed());
-					// working_sem_bis = SpecificSemantics.instantiate(AlloyUtil
-					// .getTCaseModelOpposite(working_sem_bis,
-					// res.getTc().getActions()));
-					this.completely_executed_tcs.add(new_res);
-
-				} else {
-					this.completely_executed_tcs.add(res);
-				}
-
-			}
-			if (to_rerun.size() == 0) {
-				break;
-			}
-			System.out.println(to_rerun.size() + " TESTCASES WERE NOT RUN COMPLETELY.");
-
-			working_sem_bis = new SpecificSemantics(working_sem_bis.getSignatures(),
-					working_sem_bis.getFacts(), working_sem_bis.getPredicates(),
-					working_sem_bis.getFunctions(), working_sem_bis.getOpenStatements());
-			for (final GUITestCaseResult run : to_rerun) {
-				working_sem_bis.addRun_command(run.getTc().getRunCommand());
-			}
-			work_instance.setSpecificSemantics(working_sem_bis);
 		}
+
 		return out;
 	}
 

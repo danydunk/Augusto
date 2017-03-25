@@ -26,8 +26,8 @@ public class GUITestCaseWriter {
 		final DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 		final Document doc = docBuilder.newDocument();
 		final Element tc_tag = doc.createElement("GUITestCase");
-		final Element run = doc.createElement("run_command");
-		run.setTextContent(tc.getRunCommand());
+		final Element run = doc.createElement("sem_prop");
+		run.setTextContent(tc.getSemanticProperty());
 		tc_tag.appendChild(run);
 		doc.appendChild(tc_tag);
 

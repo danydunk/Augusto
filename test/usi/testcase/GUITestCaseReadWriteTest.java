@@ -42,11 +42,9 @@ public class GUITestCaseReadWriteTest {
 		acts.add(click);
 		acts.add(fill);
 		acts.add(select);
-		final GUITestCase tc = new GUITestCase(null, acts, "test");
+		final GUITestCase tc = new GUITestCase(acts, "test");
 		doc = GUITestCaseWriter.writeGUITestCase(tc);
 		final GUITestCase tc2 = GUITestCaseParser.parse(doc);
-		assertEquals(tc.getRunCommand(), tc2.getRunCommand());
 		assertEquals(tc.getActions().size(), tc2.getActions().size());
 	}
-
 }

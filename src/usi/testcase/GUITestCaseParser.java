@@ -37,7 +37,7 @@ public class GUITestCaseParser {
 
 			final Node child = childs.item(ch);
 			if (child.getNodeType() == Node.ELEMENT_NODE) {
-				if ("run_command".equals(child.getNodeName())) {
+				if ("sem_prop".equals(child.getNodeName())) {
 					run_command = child.getTextContent();
 				} else if ("action".equals(child.getNodeName())) {
 					try {
@@ -51,7 +51,7 @@ public class GUITestCaseParser {
 			}
 		}
 
-		final GUITestCase tc = new GUITestCase(null, actions, run_command);
+		final GUITestCase tc = new GUITestCase(actions, run_command);
 		return tc;
 	}
 
