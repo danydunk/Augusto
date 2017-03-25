@@ -226,7 +226,7 @@ public class AlloyUtil {
 		cmds.add("-Xmx2g");
 		cmds.add("-Xss512m");
 		cmds.add("-cp");
-		cmds.add(PathsManager.getBINSPath() + ";" + System.getProperty("java.class.path"));
+		cmds.add(System.getProperty("java.class.path"));
 		cmds.add("src.usi.semantic.alloy.AlloyRunner");
 		cmds.add(f.getAbsolutePath());
 		cmds.add("1");
@@ -282,7 +282,7 @@ public class AlloyUtil {
 		cmds.add("-Xmx2g");
 		cmds.add("-Xss512m");
 		cmds.add("-cp");
-		cmds.add(PathsManager.getBINSPath() + ";" + System.getProperty("java.class.path"));
+		cmds.add(System.getProperty("java.class.path"));
 		cmds.add("src.usi.semantic.alloy.AlloyRunner");
 		cmds.add(path);
 		cmds.add(String.valueOf(type));
@@ -296,7 +296,6 @@ public class AlloyUtil {
 		}
 
 		final ProcessBuilder pb = new ProcessBuilder(cmds);
-		pb.directory(new File(PathsManager.getProjectRoot()));
 		Process process = null;
 		try {
 			process = pb.start();
