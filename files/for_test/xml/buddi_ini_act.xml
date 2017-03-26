@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <GUITestCase>
-    <run_command/>
+    <sem_prop/>
     <action>
         <type>select</type>
         <widget>sw1</widget>
