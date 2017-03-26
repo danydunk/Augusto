@@ -41,6 +41,9 @@ public class OracleTest extends OracleTestHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
+		if (args.length == 1) {
+			PathsManager.setProjectRoot(args[0].toString());
+		}
 		// we load the GUI structure
 		final Document doc = XMLUtil.read(PathsManager.getProjectRoot()
 				+ "/files/for_test/xml/upm.xml");

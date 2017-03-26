@@ -36,6 +36,9 @@ public class Refinement_upmfull_crud extends Refinement_upmfull_crudHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
+		if (args.length == 1) {
+			PathsManager.setProjectRoot(args[0].toString());
+		}
 		ConfigurationManager.load(PathsManager.getProjectRoot()
 				+ "/files/for_test/config/upm.properties");
 		ExperimentManager.init();

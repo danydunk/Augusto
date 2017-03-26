@@ -28,6 +28,9 @@ public class Initial_actions_test extends Initial_actions_testHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
+		if (args.length == 1) {
+			PathsManager.setProjectRoot(args[0].toString());
+		}
 		ApplicationHelper application = null;
 
 		ConfigurationManager.load(PathsManager.getProjectRoot()

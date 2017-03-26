@@ -24,6 +24,9 @@ public class ApplicationHelperTest extends ApplicationHelperTestHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
+		if (args.length == 1) {
+			PathsManager.setProjectRoot(args[0].toString());
+		}
 		ConfigurationManager.load(PathsManager.getProjectRoot()
 				+ "\\files\\for_test\\config\\upm_notempty.properties");
 		ExperimentManager.init();

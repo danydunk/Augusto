@@ -40,6 +40,9 @@ public class Save_window_xml extends Save_window_xmlHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
+		if (args.length == 1) {
+			PathsManager.setProjectRoot(args[0].toString());
+		}
 		final String out_file = PathsManager.getProjectRoot() + File.separator + "out.xml";
 		ApplicationHelper application = null;
 

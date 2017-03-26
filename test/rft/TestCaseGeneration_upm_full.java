@@ -34,6 +34,9 @@ public class TestCaseGeneration_upm_full extends TestCaseGeneration_upm_fullHelp
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
+		if (args.length == 1) {
+			PathsManager.setProjectRoot(args[0].toString());
+		}
 		ConfigurationManager.load(PathsManager.getProjectRoot()
 				+ "/files/for_test/config/upm_tc.properties");
 		ExperimentManager.init();

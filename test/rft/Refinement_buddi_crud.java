@@ -36,6 +36,9 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
+		if (args.length == 1) {
+			PathsManager.setProjectRoot(args[0].toString());
+		}
 		try {
 			ConfigurationManager.load(PathsManager.getProjectRoot()
 					+ "/files/for_test/config/buddi.properties");

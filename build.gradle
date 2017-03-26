@@ -152,7 +152,7 @@ commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\onlineshoppingsut\\bin 
 }
 task testall(type:Exec) {
 
-commandLine 'cmd', '/c', "java -ea -Xmx8g -Xss512m -cp  "+projectDir+"\\build\\classes\\main;\"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback test.rft.runAll "+projectDir+" 2>&1"
+commandLine 'cmd', '/c', "java -ea -Xmx8g -Xss512m -cp  \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\*;"+projectDir+"\\build\\classes\\main com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback test.rft.runAll "+projectDir+" 2>&1"
 }
 testall.dependsOn 'build'
 testall.dependsOn 'deployBuddi'
@@ -162,7 +162,7 @@ testall.dependsOn 'deployOnlineShopping'
 
 task runtest(type:Exec) {
 
-commandLine 'cmd', '/c', "java -ea -Xmx8g -Xss512m -cp "+projectDir+"\\build\\classes\\main;\"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback test.rft.$test "+projectDir+" 2>&1"
+commandLine 'cmd', '/c', "java -ea -Xmx8g -Xss512m -cp \"C:\\Program Files\\IBM\\SDP\\FunctionalTester\\bin\\rational_ft.jar\";"+projectDir+"\\lib\\* com.rational.test.ft.rational_ft -datastore "+projectDir+"\\build\\classes\\main -playback test.rft.$test "+projectDir+" 2>&1"
 }
 runtest.dependsOn 'build'
 runtest.dependsOn 'deployBuddi'

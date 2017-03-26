@@ -3,6 +3,7 @@ package test.rft;
 import resources.test.rft.runAllHelper;
 import src.usi.application.ApplicationHelper;
 import src.usi.configuration.ExperimentManager;
+import src.usi.configuration.PathsManager;
 
 import com.rational.test.ft.UserStoppedScriptError;
 import com.rational.test.ft.script.RationalTestScriptError;
@@ -21,11 +22,15 @@ public class runAll extends runAllHelper {
 	 *
 	 * @since 2016/11/18
 	 * @author usi
+	 * @throws Exception
 	 */
-	public void testMain(final Object[] args) {
+	public void testMain(final Object[] args) throws Exception {
 
 		System.out.println("Max Memory: " + Runtime.getRuntime().maxMemory() / (1024 * 1024)
 				+ " mb.");
+		if (args.length == 1) {
+			PathsManager.setProjectRoot(args[0].toString());
+		}
 		boolean error = false;
 		try {
 			System.out.println("RACHOTA REFINEMENT TEST");

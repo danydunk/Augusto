@@ -39,6 +39,9 @@ public class Emptyfill_test extends Emptyfill_testHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
+		if (args.length == 1) {
+			PathsManager.setProjectRoot(args[0].toString());
+		}
 		ConfigurationManager.load(PathsManager.getProjectRoot()
 				+ "/files/for_test/config/upm_notempty.properties");
 		ExperimentManager.init();
@@ -96,8 +99,8 @@ public class Emptyfill_test extends Emptyfill_testHelper {
 
 		r.generateSpecificSemantics();
 		r.getSemantics()
-				.addRun_command(
-						"run {System and (one t1,t2: Time| t2 in T/nexts[t1] and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none) and Track.op.t1.filled = Input_widget_iw17 and Track.op.t2.filled = Input_widget_iw17)}for 5 but 5 Time,4 Operation, 10 Value");
+		.addRun_command(
+				"run {System and (one t1,t2: Time| t2 in T/nexts[t1] and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none) and Track.op.t1.filled = Input_widget_iw17 and Track.op.t2.filled = Input_widget_iw17)}for 5 but 5 Time,4 Operation, 10 Value");
 
 		final List<GUITestCase> tests = AlloyTestCaseGenerator.generateTestCases(r);
 		final TestCaseRunner runner = new TestCaseRunner(gui);

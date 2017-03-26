@@ -35,6 +35,9 @@ public class Refinement_rachota_test extends Refinement_rachota_testHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
+		if (args.length == 1) {
+			PathsManager.setProjectRoot(args[0].toString());
+		}
 		ConfigurationManager.load(PathsManager.getProjectRoot()
 				+ "/files/for_test/config/rachota.properties");
 		ExperimentManager.init();
