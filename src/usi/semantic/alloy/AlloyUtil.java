@@ -261,8 +261,8 @@ public class AlloyUtil {
 
 			}
 			out = out.trim();
-			if (out.startsWith("sat: ")) {
-				return out.replace("sat: ", "").trim();
+			if (out.startsWith("sat:")) {
+				return out.replace("sat:", "").trim();
 			}
 			if (out.equals("unsat")) {
 				return null;
@@ -273,10 +273,11 @@ public class AlloyUtil {
 
 	static public GUITestCase getTestcase(final Instance_GUI_pattern model,
 			final int command_index, final int type, final int scope, final int t1, final int t2)
-			throws Exception {
+					throws Exception {
 
 		final String path = XMLUtil.saveTMP(Instance_GUI_patternWriter
 				.writeInstanceGUIPattern(model));
+
 		final List<String> cmds = new ArrayList<>();
 		cmds.add("java");
 		cmds.add("-Xmx2g");
@@ -799,6 +800,7 @@ public class AlloyUtil {
 			return Cardinality.SET;
 		}
 		// default null
+		// /System.out.println(sig.label);
 		return null;
 
 	}
@@ -1128,7 +1130,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-			throws Exception {
+					throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1521,7 +1523,7 @@ public class AlloyUtil {
 
 		int cont = 0;
 		for (final Signature s : in.getConcrete_windows()) {
-			if (s.getCardinality().getMax() > 1) {
+			if (s.getCardinality() == null || s.getCardinality().getMax() > 1) {
 				return -1;
 			}
 			cont++;
@@ -1538,7 +1540,9 @@ public class AlloyUtil {
 
 		int cont = 0;
 		for (final Signature s : in.getConcrete_action_w()) {
-			if (s.getCardinality().getMax() > 1) {
+
+			if (s.getCardinality() == null || s.getCardinality().getMax() > 1) {
+
 				return -1;
 			}
 			cont++;
@@ -1550,7 +1554,7 @@ public class AlloyUtil {
 
 		int cont = 0;
 		for (final Signature s : in.getConcrete_input_w()) {
-			if (s.getCardinality().getMax() > 1) {
+			if (s.getCardinality() == null || s.getCardinality().getMax() > 1) {
 				return -1;
 			}
 			cont++;
@@ -1562,7 +1566,7 @@ public class AlloyUtil {
 
 		int cont = 0;
 		for (final Signature s : in.getConcrete_selectable_w()) {
-			if (s.getCardinality().getMax() > 1) {
+			if (s.getCardinality() == null || s.getCardinality().getMax() > 1) {
 				return -1;
 			}
 			cont++;
@@ -1614,7 +1618,7 @@ public class AlloyUtil {
 	 */
 	static public SpecificSemantics getTCaseModel(final SpecificSemantics mod,
 			final List<GUIAction> acts, final Window reached, final Instance_GUI_pattern in)
-			throws Exception {
+					throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1849,17 +1853,17 @@ public class AlloyUtil {
 					metadata += iw.getDescriptor() != null && metadata.length() == 0 ? iw
 							.getDescriptor() : "";
 
-							if (dm.getInvalidData(metadata).contains(s)) {
-								assert (invalid);
-								fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
-										+ iw.getId() + ".invalid";
+					if (dm.getInvalidData(metadata).contains(s)) {
+						assert (invalid);
+						fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
+								+ iw.getId() + ".invalid";
 
-							} else {
-								if (invalid) {
-									fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
-											+ iw.getId() + ".invalid)";
-								}
-							}
+					} else {
+						if (invalid) {
+							fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
+									+ iw.getId() + ".invalid)";
+						}
+					}
 				}
 			} else {
 				final List<String> fills = values_used.get(s);
