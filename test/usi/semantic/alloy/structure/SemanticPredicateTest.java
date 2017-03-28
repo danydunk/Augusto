@@ -43,9 +43,9 @@ public class SemanticPredicateTest {
 			final String[] lines = s.split(separator);
 			assertEquals(4, lines.length);
 			assertTrue("pred predd [v: sig] {".equals(lines[0]));
-			assertTrue("	(aw in Ok and Current_window.is_in.t  in Form and (#aw.goes = 1 and aw.goes in Form)) => filled_required_in_w_test [Current_window.is_in.t, t]"
+			assertTrue("	(aw in Ok and Current_window.is_in.(T/prev[t])  in Form and (#aw.goes = 1 and aw.goes in Form)) => filled_required_in_w_test [Current_window.is_in.(T/prev[t]), (T/prev[t])]"
 					.equals(lines[1]));
-			assertTrue("	(aw in Ok and Current_window.is_in.t  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0) => (filled_required_test [t] and unique_test [t])"
+			assertTrue("	(aw in Ok and Current_window.is_in.(T/prev[t])  in Form and (not (#aw.goes = 1 and aw.goes in Form)) and #Confirm = 0) => (filled_required_test [T/prev[t]] and unique_test [T/prev[t]])"
 					.equals(lines[2]));
 			assertTrue("}".equals(lines[3]));
 

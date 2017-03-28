@@ -87,13 +87,15 @@ public class AlloyTestCaseGenerator {
 			loop: while (true) {
 				if (!ts[0].isAlive()) {
 					if (!ts[0].exception && ts[0].tc != null) {
-						System.out.println("ID" + x + ": FOUND SOLUTION");
+						System.out.println("ID" + x + ": FOUND SOLUTION SIZE "
+								+ ts[0].tc.getActions().size());
 						out.add(ts[0].tc);
 						break loop;
 					} else {
 						if (!ts[1].isAlive()) {
 							if (!ts[1].exception && ts[1].tc != null) {
-								System.out.println("ID" + x + ": FOUND SOLUTION");
+								System.out.println("ID" + x + ": FOUND SOLUTION SIZE "
+										+ ts[1].tc.getActions().size());
 								out.add(ts[1].tc);
 								break loop;
 							}
@@ -106,7 +108,8 @@ public class AlloyTestCaseGenerator {
 				} else {
 					if (!ts[1].isAlive()) {
 						if (!ts[1].exception && ts[1].tc != null) {
-							System.out.println("ID" + x + ": FOUND SOLUTION");
+							System.out.println("ID" + x + ": FOUND SOLUTION SIZE "
+									+ ts[1].tc.getActions().size());
 							out.add(ts[1].tc);
 							break loop;
 						}
@@ -152,10 +155,10 @@ class RunCommandThread extends Thread {
 					.getSemantics().getRun_commands().get(0).split(" for ")[1].contains("Time"))
 					&& (!this.inst.getSemantics().getRun_commands().get(0).contains("}for ") || !this.inst
 							.getSemantics().getRun_commands().get(0).split("}for ")[1]
-									.contains("Time"))
-					&& (!this.inst.getSemantics().getRun_commands().get(0).contains(")for ") || !this.inst
-							.getSemantics().getRun_commands().get(0).split(")for ")[1]
-							.contains("Time"))) {
+							.contains("Time"))
+									&& (!this.inst.getSemantics().getRun_commands().get(0).contains(")for ") || !this.inst
+											.getSemantics().getRun_commands().get(0).split(")for ")[1]
+													.contains("Time"))) {
 				time = this.time;
 			}
 			this.tc = AlloyUtil.getTestcase(this.inst, 0, 0,

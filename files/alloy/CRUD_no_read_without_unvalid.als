@@ -58,6 +58,7 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] {
 pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Ok and Current_crud_op.operation.t in CREATE) => filled_required_test [t] and unique_test [t] 
 	(aw in Ok and Current_crud_op.operation.t in UPDATE) => filled_required_test [t] and unique_for_update_test [t]
+	(aw in Delete_trigger) => 2=(1+1)
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
 	Current_window.is_in.t' = aw.goes
