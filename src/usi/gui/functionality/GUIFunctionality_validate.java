@@ -2,6 +2,9 @@ package src.usi.gui.functionality;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import src.usi.configuration.ConfigurationManager;
 import src.usi.gui.functionality.instance.Instance_GUI_pattern;
@@ -12,10 +15,6 @@ import src.usi.gui.structure.Option_input_widget;
 import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Window;
 import src.usi.semantic.FunctionalitySemantics;
-import src.usi.semantic.SpecificSemantics;
-import src.usi.semantic.alloy.AlloyUtil;
-import src.usi.semantic.alloy.Alloy_Model;
-import src.usi.semantic.alloy.structure.Fact;
 import src.usi.testcase.AlloyTestCaseGenerator;
 import src.usi.testcase.GUITestCaseResult;
 import src.usi.testcase.TestCaseRunner;
@@ -36,9 +35,8 @@ public class GUIFunctionality_validate {
 	private final List<String> aw_to_click;
 	private final List<String> iw_to_fill;
 	private final List<String> sw_to_select;
-	private final List<GUITestCaseResult> completely_executed_tcs;
-	private SpecificSemantics working_sem;
-
+	private final Vector<GUITestCaseResult> completely_executed_tcs;
+	private final Vector<GUITestCaseResult> out;
 	protected List<String> semantic_cases;
 	private List<String> semantic_pairwaise_cases;
 	private final Table<String, String, String> pairwise;
@@ -49,7 +47,8 @@ public class GUIFunctionality_validate {
 	public GUIFunctionality_validate(final Instance_GUI_pattern instancePattern, final GUI gui)
 			throws Exception {
 
-		this.completely_executed_tcs = new ArrayList<>();
+		this.out = new Vector<>();
+		this.completely_executed_tcs = new Vector<>();
 		this.instancePattern = instancePattern;
 		this.gui = gui;
 		this.windows_to_visit = new ArrayList<>();
@@ -145,228 +144,81 @@ public class GUIFunctionality_validate {
 		}
 	}
 
-	private List<GUITestCaseResult> runTestCases(final List<GUITestCase> testcases)
-			throws Exception {
-
-		final TestCaseRunner runner = new TestCaseRunner(this.gui);
-		final List<GUITestCaseResult> results = new ArrayList<>();
-		for (final GUITestCase tc : testcases) {
-			final GUITestCaseResult res = runner.runTestCase(tc);
-			// final GUITestCaseResult res2 =
-			// this.instancePattern.updateTCResult(res);
-			// if (res2 != null) {
-			// res = res2;
-			// }
-			results.add(res);
-		}
-		return results;
-	}
-
-	private List<GUITestCaseResult> execute(final boolean minimal) throws Exception {
-
-		final List<GUITestCaseResult> out = new ArrayList<>();
-
-		final SpecificSemantics working_sem_bis = new SpecificSemantics(
-				this.working_sem.getSignatures(), this.working_sem.getFacts(),
-				this.working_sem.getPredicates(), this.working_sem.getFunctions(),
-				this.working_sem.getOpenStatements());
-
-		for (final String run : this.working_sem.getRun_commands()) {
-			working_sem_bis.addRun_command(run);
-		}
-		final Instance_GUI_pattern work_instance = this.instancePattern.clone();
-		work_instance.setSpecificSemantics(working_sem_bis);
-
-		List<GUITestCase> testcases = null;
-		if (minimal) {
-			testcases = AlloyTestCaseGenerator.generateTestCasesMinimal(work_instance,
-					ConfigurationManager.getTestcaseLength());
-		} else {
-			testcases = AlloyTestCaseGenerator.generateTestCases(work_instance);
-		}
-
-		final List<GUITestCase> testcases_filtered = new ArrayList<>();
-		final List<GUITestCaseResult> results = new ArrayList<>();
-
-		// we dont need the alloy result
-		final List<GUITestCase> tests = new ArrayList<>();
-		for (final GUITestCase tc : testcases) {
-			if (tc != null) {
-
-				tests.add(tc);
-			}
-
-		}
-		testcases = tests;
-
-		final List<GUITestCase> already = new ArrayList<>();
-		// we filter out the already run test cases
-		for (final GUITestCase tc : testcases) {
-			final GUITestCaseResult res = this.wasTestCasePreviouslyExecuted(tc);
-			if (res != null) {
-				already.add(tc);
-			} else {
-				testcases_filtered.add(tc);
-			}
-		}
-		if (already.size() > 0) {
-			System.out.println("RE-EXECUTING ALREADY RUN TEST CASES:");
-			for (final GUITestCase tc : already) {
-				final Instance_GUI_pattern work_instance2 = this.instancePattern.clone();
-				final Alloy_Model working_sem_tris = AlloyUtil.getTCaseModelOpposite(
-						working_sem_bis, tc.getActions());
-				work_instance2
-				.setSpecificSemantics(SpecificSemantics.instantiate(working_sem_tris));
-
-				List<GUITestCase> testcases2 = null;
-				if (minimal) {
-					testcases2 = AlloyTestCaseGenerator.generateTestCasesMinimal(work_instance2,
-							ConfigurationManager.getTestcaseLength());
-				} else {
-					testcases2 = AlloyTestCaseGenerator.generateTestCases(work_instance2);
-				}
-
-				for (final GUITestCase tcc : testcases2) {
-					if (tcc != null) {
-
-						testcases_filtered.add(tcc);
-					}
-
-				}
-			}
-		}
-		final List<GUITestCaseResult> r = this.runTestCases(testcases_filtered);
-		results.addAll(r);
-		out.addAll(r);
-
-		for (final GUITestCaseResult res : results) {
-			if (res.getActions_executed().size() < res.getTc().getActions().size()) {
-				// if the testcase is not run completely
-				// we don't need the result
-				final GUITestCase tc = new GUITestCase(res.getActions_executed(), res.getTc()
-						.getSemanticProperty());
-				final GUITestCaseResult new_res = new GUITestCaseResult(tc,
-						res.getActions_executed(), res.getResults(),
-						res.getActions_actually_executed());
-				// working_sem_bis = SpecificSemantics.instantiate(AlloyUtil
-				// .getTCaseModelOpposite(working_sem_bis,
-				// res.getTc().getActions()));
-				this.completely_executed_tcs.add(new_res);
-
-			} else {
-				this.completely_executed_tcs.add(res);
-			}
-
-		}
-
-		return out;
-	}
-
 	public List<GUITestCaseResult> validate() throws Exception {
 
 		final long beginTime = System.currentTimeMillis();
-		// we add a fact to filter redundant actions
-		final List<Fact> facts = this.instancePattern.getSemantics().getFacts();
-		// final Fact new_fact = new Fact(
-		// "filter_redundant_actions",
-		// "no t: Time | #Track.op.t = 1 and Track.op.t in Select and Track.op.(T/prev[t]) in Select and Track.op.(T/prev[t]).wid = Track.op.t.wid"
-		// // + System.lineSeparator()
-		// // +
-		// //
-		// "no t: Time | #Track.op.t = 1 and Track.op.t in Fill and Track.op.(T/prev[t]) in Fill and Track.op.(T/prev[t]).filled = Track.op.t.filled"
-		// + System.lineSeparator()
-		// +
-		// "no t: Time | #Track.op.t = 1 and Track.op.t in Click and Track.op.(T/prev[t]) in Click and Track.op.t.clicked = Track.op.(T/prev[t]).clicked");
-		//
-		// facts.add(new_fact);
-		final SpecificSemantics sem = new SpecificSemantics(this.instancePattern.getSemantics()
-				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
-				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
-		this.instancePattern.setSpecificSemantics(sem);
 
-		final List<GUITestCaseResult> out = new ArrayList<>();
-
-		this.working_sem = new SpecificSemantics(this.instancePattern.getSemantics()
-				.getSignatures(), facts, this.instancePattern.getSemantics().getPredicates(),
-				this.instancePattern.getSemantics().getFunctions(), this.instancePattern
-				.getSemantics().getOpenStatements());
-
+		final GUITestCaseRunner runner = new GUITestCaseRunner();
+		runner.start();
 		System.out.println("COVERING SEMANTIC CASES.");
 
-		List<String> run_commands = this.semantic_cases;
-		for (int x = 0; x < run_commands.size(); x++) {
-			System.out.println((x + 1) + " " + run_commands.get(x));
+		for (int x = 0; x < this.semantic_cases.size(); x++) {
+			System.out.println((x + 1) + " " + this.semantic_cases.get(x));
 		}
 
-		System.out.println(run_commands.size() + " TESTCASES. RUNNING THEM IN BATCHES OF "
+		System.out.println(this.semantic_cases.size() + " TESTCASES. RUNNING THEM IN BATCHES OF "
 				+ this.batch_size + ".");
 
 		int batch_num = 0;
-		while (((batch_num * this.batch_size)) < run_commands.size()) {
+		while (((batch_num * this.batch_size)) < this.semantic_cases.size()) {
 			System.out.println("BATCH " + (batch_num + 1));
-			this.working_sem = new SpecificSemantics(this.working_sem.getSignatures(),
-					this.working_sem.getFacts(), this.working_sem.getPredicates(),
-					this.working_sem.getFunctions(), this.working_sem.getOpenStatements());
+			this.instancePattern.getSemantics().clearRunCommands();
 
-			for (int cont = 0; ((batch_num * this.batch_size) + cont) < run_commands.size()
+			for (int cont = 0; ((batch_num * this.batch_size) + cont) < this.semantic_cases.size()
 					&& cont < this.batch_size; cont++) {
-				final String run = run_commands.get(((batch_num * this.batch_size) + cont));
-				this.working_sem.addRun_command(run);
+				final String run = this.semantic_cases.get(((batch_num * this.batch_size) + cont));
+				this.instancePattern.getSemantics().addRun_command(run);
 			}
-			final List<GUITestCaseResult> results = this.execute(true);
-			for (final GUITestCaseResult r : results) {
-				this.working_sem = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(
-						this.working_sem, r.getActions_executed()));
+			final List<GUITestCase> tcs = AlloyTestCaseGenerator
+					.generateTestCases(this.instancePattern);
+			for (final GUITestCase tc : tcs) {
+				if (tc != null) {
+					runner.tcs.add(tc);
+				}
 			}
-
-			out.addAll(results);
 			batch_num++;
 		}
 
 		System.out.println("COVERING NEGATIVE CASES.");
 
-		run_commands = this.semantic_pairwaise_cases;
-		for (int x = 0; x < run_commands.size(); x++) {
-			System.out.println((x + 1) + " " + run_commands.get(x));
+		for (int x = 0; x < this.semantic_pairwaise_cases.size(); x++) {
+			System.out.println((x + 1) + " " + this.semantic_pairwaise_cases.get(x));
 		}
 
-		System.out.println(run_commands.size() + " TESTCASES. RUNNING THEM IN BATCHES OF "
-				+ this.batch_size + ".");
+		System.out.println(this.semantic_pairwaise_cases.size()
+				+ " TESTCASES. RUNNING THEM IN BATCHES OF " + this.batch_size + ".");
 
 		batch_num = 0;
-		while (((batch_num * this.batch_size)) < run_commands.size()) {
+		while (((batch_num * this.batch_size)) < this.semantic_pairwaise_cases.size()) {
 			System.out.println("BATCH " + (batch_num + 1));
-			this.working_sem = new SpecificSemantics(this.working_sem.getSignatures(),
-					this.working_sem.getFacts(), this.working_sem.getPredicates(),
-					this.working_sem.getFunctions(), this.working_sem.getOpenStatements());
 
-			for (int cont = 0; ((batch_num * this.batch_size) + cont) < run_commands.size()
-					&& cont < this.batch_size; cont++) {
-				final String run = run_commands.get(((batch_num * this.batch_size) + cont));
-				this.working_sem.addRun_command(run);
+			this.instancePattern.getSemantics().clearRunCommands();
+			for (int cont = 0; ((batch_num * this.batch_size) + cont) < this.semantic_pairwaise_cases
+					.size() && cont < this.batch_size; cont++) {
+				final String run = this.semantic_pairwaise_cases
+						.get(((batch_num * this.batch_size) + cont));
+				this.instancePattern.getSemantics().addRun_command(run);
 			}
-			final List<GUITestCaseResult> results = this.execute(true);
-			for (final GUITestCaseResult r : results) {
-				this.working_sem = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(
-						this.working_sem, r.getActions_executed()));
+			final List<GUITestCase> tcs = AlloyTestCaseGenerator
+					.generateTestCases(this.instancePattern);
+			for (final GUITestCase tc : tcs) {
+				if (tc != null) {
+					runner.tcs.add(tc);
+				}
 			}
-
-			out.addAll(results);
 			batch_num++;
 		}
 
 		if (ConfigurationManager.getPairwiseTestcase()) {
 			System.out.println("COVERING PAIRWISE.");
-
 			batch_num = 0;
 			System.out.println(this.pairwise.values().size()
 					+ " TESTCASES. RUNNING THEM IN BATCHES OF " + this.batch_size + ".");
 
 			while (true) {
-				this.filterPairwise(out);
+				this.filterPairwise(this.out);
 
-				run_commands = this.getNPairwiseTests(this.batch_size);
+				final List<String> run_commands = this.getNPairwiseTests(this.batch_size);
 				if (run_commands.size() == 0) {
 					break;
 				}
@@ -375,20 +227,19 @@ public class GUIFunctionality_validate {
 				}
 
 				System.out.println("BATCH " + (batch_num + 1));
-				this.working_sem = new SpecificSemantics(this.working_sem.getSignatures(),
-						this.working_sem.getFacts(), this.working_sem.getPredicates(),
-						this.working_sem.getFunctions(), this.working_sem.getOpenStatements());
 
+				this.instancePattern.getSemantics().clearRunCommands();
 				for (final String run : run_commands) {
-					this.working_sem.addRun_command(run);
+					this.instancePattern.getSemantics().addRun_command(run);
 				}
 
-				final List<GUITestCaseResult> results = this.execute(false);
-				for (final GUITestCaseResult r : results) {
-					this.working_sem = SpecificSemantics.instantiate(AlloyUtil
-							.getTCaseModelOpposite(this.working_sem, r.getActions_executed()));
+				final List<GUITestCase> tcs = AlloyTestCaseGenerator
+						.generateTestCases(this.instancePattern);
+				for (final GUITestCase tc : tcs) {
+					if (tc != null) {
+						runner.tcs.add(tc);
+					}
 				}
-				out.addAll(results);
 				batch_num++;
 
 			}
@@ -397,7 +248,8 @@ public class GUIFunctionality_validate {
 		System.out.println("COVERING REMAINING STRUCTURAL ELEMENTS.");
 		// ConfigurationManager.setTestcaseLength(old_tc_size);
 
-		run_commands = this.getAdditionalRunCommands(this.completely_executed_tcs);
+		final List<String> run_commands = this
+				.getAdditionalRunCommands(this.completely_executed_tcs);
 		for (int x = 0; x < run_commands.size(); x++) {
 			System.out.println((x + 1) + " " + run_commands.get(x));
 		}
@@ -407,28 +259,32 @@ public class GUIFunctionality_validate {
 		batch_num = 0;
 		while (((batch_num * this.batch_size)) < run_commands.size()) {
 			System.out.println("BATCH " + (batch_num + 1));
-			this.working_sem = new SpecificSemantics(this.working_sem.getSignatures(),
-					this.working_sem.getFacts(), this.working_sem.getPredicates(),
-					this.working_sem.getFunctions(), this.working_sem.getOpenStatements());
+
+			this.instancePattern.getSemantics().clearRunCommands();
 
 			for (int cont = 0; ((batch_num * this.batch_size) + cont) < run_commands.size()
 					&& cont < this.batch_size; cont++) {
 				final String run = run_commands.get(((batch_num * this.batch_size) + cont));
-				this.working_sem.addRun_command(run);
+				this.instancePattern.getSemantics().addRun_command(run);
 			}
-
-			final List<GUITestCaseResult> results = this.execute(false);
-			for (final GUITestCaseResult r : results) {
-				this.working_sem = SpecificSemantics.instantiate(AlloyUtil.getTCaseModelOpposite(
-						this.working_sem, r.getActions_executed()));
+			final List<GUITestCase> tcs = AlloyTestCaseGenerator
+					.generateTestCases(this.instancePattern);
+			for (final GUITestCase tc : tcs) {
+				if (tc != null) {
+					runner.tcs.add(tc);
+				}
 			}
-
-			out.addAll(results);
 			batch_num++;
 		}
+		runner.can_terminate = true;
+		runner.join();
+		if (runner.exception) {
+			throw new Exception("Error in runner");
+		}
+
 		final long tottime = (System.currentTimeMillis() - beginTime) / 1000;
 		System.out.println("VALIDATION ELAPSED TIME: " + tottime);
-		return out;
+		return this.out;
 	}
 
 	// function that returns additional run commands to cover uncovered
@@ -670,9 +526,12 @@ public class GUIFunctionality_validate {
 				edge2 = edge2.replace(" t]", " t2]");
 				edge2 = edge2.replace(", t,", ", t2,");
 
-				final String run = "run {System and {some t,t2: Time | t2 in T/nexts[t] and "
+				final String run1 = "run {System and {some t,t2: Time | t2 in T/nexts[t] and "
 						+ edge1 + " and " + edge2 + "}}";
-				this.semantic_pairwaise_cases.add(run);
+				final String run2 = "run {System and {some t,t2: Time | t in T/nexts[t2] and "
+						+ edge1 + " and " + edge2 + "}}";
+				this.semantic_pairwaise_cases.add(run1);
+				this.semantic_pairwaise_cases.add(run2);
 			}
 		}
 	}
@@ -741,5 +600,62 @@ public class GUIFunctionality_validate {
 			}
 		}
 		return out;
+	}
+
+	public class GUITestCaseRunner extends Thread {
+
+		public Queue<GUITestCase> tcs;
+		public boolean can_terminate;
+		public boolean exception;
+
+		public GUITestCaseRunner() {
+
+			this.tcs = new ConcurrentLinkedQueue<>();
+			this.can_terminate = false;
+			this.exception = false;
+		}
+
+		@Override
+		public void run() {
+
+			while (true) {
+				try {
+					System.out.println(this.tcs.size());
+					final GUITestCase obj = this.tcs.poll();
+					if (obj == null) {
+						if (this.can_terminate) {
+
+							// the queue is empty and the termination signal is
+							// arrived
+							break;
+						} else {
+							Thread.sleep(1000);
+							continue;
+						}
+					}
+					final TestCaseRunner runner = new TestCaseRunner(
+							GUIFunctionality_validate.this.gui);
+					final GUITestCaseResult res = runner.runTestCase(obj);
+
+					if (res.getActions_executed().size() < res.getTc().getActions().size()) {
+						// if the testcase is not run completely
+						final GUITestCase tc = new GUITestCase(res.getActions_executed(), res
+								.getTc().getSemanticProperty());
+						final GUITestCaseResult new_res = new GUITestCaseResult(tc,
+								res.getActions_executed(), res.getResults(),
+								res.getActions_actually_executed());
+						GUIFunctionality_validate.this.completely_executed_tcs.add(new_res);
+
+					} else {
+						GUIFunctionality_validate.this.completely_executed_tcs.add(res);
+					}
+
+					GUIFunctionality_validate.this.out.add(res);
+				} catch (final Exception e) {
+					e.printStackTrace();
+					this.exception = true;
+				}
+			}
+		}
 	}
 }

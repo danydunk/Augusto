@@ -37,15 +37,15 @@ public class TestCaseGeneration_upm_full extends TestCaseGeneration_upm_fullHelp
 		if (args.length == 1) {
 			PathsManager.setProjectRoot(args[0].toString());
 		}
-		ConfigurationManager.load(PathsManager.getProjectRoot() + "/aut.properties");
+		ConfigurationManager.load(PathsManager.getProjectRoot()
+				+ "/files/for_test/config/upm_tc.properties");
 		ExperimentManager.init();
 
 		// we load the GUI structure
 		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/upm.xml");
 		final GUI gui = GUIParser.parse(doc);
 
-		doc = XMLUtil.read(PathsManager.getProjectRoot()
-				+ "results_20170327_1018/SAVE_match_1/match.xml");
+		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/UPMmatch.xml");
 		final Instance_GUI_pattern match = Instance_GUI_patternParser.parse(doc);
 
 		if (match == null) {
