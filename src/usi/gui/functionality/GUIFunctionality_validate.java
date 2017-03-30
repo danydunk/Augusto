@@ -35,7 +35,7 @@ public class GUIFunctionality_validate {
 	private final List<String> aw_to_click;
 	private final List<String> iw_to_fill;
 	private final List<String> sw_to_select;
-	private final Vector<GUITestCaseResult> completely_executed_tcs;
+	private final List<GUITestCase> generated_tcs;
 	private final Vector<GUITestCaseResult> out;
 	protected List<String> semantic_cases;
 	private List<String> semantic_pairwaise_cases;
@@ -48,7 +48,7 @@ public class GUIFunctionality_validate {
 			throws Exception {
 
 		this.out = new Vector<>();
-		this.completely_executed_tcs = new Vector<>();
+		this.generated_tcs = new ArrayList<>();
 		this.instancePattern = instancePattern;
 		this.gui = gui;
 		this.windows_to_visit = new ArrayList<>();
@@ -91,7 +91,7 @@ public class GUIFunctionality_validate {
 				final String dest2 = edge2.split(" -> ")[1];
 				final String aw2 = edge2.split(" -> ")[0];
 
-				String run = "run {System and (some t1,t2: Time | #Track.op.(t1) = 1 and Track.op.(t1) in Click and #Track.op.(t2) = 1 and Track.op.(t2) in Click and ";
+				String run = "run {System and (some t1,t2: Time | t2 in T/nexts[t1] and #Track.op.(t1) = 1 and Track.op.(t1) in Click and #Track.op.(t2) = 1 and Track.op.(t2) in Click and ";
 				run += "Track.op.(t1).clicked = Action_widget_" + aw1
 						+ " and Track.op.(t2).clicked = Action_widget_" + aw2
 						+ " and Current_window.is_in.(t1) = Window_" + dest1
@@ -101,16 +101,14 @@ public class GUIFunctionality_validate {
 						+ ", T/prev[t2]])}";
 				this.pairwise.put(edge1, edge2, run);
 
-				// run =
-				// "run {System and (some t1,t2: Time | t1 in T/nexts[t2] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
-				// run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
-				// + " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
-				// + " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
-				// + " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
-				// + " and click_semantics[Action_widget_" + aw1
-				// + ", t1] and click_semantics[Action_widget_" + aw2 +
-				// ", t2])}";
-				// this.pairwise.put(edge2, edge1, run);
+				run = "run {System and (some t1,t2: Time | t1 in T/nexts[t2] and #Track.op.(T/next[t1]) = 1 and Track.op.(T/next[t1]) in Click and #Track.op.(T/next[t2]) = 1 and Track.op.(T/next[t2]) in Click and ";
+				run += "Track.op.(T/next[t1]).clicked = Action_widget_" + aw1
+						+ " and Track.op.(T/next[t2]).clicked = Action_widget_" + aw2
+						+ " and Current_window.is_in.(T/next[t1]) = Window_" + dest1
+						+ " and Current_window.is_in.(T/next[t2]) = Window_" + dest2
+						+ " and click_semantics[Action_widget_" + aw1
+						+ ", t1] and click_semantics[Action_widget_" + aw2 + ", t2])}";
+				this.pairwise.put(edge2, edge1, run);
 
 			}
 		}
@@ -173,6 +171,7 @@ public class GUIFunctionality_validate {
 					.generateTestCases(this.instancePattern);
 			for (final GUITestCase tc : tcs) {
 				if (tc != null) {
+					this.generated_tcs.add(tc);
 					runner.tcs.add(tc);
 				}
 			}
@@ -203,6 +202,7 @@ public class GUIFunctionality_validate {
 					.generateTestCases(this.instancePattern);
 			for (final GUITestCase tc : tcs) {
 				if (tc != null) {
+					this.generated_tcs.add(tc);
 					runner.tcs.add(tc);
 				}
 			}
@@ -216,7 +216,7 @@ public class GUIFunctionality_validate {
 					+ " TESTCASES. RUNNING THEM IN BATCHES OF " + this.batch_size + ".");
 
 			while (true) {
-				this.filterPairwise(this.out);
+				this.filterPairwise(this.generated_tcs);
 
 				final List<String> run_commands = this.getNPairwiseTests(this.batch_size);
 				if (run_commands.size() == 0) {
@@ -237,6 +237,7 @@ public class GUIFunctionality_validate {
 						.generateTestCases(this.instancePattern);
 				for (final GUITestCase tc : tcs) {
 					if (tc != null) {
+						this.generated_tcs.add(tc);
 						runner.tcs.add(tc);
 					}
 				}
@@ -248,8 +249,7 @@ public class GUIFunctionality_validate {
 		System.out.println("COVERING REMAINING STRUCTURAL ELEMENTS.");
 		// ConfigurationManager.setTestcaseLength(old_tc_size);
 
-		final List<String> run_commands = this
-				.getAdditionalRunCommands(this.completely_executed_tcs);
+		final List<String> run_commands = this.getAdditionalRunCommands(this.generated_tcs);
 		for (int x = 0; x < run_commands.size(); x++) {
 			System.out.println((x + 1) + " " + run_commands.get(x));
 		}
@@ -271,6 +271,7 @@ public class GUIFunctionality_validate {
 					.generateTestCases(this.instancePattern);
 			for (final GUITestCase tc : tcs) {
 				if (tc != null) {
+					this.generated_tcs.add(tc);
 					runner.tcs.add(tc);
 				}
 			}
@@ -289,10 +290,9 @@ public class GUIFunctionality_validate {
 
 	// function that returns additional run commands to cover uncovered
 	// structural elements
-	private List<String> getAdditionalRunCommands(final List<GUITestCaseResult> testcases) {
+	private List<String> getAdditionalRunCommands(final List<GUITestCase> testcases) {
 
-		for (final GUITestCaseResult tcr : testcases) {
-			final GUITestCase tc = tcr.getTc();
+		for (final GUITestCase tc : testcases) {
 			for (final GUIAction act : tc.getActions()) {
 				if (act.getWindow() != null
 						&& this.windows_to_visit.contains(act.getWindow().getId())) {
@@ -522,7 +522,12 @@ public class GUIFunctionality_validate {
 				final String edge1 = negative_commands.get(x);
 				String edge2 = positive_commands.get(y);
 				edge2 = edge2.replace("[t]", "[t2]");
+				edge2 = edge2.replace("(t)", "(t2)");
+				edge2 = edge2.replace(".t)", ".t2)");
+				edge2 = edge2.replace("(t.", "(t2.");
+				edge2 = edge2.replace(" t ", " t2 ");
 				edge2 = edge2.replace(".t ", ".t2 ");
+				edge2 = edge2.replace(".t.", ".t2.");
 				edge2 = edge2.replace(" t]", " t2]");
 				edge2 = edge2.replace(", t,", ", t2,");
 
@@ -536,22 +541,11 @@ public class GUIFunctionality_validate {
 		}
 	}
 
-	private GUITestCaseResult wasTestCasePreviouslyExecuted(final GUITestCase tc) {
+	private void filterPairwise(final List<GUITestCase> tcs) {
 
-		for (final GUITestCaseResult tc2 : this.completely_executed_tcs) {
-			if (tc.isSame(tc2.getTc())) {
-				return tc2;
-			}
-		}
-
-		return null;
-	}
-
-	private void filterPairwise(final List<GUITestCaseResult> ress) {
-
-		for (final GUITestCaseResult res : ress) {
+		for (final GUITestCase tc : tcs) {
 			final List<String> covered_edges = new ArrayList<>();
-			for (final GUIAction act : res.getActions_executed()) {
+			for (final GUIAction act : tc.getActions()) {
 				if (!(act instanceof Click)) {
 					continue;
 				}
@@ -570,7 +564,7 @@ public class GUIFunctionality_validate {
 				for (int y = x + 1; y < covered_edges.size(); y++) {
 					final String edge2 = covered_edges.get(y);
 					this.pairwise.remove(edge1, edge2);
-					this.pairwise.remove(edge2, edge1);
+					// this.pairwise.remove(edge2, edge1);
 				}
 			}
 		}
@@ -620,7 +614,6 @@ public class GUIFunctionality_validate {
 
 			while (true) {
 				try {
-					System.out.println(this.tcs.size());
 					final GUITestCase obj = this.tcs.poll();
 					if (obj == null) {
 						if (this.can_terminate) {
@@ -636,19 +629,6 @@ public class GUIFunctionality_validate {
 					final TestCaseRunner runner = new TestCaseRunner(
 							GUIFunctionality_validate.this.gui);
 					final GUITestCaseResult res = runner.runTestCase(obj);
-
-					if (res.getActions_executed().size() < res.getTc().getActions().size()) {
-						// if the testcase is not run completely
-						final GUITestCase tc = new GUITestCase(res.getActions_executed(), res
-								.getTc().getSemanticProperty());
-						final GUITestCaseResult new_res = new GUITestCaseResult(tc,
-								res.getActions_executed(), res.getResults(),
-								res.getActions_actually_executed());
-						GUIFunctionality_validate.this.completely_executed_tcs.add(new_res);
-
-					} else {
-						GUIFunctionality_validate.this.completely_executed_tcs.add(res);
-					}
 
 					GUIFunctionality_validate.this.out.add(res);
 				} catch (final Exception e) {
