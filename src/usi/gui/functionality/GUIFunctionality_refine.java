@@ -81,11 +81,12 @@ public class GUIFunctionality_refine {
 			this.discoverDynamicEdges();
 			this.discoverWindows();
 			// if we reached timeout we exit
-			if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
-					.getRefinementTimeout()) {
-				System.out.println("TIMEOUT IN STRUCTURAL REFINEMENT");
-				break;
-			}
+			// if ((System.currentTimeMillis() - this.beginTime) >=
+			// ConfigurationManager
+			// .getRefinementTimeout()) {
+			// System.out.println("TIMEOUT IN STRUCTURAL REFINEMENT");
+			// break;
+			// }
 			// if something has changed we iterate again
 		} while (!old_current_semantic_property.equals(this.current_semantic_property)
 				|| this.anyChanges(old_instancePattern));
@@ -177,11 +178,12 @@ public class GUIFunctionality_refine {
 					for (final Window target_window : target_w_matched) {
 
 						// if we reached timeout
-						if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
-								.getRefinementTimeout()) {
-							System.out.println("TIMEOUT IN DISCOVER EDGES");
-							break mainloop;
-						}
+						// if ((System.currentTimeMillis() - this.beginTime) >=
+						// ConfigurationManager
+						// .getRefinementTimeout()) {
+						// System.out.println("TIMEOUT IN DISCOVER EDGES");
+						// break mainloop;
+						// }
 
 						final String edge = aw.getId() + " - " + target_window.getId();
 						System.out.println("DISCOVER DYNAMIC EDGE: looking for edge " + edge
@@ -211,7 +213,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -395,8 +397,8 @@ public class GUIFunctionality_refine {
 						System.out.println("ADAPTING SEMANTIC PROPERTY");
 						// System.out.println(this.instancePattern.getSemantics());
 
-						final String new_prop = this.getAdaptedConstraint(this.instancePattern
-								.getSemantics());
+						final String new_prop = this.getAdaptedConstraint(
+								this.instancePattern.getSemantics(), false);
 						if (new_prop == null) {
 							this.instancePattern = old;
 							this.cleanInstance(aw);
@@ -520,11 +522,12 @@ public class GUIFunctionality_refine {
 				for (final Action_widget aw : matched_aws) {
 
 					// if we reached timeout
-					if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
-							.getRefinementTimeout()) {
-						System.out.println("TIMEOUT IN DISCOVER WINDOWS");
-						break mainloop;
-					}
+					// if ((System.currentTimeMillis() - this.beginTime) >=
+					// ConfigurationManager
+					// .getRefinementTimeout()) {
+					// System.out.println("TIMEOUT IN DISCOVER WINDOWS");
+					// break mainloop;
+					// }
 
 					System.out.println("DISCOVER DYNAMIC WINDOW: looking for "
 							+ to_discover.getId() + " from " + aw.getId() + ".");
@@ -538,7 +541,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -560,13 +563,15 @@ public class GUIFunctionality_refine {
 	 * so far Method used in the findWindow method because constraints in that
 	 * case cannot be extracted from the solutions
 	 */
-	private String getAdaptedConstraint(final SpecificSemantics in_sem) throws Exception {
+	private String getAdaptedConstraint(final SpecificSemantics in_sem, final boolean timeout)
+			throws Exception {
 
 		assert this.observed_tcs.size() > 0;
 		System.out.println("GET ADAPTED CONSTRAINT: start.");
 		while (true) {
 
-			if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
+			if (timeout
+					&& (System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
 					.getRefinementTimeout()) {
 				System.out.println("TIMEOUT IN GET ADAPTED CONSTRAINT");
 				break;
@@ -799,7 +804,6 @@ public class GUIFunctionality_refine {
 
 	private void semanticPropertyRefine() throws Exception {
 
-		boolean negative = true;
 		boolean oversemplified = false;
 		int size = -1;
 
@@ -838,15 +842,15 @@ public class GUIFunctionality_refine {
 			if (size == ConfigurationManager.getRefinementAlloyTimeScope()) {
 				// if we reached the end we try again to find a property (in
 				// case the one we found was overly simple)
-				if (negative) {
-					System.out.println("REACHED THE END OF THE FIRST LOOP.");
-					// runCmd = runCmd2;
-					size = -1;
-					negative = false;
+				// if (negative) {
+				System.out.println("REACHED THE END OF THE LOOP.");
+				// runCmd = runCmd2;
+				size = -1;
+				// negative = false;
 
-				} else {
-					break mainloop;
-				}
+				// } else {
+				// break mainloop;
+				// }
 			}
 
 			if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
@@ -895,14 +899,14 @@ public class GUIFunctionality_refine {
 
 				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
 						+ ")");
-				final String new_prop = this.getAdaptedConstraint(this.instancePattern
-						.getSemantics());
+				final String new_prop = this.getAdaptedConstraint(
+						this.instancePattern.getSemantics(), true);
 				this.discarded_semantic_properties.remove("not(" + this.current_semantic_property
 						+ ")");
 
 				if (new_prop == null) {
 					System.out
-							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				System.out.println("NEW SEMANTIC PROPERTY: " + new_prop);
@@ -992,8 +996,8 @@ public class GUIFunctionality_refine {
 				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
 						+ ")");
 
-				final String new_prop = this.getAdaptedConstraint(this.instancePattern
-						.getSemantics());
+				final String new_prop = this.getAdaptedConstraint(
+						this.instancePattern.getSemantics(), true);
 				if (new_prop == null) {
 
 					System.out.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY.");
@@ -1127,17 +1131,18 @@ public class GUIFunctionality_refine {
 
 			if (!this.testcasegen) {
 				System.out
-				.println("GET TESTCASE: test case not found, trying adapting constraint.");
+						.println("GET TESTCASE: test case not found, trying adapting constraint.");
 				// if we reached timeout
-				if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
-						.getRefinementTimeout()) {
-					System.out.println("TIMEOUT IN GENERATING TESTCASES");
-					return null;
-				}
+				// if ((System.currentTimeMillis() - this.beginTime) >=
+				// ConfigurationManager
+				// .getRefinementTimeout()) {
+				// System.out.println("TIMEOUT IN GENERATING TESTCASES");
+				// return null;
+				// }
 				this.discarded_semantic_properties.add("not(" + this.current_semantic_property
 						+ ")");
 
-				final String new_constraint = this.getAdaptedConstraint(sem);
+				final String new_constraint = this.getAdaptedConstraint(sem, false);
 				if (new_constraint == null) {
 					this.discarded_semantic_properties.remove(this.discarded_semantic_properties
 							.size() - 1);
@@ -1147,11 +1152,12 @@ public class GUIFunctionality_refine {
 				}
 				System.out.println("GET TESTCASE: adapted constraint found: " + new_constraint);
 
-				if ((System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
-						.getRefinementTimeout()) {
-					System.out.println("TIMEOUT IN GENERATING TESTCASES");
-					return null;
-				}
+				// if ((System.currentTimeMillis() - this.beginTime) >=
+				// ConfigurationManager
+				// .getRefinementTimeout()) {
+				// System.out.println("TIMEOUT IN GENERATING TESTCASES");
+				// return null;
+				// }
 
 				constraints = new ArrayList<>();
 				constraints.add(new_constraint);
@@ -1274,7 +1280,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-													.equals(inw.getInstance().getId())) {
+											.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1291,7 +1297,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-													.equals(inw.getInstance().getId())) {
+											.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1322,9 +1328,9 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-					+ "System and "
-					+ "(all t: Time| (t = T/last) <=> (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
-					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+			+ "System and "
+			+ "(all t: Time| (t = T/last) <=> (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
+			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
 
