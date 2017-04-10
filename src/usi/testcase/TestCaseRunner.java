@@ -45,6 +45,7 @@ public class TestCaseRunner {
 	public GUITestCaseResult runTestCase(final GUITestCase tc) throws Exception {
 
 		final ApplicationHelper app = ApplicationHelper.getInstance();
+
 		if (app.isRunning()) {
 			app.restartApplication();
 		} else {
@@ -123,7 +124,6 @@ public class TestCaseRunner {
 		}
 
 		mainloop: for (int cont = 0; cont < actions.size(); cont++) {
-
 			final GUIAction act = actions.get(cont);
 			curr = gmanager.getCurrentActiveWindows();
 			GUIAction act_to_execute = act;
@@ -557,7 +557,7 @@ public class TestCaseRunner {
 
 				if (index != index2
 						|| !this.w.getSelectableWidgets().get(index2)
-						.isSimilar(p.w.getSelectableWidgets().get(index))) {
+								.isSimilar(p.w.getSelectableWidgets().get(index))) {
 					return false;
 				}
 

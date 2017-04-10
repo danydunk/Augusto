@@ -271,6 +271,7 @@ public class GUIFunctionality_validate {
 					.generateTestCases(this.instancePattern);
 			for (final GUITestCase tc : tcs) {
 				if (tc != null) {
+
 					this.generated_tcs.add(tc);
 					runner.tcs.add(tc);
 				}
@@ -279,7 +280,8 @@ public class GUIFunctionality_validate {
 		}
 		runner.can_terminate = true;
 		runner.join();
-		if (runner.exception) {
+		if (runner.exception != null) {
+			runner.exception.printStackTrace();
 			throw new Exception("Error in runner");
 		}
 
@@ -600,13 +602,13 @@ public class GUIFunctionality_validate {
 
 		public Queue<GUITestCase> tcs;
 		public boolean can_terminate;
-		public boolean exception;
+		public Exception exception;
 
 		public GUITestCaseRunner() {
 
 			this.tcs = new ConcurrentLinkedQueue<>();
 			this.can_terminate = false;
-			this.exception = false;
+			this.exception = null;
 		}
 
 		@Override
@@ -628,12 +630,14 @@ public class GUIFunctionality_validate {
 					}
 					final TestCaseRunner runner = new TestCaseRunner(
 							GUIFunctionality_validate.this.gui);
+					System.out.println("TC " + obj.getActions().size());
 					final GUITestCaseResult res = runner.runTestCase(obj);
 
 					GUIFunctionality_validate.this.out.add(res);
 				} catch (final Exception e) {
-					e.printStackTrace();
-					this.exception = true;
+					// e.printStackTrace();
+					this.exception = e;
+					return;
 				}
 			}
 		}

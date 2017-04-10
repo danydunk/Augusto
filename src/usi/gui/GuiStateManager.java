@@ -151,7 +151,6 @@ public class GuiStateManager {
 		// if (tos.length == 0) {
 		// continue;
 		// }
-
 		final List<Widget> wids = Widget.getWidgets(window, this.idm);
 		if (wids.size() != 1 || !(wids.get(0) instanceof Window)) {
 			throw new Exception(
