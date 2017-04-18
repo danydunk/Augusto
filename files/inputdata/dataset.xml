@@ -1,6 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <DATASET>
   <DATA>
+    <metadata>server:</metadata>
+    <values>
+      <valid>localhost</valid>
+      <invalid>inv</invalid>
+    </values>
+  </DATA>
+  <DATA>
     <metadata>starting on</metadata>
     <values>
       <valid>2016/11/14</valid>

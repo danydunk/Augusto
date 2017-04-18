@@ -56,7 +56,7 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] { }
 
 pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Login) => filled_login_test [t] and existing_test [t] 
-	(aw in Ok) => filled_required_test[t] and unique_fields_test [t] and same_pass_test [t] and valid_data_test [Current_window.is_in.t, t]
+	(aw in Ok) => filled_required_test[t] and unique_fields_test [t] and same_pass_test [t] and valid_data_test [t]
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
 	Current_window.is_in.t' = aw.goes
@@ -89,6 +89,6 @@ pred  unique_fields_test [t: Time] {
 	all o: List.elements.t | (#o.vs.User_save= 1 => User_save.content.t !=o.vs.User_save) and (#o.vs.Password_save= 1 => Password_save.content.t !=o.vs.Password_save) 
 	all iw: Field | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
 }
-pred valid_data_test [w: Window, t: Time] {
-	all iw: w.iws | (#iw.invalid > 0 and #iw.content.t > 0) => not(iw.content.t in iw.invalid)
+pred valid_data_test [t: Time] {
+	all iw: Input_widget | (#iw.invalid > 0) => (#iw.content.t = 1 and not(iw.content.t in iw.invalid))
 }

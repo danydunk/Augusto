@@ -1,4 +1,4 @@
-kkill.exe /F /IM firefox.exe
+Taskkill.exe /F /IM firefox.exe
 Taskkill.exe /F /IM iexplore.exe
 del C:\Users\usi\AppData\Roaming\Buddi\Buddi3_Prefs.xml
 copy .\files\for_test\SUTs_configuration\Buddi3_Prefs.xml C:\Users\usi\AppData\Roaming\Buddi\Buddi3_Prefs.xml

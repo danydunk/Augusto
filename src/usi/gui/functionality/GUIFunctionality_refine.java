@@ -1059,6 +1059,7 @@ public class GUIFunctionality_refine {
 						.getTc().getActions(),
 						batch.get(cont).getResults().get(batch.get(cont).getResults().size() - 1),
 						this.instancePattern);
+				// System.out.println(sem);
 				final Run_command_thread run = new Run_command_thread(sem, 0);
 				run.start();
 				threads.add(run);

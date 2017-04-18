@@ -432,7 +432,9 @@ public class PatternRecognitionTest {
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
 			final List<Instance_GUI_pattern> res = gfs.match(pattern);
-
+			// final Input_widget iw = res.get(0).getIWS_for_PIW("piw6").get(0);
+			// final List<String> ss =
+			// DataManager.getInstance().getInvalidData(iw.getDescriptor());
 			assertEquals(1, res.size());
 		} catch (final Exception e) {
 			e.printStackTrace();
