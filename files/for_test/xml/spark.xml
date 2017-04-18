@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<GUI>
+    <window id="w7">
+        <pos>504:170</pos>
+        <rectangle>428:483</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Preferences</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw37">
+            <pos>908:174</pos>
+            <rectangle>17:17</rectangle>
+            <class>ButtonUI</class>
+            <descriptor>&lt;HTML&gt;&lt;BODY&gt;&lt;/HTML&gt;&lt;/BODY&gt;</descriptor>
+        </action_widget>
+        <action_widget id="aw38">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>General</label>
+        </action_widget>
+        <action_widget id="aw39">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>Proxy</label>
+        </action_widget>
+        <action_widget id="aw40">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>SSO</label>
+        </action_widget>
+        <action_widget id="aw41">
+            <pos>742:415</pos>
+            <rectangle>66:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Choose file</label>
+        </action_widget>
+        <action_widget id="aw42">
+            <pos>724:478</pos>
+            <rectangle>66:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Choose file</label>
+        </action_widget>
+        <action_widget id="aw43">
+            <pos>610:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Ok</label>
+        </action_widget>
+        <action_widget id="aw44">
+            <pos>684:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <action_widget id="aw45">
+            <pos>758:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Use Default</label>
+        </action_widget>
+        <input_widget id="iw30">
+            <pos>523:329</pos>
+            <rectangle>133:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Use PKI authentication</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw31">
+            <pos>666:362</pos>
+            <rectangle>100:21</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Which PKI method?</descriptor>
+            <value>[options] 0 : 3</value>
+        </input_widget>
+        <input_widget id="iw32">
+            <pos>628:415</pos>
+            <rectangle>104:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Advanced connection preferences</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw33">
+            <pos>608:478</pos>
+            <rectangle>106:19</rectangle>
+            <class>TextFieldUI</class>
+            <value/>
+        </input_widget>
+        <input_widget id="iw34">
+            <pos>724:509</pos>
+            <rectangle>104:19</rectangle>
+            <class>PasswordFieldUI</class>
+            <descriptor>Trust store password</descriptor>
+            <value/>
+        </input_widget>
+    </window>
+    <window id="w8">
+        <pos>423:249</pos>
+        <rectangle>590:370</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Open</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw53">
+            <pos>989:253</pos>
+            <rectangle>17:17</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw46">
+            <pos>827:286</pos>
+            <rectangle>31:25</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw47">
+            <pos>863:286</pos>
+            <rectangle>31:25</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw48">
+            <pos>899:286</pos>
+            <rectangle>31:25</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw49">
+            <pos>935:286</pos>
+            <rectangle>31:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw50">
+            <pos>966:286</pos>
+            <rectangle>31:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw51">
+            <pos>902:582</pos>
+            <rectangle>45:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw52">
+            <pos>952:582</pos>
+            <rectangle>45:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw35">
+            <pos>488:286</pos>
+            <rectangle>328:25</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Look In:</descriptor>
+            <value>[options] 6 : 15</value>
+        </input_widget>
+        <input_widget id="iw36">
+            <pos>516:520</pos>
+            <rectangle>481:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>File Name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw37">
+            <pos>516:544</pos>
+            <rectangle>481:21</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw1">
+            <pos>442:324</pos>
+            <rectangle>553:183</rectangle>
+            <class>ListUI</class>
+            <size>1</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w9">
+        <pos>423:249</pos>
+        <rectangle>590:370</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Open</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw61">
+            <pos>989:253</pos>
+            <rectangle>17:17</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw54">
+            <pos>827:286</pos>
+            <rectangle>31:25</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw55">
+            <pos>863:286</pos>
+            <rectangle>31:25</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw56">
+            <pos>899:286</pos>
+            <rectangle>31:25</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw57">
+            <pos>935:286</pos>
+            <rectangle>31:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw58">
+            <pos>966:286</pos>
+            <rectangle>31:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw59">
+            <pos>902:582</pos>
+            <rectangle>45:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw60">
+            <pos>952:582</pos>
+            <rectangle>45:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw38">
+            <pos>488:286</pos>
+            <rectangle>328:25</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Look In:</descriptor>
+            <value>[options] 6 : 15</value>
+        </input_widget>
+        <input_widget id="iw39">
+            <pos>516:520</pos>
+            <rectangle>481:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>File Name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw40">
+            <pos>516:544</pos>
+            <rectangle>481:21</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw2">
+            <pos>441:341</pos>
+            <rectangle>555:17</rectangle>
+            <class>TableUI</class>
+            <size>1</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w1">
+        <pos>593:188</pos>
+        <rectangle>250:446</rectangle>
+        <class>javax.swing.JFrame</class>
+        <title>Spark</title>
+        <modal>false</modal>
+        <root>true</root>
+        <action_widget id="aw1">
+            <pos>599:192</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>    - Restore</label>
+        </action_widget>
+        <action_widget id="aw2">
+            <pos>599:192</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>    - Minimize</label>
+        </action_widget>
+        <action_widget id="aw3">
+            <pos>599:192</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>    - Maximize</label>
+        </action_widget>
+        <action_widget id="aw4">
+            <pos>599:192</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>    - Close</label>
+        </action_widget>
+        <action_widget id="aw5">
+            <pos>802:192</pos>
+            <rectangle>17:17</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw6">
+            <pos>821:192</pos>
+            <rectangle>17:17</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw7">
+            <pos>820:408</pos>
+            <rectangle>20:15</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw8">
+            <pos>603:590</pos>
+            <rectangle>59:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Accounts</label>
+        </action_widget>
+        <action_widget id="aw9">
+            <pos>697:590</pos>
+            <rectangle>62:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Advanced</label>
+            <descriptor>Login as invisible</descriptor>
+        </action_widget>
+        <action_widget id="aw10">
+            <pos>794:590</pos>
+            <rectangle>38:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Login</label>
+        </action_widget>
+        <input_widget id="iw1">
+            <pos>666:406</pos>
+            <rectangle>154:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Username</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw2">
+            <pos>666:430</pos>
+            <rectangle>154:19</rectangle>
+            <class>PasswordFieldUI</class>
+            <descriptor>Password</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw3">
+            <pos>666:454</pos>
+            <rectangle>154:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Server</descriptor>
+            <value>localhost</value>
+        </input_widget>
+        <input_widget id="iw4">
+            <pos>666:478</pos>
+            <rectangle>149:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Save password</label>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw5">
+            <pos>666:506</pos>
+            <rectangle>149:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Auto login</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw6">
+            <pos>666:534</pos>
+            <rectangle>149:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Login as invisible</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+    </window>
+    <window id="w2">
+        <pos>518:261</pos>
+        <rectangle>400:300</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Create new account</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw13">
+            <pos>894:265</pos>
+            <rectangle>17:17</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw11">
+            <pos>773:490</pos>
+            <rectangle>86:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Create account</label>
+        </action_widget>
+        <action_widget id="aw12">
+            <pos>869:490</pos>
+            <rectangle>39:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Close</label>
+        </action_widget>
+        <input_widget id="iw7">
+            <pos>631:374</pos>
+            <rectangle>277:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Username:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw8">
+            <pos>631:403</pos>
+            <rectangle>277:19</rectangle>
+            <class>PasswordFieldUI</class>
+            <descriptor>Password:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw9">
+            <pos>631:432</pos>
+            <rectangle>277:19</rectangle>
+            <class>PasswordFieldUI</class>
+            <descriptor>Confirm password:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw10">
+            <pos>631:461</pos>
+            <rectangle>277:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Server:</descriptor>
+            <value/>
+        </input_widget>
+    </window>
+    <window id="w3">
+        <pos>584:384</pos>
+        <rectangle>268:118</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Account creation problem</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw15">
+            <pos>830:388</pos>
+            <rectangle>17:17</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw14">
+            <pos>705:469</pos>
+            <rectangle>25:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Ok</label>
+            <descriptor>Specify a username for the account</descriptor>
+        </action_widget>
+    </window>
+    <window id="w4">
+        <pos>504:170</pos>
+        <rectangle>428:483</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Preferences</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw16">
+            <pos>908:174</pos>
+            <rectangle>17:17</rectangle>
+            <class>ButtonUI</class>
+            <descriptor>&lt;HTML&gt;&lt;BODY&gt;&lt;/HTML&gt;&lt;/BODY&gt;</descriptor>
+        </action_widget>
+        <action_widget id="aw17">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>Proxy</label>
+        </action_widget>
+        <action_widget id="aw18">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>SSO</label>
+        </action_widget>
+        <action_widget id="aw19">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>PKI</label>
+        </action_widget>
+        <action_widget id="aw20">
+            <pos>610:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Ok</label>
+            <descriptor>Advanced connection preferences</descriptor>
+        </action_widget>
+        <action_widget id="aw21">
+            <pos>684:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <action_widget id="aw22">
+            <pos>758:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Use Default</label>
+        </action_widget>
+        <input_widget id="iw11">
+            <pos>523:266</pos>
+            <rectangle>202:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Automatically discover host and port</label>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw12">
+            <pos>609:321</pos>
+            <rectangle>249:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Host</descriptor>
+            <value>127.0.0.1</value>
+        </input_widget>
+        <input_widget id="iw13">
+            <pos>609:350</pos>
+            <rectangle>78:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Port</descriptor>
+            <value>5222</value>
+        </input_widget>
+        <input_widget id="iw14">
+            <pos>648:389</pos>
+            <rectangle>132:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Resource</descriptor>
+            <value>Spark</value>
+        </input_widget>
+        <input_widget id="iw15">
+            <pos>523:418</pos>
+            <rectangle>157:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Use hostname as resource</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw16">
+            <pos>523:451</pos>
+            <rectangle>177:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Use Spark version as resource</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw17">
+            <pos>648:484</pos>
+            <rectangle>66:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Response timeout (sec)</descriptor>
+            <value>10</value>
+        </input_widget>
+        <input_widget id="iw18">
+            <pos>523:513</pos>
+            <rectangle>257:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Use old SSL port method</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw19">
+            <pos>523:546</pos>
+            <rectangle>257:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Use compression</label>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw20">
+            <pos>523:579</pos>
+            <rectangle>257:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Start debugger on startup</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+    </window>
+    <window id="w5">
+        <pos>504:170</pos>
+        <rectangle>428:483</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Preferences</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw23">
+            <pos>908:174</pos>
+            <rectangle>17:17</rectangle>
+            <class>ButtonUI</class>
+            <descriptor>&lt;HTML&gt;&lt;BODY&gt;&lt;/HTML&gt;&lt;/BODY&gt;</descriptor>
+        </action_widget>
+        <action_widget id="aw24">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>General</label>
+        </action_widget>
+        <action_widget id="aw25">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>SSO</label>
+        </action_widget>
+        <action_widget id="aw26">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>PKI</label>
+        </action_widget>
+        <action_widget id="aw27">
+            <pos>610:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Ok</label>
+            <descriptor>Advanced connection preferences</descriptor>
+        </action_widget>
+        <action_widget id="aw28">
+            <pos>684:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <action_widget id="aw29">
+            <pos>758:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Use Default</label>
+        </action_widget>
+        <input_widget id="iw21">
+            <pos>523:349</pos>
+            <rectangle>111:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Use proxy server</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw22">
+            <pos>583:382</pos>
+            <rectangle>330:21</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Protocol</descriptor>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw23">
+            <pos>583:413</pos>
+            <rectangle>330:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Host</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw24">
+            <pos>583:442</pos>
+            <rectangle>330:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Port</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw25">
+            <pos>583:471</pos>
+            <rectangle>330:19</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Username</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw26">
+            <pos>583:500</pos>
+            <rectangle>330:19</rectangle>
+            <class>PasswordFieldUI</class>
+            <descriptor>Password</descriptor>
+            <value/>
+        </input_widget>
+    </window>
+    <window id="w6">
+        <pos>504:170</pos>
+        <rectangle>428:483</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Preferences</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw30">
+            <pos>908:174</pos>
+            <rectangle>17:17</rectangle>
+            <class>ButtonUI</class>
+            <descriptor>&lt;HTML&gt;&lt;BODY&gt;&lt;/HTML&gt;&lt;/BODY&gt;</descriptor>
+        </action_widget>
+        <action_widget id="aw31">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>General</label>
+        </action_widget>
+        <action_widget id="aw32">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>Proxy</label>
+        </action_widget>
+        <action_widget id="aw33">
+            <pos>517:237</pos>
+            <rectangle>402:371</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>PKI</label>
+        </action_widget>
+        <action_widget id="aw34">
+            <pos>610:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Ok</label>
+            <descriptor>Advanced connection preferences</descriptor>
+        </action_widget>
+        <action_widget id="aw35">
+            <pos>684:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <action_widget id="aw36">
+            <pos>758:619</pos>
+            <rectangle>68:21</rectangle>
+            <class>ButtonUI</class>
+            <label>Use Default</label>
+        </action_widget>
+        <input_widget id="iw27">
+            <pos>523:386</pos>
+            <rectangle>210:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Use Single Sign-On (SSO) via GSSAPI</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw28">
+            <pos>523:419</pos>
+            <rectangle>195:23</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Advanced connection preferences</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw29">
+            <pos>523:452</pos>
+            <rectangle>390:30</rectangle>
+            <class>TextAreaUI</class>
+            <descriptor>Advanced connection preferences</descriptor>
+            <value>Spark is unable to find the principal to use for Single Sign-On. This will prevent SSO from working.</value>
+        </input_widget>
+    </window>
+    <edge type="static">
+        <from>aw37</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw38</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw39</from>
+        <to>w5</to>
+    </edge>
+    <edge type="static">
+        <from>aw40</from>
+        <to>w6</to>
+    </edge>
+    <edge type="static">
+        <from>aw42</from>
+        <to>w8</to>
+    </edge>
+    <edge type="static">
+        <from>aw43</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw44</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw50</from>
+        <to>w9</to>
+    </edge>
+    <edge type="static">
+        <from>aw52</from>
+        <to>w7</to>
+    </edge>
+    <edge type="static">
+        <from>aw57</from>
+        <to>w8</to>
+    </edge>
+    <edge type="static">
+        <from>aw60</from>
+        <to>w7</to>
+    </edge>
+    <edge type="static">
+        <from>aw8</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw9</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw11</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw12</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw14</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw16</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw17</from>
+        <to>w5</to>
+    </edge>
+    <edge type="static">
+        <from>aw18</from>
+        <to>w6</to>
+    </edge>
+    <edge type="static">
+        <from>aw19</from>
+        <to>w7</to>
+    </edge>
+    <edge type="static">
+        <from>aw20</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw21</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw23</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw24</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw25</from>
+        <to>w6</to>
+    </edge>
+    <edge type="static">
+        <from>aw26</from>
+        <to>w7</to>
+    </edge>
+    <edge type="static">
+        <from>aw27</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw28</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw30</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw31</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw32</from>
+        <to>w5</to>
+    </edge>
+    <edge type="static">
+        <from>aw33</from>
+        <to>w7</to>
+    </edge>
+    <edge type="static">
+        <from>aw34</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw35</from>
+        <to>w1</to>
+    </edge>
+</GUI>
