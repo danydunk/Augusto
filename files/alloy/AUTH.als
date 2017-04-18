@@ -9,8 +9,17 @@ abstract sig Go, Login, Signup, Ok, Cancel, Logout extends Action_widget { }
 abstract sig User, Password, User_save, Password_save, Re_password, Field extends Input_widget { }
 
 fact {
-	(User_save+Password_save+Re_password) in Property_required.requireds
-	(User_save+Password_save) in Property_unique.uniques
+	not(User in Property_required.requireds)
+	not(Password in Property_required.requireds)
+	not(User in Property_unique.uniques)
+	not(Password in Property_unique.uniques)
+	
+	not(User_save in Property_required.requireds)
+	not(Password_save in Property_required.requireds)
+	not(Re_password in Property_required.requireds)
+	not(User_save in Property_unique.uniques)
+	not(Password_save in Property_unique.uniques)
+	not(Re_password in Property_unique.uniques)
 }
 ---------------Generic AUTH Semantics---------- 
 one sig Property_unique{
@@ -33,7 +42,7 @@ pred fill_fail_post [iw: Input_widget, t, t': Time, v: Value] {
 		List.elements.t' =  List.elements.t
 }
 pred fill_pre[iw: Input_widget, t: Time, v: Value] { 
-	//#iw.content.(T/first) = 1 => not(v = none)
+	#iw.content.(T/first) = 1 => not(v = none)
 }
 
 pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }
@@ -73,10 +82,12 @@ pred same_pass_test [t: Time] {
 	Password_save.content.t = Re_password.content.t
 }
 pred filled_required_test [t: Time] { 
-	all iw: (User_save + Password_save + Re_password + Field)| (iw in Property_required.requireds) => #iw.content.t = 1
+	#User_save.content.t = 1 and #Password_save.content.t = 1 and #Re_password.content.t = 1
+	all iw: Field| (iw in Property_required.requireds) => #iw.content.t = 1
 }
 pred  unique_fields_test [t: Time] { 
-	all iw: (User_save + Password_save + Field) | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
+	all o: List.elements.t | (#o.vs.User_save= 1 => User_save.content.t !=o.vs.User_save) and (#o.vs.Password_save= 1 => Password_save.content.t !=o.vs.Password_save) 
+	all iw: Field | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
 }
 pred valid_data_test [w: Window, t: Time] {
 	all iw: w.iws | (#iw.invalid > 0 and #iw.content.t > 0) => not(iw.content.t in iw.invalid)

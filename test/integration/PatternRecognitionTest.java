@@ -364,4 +364,79 @@ public class PatternRecognitionTest {
 			fail();
 		}
 	}
+
+	@Test
+	public void test13() {
+
+		System.out.println("test13");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/save.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/spark.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
+			assertEquals(0, res.size());
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void test14() {
+
+		System.out.println("test14");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/crud_no_read.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/spark.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
+			assertEquals(0, res.size());
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void test15() {
+
+		System.out.println("test15");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/auth.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/spark.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+
+			assertEquals(1, res.size());
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
 }

@@ -97,7 +97,13 @@ public abstract class Pattern_widget<T extends Widget> {
 				return false;
 			}
 		}
-
+		if (this.getLabel().equals("?null?")) {
+			if (w.getLabel() == null && w.getDescriptor() == null) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 		r = java.util.regex.Pattern.compile(this.getLabel());
 
 		if ((w.getLabel() == null || w.getLabel().length() == 0)

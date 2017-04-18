@@ -46,7 +46,7 @@ public class DataManager {
 		final String desc = descriptor.trim().toLowerCase();
 
 		if (this.validDataMap.containsKey(desc)) {
-			return this.validDataMap.get(desc);
+			return new ArrayList<>(this.validDataMap.get(desc));
 		}
 
 		final List<String> out = new ArrayList<>();
@@ -68,7 +68,7 @@ public class DataManager {
 		final String desc = descriptor.trim().toLowerCase();
 
 		if (this.invalidDataMap.containsKey(desc)) {
-			return this.invalidDataMap.get(desc);
+			return new ArrayList<>(this.invalidDataMap.get(desc));
 		}
 
 		final List<String> out = new ArrayList<>();
@@ -91,7 +91,7 @@ public class DataManager {
 
 		// for itemized data there must be a perfect match with the metadata
 		if (this.validItemizedDataMap.containsKey(desc)) {
-			return this.validItemizedDataMap.get(desc);
+			return new ArrayList<>(this.validItemizedDataMap.get(desc));
 		}
 
 		return new ArrayList<>();
@@ -106,7 +106,7 @@ public class DataManager {
 
 		// for itemized data there must be a perfect match with the metadata
 		if (this.invalidItemizedDataMap.containsKey(desc)) {
-			return this.invalidItemizedDataMap.get(desc);
+			return new ArrayList<>(this.invalidItemizedDataMap.get(desc));
 		}
 
 		return new ArrayList<>();

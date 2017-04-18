@@ -142,6 +142,10 @@ task deployUPM(type:Exec) {
 
 commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\upm\\bin > run.bat && echo cd "+projectDir+"\\..\\upm\\bin >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\upm.jar >> run.bat && echo cd "+projectDir+"  >> run.bat >> .\\run.bat && .\\run.bat && del /Q /F run.bat"
 }
+task deploySPARK(type:Exec) {
+
+commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\spark\\bin > run.bat && echo cd "+projectDir+"\\..\\spark\\bin >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\spark-lib.jar >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\spark.jar >> run.bat && echo cd "+projectDir+"  >> run.bat >> .\\run.bat && .\\run.bat && del /Q /F run.bat"
+}
 task deployRACHOTA(type:Exec) {
 
 commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\rachota\\bin > run.bat && echo cd "+projectDir+"\\..\\rachota\\bin >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\rachota.jar >> run.bat && echo cd "+projectDir+"  >> run.bat >> .\\run.bat && .\\run.bat && del /Q /F run.bat"
@@ -159,6 +163,7 @@ testall.dependsOn 'deployBuddi'
 testall.dependsOn 'deployUPM'
 testall.dependsOn 'deployRACHOTA'
 testall.dependsOn 'deployOnlineShopping'
+testall.dependsOn 'deploySPARK'
 
 task runtest(type:Exec) {
 
@@ -168,3 +173,5 @@ runtest.dependsOn 'build'
 runtest.dependsOn 'deployBuddi'
 runtest.dependsOn 'deployUPM'
 runtest.dependsOn 'deployRACHOTA'
+runtest.dependsOn 'deployOnlineShopping'
+runtest.dependsOn 'deploySPARK'

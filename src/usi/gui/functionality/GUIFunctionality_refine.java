@@ -237,7 +237,7 @@ public class GUIFunctionality_refine {
 			System.out.println("TESTCASE NOT FOUND.");
 			return false;
 		}
-		this.testcasegen = true;
+		// this.testcasegen = true;
 		String aw = null;
 		if (tc.getActions().get(tc.getActions().size() - 1) instanceof Click) {
 			aw = tc.getActions().get(tc.getActions().size() - 1).getWidget().getId();
@@ -548,7 +548,7 @@ public class GUIFunctionality_refine {
 					}
 
 					clone.getSemantics().addRun_command(run_command);
-
+					// System.out.println(clone.getSemantics());
 					final GUITestCase tc = this.getTestCase(clone.getSemantics());
 
 					if (this.run_and_update(tc, to_discover, null)) {
@@ -1132,6 +1132,7 @@ public class GUIFunctionality_refine {
 			}
 
 			if (!this.testcasegen) {
+				this.testcasegen = true;
 				System.out
 						.println("GET TESTCASE: test case not found, trying adapting constraint.");
 				// if we reached timeout

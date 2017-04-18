@@ -72,9 +72,13 @@
       <valid>0000000000</valid>
       <valid>0000000001</valid>
 	  <valid>0000000002</valid>
+	  <valid>0000000003</valid>
+	  <valid>0000000004</valid>
 	  <invalid>aaa</invalid>
 	  <invalid>bbb</invalid>
 	  <invalid>ccc</invalid>
+	  <invalid>ddd</invalid>
+	  <invalid>eee</invalid>
     </values>
   </DATA>
    <DATA>

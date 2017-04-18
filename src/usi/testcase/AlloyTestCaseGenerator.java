@@ -56,8 +56,8 @@ public class AlloyTestCaseGenerator {
 	public static List<GUITestCase> generateTestCasesMinimal(final Instance_GUI_pattern instance,
 			final int max_time) throws Exception {
 
+		// System.out.println(instance.getSemantics().toString());
 		final List<GUITestCase> out = new ArrayList<>();
-
 		final List<RunCommandThread[]> threads = new ArrayList<>();
 		for (int x = 0; x < instance.getSemantics().getRun_commands().size(); x++) {
 

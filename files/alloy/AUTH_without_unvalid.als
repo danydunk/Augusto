@@ -33,7 +33,7 @@ pred fill_fail_post [iw: Input_widget, t, t': Time, v: Value] {
 		List.elements.t' =  List.elements.t
 }
 pred fill_pre[iw: Input_widget, t: Time, v: Value] { 
-	//#iw.content.(T/first) = 1 => not(v = none)
+	#iw.content.(T/first) = 1 => not(v = none)
 }
 
 pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }

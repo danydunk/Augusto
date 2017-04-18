@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pattern xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	alloy="AUTH.als" alloy_without_unvalid_data="AUTH_without_unvalid.als" name="AUTH">
-	<window id="pre" dynamic="false" card="one" alloy="Pre">
+	<window id="pre" dynamic="false" card="lone" alloy="Pre">
 		<title>.*</title>
 		<class>.*</class>
 		<modal>any</modal>
@@ -19,7 +19,7 @@
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw2" card="one" alloy="Signup">
-			<label>^(register|signup|sign up).*$</label>
+			<label>^(register|signup|sign up|accounts).*$</label>
 			<class>.*</class>
 		</action_widget>
 		<input_widget id="piw1" card="one" alloy="User">
@@ -38,11 +38,11 @@
 		<class>.*</class>
 		<modal>any</modal>
 		<action_widget id="paw3" card="one" alloy="Ok">
-			<label>^(ok|save|record|signup|sign up)</label>
+			<label>^(ok|save|record|signup|sign up|create account)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw4" card="one" alloy="Cancel">
-			<label>^(cancel|clear|back)</label>
+			<label>^(cancel|clear|back|close)</label>
 			<class>.*</class>
 		</action_widget>
 		<input_widget id="piw3" card="one" alloy="User_save">
@@ -51,12 +51,12 @@
 			<text>.*</text>
 		</input_widget>
 		<input_widget id="piw4" card="one" alloy="Password_save">
-			<label>^(?!re-enter|repeat)(pass|password).*</label>
+			<label>^(?!re-enter|repeat|confirm)(pass|password).*</label>
 			<class>.*</class>
 			<text>.*</text>
 		</input_widget>
 		<input_widget id="piw5" card="one" alloy="Re_password">
-			<label>^(repeat|re-enter).*</label>
+			<label>^(repeat|re-enter|confirm).*</label>
 			<class>.*</class>
 			<text>.*</text>
 		</input_widget>
