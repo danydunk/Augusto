@@ -71,7 +71,7 @@
 		<class>.*</class>
 		<modal>any</modal>
 		<action_widget id="paw5" card="one" alloy="Logout">
-			<label>^(logout|exit|sign out|signout).*$</label>
+			<label>^.*(logout|exit|sign out|signout|log out)$</label>
 			<class>.*</class>
 		</action_widget>
 	</window>

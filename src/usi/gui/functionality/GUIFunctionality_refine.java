@@ -245,6 +245,9 @@ public class GUIFunctionality_refine {
 		final Object[] out = this.getFoundWindow(tc, target);
 		final Instance_window found = (Instance_window) out[0];
 		final Window reached_win = (Window) out[1];
+		// final GUI a = new GUI();
+		// a.addWindow(reached_win);
+		// XMLUtil.save("gggg.xml", GUIWriter.writeGUI(a));
 		boolean new_window = false;
 		boolean new_edge = false;
 

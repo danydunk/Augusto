@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import src.usi.application.ActionManager;
 import src.usi.application.ApplicationHelper;
+import src.usi.configuration.ConfigurationManager;
 import src.usi.gui.GuiStateManager;
 import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.GUI;
@@ -182,6 +183,16 @@ public class TestCaseRunner {
 
 			if (ActionManager.executeAction(act_to_execute)) {
 
+				if (ConfigurationManager.getAutMainCLass().toLowerCase()
+						.contains("org.jivesoftware.launcher.startup")
+						&& (act_to_execute instanceof Click)
+						&& (act_to_execute.getWidget().getLabel().toLowerCase().trim()
+								.equals("create account")
+								|| act_to_execute.getWidget().getLabel().toLowerCase().trim()
+										.equals("login") || act_to_execute.getWidget().getLabel()
+								.toLowerCase().trim().equals("log out"))) {
+					Thread.sleep(4000);
+				}
 				gmanager.readGUI();
 
 				this.dealWithDialogsWindow(gmanager);
