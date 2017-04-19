@@ -21,7 +21,7 @@ import com.rational.test.ft.object.interfaces.TestObject;
 public class ActionManager {
 
 	/*
-	 * 
+	 *
 	 * GUI must be read before calling this method This function returns true if
 	 * the action was executed, false if it could not be executed because the
 	 * widget was disabled It throws an exception if there is no
@@ -165,6 +165,15 @@ public class ActionManager {
 			}
 
 			method.invoke(c.newInstance(), to, select.getIndex());
+		}
+
+		if (ConfigurationManager.getAutMainCLass().toLowerCase()
+				.contains("org.jivesoftware.launcher.startup")
+				&& (act instanceof Click)
+				&& (act.getWidget().getLabel().toLowerCase().trim().equals("create account")
+						|| act.getWidget().getLabel().toLowerCase().trim().equals("login") || act
+						.getWidget().getLabel().toLowerCase().trim().equals("log out"))) {
+			Thread.sleep(4000);
 		}
 
 		Thread.sleep(ConfigurationManager.getSleepTime());

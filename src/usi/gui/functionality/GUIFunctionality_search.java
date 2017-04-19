@@ -36,6 +36,7 @@ public class GUIFunctionality_search {
 	public void init_match(final GUI_Pattern pattern, final boolean filter_dyn) throws Exception {
 
 		this.gui_pattern = pattern;
+		this.not_overlapping = new ArrayList<>();
 
 		// the windows in the GUI are reduced to only the windows that can match
 		// the windows in the pattern
@@ -134,7 +135,6 @@ public class GUIFunctionality_search {
 		final List<Instance_GUI_pattern> out = new ArrayList<>();
 
 		while (true) {
-			this.not_overlapping = new ArrayList<>();
 			for (final Window w : this.matches_table_wm.columnKeySet()) {
 				final List<Instance_window> instancesnot = new ArrayList<>();
 				final List<Instance_window> instances = new ArrayList<>();
@@ -504,10 +504,10 @@ public class GUIFunctionality_search {
 							}
 						}
 						if (source_pw.getCardinality().getMin() != 0 /*
-						 * &&
-						 * source_pw
-						 * != pw
-						 */) {
+																	 * &&
+																	 * source_pw
+																	 * != pw
+																	 */) {
 							check_optional = true;
 						}
 					}

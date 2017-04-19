@@ -8,4 +8,29 @@
 			<label>?null?</label>
 			<class>buttonui</class>
 	</action_widget>
+	<action_widget id="aw3">
+			<label>contacts -.*</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw4">
+			<label>help -.*</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw5">
+			<label>actions -.*</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw6">
+			<label>.*preferences</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw7">
+			<label>.*exit</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw8">
+			<label>^(?!(.*log out$)).*</label>
+			<class>.*</class>
+	</action_widget>
+	
 </filter>
