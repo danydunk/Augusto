@@ -56,6 +56,7 @@ public class AlloyRunner {
 
 	public static void main(final String[] args) {
 
+		final Random r = new Random();
 		if (args.length < 3) {
 			System.err.println("invalid number of parameters");
 			System.exit(-1);
@@ -110,6 +111,9 @@ public class AlloyRunner {
 					overall = run_command.overall;
 				} else if (win_scope == -1 || aw_scope == -1 || iw_scope == -1 || sw_scope == -1) {
 					overall = overall * 4;
+				}
+				if (r.nextBoolean()) {
+					overall = overall + 1;
 				}
 
 				Sig time = null;
@@ -169,20 +173,41 @@ public class AlloyRunner {
 				}
 
 				if (win_scope > -1) {
-					final CommandScope winscope = new CommandScope(win, false, win_scope);
-					scopes.add(winscope);
+					if (r.nextBoolean()) {
+						final CommandScope winscope = new CommandScope(win, false, win_scope);
+						scopes.add(winscope);
+					} else {
+						final CommandScope winscope = new CommandScope(win, false, win_scope + 1);
+						scopes.add(winscope);
+					}
+
 				}
 				if (aw_scope > -1) {
-					final CommandScope awscope = new CommandScope(aw, false, aw_scope);
-					scopes.add(awscope);
+					if (r.nextBoolean()) {
+						final CommandScope awscope = new CommandScope(aw, false, aw_scope);
+						scopes.add(awscope);
+					} else {
+						final CommandScope awscope = new CommandScope(aw, false, aw_scope + 1);
+						scopes.add(awscope);
+					}
 				}
 				if (iw_scope > -1) {
-					final CommandScope iwscope = new CommandScope(iw, false, iw_scope);
-					scopes.add(iwscope);
+					if (r.nextBoolean()) {
+						final CommandScope iwscope = new CommandScope(iw, false, iw_scope);
+						scopes.add(iwscope);
+					} else {
+						final CommandScope iwscope = new CommandScope(iw, false, iw_scope + 1);
+						scopes.add(iwscope);
+					}
 				}
 				if (sw_scope > -1) {
-					final CommandScope swscope = new CommandScope(sw, false, sw_scope);
-					scopes.add(swscope);
+					if (r.nextBoolean()) {
+						final CommandScope swscope = new CommandScope(sw, false, sw_scope);
+						scopes.add(swscope);
+					} else {
+						final CommandScope swscope = new CommandScope(sw, false, sw_scope + 1);
+						scopes.add(swscope);
+					}
 				}
 
 				int time_scope = -1;
@@ -202,20 +227,29 @@ public class AlloyRunner {
 					}
 
 					if (v_scope > -1) {
-						final CommandScope vscope = new CommandScope(v, false,
-								(v_scope + ((time_scope - 1) * 1 / 2)));
-						scopes.add(vscope);
+						if (r.nextBoolean()) {
+							final CommandScope vscope = new CommandScope(v, false,
+									(v_scope + ((time_scope - 1) * 1 / 2)));
+							scopes.add(vscope);
+						} else {
+							final CommandScope vscope = new CommandScope(v, false,
+									(v_scope + ((time_scope - 1) * 1 / 2)) + 1);
+							scopes.add(vscope);
+						}
 					}
 					final CommandScope timescope = new CommandScope(time, false, time_scope);
 					final CommandScope opscope = new CommandScope(operation, false, time_scope - 1);
+
 					scopes.add(timescope);
 					scopes.add(opscope);
+
 					final ConstList<CommandScope> scope_list = run_command.scope.make(scopes);
 
 					final Command run = new Command(run_command.pos, run_command.label,
 							run_command.check, overall, run_command.bitwidth, run_command.maxseq,
 							run_command.expects, scope_list, run_command.additionalExactScopes,
 							run_command.formula, run_command.parent);
+
 					final A4Solution app = TranslateAlloyToKodkod.execute_command(rep,
 							model.getAllReachableSigs(), run, options);
 					if (app.satisfiable()) {
@@ -224,6 +258,7 @@ public class AlloyRunner {
 					} else {
 						System.out.println("unsat");
 					}
+
 				} else {
 					if (time_scope != -1) {
 						throw new Exception("already found time in model");
@@ -237,9 +272,15 @@ public class AlloyRunner {
 							scopes2.add(sc);
 						}
 						if (v_scope > -1) {
-							final CommandScope vscope = new CommandScope(v, false,
-									(v_scope + ((time_scope - 1) * 1 / 2)));
-							scopes2.add(vscope);
+							if (r.nextBoolean()) {
+								final CommandScope vscope = new CommandScope(v, false,
+										(v_scope + ((time_scope - 1) * 1 / 2)));
+								scopes2.add(vscope);
+							} else {
+								final CommandScope vscope = new CommandScope(v, false, (v_scope
+										+ ((time_scope - 1) * 1 / 2) + 1));
+								scopes2.add(vscope);
+							}
 						}
 						final CommandScope timescope = new CommandScope(time, false, time_scope);
 						final CommandScope opscope = new CommandScope(operation, false,
