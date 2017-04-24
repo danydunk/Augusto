@@ -1632,7 +1632,7 @@ public class AlloyUtil {
 
 		boolean invalid = false;
 		for (final Signature sig : sigs) {
-			if (sig.getIdentifier().equals("Invalid")) {
+			if (sig.getIdentifier().equals("Input_widget") && sig.getBinary_relations().size() == 2) {
 				invalid = true;
 			}
 		}

@@ -319,8 +319,8 @@ public class AlloyRunner {
 	}
 
 	static GUITestCase
-			analyzeTuples(final A4Solution solution, final Instance_GUI_pattern instance)
-					throws Exception {
+	analyzeTuples(final A4Solution solution, final Instance_GUI_pattern instance)
+			throws Exception {
 
 		Map<String, String> input_data_map = null;
 		input_data_map = elaborateInputData(solution, instance);
@@ -504,7 +504,7 @@ public class AlloyRunner {
 									final Selectable_widget new_sw = new Selectable_widget(
 											sw.getId(), sw.getLabel(), sw.getClasss(), sw.getX(),
 											sw.getY(), sw.getWidth(), sw.getHeight(), sw.getSize()
-													+ (map.keySet().size()), sel);
+											+ (map.keySet().size()), sel);
 									new_sw.setDescriptor(sw.getDescriptor());
 									sws.add(new_sw);
 									continue swloop;
@@ -834,41 +834,41 @@ public class AlloyRunner {
 				metadata += inpw.getDescriptor() != null && metadata.length() == 0 ? inpw
 						.getDescriptor() : "";
 
-				List<String> data = null;
-				if (invalid_values.contains(v)) {
-					data = dm.getInvalidData(metadata);
+						List<String> data = null;
+						if (invalid_values.contains(v)) {
+							data = dm.getInvalidData(metadata);
 
-					assert (data.size() > 0);
-				} else {
-					data = dm.getValidData(metadata);
-				}
-
-				assert (data != null);
-
-				if (data_for_value.containsKey(v)) {
-					List<String> new_list = new ArrayList<>();
-					// we calculate the intersection between the values
-					// already
-					// available for this value and the new ones
-
-					if (data.size() == 0) {
-						new_list = data_for_value.get(v);
-					} else {
-						for (final String s : data_for_value.get(v)) {
-							if (data.contains(s)) {
-								new_list.add(s);
-							}
+							assert (data.size() > 0);
+						} else {
+							data = dm.getValidData(metadata);
 						}
-					}
-					if (invalid_values.contains(v) && new_list.size() == 0) {
-						throw new Exception(
-								"AlloyTestCaseGeneration - not enough invalid input data.");
-					}
 
-					data_for_value.put(v, new_list);
-				} else {
-					data_for_value.put(v, data);
-				}
+						assert (data != null);
+
+						if (data_for_value.containsKey(v)) {
+							List<String> new_list = new ArrayList<>();
+							// we calculate the intersection between the values
+							// already
+							// available for this value and the new ones
+
+							if (data.size() == 0) {
+								new_list = data_for_value.get(v);
+							} else {
+								for (final String s : data_for_value.get(v)) {
+									if (data.contains(s)) {
+										new_list.add(s);
+									}
+								}
+							}
+							if (invalid_values.contains(v) && new_list.size() == 0) {
+								throw new Exception(
+										"AlloyTestCaseGeneration - not enough invalid input data.");
+							}
+
+							data_for_value.put(v, new_list);
+						} else {
+							data_for_value.put(v, data);
+						}
 
 			}
 		}
@@ -884,13 +884,7 @@ public class AlloyRunner {
 				continue;
 			}
 			final List<String> possible_values = new ArrayList<>();
-			for (final String s : data_for_value.get(key)) {
-				if (!used_values.contains(s)) {
-
-					possible_values.add(s);
-				}
-			}
-			if (possible_values.isEmpty()) {
+			if (data_for_value.get(key).size() == 0) {
 				final List<String> generics = dm.getGenericData();
 
 				for (final String s : generics) {
@@ -898,7 +892,15 @@ public class AlloyRunner {
 						possible_values.add(s);
 					}
 				}
+			} else {
+				for (final String s : data_for_value.get(key)) {
+					if (!used_values.contains(s)) {
+
+						possible_values.add(s);
+					}
+				}
 			}
+
 			if (possible_values.isEmpty()) {
 				throw new Exception(
 						"AlloyTestCaseGenerator - elaborateInputData: not enough inputdata.");

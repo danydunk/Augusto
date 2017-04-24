@@ -90,5 +90,5 @@ pred  unique_fields_test [t: Time] {
 	all iw: Field | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
 }
 pred valid_data_test [t: Time] {
-	all iw: Input_widget | (#iw.invalid > 0) => (#iw.content.t = 1 and not(iw.content.t in iw.invalid))
+	all iw: Input_widget | (#iw.invalid > 0 and #iw.content.t = 1) => (not(iw.content.t in iw.invalid))
 }

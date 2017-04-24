@@ -4,7 +4,12 @@
     <metadata>server:</metadata>
     <values>
       <valid>localhost</valid>
+	  <valid>127.0.0.1</valid>
+	  <valid>127.0.0.2</valid>
+	  <valid>127.0.0.3</valid>
+	  <valid>127.0.0.4</valid>
       <invalid>inv</invalid>
+	  <invalid>inv2</invalid>
     </values>
   </DATA>
   <DATA>
