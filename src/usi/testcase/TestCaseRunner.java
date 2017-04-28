@@ -202,6 +202,14 @@ public class TestCaseRunner {
 				} else {
 					results.add(null);
 				}
+				if (cont < actions.size() - 1) {
+					// if the action was not executed and the next action is in
+					// a different window
+					if (!actions.get(cont + 1).getWindow().getId()
+							.equals(results.get(results.size() - 1).getId())) {
+						break mainloop;
+					}
+				}
 			} else {
 				actions_executed.add(act);
 
@@ -214,12 +222,11 @@ public class TestCaseRunner {
 					// if the action was not executed and the next action is in
 					// a different window
 					if (!actions.get(cont + 1).getWindow().getId()
-							.equals(act_to_execute.getWindow().getId())) {
+							.equals(results.get(results.size() - 1).getId())) {
 						break mainloop;
 					}
 				}
 			}
-
 		}
 		app.closeApplication();
 		final GUITestCaseResult res = new GUITestCaseResult(tc, actions_executed, results,
