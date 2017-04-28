@@ -68,7 +68,7 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Openo) => ((Opening_list.selected.t) in (Auxiliary.haspwd)) => (Current_window.is_in.t' = aws.Decryptb and same[t,t']) else (openo[t,t'])
 	(aw in Cancelopen) => returned[t, t']
 	(aw in Encryptb) => save[t,t', Password.content.t, Filename.content.t]
-	(aw in Backe) => ((aw.goes in aws.New) => returned[t,t'] else (same2[t,t'] and Current_window.is_in.t' = aw.goes))
+	(aw in Backe) => (#Yes = 1) => savenp[t,t', Filename.content.t] else((aw.goes in aws.New) => returned[t,t'] else (same2[t,t'] and Current_window.is_in.t' = aw.goes))
 	(aw in Decryptb) => openo[t, t']
 	(aw in Backd) => ((aw.goes in aws.New) => returned[t,t'] else (same2[t,t'] and Current_window.is_in.t' = aw.goes))
 	(aw in Yes) => same[t,t'] and Current_window.is_in.t' = aw.goes
