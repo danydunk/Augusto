@@ -9,13 +9,22 @@ abstract sig Go, Login, Signup, Ok, Cancel, Logout extends Action_widget { }
 abstract sig User, Password, User_save, Password_save, Re_password, Field extends Input_widget { }
 
 fact {
-	(User_save+Password_save+Re_password) in Property_required.requireds
-	(User_save+Password_save) in Property_unique.uniques
+	not(User in Property_required.requireds)
+	not(Password in Property_required.requireds)
+	//not(User in Property_unique.uniques)
+	//not(Password in Property_unique.uniques)
+	
+	not(User_save in Property_required.requireds)
+	not(Password_save in Property_required.requireds)
+	not(Re_password in Property_required.requireds)
+	//not(User_save in Property_unique.uniques)
+	//not(Password_save in Property_unique.uniques)
+	//not(Re_password in Property_unique.uniques)
 }
 ---------------Generic AUTH Semantics---------- 
-one sig Property_unique{
-	uniques: set Input_widget
-} 
+//one sig Property_unique{
+//	uniques: set Input_widget
+//} 
 one sig Property_required{
 	requireds: set Input_widget
 }
@@ -47,7 +56,7 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] { }
 
 pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Login) => filled_login_test [t] and existing_test [t] 
-	(aw in Ok) => filled_required_test[t] and unique_fields_test [t] and same_pass_test [t] 
+	(aw in Ok) => filled_required_test[t] and unique_fields_test [t] and same_pass_test [t]
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
 	Current_window.is_in.t' = aw.goes
@@ -73,8 +82,10 @@ pred same_pass_test [t: Time] {
 	Password_save.content.t = Re_password.content.t
 }
 pred filled_required_test [t: Time] { 
-	all iw: (User_save + Password_save + Re_password + Field)| (iw in Property_required.requireds) => #iw.content.t = 1
+	#User_save.content.t = 1 and #Password_save.content.t = 1 and #Re_password.content.t = 1
+	all iw: Field| (iw in Property_required.requireds) => #iw.content.t = 1
 }
 pred  unique_fields_test [t: Time] { 
-	all iw: (User_save + Password_save + Field) | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
+	all o: List.elements.t | (#o.vs.User_save= 1 => User_save.content.t !=o.vs.User_save) and (#o.vs.Password_save= 1 => Password_save.content.t !=o.vs.Password_save) 
+	//all iw: Field | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
 }

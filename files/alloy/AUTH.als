@@ -11,20 +11,20 @@ abstract sig User, Password, User_save, Password_save, Re_password, Field extend
 fact {
 	not(User in Property_required.requireds)
 	not(Password in Property_required.requireds)
-	not(User in Property_unique.uniques)
-	not(Password in Property_unique.uniques)
+	//not(User in Property_unique.uniques)
+	//not(Password in Property_unique.uniques)
 	
 	not(User_save in Property_required.requireds)
 	not(Password_save in Property_required.requireds)
 	not(Re_password in Property_required.requireds)
-	not(User_save in Property_unique.uniques)
-	not(Password_save in Property_unique.uniques)
-	not(Re_password in Property_unique.uniques)
+	//not(User_save in Property_unique.uniques)
+	//not(Password_save in Property_unique.uniques)
+	//not(Re_password in Property_unique.uniques)
 }
 ---------------Generic AUTH Semantics---------- 
-one sig Property_unique{
-	uniques: set Input_widget
-} 
+//one sig Property_unique{
+//	uniques: set Input_widget
+//} 
 one sig Property_required{
 	requireds: set Input_widget
 }
@@ -87,7 +87,7 @@ pred filled_required_test [t: Time] {
 }
 pred  unique_fields_test [t: Time] { 
 	all o: List.elements.t | (#o.vs.User_save= 1 => User_save.content.t !=o.vs.User_save) and (#o.vs.Password_save= 1 => Password_save.content.t !=o.vs.Password_save) 
-	all iw: Field | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
+	//all iw: Field | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
 }
 pred valid_data_test [t: Time] {
 	all iw: Input_widget | (#iw.invalid > 0 and #iw.content.t = 1) => (not(iw.content.t in iw.invalid))

@@ -12,6 +12,7 @@ import src.usi.gui.functionality.instance.Instance_window;
 import src.usi.gui.structure.Action_widget;
 import src.usi.gui.structure.GUI;
 import src.usi.gui.structure.Input_widget;
+import src.usi.gui.structure.Option_input_widget;
 import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Widget;
 import src.usi.gui.structure.Window;
@@ -214,7 +215,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -545,7 +546,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -576,7 +577,7 @@ public class GUIFunctionality_refine {
 
 			if (timeout
 					&& (System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
-					.getRefinementTimeout()) {
+							.getRefinementTimeout()) {
 				System.out.println("TIMEOUT IN GET ADAPTED CONSTRAINT");
 				break;
 			}
@@ -682,6 +683,109 @@ public class GUIFunctionality_refine {
 		// res = this.last_used_instance.updateTCResult(res);
 		// the window reached after the last action was executed
 		reached_w = res.getResults().get(res.getActions_executed().size() - 1);
+
+		// we look only for windows that are the same
+		for (final Window w : this.gui.getWindows()) {
+			if (w.isSame(reached_w)) {
+				final Window new_reached = new Window(reached_w.getTo(), w.getId(),
+						reached_w.getLabel(), reached_w.getClasss(), reached_w.getX(),
+						reached_w.getY(), reached_w.getWidth(), reached_w.getHeight(),
+						reached_w.isModal());
+				new_reached.setRoot(w.isRoot());
+
+				// we can loop only once since if they are the same they must
+				// have the same widgets number
+				// we need to filter out the selectable widgets cause their
+				// position might change when they are scrolled
+
+				final List<Widget> widgets = reached_w
+						.getWidgets()
+						.stream()
+						.filter(e -> {
+							if (e instanceof Action_widget
+									&& e.getClasss().toLowerCase().equals("menuitemui")
+									&& e.getLabel().toLowerCase().startsWith("window -")) {
+								return false;
+							}
+							// we deal with selectable widgets separately cause
+							// selecting an element can modify the position of
+							// the
+							// widget
+							if (e instanceof Selectable_widget) {
+								return false;
+							}
+							return true;
+						}).collect(Collectors.toList());
+
+				final List<Widget> widgets2 = w
+						.getWidgets()
+						.stream()
+						.filter(e -> {
+							if (e instanceof Action_widget
+									&& e.getClasss().toLowerCase().equals("menuitemui")
+									&& e.getLabel().toLowerCase().startsWith("window -")) {
+								return false;
+							}
+							// we deal with selectable widgets separately cause
+							// selecting an element can modify the position of
+							// the
+							// widget
+							if (e instanceof Selectable_widget) {
+								return false;
+							}
+							return true;
+						}).collect(Collectors.toList());
+
+				for (int x = 0; x < widgets.size(); x++) {
+					if (widgets2.get(x) instanceof Action_widget) {
+						final Action_widget aw = (Action_widget) widgets.get(x);
+						final Action_widget aw2 = (Action_widget) widgets2.get(x);
+						final Action_widget new_aw = new Action_widget(aw2.getId(), aw.getLabel(),
+								aw.getClasss(), aw.getX(), aw.getY(), aw.getWidth(), aw.getHeight());
+						new_aw.setDescriptor(aw.getDescriptor());
+						new_reached.addWidget(new_aw);
+
+					} else if (widgets2.get(x) instanceof Input_widget) {
+						final Input_widget iw = (Input_widget) widgets.get(x);
+						if (widgets2.get(x) instanceof Option_input_widget) {
+							final Option_input_widget iw2 = (Option_input_widget) widgets2.get(x);
+							final Option_input_widget oiw = (Option_input_widget) iw;
+							final Option_input_widget new_oiw = new Option_input_widget(
+									iw2.getId(), iw.getLabel(), iw.getClasss(), iw.getX(),
+									iw.getY(), oiw.getWidth(), oiw.getHeight(), oiw.getSize(),
+									oiw.getSelected());
+							new_oiw.setDescriptor(iw.getDescriptor());
+							new_reached.addWidget(new_oiw);
+						} else {
+							final Input_widget iw2 = (Input_widget) widgets2.get(x);
+							final Input_widget new_iw = new Input_widget(iw2.getId(),
+									iw.getLabel(), iw.getClasss(), iw.getX(), iw.getY(),
+									iw.getWidth(), iw.getHeight(), iw.getValue());
+							new_iw.setDescriptor(iw.getDescriptor());
+							new_reached.addWidget(new_iw);
+
+						}
+					}
+				}
+
+				for (int x = 0; x < reached_w.getSelectableWidgets().size(); x++) {
+					if (w.getSelectableWidgets().get(x) instanceof Selectable_widget) {
+						final Selectable_widget sw = reached_w.getSelectableWidgets().get(x);
+						final Selectable_widget sw2 = w.getSelectableWidgets().get(x);
+
+						final Selectable_widget new_sw = new Selectable_widget(sw2.getId(),
+								sw.getLabel(), sw.getClasss(), sw.getX(), sw.getY(), sw.getWidth(),
+								sw.getHeight(), sw.getSize(), sw.getSelected());
+						new_sw.setDescriptor(sw.getDescriptor());
+						new_reached.addWidget(new_sw);
+
+					}
+
+				}
+				reached_w = new_reached;
+			}
+		}
+
 		boolean neww = false;
 		if (this.gui.getWindow(reached_w.getId()) == null) {
 			// the window is new, we add it and rip it
@@ -861,7 +965,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				if (!candidates.contains(new_prop)) {
@@ -927,7 +1031,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				if (!candidates.contains(new_prop)) {
@@ -1068,7 +1172,7 @@ public class GUIFunctionality_refine {
 			final List<GUITestCaseResult> tcs) throws Exception {
 
 		System.out.println("VALIDATE PROPERTY: start.");
-
+		// System.out.println(prop);
 		// we clone the semantics to remove all the facts related to discovering
 		// windows/edges
 		final List<Fact> facts = new ArrayList<>();
@@ -1126,6 +1230,7 @@ public class GUIFunctionality_refine {
 							for (final Run_command_thread run2 : threads) {
 								run2.interrupt();
 							}
+							// System.out.println(run.model);
 							System.out.println("VALIDATE PROPERTY: -false- end.");
 							return false;
 						}
@@ -1177,7 +1282,7 @@ public class GUIFunctionality_refine {
 			if (!this.testcasegen) {
 				this.testcasegen = true;
 				System.out
-						.println("GET TESTCASE: test case not found, trying adapting constraint.");
+				.println("GET TESTCASE: test case not found, trying adapting constraint.");
 				// if we reached timeout
 				// if ((System.currentTimeMillis() - this.beginTime) >=
 				// ConfigurationManager
@@ -1326,7 +1431,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-											.equals(inw.getInstance().getId())) {
+													.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1343,7 +1448,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-											.equals(inw.getInstance().getId())) {
+													.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1374,9 +1479,9 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-			+ "System and "
-			+ "(all t: Time| (t = T/last) <=> (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
-			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+					+ "System and "
+					+ "(all t: Time| (t = T/last) <=> (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
+					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
 

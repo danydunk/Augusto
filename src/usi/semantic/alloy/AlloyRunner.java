@@ -229,11 +229,11 @@ public class AlloyRunner {
 					if (v_scope > -1) {
 						if (r.nextBoolean()) {
 							final CommandScope vscope = new CommandScope(v, false,
-									(v_scope + ((time_scope - 1) * 1 / 2)));
+									(v_scope + ((time_scope - 1) * 2 / 3)));
 							scopes.add(vscope);
 						} else {
 							final CommandScope vscope = new CommandScope(v, false,
-									(v_scope + ((time_scope - 1) * 1 / 2)) + 1);
+									(v_scope + ((time_scope - 1) * 2 / 3)) + 1);
 							scopes.add(vscope);
 						}
 					}
@@ -274,11 +274,11 @@ public class AlloyRunner {
 						if (v_scope > -1) {
 							if (r.nextBoolean()) {
 								final CommandScope vscope = new CommandScope(v, false,
-										(v_scope + ((time_scope - 1) * 1 / 2)));
+										(v_scope + ((time_scope - 1) * 2 / 3)));
 								scopes2.add(vscope);
 							} else {
 								final CommandScope vscope = new CommandScope(v, false, (v_scope
-										+ ((time_scope - 1) * 1 / 2) + 1));
+										+ ((time_scope - 1) * 2 / 3) + 1));
 								scopes2.add(vscope);
 							}
 						}
@@ -319,8 +319,8 @@ public class AlloyRunner {
 	}
 
 	static GUITestCase
-	analyzeTuples(final A4Solution solution, final Instance_GUI_pattern instance)
-			throws Exception {
+			analyzeTuples(final A4Solution solution, final Instance_GUI_pattern instance)
+					throws Exception {
 
 		Map<String, String> input_data_map = null;
 		input_data_map = elaborateInputData(solution, instance);
@@ -504,7 +504,7 @@ public class AlloyRunner {
 									final Selectable_widget new_sw = new Selectable_widget(
 											sw.getId(), sw.getLabel(), sw.getClasss(), sw.getX(),
 											sw.getY(), sw.getWidth(), sw.getHeight(), sw.getSize()
-											+ (map.keySet().size()), sel);
+													+ (map.keySet().size()), sel);
 									new_sw.setDescriptor(sw.getDescriptor());
 									sws.add(new_sw);
 									continue swloop;
@@ -834,41 +834,41 @@ public class AlloyRunner {
 				metadata += inpw.getDescriptor() != null && metadata.length() == 0 ? inpw
 						.getDescriptor() : "";
 
-						List<String> data = null;
-						if (invalid_values.contains(v)) {
-							data = dm.getInvalidData(metadata);
+				List<String> data = null;
+				if (invalid_values.contains(v)) {
+					data = dm.getInvalidData(metadata);
 
-							assert (data.size() > 0);
-						} else {
-							data = dm.getValidData(metadata);
-						}
+					assert (data.size() > 0);
+				} else {
+					data = dm.getValidData(metadata);
+				}
 
-						assert (data != null);
+				assert (data != null);
 
-						if (data_for_value.containsKey(v)) {
-							List<String> new_list = new ArrayList<>();
-							// we calculate the intersection between the values
-							// already
-							// available for this value and the new ones
+				if (data_for_value.containsKey(v)) {
+					List<String> new_list = new ArrayList<>();
+					// we calculate the intersection between the values
+					// already
+					// available for this value and the new ones
 
-							if (data.size() == 0) {
-								new_list = data_for_value.get(v);
-							} else {
-								for (final String s : data_for_value.get(v)) {
-									if (data.contains(s)) {
-										new_list.add(s);
-									}
-								}
+					if (data.size() == 0) {
+						new_list = data_for_value.get(v);
+					} else {
+						for (final String s : data_for_value.get(v)) {
+							if (data.contains(s)) {
+								new_list.add(s);
 							}
-							if (invalid_values.contains(v) && new_list.size() == 0) {
-								throw new Exception(
-										"AlloyTestCaseGeneration - not enough invalid input data.");
-							}
-
-							data_for_value.put(v, new_list);
-						} else {
-							data_for_value.put(v, data);
 						}
+					}
+					if (invalid_values.contains(v) && new_list.size() == 0) {
+						throw new Exception(
+								"AlloyTestCaseGeneration - not enough invalid input data.");
+					}
+
+					data_for_value.put(v, new_list);
+				} else {
+					data_for_value.put(v, data);
+				}
 
 			}
 		}

@@ -298,7 +298,7 @@ public class Instance_GUI_pattern {
 		}
 		if (vs > -1) {
 
-			scopes += "," + (vs + (ConfigurationManager.getAlloyRunScope() * 1 / 2)) + " Value";
+			scopes += "," + (vs + (ConfigurationManager.getAlloyRunScope() * 1 / 3)) + " Value";
 		}
 		run = run + scopes;
 		// System.out.println("validating");
