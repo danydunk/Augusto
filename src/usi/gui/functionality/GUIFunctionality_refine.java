@@ -35,6 +35,7 @@ import src.usi.testcase.TestCaseRunner;
 import src.usi.testcase.structure.Click;
 import src.usi.testcase.structure.GUIAction;
 import src.usi.testcase.structure.GUITestCase;
+import src.usi.util.IDManager;
 
 public class GUIFunctionality_refine {
 
@@ -683,7 +684,35 @@ public class GUIFunctionality_refine {
 		// res = this.last_used_instance.updateTCResult(res);
 		// the window reached after the last action was executed
 		reached_w = res.getResults().get(res.getActions_executed().size() - 1);
-
+		final List<Widget> wids = reached_w.getWidgets();
+		reached_w = new Window(reached_w.getTo(), IDManager.getInstance().nextWindowId(),
+				reached_w.getLabel(), reached_w.getClasss(), reached_w.getX(), reached_w.getY(),
+				reached_w.getWidth(), reached_w.getHeight(), reached_w.isModal());
+		for (final Widget wiid : wids) {
+			if (wiid instanceof Action_widget) {
+				final Action_widget aw = new Action_widget(IDManager.getInstance().nextAWId(),
+						wiid.getLabel(), wiid.getClasss(), wiid.getX(), wiid.getY(),
+						wiid.getWidth(), wiid.getHeight());
+				aw.setDescriptor(wiid.getDescriptor());
+				reached_w.addWidget(aw);
+			}
+			if (wiid instanceof Input_widget) {
+				final Input_widget wii = (Input_widget) wiid;
+				final Input_widget iw = new Input_widget(IDManager.getInstance().nextIWId(),
+						wiid.getLabel(), wiid.getClasss(), wiid.getX(), wiid.getY(),
+						wiid.getWidth(), wiid.getHeight(), wii.getValue());
+				iw.setDescriptor(wiid.getDescriptor());
+				reached_w.addWidget(iw);
+			}
+			if (wiid instanceof Selectable_widget) {
+				final Selectable_widget wii = (Selectable_widget) wiid;
+				final Selectable_widget sw = new Selectable_widget(IDManager.getInstance()
+						.nextSWId(), wiid.getLabel(), wiid.getClasss(), wiid.getX(), wiid.getY(),
+						wiid.getWidth(), wiid.getHeight(), wii.getSize(), wii.getSelected());
+				sw.setDescriptor(wiid.getDescriptor());
+				reached_w.addWidget(sw);
+			}
+		}
 		// we look only for windows that are the same
 		for (final Window w : this.gui.getWindows()) {
 			if (w.isSame(reached_w)) {
