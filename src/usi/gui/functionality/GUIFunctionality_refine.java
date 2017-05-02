@@ -697,12 +697,22 @@ public class GUIFunctionality_refine {
 				reached_w.addWidget(aw);
 			}
 			if (wiid instanceof Input_widget) {
-				final Input_widget wii = (Input_widget) wiid;
-				final Input_widget iw = new Input_widget(IDManager.getInstance().nextIWId(),
-						wiid.getLabel(), wiid.getClasss(), wiid.getX(), wiid.getY(),
-						wiid.getWidth(), wiid.getHeight(), wii.getValue());
-				iw.setDescriptor(wiid.getDescriptor());
-				reached_w.addWidget(iw);
+				if (wiid instanceof Option_input_widget) {
+					final Option_input_widget wii = (Option_input_widget) wiid;
+					final Option_input_widget iw = new Option_input_widget(IDManager.getInstance()
+							.nextIWId(), wiid.getLabel(), wiid.getClasss(), wiid.getX(),
+							wiid.getY(), wiid.getWidth(), wiid.getHeight(), wii.getSize(),
+							wii.getSelected());
+					iw.setDescriptor(wiid.getDescriptor());
+					reached_w.addWidget(iw);
+				} else {
+					final Input_widget wii = (Input_widget) wiid;
+					final Input_widget iw = new Input_widget(IDManager.getInstance().nextIWId(),
+							wiid.getLabel(), wiid.getClasss(), wiid.getX(), wiid.getY(),
+							wiid.getWidth(), wiid.getHeight(), wii.getValue());
+					iw.setDescriptor(wiid.getDescriptor());
+					reached_w.addWidget(iw);
+				}
 			}
 			if (wiid instanceof Selectable_widget) {
 				final Selectable_widget wii = (Selectable_widget) wiid;

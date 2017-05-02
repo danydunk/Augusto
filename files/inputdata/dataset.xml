@@ -8,6 +8,7 @@
 	  <valid>127.0.0.2</valid>
 	  <valid>127.0.0.3</valid>
 	  <valid>127.0.0.4</valid>
+	  <valid>127.0.0.5</valid>
       <invalid>inv</invalid>
 	  <invalid>inv2</invalid>
     </values>
