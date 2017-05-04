@@ -274,7 +274,7 @@ public class AlloyUtil {
 
 	static public GUITestCase getTestcase(final Instance_GUI_pattern model,
 			final int command_index, final int type, final int scope, final int t1, final int t2)
-					throws Exception {
+			throws Exception {
 
 		final String path = XMLUtil.saveTMP(Instance_GUI_patternWriter
 				.writeInstanceGUIPattern(model));
@@ -1134,7 +1134,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1622,7 +1622,7 @@ public class AlloyUtil {
 	 */
 	static public SpecificSemantics getTCaseModel(final SpecificSemantics mod,
 			final List<GUIAction> acts, final Window reached, final Instance_GUI_pattern in)
-					throws Exception {
+			throws Exception {
 
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
@@ -1656,23 +1656,24 @@ public class AlloyUtil {
 
 				if (selflink) {
 
-					for (final Input_widget iw : reached.getInputWidgets()) {
-						if (in.getPIW_for_IW(iw.getId()) != null) {
-							// final Input_widget iiw = (Input_widget)
-							// in.getGui()
-							// .getWindow(reached.getId()).getWidget(iw.getId());
-							// if (iiw.getValue() == null ||
-							// iiw.getValue().length() == 0) {
-							if (iw.getValue() == null || iw.getValue().length() == 0) {
-								fact += " and #Input_widget_" + iw.getId()
-										+ ".content.(T/last) = 0";
-							} else {
-								fact += " and #Input_widget_" + iw.getId()
-										+ ".content.(T/last) = 1";
-							}
-							// }
-						}
-					}
+					// for (final Input_widget iw : reached.getInputWidgets()) {
+					// if (in.getPIW_for_IW(iw.getId()) != null) {
+					// // final Input_widget iiw = (Input_widget)
+					// // in.getGui()
+					// // .getWindow(reached.getId()).getWidget(iw.getId());
+					// // if (iiw.getValue() == null ||
+					// // iiw.getValue().length() == 0) {
+					// if (iw.getValue() == null || iw.getValue().length() == 0)
+					// {
+					// fact += " and #Input_widget_" + iw.getId()
+					// + ".content.(T/last) = 0";
+					// } else {
+					// fact += " and #Input_widget_" + iw.getId()
+					// + ".content.(T/last) = 1";
+					// }
+					// // }
+					// }
+					// }
 					for (final Selectable_widget sw : reached.getSelectableWidgets()) {
 						if (in.getPSW_for_SW(sw.getId()) != null) {
 							final Selectable_widget ssw = (Selectable_widget) in.getGui()
@@ -1857,17 +1858,17 @@ public class AlloyUtil {
 					metadata += iw.getDescriptor() != null && metadata.length() == 0 ? iw
 							.getDescriptor() : "";
 
-					if (dm.getInvalidData(metadata).contains(s)) {
-						assert (invalid);
-						fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
-								+ iw.getId() + ".invalid";
+							if (dm.getInvalidData(metadata).contains(s)) {
+								assert (invalid);
+								fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
+										+ iw.getId() + ".invalid";
 
-					} else {
-						if (invalid) {
-							fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
-									+ iw.getId() + ".invalid)";
-						}
-					}
+							} else {
+								if (invalid) {
+									fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
+											+ iw.getId() + ".invalid)";
+								}
+							}
 				}
 			} else {
 				final List<String> fills = values_used.get(s);
