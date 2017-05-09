@@ -822,8 +822,15 @@ public class GUIFunctionality_refine {
 
 				}
 				reached_w = new_reached;
+				break;
 			}
 		}
+
+		final List<Window> www = res.getResults();
+		www.remove(www.size() - 1);
+		www.add(reached_w);
+		res = new GUITestCaseResult(res.getTc(), res.getActions_executed(), www,
+				res.getActions_actually_executed());
 
 		boolean neww = false;
 		if (this.gui.getWindow(reached_w.getId()) == null) {
@@ -1195,11 +1202,30 @@ public class GUIFunctionality_refine {
 		if (candidates.size() == 0) {
 			System.out.println("SEMANTIC PROPERTY NOT FOUND.");
 		} else {
-			for (final String s : candidates) {
-				if (this.validateProperty(s, this.instancePattern.getSemantics(), this.observed_tcs)) {
+
+			loop: while (true) {
+				String min = null;
+
+				for (final String s : candidates) {
+					if (min == null) {
+						min = s;
+						continue;
+					}
+					if (s.length() < min.length()) {
+						min = s;
+					}
+				}
+				if (min == null) {
+					System.out.println("Min constr not found");
+					break loop;
+				}
+				System.out.println("Verifying: " + min);
+				candidates.remove(min);
+				if (this.validateProperty(min, this.instancePattern.getSemantics(),
+						this.observed_tcs)) {
 					System.out.println("SEMANTIC PROPERTY FOUND.");
-					this.current_semantic_property = s;
-					break;
+					this.current_semantic_property = min;
+					break loop;
 				}
 			}
 		}

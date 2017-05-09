@@ -11,6 +11,7 @@ abstract sig User, Password, User_save, Password_save, Re_password, Field extend
 fact {
 	not(User in Property_required.requireds)
 	not(Password in Property_required.requireds)
+	all iw: Input_widget | (#iw.invalid > 0 and iw.invalid in (Option_value_0+Option_value_1+Option_value_2+Option_value_3+Option_value_4)) => iw in Property_required.requireds
 	//not(User in Property_unique.uniques)
 	//not(Password in Property_unique.uniques)
 	
@@ -86,7 +87,7 @@ pred filled_required_test [t: Time] {
 	all iw: Field| (iw in Property_required.requireds) => #iw.content.t = 1
 }
 pred  unique_fields_test [t: Time] { 
-	all o: List.elements.t | (#o.vs.User_save= 1 => User_save.content.t !=o.vs.User_save) and (#o.vs.Password_save= 1 => Password_save.content.t !=o.vs.Password_save) 
+	all o: List.elements.t | (#o.vs.User_save= 1 => User_save.content.t !=o.vs.User_save)
 	//all iw: Field | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
 }
 pred valid_data_test [t: Time] {

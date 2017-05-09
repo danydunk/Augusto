@@ -854,9 +854,17 @@ public class AlloyRunner {
 					if (data.size() == 0) {
 						new_list = data_for_value.get(v);
 					} else {
-						for (final String s : data_for_value.get(v)) {
-							if (data.contains(s)) {
-								new_list.add(s);
+						if (data_for_value.get(v).size() == 0) {
+							new_list = data;
+						} else {
+							for (final String s : data_for_value.get(v)) {
+								if (data.contains(s)) {
+									new_list.add(s);
+								}
+							}
+							if (new_list.size() == 0) {
+								throw new Exception(
+										"AlloyTestCaseGeneration - incompatible input widgets.");
 							}
 						}
 					}
@@ -869,7 +877,6 @@ public class AlloyRunner {
 				} else {
 					data_for_value.put(v, data);
 				}
-
 			}
 		}
 

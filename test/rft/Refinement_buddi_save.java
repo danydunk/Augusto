@@ -40,15 +40,15 @@ public class Refinement_buddi_save extends Refinement_buddi_saveHelper {
 			PathsManager.setProjectRoot(args[0].toString());
 		}
 		ConfigurationManager.load(PathsManager.getProjectRoot()
-				+ "/files/for_test/config/upm.properties");
+				+ "/files/for_test/config/spark.properties");
 		ExperimentManager.init();
 
 		// we load a gui pattern
-		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/guipatterns/save.xml");
+		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/guipatterns/auth.xml");
 		final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 		// we load the GUI structure
-		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/upm.xml");
+		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/spark.xml");
 		final GUI gui = GUIParser.parse(doc);
 
 		final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);

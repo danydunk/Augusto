@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
@@ -274,7 +275,7 @@ public class AlloyUtil {
 
 	static public GUITestCase getTestcase(final Instance_GUI_pattern model,
 			final int command_index, final int type, final int scope, final int t1, final int t2)
-					throws Exception {
+			throws Exception {
 
 		final String path = XMLUtil.saveTMP(Instance_GUI_patternWriter
 				.writeInstanceGUIPattern(model));
@@ -1134,7 +1135,7 @@ public class AlloyUtil {
 	 */
 	public static Fact createFactsForActionWidget(final Map<Action_widget, Signature> aws,
 			final Signature window, final Map<Window, Signature> ws, final GUI gui)
-					throws Exception {
+			throws Exception {
 
 		final Fact initial_fact = createFactsForElement(aws.values(), window, "aws");
 		String content = initial_fact.getContent();
@@ -1622,8 +1623,9 @@ public class AlloyUtil {
 	 */
 	static public SpecificSemantics getTCaseModel(final SpecificSemantics mod,
 			final List<GUIAction> acts, final Window reached, final Instance_GUI_pattern in)
-					throws Exception {
+			throws Exception {
 
+		final Random r = new Random();
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
 		final List<Function> funcs = mod.getFunctions();
@@ -1700,13 +1702,32 @@ public class AlloyUtil {
 		final int time_size = acts.size() + 1;
 		final int op_size = time_size - 1;
 
-		final int winscope = AlloyUtil.getWinScope(mod);
-		final int awscope = AlloyUtil.getAWScope(mod);
-		final int vscope = AlloyUtil.getValueScope(mod);
-		final int iwscope = AlloyUtil.getIWScope(mod);
-		final int swscope = AlloyUtil.getSWScope(mod);
+		int winscope = AlloyUtil.getWinScope(mod);
+		int awscope = AlloyUtil.getAWScope(mod);
+		int vscope = AlloyUtil.getValueScope(mod);
+		int iwscope = AlloyUtil.getIWScope(mod);
+		int swscope = AlloyUtil.getSWScope(mod);
 
 		int totalscope = ConfigurationManager.getAlloyRunScope();
+
+		if (r.nextBoolean()) {
+			totalscope = totalscope + 1;
+		}
+		if (r.nextBoolean()) {
+			winscope = winscope + 1;
+		}
+		if (r.nextBoolean()) {
+			awscope = awscope + 1;
+		}
+		if (r.nextBoolean()) {
+			vscope = vscope + 1;
+		}
+		if (r.nextBoolean()) {
+			iwscope = iwscope + 1;
+		}
+		if (r.nextBoolean()) {
+			swscope = swscope + 1;
+		}
 
 		if (winscope == -1 || awscope == -1 || iwscope == -1 || swscope == -1) {
 
@@ -1857,17 +1878,17 @@ public class AlloyUtil {
 					metadata += iw.getDescriptor() != null && metadata.length() == 0 ? iw
 							.getDescriptor() : "";
 
-					if (dm.getInvalidData(metadata).contains(s)) {
-						assert (invalid);
-						fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
-								+ iw.getId() + ".invalid";
+							if (dm.getInvalidData(metadata).contains(s)) {
+								assert (invalid);
+								fact += " and " + values_used.get(s).get(0) + " in Input_widget_"
+										+ iw.getId() + ".invalid";
 
-					} else {
-						if (invalid) {
-							fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
-									+ iw.getId() + ".invalid)";
-						}
-					}
+							} else {
+								if (invalid) {
+									fact += " and not(" + values_used.get(s).get(0) + " in Input_widget_"
+											+ iw.getId() + ".invalid)";
+								}
+							}
 				}
 			} else {
 				final List<String> fills = values_used.get(s);
