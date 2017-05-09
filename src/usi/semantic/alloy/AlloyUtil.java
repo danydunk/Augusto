@@ -1658,23 +1658,24 @@ public class AlloyUtil {
 
 				if (selflink) {
 
-					for (final Input_widget iw : reached.getInputWidgets()) {
-						if (in.getPIW_for_IW(iw.getId()) != null) {
-							// final Input_widget iiw = (Input_widget)
-							// in.getGui()
-							// .getWindow(reached.getId()).getWidget(iw.getId());
-							// if (iiw.getValue() == null ||
-							// iiw.getValue().length() == 0) {
-							if (iw.getValue() == null || iw.getValue().length() == 0) {
-								fact += " and #Input_widget_" + iw.getId()
-										+ ".content.(T/last) = 0";
-							} else {
-								fact += " and #Input_widget_" + iw.getId()
-										+ ".content.(T/last) = 1";
-							}
-							// }
-						}
-					}
+					// for (final Input_widget iw : reached.getInputWidgets()) {
+					// if (in.getPIW_for_IW(iw.getId()) != null) {
+					// // final Input_widget iiw = (Input_widget)
+					// // in.getGui()
+					// // .getWindow(reached.getId()).getWidget(iw.getId());
+					// // if (iiw.getValue() == null ||
+					// // iiw.getValue().length() == 0) {
+					// if (iw.getValue() == null || iw.getValue().length() == 0)
+					// {
+					// fact += " and #Input_widget_" + iw.getId()
+					// + ".content.(T/last) = 0";
+					// } else {
+					// fact += " and #Input_widget_" + iw.getId()
+					// + ".content.(T/last) = 1";
+					// }
+					// // }
+					// }
+					// }
 					for (final Selectable_widget sw : reached.getSelectableWidgets()) {
 						if (in.getPSW_for_SW(sw.getId()) != null) {
 							final Selectable_widget ssw = (Selectable_widget) in.getGui()
