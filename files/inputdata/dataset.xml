@@ -9,6 +9,8 @@
 	  <valid>127.0.0.3</valid>
 	  <valid>127.0.0.4</valid>
 	  <valid>127.0.0.5</valid>
+	  <valid>127.0.0.6</valid>
+	  <valid>127.0.0.7</valid>
       <invalid>inv</invalid>
 	  <invalid>inv2</invalid>
     </values>
@@ -58,7 +60,7 @@
     </values>
   </DATA>
   <DATA>
-    <metadata></metadata>
+    <metadata>app</metadata>
     <values>
       <valid>1.00</valid>
       <valid>10.00</valid>

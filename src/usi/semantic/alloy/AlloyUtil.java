@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
@@ -1624,6 +1625,7 @@ public class AlloyUtil {
 			final List<GUIAction> acts, final Window reached, final Instance_GUI_pattern in)
 			throws Exception {
 
+		final Random r = new Random();
 		final List<Signature> sigs = mod.getSignatures();
 		final List<Fact> facts = mod.getFacts();
 		final List<Function> funcs = mod.getFunctions();
@@ -1701,13 +1703,32 @@ public class AlloyUtil {
 		final int time_size = acts.size() + 1;
 		final int op_size = time_size - 1;
 
-		final int winscope = AlloyUtil.getWinScope(mod);
-		final int awscope = AlloyUtil.getAWScope(mod);
-		final int vscope = AlloyUtil.getValueScope(mod);
-		final int iwscope = AlloyUtil.getIWScope(mod);
-		final int swscope = AlloyUtil.getSWScope(mod);
+		int winscope = AlloyUtil.getWinScope(mod);
+		int awscope = AlloyUtil.getAWScope(mod);
+		int vscope = AlloyUtil.getValueScope(mod);
+		int iwscope = AlloyUtil.getIWScope(mod);
+		int swscope = AlloyUtil.getSWScope(mod);
 
 		int totalscope = ConfigurationManager.getAlloyRunScope();
+
+		if (r.nextBoolean()) {
+			totalscope = totalscope + 1;
+		}
+		if (r.nextBoolean()) {
+			winscope = winscope + 1;
+		}
+		if (r.nextBoolean()) {
+			awscope = awscope + 1;
+		}
+		if (r.nextBoolean()) {
+			vscope = vscope + 1;
+		}
+		if (r.nextBoolean()) {
+			iwscope = iwscope + 1;
+		}
+		if (r.nextBoolean()) {
+			swscope = swscope + 1;
+		}
 
 		if (winscope == -1 || awscope == -1 || iwscope == -1 || swscope == -1) {
 
