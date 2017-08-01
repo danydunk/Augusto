@@ -60,27 +60,32 @@ public class GUIParser {
 		final String type = node.getAttributes().getNamedItem("type").getNodeValue();
 		// See that the id is not used.
 		final Node fromNode = XMLUtil.getElementNode(node.getChildNodes(), "from");
-		final Node toNode = XMLUtil.getElementNode(node.getChildNodes(), "to");
 		final String idFrom = fromNode.getTextContent();
-		final String idTo = toNode.getTextContent();
 
-		final List<Action_widget> aw = aws.stream().filter(e -> e.getId().equals(idFrom))
-				.collect(Collectors.toList());
+		final List<Node> toNodes = XMLUtil.getElementNodesList(node.getChildNodes(), "to");
+		for (final Node toNode : toNodes) {
+			// final Node toNode = XMLUtil.getElementNode(node.getChildNodes(),
+			// "to");
+			final String idTo = toNode.getTextContent();
 
-		final List<Window> w = gui.getWindows().stream().filter(e -> e.getId().equals(idTo))
-				.collect(Collectors.toList());
-		if (aw.size() != 1 || w.size() != 1) {
-			throw new Exception("GUIParser - createEdge: id not found.");
-		}
-		switch (type) {
-		case "static":
-			gui.addStaticEdge(aw.get(0).getId(), w.get(0).getId());
-			break;
-		case "dynamic":
-			gui.addDynamicEdge(aw.get(0).getId(), w.get(0).getId());
-			break;
-		default:
-			throw new Exception("GUIParser - createEdge: edge type not found.");
+			final List<Action_widget> aw = aws.stream().filter(e -> e.getId().equals(idFrom))
+					.collect(Collectors.toList());
+
+			final List<Window> w = gui.getWindows().stream().filter(e -> e.getId().equals(idTo))
+					.collect(Collectors.toList());
+			if (aw.size() != 1 || w.size() != 1) {
+				throw new Exception("GUIParser - createEdge: id not found.");
+			}
+			switch (type) {
+			case "static":
+				gui.addStaticEdge(aw.get(0).getId(), w.get(0).getId());
+				break;
+			case "dynamic":
+				gui.addDynamicEdge(aw.get(0).getId(), w.get(0).getId());
+				break;
+			default:
+				throw new Exception("GUIParser - createEdge: edge type not found.");
+			}
 		}
 
 	}

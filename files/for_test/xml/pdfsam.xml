@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<GUI>
+    <window id="w7">
+        <pos>461:171</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Open</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw45">
+            <pos>914:213</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw46">
+            <pos>936:213</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw42">
+            <pos>839:214</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw43">
+            <pos>864:214</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw44">
+            <pos>889:214</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw47">
+            <pos>857:493</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw48">
+            <pos>910:493</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw33">
+            <pos>534:213</pos>
+            <rectangle>294:24</rectangle>
+            <class>ComboBoxUI</class>
+            <value>[options] 6 : 15</value>
+        </input_widget>
+        <input_widget id="iw34">
+            <pos>482:396</pos>
+            <rectangle>219:17</rectangle>
+            <class>TextFieldUI</class>
+            <value>New Folder (26)</value>
+        </input_widget>
+        <input_widget id="iw35">
+            <pos>561:425</pos>
+            <rectangle>397:23</rectangle>
+            <class>TextFieldUI</class>
+            <value>New Folder (26)</value>
+        </input_widget>
+        <input_widget id="iw36">
+            <pos>561:453</pos>
+            <rectangle>397:23</rectangle>
+            <class>ComboBoxUI</class>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <selectable_widget id="sw6">
+            <pos>482:327</pos>
+            <rectangle>460:442</rectangle>
+            <class>TableUI</class>
+            <size>26</size>
+            <selected>25</selected>
+        </selectable_widget>
+    </window>
+    <window id="w1">
+        <pos>420:46</pos>
+        <rectangle>600:650</rectangle>
+        <class>javax.swing.JFrame</class>
+        <title>PDF Split and Merge Ver. 0.7 stable release 1</title>
+        <modal>false</modal>
+        <root>true</root>
+        <action_widget id="aw10">
+            <pos>430:78</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Clear log</label>
+        </action_widget>
+        <action_widget id="aw11">
+            <pos>430:78</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Exit</label>
+        </action_widget>
+        <action_widget id="aw12">
+            <pos>465:78</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>About - Info</label>
+        </action_widget>
+        <action_widget id="aw1">
+            <pos>429:106</pos>
+            <rectangle>582:472</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>Split</label>
+        </action_widget>
+        <action_widget id="aw2">
+            <pos>429:106</pos>
+            <rectangle>582:472</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>Settings</label>
+        </action_widget>
+        <action_widget id="aw3">
+            <pos>908:163</pos>
+            <rectangle>93:25</rectangle>
+            <class>ButtonUI</class>
+            <label>Add</label>
+        </action_widget>
+        <action_widget id="aw4">
+            <pos>908:193</pos>
+            <rectangle>93:25</rectangle>
+            <class>ButtonUI</class>
+            <label>Remove</label>
+        </action_widget>
+        <action_widget id="aw5">
+            <pos>908:223</pos>
+            <rectangle>93:25</rectangle>
+            <class>ButtonUI</class>
+            <label>Move Up</label>
+        </action_widget>
+        <action_widget id="aw6">
+            <pos>908:253</pos>
+            <rectangle>93:25</rectangle>
+            <class>ButtonUI</class>
+            <label>Move Down</label>
+        </action_widget>
+        <action_widget id="aw7">
+            <pos>908:283</pos>
+            <rectangle>93:25</rectangle>
+            <class>ButtonUI</class>
+            <label>Clear</label>
+        </action_widget>
+        <action_widget id="aw8">
+            <pos>907:394</pos>
+            <rectangle>88:25</rectangle>
+            <class>ButtonUI</class>
+            <label>Browse</label>
+        </action_widget>
+        <action_widget id="aw9">
+            <pos>908:478</pos>
+            <rectangle>93:25</rectangle>
+            <class>ButtonUI</class>
+            <label>Run</label>
+        </action_widget>
+        <input_widget id="iw1">
+            <pos>444:339</pos>
+            <rectangle>516:25</rectangle>
+            <class>CheckBoxUI</class>
+            <label>PDF documents contain forms</label>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw2">
+            <pos>444:394</pos>
+            <rectangle>451:25</rectangle>
+            <class>TextFieldUI</class>
+            <value/>
+        </input_widget>
+        <input_widget id="iw4">
+            <pos>444:424</pos>
+            <rectangle>151:17</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Overwrite if already exists</label>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw3">
+            <pos>444:446</pos>
+            <rectangle>129:17</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Compress output file</label>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw5">
+            <pos>430:586</pos>
+            <rectangle>580:100</rectangle>
+            <class>TextPaneUI</class>
+            <value>&lt;html&gt;
+  &lt;head&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    PDF Split and Merge Ver. 0.7 stable release 1&lt;br&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</value>
+        </input_widget>
+        <selectable_widget id="sw1">
+            <pos>439:184</pos>
+            <rectangle>456:0</rectangle>
+            <class>TableUI</class>
+            <size>0</size>
+            <selected>-1</selected>
+        </selectable_widget>
+        <selectable_widget id="sw2">
+            <pos>438:478</pos>
+            <rectangle>465:60</rectangle>
+            <class>ListUI</class>
+            <size>0</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w2">
+        <pos>100:100</pos>
+        <rectangle>449:500</rectangle>
+        <class>javax.swing.JFrame</class>
+        <title>About pdfsam</title>
+        <modal>false</modal>
+        <root>false</root>
+        <action_widget id="aw13">
+            <pos>500:560</pos>
+            <rectangle>41:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Close</label>
+        </action_widget>
+        <input_widget id="iw6">
+            <pos>108:150</pos>
+            <rectangle>433:100</rectangle>
+            <class>TextPaneUI</class>
+            <value>Application name: PDF Split and Merge
+Application version: 0.7 stable release 1
+Language: Java(TM) 2 SDK, Standard Edition, Version 1.4.2
+Author: Andrea Vacondio
+Build date: 28/08/2007
+Website: http://www.pdfsam.org</value>
+        </input_widget>
+        <input_widget id="iw7">
+            <pos>109:421</pos>
+            <rectangle>416:351</rectangle>
+            <class>TextPaneUI</class>
+            <value>&lt;html&gt;
+  &lt;head&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;center&gt;
+      &lt;font size="+1"&gt;Thanks to&lt;/font&gt;&lt;br&gt;SourceForge&lt;br&gt;Freshmeat&lt;br&gt;Launchpad&lt;br&gt;Rosetta 
+      translators&lt;br&gt;Ubuntu&lt;br&gt;iText&lt;br&gt;GNU&lt;br&gt;OpenOffice&lt;br&gt;jcmdline&lt;br&gt;JGoodies&lt;br&gt;David 
+      Vignoni&lt;br&gt;Eclipse&lt;br&gt;Xenoage Software&lt;br&gt;Elisa Bortolotti&lt;br&gt;dom4j&lt;br&gt;jaxen&lt;br&gt;All 
+      the donors and contributors&lt;br&gt;
+    &lt;/center&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</value>
+        </input_widget>
+        <selectable_widget id="sw3">
+            <pos>109:296</pos>
+            <rectangle>431:32</rectangle>
+            <class>TableUI</class>
+            <size>2</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w3">
+        <pos>420:46</pos>
+        <rectangle>600:650</rectangle>
+        <class>javax.swing.JFrame</class>
+        <title>PDF Split and Merge Ver. 0.7 stable release 1</title>
+        <modal>false</modal>
+        <root>false</root>
+        <action_widget id="aw19">
+            <pos>430:78</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Clear log</label>
+        </action_widget>
+        <action_widget id="aw20">
+            <pos>430:78</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Exit</label>
+        </action_widget>
+        <action_widget id="aw21">
+            <pos>465:78</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>About - Info</label>
+        </action_widget>
+        <action_widget id="aw14">
+            <pos>429:106</pos>
+            <rectangle>582:472</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>Merge</label>
+        </action_widget>
+        <action_widget id="aw15">
+            <pos>429:106</pos>
+            <rectangle>582:472</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>Settings</label>
+        </action_widget>
+        <action_widget id="aw16">
+            <pos>898:153</pos>
+            <rectangle>98:25</rectangle>
+            <class>ButtonUI</class>
+            <label>Browse</label>
+        </action_widget>
+        <action_widget id="aw17">
+            <pos>902:364</pos>
+            <rectangle>88:25</rectangle>
+            <class>ButtonUI</class>
+            <label>Browse</label>
+        </action_widget>
+        <action_widget id="aw18">
+            <pos>898:523</pos>
+            <rectangle>98:25</rectangle>
+            <class>ButtonUI</class>
+            <label>Run</label>
+        </action_widget>
+        <input_widget id="iw8">
+            <pos>438:153</pos>
+            <rectangle>448:20</rectangle>
+            <class>TextFieldUI</class>
+            <value/>
+        </input_widget>
+        <input_widget id="iw9">
+            <pos>449:214</pos>
+            <rectangle>220:151</rectangle>
+            <class>RadioButtonUI</class>
+            <label/>
+            <value>[options] 6 : 7</value>
+        </input_widget>
+        <input_widget id="iw15">
+            <pos>777:214</pos>
+            <rectangle>70:20</rectangle>
+            <class>TextFieldUI</class>
+            <value/>
+        </input_widget>
+        <input_widget id="iw11">
+            <pos>580:234</pos>
+            <rectangle>40:20</rectangle>
+            <class>TextFieldUI</class>
+            <value/>
+        </input_widget>
+        <input_widget id="iw18">
+            <pos>444:369</pos>
+            <rectangle>451:20</rectangle>
+            <class>TextFieldUI</class>
+            <value/>
+        </input_widget>
+        <input_widget id="iw19">
+            <pos>444:394</pos>
+            <rectangle>151:17</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Overwrite if already exists</label>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw20">
+            <pos>444:416</pos>
+            <rectangle>129:17</rectangle>
+            <class>CheckBoxUI</class>
+            <label>Compress output file</label>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw21">
+            <pos>589:465</pos>
+            <rectangle>401:20</rectangle>
+            <class>TextFieldUI</class>
+            <value>pdfsam_</value>
+        </input_widget>
+        <input_widget id="iw22">
+            <pos>430:586</pos>
+            <rectangle>580:100</rectangle>
+            <class>TextPaneUI</class>
+            <value>&lt;html&gt;
+  &lt;head&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    PDF Split and Merge Ver. 0.7 stable release 1&lt;br&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</value>
+        </input_widget>
+    </window>
+    <window id="w4">
+        <pos>420:46</pos>
+        <rectangle>600:650</rectangle>
+        <class>javax.swing.JFrame</class>
+        <title>PDF Split and Merge Ver. 0.7 stable release 1</title>
+        <modal>false</modal>
+        <root>false</root>
+        <action_widget id="aw25">
+            <pos>430:78</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Clear log</label>
+        </action_widget>
+        <action_widget id="aw26">
+            <pos>430:78</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Exit</label>
+        </action_widget>
+        <action_widget id="aw27">
+            <pos>465:78</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>About - Info</label>
+        </action_widget>
+        <action_widget id="aw22">
+            <pos>429:106</pos>
+            <rectangle>582:472</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>Merge</label>
+        </action_widget>
+        <action_widget id="aw23">
+            <pos>429:106</pos>
+            <rectangle>582:472</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>Split</label>
+        </action_widget>
+        <action_widget id="aw24">
+            <pos>911:273</pos>
+            <rectangle>90:25</rectangle>
+            <class>ButtonUI</class>
+            <label>Save</label>
+        </action_widget>
+        <input_widget id="iw23">
+            <pos>544:159</pos>
+            <rectangle>120:20</rectangle>
+            <class>ComboBoxUI</class>
+            <value>[options] 3 : 17</value>
+        </input_widget>
+        <input_widget id="iw24">
+            <pos>544:184</pos>
+            <rectangle>120:20</rectangle>
+            <class>ComboBoxUI</class>
+            <value>[options] 5 : 7</value>
+        </input_widget>
+        <input_widget id="iw25">
+            <pos>764:184</pos>
+            <rectangle>120:20</rectangle>
+            <class>ComboBoxUI</class>
+            <value>[options] 11 : 14</value>
+        </input_widget>
+        <input_widget id="iw26">
+            <pos>430:586</pos>
+            <rectangle>580:100</rectangle>
+            <class>TextPaneUI</class>
+            <value>&lt;html&gt;
+  &lt;head&gt;
+    
+  &lt;/head&gt;
+  &lt;body&gt;
+    PDF Split and Merge Ver. 0.7 stable release 1&lt;br&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</value>
+        </input_widget>
+    </window>
+    <window id="w5">
+        <pos>461:171</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Open</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw31">
+            <pos>914:213</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw32">
+            <pos>936:213</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw28">
+            <pos>839:214</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw29">
+            <pos>864:214</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw30">
+            <pos>889:214</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw33">
+            <pos>857:493</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw34">
+            <pos>910:493</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw27">
+            <pos>534:213</pos>
+            <rectangle>294:24</rectangle>
+            <class>ComboBoxUI</class>
+            <value>[options] 6 : 15</value>
+        </input_widget>
+        <input_widget id="iw28">
+            <pos>561:425</pos>
+            <rectangle>397:23</rectangle>
+            <class>TextFieldUI</class>
+            <value/>
+        </input_widget>
+        <input_widget id="iw29">
+            <pos>561:453</pos>
+            <rectangle>397:23</rectangle>
+            <class>ComboBoxUI</class>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <selectable_widget id="sw4">
+            <pos>482:249</pos>
+            <rectangle>475:164</rectangle>
+            <class>ListUI</class>
+            <size>25</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w6">
+        <pos>461:171</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Open</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw38">
+            <pos>914:213</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw39">
+            <pos>936:213</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw35">
+            <pos>839:214</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw36">
+            <pos>864:214</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw37">
+            <pos>889:214</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw40">
+            <pos>857:493</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw41">
+            <pos>910:493</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw30">
+            <pos>534:213</pos>
+            <rectangle>294:24</rectangle>
+            <class>ComboBoxUI</class>
+            <value>[options] 6 : 15</value>
+        </input_widget>
+        <input_widget id="iw31">
+            <pos>561:425</pos>
+            <rectangle>397:23</rectangle>
+            <class>TextFieldUI</class>
+            <value/>
+        </input_widget>
+        <input_widget id="iw32">
+            <pos>561:453</pos>
+            <rectangle>397:23</rectangle>
+            <class>ComboBoxUI</class>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <selectable_widget id="sw5">
+            <pos>482:269</pos>
+            <rectangle>460:425</rectangle>
+            <class>TableUI</class>
+            <size>25</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <edge type="static">
+        <from>aw45</from>
+        <to>w5</to>
+    </edge>
+    <edge type="static">
+        <from>aw47</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw48</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw12</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw1</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw2</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw3</from>
+        <to>w5</to>
+    </edge>
+    <edge type="static">
+        <from>aw8</from>
+        <to>w5</to>
+    </edge>
+    <edge type="static">
+        <from>aw13</from>
+        <to>w3</to>
+        <to>w4</to>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw21</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw14</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw15</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw16</from>
+        <to>w5</to>
+    </edge>
+    <edge type="static">
+        <from>aw17</from>
+        <to>w5</to>
+    </edge>
+    <edge type="static">
+        <from>aw27</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw22</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw23</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw32</from>
+        <to>w6</to>
+    </edge>
+    <edge type="static">
+        <from>aw33</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw34</from>
+        <to>w3</to>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw38</from>
+        <to>w5</to>
+    </edge>
+    <edge type="static">
+        <from>aw37</from>
+        <to>w7</to>
+    </edge>
+    <edge type="static">
+        <from>aw41</from>
+        <to>w3</to>
+    </edge>
+</GUI>

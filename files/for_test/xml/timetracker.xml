@@ -1,0 +1,2074 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<GUI>
+    <window id="w7">
+        <pos>431:189</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Save</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw103">
+            <pos>880:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw104">
+            <pos>904:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw100">
+            <pos>799:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw101">
+            <pos>826:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw102">
+            <pos>853:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw105">
+            <pos>823:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw106">
+            <pos>878:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw31">
+            <pos>502:231</pos>
+            <rectangle>286:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Save In:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw32">
+            <pos>531:446</pos>
+            <rectangle>397:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>File Name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw33">
+            <pos>531:473</pos>
+            <rectangle>397:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw8">
+            <pos>452:266</pos>
+            <rectangle>474:167</rectangle>
+            <class>ListUI</class>
+            <size>2</size>
+            <selected>0</selected>
+        </selectable_widget>
+    </window>
+    <window id="w8">
+        <pos>397:191</pos>
+        <rectangle>645:359</rectangle>
+        <class>net.sf.timeslottracker.gui.reports.ReportConfiguration</class>
+        <title>Report configuration: HTML Timesheet table report</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw107">
+            <pos>691:284</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw108">
+            <pos>733:284</pos>
+            <rectangle>39:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Now</label>
+        </action_widget>
+        <action_widget id="aw109">
+            <pos>691:313</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw110">
+            <pos>733:313</pos>
+            <rectangle>39:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Now</label>
+        </action_widget>
+        <action_widget id="aw111">
+            <pos>797:453</pos>
+            <rectangle>131:22</rectangle>
+            <class>ButtonUI</class>
+            <label>choose file to save</label>
+        </action_widget>
+        <action_widget id="aw112">
+            <pos>797:482</pos>
+            <rectangle>131:22</rectangle>
+            <class>ButtonUI</class>
+            <label>choose file to save</label>
+        </action_widget>
+        <action_widget id="aw113">
+            <pos>637:520</pos>
+            <rectangle>70:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <action_widget id="aw114">
+            <pos>712:520</pos>
+            <rectangle>90:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Run report</label>
+        </action_widget>
+        <input_widget id="iw34">
+            <pos>570:226</pos>
+            <rectangle>446:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Title for report (optional)</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw35">
+            <pos>569:255</pos>
+            <rectangle>458:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Select time period</descriptor>
+            <value>[options] 0 : 5</value>
+        </input_widget>
+        <input_widget id="iw36">
+            <pos>570:284</pos>
+            <rectangle>50:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Start (yyyy-mm-dd)</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw37">
+            <pos>627:284</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw38">
+            <pos>662:284</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw39">
+            <pos>570:313</pos>
+            <rectangle>50:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>End (yyyy-mm-dd)</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw40">
+            <pos>627:313</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw41">
+            <pos>662:313</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw42">
+            <pos>570:342</pos>
+            <rectangle>261:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Date column looks like</descriptor>
+            <value>[options] 0 : 5</value>
+        </input_widget>
+        <input_widget id="iw43">
+            <pos>570:371</pos>
+            <rectangle>165:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Format of the time duration</descriptor>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw44">
+            <pos>570:400</pos>
+            <rectangle>224:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Start from task</descriptor>
+            <value>[options] 0 : 13</value>
+        </input_widget>
+        <input_widget id="iw45">
+            <pos>569:429</pos>
+            <rectangle>458:18</rectangle>
+            <class>CheckBoxUI</class>
+            <label/>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw46">
+            <pos>570:453</pos>
+            <rectangle>226:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>XML file</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw47">
+            <pos>570:482</pos>
+            <rectangle>226:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Result file</descriptor>
+            <value/>
+        </input_widget>
+    </window>
+    <window id="w9">
+        <pos>460:219</pos>
+        <rectangle>520:303</rectangle>
+        <class>net.sf.timeslottracker.gui.reports.ReportConfiguration</class>
+        <title>Report configuration: TXT Detail report</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw115">
+            <pos>717:284</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw116">
+            <pos>759:284</pos>
+            <rectangle>39:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Now</label>
+        </action_widget>
+        <action_widget id="aw117">
+            <pos>717:313</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw118">
+            <pos>759:313</pos>
+            <rectangle>39:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Now</label>
+        </action_widget>
+        <action_widget id="aw119">
+            <pos>823:424</pos>
+            <rectangle>131:22</rectangle>
+            <class>ButtonUI</class>
+            <label>choose file to save</label>
+        </action_widget>
+        <action_widget id="aw120">
+            <pos>823:453</pos>
+            <rectangle>131:22</rectangle>
+            <class>ButtonUI</class>
+            <label>choose file to save</label>
+        </action_widget>
+        <action_widget id="aw121">
+            <pos>637:492</pos>
+            <rectangle>70:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <action_widget id="aw122">
+            <pos>712:492</pos>
+            <rectangle>90:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Run report</label>
+        </action_widget>
+        <input_widget id="iw48">
+            <pos>595:255</pos>
+            <rectangle>370:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Select time period</descriptor>
+            <value>[options] 0 : 5</value>
+        </input_widget>
+        <input_widget id="iw49">
+            <pos>596:284</pos>
+            <rectangle>50:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Start (yyyy-mm-dd)</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw50">
+            <pos>653:284</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw51">
+            <pos>688:284</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw52">
+            <pos>596:313</pos>
+            <rectangle>50:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>End (yyyy-mm-dd)</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw53">
+            <pos>653:313</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw54">
+            <pos>688:313</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw55">
+            <pos>596:342</pos>
+            <rectangle>134:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Output file encoding</descriptor>
+            <value>[options] 80 : 170</value>
+        </input_widget>
+        <input_widget id="iw56">
+            <pos>596:371</pos>
+            <rectangle>224:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Start from task</descriptor>
+            <value>[options] 0 : 13</value>
+        </input_widget>
+        <input_widget id="iw57">
+            <pos>595:400</pos>
+            <rectangle>370:18</rectangle>
+            <class>CheckBoxUI</class>
+            <label/>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw58">
+            <pos>596:424</pos>
+            <rectangle>226:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>XML file</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw59">
+            <pos>596:453</pos>
+            <rectangle>226:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Result file</descriptor>
+            <value/>
+        </input_widget>
+    </window>
+    <window id="w11">
+        <pos>431:189</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Open</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw135">
+            <pos>880:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw136">
+            <pos>904:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw132">
+            <pos>799:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw133">
+            <pos>826:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw134">
+            <pos>853:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw137">
+            <pos>823:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw138">
+            <pos>878:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw75">
+            <pos>504:231</pos>
+            <rectangle>284:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Look In:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw76">
+            <pos>531:446</pos>
+            <rectangle>397:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>File Name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw77">
+            <pos>531:473</pos>
+            <rectangle>397:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw9">
+            <pos>452:266</pos>
+            <rectangle>474:167</rectangle>
+            <class>ListUI</class>
+            <size>7</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w10">
+        <pos>405:177</pos>
+        <rectangle>629:387</rectangle>
+        <class>net.sf.timeslottracker.gui.reports.ReportConfiguration</class>
+        <title>Report configuration: * Custom (user) report</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw123">
+            <pos>683:273</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw124">
+            <pos>725:273</pos>
+            <rectangle>39:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Now</label>
+        </action_widget>
+        <action_widget id="aw125">
+            <pos>683:301</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw126">
+            <pos>725:301</pos>
+            <rectangle>39:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Now</label>
+        </action_widget>
+        <action_widget id="aw127">
+            <pos>789:329</pos>
+            <rectangle>135:22</rectangle>
+            <class>ButtonUI</class>
+            <label>choose file to open</label>
+        </action_widget>
+        <action_widget id="aw128">
+            <pos>789:464</pos>
+            <rectangle>131:22</rectangle>
+            <class>ButtonUI</class>
+            <label>choose file to save</label>
+        </action_widget>
+        <action_widget id="aw129">
+            <pos>789:492</pos>
+            <rectangle>131:22</rectangle>
+            <class>ButtonUI</class>
+            <label>choose file to save</label>
+        </action_widget>
+        <action_widget id="aw130">
+            <pos>637:534</pos>
+            <rectangle>70:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <action_widget id="aw131">
+            <pos>712:534</pos>
+            <rectangle>90:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Run report</label>
+        </action_widget>
+        <input_widget id="iw60">
+            <pos>562:217</pos>
+            <rectangle>446:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Title for report (optional)</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw61">
+            <pos>561:245</pos>
+            <rectangle>458:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Select time period</descriptor>
+            <value>[options] 0 : 5</value>
+        </input_widget>
+        <input_widget id="iw62">
+            <pos>562:273</pos>
+            <rectangle>50:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Start (yyyy-mm-dd)</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw63">
+            <pos>619:273</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw64">
+            <pos>654:273</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw65">
+            <pos>562:301</pos>
+            <rectangle>50:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>End (yyyy-mm-dd)</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw66">
+            <pos>619:301</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw67">
+            <pos>654:301</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw68">
+            <pos>562:329</pos>
+            <rectangle>226:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Choose xslt filter file</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw69">
+            <pos>562:357</pos>
+            <rectangle>134:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Output file encoding</descriptor>
+            <value>[options] 80 : 170</value>
+        </input_widget>
+        <input_widget id="iw70">
+            <pos>562:385</pos>
+            <rectangle>261:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Date column looks like</descriptor>
+            <value>[options] 0 : 5</value>
+        </input_widget>
+        <input_widget id="iw71">
+            <pos>562:413</pos>
+            <rectangle>224:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Start from task</descriptor>
+            <value>[options] 0 : 13</value>
+        </input_widget>
+        <input_widget id="iw72">
+            <pos>561:441</pos>
+            <rectangle>458:17</rectangle>
+            <class>CheckBoxUI</class>
+            <label/>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw73">
+            <pos>562:464</pos>
+            <rectangle>226:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>XML file</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw74">
+            <pos>562:492</pos>
+            <rectangle>226:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Result file</descriptor>
+            <value/>
+        </input_widget>
+    </window>
+    <window id="w13">
+        <pos>431:189</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Open</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw149">
+            <pos>880:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw150">
+            <pos>904:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw146">
+            <pos>799:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw147">
+            <pos>826:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw148">
+            <pos>853:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw151">
+            <pos>823:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw152">
+            <pos>878:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw81">
+            <pos>504:231</pos>
+            <rectangle>284:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Look In:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw82">
+            <pos>452:388</pos>
+            <rectangle>233:17</rectangle>
+            <class>TextFieldUI</class>
+            <value>New Folder (7)</value>
+        </input_widget>
+        <input_widget id="iw83">
+            <pos>531:446</pos>
+            <rectangle>397:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>File Name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw84">
+            <pos>531:473</pos>
+            <rectangle>397:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw11">
+            <pos>452:286</pos>
+            <rectangle>474:136</rectangle>
+            <class>TableUI</class>
+            <size>8</size>
+            <selected>6</selected>
+        </selectable_widget>
+    </window>
+    <window id="w12">
+        <pos>431:189</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Open</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw142">
+            <pos>880:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw143">
+            <pos>904:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw139">
+            <pos>799:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw140">
+            <pos>826:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw141">
+            <pos>853:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw144">
+            <pos>823:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw145">
+            <pos>878:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw78">
+            <pos>504:231</pos>
+            <rectangle>284:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Look In:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw79">
+            <pos>531:446</pos>
+            <rectangle>397:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>File Name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw80">
+            <pos>531:473</pos>
+            <rectangle>397:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw10">
+            <pos>452:286</pos>
+            <rectangle>474:119</rectangle>
+            <class>TableUI</class>
+            <size>7</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w1">
+        <pos>270:71</pos>
+        <rectangle>900:600</rectangle>
+        <class>net.sf.timeslottracker.Starter</class>
+        <title>TimeSlotTracker - (release 1.3.1)</title>
+        <modal>false</modal>
+        <root>true</root>
+        <action_widget id="aw7">
+            <pos>278:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Add new sub task (child) ...</label>
+        </action_widget>
+        <action_widget id="aw8">
+            <pos>278:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Save data</label>
+        </action_widget>
+        <action_widget id="aw9">
+            <pos>278:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Remove old data ...</label>
+        </action_widget>
+        <action_widget id="aw10">
+            <pos>278:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Import - Import from csv ...</label>
+        </action_widget>
+        <action_widget id="aw11">
+            <pos>278:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Export - Export to icalendar ...</label>
+        </action_widget>
+        <action_widget id="aw12">
+            <pos>278:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Quit</label>
+        </action_widget>
+        <action_widget id="aw13">
+            <pos>313:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>View - 1 Tasks tree</label>
+        </action_widget>
+        <action_widget id="aw14">
+            <pos>313:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>View - 2 Tasks by days</label>
+        </action_widget>
+        <action_widget id="aw15">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Summary report</label>
+        </action_widget>
+        <action_widget id="aw16">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Detail report</label>
+        </action_widget>
+        <action_widget id="aw17">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Journal report</label>
+        </action_widget>
+        <action_widget id="aw18">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Timesheet table report</label>
+        </action_widget>
+        <action_widget id="aw19">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Timesheet with description table report</label>
+        </action_widget>
+        <action_widget id="aw20">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Project Tasks report</label>
+        </action_widget>
+        <action_widget id="aw21">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - CSV Summary report</label>
+        </action_widget>
+        <action_widget id="aw22">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - CSV Journal report</label>
+        </action_widget>
+        <action_widget id="aw23">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - CSV Timesheet table report</label>
+        </action_widget>
+        <action_widget id="aw24">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - TXT Detail report</label>
+        </action_widget>
+        <action_widget id="aw25">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - TXT Journal report</label>
+        </action_widget>
+        <action_widget id="aw26">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - TXT Monthly report</label>
+        </action_widget>
+        <action_widget id="aw27">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - * Custom (user) report</label>
+        </action_widget>
+        <action_widget id="aw28">
+            <pos>411:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Configuration - Configuration</label>
+        </action_widget>
+        <action_widget id="aw29">
+            <pos>411:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Configuration - Attributes types</label>
+        </action_widget>
+        <action_widget id="aw30">
+            <pos>502:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Windows - Today</label>
+        </action_widget>
+        <action_widget id="aw31">
+            <pos>567:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Help - Documentation (external link)</label>
+        </action_widget>
+        <action_widget id="aw32">
+            <pos>567:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Help - Changelog</label>
+        </action_widget>
+        <action_widget id="aw33">
+            <pos>567:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Help - Known issues</label>
+        </action_widget>
+        <action_widget id="aw34">
+            <pos>567:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Help - Check updates</label>
+        </action_widget>
+        <action_widget id="aw35">
+            <pos>567:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Help - About</label>
+        </action_widget>
+        <action_widget id="aw2">
+            <pos>294:130</pos>
+            <rectangle>28:24</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw3">
+            <pos>332:130</pos>
+            <rectangle>28:24</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw4">
+            <pos>360:130</pos>
+            <rectangle>28:24</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw5">
+            <pos>388:130</pos>
+            <rectangle>28:24</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw6">
+            <pos>416:130</pos>
+            <rectangle>28:24</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw1">
+            <pos>556:158</pos>
+            <rectangle>604:0</rectangle>
+            <class>TabbedPaneUI</class>
+            <label>Attributes</label>
+        </action_widget>
+        <input_widget id="iw3">
+            <pos>684:130</pos>
+            <rectangle>258:24</rectangle>
+            <class>TextFieldUI</class>
+            <value>Memory usage: 40 from 2,276 Mb</value>
+        </input_widget>
+        <input_widget id="iw4">
+            <pos>952:130</pos>
+            <rectangle>198:24</rectangle>
+            <class>TextFieldUI</class>
+            <value/>
+        </input_widget>
+        <input_widget id="iw2">
+            <pos>492:131</pos>
+            <rectangle>182:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Search </descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw1">
+            <pos>365:168</pos>
+            <rectangle>96:22</rectangle>
+            <class>ComboBoxUI</class>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <selectable_widget id="sw2">
+            <pos>569:218</pos>
+            <rectangle>610:0</rectangle>
+            <class>TableUI</class>
+            <descriptor>Selected task's timeslots</descriptor>
+            <size>0</size>
+            <selected>-1</selected>
+        </selectable_widget>
+        <selectable_widget id="sw1">
+            <pos>293:407</pos>
+            <rectangle>240:242</rectangle>
+            <class>ListUI</class>
+            <descriptor>Favourites list</descriptor>
+            <size>3</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w15">
+        <pos>345:171</pos>
+        <rectangle>750:400</rectangle>
+        <class>net.sf.timeslottracker.gui.attributes.AttributeTypesWindow</class>
+        <title>Attributes types</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw155">
+            <pos>487:536</pos>
+            <rectangle>82:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Add type</label>
+        </action_widget>
+        <action_widget id="aw156">
+            <pos>579:536</pos>
+            <rectangle>100:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Edit selected</label>
+        </action_widget>
+        <action_widget id="aw157">
+            <pos>689:536</pos>
+            <rectangle>123:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Remove selected</label>
+        </action_widget>
+        <action_widget id="aw158">
+            <pos>822:536</pos>
+            <rectangle>63:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Close</label>
+        </action_widget>
+        <action_widget id="aw159">
+            <pos>895:536</pos>
+            <rectangle>58:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Save</label>
+        </action_widget>
+        <selectable_widget id="sw12">
+            <pos>359:227</pos>
+            <rectangle>875:96</rectangle>
+            <class>TableUI</class>
+            <size>6</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w2">
+        <pos>270:71</pos>
+        <rectangle>900:600</rectangle>
+        <class>net.sf.timeslottracker.Starter</class>
+        <title>TimeSlotTracker - (release 1.3.1)</title>
+        <modal>false</modal>
+        <root>false</root>
+        <action_widget id="aw41">
+            <pos>278:102</pos>
+            <rectangle>224:22</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Add new sub task (child) ...</label>
+        </action_widget>
+        <action_widget id="aw42">
+            <pos>278:102</pos>
+            <rectangle>224:22</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Save data</label>
+        </action_widget>
+        <action_widget id="aw43">
+            <pos>278:102</pos>
+            <rectangle>224:22</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Remove old data ...</label>
+        </action_widget>
+        <action_widget id="aw44">
+            <pos>278:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Import - Import from csv ...</label>
+        </action_widget>
+        <action_widget id="aw45">
+            <pos>278:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Export - Export to icalendar ...</label>
+        </action_widget>
+        <action_widget id="aw46">
+            <pos>278:102</pos>
+            <rectangle>224:22</rectangle>
+            <class>MenuItemUI</class>
+            <label>File - Quit</label>
+        </action_widget>
+        <action_widget id="aw47">
+            <pos>313:102</pos>
+            <rectangle>156:22</rectangle>
+            <class>MenuItemUI</class>
+            <label>View - 1 Tasks tree</label>
+        </action_widget>
+        <action_widget id="aw48">
+            <pos>313:102</pos>
+            <rectangle>156:22</rectangle>
+            <class>MenuItemUI</class>
+            <label>View - 2 Tasks by days</label>
+        </action_widget>
+        <action_widget id="aw49">
+            <pos>313:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>View - Update</label>
+        </action_widget>
+        <action_widget id="aw50">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Summary report</label>
+        </action_widget>
+        <action_widget id="aw51">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Detail report</label>
+        </action_widget>
+        <action_widget id="aw52">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Journal report</label>
+        </action_widget>
+        <action_widget id="aw53">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Timesheet table report</label>
+        </action_widget>
+        <action_widget id="aw54">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Timesheet with description table report</label>
+        </action_widget>
+        <action_widget id="aw55">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - HTML Project Tasks report</label>
+        </action_widget>
+        <action_widget id="aw56">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - CSV Summary report</label>
+        </action_widget>
+        <action_widget id="aw57">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - CSV Journal report</label>
+        </action_widget>
+        <action_widget id="aw58">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - CSV Timesheet table report</label>
+        </action_widget>
+        <action_widget id="aw59">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - TXT Detail report</label>
+        </action_widget>
+        <action_widget id="aw60">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - TXT Journal report</label>
+        </action_widget>
+        <action_widget id="aw61">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - TXT Monthly report</label>
+        </action_widget>
+        <action_widget id="aw62">
+            <pos>354:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Reports - * Custom (user) report</label>
+        </action_widget>
+        <action_widget id="aw63">
+            <pos>411:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Configuration - Configuration</label>
+        </action_widget>
+        <action_widget id="aw64">
+            <pos>411:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Configuration - Attributes types</label>
+        </action_widget>
+        <action_widget id="aw65">
+            <pos>502:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Windows - Today</label>
+        </action_widget>
+        <action_widget id="aw66">
+            <pos>567:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Help - Documentation (external link)</label>
+        </action_widget>
+        <action_widget id="aw67">
+            <pos>567:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Help - Changelog</label>
+        </action_widget>
+        <action_widget id="aw68">
+            <pos>567:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Help - Known issues</label>
+        </action_widget>
+        <action_widget id="aw69">
+            <pos>567:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Help - Check updates</label>
+        </action_widget>
+        <action_widget id="aw70">
+            <pos>567:102</pos>
+            <rectangle>0:0</rectangle>
+            <class>MenuItemUI</class>
+            <label>Help - About</label>
+        </action_widget>
+        <action_widget id="aw36">
+            <pos>294:130</pos>
+            <rectangle>28:24</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw37">
+            <pos>332:130</pos>
+            <rectangle>28:24</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw38">
+            <pos>360:130</pos>
+            <rectangle>28:24</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw39">
+            <pos>388:130</pos>
+            <rectangle>28:24</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw40">
+            <pos>416:130</pos>
+            <rectangle>28:24</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <input_widget id="iw7">
+            <pos>684:130</pos>
+            <rectangle>258:24</rectangle>
+            <class>TextFieldUI</class>
+            <value>Memory usage: 102 from 2,276 Mb</value>
+        </input_widget>
+        <input_widget id="iw8">
+            <pos>952:130</pos>
+            <rectangle>198:24</rectangle>
+            <class>TextFieldUI</class>
+            <value>Data saved: OK at 03:44</value>
+        </input_widget>
+        <input_widget id="iw6">
+            <pos>492:131</pos>
+            <rectangle>182:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Search </descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw5">
+            <pos>365:168</pos>
+            <rectangle>96:22</rectangle>
+            <class>ComboBoxUI</class>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <selectable_widget id="sw4">
+            <pos>569:202</pos>
+            <rectangle>610:0</rectangle>
+            <class>TableUI</class>
+            <size>0</size>
+            <selected>-1</selected>
+        </selectable_widget>
+        <selectable_widget id="sw3">
+            <pos>293:407</pos>
+            <rectangle>240:242</rectangle>
+            <class>ListUI</class>
+            <descriptor>Favourites list</descriptor>
+            <size>3</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w14">
+        <pos>345:221</pos>
+        <rectangle>750:300</rectangle>
+        <class>net.sf.timeslottracker.gui.configuration.ConfigurationWindow</class>
+        <title>Configuration</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw153">
+            <pos>939:486</pos>
+            <rectangle>70:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <action_widget id="aw154">
+            <pos>1019:486</pos>
+            <rectangle>58:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Save</label>
+        </action_widget>
+        <input_widget id="iw85">
+            <pos>705:313</pos>
+            <rectangle>369:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Language code (locale)</descriptor>
+            <value>[options] 0 : 7</value>
+        </input_widget>
+        <input_widget id="iw86">
+            <pos>705:341</pos>
+            <rectangle>369:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Default hours per working day</descriptor>
+            <value>8</value>
+        </input_widget>
+        <input_widget id="iw87">
+            <pos>705:369</pos>
+            <rectangle>369:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>First day of week</descriptor>
+            <value>[options] 1 : 7</value>
+        </input_widget>
+        <input_widget id="iw88">
+            <pos>705:397</pos>
+            <rectangle>369:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Show duration in format</descriptor>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+    </window>
+    <window id="w3">
+        <pos>405:219</pos>
+        <rectangle>629:303</rectangle>
+        <class>net.sf.timeslottracker.gui.reports.ReportConfiguration</class>
+        <title>Report configuration: HTML Summary report</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw71">
+            <pos>683:313</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw72">
+            <pos>725:313</pos>
+            <rectangle>39:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Now</label>
+        </action_widget>
+        <action_widget id="aw73">
+            <pos>683:342</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw74">
+            <pos>725:342</pos>
+            <rectangle>39:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Now</label>
+        </action_widget>
+        <action_widget id="aw75">
+            <pos>789:424</pos>
+            <rectangle>131:22</rectangle>
+            <class>ButtonUI</class>
+            <label>choose file to save</label>
+        </action_widget>
+        <action_widget id="aw76">
+            <pos>789:453</pos>
+            <rectangle>131:22</rectangle>
+            <class>ButtonUI</class>
+            <label>choose file to save</label>
+        </action_widget>
+        <action_widget id="aw77">
+            <pos>637:492</pos>
+            <rectangle>70:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <action_widget id="aw78">
+            <pos>712:492</pos>
+            <rectangle>90:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Run report</label>
+        </action_widget>
+        <input_widget id="iw9">
+            <pos>562:255</pos>
+            <rectangle>446:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Title for report (optional)</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw10">
+            <pos>561:284</pos>
+            <rectangle>458:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Select time period</descriptor>
+            <value>[options] 0 : 5</value>
+        </input_widget>
+        <input_widget id="iw11">
+            <pos>562:313</pos>
+            <rectangle>50:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Start (yyyy-mm-dd)</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw12">
+            <pos>619:313</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw13">
+            <pos>654:313</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw14">
+            <pos>562:342</pos>
+            <rectangle>50:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>End (yyyy-mm-dd)</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw15">
+            <pos>619:342</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw16">
+            <pos>654:342</pos>
+            <rectangle>28:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>-</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw17">
+            <pos>562:371</pos>
+            <rectangle>224:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Start from task</descriptor>
+            <value>[options] 0 : 13</value>
+        </input_widget>
+        <input_widget id="iw18">
+            <pos>561:400</pos>
+            <rectangle>458:18</rectangle>
+            <class>CheckBoxUI</class>
+            <label/>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <input_widget id="iw19">
+            <pos>562:424</pos>
+            <rectangle>226:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>XML file</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw20">
+            <pos>562:453</pos>
+            <rectangle>226:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Result file</descriptor>
+            <value/>
+        </input_widget>
+    </window>
+    <window id="w4">
+        <pos>431:189</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Save</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw82">
+            <pos>880:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw83">
+            <pos>904:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw79">
+            <pos>799:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw80">
+            <pos>826:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw81">
+            <pos>853:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw84">
+            <pos>823:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Save</label>
+        </action_widget>
+        <action_widget id="aw85">
+            <pos>878:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw21">
+            <pos>502:231</pos>
+            <rectangle>286:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Save In:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw22">
+            <pos>531:446</pos>
+            <rectangle>397:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>File Name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw23">
+            <pos>531:473</pos>
+            <rectangle>397:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw5">
+            <pos>452:266</pos>
+            <rectangle>474:167</rectangle>
+            <class>ListUI</class>
+            <size>1</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w16">
+        <pos>366:204</pos>
+        <rectangle>708:334</rectangle>
+        <class>net.sf.timeslottracker.gui.attributes.AttributeTypeEditDialog</class>
+        <title>Edit attribute type</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw160">
+            <pos>648:508</pos>
+            <rectangle>70:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <action_widget id="aw161">
+            <pos>733:508</pos>
+            <rectangle>58:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Save</label>
+        </action_widget>
+        <input_widget id="iw89">
+            <pos>603:239</pos>
+            <rectangle>456:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Category</descriptor>
+            <value>[options] 0 : 7</value>
+        </input_widget>
+        <input_widget id="iw90">
+            <pos>603:268</pos>
+            <rectangle>456:23</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Attribute's name</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw91">
+            <pos>603:297</pos>
+            <rectangle>456:23</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Description</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw92">
+            <pos>603:326</pos>
+            <rectangle>456:23</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Default value</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw93">
+            <pos>603:355</pos>
+            <rectangle>456:18</rectangle>
+            <class>CheckBoxUI</class>
+            <label/>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw94">
+            <pos>603:379</pos>
+            <rectangle>456:18</rectangle>
+            <class>CheckBoxUI</class>
+            <label/>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw95">
+            <pos>603:403</pos>
+            <rectangle>456:18</rectangle>
+            <class>CheckBoxUI</class>
+            <label/>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw96">
+            <pos>603:427</pos>
+            <rectangle>456:18</rectangle>
+            <class>CheckBoxUI</class>
+            <label/>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw97">
+            <pos>603:451</pos>
+            <rectangle>456:18</rectangle>
+            <class>CheckBoxUI</class>
+            <label/>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+        <input_widget id="iw98">
+            <pos>603:475</pos>
+            <rectangle>456:18</rectangle>
+            <class>CheckBoxUI</class>
+            <label/>
+            <value>[options] 0 : 2</value>
+        </input_widget>
+    </window>
+    <window id="w5">
+        <pos>431:189</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Save</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw89">
+            <pos>880:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw90">
+            <pos>904:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw86">
+            <pos>799:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw87">
+            <pos>826:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw88">
+            <pos>853:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw91">
+            <pos>823:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Save</label>
+        </action_widget>
+        <action_widget id="aw92">
+            <pos>878:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw24">
+            <pos>502:231</pos>
+            <rectangle>286:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Save In:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw25">
+            <pos>531:446</pos>
+            <rectangle>397:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>File Name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw26">
+            <pos>531:473</pos>
+            <rectangle>397:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw6">
+            <pos>452:286</pos>
+            <rectangle>474:17</rectangle>
+            <class>TableUI</class>
+            <size>1</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w6">
+        <pos>431:189</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Save</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw96">
+            <pos>880:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw97">
+            <pos>904:231</pos>
+            <rectangle>24:23</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw93">
+            <pos>799:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw94">
+            <pos>826:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw95">
+            <pos>853:232</pos>
+            <rectangle>22:21</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw98">
+            <pos>823:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw99">
+            <pos>878:512</pos>
+            <rectangle>50:22</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw27">
+            <pos>502:231</pos>
+            <rectangle>286:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Save In:</descriptor>
+            <value>[options] 6 : 12</value>
+        </input_widget>
+        <input_widget id="iw28">
+            <pos>452:286</pos>
+            <rectangle>233:17</rectangle>
+            <class>TextFieldUI</class>
+            <value>New Folder</value>
+        </input_widget>
+        <input_widget id="iw29">
+            <pos>531:446</pos>
+            <rectangle>397:22</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>File Name:</descriptor>
+            <value/>
+        </input_widget>
+        <input_widget id="iw30">
+            <pos>531:473</pos>
+            <rectangle>397:22</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 0 : 1</value>
+        </input_widget>
+        <selectable_widget id="sw7">
+            <pos>452:286</pos>
+            <rectangle>474:34</rectangle>
+            <class>TableUI</class>
+            <size>2</size>
+            <selected>0</selected>
+        </selectable_widget>
+    </window>
+    <edge type="static">
+        <from>aw104</from>
+        <to>w6</to>
+    </edge>
+    <edge type="static">
+        <from>aw106</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw112</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw113</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw120</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw121</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw136</from>
+        <to>w12</to>
+    </edge>
+    <edge type="static">
+        <from>aw138</from>
+        <to>w10</to>
+    </edge>
+    <edge type="static">
+        <from>aw127</from>
+        <to>w11</to>
+    </edge>
+    <edge type="static">
+        <from>aw129</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw130</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw149</from>
+        <to>w11</to>
+    </edge>
+    <edge type="static">
+        <from>aw152</from>
+        <to>w10</to>
+    </edge>
+    <edge type="static">
+        <from>aw142</from>
+        <to>w11</to>
+    </edge>
+    <edge type="static">
+        <from>aw141</from>
+        <to>w13</to>
+    </edge>
+    <edge type="static">
+        <from>aw145</from>
+        <to>w10</to>
+    </edge>
+    <edge type="static">
+        <from>aw14</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw15</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw16</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw17</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw18</from>
+        <to>w8</to>
+    </edge>
+    <edge type="static">
+        <from>aw19</from>
+        <to>w8</to>
+    </edge>
+    <edge type="static">
+        <from>aw20</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw24</from>
+        <to>w9</to>
+    </edge>
+    <edge type="static">
+        <from>aw25</from>
+        <to>w9</to>
+    </edge>
+    <edge type="static">
+        <from>aw26</from>
+        <to>w9</to>
+    </edge>
+    <edge type="static">
+        <from>aw27</from>
+        <to>w10</to>
+    </edge>
+    <edge type="static">
+        <from>aw28</from>
+        <to>w14</to>
+    </edge>
+    <edge type="static">
+        <from>aw29</from>
+        <to>w15</to>
+    </edge>
+    <edge type="static">
+        <from>aw155</from>
+        <to>w16</to>
+    </edge>
+    <edge type="static">
+        <from>aw158</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw159</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw47</from>
+        <to>w1</to>
+    </edge>
+    <edge type="static">
+        <from>aw50</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw51</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw52</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw53</from>
+        <to>w8</to>
+    </edge>
+    <edge type="static">
+        <from>aw54</from>
+        <to>w8</to>
+    </edge>
+    <edge type="static">
+        <from>aw55</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw59</from>
+        <to>w9</to>
+    </edge>
+    <edge type="static">
+        <from>aw60</from>
+        <to>w9</to>
+    </edge>
+    <edge type="static">
+        <from>aw61</from>
+        <to>w9</to>
+    </edge>
+    <edge type="static">
+        <from>aw62</from>
+        <to>w10</to>
+    </edge>
+    <edge type="static">
+        <from>aw63</from>
+        <to>w14</to>
+    </edge>
+    <edge type="static">
+        <from>aw64</from>
+        <to>w15</to>
+    </edge>
+    <edge type="static">
+        <from>aw153</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw154</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw76</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw77</from>
+        <to>w2</to>
+    </edge>
+    <edge type="static">
+        <from>aw83</from>
+        <to>w5</to>
+    </edge>
+    <edge type="static">
+        <from>aw81</from>
+        <to>w7</to>
+    </edge>
+    <edge type="static">
+        <from>aw85</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw160</from>
+        <to>w15</to>
+    </edge>
+    <edge type="static">
+        <from>aw161</from>
+        <to>w15</to>
+    </edge>
+    <edge type="static">
+        <from>aw89</from>
+        <to>w4</to>
+    </edge>
+    <edge type="static">
+        <from>aw88</from>
+        <to>w6</to>
+    </edge>
+    <edge type="static">
+        <from>aw92</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw96</from>
+        <to>w7</to>
+    </edge>
+    <edge type="static">
+        <from>aw99</from>
+        <to>w3</to>
+    </edge>
+</GUI>

@@ -16,7 +16,7 @@ public class Selectable_widget extends Widget {
 
 	public Selectable_widget(final TestObject to, final String id, final String label,
 			final String classs, final int x, final int y, final int width, final int height,
-			final int size, final int selected) throws Exception {
+			final int size, final int selected, final int visx, final int visy) throws Exception {
 
 		super(to, id, label, classs, x, y, width, height);
 		if (size < 0 || selected < -1) {
@@ -29,18 +29,27 @@ public class Selectable_widget extends Widget {
 			this.selected = selected;
 		}
 		this.size = size;
+		// for when the list exceeds the borders
+		if (x < 0) {
+			this.x = visx - x;
+		}
+		if (y < 0) {
+			this.y = visy - y;
+		}
 	}
 
 	public Selectable_widget(final String id, final String label, final String classs, final int x,
 			final int y, final int width, final int height, final int size, final int selected)
-					throws Exception {
+			throws Exception {
 
 		super(id, label, classs, x, y, width, height);
 		if (size < 0 || selected < -1 || selected > size - 1) {
 			throw new Exception("Selectable_widget: wrong size or selected.");
 		}
+
 		this.size = size;
 		this.selected = selected;
+
 	}
 
 	@Override
@@ -103,7 +112,10 @@ public class Selectable_widget extends Widget {
 				String element = "";
 
 				for (int cc = 0; cc < columns; cc++) {
-					element += list.getCell(c, cc).toString();
+
+					if (list.getCell(c, cc) != null) {
+						element += list.getCell(c, cc).toString();
+					}
 				}
 				out.add(element);
 

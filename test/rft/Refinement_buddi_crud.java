@@ -40,8 +40,7 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 			PathsManager.setProjectRoot(args[0].toString());
 		}
 		try {
-			ConfigurationManager.load(PathsManager.getProjectRoot()
-					+ "/files/for_test/config/buddi.properties");
+			ConfigurationManager.load(PathsManager.getProjectRoot() + "/aut.properties");
 			ExperimentManager.init();
 
 			// we load a gui pattern
@@ -50,12 +49,13 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
-			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/buddi.xml");
+			doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/for_test/xml/timetracker.xml");
 			final GUI gui = GUIParser.parse(doc);
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
 			final List<Instance_GUI_pattern> res = gfs.match(pattern);
 
-			Instance_GUI_pattern match = res.get(2);
+			Instance_GUI_pattern match = res.get(0);
 
 			match.generateSpecificSemantics();
 			final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);

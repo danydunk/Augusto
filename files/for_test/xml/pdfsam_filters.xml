@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filter>
+	<action_widget id="aw1">
+			<label>file - exit</label>
+			<class>menuitemui</class>
+	</action_widget>
+</filter>

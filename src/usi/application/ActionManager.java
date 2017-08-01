@@ -91,12 +91,21 @@ public class ActionManager {
 				}
 			}
 
-			// TODO: find a better way to handle TabbedPaneUI
-			// label is used to distinguish the different tabs
-			if (act.getWidget().getClasss().equals("TabbedPaneUI")) {
-				method.invoke(c.newInstance(), to, act.getWidget().getLabel());
-			} else {
-				method.invoke(c.newInstance(), to);
+			try {
+				// TODO: find a better way to handle TabbedPaneUI
+				// label is used to distinguish the different tabs
+				if (act.getWidget().getClasss().equals("TabbedPaneUI")) {
+					method.invoke(c.newInstance(), to, act.getWidget().getLabel());
+				} else {
+					method.invoke(c.newInstance(), to);
+				}
+			} catch (final Exception e) {
+				Thread.sleep(500);
+				if (act.getWidget().getClasss().equals("TabbedPaneUI")) {
+					method.invoke(c.newInstance(), to, act.getWidget().getLabel());
+				} else {
+					method.invoke(c.newInstance(), to);
+				}
 			}
 		}
 

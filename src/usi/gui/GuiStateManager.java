@@ -143,9 +143,11 @@ public class GuiStateManager {
 		tos = this.filterTOSforTabbedPane(tos);
 		this.currentTOs.addAll(Arrays.asList(tos));
 
+		// System.out.println("FIRST");
+
 		final ContextAnalyzer context = new ContextAnalyzer(new ArrayList<TestObject>(
 				Arrays.asList(tos)));
-
+		// System.out.println("CONTEXT");
 		// windows with no widgets or with the override redirect flag are
 		// filtered
 		// if (tos.length == 0) {
@@ -184,6 +186,8 @@ public class GuiStateManager {
 			// }
 			// }
 		}
+		// System.out.println("LOOP");
+
 		final Widget[] widadd = widgets_to_add.toArray(new Widget[widgets_to_add.size()]);
 		Arrays.sort(widadd);
 		widgets_to_add = new ArrayList<Widget>();
@@ -198,12 +202,15 @@ public class GuiStateManager {
 			}
 			widgets_to_add.add(widget);
 		}
+		// System.out.println("LOOP2");
+
 		widgets_to_add = this.postProcessWidgetList(widgets_to_add);
 		for (final Widget wid : widgets_to_add) {
 			w.addWidget(wid);
 		}
 
 		winds.add(w);
+		// System.out.println("LOOP3");
 
 		return winds;
 	}

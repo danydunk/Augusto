@@ -28,7 +28,7 @@
 		<class>.*</class>
 		<modal>any</modal>
 		<action_widget id="paw5" card="one" alloy="Ok">
-			<label>^(ok|save|record)</label>
+			<label>^(ok|save|record|open)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw6" card="one" alloy="Cancel">

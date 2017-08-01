@@ -1,6 +1,7 @@
 package src.usi.gui.structure;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,8 @@ public abstract class Widget implements Comparable<Widget> {
 	protected final String label;
 	protected String descriptor;
 	protected final String classs;
-	protected final int x;
-	protected final int y;
+	protected int x;
+	protected int y;
 	protected final int width;
 	protected final int height;
 	protected TestObject to;
@@ -39,10 +40,6 @@ public abstract class Widget implements Comparable<Widget> {
 		}
 		this.classs = classs;
 
-		if (x < 0 || y < 0) {
-
-			throw new Exception("Widget:wrong position.");
-		}
 		this.x = x;
 		this.y = y;
 
@@ -451,9 +448,12 @@ public abstract class Widget implements Comparable<Widget> {
 			final int x = p.x;
 			final int y = p.y;
 			final int size = Integer.valueOf(to.getProperty(".itemCount").toString());
+			p = (Point) support.getProperty("locationOnScreen");
+			final Rectangle r = (Rectangle) support.getProperty("visibleRect");
+
 			final int selected = Integer.valueOf(to.getProperty("selectedIndex").toString());
 			out.add(new Selectable_widget(to, idm.nextSWId(), label, type, x, y, width, height,
-					size, selected));
+					size, selected, r.x, r.y));
 			return out;
 
 		} else if (type.equals("MenuItemUI")) {
@@ -552,8 +552,10 @@ public abstract class Widget implements Comparable<Widget> {
 			// selected += columnc;
 			// }
 			// selected += columns;
+			final Rectangle r = (Rectangle) support.getProperty("visibleRect");
+
 			out.add(new Selectable_widget(to, idm.nextSWId(), label, type, x, y, width, height,
-					rowc, rows));
+					rowc, rows, r.x, r.y));
 			return out;
 
 		} else if (type.equals("TextAreaUI")) {

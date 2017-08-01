@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filter>
+	<action_widget id="aw2">
+			<label>.*csv.*</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw8">
+			<label>windows.*</label>
+			<class>menuitemui</class>
+	</action_widget>
+<action_widget id="aw9">
+			<label>help.*</label>
+			<class>menuitemui</class>
+	</action_widget>
+	<action_widget id="aw3">
+			<label>.*icalendar.*</label>
+			<class>menuitemui</class>
+	</action_widget>
+<action_widget id="aw7">
+			<label>.*quit.*</label>
+			<class>menuitemui</class>
+	</action_widget>
+<action_widget id="aw4">
+			<label>year</label>
+			<class>buttonui</class>
+	</action_widget>
+<action_widget id="aw5">
+			<label>month</label>
+			<class>buttonui</class>
+	</action_widget>
+<action_widget id="aw6">
+			<label>.*remove old data.*</label>
+			<class>menuitemui</class>
+	</action_widget>
+</filter>

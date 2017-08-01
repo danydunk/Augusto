@@ -822,6 +822,7 @@ public class GUIFunctionality_refine {
 
 				}
 				reached_w = new_reached;
+				break;
 			}
 		}
 
@@ -847,7 +848,7 @@ public class GUIFunctionality_refine {
 					final List<GUIAction> action_executed = res.getActions_actually_executed();
 
 					final Ripper ripper = new Ripper(this.gui);
-					ripper.ripWindow(action_executed, reached_w);
+					ripper.ripWindow(action_executed, reached_w, null);
 					ApplicationHelper.getInstance().closeApplication();
 				}
 				System.out.println("GET FOUND WINDOW: end.");
@@ -868,7 +869,7 @@ public class GUIFunctionality_refine {
 						final List<GUIAction> action_executed = res.getActions_actually_executed();
 
 						final Ripper ripper = new Ripper(this.gui);
-						ripper.ripWindow(action_executed, reached_w);
+						ripper.ripWindow(action_executed, reached_w, null);
 						ApplicationHelper.getInstance().closeApplication();
 					}
 					System.out.println("GET FOUND WINDOW: end.");
@@ -889,7 +890,7 @@ public class GUIFunctionality_refine {
 						final List<GUIAction> action_executed = res.getActions_actually_executed();
 
 						final Ripper ripper = new Ripper(this.gui);
-						ripper.ripWindow(action_executed, reached_w);
+						ripper.ripWindow(action_executed, reached_w, null);
 						ApplicationHelper.getInstance().closeApplication();
 					}
 					System.out.println("GET FOUND WINDOW: end.");
@@ -909,7 +910,7 @@ public class GUIFunctionality_refine {
 				final List<GUIAction> action_executed = res.getActions_actually_executed();
 
 				final Ripper ripper = new Ripper(this.gui);
-				ripper.ripWindow(action_executed, reached_w);
+				ripper.ripWindow(action_executed, reached_w, null);
 				ApplicationHelper.getInstance().closeApplication();
 			}
 			System.out.println("GET FOUND WINDOW: end.");
@@ -925,7 +926,7 @@ public class GUIFunctionality_refine {
 						final List<GUIAction> action_executed = res.getActions_actually_executed();
 
 						final Ripper ripper = new Ripper(this.gui);
-						ripper.ripWindow(action_executed, reached_w);
+						ripper.ripWindow(action_executed, reached_w, null);
 						ApplicationHelper.getInstance().closeApplication();
 					}
 					System.out.println("GET FOUND WINDOW: end.");

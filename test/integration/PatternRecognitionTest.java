@@ -43,7 +43,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -83,7 +83,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -120,7 +120,7 @@ public class PatternRecognitionTest {
 				System.out.println("found " + cont + " size=" + gg.getWindows().size());
 				for (final Instance_window www : gg.getWindows()) {
 					System.out
-							.println(www.getInstance().getId() + " - " + www.getPattern().getId());
+					.println(www.getInstance().getId() + " - " + www.getPattern().getId());
 				}
 				// assertEquals(2, gg.getWindows().size());
 				cont++;
@@ -428,6 +428,33 @@ public class PatternRecognitionTest {
 
 			// we load the GUI structure
 			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/spark.xml");
+			final GUI gui = GUIParser.parse(doc);
+
+			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
+			final List<Instance_GUI_pattern> res = gfs.match(pattern);
+			// final Input_widget iw = res.get(0).getIWS_for_PIW("piw6").get(0);
+			// final List<String> ss =
+			// DataManager.getInstance().getInvalidData(iw.getDescriptor());
+			assertEquals(1, res.size());
+		} catch (final Exception e) {
+			e.printStackTrace();
+			fail();
+		}
+	}
+
+	@Test
+	public void test16() {
+
+		System.out.println("test16");
+		try {
+
+			// we load a gui pattern
+			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
+					+ "/files/guipatterns/crud_no_read.xml");
+			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
+
+			// we load the GUI structure
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/pdfsam.xml");
 			final GUI gui = GUIParser.parse(doc);
 
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);

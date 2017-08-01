@@ -1,7 +1,9 @@
 package src.usi.gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -28,11 +30,13 @@ public class Ripper {
 	private GUI gui;
 	private List<Pattern_action_widget> aw_to_filter;
 	private final boolean skip_dialogs = true;
+	private final Map<String, List<String>> terminal_aws;
 
 	public Ripper() throws Exception {
 
 		this.application = ApplicationHelper.getInstance();
 		this.action_widget_to_ignore = new ArrayList<>();
+		this.terminal_aws = new HashMap<>();
 
 		if (ConfigurationManager.getRipperFilters().length() == 0) {
 			this.aw_to_filter = new ArrayList<>();
@@ -48,6 +52,8 @@ public class Ripper {
 
 		this.application = ApplicationHelper.getInstance();
 		this.action_widget_to_ignore = new ArrayList<>();
+		this.terminal_aws = new HashMap<>();
+
 		this.gui = gui;
 		if (ConfigurationManager.getRipperFilters().length() == 0) {
 			this.aw_to_filter = new ArrayList<>();
@@ -73,12 +79,13 @@ public class Ripper {
 
 		// list of action performed to reach a certain window
 		final List<GUIAction> actions = new ArrayList<>();
-		this.ripWindow(actions, rootWind);
+		this.ripWindow(actions, rootWind, null);
 		this.application.closeApplication();
 		return this.gui;
 	}
 
-	public void ripWindow(final List<GUIAction> actions, final Window w) throws Exception {
+	public void ripWindow(final List<GUIAction> actions, final Window w, final Window prev)
+			throws Exception {
 
 		if (this.guimanager == null) {
 			this.guimanager = GuiStateManager.getInstance();
@@ -104,8 +111,7 @@ public class Ripper {
 			}
 			final Click act = new Click(w, null, aw);
 			// System.out.println(w.getLabel());
-			// System.out.println(aw.getLabel());
-
+			System.out.println(aw.getLabel());
 			ActionManager.executeAction(act);
 
 			this.guimanager.readGUI();
@@ -128,14 +134,98 @@ public class Ripper {
 					this.gui.addStaticEdge(aw.getId(), curr_window.getId());
 					final List<GUIAction> actions_to_current = new ArrayList<>(actions);
 					actions_to_current.add(act);
-					this.ripWindow(actions_to_current, curr_window);
+					this.ripWindow(actions_to_current, curr_window, w);
 
 				} else {
 					this.gui.addStaticEdge(aw.getId(), match.getId());
+					if (prev != null && match.getId().equals(prev.getId())) {
+						// terminal aw
+						if (!this.terminal_aws.containsKey(w.getId())) {
+							this.terminal_aws.put(w.getId(), new ArrayList<>());
+						}
+						this.terminal_aws.get(w.getId()).add(aw.getId());
+					} else {
+						if (this.terminal_aws.containsKey(match.getId())) {
+							final List<GUIAction> actions_to_current = new ArrayList<>(actions);
+							actions_to_current.add(act);
+							this.reExecuteTerminal(actions_to_current, match);
+						}
+					}
 				}
 			}
 
 			if (cont < aws.size() - 1) {
+				// application is restarted and brought back to the window
+				this.restart_and_go_to_window(actions, w);
+			}
+		}
+	}
+
+	public void reExecuteTerminal(final List<GUIAction> actions, final Window w) throws Exception {
+
+		if (this.guimanager == null) {
+			this.guimanager = GuiStateManager.getInstance();
+		}
+		if (this.guimanager == null) {
+			this.restart_and_go_to_window(actions, w);
+		}
+		final List<Action_widget> aws = this.filterAWS(w.getActionWidgets());
+
+		final List<String> terminal_ids = this.terminal_aws.get(w.getId());
+
+		int terminal_consumed = 0;
+		mainloop: for (int cont = 0; cont < aws.size(); cont++) {
+
+			final Action_widget aw = aws.get(cont);
+
+			if (!terminal_ids.contains(aw.getId())) {
+				continue;
+			}
+			terminal_consumed++;
+			final Click act = new Click(w, null, aw);
+			// System.out.println(w.getLabel());
+			System.out.println(aw.getLabel());
+			ActionManager.executeAction(act);
+
+			this.guimanager.readGUI();
+			this.dealWithDialogsWindow(this.guimanager);
+			final Window curr_window = this.guimanager.getCurrentActiveWindows();
+
+			if (curr_window != null && w.isSame(curr_window)) {
+				// same window
+				// aws = curr_window.getActionWidgets();
+				continue;
+			}
+
+			// if the windows is null the application was closed
+			if (curr_window != null) {
+
+				final Window match = this.isWindowNew(curr_window);
+				if (match == null) {
+					// new window
+					// this should never happen
+					System.out.println("Re-executing terminal aws found a new window!");
+					this.gui.addWindow(curr_window);
+					this.gui.addStaticEdge(aw.getId(), curr_window.getId());
+					final List<GUIAction> actions_to_current = new ArrayList<>(actions);
+					actions_to_current.add(act);
+					this.ripWindow(actions_to_current, curr_window, w);
+
+				} else {
+					this.gui.addStaticEdge(aw.getId(), match.getId());
+					// if (match.getId().equals(prev.getId())) {
+					// // terminal aw
+					// if (!this.terminal_aws.containsKey(w.getId())) {
+					// this.terminal_aws.put(w.getId(), new ArrayList<>());
+					// }
+					// this.terminal_aws.get(w.getId()).add(aw.getId());
+					// }else{
+					//
+					// }
+				}
+			}
+
+			if (terminal_consumed < terminal_ids.size()) {
 				// application is restarted and brought back to the window
 				this.restart_and_go_to_window(actions, w);
 			}
@@ -153,7 +243,7 @@ public class Ripper {
 		for (final GUIAction act : actions) {
 			this.guimanager.readGUI();
 			this.dealWithDialogsWindow(this.guimanager);
-
+			System.out.println(act.getWidget().getLabel());
 			ActionManager.executeAction(act);
 		}
 		this.guimanager.readGUI();
