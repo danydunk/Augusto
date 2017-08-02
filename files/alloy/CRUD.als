@@ -5,6 +5,8 @@ pred init [t: Time] {
 	no Selectable_widget.selected.t
  	Current_window.is_in.t = sws.For_selecting
 	#Create_trigger = 0 =>Current_crud_op.operation.t = CREATE else #Current_crud_op.operation.t = 0
+	#To_be_cleaned = 1
+	all iw: Input_widget | #iw.content.(T/first) > 0
 }
 ---------------Generic CRUD Structure ----------
 abstract sig Ok, Cancel, Continue extends Action_widget { }
@@ -110,26 +112,26 @@ pred click_pre[aw: Action_widget, t: Time] {
 }
 
 pred add [t, t': Time] {
-	one o: Object_inlist |all iw: For_inputing | not(o in For_selecting.list.t) and o.appeared = t' and o.vs.iw = iw.content.t and For_selecting.list.t' = For_selecting.list.t+o
+	one o: Object_inlist |all iw: For_inputing | not(o in For_selecting.list.t) and o.appeared = t' and (iw.content.t in To_be_ordered => #o.vs.iw = 0 else o.vs.iw = iw.content.t) and For_selecting.list.t' = For_selecting.list.t+o
 }
 pred filled_required_test [w: Window, t: Time] { 
-	all iw: (w.iws & For_inputing)| (iw in Property_required.requireds) => #iw.content.t = 1
+	all iw: (w.iws & For_inputing)| (iw in Property_required.requireds) => not(iw.content.t in To_be_cleaned)
 }
 pred  unique_test [w: Window, t: Time] { 
-	all iw: (w.iws & For_inputing) | all o: For_selecting.list.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
+	all iw: (w.iws & For_inputing) | all o: For_selecting.list.t | (iw in Property_unique.uniques and (not(o.vs.iw in To_be_cleaned))) => iw.content.t !=o.vs.iw //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
 }
 pred valid_data_test [w: Window, t: Time] {
-	all iw: (w.iws & For_inputing) | (#iw.invalid > 0 and #iw.content.t = 1) => (not(iw.content.t in iw.invalid))
+	all iw: (w.iws & For_inputing) | (#iw.invalid > 0 and not(iw.content.t in To_be_cleaned)) => (not(iw.content.t in iw.invalid))
 }
 pred  unique_for_update_test [w: Window, t: Time] {
-	all iw: (w.iws & For_inputing) | all o: (For_selecting.list.t-For_selecting.selected.t) | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
+	all iw: (w.iws & For_inputing) | all o: (For_selecting.list.t-For_selecting.selected.t) | (iw in Property_unique.uniques and (not(o.vs.iw in To_be_cleaned))) => iw.content.t !=o.vs.iw //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
 }
 pred load_form [o: Object, t': Time] {
 	all iw: For_inputing | iw.content.t' = o.vs.iw
 	all iw: For_viewing | iw.content.t' = iw.mapping.content.t'
 }
 pred update [t, t': Time] {
-	one o: Object | all iw: For_inputing | not(o in For_selecting.list.t) and o.appeared = For_selecting.selected.t.appeared and o.vs.iw = iw.content.t and For_selecting.list.t' = (For_selecting.list.t - Selectable_widget.selected.t)+o
+	one o: Object | all iw: For_inputing | not(o in For_selecting.list.t) and o.appeared = For_selecting.selected.t.appeared and (iw.content.t in To_be_ordered => #o.vs.iw = 0 else o.vs.iw = iw.content.t) and For_selecting.list.t' = (For_selecting.list.t - Selectable_widget.selected.t)+o
 }
 pred delete [t, t': Time] {
 	For_selecting.list.t' = For_selecting.list.t - For_selecting.selected.t

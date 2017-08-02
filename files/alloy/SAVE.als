@@ -5,6 +5,8 @@ pred init [t: Time] {
 	#Opening_list.list.t = 0
 	#(Auxiliary.saved.t) = 1
 	no Selectable_widget.selected.t
+	#To_be_cleaned = 1
+	all iw: Input_widget | #iw.content.(T/first) > 0
 }
 ---------------Generic SAVE Structure ----------
 abstract sig New, Open, Save, Saveas, Saves, Cancelsave, Openo, Cancelopen, Encryptb, Backe, Decryptb, Backd, Yes, No, Replace, Noreplace extends Action_widget { }
@@ -77,7 +79,7 @@ pred click_success_post [aw: Action_widget, t, t': Time] {
 	(aw in Noreplace) => ((aw.goes in aws.New) => returned[t,t'] else (same2[t,t'] and Current_window.is_in.t' = aw.goes))
 }
 pred click_fail_post [aw: Action_widget, t, t': Time] {
-	(aw in (Encryptb+Decryptb)) => #Input_widget.content.t' = 0 else (all iw: Input_widget | iw.content.t' = iw.content.t)
+	(aw in (Encryptb+Decryptb)) => (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) else (all iw: Input_widget | iw.content.t' = iw.content.t)
 	Opening_list.list.t' =  Opening_list.list.t
 	Opening_list.selected.t' =  Opening_list.selected.t
 	(Auxiliary.saved.t') = 	(Auxiliary.saved.t)
@@ -90,25 +92,25 @@ pred save [t, t': Time, password, filename: Value] {
 	#(Auxiliary.saved.t') = 1
 	Current_window.is_in.t' = aws.New
 	#Opening_list.selected.t' = 0
-	#Input_widget.content.t' = 0
+  (all iw: Input_widget | iw.content.t' = iw.content.(T/first))
 }
 pred savenp [t, t': Time, filename: Value] {
 	(filename in (Opening_list.list.t).(Auxiliary.names)) => (one o: Object | not(o in Auxiliary.haspwd) and not(o in Opening_list.list.t) and o.appeared = Auxiliary.names.filename.appeared and o.(Auxiliary.pwd) = none and o.(Auxiliary.names) = filename and Opening_list.list.t' = (Opening_list.list.t - (Auxiliary.names).filename)+o) else (one o: Object | not(o in Auxiliary.haspwd) and not(o in Opening_list.list.t) and o.(Auxiliary.pwd) = none and o.(Auxiliary.names) = filename and o.appeared = t' and	Opening_list.list.t' = Opening_list.list.t + o)
 	#(Auxiliary.saved.t') = 1
 	Current_window.is_in.t' = aws.New
 	#Opening_list.selected.t' = 0
-	#Input_widget.content.t' = 0
+	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
 }
 pred new [t, t': Time] {
 	#(Auxiliary.saved.t') = 0
-	#Input_widget.content.t' = 0
+	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
 	Opening_list.list.t' =Opening_list.list.t
 	#Opening_list.selected.t' = 0
 	Current_window.is_in.t' = aws.New
 }
 pred openo [t, t': Time] {
 	#(Auxiliary.saved.t') = 1
-	#Input_widget.content.t' = 0
+	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
 	Opening_list.list.t' =  Opening_list.list.t
 	Current_window.is_in.t' = aws.New
 	#Opening_list.selected.t' = 0
@@ -118,7 +120,7 @@ pred exisit [t: Time, name: Value] {
 }
 pred returned [t, t': Time] {
 	(Auxiliary.saved.t') = 	(Auxiliary.saved.t)
-	#Input_widget.content.t' = 0
+	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
 	#Opening_list.selected.t' = 0
 	Opening_list.list.t' = Opening_list.list.t
 	Current_window.is_in.t' = aws.New
@@ -132,7 +134,7 @@ pred same [t, t': Time] {
 }
 pred same2 [t, t': Time] {
 	(Auxiliary.saved.t') = 	(Auxiliary.saved.t)
-	#Input_widget.content.t' = 0
+	(all iw: Input_widget | iw.content.t' = iw.content.(T/first))
 	Opening_list.selected.t' = Opening_list.selected.t
 	Opening_list.list.t' = Opening_list.list.t
 }

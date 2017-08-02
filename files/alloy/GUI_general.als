@@ -44,6 +44,7 @@ one sig Option_value_1 extends Value{ }
 one sig Option_value_2 extends Value{ }
 one sig Option_value_3 extends Value{ }
 one sig Option_value_4 extends Value{ }
+sig To_be_cleaned extends Value{ }
 
 abstract sig Input_widget {
 	content: Value lone -> Time,
@@ -85,7 +86,7 @@ pred click [aw: Action_widget, t, t': Time, c: Click] {
 }
 pred fill [iw: Input_widget, t, t': Time, v: Value, f: Fill] { 
 	--- precondition ---
-	not(v = iw.content.t)
+	not(v = iw.content.t or v = To_be_cleaned)
 	iw in Current_window.is_in.t.iws
 	v in iw.val
 	fill_pre [iw, t, v]
