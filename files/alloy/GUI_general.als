@@ -86,7 +86,7 @@ pred click [aw: Action_widget, t, t': Time, c: Click] {
 }
 pred fill [iw: Input_widget, t, t': Time, v: Value, f: Fill] { 
 	--- precondition ---
-	not(v = iw.content.t or v = To_be_cleaned)
+	not(v = iw.content.t) and not(v = none)  => not(v in To_be_cleaned)
 	iw in Current_window.is_in.t.iws
 	v in iw.val
 	fill_pre [iw, t, v]

@@ -91,25 +91,25 @@ pred click_pre[aw: Action_widget, t: Time] {
 }
 
 pred add [t, t': Time] {
-	one o: Object_inlist |all iw: Input_widget | not(o in Selectable_widget.list.t) and o.appeared = t' and (iw.content.t in To_be_ordered => #o.vs.iw = 0 else o.vs.iw = iw.content.t) and Selectable_widget.list.t' = Selectable_widget.list.t+o
+	one o: Object_inlist |all iw: Input_widget | not(o in Selectable_widget.list.t) and o.appeared = t' and (iw.content.t = To_be_cleaned => #o.vs.iw = 0 else o.vs.iw = iw.content.t) and Selectable_widget.list.t' = Selectable_widget.list.t+o
 }
 pred filled_required_test [t: Time] { 
-	all iw: Property_semantic.requireds|  not(iw.content.t in To_be_cleaned)
+	all iw: Property_semantic.requireds|  not(iw.content.t = To_be_cleaned)
 }
 pred  unique_test [t: Time] { 
-	all iw: Property_semantic.uniques | all o: Selectable_widget.list.t | ((not(o.vs.iw in To_be_cleaned))) => iw.content.t !=o.vs.iw
+	all iw: Property_semantic.uniques | all o: Selectable_widget.list.t | (#(o.vs.iw)=1) => iw.content.t !=o.vs.iw
 }
 pred valid_data_test [t: Time] {
-	all iw: Input_widget | (#iw.invalid > 0) => (not(iw.content.t in To_be_cleaned) and not(iw.content.t in iw.invalid))
+	all iw: Input_widget | (#iw.invalid > 0) => (#(iw.content.t) > 0 and not(iw.content.t = To_be_cleaned) and not(iw.content.t in iw.invalid))
 }
 pred  unique_for_update_test [t: Time] {
-	all iw: Property_semantic.uniques | all o: (Selectable_widget.list.t-Selectable_widget.selected.t) | (not(o.vs.iw in To_be_cleaned)) => iw.content.t !=o.vs.iw
+	all iw: Property_semantic.uniques | all o: (Selectable_widget.list.t-Selectable_widget.selected.t) |  (#(o.vs.iw)=1) => iw.content.t !=o.vs.iw
 }
 pred load_form [o: Object, t': Time] {
 	all iw: Input_widget | iw.content.t' = o.vs.iw
 }
 pred update [t, t': Time] {
-	one o: Object | all iw: Input_widget | not(o in Selectable_widget.list.t) and o.appeared = Selectable_widget.selected.t.appeared and (iw.content.t in To_be_ordered => #o.vs.iw = 0 else o.vs.iw = iw.content.t) and Selectable_widget.list.t' = (Selectable_widget.list.t - Selectable_widget.selected.t)+o
+	one o: Object | all iw: Input_widget | not(o in Selectable_widget.list.t) and o.appeared = Selectable_widget.selected.t.appeared and (iw.content.t = To_be_cleaned => #o.vs.iw = 0 else o.vs.iw = iw.content.t) and Selectable_widget.list.t' = (Selectable_widget.list.t - Selectable_widget.selected.t)+o
 }
 pred delete [t, t': Time] {
 	Selectable_widget.list.t' = Selectable_widget.list.t - Selectable_widget.selected.t

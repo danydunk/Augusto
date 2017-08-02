@@ -54,7 +54,7 @@ pred select_pre [sw: Selectable_widget, t: Time, o: Object] {
 pred click_semantics [aw: Action_widget, t: Time] {
 	(aw in Save)        => #(Auxiliary.saved.t) = 0
 	(aw in Openo)     => #Opening_list.selected.t = 1
-	(aw in Saves)      => #Filename.content.t = 1
+	(aw in Saves)      => #Filename.content.t = 1 and not(Filename.content.t = To_be_cleaned)
 	(aw in Encryptb)   => Password.content.t = Repassword.content.t and valid_data[t]
 	(aw in Decryptb) => Depassword.content.t = (Opening_list.selected.t).(Auxiliary.pwd)
 }
@@ -88,7 +88,7 @@ pred click_pre [aw: Action_widget, t': Time] {
 	
 }
 pred save [t, t': Time, password, filename: Value] {
-	(filename in (Opening_list.list.t).(Auxiliary.names)) => (one o: Object | o in Auxiliary.haspwd and not(o in Opening_list.list.t) and o.appeared = Auxiliary.names.filename.appeared and o.(Auxiliary.pwd) = password and o.(Auxiliary.names) = filename and Opening_list.list.t' = (Opening_list.list.t - (Auxiliary.names).filename)+o) else (one o: Object | o in Auxiliary.haspwd and not(o in Opening_list.list.t) and o.(Auxiliary.pwd) = password and o.(Auxiliary.names) = filename and o.appeared = t' and Opening_list.list.t' = Opening_list.list.t + o)
+	(filename in (Opening_list.list.t).(Auxiliary.names)) => (one o: Object | o in Auxiliary.haspwd and not(o in Opening_list.list.t) and o.appeared = Auxiliary.names.filename.appeared and (password = To_be_cleaned =>#o.(Auxiliary.pwd)=0 else o.(Auxiliary.pwd) = password) and o.(Auxiliary.names) = filename and Opening_list.list.t' = (Opening_list.list.t - (Auxiliary.names).filename)+o) else (one o: Object | o in Auxiliary.haspwd and not(o in Opening_list.list.t) and o.(Auxiliary.pwd) = password and o.(Auxiliary.names) = filename and o.appeared = t' and Opening_list.list.t' = Opening_list.list.t + o)
 	#(Auxiliary.saved.t') = 1
 	Current_window.is_in.t' = aws.New
 	#Opening_list.selected.t' = 0
@@ -139,5 +139,5 @@ pred same2 [t, t': Time] {
 	Opening_list.list.t' = Opening_list.list.t
 }
 pred valid_data [t: Time] {
-	(#Password.invalid > 0 and #Password.content.t = 1) => (not(Password.content.t in Password.invalid))
+	(#Password.invalid > 0 and #Password.content.t = 1 and not(Passworde.content.t = To_be_cleaned)) => (not(Password.content.t in Password.invalid))
 }
