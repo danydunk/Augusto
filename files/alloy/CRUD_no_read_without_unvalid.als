@@ -17,7 +17,7 @@ abstract sig Delete_trigger extends Action_widget { }
 fact {
 	#Ok < 2
 	#Selectable_widget = 1
-	all iw: Input_widget | #iw.content.(T/first) = 1 => not(iw in Property_semantic.requireds) 
+	all iw: Input_widget | not(iw.content.(T/first) = To_be_cleaned) => not(iw in Property_semantic.requireds) 
 }
 ---------------Generic CRUD Semantics---------- 
 abstract sig Crud_op {}
@@ -42,7 +42,7 @@ pred fill_fail_post [iw: Input_widget, t, t': Time, v: Value] {
 	Current_crud_op.operation.t' = Current_crud_op.operation.t
 }
 pred fill_pre[iw: Input_widget, t: Time, v: Value] { 
-	#iw.content.(T/first) = 1 => not(v = none)
+	(#iw.content.(T/first) = 1 and not(iw.content.(T/first) = To_be_cleaned)) => not(v = none)
 }
 
 pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }
@@ -93,7 +93,7 @@ pred add [t, t': Time] {
 	one o: Object_inlist |all iw: Input_widget | not(o in Selectable_widget.list.t) and o.appeared = t' and (iw.content.t = To_be_cleaned => #o.vs.iw = 0 else o.vs.iw = iw.content.t) and Selectable_widget.list.t' = Selectable_widget.list.t+o
 }
 pred filled_required_test [t: Time] { 
-	all iw: Property_semantic.requireds|  not(iw.content.t = To_be_cleaned)
+	all iw: Property_semantic.requireds|  not(iw.content.t = To_be_cleaned) and not(#iw.content.t = 0)
 }
 pred  unique_test [t: Time] { 
 	all iw: Property_semantic.uniques | all o: Selectable_widget.list.t | (#(o.vs.iw)=1) => iw.content.t !=o.vs.iw

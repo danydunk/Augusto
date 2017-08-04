@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import src.usi.gui.GUIWriter;
+import src.usi.testcase.structure.Clean;
 import src.usi.testcase.structure.Click;
 import src.usi.testcase.structure.Fill;
 import src.usi.testcase.structure.GUIAction;
@@ -48,6 +49,10 @@ public class GUITestCaseWriter {
 					v.setTextContent(f.getInput());
 					action.appendChild(v);
 				}
+			}
+			if (act instanceof Clean) {
+				final Clean f = (Clean) act;
+				type.setTextContent("clean");
 			}
 			if (act instanceof Select) {
 				final Select s = (Select) act;

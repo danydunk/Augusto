@@ -81,13 +81,13 @@ public class AlloyTestCaseGenerationTest {
 		r.generateSpecificSemantics();
 		r.getSemantics()
 				.addRun_command(
-						"run {System and (one t1,t2: Time| t2 in T/nexts[t1] and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none))} for 5 but 5 Time,4 Operation, 10 Value");
-
+						"run {System and (one t1,t2: Time| t2 in T/nexts[t1] and not(t2 = T/next[t1]) and Track.op.t1 in Fill and Track.op.t2 in Fill and Track.op.t2.with = none and not(Track.op.t1.with=none))} for 5 but 5 Time,4 Operation, 11 Value");
+		// System.out.println(r.getSemantics());
 		final List<GUITestCase> tests = AlloyTestCaseGenerator.generateTestCases(r);
 		assertEquals(1, tests.size());
-		Fill f = (Fill) tests.get(0).getActions().get(1);
+		Fill f = (Fill) tests.get(0).getActions().get(5);
 		assertTrue(f.getInput() != null);
-		f = (Fill) tests.get(0).getActions().get(3);
+		f = (Fill) tests.get(0).getActions().get(7);
 		assertTrue(f.getInput() == null);
 	}
 
@@ -146,6 +146,7 @@ public class AlloyTestCaseGenerationTest {
 		r.getGui().addDynamicEdge("aw62", "w2");
 
 		r.generateSpecificSemantics();
+		System.out.println(r.getSemantics());
 		final Wrapper2 wr = new Wrapper2(r, null);
 		final List<String> runs = wr.generate(r.getSemantics());
 		for (final String run : runs) {
@@ -175,6 +176,7 @@ public class AlloyTestCaseGenerationTest {
 		final Instance_GUI_pattern r = res.get(1);
 		r.generateSpecificSemantics();
 		r.getSemantics().addRun_command("run {System} for 5 ");
+		System.out.println(r.getSemantics());
 		final List<GUITestCase> tests = AlloyTestCaseGenerator.generateTestCases(r);
 		assertEquals(1, tests.size());
 	}

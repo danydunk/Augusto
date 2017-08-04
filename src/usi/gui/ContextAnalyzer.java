@@ -2,7 +2,10 @@ package src.usi.gui;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -49,33 +52,41 @@ public class ContextAnalyzer {
 		this.descriptorInContainerRB = new IdentityHashMap<TestObject, List<Descriptor>>();
 
 		this.containedInContainer = new IdentityHashMap<TestObject, List<TestObject>>();
-		this.fatherMap = new IdentityHashMap<TestObject, TestObject>(tos.size());
+		this.fatherMap = new HashMap<TestObject, TestObject>(tos.size());
 		this.containerDescription = new IdentityHashMap<TestObject, String>();
+		final HashSet<TestObject> fathers = new HashSet<>();
 
 		for (final TestObject to : tos) {
-
 			final String classs = to.getProperty("uIClassID").toString();
 
-			// if (classs == null) {
-			// throw new Exception("ContextAnalyzer: class id not found.");
-			// }
+			if (classs == null) {
+				throw new Exception("ContextAnalyzer: class id not found.");
+			}
 			// the father is retrieved
+			final TestObject f = to.getMappableParent();
+			TestObject father = null;
 
-			final TestObject father = to.getMappableParent();
-
+			final Iterator<TestObject> it = fathers.iterator();
+			while (it.hasNext()) {
+				final TestObject t = it.next();
+				if (t.equals(f)) {
+					father = t;
+					break;
+				}
+			}
+			if (father == null) {
+				father = f;
+				fathers.add(f);
+			}
 			this.fatherMap.put(to, father);
-
-			final List<Descriptor> listDesc = new ArrayList<Descriptor>();
-			final List<TestObject> listContained = new ArrayList<>();
-
-			// if (!this.descriptorInContainer.containsKey(father)) {
-			// final List<Descriptor> list = new ArrayList<Descriptor>();
-			// this.descriptorInContainer.put(father, list);
-			// // }
-			// // if (!this.containedInContainer.containsKey(father)) {
-			// final List<TestObject> list2 = new ArrayList<>();
-			// this.containedInContainer.put(father, list2);
-			// }
+			if (!this.descriptorInContainer.containsKey(father)) {
+				final List<Descriptor> list = new ArrayList<Descriptor>();
+				this.descriptorInContainer.put(father, list);
+			}
+			if (!this.containedInContainer.containsKey(father)) {
+				final List<TestObject> list = new ArrayList<>();
+				this.containedInContainer.put(father, list);
+			}
 
 			if (classs.equals("TableHeaderUI")) {
 				this.tableheaders.add(to);
@@ -83,7 +94,6 @@ public class ContextAnalyzer {
 
 			// if it is a descriptor
 			if (this.descriptors_classes.contains(classs)) {
-
 				final boolean showing = Boolean.valueOf(to.getProperty("showing").toString());
 
 				if (!showing) {
@@ -105,29 +115,17 @@ public class ContextAnalyzer {
 					label = text.toString();
 				}
 				// we filter the empty strings
-				if (label.length() == 0) {
+				if (label.trim().length() == 0) {
 					continue;
 				}
 				final Descriptor d = new Descriptor(label, x, y, height, width);
 
-				// this.descriptorInContainer.get(father).add(d);
-				listDesc.add(d);
-
+				this.descriptorInContainer.get(father).add(d);
 			} else {
-				// this.containedInContainer.get(father).add(to);
-				listContained.add(to);
-			}
-			if (!this.descriptorInContainer.containsKey(father)) {
-				this.descriptorInContainer.put(father, listDesc);
-				this.containedInContainer.put(father, listContained);
-
-			} else {
-
-				this.descriptorInContainer.get(father).addAll(listDesc);
-				this.containedInContainer.get(father).addAll(listContained);
-
+				this.containedInContainer.get(father).add(to);
 			}
 		}
+
 	}
 
 	public String getDescriptor(final TestObject to) throws Exception {
@@ -165,6 +163,7 @@ public class ContextAnalyzer {
 			}
 			height = oo.height;
 		}
+
 		if (!this.fatherMap.containsKey(to)) {
 			throw new Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
 		}
@@ -310,24 +309,11 @@ public class ContextAnalyzer {
 		final int height = Integer.valueOf(to.getProperty("height").toString());
 		final Area area = new Area(x, y, height, width);
 
-		// TestObject to2 = this.fathers.get(to);
-		// if (to2 == null) {
-		// for (final TestObject t : this.fatherMap.keySet()) {
-		// if (t.equals(to)) {
-		// to2 = t;
-		// this.fathers.put(to, to2);
-		// }
-		// }
-		// }
-
-		// if (!this.fatherMap.containsKey(to)) {
-		// return null;
-		// }
+		if (!this.fatherMap.containsKey(to)) {
+			throw new Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
+		}
 
 		final TestObject father = this.fatherMap.get(to);
-		if (father == null) {
-			return null;
-		}
 		final List<Descriptor> descriptors = this.descriptorInContainer.get(father);
 
 		double min_dist = Double.MAX_VALUE;
@@ -386,11 +372,11 @@ public class ContextAnalyzer {
 				distance = (int) (Math.pow(((a.x + a.width + 1) - this.x), 2) + Math.pow(
 						(a.y - this.y), 2));
 			} else
-			/*
-			 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
-			 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
-			 * 2)); } else
-			 */{
+				/*
+				 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
+				 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
+				 * 2)); } else
+				 */{
 				distance = (int) (Math.pow(((a.x + 1) - this.x), 2) + Math.pow(
 						((a.y + a.height) - this.y), 2));
 			}

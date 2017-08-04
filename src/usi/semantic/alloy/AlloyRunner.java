@@ -19,6 +19,7 @@ import src.usi.gui.structure.Window;
 import src.usi.semantic.SpecificSemantics;
 import src.usi.testcase.GUITestCaseWriter;
 import src.usi.testcase.inputdata.DataManager;
+import src.usi.testcase.structure.Clean;
 import src.usi.testcase.structure.Click;
 import src.usi.testcase.structure.Fill;
 import src.usi.testcase.structure.GUIAction;
@@ -242,9 +243,10 @@ public class AlloyRunner {
 
 					scopes.add(timescope);
 					scopes.add(opscope);
-
 					final ConstList<CommandScope> scope_list = run_command.scope.make(scopes);
+					// System.out.println(scope_list);
 
+					// System.out.println(scope_list);
 					final Command run = new Command(run_command.pos, run_command.label,
 							run_command.check, overall, run_command.bitwidth, run_command.maxseq,
 							run_command.expects, scope_list, run_command.additionalExactScopes,
@@ -322,6 +324,7 @@ public class AlloyRunner {
 			analyzeTuples(final A4Solution solution, final Instance_GUI_pattern instance)
 					throws Exception {
 
+		final Map<Integer, List<String>> to_clean_at_t = new HashMap<>();
 		Map<String, String> input_data_map = null;
 		input_data_map = elaborateInputData(solution, instance);
 
@@ -398,17 +401,25 @@ public class AlloyRunner {
 								assert (value.arity() <= 3);
 
 								if (value.arity() == 3 && value.atom(2).equals(tuple.atom(2))) {
-
-									if (iw instanceof Option_input_widget) {
-
-										assert (value.atom(1).toString()
-												.startsWith("Option_value_"));
-										inputdata = value.atom(1).replace("Option_value_", "")
-												.replace("$0", "");
+									if (value.atom(1).toLowerCase().contains("to_be_cleaned")) {
+										if (!to_clean_at_t.containsKey(time_index + 1)) {
+											to_clean_at_t.put(time_index + 1,
+													new ArrayList<String>());
+										}
+										to_clean_at_t.get(time_index + 1).add(iw.getId());
 
 									} else {
-										// the input data is retrieved
-										inputdata = input_data_map.get(value.atom(1));
+										if (iw instanceof Option_input_widget) {
+
+											assert (value.atom(1).toString()
+													.startsWith("Option_value_"));
+											inputdata = value.atom(1).replace("Option_value_", "")
+													.replace("$0", "");
+
+										} else {
+											// the input data is retrieved
+											inputdata = input_data_map.get(value.atom(1));
+										}
 									}
 								}
 							}
@@ -702,7 +713,36 @@ public class AlloyRunner {
 			}
 		}
 
-		final GUITestCase test = new GUITestCase(actions, AlloyUtil.extractProperty(solution,
+		String pre_win_id = null;
+		final List<GUIAction> new_actions = new ArrayList<>();
+		for (int cont = 0; cont < actions.size(); cont++) {
+			if (pre_win_id == null || !pre_win_id.equals(actions.get(cont).getWindow().getId())) {
+				pre_win_id = actions.get(cont).getWindow().getId();
+				Input_widget tiw = null;
+				if (to_clean_at_t.containsKey(cont + 1)) {
+
+					for (final String iw_id : to_clean_at_t.get(cont + 1)) {
+						for (final Input_widget iw : actions.get(cont).getWindow()
+								.getInputWidgets()) {
+							if (iw.getId().equals(iw_id)) {
+								tiw = iw;
+								break;
+							}
+						}
+						if (tiw == null) {
+							throw new Exception("AlloyRunner: error dealing with clean actions."
+									+ iw_id + actions.get(cont).getWindow().getId());
+						}
+						final Clean caction = new Clean(actions.get(cont).getWindow(), tiw);
+						new_actions.add(caction);
+					}
+				}
+
+			}
+			new_actions.add(actions.get(cont));
+		}
+
+		final GUITestCase test = new GUITestCase(new_actions, AlloyUtil.extractProperty(solution,
 				instance.getSemantics()));
 		return test;
 	}
@@ -720,21 +760,22 @@ public class AlloyRunner {
 
 		final Map<String, String> out = new HashMap<>();
 		final DataManager dm = DataManager.getInstance();
-		Sig value = null;
+		// Sig value = null;
 		Sig fill = null;
 		for (final Sig sig : solution.getAllReachableSigs()) {
-			if ("this/Value".equals(sig.label)) {
-				value = sig;
-			}
+			// if ("this/Value".equals(sig.label)) {
+			// // value = sig;
+			// }
 			if ("this/Fill".equals(sig.label)) {
 				fill = sig;
 			}
 		}
 
-		assert (value != null && fill != null);
+		assert (/* value != null && */fill != null);
 
 		List<String> fill_atoms = AlloyUtil.getElementsInSet(solution, fill);
-		List<String> value_atoms = AlloyUtil.getElementsInSet(solution, value);
+		// List<String> value_atoms = AlloyUtil.getElementsInSet(solution,
+		// value);
 
 		// in the atoms extracted the underscore is substituted with the dollar
 		fill_atoms = fill_atoms
@@ -742,10 +783,10 @@ public class AlloyRunner {
 				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
 						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
 
-		value_atoms = value_atoms
-				.stream()
-				.map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
-						+ e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
+		// value_atoms = value_atoms
+		// .stream()
+		// .map(e -> e.substring(0, e.lastIndexOf("_")) + "$"
+		// + e.substring(e.lastIndexOf("_") + 1)).collect(Collectors.toList());
 
 		final Map<String, List<String>> data_for_value = new HashMap<>();
 
@@ -763,9 +804,10 @@ public class AlloyRunner {
 					}
 				}
 				if (first != null) {
-
+					if (first.toLowerCase().contains("to_be_cleaned")) {
+						continue;
+					}
 					out.put(first + "_option", String.valueOf(oiw.getSelected()));
-					continue;
 				}
 			} else {
 
@@ -779,10 +821,11 @@ public class AlloyRunner {
 					}
 				}
 				if (first != null) {
+					if (first.toLowerCase().contains("to_be_cleaned")) {
+						continue;
+					}
 					out.put(first, String.valueOf(iw.getValue()));
-					continue;
 				}
-
 			}
 		}
 

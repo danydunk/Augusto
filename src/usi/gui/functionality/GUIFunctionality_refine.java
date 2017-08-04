@@ -32,6 +32,7 @@ import src.usi.testcase.AlloyTestCaseGenerator;
 import src.usi.testcase.GUITestCaseResult;
 import src.usi.testcase.OracleChecker;
 import src.usi.testcase.TestCaseRunner;
+import src.usi.testcase.structure.Clean;
 import src.usi.testcase.structure.Click;
 import src.usi.testcase.structure.GUIAction;
 import src.usi.testcase.structure.GUITestCase;
@@ -683,6 +684,7 @@ public class GUIFunctionality_refine {
 		}
 		// res = this.last_used_instance.updateTCResult(res);
 		// the window reached after the last action was executed
+
 		reached_w = res.getResults().get(res.getActions_executed().size() - 1);
 		final List<Widget> wids = reached_w.getWidgets();
 		reached_w = new Window(reached_w.getTo(), IDManager.getInstance().nextWindowId(),
@@ -846,6 +848,13 @@ public class GUIFunctionality_refine {
 		this.observed_tcs.add(res);
 
 		out[1] = reached_w;
+
+		final List<GUIAction> real_acts = res.getActions_executed().stream()
+				.filter(e -> !(e instanceof Clean)).collect(Collectors.toList());
+		if (!real_acts.get(real_acts.size() - 1).isSame(
+				tc.getActions().get(tc.getActions().size() - 1))) {
+			out[1] = tc.getActions().get(tc.getActions().size() - 1).getWindow();
+		}
 		// we check whether a match with the target was found already
 		for (final Instance_window iw : this.instancePattern.getWindows()) {
 			if (iw.getPattern().getId().equals(target.getId())
@@ -886,7 +895,11 @@ public class GUIFunctionality_refine {
 			}
 		}
 
-		final Window previus = tc.getActions().get(tc.getActions().size() - 1).getWindow();
+		final Window previus = res.getActions_executed().get(res.getActions_executed().size() - 1)
+				.getWindow();
+
+		// final Window previus = tc.getActions().get(tc.getActions().size() -
+		// 1).getWindow();
 		if (previus.getId().equals(reached_w.getId())) {
 			// we stayed in the same window
 			for (final Instance_window iw : this.instancePattern.getWindows()) {
@@ -1330,7 +1343,7 @@ public class GUIFunctionality_refine {
 				constrained.getOpenStatements());
 		newsem.addRun_command(constrained.getRun_commands().get(0));
 		clone.setSpecificSemantics(newsem);
-
+		// System.out.println(clone.getSemantics());
 		List<GUITestCase> tests = AlloyTestCaseGenerator.generateTestCasesMinimal(clone,
 				ConfigurationManager.getRefinementAlloyTimeScope());
 

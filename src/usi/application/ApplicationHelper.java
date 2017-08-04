@@ -67,7 +67,7 @@ public class ApplicationHelper {
 		try {
 			do {
 				System.out.println("GETTING ROOT OBJECT");
-				Thread.sleep(10000);
+				Thread.sleep(5000);
 				if (ConfigurationManager.getAutMainCLass().toLowerCase().contains("rachota")) {
 					Thread.sleep(5000);
 				}
@@ -111,7 +111,7 @@ public class ApplicationHelper {
 
 			e.printStackTrace();
 			System.out
-			.println("ApplicationHelper: RMI error while closing application. Moving on.");
+					.println("ApplicationHelper: RMI error while closing application. Moving on.");
 		}
 
 		if (this.root == null) {

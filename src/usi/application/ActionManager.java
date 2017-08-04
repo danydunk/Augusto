@@ -7,10 +7,12 @@ import java.util.stream.Collectors;
 import src.usi.configuration.ConfigurationManager;
 import src.usi.gui.GuiStateManager;
 import src.usi.gui.structure.Action_widget;
+import src.usi.gui.structure.Input_widget;
 import src.usi.gui.structure.Option_input_widget;
 import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Widget;
 import src.usi.gui.structure.Window;
+import src.usi.testcase.structure.Clean;
 import src.usi.testcase.structure.Click;
 import src.usi.testcase.structure.Fill;
 import src.usi.testcase.structure.GUIAction;
@@ -21,7 +23,7 @@ import com.rational.test.ft.object.interfaces.TestObject;
 public class ActionManager {
 
 	/*
-	 *
+	 * 
 	 * GUI must be read before calling this method This function returns true if
 	 * the action was executed, false if it could not be executed because the
 	 * widget was disabled It throws an exception if there is no
@@ -106,6 +108,61 @@ public class ActionManager {
 				} else {
 					method.invoke(c.newInstance(), to);
 				}
+			}
+		}
+
+		if (act instanceof Clean) {
+			final Clean clean = (Clean) act;
+
+			Method method = null;
+
+			if (clean.getWidget() instanceof Option_input_widget) {
+				for (final Method m : ms) {
+					if (m.getName().equals("select")) {
+						method = m;
+						break;
+					}
+				}
+				final Option_input_widget oiw = (Option_input_widget) wid;
+				final Option_input_widget origin = (Option_input_widget) clean.getWidget();
+				if (oiw.getSelected() == origin.getSelected()) {
+					return true;
+				}
+				TestObject to_fill = null;
+
+				if (oiw.getTOS().size() == 1) {
+					to_fill = oiw.getTOS().get(0);
+					try {
+						method.invoke(c.newInstance(), to_fill, origin.getSelected());
+					} catch (final Exception e) {
+						e.printStackTrace();
+						return false;
+					}
+				} else {
+					to_fill = oiw.getTOS().get(origin.getSelected());
+					try {
+						method.invoke(c.newInstance(), to_fill);
+					} catch (final Exception e) {
+						e.printStackTrace();
+						return false;
+					}
+				}
+
+			} else {
+				final Input_widget iw = (Input_widget) wid;
+
+				if (iw.getValue() == null || iw.getValue().length() == 0) {
+					return true;
+				}
+				for (final Method m : ms) {
+					if (m.getName().equals("fill")) {
+						method = m;
+						break;
+					}
+				}
+				final String in = "";
+
+				method.invoke(c.newInstance(), to, in);
 			}
 		}
 

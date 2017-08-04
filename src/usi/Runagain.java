@@ -44,7 +44,8 @@ public class Runagain extends RunagainHelper {
 
 		ConfigurationManager.load();
 		ExperimentManager.init();
-		final String out_folder = "./results_20170129_0813/";
+		final String out_folder = "./results_20170803_0207/";
+
 		// we set the stdout as a log file
 		final PrintStream generallog = new PrintStream(new FileOutputStream(out_folder + "out.log"));
 		final PrintStream generalerr = new PrintStream(new FileOutputStream(out_folder + "out.err"));
@@ -59,7 +60,7 @@ public class Runagain extends RunagainHelper {
 			// ExperimentManager.moveFile(ConfigurationManager.getGUIFile(),
 			// out_folder);
 
-			final String match_folder = out_folder + "/" + "AUTH_match_1/";
+			final String match_folder = out_folder + "/" + "CRUD_NO_READ_match_1/";
 
 			final PrintStream vallog = new PrintStream(new FileOutputStream(match_folder
 					+ "testcases/validator.log"));

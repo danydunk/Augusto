@@ -155,10 +155,10 @@ class RunCommandThread extends Thread {
 					.getSemantics().getRun_commands().get(0).split(" for ")[1].contains("Time"))
 					&& (!this.inst.getSemantics().getRun_commands().get(0).contains("}for ") || !this.inst
 							.getSemantics().getRun_commands().get(0).split("}for ")[1]
-							.contains("Time"))
-									&& (!this.inst.getSemantics().getRun_commands().get(0).contains(")for ") || !this.inst
-											.getSemantics().getRun_commands().get(0).split(")for ")[1]
-													.contains("Time"))) {
+									.contains("Time"))
+					&& (!this.inst.getSemantics().getRun_commands().get(0).contains(")for ") || !this.inst
+							.getSemantics().getRun_commands().get(0).split(")for ")[1]
+							.contains("Time"))) {
 				time = this.time;
 			}
 			this.tc = AlloyUtil.getTestcase(this.inst, 0, 0,

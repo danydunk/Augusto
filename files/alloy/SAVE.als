@@ -139,5 +139,5 @@ pred same2 [t, t': Time] {
 	Opening_list.list.t' = Opening_list.list.t
 }
 pred valid_data [t: Time] {
-	(#Password.invalid > 0 and #Password.content.t = 1 and not(Passworde.content.t = To_be_cleaned)) => (not(Password.content.t in Password.invalid))
+	(#Password.invalid > 0 and #Password.content.t = 1 and not(Password.content.t = To_be_cleaned)) => (not(Password.content.t in Password.invalid))
 }

@@ -49,8 +49,7 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure
-			doc = XMLUtil.read(PathsManager.getProjectRoot()
-					+ "/files/for_test/xml/timetracker.xml");
+			doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/pdfsam.xml");
 			final GUI gui = GUIParser.parse(doc);
 			final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
 			final List<Instance_GUI_pattern> res = gfs.match(pattern);

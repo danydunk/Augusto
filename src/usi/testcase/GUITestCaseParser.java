@@ -13,6 +13,7 @@ import src.usi.gui.structure.Input_widget;
 import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Widget;
 import src.usi.gui.structure.Window;
+import src.usi.testcase.structure.Clean;
 import src.usi.testcase.structure.Click;
 import src.usi.testcase.structure.Fill;
 import src.usi.testcase.structure.GUIAction;
@@ -99,6 +100,14 @@ public class GUITestCaseParser {
 			final Input_widget iw = (Input_widget) widget;
 			final Fill f = new Fill(source, oracle, iw, input);
 			return f;
+		case "clean":
+			if (!(widget instanceof Input_widget)) {
+				throw new Exception();
+			}
+
+			final Input_widget iww = (Input_widget) widget;
+			final Clean c = new Clean(source, iww);
+			return c;
 		case "select":
 			if (!(widget instanceof Selectable_widget)) {
 				throw new Exception();

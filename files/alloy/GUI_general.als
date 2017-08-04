@@ -59,6 +59,7 @@ abstract sig Selectable_widget {
 	selected: Object lone ->Time
 }
 fact {
+	#To_be_cleaned = 1 => not(To_be_cleaned in Fill.with)
 	all iw: Input_widget | iw in Window.iws
 	all aw: Action_widget | aw in Window.aws
 	all sw: Selectable_widget | sw in Window.sws
@@ -86,7 +87,7 @@ pred click [aw: Action_widget, t, t': Time, c: Click] {
 }
 pred fill [iw: Input_widget, t, t': Time, v: Value, f: Fill] { 
 	--- precondition ---
-	not(v = iw.content.t) and not(v = none)  => not(v in To_be_cleaned)
+	(v = none)  => not(iw.content.t = To_be_cleaned)
 	iw in Current_window.is_in.t.iws
 	v in iw.val
 	fill_pre [iw, t, v]

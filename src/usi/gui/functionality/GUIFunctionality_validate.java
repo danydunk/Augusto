@@ -167,6 +167,7 @@ public class GUIFunctionality_validate {
 				final String run = this.semantic_cases.get(((batch_num * this.batch_size) + cont));
 				this.instancePattern.getSemantics().addRun_command(run);
 			}
+			System.out.println(this.instancePattern.getSemantics());
 			final List<GUITestCase> tcs = AlloyTestCaseGenerator
 					.generateTestCases(this.instancePattern);
 			for (final GUITestCase tc : tcs) {

@@ -8,8 +8,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.List;
 
-import org.junit.Test;
-
 import src.usi.gui.functionality.GUIFunctionality_search;
 import src.usi.gui.functionality.instance.Instance_GUI_pattern;
 import src.usi.gui.functionality.instance.Instance_window;
@@ -28,7 +26,7 @@ import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 
 public class SpecificSemanticTest {
 
-	@Test
+	// @Test
 	public void testFromPatternToAlloy1() throws Exception {
 
 		final GUI gui = GUIStructureMaker.instance1();

@@ -4,6 +4,7 @@ import src.usi.gui.structure.GUI;
 import src.usi.gui.structure.Input_widget;
 import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Window;
+import src.usi.testcase.structure.Clean;
 
 public class OracleChecker {
 
@@ -32,6 +33,7 @@ public class OracleChecker {
 
 		this.description_last_check = "";
 		boolean out = true;
+
 		if (result.getActions_executed().size() < result.getTc().getActions().size()) {
 			this.description_last_check += "TESTCASE NOT RUN CORRECTLY";
 			this.description_last_check += System.lineSeparator();
@@ -43,10 +45,27 @@ public class OracleChecker {
 		}
 		int cont = 0;
 
+		Window old_oracle = null;
 		for (; cont < result.getActions_executed().size(); cont++) {
-			final Window oracle = result.getTc().getActions().get(cont).getOracle();
-			if (oracle == null) {
+			if (result.getTc().getActions().get(cont) instanceof Clean
+					&& cont < result.getActions_executed().size() - 1
+					&& result.getTc().getActions().get(cont + 1) instanceof Clean) {
 				continue;
+			}
+			Window oracle = result.getTc().getActions().get(cont).getOracle();
+			if (oracle == null && !(result.getTc().getActions().get(cont) instanceof Clean)) {
+				continue;
+			}
+			if (cont < result.getActions_executed().size() - 1
+					&& result.getTc().getActions().get(cont + 1) instanceof Clean) {
+				old_oracle = oracle;
+				continue;
+			}
+			if ((result.getTc().getActions().get(cont) instanceof Clean)) {
+				if (old_oracle == null) {
+					continue;
+				}
+				oracle = old_oracle;
 			}
 			// System.out.println(cont);
 			final Window actual = result.getResults().get(cont);

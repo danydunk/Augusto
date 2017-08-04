@@ -114,7 +114,7 @@
             <rectangle>276:27</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
-            <value>[options] 6 : 12</value>
+            <value>[options] 6 : 15</value>
         </input_widget>
         <input_widget id="iw64">
             <pos>646:414</pos>
@@ -134,7 +134,7 @@
             <pos>563:243</pos>
             <rectangle>474:158</rectangle>
             <class>ListUI</class>
-            <size>0</size>
+            <size>1</size>
             <selected>-1</selected>
         </selectable_widget>
     </window>
@@ -190,7 +190,7 @@
             <rectangle>276:27</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
-            <value>[options] 6 : 12</value>
+            <value>[options] 6 : 15</value>
         </input_widget>
         <input_widget id="iw67">
             <pos>646:414</pos>
@@ -210,8 +210,8 @@
             <pos>563:243</pos>
             <rectangle>474:158</rectangle>
             <class>ListUI</class>
-            <size>1</size>
-            <selected>0</selected>
+            <size>2</size>
+            <selected>1</selected>
         </selectable_widget>
     </window>
     <window id="w11">
@@ -266,13 +266,13 @@
             <rectangle>276:27</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
-            <value>[options] 6 : 12</value>
+            <value>[options] 6 : 15</value>
         </input_widget>
         <input_widget id="iw73">
-            <pos>563:297</pos>
+            <pos>563:314</pos>
             <rectangle>233:17</rectangle>
             <class>TextFieldUI</class>
-            <value>New Folder (3)</value>
+            <value>New Folder (4)</value>
         </input_widget>
         <input_widget id="iw74">
             <pos>646:414</pos>
@@ -290,10 +290,10 @@
         </input_widget>
         <selectable_widget id="sw6">
             <pos>563:263</pos>
-            <rectangle>474:51</rectangle>
+            <rectangle>474:68</rectangle>
             <class>TableUI</class>
-            <size>3</size>
-            <selected>0</selected>
+            <size>4</size>
+            <selected>1</selected>
         </selectable_widget>
     </window>
     <window id="w10">
@@ -348,7 +348,7 @@
             <rectangle>276:27</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
-            <value>[options] 6 : 12</value>
+            <value>[options] 6 : 15</value>
         </input_widget>
         <input_widget id="iw70">
             <pos>646:414</pos>
@@ -366,10 +366,10 @@
         </input_widget>
         <selectable_widget id="sw5">
             <pos>563:263</pos>
-            <rectangle>474:34</rectangle>
+            <rectangle>474:51</rectangle>
             <class>TableUI</class>
-            <size>2</size>
-            <selected>0</selected>
+            <size>3</size>
+            <selected>1</selected>
         </selectable_widget>
     </window>
     <window id="w13">
@@ -625,7 +625,7 @@
             <rectangle>276:27</rectangle>
             <class>ComboBoxUI</class>
             <descriptor>Look In:</descriptor>
-            <value>[options] 6 : 12</value>
+            <value>[options] 6 : 15</value>
         </input_widget>
         <input_widget id="iw77">
             <pos>646:414</pos>
@@ -643,9 +643,9 @@
         </input_widget>
         <selectable_widget id="sw7">
             <pos>563:263</pos>
-            <rectangle>459:153</rectangle>
+            <rectangle>459:170</rectangle>
             <class>TableUI</class>
-            <size>9</size>
+            <size>10</size>
             <selected>-1</selected>
         </selectable_widget>
     </window>
@@ -1453,7 +1453,7 @@
             <rectangle>214:19</rectangle>
             <class>TextFieldUI</class>
             <descriptor>29</descriptor>
-            <value>Friday - 28. October, 2016</value>
+            <value>Thursday - 27. October, 2016</value>
         </input_widget>
     </window>
     <window id="w5">
@@ -1750,7 +1750,9 @@
     </edge>
     <edge type="static">
         <from>aw76</from>
+        <to>w13</to>
         <to>w5</to>
+        <to>w14</to>
     </edge>
     <edge type="static">
         <from>aw79</from>
@@ -1870,11 +1872,19 @@
     </edge>
     <edge type="static">
         <from>aw29</from>
+        <to>w13</to>
         <to>w1</to>
+        <to>w14</to>
+        <to>w5</to>
+        <to>w6</to>
     </edge>
     <edge type="static">
         <from>aw30</from>
+        <to>w13</to>
         <to>w1</to>
+        <to>w14</to>
+        <to>w5</to>
+        <to>w6</to>
     </edge>
     <edge type="static">
         <from>aw147</from>
@@ -1906,15 +1916,24 @@
     </edge>
     <edge type="static">
         <from>aw36</from>
+        <to>w1</to>
         <to>w2</to>
     </edge>
     <edge type="static">
         <from>aw39</from>
+        <to>w13</to>
         <to>w1</to>
+        <to>w14</to>
+        <to>w5</to>
+        <to>w6</to>
     </edge>
     <edge type="static">
         <from>aw40</from>
+        <to>w13</to>
         <to>w1</to>
+        <to>w14</to>
+        <to>w5</to>
+        <to>w6</to>
     </edge>
     <edge type="static">
         <from>aw53</from>
@@ -1958,6 +1977,8 @@
     </edge>
     <edge type="static">
         <from>aw62</from>
+        <to>w13</to>
         <to>w5</to>
+        <to>w14</to>
     </edge>
 </GUI>

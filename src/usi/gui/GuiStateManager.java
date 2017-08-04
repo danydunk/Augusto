@@ -266,10 +266,10 @@ public class GuiStateManager {
 				}
 				out.remove(oiw);
 			}
-			if (selected == -1) {
-				throw new Exception(
-						"GUIStateManager - postProcessWidgetList: error finding selected radio button.");
-			}
+			// if (selected == -1) {
+			// throw new Exception(
+			// "GUIStateManager - postProcessWidgetList: error finding selected radio button.");
+			// }
 
 			final int width = (list.get(list.size() - 1).getX() + list.get(list.size() - 1)
 					.getWidth()) - list.get(0).getX();

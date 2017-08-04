@@ -51,32 +51,269 @@
             <pos>534:213</pos>
             <rectangle>294:24</rectangle>
             <class>ComboBoxUI</class>
+            <descriptor>Look In:</descriptor>
             <value>[options] 6 : 15</value>
         </input_widget>
         <input_widget id="iw34">
             <pos>482:396</pos>
             <rectangle>219:17</rectangle>
             <class>TextFieldUI</class>
-            <value>New Folder (26)</value>
+            <value>New Folder (19)</value>
         </input_widget>
         <input_widget id="iw35">
             <pos>561:425</pos>
             <rectangle>397:23</rectangle>
             <class>TextFieldUI</class>
-            <value>New Folder (26)</value>
+            <descriptor>File Name:</descriptor>
+            <value>New Folder (19)</value>
         </input_widget>
         <input_widget id="iw36">
             <pos>561:453</pos>
             <rectangle>397:23</rectangle>
             <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw6">
-            <pos>482:327</pos>
-            <rectangle>460:442</rectangle>
+            <pos>482:90</pos>
+            <rectangle>460:323</rectangle>
             <class>TableUI</class>
-            <size>26</size>
-            <selected>25</selected>
+            <size>19</size>
+            <selected>18</selected>
+        </selectable_widget>
+    </window>
+    <window id="w8">
+        <pos>461:206</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Open</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw52">
+            <pos>914:248</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw53">
+            <pos>936:248</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw49">
+            <pos>839:249</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw50">
+            <pos>864:249</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw51">
+            <pos>889:249</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw54">
+            <pos>857:528</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw55">
+            <pos>910:528</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw37">
+            <pos>534:248</pos>
+            <rectangle>294:24</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Look In:</descriptor>
+            <value>[options] 6 : 15</value>
+        </input_widget>
+        <input_widget id="iw38">
+            <pos>561:460</pos>
+            <rectangle>397:23</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Folder name:</descriptor>
+            <value>C:\Users\usi\abtMyDocuments</value>
+        </input_widget>
+        <input_widget id="iw39">
+            <pos>561:488</pos>
+            <rectangle>397:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <selectable_widget id="sw7">
+            <pos>482:284</pos>
+            <rectangle>475:164</rectangle>
+            <class>ListUI</class>
+            <size>23</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w9">
+        <pos>461:206</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Open</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw59">
+            <pos>914:248</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw60">
+            <pos>936:248</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw56">
+            <pos>839:249</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw57">
+            <pos>864:249</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw58">
+            <pos>889:249</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw61">
+            <pos>857:528</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw62">
+            <pos>910:528</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw40">
+            <pos>534:248</pos>
+            <rectangle>294:24</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Look In:</descriptor>
+            <value>[options] 6 : 15</value>
+        </input_widget>
+        <input_widget id="iw41">
+            <pos>561:460</pos>
+            <rectangle>397:23</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Folder name:</descriptor>
+            <value>C:\Users\usi\abtMyDocuments</value>
+        </input_widget>
+        <input_widget id="iw42">
+            <pos>561:488</pos>
+            <rectangle>397:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <selectable_widget id="sw8">
+            <pos>482:304</pos>
+            <rectangle>460:391</rectangle>
+            <class>TableUI</class>
+            <size>23</size>
+            <selected>-1</selected>
+        </selectable_widget>
+    </window>
+    <window id="w10">
+        <pos>461:206</pos>
+        <rectangle>516:364</rectangle>
+        <class>javax.swing.JDialog</class>
+        <title>Open</title>
+        <modal>true</modal>
+        <root>false</root>
+        <action_widget id="aw66">
+            <pos>914:248</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw67">
+            <pos>936:248</pos>
+            <rectangle>22:24</rectangle>
+            <class>ToggleButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw63">
+            <pos>839:249</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw64">
+            <pos>864:249</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+            <label/>
+        </action_widget>
+        <action_widget id="aw65">
+            <pos>889:249</pos>
+            <rectangle>20:22</rectangle>
+            <class>ButtonUI</class>
+        </action_widget>
+        <action_widget id="aw68">
+            <pos>857:528</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Open</label>
+        </action_widget>
+        <action_widget id="aw69">
+            <pos>910:528</pos>
+            <rectangle>48:23</rectangle>
+            <class>ButtonUI</class>
+            <label>Cancel</label>
+        </action_widget>
+        <input_widget id="iw43">
+            <pos>534:248</pos>
+            <rectangle>294:24</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Look In:</descriptor>
+            <value>[options] 6 : 15</value>
+        </input_widget>
+        <input_widget id="iw44">
+            <pos>482:431</pos>
+            <rectangle>219:17</rectangle>
+            <class>TextFieldUI</class>
+            <value>New Folder (24)</value>
+        </input_widget>
+        <input_widget id="iw45">
+            <pos>561:460</pos>
+            <rectangle>397:23</rectangle>
+            <class>TextFieldUI</class>
+            <descriptor>Folder name:</descriptor>
+            <value>C:\Users\usi\abtMyDocuments\New Folder (24)</value>
+        </input_widget>
+        <input_widget id="iw46">
+            <pos>561:488</pos>
+            <rectangle>397:23</rectangle>
+            <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
+            <value>[options] 1 : 2</value>
+        </input_widget>
+        <selectable_widget id="sw9">
+            <pos>482:40</pos>
+            <rectangle>460:408</rectangle>
+            <class>TableUI</class>
+            <size>24</size>
+            <selected>23</selected>
         </selectable_widget>
     </window>
     <window id="w1">
@@ -169,6 +406,7 @@
             <pos>444:394</pos>
             <rectangle>451:25</rectangle>
             <class>TextFieldUI</class>
+            <descriptor>Destination output file:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw4">
@@ -210,6 +448,7 @@
             <pos>438:478</pos>
             <rectangle>465:60</rectangle>
             <class>ListUI</class>
+            <descriptor>Compress output file</descriptor>
             <size>0</size>
             <selected>-1</selected>
         </selectable_widget>
@@ -231,6 +470,7 @@
             <pos>108:150</pos>
             <rectangle>433:100</rectangle>
             <class>TextPaneUI</class>
+            <descriptor>Informations:</descriptor>
             <value>Application name: PDF Split and Merge
 Application version: 0.7 stable release 1
 Language: Java(TM) 2 SDK, Standard Edition, Version 1.4.2
@@ -261,6 +501,7 @@ Website: http://www.pdfsam.org</value>
             <pos>109:296</pos>
             <rectangle>431:32</rectangle>
             <class>TableUI</class>
+            <descriptor>Installed plugins:</descriptor>
             <size>2</size>
             <selected>-1</selected>
         </selectable_widget>
@@ -324,14 +565,23 @@ Website: http://www.pdfsam.org</value>
             <pos>438:153</pos>
             <rectangle>448:20</rectangle>
             <class>TextFieldUI</class>
+            <descriptor>Source file:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw9">
             <pos>449:214</pos>
-            <rectangle>220:151</rectangle>
+            <rectangle>171:80</rectangle>
             <class>RadioButtonUI</class>
             <label/>
-            <value>[options] 6 : 7</value>
+            <descriptor>Split options:</descriptor>
+            <value>[options] -1 : 4</value>
+        </input_widget>
+        <input_widget id="iw14">
+            <pos>639:214</pos>
+            <rectangle>30:151</rectangle>
+            <class>RadioButtonUI</class>
+            <label/>
+            <value>[options] 1 : 2</value>
         </input_widget>
         <input_widget id="iw15">
             <pos>777:214</pos>
@@ -345,10 +595,19 @@ Website: http://www.pdfsam.org</value>
             <class>TextFieldUI</class>
             <value/>
         </input_widget>
+        <input_widget id="iw16">
+            <pos>449:340</pos>
+            <rectangle>99:25</rectangle>
+            <class>RadioButtonUI</class>
+            <label/>
+            <descriptor>Destination folder:</descriptor>
+            <value>[options] -1 : 1</value>
+        </input_widget>
         <input_widget id="iw18">
             <pos>444:369</pos>
             <rectangle>451:20</rectangle>
             <class>TextFieldUI</class>
+            <descriptor>Destination folder:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw19">
@@ -369,6 +628,7 @@ Website: http://www.pdfsam.org</value>
             <pos>589:465</pos>
             <rectangle>401:20</rectangle>
             <class>TextFieldUI</class>
+            <descriptor>Output file names prefix:</descriptor>
             <value>pdfsam_</value>
         </input_widget>
         <input_widget id="iw22">
@@ -433,18 +693,21 @@ Website: http://www.pdfsam.org</value>
             <pos>544:159</pos>
             <rectangle>120:20</rectangle>
             <class>ComboBoxUI</class>
+            <descriptor>Language:</descriptor>
             <value>[options] 3 : 17</value>
         </input_widget>
         <input_widget id="iw24">
             <pos>544:184</pos>
             <rectangle>120:20</rectangle>
             <class>ComboBoxUI</class>
+            <descriptor>Look and feel:</descriptor>
             <value>[options] 5 : 7</value>
         </input_widget>
         <input_widget id="iw25">
             <pos>764:184</pos>
             <rectangle>120:20</rectangle>
             <class>ComboBoxUI</class>
+            <descriptor>Theme:</descriptor>
             <value>[options] 11 : 14</value>
         </input_widget>
         <input_widget id="iw26">
@@ -513,25 +776,28 @@ Website: http://www.pdfsam.org</value>
             <pos>534:213</pos>
             <rectangle>294:24</rectangle>
             <class>ComboBoxUI</class>
+            <descriptor>Look In:</descriptor>
             <value>[options] 6 : 15</value>
         </input_widget>
         <input_widget id="iw28">
             <pos>561:425</pos>
             <rectangle>397:23</rectangle>
             <class>TextFieldUI</class>
+            <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw29">
             <pos>561:453</pos>
             <rectangle>397:23</rectangle>
             <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw4">
             <pos>482:249</pos>
             <rectangle>475:164</rectangle>
             <class>ListUI</class>
-            <size>25</size>
+            <size>18</size>
             <selected>-1</selected>
         </selectable_widget>
     </window>
@@ -586,25 +852,28 @@ Website: http://www.pdfsam.org</value>
             <pos>534:213</pos>
             <rectangle>294:24</rectangle>
             <class>ComboBoxUI</class>
+            <descriptor>Look In:</descriptor>
             <value>[options] 6 : 15</value>
         </input_widget>
         <input_widget id="iw31">
             <pos>561:425</pos>
             <rectangle>397:23</rectangle>
             <class>TextFieldUI</class>
+            <descriptor>File Name:</descriptor>
             <value/>
         </input_widget>
         <input_widget id="iw32">
             <pos>561:453</pos>
             <rectangle>397:23</rectangle>
             <class>ComboBoxUI</class>
+            <descriptor>Files of Type:</descriptor>
             <value>[options] 1 : 2</value>
         </input_widget>
         <selectable_widget id="sw5">
             <pos>482:269</pos>
-            <rectangle>460:425</rectangle>
+            <rectangle>460:306</rectangle>
             <class>TableUI</class>
-            <size>25</size>
+            <size>18</size>
             <selected>-1</selected>
         </selectable_widget>
     </window>
@@ -618,6 +887,46 @@ Website: http://www.pdfsam.org</value>
     </edge>
     <edge type="static">
         <from>aw48</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw53</from>
+        <to>w9</to>
+    </edge>
+    <edge type="static">
+        <from>aw54</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw55</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw59</from>
+        <to>w8</to>
+    </edge>
+    <edge type="static">
+        <from>aw58</from>
+        <to>w10</to>
+    </edge>
+    <edge type="static">
+        <from>aw61</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw62</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw66</from>
+        <to>w8</to>
+    </edge>
+    <edge type="static">
+        <from>aw68</from>
+        <to>w3</to>
+    </edge>
+    <edge type="static">
+        <from>aw69</from>
         <to>w3</to>
     </edge>
     <edge type="static">
@@ -664,7 +973,7 @@ Website: http://www.pdfsam.org</value>
     </edge>
     <edge type="static">
         <from>aw17</from>
-        <to>w5</to>
+        <to>w8</to>
     </edge>
     <edge type="static">
         <from>aw27</from>

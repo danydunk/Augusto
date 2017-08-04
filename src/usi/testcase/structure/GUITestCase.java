@@ -73,6 +73,13 @@ public class GUITestCase {
 				}
 
 			}
+			if (act1 instanceof Clean) {
+
+				if (!(act2 instanceof Clean)) {
+					return false;
+				}
+
+			}
 			if (act1 instanceof Select) {
 
 				if (!(act2 instanceof Select)) {
@@ -96,6 +103,9 @@ public class GUITestCase {
 		String out = "TESTCASE SIZE = " + this.getActions().size();
 		int cont = 1;
 		for (final GUIAction act : this.getActions()) {
+			if (act instanceof Clean) {
+				continue;
+			}
 			out += System.lineSeparator();
 			out += "ACTION " + cont;
 			out += System.lineSeparator();

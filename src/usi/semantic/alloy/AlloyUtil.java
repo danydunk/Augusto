@@ -41,6 +41,7 @@ import src.usi.semantic.alloy.structure.Predicate;
 import src.usi.semantic.alloy.structure.Signature;
 import src.usi.testcase.GUITestCaseParser;
 import src.usi.testcase.inputdata.DataManager;
+import src.usi.testcase.structure.Clean;
 import src.usi.testcase.structure.Click;
 import src.usi.testcase.structure.Fill;
 import src.usi.testcase.structure.GUIAction;
@@ -1002,7 +1003,8 @@ public class AlloyUtil {
 					content += System.getProperty("line.separator");
 
 					if (oiw.getSelected() == -1 || oiw.getSelected() > 9) {
-						content += "#(" + iws.get(iw).getIdentifier() + ".content.(T/first)) = 0";
+						content += iws.get(iw).getIdentifier()
+								+ ".content.(T/first) = To_be_cleaned";
 					} else {
 						content += iws.get(iw).getIdentifier()
 								+ ".content.(T/first) = Option_value_" + oiw.getSelected();
@@ -1033,9 +1035,10 @@ public class AlloyUtil {
 						content += "#" + iws.get(iw).getIdentifier()
 								+ ".content.(T/first) = 1 and not(" + iws.get(iw).getIdentifier()
 								+ ".content.(T/first) in " + iws.get(iw).getIdentifier()
-								+ ".invalid)";
+								+ ".invalid + To_be_cleaned)";
 					} else {
-						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
+						content += iws.get(iw).getIdentifier()
+								+ ".content.(T/first) = To_be_cleaned";
 					}
 					content += System.getProperty("line.separator");
 					content += "#((";
@@ -1081,7 +1084,8 @@ public class AlloyUtil {
 					content += System.getProperty("line.separator");
 
 					if (oiw.getSelected() == -1 || oiw.getSelected() > 9) {
-						content += "#(" + iws.get(iw).getIdentifier() + ".content.(T/first)) = 0";
+						content += "(" + iws.get(iw).getIdentifier()
+								+ ".content.(T/first)) = To_be_cleaned";
 					} else {
 						content += iws.get(iw).getIdentifier()
 								+ ".content.(T/first) = Option_value_" + oiw.getSelected();
@@ -1091,9 +1095,12 @@ public class AlloyUtil {
 
 					content += System.getProperty("line.separator");
 					if (iw.getValue().length() > 0) {
-						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 1";
+						content += "#" + iws.get(iw).getIdentifier()
+								+ ".content.(T/first) = 1 and not(" + iws.get(iw).getIdentifier()
+								+ ".content.(T/first) = To_be_cleaned)";
 					} else {
-						content += "#" + iws.get(iw).getIdentifier() + ".content.(T/first) = 0";
+						content += iws.get(iw).getIdentifier()
+								+ ".content.(T/first) = To_be_cleaned";
 					}
 					content += System.getProperty("line.separator");
 					content += "#(filled." + iws.get(iw).getIdentifier() + ".with & (";
@@ -1538,7 +1545,7 @@ public class AlloyUtil {
 
 	static public int getValueScope(final SpecificSemantics in) {
 
-		return 5;
+		return 5 + 1;
 	}
 
 	static public int getAWScope(final SpecificSemantics in) {
@@ -1700,7 +1707,10 @@ public class AlloyUtil {
 		final Fact new_fact = new Fact("testcase", fact);
 		facts.add(new_fact);
 
-		final int time_size = acts.size() + 1;
+		final List<GUIAction> actual_acts = acts.stream().filter(e -> !(e instanceof Clean))
+				.collect(Collectors.toList());
+
+		final int time_size = actual_acts.size() + 1;
 		final int op_size = time_size - 1;
 
 		int winscope = AlloyUtil.getWinScope(mod);
@@ -1781,7 +1791,9 @@ public class AlloyUtil {
 
 		for (int cont = 0; cont < acts.size(); cont++) {
 			final GUIAction act = acts.get(cont);
-
+			if (act instanceof Clean) {
+				continue;
+			}
 			if (cont == 0) {
 				t = "t";
 
