@@ -841,20 +841,20 @@ public class GUIFunctionality_refine {
 			neww = true;
 		}
 
-		if (wid instanceof Action_widget) {
-			this.gui.addDynamicEdge(wid.getId(), reached_w.getId());
-		}
-
 		this.observed_tcs.add(res);
-
-		out[1] = reached_w;
 
 		final List<GUIAction> real_acts = res.getActions_executed().stream()
 				.filter(e -> !(e instanceof Clean)).collect(Collectors.toList());
 		if (!real_acts.get(real_acts.size() - 1).isSame(
 				tc.getActions().get(tc.getActions().size() - 1))) {
-			out[1] = tc.getActions().get(tc.getActions().size() - 1).getWindow();
+			reached_w = tc.getActions().get(tc.getActions().size() - 1).getWindow();
 		}
+		out[1] = reached_w;
+
+		if (wid instanceof Action_widget) {
+			this.gui.addDynamicEdge(wid.getId(), reached_w.getId());
+		}
+
 		// we check whether a match with the target was found already
 		for (final Instance_window iw : this.instancePattern.getWindows()) {
 			if (iw.getPattern().getId().equals(target.getId())
@@ -1194,6 +1194,8 @@ public class GUIFunctionality_refine {
 				if (new_prop == null) {
 
 					System.out.println("SEMANTIC PROPERTY REFINE: INCONSISTENCY.");
+					final TestCaseRunner runner = new TestCaseRunner(this.gui);
+					final GUITestCaseResult res2 = runner.runTestCase(tc);
 					this.current_semantic_property = "";
 					break;
 				}
