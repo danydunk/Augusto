@@ -161,14 +161,20 @@ public class ContextAnalyzer {
 					oo = aa;
 				}
 			}
-			height = oo.height;
+		height = oo.height;
 		}
 
-		if (!this.fatherMap.containsKey(to)) {
-			throw new Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
-		}
+		// if (!this.fatherMap.containsKey(to)) {
+		// throw new
+		// Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
+		// }
 
 		final TestObject father = this.fatherMap.get(to);
+		if (father == null) {
+			// System.out.println("father not found: " +
+			// to.getProperty("uIClassID"));
+			return null;
+		}
 		// if (height == 0) {
 		// height = 15;
 		// }
@@ -231,14 +237,22 @@ public class ContextAnalyzer {
 					oo = aa;
 				}
 			}
-			height = oo.height;
+		height = oo.height;
 		}
-
-		if (!this.fatherMap.containsKey(to)) {
-			throw new Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
-		}
+		//
+		// if (!this.fatherMap.containsKey(to)) {
+		// throw new
+		// Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
+		// }
 
 		final TestObject father = this.fatherMap.get(to);
+
+		if (father == null) {
+			// System.out.println("father not foundRB: " +
+			// to.getProperty("uIClassID"));
+			return null;
+		}
+
 		// if (height == 0) {
 		// height = 15;
 		// }
@@ -309,11 +323,18 @@ public class ContextAnalyzer {
 		final int height = Integer.valueOf(to.getProperty("height").toString());
 		final Area area = new Area(x, y, height, width);
 
-		if (!this.fatherMap.containsKey(to)) {
-			throw new Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
-		}
+		// if (!this.fatherMap.containsKey(to)) {
+		// throw new
+		// Exception("ContextAnalyzer - getContainerDescriptor: father not found.");
+		// }
 
 		final TestObject father = this.fatherMap.get(to);
+		if (father == null) {
+			// System.out.println("father not foundC: " +
+			// to.getProperty("uIClassID"));
+			return null;
+		}
+
 		final List<Descriptor> descriptors = this.descriptorInContainer.get(father);
 
 		double min_dist = Double.MAX_VALUE;
@@ -372,11 +393,11 @@ public class ContextAnalyzer {
 				distance = (int) (Math.pow(((a.x + a.width + 1) - this.x), 2) + Math.pow(
 						(a.y - this.y), 2));
 			} else
-				/*
-				 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
-				 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
-				 * 2)); } else
-				 */{
+			/*
+			 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
+			 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
+			 * 2)); } else
+			 */{
 				distance = (int) (Math.pow(((a.x + 1) - this.x), 2) + Math.pow(
 						((a.y + a.height) - this.y), 2));
 			}

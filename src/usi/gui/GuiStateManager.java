@@ -297,13 +297,15 @@ public class GuiStateManager {
 
 		final List<TestObject> out_array = new ArrayList<>();
 		mainloop: for (final TestObject to : tos) {
-			if (!Boolean.valueOf(to.getProperty("showing").toString())) {
+			if (to.getProperty("showing") == null
+					|| !Boolean.valueOf(to.getProperty("showing").toString())) {
 				// if the to is not showing
 				TestObject parent = to.getMappableParent();
 				while (parent != null && parent != this.root) {
 					Object classui = null;
 					try {
 						classui = parent.getProperty("uIClassID");
+
 					} catch (final Exception e) {}
 					if (classui == null) {
 						break;

@@ -2,6 +2,7 @@ package src.usi.testcase.structure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GUITestCase {
 
@@ -100,12 +101,12 @@ public class GUITestCase {
 	@Override
 	public String toString() {
 
-		String out = "TESTCASE SIZE = " + this.getActions().size();
+		final List<GUIAction> actions = this.getActions().stream()
+				.filter(e -> !(e instanceof Clean)).collect(Collectors.toList());
+		String out = "TESTCASE SIZE = " + actions.size();
 		int cont = 1;
-		for (final GUIAction act : this.getActions()) {
-			if (act instanceof Clean) {
-				continue;
-			}
+		for (final GUIAction act : actions) {
+
 			out += System.lineSeparator();
 			out += "ACTION " + cont;
 			out += System.lineSeparator();

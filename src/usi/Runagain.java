@@ -44,7 +44,7 @@ public class Runagain extends RunagainHelper {
 
 		ConfigurationManager.load();
 		ExperimentManager.init();
-		final String out_folder = "./results_20170803_0207/";
+		final String out_folder = ".\\pdfsam_results\\pdfsam_results\\results_20170804_0951\\";
 
 		// we set the stdout as a log file
 		final PrintStream generallog = new PrintStream(new FileOutputStream(out_folder + "out.log"));
