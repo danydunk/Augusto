@@ -142,6 +142,10 @@ task deployUPM(type:Exec) {
 
 commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\upm\\bin > run.bat && echo cd "+projectDir+"\\..\\upm\\bin >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\upm.jar >> run.bat && echo cd "+projectDir+"  >> run.bat >> .\\run.bat && .\\run.bat && del /Q /F run.bat"
 }
+task deployUPMSmall(type:Exec) {
+
+commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\upmsmall\\bin > run.bat && echo cd "+projectDir+"\\..\\upmsmall\\bin >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\upmsmall.jar >> run.bat && echo cd "+projectDir+"  >> run.bat >> .\\run.bat && .\\run.bat && del /Q /F run.bat"
+}
 task deploySPARK(type:Exec) {
 
 commandLine 'cmd', '/c', "echo mkdir "+projectDir+"\\..\\spark\\bin > run.bat && echo cd "+projectDir+"\\..\\spark\\bin >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\spark-lib.jar >> run.bat && echo jar -xf "+projectDir+"\\files\\for_test\\SUTs\\spark.jar >> run.bat && echo cd "+projectDir+"  >> run.bat >> .\\run.bat && .\\run.bat && del /Q /F run.bat"

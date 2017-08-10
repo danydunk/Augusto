@@ -9,10 +9,6 @@
 			<label>^(?!window - )(.*( new | add | create ).*|^(new (?!-)|add |create ).*|^(new|add|create)$)</label>
 			<class>.*</class>
 		</action_widget>
-		<action_widget id="paw2" card="set" alloy="Read_trigger">
-			<label>^(?!window - )(.* view .*|^view (?!-).*|^view$)</label>
-			<class>.*</class>
-		</action_widget>
 		<action_widget id="paw3" card="set" alloy="Update_trigger">
 			<label>^(?!window - )(.*( edit | update | modify ).*|^(edit (?!-)|update |modify ).*|^(edit|update|modify)$)</label>
 			<class>.*</class>
@@ -21,7 +17,7 @@
 			<label>^(?!window - )(.*( delete | remove ).*|^(delete |remove ).*|^(delete|remove)$)</label>
 			<class>.*</class>
 		</action_widget>
-		<selectable_widget id="psw1" card="one" alloy="For_selecting">
+		<selectable_widget id="psw1" card="one" alloy="">
 			<label>.*</label>
 			<class>.*</class>
 			<size>.*</size>
@@ -32,28 +28,14 @@
 		<class>.*</class>
 		<modal>any</modal>
 		<action_widget id="paw5" card="one" alloy="Ok">
-			<label>^(ok|save|record)</label>
+			<label>^(ok|save|record|open)</label>
 			<class>.*</class>
 		</action_widget>
 		<action_widget id="paw6" card="one" alloy="Cancel">
 			<label>^(cancel|clear)</label>
 			<class>.*</class>
 		</action_widget>
-		<input_widget id="piw1" card="some" alloy="For_inputing">
-			<label>.*</label>
-			<class>.*</class>
-			<text>.*</text>
-		</input_widget>
-	</window>
-	<window id="view" card="lone" dynamic="true" alloy="View">
-		<title>.*</title>
-		<class>.*</class>
-		<modal>any</modal>
-		<action_widget id="paw7" card="one" alloy="Continue">
-			<label>^(ok|back)</label>
-			<class>.*</class>
-		</action_widget>
-		<input_widget id="piw3" card="some" alloy="For_viewing">
+		<input_widget id="piw1" card="some" alloy="">
 			<label>.*</label>
 			<class>.*</class>
 			<text>.*</text>
@@ -64,20 +46,12 @@
 		<to>form</to>
 	</edge>
 	<edge type="static">
-		<from>paw7</from>
-		<to>initial</to>
-	</edge>
-	<edge type="static">
 		<from>paw6</from>
 		<to>initial</to>
 	</edge>
 	<edge type="dynamic">
 		<from>paw5</from>
 		<to>initial</to>		
-	</edge>
-	<edge type="dynamic">
-		<from>paw2</from>
-		<to>view</to>		
 	</edge>
 	<edge type="dynamic">
 		<from>paw3</from>

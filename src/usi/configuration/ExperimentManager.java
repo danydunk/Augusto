@@ -93,9 +93,16 @@ public class ExperimentManager {
 			throw new Exception("ExperimentManager - dumpGUI: null gui.");
 		}
 		final Document doc = GUIWriter.writeGUI(gui);
+		String out_f = null;
+		if (ConfigurationManager.getGUIFile() == null
+				|| ConfigurationManager.getGUIFile().length() == 0) {
+			out_f = PathsManager.getRipperOutputFolder() + File.separator + "gui_"
+					+ (DateUtility.now() + ".xml");
+			System.out.println("GUI file path not set, saving in " + out_f);
 
-		final String out_f = PathsManager.getRipperOutputFolder() + File.separator + "gui_"
-				+ (DateUtility.now() + ".xml");
+		} else {
+			out_f = ConfigurationManager.getGUIFile();
+		}
 
 		XMLUtil.save(out_f, doc);
 	}
@@ -172,6 +179,6 @@ public class ExperimentManager {
 		new File(SER_RESET_FILE_PATH).delete();
 		new File(System.getProperty("user.dir") + File.separator + "aut.log").delete();
 		new File(System.getProperty("user.dir") + File.separator + "cobertura_warnings.out")
-				.delete();
+		.delete();
 	}
 }

@@ -3,49 +3,34 @@ pred init [t: Time] {
 	no Selectable_widget.list.t
 	no Track.op.t
 	no Selectable_widget.selected.t
- 	Current_window.is_in.t = sws.For_selecting
+ 	Current_window.is_in.t = sws.Selectable_widget
+	#Create_trigger = 0 =>Current_crud_op.operation.t = CREATE else #Current_crud_op.operation.t = 0
 	#Create_trigger = 0 =>Current_crud_op.operation.t = CREATE else #Current_crud_op.operation.t = 0
 	#To_be_cleaned = 1
 	all iw: Input_widget | #iw.content.(T/first) > 0
 }
 ---------------Generic CRUD Structure ----------
-abstract sig Ok, Cancel, Continue extends Action_widget { }
+abstract sig Ok, Cancel extends Action_widget { }
 abstract sig Create_trigger extends Action_widget { }
-abstract sig Read_trigger extends Action_widget { }
 abstract sig Update_trigger extends Action_widget { }
 abstract sig Delete_trigger extends Action_widget { }
-abstract sig For_inputing extends Input_widget { }
-abstract sig For_viewing extends Input_widget { 
-	mapping: one For_inputing,
-}
-abstract sig For_selecting extends Selectable_widget{ }
-
-fact{
-	no t: Time |  #Track.op.t = 1 and Track.op.t in Fill and Track.op.t.with = Track.op.t.filled.content.(T/prev[t])
-}
 
 fact {
 	#Ok < 2
-	#Continue < 2
-	#For_viewing > 0 => #For_viewing = #For_inputing
-	no iw, iw2: For_viewing |  not (iw = iw2) and iw.mapping = iw2.mapping
-	#For_viewing > 0 => no iww, iww2: For_inputing | one iw, iw2: For_viewing | IW/lt[iww,iww2] and IW/lt[iw2,iw] and iw.mapping = iww and iw2.mapping = iww2
-	#For_selecting = 1 and #Selectable_widget = 1
-	all iw: For_inputing | #iw.content.(T/first) =1 => not(iw in Property_required.requireds)
-	all iw: For_viewing | not(iw in Property_required.requireds) and not(iw in Property_unique.uniques)
+	#Selectable_widget = 1
+	all iw: Input_widget | (not(iw.content.(T/first) = To_be_cleaned) or #iw.invalid > 0) => not(iw in Property_semantic.requireds)
 }
 ---------------Generic CRUD Semantics---------- 
 abstract sig Crud_op {}
-one sig CREATE, READ, UPDATE extends Crud_op {}
+one sig CREATE, UPDATE extends Crud_op {}
 one sig Current_crud_op {
 	operation: Crud_op lone -> Time
 }
-one sig Property_unique{
-	uniques: set Input_widget
-} 
-one sig Property_required{
+one sig Property_semantic{
+	uniques: set Input_widget,
 	requireds: set Input_widget
-}
+} 
+
 sig Object_inlist extends Object{
 	vs: Value lone ->Input_widget
 }
@@ -58,8 +43,7 @@ pred fill_fail_post [iw: Input_widget, t, t': Time, v: Value] {
 	Current_crud_op.operation.t' = Current_crud_op.operation.t
 }
 pred fill_pre[iw: Input_widget, t: Time, v: Value] { 
-	not Current_crud_op.operation.t = READ
-	#iw.content.(T/first) = 1 => not(v = none)
+	(#iw.content.(T/first) = 1 and not(iw.content.(T/first) = To_be_cleaned)) => not(v = none)
 }
 
 pred select_semantics [sw: Selectable_widget, t: Time, o: Object] { }
@@ -75,64 +59,58 @@ pred select_pre[sw: Selectable_widget, t: Time, o: Object] {
 }
 
 pred click_semantics [aw: Action_widget, t: Time] {
-	(aw in Ok and Current_crud_op.operation.t in CREATE) => filled_required_test [Current_window.is_in.t, t] and unique_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
-	(aw in Ok and Current_crud_op.operation.t in UPDATE) => filled_required_test [Current_window.is_in.t, t] and unique_for_update_test [Current_window.is_in.t, t] and valid_data_test [Current_window.is_in.t, t]
+	(aw in Ok and Current_crud_op.operation.t in CREATE) => filled_required_test [t] and unique_test [t] and valid_data_test [t]
+	(aw in Ok and Current_crud_op.operation.t in UPDATE) => filled_required_test [t] and unique_for_update_test [t] and valid_data_test [t]
 	(aw in Delete_trigger) => 2=(1+1)
 }
 pred click_success_post [aw: Action_widget, t, t': Time] {
 	Current_window.is_in.t' = aw.goes
-	(aw in Create_trigger) => (Current_crud_op.operation.t' = CREATE and For_selecting.list.t' = For_selecting.list.t and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #For_selecting.selected.t' = 0)
-	(aw in Read_trigger) => (Current_crud_op.operation.t' = READ and For_selecting.list.t' = For_selecting.list.t and load_form[For_selecting.selected.t, t'] and For_selecting.selected.t' = For_selecting.selected.t)
-	(aw in Update_trigger) => (Current_crud_op.operation.t' = UPDATE and For_selecting.list.t' = For_selecting.list.t and load_form[For_selecting.selected.t, t']  and For_selecting.selected.t' = For_selecting.selected.t)
-	(aw in Delete_trigger) => (#For_selecting.selected.t' = 0 and delete [t, t'])
+	(aw in Create_trigger) => (Current_crud_op.operation.t' = CREATE and Selectable_widget.list.t' = Selectable_widget.list.t and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #Selectable_widget.selected.t' = 0)
+	(aw in Update_trigger) => (Current_crud_op.operation.t' = UPDATE and Selectable_widget.list.t' = Selectable_widget.list.t and load_form[Selectable_widget.selected.t, t']  and Selectable_widget.selected.t' = Selectable_widget.selected.t)
+	(aw in Delete_trigger) => (#Selectable_widget.selected.t' = 0 and delete [t, t'])
 	(aw in Delete_trigger and #Create_trigger = 0) => (Current_crud_op.operation.t' = CREATE  and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)))
 	(aw in Delete_trigger and #Create_trigger > 0) => (#Current_crud_op.operation.t' = 0  and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)))
 	
-	(aw in Cancel and #Create_trigger > 0) => (#Current_crud_op.operation.t' = 0 and For_selecting.list.t' = For_selecting.list.t and #For_selecting.selected.t' = 0)
-	(aw in Cancel and #Create_trigger = 0) => (Current_crud_op.operation.t' = CREATE and For_selecting.list.t' = For_selecting.list.t and #For_selecting.selected.t' = 0  and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)))
+	(aw in Cancel and #Create_trigger > 0) => (#Current_crud_op.operation.t' = 0 and Selectable_widget.list.t' = Selectable_widget.list.t and #Selectable_widget.selected.t' = 0)
+	(aw in Cancel and #Create_trigger = 0) => (Current_crud_op.operation.t' = CREATE and Selectable_widget.list.t' = Selectable_widget.list.t and #Selectable_widget.selected.t' = 0  and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)))
 	
-	(aw in Ok and Current_crud_op.operation.t in CREATE) => (#For_selecting.selected.t' = 0 and add [t, t'])
-	(aw in Ok and Current_crud_op.operation.t in UPDATE) => (#For_selecting.selected.t' = 0 and update [t, t'])
+	(aw in Ok and Current_crud_op.operation.t in CREATE) => (#Selectable_widget.selected.t' = 0 and add [t, t'])
+	(aw in Ok and Current_crud_op.operation.t in UPDATE) => (#Selectable_widget.selected.t' = 0 and update [t, t'])
 	(aw in Ok and #Create_trigger > 0) => (#Current_crud_op.operation.t' =0)
-	(aw in Ok and #Create_trigger = 0) => (Current_crud_op.operation.t' =CREATE  and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #For_selecting.selected.t' = 0)
-	
-	(aw in Continue and #Create_trigger > 0) => (#For_selecting.selected.t' = 0  and #Current_crud_op.operation.t' = 0 and For_selecting.list.t' = For_selecting.list.t)
-	(aw in Continue and #Create_trigger = 0) => (#For_selecting.selected.t' = 0  and Current_crud_op.operation.t' = CREATE and For_selecting.list.t' = For_selecting.list.t  and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)))
+	(aw in Ok and #Create_trigger = 0) => (Current_crud_op.operation.t' =CREATE  and (all iw: Input_widget | iw.content.t' = iw.content.(T/first)) and #Selectable_widget.selected.t' = 0)
 }
 pred click_fail_post [aw: Action_widget, t, t': Time]	{
-	For_selecting.list.t' = For_selecting.list.t
+	Selectable_widget.list.t' = Selectable_widget.list.t
 	(all iw:Input_widget | iw.content.t' = iw.content.t)
-	For_selecting.selected.t' = For_selecting.selected.t
+	Selectable_widget.selected.t' = Selectable_widget.selected.t
 	Current_crud_op.operation.t' = Current_crud_op.operation.t
 }
 pred click_pre[aw: Action_widget, t: Time] {
-	(aw in Read_trigger) => #For_selecting.selected.t = 1
-	(aw in Update_trigger) => #For_selecting.selected.t = 1
-	(aw in Delete_trigger) => #For_selecting.selected.t = 1
+	(aw in Update_trigger) => #Selectable_widget.selected.t = 1
+	(aw in Delete_trigger) => #Selectable_widget.selected.t = 1
 }
 
 pred add [t, t': Time] {
-	one o: Object_inlist |all iw: For_inputing | not(o in For_selecting.list.t) and o.appeared = t' and (iw.content.t in To_be_ordered => #o.vs.iw = 0 else o.vs.iw = iw.content.t) and For_selecting.list.t' = For_selecting.list.t+o
+	one o: Object_inlist |all iw: Input_widget | not(o in Selectable_widget.list.t) and o.appeared = t' and (iw.content.t = To_be_cleaned => #o.vs.iw = 0 else o.vs.iw = iw.content.t) and Selectable_widget.list.t' = Selectable_widget.list.t+o
 }
-pred filled_required_test [w: Window, t: Time] { 
-	all iw: (w.iws & For_inputing)| (iw in Property_required.requireds) => not(iw.content.t in To_be_cleaned)
+pred filled_required_test [t: Time] { 
+	all iw: Property_semantic.requireds|  not(iw.content.t = To_be_cleaned) and not(#iw.content.t = 0)
 }
-pred  unique_test [w: Window, t: Time] { 
-	all iw: (w.iws & For_inputing) | all o: For_selecting.list.t | (iw in Property_unique.uniques and (not(o.vs.iw in To_be_cleaned))) => iw.content.t !=o.vs.iw //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
+pred  unique_test [t: Time] { 
+	all iw: Property_semantic.uniques | all o: Selectable_widget.list.t | (#(o.vs.iw)=1) => iw.content.t !=o.vs.iw
 }
-pred valid_data_test [w: Window, t: Time] {
-	all iw: (w.iws & For_inputing) | (#iw.invalid > 0 and not(iw.content.t in To_be_cleaned)) => (not(iw.content.t in iw.invalid))
+pred valid_data_test [t: Time] {
+	all iw: Input_widget | (#iw.invalid > 0) => (#(iw.content.t) > 0 and not(iw.content.t = To_be_cleaned) and not(iw.content.t in iw.invalid))
 }
-pred  unique_for_update_test [w: Window, t: Time] {
-	all iw: (w.iws & For_inputing) | all o: (For_selecting.list.t-For_selecting.selected.t) | (iw in Property_unique.uniques and (not(o.vs.iw in To_be_cleaned))) => iw.content.t !=o.vs.iw //and ((#p.has_value.o2 = 0) => #p.associated_to.content.t = 1)
+pred  unique_for_update_test [t: Time] {
+	all iw: Property_semantic.uniques | all o: (Selectable_widget.list.t-Selectable_widget.selected.t) |  (#(o.vs.iw)=1) => iw.content.t !=o.vs.iw
 }
 pred load_form [o: Object, t': Time] {
-	all iw: For_inputing | iw.content.t' = o.vs.iw
-	all iw: For_viewing | iw.content.t' = iw.mapping.content.t'
+	all iw: Input_widget | iw.content.t' = o.vs.iw
 }
 pred update [t, t': Time] {
-	one o: Object | all iw: For_inputing | not(o in For_selecting.list.t) and o.appeared = For_selecting.selected.t.appeared and (iw.content.t in To_be_ordered => #o.vs.iw = 0 else o.vs.iw = iw.content.t) and For_selecting.list.t' = (For_selecting.list.t - Selectable_widget.selected.t)+o
+	one o: Object | all iw: Input_widget | not(o in Selectable_widget.list.t) and o.appeared = Selectable_widget.selected.t.appeared and (iw.content.t = To_be_cleaned => #o.vs.iw = 0 else o.vs.iw = iw.content.t) and Selectable_widget.list.t' = (Selectable_widget.list.t - Selectable_widget.selected.t)+o
 }
 pred delete [t, t': Time] {
-	For_selecting.list.t' = For_selecting.list.t - For_selecting.selected.t
+	Selectable_widget.list.t' = Selectable_widget.list.t - Selectable_widget.selected.t
 }
