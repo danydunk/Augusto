@@ -67,10 +67,8 @@ public class ApplicationHelper {
 		try {
 			do {
 				System.out.println("GETTING ROOT OBJECT");
-				Thread.sleep(5000);
-				if (ConfigurationManager.getAutMainCLass().toLowerCase().contains("rachota")) {
-					Thread.sleep(5000);
-				}
+				Thread.sleep(ConfigurationManager.getInitialSleep());
+
 				this.root = RationalTestScript.getRootTestObject();
 			} while (this.root == null && (System.nanoTime() - delayTime) / 1000000 < 30000);
 		} catch (final Exception e) {
@@ -92,7 +90,7 @@ public class ApplicationHelper {
 				this.dealWithDialogsWindow(gmanager);
 				ActionManager.executeAction(act);
 			}
-			Thread.sleep(1000);
+			// Thread.sleep(1000);
 			gmanager.readGUI();
 			this.dealWithDialogsWindow(gmanager);
 		}
@@ -111,7 +109,7 @@ public class ApplicationHelper {
 
 			e.printStackTrace();
 			System.out
-					.println("ApplicationHelper: RMI error while closing application. Moving on.");
+			.println("ApplicationHelper: RMI error while closing application. Moving on.");
 		}
 
 		if (this.root == null) {
@@ -152,7 +150,7 @@ public class ApplicationHelper {
 		if (this.running) {
 			this.closeApplication();
 		}
-		Thread.sleep(6000);
+		Thread.sleep(1000);
 
 		this.startApplication();
 	}

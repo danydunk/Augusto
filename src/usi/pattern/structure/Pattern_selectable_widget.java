@@ -19,6 +19,18 @@ public class Pattern_selectable_widget extends Pattern_widget<Selectable_widget>
 		}
 	}
 
+	public Pattern_selectable_widget(final String id, final String label, final Cardinality card,
+			final String alloy_correspondence, final String size, final String classs,
+			final String position) {
+
+		super(id, label, card, alloy_correspondence, classs, position);
+		if (size != null) {
+			this.size = size;
+		} else {
+			this.size = ".*";
+		}
+	}
+
 	public String getSize() {
 
 		return this.size;

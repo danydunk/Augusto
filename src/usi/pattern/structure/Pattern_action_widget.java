@@ -10,6 +10,12 @@ public class Pattern_action_widget extends Pattern_widget<Action_widget> {
 		super(id, label, card, alloy_correspondence, classs);
 	}
 
+	public Pattern_action_widget(final String id, final String label, final Cardinality card,
+			final String alloy_correspondence, final String classs, final String position) {
+
+		super(id, label, card, alloy_correspondence, classs, position);
+	}
+
 	@Override
 	public boolean isMatch(final Action_widget aw) throws Exception {
 

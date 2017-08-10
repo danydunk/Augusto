@@ -43,6 +43,19 @@ public class Pattern_window extends Pattern_widget<Window> {
 		this.dynamic = dynamic;
 	}
 
+	public Pattern_window(final String id, final String label, final Cardinality card,
+			final String alloy_correspondence, final Boolean_regexp modal, final String classs,
+			final boolean dynamic, final String position) {
+
+		super(id, label, card, alloy_correspondence, classs, position);
+		this.modal = modal;
+		this.action_widgets = new ArrayList<>();
+		this.input_widgets = new ArrayList<>();
+		this.selectable_widgets = new ArrayList<>();
+		this.widgets_map = new HashMap<>();
+		this.dynamic = dynamic;
+	}
+
 	public boolean isDynamic() {
 
 		return this.dynamic;
@@ -319,7 +332,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 	 */
 	protected <C extends Widget> List<Map<? extends Pattern_widget<C>, List<C>>> distribute(
 			final List<? extends Pattern_widget<C>> keys,
-					final Map<? extends Pattern_widget<C>, List<C>> map) {
+			final Map<? extends Pattern_widget<C>, List<C>> map) {
 
 		final List<Map<? extends Pattern_widget<C>, List<C>>> out = new ArrayList<>();
 

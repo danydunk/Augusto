@@ -215,6 +215,11 @@ public class GUIPatternParser {
 			final String id = node.getAttributes().getNamedItem("id").getNodeValue();
 			final Node nodeLabel = getElementNode(node.getChildNodes(), "label");
 			final String label = getNodeContent(nodeLabel);
+			final Node nodePos = getElementNode(node.getChildNodes(), "pos");
+			String pos = null;
+			if (nodePos != null) {
+				pos = getNodeContent(nodePos);
+			}
 			final Node nodeClass = getElementNode(node.getChildNodes(), "class");
 			final String classs = getNodeContent(nodeClass);
 			final Node textLabel = getElementNode(node.getChildNodes(), "text");
@@ -226,7 +231,7 @@ public class GUIPatternParser {
 				alloy = nAlloy.getNodeValue();
 			}
 			final Pattern_input_widget aw = new Pattern_input_widget(id, label, card, alloy, text,
-					classs);
+					classs, pos);
 			input.add(aw);
 		}
 
@@ -261,6 +266,11 @@ public class GUIPatternParser {
 			final String classs = getNodeContent(nodeClass);
 			final String label = getNodeContent(nodeLabel);
 			final Cardinality card = getCardinality(node);
+			final Node nodePos = getElementNode(node.getChildNodes(), "pos");
+			String pos = null;
+			if (nodePos != null) {
+				pos = getNodeContent(nodePos);
+			}
 
 			final Node nAlloy = node.getAttributes().getNamedItem("alloy");
 			String alloy = "";
@@ -268,7 +278,7 @@ public class GUIPatternParser {
 				alloy = nAlloy.getNodeValue();
 			}
 			final Pattern_action_widget aw = new Pattern_action_widget(id, label, card, alloy,
-					classs);
+					classs, pos);
 
 			actions.add(aw);
 		}
@@ -297,14 +307,18 @@ public class GUIPatternParser {
 			final Node sizen = getElementNode(node.getChildNodes(), "size");
 			final String size = getNodeContent(sizen);
 			final Cardinality card = getCardinality(node);
-
+			final Node nodePos = getElementNode(node.getChildNodes(), "pos");
+			String pos = null;
+			if (nodePos != null) {
+				pos = getNodeContent(nodePos);
+			}
 			final Node nAlloy = node.getAttributes().getNamedItem("alloy");
 			String alloy = "";
 			if (nAlloy != null) {
 				alloy = nAlloy.getNodeValue();
 			}
 			final Pattern_selectable_widget aw = new Pattern_selectable_widget(id, label, card,
-					alloy, size, classs);
+					alloy, size, classs, pos);
 
 			selectables.add(aw);
 		}

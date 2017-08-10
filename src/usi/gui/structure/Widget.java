@@ -347,6 +347,16 @@ public abstract class Widget implements Comparable<Widget> {
 			}
 			final int x = p.x;
 			final int y = p.y;
+
+			if (label == null || label.length() == 0) {
+				if (to.getRecognitionProperties().get("iconDescription") != null) {
+					label = (String) to.getRecognitionProperties().get("iconDescription");
+					// System.out.println(label);
+					label = label.contains(".") ? label.split("\\.")[0] : label;
+					label = label.replace("_", " ");
+				}
+			}
+
 			out.add(new Action_widget(to, idm.nextAWId(), label, type, x, y, width, height));
 			return out;
 

@@ -17,6 +17,7 @@ public class ConfigurationManager {
 	private static String initial_actions = "";
 	private static int alloyRunScope = 4;
 	private static String ripperFilters = "";
+	private static long initialSleep = 5000;
 	// path to the GUI file
 	private static String guiFile;
 	// refinement settings
@@ -73,6 +74,10 @@ public class ConfigurationManager {
 		} catch (final Exception e) {
 			ConfigurationManager.setRipperFilters("");
 		}
+		try {
+			ConfigurationManager.setInitialSleep(Long.valueOf(properties
+					.getProperty("initial_sleep")));
+		} catch (final Exception e) {}
 		ApplicationHelper.reset();
 	}
 
@@ -228,5 +233,15 @@ public class ConfigurationManager {
 	public static String getInitialActions() {
 
 		return ConfigurationManager.initial_actions;
+	}
+
+	private static void setInitialSleep(final long s) {
+
+		ConfigurationManager.initialSleep = s;
+	}
+
+	public static long getInitialSleep() {
+
+		return ConfigurationManager.initialSleep;
 	}
 }

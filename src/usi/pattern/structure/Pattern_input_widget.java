@@ -20,6 +20,18 @@ public class Pattern_input_widget extends Pattern_widget<Input_widget> {
 		}
 	}
 
+	public Pattern_input_widget(final String id, final String label, final Cardinality card,
+			final String alloy_correspondence, final String value, final String classs,
+			final String position) {
+
+		super(id, label, card, alloy_correspondence, classs, position);
+		if (value != null) {
+			this.value = value;
+		} else {
+			this.value = ".*";
+		}
+	}
+
 	public String getValue() {
 
 		return this.value;
