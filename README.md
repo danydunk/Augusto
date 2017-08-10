@@ -18,4 +18,7 @@ For information about how to run Augusto on a application under test check the t
 If you want to add a new Application Independent Functionality to Augusto you must model using two types of models: the Gui pattern model and the Alloy Semantic model.
 For examples of this models check `files/guipatterns` and `files/alloy`.
 
-Once the new functionality is modelled it must be added to the ENUM usi.pattern.Patterns
+Once the new functionality is modelled it must be added to the ENUM `usi.pattern.Patterns`
+
+## Support
+For support contact danydunk@gmail.com

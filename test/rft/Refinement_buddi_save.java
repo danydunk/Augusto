@@ -12,7 +12,6 @@ import src.usi.gui.GUIParser;
 import src.usi.gui.functionality.GUIFunctionality_refine;
 import src.usi.gui.functionality.GUIFunctionality_search;
 import src.usi.gui.functionality.instance.Instance_GUI_pattern;
-import src.usi.gui.functionality.instance.Instance_GUI_patternWriter;
 import src.usi.gui.structure.GUI;
 import src.usi.pattern.GUIPatternParser;
 import src.usi.pattern.structure.GUI_Pattern;
@@ -40,15 +39,15 @@ public class Refinement_buddi_save extends Refinement_buddi_saveHelper {
 			PathsManager.setProjectRoot(args[0].toString());
 		}
 		ConfigurationManager.load(PathsManager.getProjectRoot()
-				+ "/files/for_test/config/spark.properties");
+				+ "/files/for_test/config/buddi.properties");
 		ExperimentManager.init();
 
 		// we load a gui pattern
-		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/guipatterns/auth.xml");
+		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/guipatterns/save.xml");
 		final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 		// we load the GUI structure
-		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/spark.xml");
+		doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/for_test/xml/buddi.xml");
 		final GUI gui = GUIParser.parse(doc);
 
 		final GUIFunctionality_search gfs = new GUIFunctionality_search(gui);
@@ -60,8 +59,9 @@ public class Refinement_buddi_save extends Refinement_buddi_saveHelper {
 		final GUIFunctionality_refine refiner = new GUIFunctionality_refine(match, gui);
 		try {
 			match = refiner.refine();
-			final Document a = Instance_GUI_patternWriter.writeInstanceGUIPattern(match);
-			XMLUtil.save("savematch.xml", a);
+			// final Document a =
+			// Instance_GUI_patternWriter.writeInstanceGUIPattern(match);
+			// XMLUtil.save("savematch.xml", a);
 
 		} catch (final Exception e) {
 			e.printStackTrace();

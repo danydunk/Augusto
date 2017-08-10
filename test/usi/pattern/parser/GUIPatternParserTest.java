@@ -23,7 +23,7 @@ public class GUIPatternParserTest {
 	public void testParserGUIPattern1() throws Exception {
 
 		final Document doc = XMLUtil.read(PathsManager.getProjectRoot()
-				+ "/files/guipatterns/CRUD_NO_READ.xml");
+				+ "/files/guipatterns/CRUD.xml");
 		Assert.assertNotNull(doc);
 
 		final GUI_Pattern gui = GUIPatternParser.parse(doc);
