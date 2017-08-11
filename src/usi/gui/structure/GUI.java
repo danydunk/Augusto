@@ -108,6 +108,7 @@ public class GUI {
 
 		if (aw == null || w == null || !this.windows.containsKey(w)
 				|| !this.aw_window_mapping.containsKey(aw)) {
+			// System.out.println(aw + " " + w);
 			throw new Exception("GUI - isDynamicEdge: wrong input.");
 		}
 		if (this.dynamicEdgesFrom.containsEntry(aw, w) && this.dynamicEdgesTo.containsEntry(w, aw)) {

@@ -241,9 +241,11 @@ public class GUIFunctionality_refine {
 			return false;
 		}
 		// this.testcasegen = true;
+		final List<GUIAction> real_acts = tc.getActions().stream()
+				.filter(e -> !(e instanceof Clean)).collect(Collectors.toList());
 		String aw = null;
-		if (tc.getActions().get(tc.getActions().size() - 1) instanceof Click) {
-			aw = tc.getActions().get(tc.getActions().size() - 1).getWidget().getId();
+		if (real_acts.get(real_acts.size() - 1) instanceof Click) {
+			aw = real_acts.get(real_acts.size() - 1).getWidget().getId();
 		}
 		final Object[] out = this.getFoundWindow(tc, target);
 		final Instance_window found = (Instance_window) out[0];
@@ -266,13 +268,13 @@ public class GUIFunctionality_refine {
 			if (aw != null) {
 
 				final Pattern_action_widget paw = this.instancePattern.getPAW_for_AW(aw);
-
+				// System.out.println(paw);
 				if (!covered_edge
 						&& this.pattern.isDyanamicEdge(paw.getId(), found.getPattern().getId())) {
 
 					final OracleChecker oracle = new OracleChecker(this.gui);
-					if (oracle.checkWindow(reached_win,
-							tc.getActions().get(tc.getActions().size() - 1).getOracle())) {
+					if (oracle.checkWindow(reached_win, real_acts.get(real_acts.size() - 1)
+							.getOracle())) {
 						covered_edge = true;
 					}
 				}
