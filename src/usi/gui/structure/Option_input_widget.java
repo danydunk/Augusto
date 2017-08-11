@@ -8,6 +8,7 @@ import com.rational.test.ft.object.interfaces.TestObject;
 public class Option_input_widget extends Input_widget {
 
 	private final int size;
+	// -2 means not defined
 	private final int selected;
 	// list of tos, option input widget are often composed of multiple tos
 	private final List<TestObject> tos;
@@ -46,7 +47,7 @@ public class Option_input_widget extends Input_widget {
 			final int selected) throws Exception {
 
 		super(id, label, classs, x, y, width, height, String.valueOf(selected));
-		if (size < 0 || selected < -1 || selected > size - 1) {
+		if (size < 0 || selected < -2 || selected > size - 1) {
 
 			throw new Exception("Option_input_widget: wrong size or selected.");
 		}

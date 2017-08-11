@@ -1,4 +1,8 @@
+CALL .\gradlew.bat build
+
+REM the AUT is deployed, this app has a CRUD and a SAVE functionality
 CALL .\gradlew.bat deployUPMSmall
+
 REM to run Augusto the information required to run the application under test must be specified in the file ./aut.properties
 cp .\files\for_test\config\tutorial.properties .\aut.properties
 

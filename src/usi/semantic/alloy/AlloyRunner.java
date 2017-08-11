@@ -18,6 +18,7 @@ import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Window;
 import src.usi.semantic.SpecificSemantics;
 import src.usi.testcase.GUITestCaseWriter;
+import src.usi.testcase.OracleChecker;
 import src.usi.testcase.inputdata.DataManager;
 import src.usi.testcase.structure.Clean;
 import src.usi.testcase.structure.Click;
@@ -321,8 +322,8 @@ public class AlloyRunner {
 	}
 
 	static GUITestCase
-	analyzeTuples(final A4Solution solution, final Instance_GUI_pattern instance)
-			throws Exception {
+			analyzeTuples(final A4Solution solution, final Instance_GUI_pattern instance)
+					throws Exception {
 
 		final Map<Integer, List<String>> to_clean_at_t = new HashMap<>();
 		Map<String, String> input_data_map = null;
@@ -407,7 +408,7 @@ public class AlloyRunner {
 													new ArrayList<String>());
 										}
 										to_clean_at_t.get(time_index + 1).add(iw.getId());
-
+										inputdata = OracleChecker.SKIP_IW;
 									} else {
 										if (iw instanceof Option_input_widget) {
 
@@ -431,6 +432,10 @@ public class AlloyRunner {
 										&& t.atom(1).equals("Input_widget_" + iw.getId() + "$0")) {
 									if (iw instanceof Option_input_widget) {
 										final Option_input_widget oiw = (Option_input_widget) iw;
+
+										if (inputdata.equals(OracleChecker.SKIP_IW)) {
+											inputdata = "-2";
+										}
 
 										if (inputdata.length() == 0) {
 											inputdata = String.valueOf(oiw.getSelected());
@@ -515,7 +520,7 @@ public class AlloyRunner {
 									final Selectable_widget new_sw = new Selectable_widget(
 											sw.getId(), sw.getLabel(), sw.getClasss(), sw.getX(),
 											sw.getY(), sw.getWidth(), sw.getHeight(), sw.getSize()
-											+ (map.keySet().size()), sel);
+													+ (map.keySet().size()), sel);
 									new_sw.setDescriptor(sw.getDescriptor());
 									sws.add(new_sw);
 									continue swloop;
@@ -744,7 +749,9 @@ public class AlloyRunner {
 		// System.out.println(actions.size());
 		// System.out.println(to_clean_at_t);
 		// for the last window
-		if (!actions.get(actions.size() - 1).getOracle().getId().equals(pre_win_id)) {
+
+		if (actions.get(actions.size() - 1).getOracle() != null
+				&& !actions.get(actions.size() - 1).getOracle().getId().equals(pre_win_id)) {
 			Input_widget tiw = null;
 			if (to_clean_at_t.containsKey(actions.size() + 1)) {
 
@@ -903,49 +910,49 @@ public class AlloyRunner {
 				metadata += inpw.getDescriptor() != null && metadata.length() == 0 ? inpw
 						.getDescriptor() : "";
 
-						List<String> data = null;
-						if (invalid_values.contains(v)) {
-							data = dm.getInvalidData(metadata);
+				List<String> data = null;
+				if (invalid_values.contains(v)) {
+					data = dm.getInvalidData(metadata);
 
-							assert (data.size() > 0);
+					assert (data.size() > 0);
+				} else {
+					data = dm.getValidData(metadata);
+				}
+
+				assert (data != null);
+
+				if (data_for_value.containsKey(v)) {
+					List<String> new_list = new ArrayList<>();
+					// we calculate the intersection between the values
+					// already
+					// available for this value and the new ones
+
+					if (data.size() == 0) {
+						new_list = data_for_value.get(v);
+					} else {
+						if (data_for_value.get(v).size() == 0) {
+							new_list = data;
 						} else {
-							data = dm.getValidData(metadata);
-						}
-
-						assert (data != null);
-
-						if (data_for_value.containsKey(v)) {
-							List<String> new_list = new ArrayList<>();
-							// we calculate the intersection between the values
-							// already
-							// available for this value and the new ones
-
-							if (data.size() == 0) {
-								new_list = data_for_value.get(v);
-							} else {
-								if (data_for_value.get(v).size() == 0) {
-									new_list = data;
-								} else {
-									for (final String s : data_for_value.get(v)) {
-										if (data.contains(s)) {
-											new_list.add(s);
-										}
-									}
-									if (new_list.size() == 0) {
-										throw new Exception(
-												"AlloyTestCaseGeneration - incompatible input widgets.");
-									}
+							for (final String s : data_for_value.get(v)) {
+								if (data.contains(s)) {
+									new_list.add(s);
 								}
 							}
-							if (invalid_values.contains(v) && new_list.size() == 0) {
+							if (new_list.size() == 0) {
 								throw new Exception(
-										"AlloyTestCaseGeneration - not enough invalid input data.");
+										"AlloyTestCaseGeneration - incompatible input widgets.");
 							}
-
-							data_for_value.put(v, new_list);
-						} else {
-							data_for_value.put(v, data);
 						}
+					}
+					if (invalid_values.contains(v) && new_list.size() == 0) {
+						throw new Exception(
+								"AlloyTestCaseGeneration - not enough invalid input data.");
+					}
+
+					data_for_value.put(v, new_list);
+				} else {
+					data_for_value.put(v, data);
+				}
 			}
 		}
 

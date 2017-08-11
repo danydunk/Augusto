@@ -89,20 +89,37 @@ public class GUIFunctionality_search {
 							continue;
 						}
 						boolean reached = true;
-						boolean required = false;
+						boolean required = true;
+						for (final Pattern_window ppw : this.gui_pattern.getStaticForwardLinks(paw
+								.getId())) {
+							if (ppw.getCardinality().getMin() == 0) {
+								required = false;
+							}
 
+						}
 						loop: for (final Action_widget aw : iw.getAWS_for_PAW(paw.getId())) {
+							if (this.gui.getStaticForwardLinks(aw.getId()).size() == 0) {
+								final Window hisw = this.gui.getActionWidget_Window(aw.getId());
+								for (final Pattern_window ppw : this.gui_pattern
+										.getStaticForwardLinks(paw.getId())) {
+									if (possible_matches.get(ppw).contains(hisw)) {
+										continue loop;
+									}
+								}
+							}
+
 							for (final Window ww : this.gui.getStaticForwardLinks(aw.getId())) {
 								for (final Pattern_window ppw : this.gui_pattern
 										.getStaticForwardLinks(paw.getId())) {
-									if (ppw.getCardinality().getMin() > 0) {
-										required = true;
-									}
+									// if (ppw.getCardinality().getMin() > 0) {
+									// required = true;
+									// }
 									if (possible_matches.get(ppw).contains(ww)) {
 										continue loop;
 									}
 								}
 							}
+
 							reached = false;
 							break;
 						}
@@ -504,10 +521,10 @@ public class GUIFunctionality_search {
 							}
 						}
 						if (source_pw.getCardinality().getMin() != 0 /*
-																	 * &&
-																	 * source_pw
-																	 * != pw
-																	 */) {
+						 * &&
+						 * source_pw
+						 * != pw
+						 */) {
 							check_optional = true;
 						}
 					}

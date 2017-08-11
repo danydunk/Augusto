@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import src.usi.gui.structure.GUI;
 import src.usi.gui.structure.Input_widget;
+import src.usi.gui.structure.Option_input_widget;
 import src.usi.gui.structure.Selectable_widget;
 import src.usi.gui.structure.Window;
 import src.usi.testcase.structure.Clean;
@@ -12,6 +13,7 @@ import src.usi.testcase.structure.GUIAction;
 
 public class OracleChecker {
 
+	public static String SKIP_IW = "";
 	private String description_last_check;
 	// needed to manage standard values
 	private final GUI gui;
@@ -143,6 +145,15 @@ public class OracleChecker {
 					this.description_last_check += System.lineSeparator();
 
 					out = false;
+					continue;
+				}
+				if (iw instanceof Option_input_widget) {
+					final Option_input_widget oiw = (Option_input_widget) iw;
+					if (oiw.getSelected() == -2) {
+						continue;
+					}
+				}
+				if (iw.getValue().equals(SKIP_IW)) {
 					continue;
 				}
 				if (!actual_iw.getValue().equals(iw.getValue())) {

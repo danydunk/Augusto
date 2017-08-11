@@ -46,7 +46,7 @@ public class Refinement_buddi_crud extends Refinement_buddi_crudHelper {
 
 			// we load a gui pattern
 			Document doc = XMLUtil.read(PathsManager.getProjectRoot()
-					+ "/files/guipatterns/crud_no_read.xml");
+					+ "/files/guipatterns/crud.xml");
 			final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 			// we load the GUI structure

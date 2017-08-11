@@ -35,24 +35,26 @@ public class RunTestsuite extends RunTestsuiteHelper {
 
 		String dir = null;
 		String settings = null;
-		// switch (args.length) {
-		// case 2:
-		// // settings =
-		// settings = (String) args[1];
-		// // settings =
-		// // "C:\\workspace\\Augusto\\results_buddi_final\\aut.properties";
-		// dir = (String) args[0];
-		// // dir =
-		// //
-		// "C:\\workspace\\Augusto\\results_buddi_final\\CRUD_match_1\\testcases";
-		// break;
-		//
-		// default:
-		// System.out.println("Error: wrong number of parameters.");
-		// return;
-		// }
-		settings = "C:\\workspace\\Augusto\\pdfsam_results\\pdfsam_results\\results_20170804_0951\\aut.properties";
-		dir = "C:\\workspace\\Augusto\\pdfsam_results\\pdfsam_results\\results_20170804_0951\\CRUD_NO_READ_match_1\\testcases";
+		switch (args.length) {
+		case 2:
+			// settings =
+			settings = (String) args[1];
+			// settings =
+			// "C:\\workspace\\Augusto\\results_buddi_final\\aut.properties";
+			dir = (String) args[0];
+			// dir =
+			//
+			// "C:\\workspace\\Augusto\\results_buddi_final\\CRUD_match_1\\testcases";
+			break;
+
+		default:
+			System.out.println("Error: wrong number of parameters.");
+			return;
+		}
+		// settings =
+		// "C:\\workspace\\Augusto\\pdfsam_results\\pdfsam_results\\results_20170804_0951\\aut.properties";
+		// dir =
+		// "C:\\workspace\\Augusto\\pdfsam_results\\pdfsam_results\\results_20170804_0951\\CRUD_NO_READ_match_1\\testcases";
 		ConfigurationManager.load(settings);
 		ExperimentManager.init();
 		final GUI gui = GUIParser.parse(XMLUtil.read(ConfigurationManager.getGUIFile()));

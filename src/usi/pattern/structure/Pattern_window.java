@@ -332,7 +332,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 	 */
 	protected <C extends Widget> List<Map<? extends Pattern_widget<C>, List<C>>> distribute(
 			final List<? extends Pattern_widget<C>> keys,
-			final Map<? extends Pattern_widget<C>, List<C>> map) {
+					final Map<? extends Pattern_widget<C>, List<C>> map) {
 
 		final List<Map<? extends Pattern_widget<C>, List<C>>> out = new ArrayList<>();
 
@@ -420,7 +420,7 @@ public class Pattern_window extends Pattern_widget<Window> {
 			loop: for (int cont = keys.size() - 1; cont >= 0; cont--) {
 
 				if (possibilities_map.get(keys.get(cont)).size() > (indexes.get(cont) + 1)) {
-					if (indexes.get(cont) == 0 && cont != (keys.size() - 1)) {
+					if (cont != (keys.size() - 1)) {
 						for (int x = cont + 1; x < keys.size(); x++) {
 							indexes.remove(x);
 							indexes.add(x, 0);

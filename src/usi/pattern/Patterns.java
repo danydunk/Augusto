@@ -1,7 +1,7 @@
 package src.usi.pattern;
 
 public enum Patterns {
-	CRUD("CRUD.xml"), AUTH("AUTH.xml"), SAVE("SAVE.xml");
+	SAVE("SAVE.xml"), AUTH("AUTH.xml"), CRUD("CRUD.xml"), ;
 
 	public String name;
 

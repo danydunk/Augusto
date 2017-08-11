@@ -21,7 +21,7 @@ public class Window extends Widget {
 
 	public Window(final TestObject to, final String id, final String label, final String classs,
 			final int x, final int y, final int width, final int height, final boolean modal)
-			throws Exception {
+					throws Exception {
 
 		super(to, id, label, classs, x, y, width, height);
 		if (id == null || id.length() == 0) {
@@ -50,6 +50,25 @@ public class Window extends Widget {
 		this.input_widgets = new ArrayList<>();
 		this.selectable_widgets = new ArrayList<>();
 		this.widgets_map = new HashMap<>();
+	}
+
+	public boolean removeWidget(final String id) {
+
+		final Widget w = this.widgets_map.remove(id);
+		if (w == null) {
+			return false;
+		}
+
+		if (w instanceof Action_widget) {
+			this.action_widgets.remove(w);
+		}
+		if (w instanceof Input_widget) {
+			this.input_widgets.remove(w);
+		}
+		if (w instanceof Selectable_widget) {
+			this.selectable_widgets.remove(w);
+		}
+		return true;
 	}
 
 	@Override

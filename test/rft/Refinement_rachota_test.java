@@ -43,8 +43,7 @@ public class Refinement_rachota_test extends Refinement_rachota_testHelper {
 		ExperimentManager.init();
 
 		// we load a gui pattern
-		Document doc = XMLUtil.read(PathsManager.getProjectRoot()
-				+ "/files/guipatterns/crud_no_read.xml");
+		Document doc = XMLUtil.read(PathsManager.getProjectRoot() + "/files/guipatterns/crud.xml");
 		final GUI_Pattern pattern = GUIPatternParser.parse(doc);
 
 		// we load the GUI structure
