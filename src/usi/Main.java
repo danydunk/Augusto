@@ -130,7 +130,7 @@ public class Main extends MainHelper {
 
 						instance.addWindow(newiw);
 
-						if (newgui.containsWindow(iiww.getInstance().getId())) {
+						if (!newgui.containsWindow(iiww.getInstance().getId())) {
 							newgui.addWindow(gui.getWindow(iiww.getInstance().getId()));
 						}
 						for (final Pattern_action_widget paw : iiww.getPattern().getActionWidgets()) {
@@ -174,7 +174,7 @@ public class Main extends MainHelper {
 					if (refined_instance != null) {
 						XMLUtil.save(match_folder + File.separator + "match.xml",
 								Instance_GUI_patternWriter
-										.writeInstanceGUIPattern(refined_instance));
+								.writeInstanceGUIPattern(refined_instance));
 						// we remove the instance elements from the gui so that
 						// they
 						// cannot be added to a match of another pattern
