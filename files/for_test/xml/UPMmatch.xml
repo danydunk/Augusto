@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <instance_GUI_pattern>
-    <GUI_pattern>CRUD_NO_READ</GUI_pattern>
+    <GUI_pattern>CRUD</GUI_pattern>
     <windows>
         <instance_window instance_id="w2" pattern_id="initial">
             <mapping>
