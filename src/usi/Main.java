@@ -127,8 +127,12 @@ public class Main extends MainHelper {
 					for (final Instance_window iiww : inst.getWindows()) {
 						final Instance_window newiw = new Instance_window(iiww.getPattern(),
 								gui.getWindow(iiww.getInstance().getId()));
+
 						instance.addWindow(newiw);
-						newgui.addWindow(gui.getWindow(iiww.getInstance().getId()));
+
+						if (newgui.containsWindow(iiww.getInstance().getId())) {
+							newgui.addWindow(gui.getWindow(iiww.getInstance().getId()));
+						}
 						for (final Pattern_action_widget paw : iiww.getPattern().getActionWidgets()) {
 							final List<Action_widget> mapping = new ArrayList<>();
 							for (final Action_widget aw : iiww.getAWS_for_PAW(paw.getId())) {
@@ -170,7 +174,7 @@ public class Main extends MainHelper {
 					if (refined_instance != null) {
 						XMLUtil.save(match_folder + File.separator + "match.xml",
 								Instance_GUI_patternWriter
-								.writeInstanceGUIPattern(refined_instance));
+										.writeInstanceGUIPattern(refined_instance));
 						// we remove the instance elements from the gui so that
 						// they
 						// cannot be added to a match of another pattern
