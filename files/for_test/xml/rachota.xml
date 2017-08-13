@@ -73,6 +73,7 @@
             <pos>904:205</pos>
             <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw78">
             <pos>933:205</pos>
@@ -84,6 +85,7 @@
             <pos>962:205</pos>
             <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw80">
             <pos>991:205</pos>
@@ -134,7 +136,7 @@
             <pos>563:243</pos>
             <rectangle>474:158</rectangle>
             <class>ListUI</class>
-            <size>1</size>
+            <size>0</size>
             <selected>-1</selected>
         </selectable_widget>
     </window>
@@ -149,6 +151,7 @@
             <pos>904:205</pos>
             <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw85">
             <pos>933:205</pos>
@@ -160,6 +163,7 @@
             <pos>962:205</pos>
             <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw87">
             <pos>991:205</pos>
@@ -210,8 +214,8 @@
             <pos>563:243</pos>
             <rectangle>474:158</rectangle>
             <class>ListUI</class>
-            <size>2</size>
-            <selected>1</selected>
+            <size>1</size>
+            <selected>0</selected>
         </selectable_widget>
     </window>
     <window id="w11">
@@ -225,6 +229,7 @@
             <pos>904:205</pos>
             <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw99">
             <pos>933:205</pos>
@@ -236,6 +241,7 @@
             <pos>962:205</pos>
             <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw101">
             <pos>991:205</pos>
@@ -269,10 +275,10 @@
             <value>[options] 6 : 15</value>
         </input_widget>
         <input_widget id="iw73">
-            <pos>563:314</pos>
+            <pos>563:297</pos>
             <rectangle>233:17</rectangle>
             <class>TextFieldUI</class>
-            <value>New Folder (4)</value>
+            <value>New Folder (3)</value>
         </input_widget>
         <input_widget id="iw74">
             <pos>646:414</pos>
@@ -290,10 +296,10 @@
         </input_widget>
         <selectable_widget id="sw6">
             <pos>563:263</pos>
-            <rectangle>474:68</rectangle>
+            <rectangle>474:51</rectangle>
             <class>TableUI</class>
-            <size>4</size>
-            <selected>1</selected>
+            <size>3</size>
+            <selected>0</selected>
         </selectable_widget>
     </window>
     <window id="w10">
@@ -307,6 +313,7 @@
             <pos>904:205</pos>
             <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw92">
             <pos>933:205</pos>
@@ -318,6 +325,7 @@
             <pos>962:205</pos>
             <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw94">
             <pos>991:205</pos>
@@ -366,10 +374,10 @@
         </input_widget>
         <selectable_widget id="sw5">
             <pos>563:263</pos>
-            <rectangle>474:51</rectangle>
+            <rectangle>474:34</rectangle>
             <class>TableUI</class>
-            <size>3</size>
-            <selected>1</selected>
+            <size>2</size>
+            <selected>0</selected>
         </selectable_widget>
     </window>
     <window id="w13">
@@ -455,13 +463,13 @@
             <pos>560:198</pos>
             <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
-            <label/>
+            <label>previous</label>
         </action_widget>
         <action_widget id="aw118">
             <pos>823:198</pos>
             <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
-            <label/>
+            <label>next</label>
         </action_widget>
         <action_widget id="aw115">
             <pos>539:201</pos>
@@ -584,6 +592,7 @@
             <pos>904:205</pos>
             <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw106">
             <pos>933:205</pos>
@@ -595,6 +604,7 @@
             <pos>962:205</pos>
             <rectangle>24:24</rectangle>
             <class>ButtonUI</class>
+            <label/>
         </action_widget>
         <action_widget id="aw108">
             <pos>991:205</pos>
@@ -643,9 +653,9 @@
         </input_widget>
         <selectable_widget id="sw7">
             <pos>563:263</pos>
-            <rectangle>459:170</rectangle>
+            <rectangle>459:153</rectangle>
             <class>TableUI</class>
-            <size>10</size>
+            <size>9</size>
             <selected>-1</selected>
         </selectable_widget>
     </window>
@@ -738,25 +748,25 @@
             <pos>493:199</pos>
             <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
-            <label/>
+            <label>previous week</label>
         </action_widget>
         <action_widget id="aw5">
             <pos>523:199</pos>
             <rectangle>30:20</rectangle>
             <class>ButtonUI</class>
-            <label/>
+            <label>previous month</label>
         </action_widget>
         <action_widget id="aw7">
             <pos>862:199</pos>
             <rectangle>30:20</rectangle>
             <class>ButtonUI</class>
-            <label/>
+            <label>next month</label>
         </action_widget>
         <action_widget id="aw8">
             <pos>902:199</pos>
             <rectangle>20:20</rectangle>
             <class>ButtonUI</class>
-            <label/>
+            <label>next week</label>
         </action_widget>
         <action_widget id="aw9">
             <pos>574:327</pos>
@@ -781,7 +791,7 @@
             <pos>921:402</pos>
             <rectangle>15:19</rectangle>
             <class>ButtonUI</class>
-            <label/>
+            <label>table</label>
         </action_widget>
         <action_widget id="aw13">
             <pos>507:650</pos>
@@ -1160,13 +1170,13 @@
             <pos>560:198</pos>
             <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
-            <label/>
+            <label>previous</label>
         </action_widget>
         <action_widget id="aw141">
             <pos>823:198</pos>
             <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
-            <label/>
+            <label>next</label>
         </action_widget>
         <action_widget id="aw138">
             <pos>539:201</pos>
@@ -1539,13 +1549,13 @@
             <pos>560:198</pos>
             <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
-            <label/>
+            <label>previous</label>
         </action_widget>
         <action_widget id="aw47">
             <pos>823:198</pos>
             <rectangle>53:30</rectangle>
             <class>ButtonUI</class>
-            <label/>
+            <label>next</label>
         </action_widget>
         <action_widget id="aw44">
             <pos>539:201</pos>

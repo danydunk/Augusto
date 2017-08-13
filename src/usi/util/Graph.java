@@ -56,6 +56,10 @@ public class Graph {
 			final Vertex vsrc = getVertex(vertexes, window.getId());
 			for (final Action_widget actionWindows : window.getActionWidgets()) {
 				final Collection<Window> links = gui.getStaticForwardLinks(actionWindows.getId());
+				// we remove the terminal edges
+				if (links.size() > 1) {
+					continue;
+				}
 				for (final Window linkedWin : links) {
 					final Vertex vdest = getVertex(vertexes, linkedWin.getId());
 					final int weight = 1;
