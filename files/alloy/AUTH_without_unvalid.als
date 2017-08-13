@@ -9,6 +9,7 @@ abstract sig Go, Login, Signup, Ok, Cancel, Logout extends Action_widget { }
 abstract sig User, Password, User_save, Password_save, Re_password, Field extends Input_widget { }
 
 fact {
+#To_be_cleaned=1
 	not(User in Property_required.requireds)
 	not(Password in Property_required.requireds)
 	//not(User in Property_unique.uniques)
@@ -72,20 +73,22 @@ pred click_pre[aw: Action_widget, t: Time] { }
 pred add [t, t': Time] {
 	one o: Object_inlist |all iw: (User_save + Password_save + Field) | not(o in List.elements.t) and o.appeared = t' and o.vs.iw = iw.content.t and List.elements.t' =  List.elements.t+o
 }
-pred filled_login_test [t: Time] { 
-	all iw: (User+Password)| #iw.content.t = 1
+pred filled_login_test [t: Time] {
+	all iw: (User+Password)| #iw.content.t = 1   and not(iw.content.t=To_be_cleaned)
 }
-pred  existing_test [t: Time] { 
+pred existing_test [t: Time] {
 	one o: List.elements.t | Password.content.t =o.vs.Password_save and User.content.t =o.vs.User_save
 }
 pred same_pass_test [t: Time] {
 	Password_save.content.t = Re_password.content.t
 }
-pred filled_required_test [t: Time] { 
-	#User_save.content.t = 1 and #Password_save.content.t = 1 and #Re_password.content.t = 1
-	all iw: Field| (iw in Property_required.requireds) => #iw.content.t = 1
+pred filled_required_test [t: Time] {
+ 	#User_save.content.t = 1 and not(User_save.content.t=To_be_cleaned) 
+ 	#Password_save.content.t = 1  and not(Password_save.content.t=To_be_cleaned) 
+	#Re_password.content.t = 1  and not(Re_password.content.t=To_be_cleaned)
+	all iw: Field| (iw in Property_required.requireds) => #iw.content.t = 1 and not(iw.content.t=To_be_cleaned)
 }
-pred  unique_fields_test [t: Time] { 
+pred unique_fields_test [t: Time] {
 	all o: List.elements.t | (#o.vs.User_save= 1 => User_save.content.t !=o.vs.User_save)
-	//all iw: Field | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw 
+	//all iw: Field | all o: List.elements.t | (iw in Property_unique.uniques and (#o.vs.iw= 1)) => iw.content.t !=o.vs.iw
 }
