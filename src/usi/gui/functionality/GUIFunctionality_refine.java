@@ -217,7 +217,7 @@ public class GUIFunctionality_refine {
 
 						if (this.unsat_commands.contains(run_command)) {
 							System.out
-							.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
+									.println("DISCOVER DYNAMIC EDGE: this run command was previusly observed as unsat.");
 							continue;
 
 						}
@@ -550,7 +550,7 @@ public class GUIFunctionality_refine {
 							+ (aw.getId()) + ",(T/prev[T/last])])}";
 					if (this.unsat_commands.contains(run_command)) {
 						System.out
-						.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
+								.println("DISCOVER DYNAMIC WINDOW: this run command was previusly observed as unsat.");
 						continue;
 
 					}
@@ -581,7 +581,7 @@ public class GUIFunctionality_refine {
 
 			if (timeout
 					&& (System.currentTimeMillis() - this.beginTime) >= ConfigurationManager
-					.getRefinementTimeout()) {
+							.getRefinementTimeout()) {
 				System.out.println("TIMEOUT IN GET ADAPTED CONSTRAINT");
 				break;
 			}
@@ -662,7 +662,9 @@ public class GUIFunctionality_refine {
 		final Object[] out = new Object[2];
 		System.out.println("GET FOUND WINDOW: start.");
 		// the last action widget exercised
-		final Widget wid = tc.getActions().get(tc.getActions().size() - 1).getWidget();
+		final List<GUIAction> tc_real_acts = tc.getActions().stream()
+				.filter(e -> !(e instanceof Clean)).collect(Collectors.toList());
+		final Widget wid = tc_real_acts.get(tc_real_acts.size() - 1).getWidget();
 		Pattern_widget pwid = null;
 		Pattern_window pw = null;
 
@@ -847,9 +849,9 @@ public class GUIFunctionality_refine {
 
 		final List<GUIAction> real_acts = res.getActions_executed().stream()
 				.filter(e -> !(e instanceof Clean)).collect(Collectors.toList());
-		if (!real_acts.get(real_acts.size() - 1).isSame(
-				tc.getActions().get(tc.getActions().size() - 1))) {
-			reached_w = tc.getActions().get(tc.getActions().size() - 1).getWindow();
+
+		if (!real_acts.get(real_acts.size() - 1).isSame(tc_real_acts.get(tc_real_acts.size() - 1))) {
+			reached_w = tc_real_acts.get(tc_real_acts.size() - 1).getWindow();
 		}
 		out[1] = reached_w;
 
@@ -1026,7 +1028,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				if (!candidates.contains(new_prop)) {
@@ -1092,7 +1094,7 @@ public class GUIFunctionality_refine {
 
 				if (new_prop == null) {
 					System.out
-					.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
+							.println("SEMANTIC PROPERTY REFINE: no more possible semantic properties to be found. CORRECT ONE FOUND!");
 					break mainloop;
 				}
 				if (!candidates.contains(new_prop)) {
@@ -1366,7 +1368,7 @@ public class GUIFunctionality_refine {
 			if (!this.testcasegen) {
 				this.testcasegen = true;
 				System.out
-						.println("GET TESTCASE: test case not found, trying adapting constraint.");
+				.println("GET TESTCASE: test case not found, trying adapting constraint.");
 				// if we reached timeout
 				// if ((System.currentTimeMillis() - this.beginTime) >=
 				// ConfigurationManager
@@ -1515,7 +1517,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-											.equals(inw.getInstance().getId())) {
+													.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1532,7 +1534,7 @@ public class GUIFunctionality_refine {
 								for (final Instance_window iww : this.instancePattern.getWindows()) {
 									if (iww.getPattern().getId().equals(pw.getId())
 											&& iww.getInstance().getId()
-											.equals(inw.getInstance().getId())) {
+													.equals(inw.getInstance().getId())) {
 										continue loop;
 									}
 								}
@@ -1563,9 +1565,9 @@ public class GUIFunctionality_refine {
 		} else {
 			set = set.substring(0, set.length() - 1) + ")";
 			return "run {"
-			+ "System and "
-			+ "(all t: Time| (t = T/last) <=> (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
-			+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
+					+ "System and "
+					+ "(all t: Time| (t = T/last) <=> (#Track.op.t = 1 and Track.op.t in Click and Track.op.t.clicked in "
+					+ set + " and click_semantics[Track.op.t.clicked, T/prev[t]]))}";
 		}
 	}
 

@@ -262,6 +262,7 @@
     </edge>
     <edge type="static">
         <from>aw9</from>
+        <to>w5</to>
         <to>w2</to>
     </edge>
     <edge type="static">

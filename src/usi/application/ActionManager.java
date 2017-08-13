@@ -117,17 +117,20 @@ public class ActionManager {
 			Method method = null;
 
 			if (clean.getWidget() instanceof Option_input_widget) {
+
+				final Option_input_widget oiw = (Option_input_widget) wid;
+				final Option_input_widget origin = (Option_input_widget) clean.getWidget();
+				if (oiw.getSelected() == origin.getSelected()) {
+					return false;
+				}
+
 				for (final Method m : ms) {
 					if (m.getName().equals("select")) {
 						method = m;
 						break;
 					}
 				}
-				final Option_input_widget oiw = (Option_input_widget) wid;
-				final Option_input_widget origin = (Option_input_widget) clean.getWidget();
-				if (oiw.getSelected() == origin.getSelected()) {
-					return true;
-				}
+
 				TestObject to_fill = null;
 
 				if (oiw.getTOS().size() == 1) {
@@ -152,7 +155,7 @@ public class ActionManager {
 				final Input_widget iw = (Input_widget) wid;
 
 				if (iw.getValue() == null || iw.getValue().length() == 0) {
-					return true;
+					return false;
 				}
 				for (final Method m : ms) {
 					if (m.getName().equals("fill")) {
