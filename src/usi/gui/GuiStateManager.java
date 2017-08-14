@@ -155,6 +155,7 @@ public class GuiStateManager {
 		// }
 		final List<Widget> wids = Widget.getWidgets(window, this.idm);
 		if (wids.size() != 1 || !(wids.get(0) instanceof Window)) {
+
 			throw new Exception(
 					"GuiStateManager - getCurrentWindows: error, window not recognized.");
 		}

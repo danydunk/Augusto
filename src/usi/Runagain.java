@@ -42,9 +42,10 @@ public class Runagain extends RunagainHelper {
 	 */
 	public void testMain(final Object[] args) throws Exception {
 
-		ConfigurationManager.load();
+		final String out_folder = ".\\results_20170814_0051\\";
+
+		ConfigurationManager.load(out_folder + "aut.properties");
 		ExperimentManager.init();
-		final String out_folder = ".\\pdfsam_results\\pdfsam_results\\results_20170804_0951\\";
 
 		// we set the stdout as a log file
 		final PrintStream generallog = new PrintStream(new FileOutputStream(out_folder + "out.log"));
@@ -60,7 +61,7 @@ public class Runagain extends RunagainHelper {
 			// ExperimentManager.moveFile(ConfigurationManager.getGUIFile(),
 			// out_folder);
 
-			final String match_folder = out_folder + "/" + "CRUD_NO_READ_match_1/";
+			final String match_folder = out_folder + "/" + "CRUD_match_1/";
 
 			final PrintStream vallog = new PrintStream(new FileOutputStream(match_folder
 					+ "testcases/validator.log"));
