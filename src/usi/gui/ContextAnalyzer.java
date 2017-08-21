@@ -24,6 +24,7 @@ public class ContextAnalyzer {
 	private final Map<TestObject, List<TestObject>> containedInContainer;
 	private final Map<TestObject, List<Descriptor>> descriptorInContainer;
 	private final Map<TestObject, List<Descriptor>> descriptorInContainerRB;
+	private final List<String> classesToFilter;
 
 	// used to detect the hights of tables in a stable way
 	private final List<TestObject> tableheaders;
@@ -44,7 +45,11 @@ public class ContextAnalyzer {
 
 		this.tableheaders = new ArrayList<>();
 
-		this.descriptors_classes = new ArrayList<String>();
+		this.classesToFilter = new ArrayList<>();
+		this.classesToFilter.add("menuitemui");
+		this.classesToFilter.add("buttonui");
+
+		this.descriptors_classes = new ArrayList<>();
 		this.descriptors_classes.add("LabelUI");
 		this.descriptors_classes.add("CheckBoxUI");
 
@@ -58,7 +63,9 @@ public class ContextAnalyzer {
 
 		for (final TestObject to : tos) {
 			final String classs = to.getProperty("uIClassID").toString();
-
+			if (this.classesToFilter.contains(classs)) {
+				continue;
+			}
 			if (classs == null) {
 				throw new Exception("ContextAnalyzer: class id not found.");
 			}
@@ -131,6 +138,10 @@ public class ContextAnalyzer {
 	public String getDescriptor(final TestObject to) throws Exception {
 
 		final String classs = to.getProperty("uIClassID").toString();
+		if (this.classesToFilter.contains(classs)) {
+			return null;
+		}
+
 		final Point p = (Point) to.getProperty("locationOnScreen");
 		final int x = p.x;
 		final int y = p.y;
@@ -161,7 +172,7 @@ public class ContextAnalyzer {
 					oo = aa;
 				}
 			}
-		height = oo.height;
+			height = oo.height;
 		}
 
 		// if (!this.fatherMap.containsKey(to)) {
@@ -207,6 +218,9 @@ public class ContextAnalyzer {
 	public String getDescriptorRB(final TestObject to) throws Exception {
 
 		final String classs = to.getProperty("uIClassID").toString();
+		if (this.classesToFilter.contains(classs)) {
+			return null;
+		}
 		final Point p = (Point) to.getProperty("locationOnScreen");
 		final int x = p.x;
 		final int y = p.y;
@@ -237,7 +251,7 @@ public class ContextAnalyzer {
 					oo = aa;
 				}
 			}
-		height = oo.height;
+			height = oo.height;
 		}
 		//
 		// if (!this.fatherMap.containsKey(to)) {
@@ -393,11 +407,11 @@ public class ContextAnalyzer {
 				distance = (int) (Math.pow(((a.x + a.width + 1) - this.x), 2) + Math.pow(
 						(a.y - this.y), 2));
 			} else
-			/*
-			 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
-			 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
-			 * 2)); } else
-			 */{
+				/*
+				 * if ((a.x + a.width) <= this.x) { distance = (int) (Math.pow(((a.x
+				 * + a.width) - this.x), 2) + Math.pow( ((a.y + a.height) - this.y),
+				 * 2)); } else
+				 */{
 				distance = (int) (Math.pow(((a.x + 1) - this.x), 2) + Math.pow(
 						((a.y + a.height) - this.y), 2));
 			}

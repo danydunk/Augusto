@@ -263,12 +263,14 @@ public class Window extends Widget {
 		// TODO: is there a better way to do it?
 		// when checking whether 2 windows are the same we skip the elements
 		// under the menu window (it changes according to the windows open)
+		// we also skip tabbedpanes
 		widgets = widgets
 				.stream()
 				.filter(e -> {
 					if (e instanceof Action_widget
-							&& e.getClasss().toLowerCase().equals("menuitemui")
-							&& e.getLabel().toLowerCase().startsWith("window -")) {
+							&& ((e.getClasss().toLowerCase().equals("menuitemui") && e.getLabel()
+									.toLowerCase().startsWith("window -")) || e.getClasss()
+									.toLowerCase().equals("tabbedpaneui"))) {
 						return false;
 					}
 					// we deal with selectable widgets separately cause
@@ -284,8 +286,9 @@ public class Window extends Widget {
 				.stream()
 				.filter(e -> {
 					if (e instanceof Action_widget
-							&& e.getClasss().toLowerCase().equals("menuitemui")
-							&& e.getLabel().toLowerCase().startsWith("window -")) {
+							&& ((e.getClasss().toLowerCase().equals("menuitemui") && e.getLabel()
+									.toLowerCase().startsWith("window -")) || e.getClasss()
+									.toLowerCase().equals("tabbedpaneui"))) {
 						return false;
 					}
 					// we deal with selectable widgets separately cause
@@ -393,12 +396,14 @@ public class Window extends Widget {
 		// TODO: is there a better way to do it?
 		// when checking whether 2 windows are the same we skip the elements
 		// under the menu window (it changes according to the windows open)
+		// we also skip tabbed panes
 		widgets = widgets
 				.stream()
 				.filter(e -> {
 					if (e instanceof Action_widget
-							&& e.getClasss().toLowerCase().equals("menuitemui")
-							&& e.getLabel().toLowerCase().startsWith("window -")) {
+							&& ((e.getClasss().toLowerCase().equals("menuitemui") && e.getLabel()
+									.toLowerCase().startsWith("window -")) || e.getClasss()
+									.toLowerCase().equals("tabbedpaneui"))) {
 						return false;
 					}
 					// we deal with selectable widgets separately cause
@@ -414,8 +419,9 @@ public class Window extends Widget {
 				.stream()
 				.filter(e -> {
 					if (e instanceof Action_widget
-							&& e.getClasss().toLowerCase().equals("menuitemui")
-							&& e.getLabel().toLowerCase().startsWith("window -")) {
+							&& ((e.getClasss().toLowerCase().equals("menuitemui") && e.getLabel()
+									.toLowerCase().startsWith("window -")) || e.getClasss()
+									.toLowerCase().equals("tabbedpaneui"))) {
 						return false;
 					}
 					// we deal with selectable widgets separately cause

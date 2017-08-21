@@ -145,8 +145,6 @@ public class GuiStateManager {
 
 		// System.out.println("FIRST");
 
-		final ContextAnalyzer context = new ContextAnalyzer(new ArrayList<TestObject>(
-				Arrays.asList(tos)));
 		// System.out.println("CONTEXT");
 		// windows with no widgets or with the override redirect flag are
 		// filtered
@@ -189,6 +187,9 @@ public class GuiStateManager {
 		}
 		// System.out.println("LOOP");
 
+		final ContextAnalyzer context = new ContextAnalyzer(new ArrayList<TestObject>(
+				Arrays.asList(tos)));
+
 		final Widget[] widadd = widgets_to_add.toArray(new Widget[widgets_to_add.size()]);
 		Arrays.sort(widadd);
 		widgets_to_add = new ArrayList<Widget>();
@@ -197,7 +198,7 @@ public class GuiStateManager {
 			if (widget.getClasss().equals("RadioButtonUI")) {
 				widget.setDescriptor(context.getDescriptorRB(widget.getTo()));
 
-			} else if (widget.getLabel() == null || widget.getClasss().equals("ButtonUI")) {
+			} else if (widget.getLabel() == null) {
 
 				widget.setDescriptor(context.getDescriptor(widget.getTo()));
 			}

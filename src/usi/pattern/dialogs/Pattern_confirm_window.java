@@ -2,6 +2,7 @@ package src.usi.pattern.dialogs;
 
 import java.util.regex.Matcher;
 
+import src.usi.gui.GuiStateManager;
 import src.usi.gui.structure.Window;
 import src.usi.pattern.structure.Boolean_regexp;
 import src.usi.pattern.structure.Cardinality;
@@ -9,6 +10,8 @@ import src.usi.pattern.structure.Pattern_action_widget;
 import src.usi.pattern.structure.Pattern_input_widget;
 import src.usi.pattern.structure.Pattern_selectable_widget;
 import src.usi.pattern.structure.Pattern_window;
+
+import com.rational.test.ft.object.interfaces.TestObject;
 
 public class Pattern_confirm_window extends Pattern_window {
 
@@ -39,31 +42,29 @@ public class Pattern_confirm_window extends Pattern_window {
 			return false;
 		}
 
-		final java.util.regex.Pattern r = java.util.regex.Pattern.compile(".*continue.*");
-		final java.util.regex.Pattern r2 = java.util.regex.Pattern.compile(".*are you sure.*");
+		final GuiStateManager gm = GuiStateManager.getInstance();
+		for (final TestObject to : gm.getCurrentTOs()) {
+			final String classs = to.getProperty("uIClassID").toString();
+			final String text = (String) to.getProperty("text");
+			if (classs.equals("LabelUI")) {
+				final java.util.regex.Pattern r = java.util.regex.Pattern.compile(".*continue.*");
+				final java.util.regex.Pattern r2 = java.util.regex.Pattern
+						.compile(".*are you sure.*");
 
-		if (w.getActionWidgets().get(0).getDescriptor() != null) {
-			final Matcher m = r.matcher(w.getActionWidgets().get(0).getDescriptor().toLowerCase());
-			if (m.find()) {
-				return true;
+				if (w.getActionWidgets().get(0).getDescriptor() != null) {
+					final Matcher m = r.matcher(text.toLowerCase());
+					if (m.find()) {
+						return true;
+					}
+					final Matcher m2 = r2.matcher(text.toLowerCase());
+					if (m2.find()) {
+						return true;
+					}
+				}
 			}
-			final Matcher m2 = r2
-					.matcher(w.getActionWidgets().get(0).getDescriptor().toLowerCase());
-			if (m2.find()) {
-				return true;
-			}
+
 		}
-		if (w.getActionWidgets().get(1).getDescriptor() != null) {
-			final Matcher m = r.matcher(w.getActionWidgets().get(1).getDescriptor().toLowerCase());
-			if (m.find()) {
-				return true;
-			}
-			final Matcher m2 = r2
-					.matcher(w.getActionWidgets().get(1).getDescriptor().toLowerCase());
-			if (m2.find()) {
-				return true;
-			}
-		}
+
 		return false;
 	}
 }
